@@ -35,7 +35,7 @@ import org.apache.axiom.om.OMElement;
 
 import junit.framework.TestCase;
 
-public class AtomConformanceTests extends TestCase {
+public class AtomConformanceTest extends TestCase {
 
   private static Document<Feed> get(URI uri) {
     try {

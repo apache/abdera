@@ -34,7 +34,7 @@ import org.apache.abdera.parser.Parser;
 
 import junit.framework.TestCase;
 
-public class FeedParserTests extends TestCase {
+public class FeedParserTest extends TestCase {
 
   private static URI baseURI = null;
   

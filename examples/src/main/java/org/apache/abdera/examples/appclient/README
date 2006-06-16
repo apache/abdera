@@ -1,0 +1,6 @@
+A simple APP Client implementation.
+
+To run:
+
+java org.apache.abdera.examples.appclient.Main {Introspection URI} {Workspace Name} {Collection Name}
+

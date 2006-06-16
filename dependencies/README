@@ -1,0 +1,2 @@
+Run ant -f build/build.xml download from the $ABDERA_SRC to download
+the project dependencies

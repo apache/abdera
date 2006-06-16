@@ -1,0 +1,24 @@
+To build with maven:
+
+  mvn install
+  
+The jars will be compiled and installed in your local Maven repository
+  
+To build with ant:
+
+  # download the project dependencies. This is mandatory before you build!
+  ant -f build/build.xml download 
+
+  # perform a complete build, jars and javadocs will be copied to 'dist' folder
+  ant -f build/build.xml dist
+  
+  # produce a distributable zip
+  ant -f build/build.xml zip
+
+  # clean
+  ant -f build/build.xml clean
+
+  # delete downloaded dependencies
+  ant -f build/build.xml clean-downloads
+
+

@@ -1,0 +1,5 @@
+Currently excluded from the build.  
+
+Requires the Apache XML Security version 1.3 to compile and the Bouncing Castle 
+Crypto implementation to run.
+

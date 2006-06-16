@@ -1,0 +1,38 @@
+# Abdera Properties
+
+#
+# The Factory is used to create instances of Feed Object
+# Model objects.  Applications can plug in their own
+# implementations of the Feed Object Model in order
+# to make adapting to application specific object models
+# easier and more efficient.  
+#
+# The Default Factory can be set in one of four ways
+#  - Using the org.apache.abdera.model.Factory System property
+#  - Using the org.apache.abdera.model.Factory configuration option below
+#  - Using META-INF/services
+#  - Using the default implementation that ships with the Adbera Parser 
+#
+#org.apache.abdera.factory.Factory=org.apache.abdera.parser.stax.FOMFactory
+
+#
+# The Parser is the component used to actually parse feeds and produce
+# instances of the object model.  The default parser implementation is
+# based on the Stax API and Apache AXIOM .  Applications can plug in 
+# their own implementations. Typically, the Parser and the Factory are
+# VERY closely related to one another.  If you change one, you'll likely
+# need to change the other.
+#
+#org.apache.abdera.parser.Parser=org.apache.abdera.parser.stax.FOMParser
+
+#
+# The Filter Policy is the component used to filter out unwanted or unsafe
+# text and content from a parsed Atom entry. The default filter policy is to
+# allow all content.
+#
+#org.apache.abdera.filter.FilterPolicy=org.apache.abdera.filter.DefaultFilterPolicy
+
+#
+# XPath implementation (likely will be dependent on the parser implementation)
+#
+#org.apache.abdera.xpath.XPath=org.apache.abdera.parser.stax.FOMXPath

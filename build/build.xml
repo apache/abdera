@@ -1,0 +1,161 @@
+<project name="abdera" default="build" basedir="..">
+<!--
+
+  abdera Build
+    targets:
+      * build (compile everything)
+      * test  (compile and run test cases)
+      * dist  (compile, test and create jars)
+      * clean (rather self explanatory)
+      * docs  (build the javadocs)
+-->
+  <property name="version" value="0.1" />
+  <property name="site" value="../site" />
+  <property name="work" value="${basedir}/build/work" />
+  <property name="dist" value="${basedir}/dist" />
+  <property name="dist_lib" value="${dist}/lib" />
+  <property name="docs" value="${dist}/docs" />
+  <property name="javadocs" value="${docs}/api" />
+  <property name="core" value="${basedir}/core" />
+  <property name="core.src" value="${core}/src/main/java" />
+  <property name="core.test" value="${core}/src/test/java" />
+  <property name="core.work" value="${work}/core" />
+  <property name="core.jar" value="${dist}/${ant.project.name}.core.${version}.jar" />
+  <property name="parser" value="${basedir}/parser" />
+  <property name="parser.src" value="${parser}/src/main/java" />
+  <property name="parser.test" value="${parser}/src/test/java" />
+  <property name="parser.work" value="${work}/parser" />
+  <property name="parser.jar" value="${dist}/${ant.project.name}.parser.${version}.jar" />
+  <property name="dependencies" value="${basedir}/dependencies" />
+  <path id="jar.dependencies">
+    <fileset dir="${dependencies}" includes="**/*.jar" />
+  </path>
+  
+  <target name="dependencies">
+    <path id="">
+      <fileset dir="dependencies" includes="*.jar" />
+    </path>
+  </target>
+  
+  <target name="init">
+    <echo>
+=====================================================
+${ant.project.name}, ${version}
+Working directory: ${work}
+=====================================================
+    </echo>
+  </target>
+  
+  <target name="compile.core" depends="init">
+    <mkdir dir="${core.work}" />
+    <javac srcdir="${core.src}"
+           destdir="${core.work}"
+           classpathref="jar.dependencies"/>
+  	<javac srcdir="${core.test}"
+  	       destdir="${test}" 
+       	   classpathref="jar.dependencies"
+  		     classpath="${core.work}"/>
+  </target>
+  
+  <target name="compile.parser" depends="init,compile.core">
+    <mkdir dir="${parser.work}" />
+    <javac srcdir="${parser.src}"
+           destdir="${parser.work}"
+           classpathref="jar.dependencies" 
+           classpath="${core.work}" />
+  	<javac srcdir="${parser.test}"
+  	       destdir="${test}"
+  	       classpathref="jar.dependencies"
+  	       classpath="${core.work};${parser.work}" />
+      <copydir dest="${test}" src="${parser.test}" />
+  </target>
+
+  <target name="build" depends="init,compile.core,compile.parser"></target>
+
+  <target name="docs" depends="init">
+    <javadoc packagenames="org.apache.abdera.*"
+             excludepackagenames="org.apache.abdera.util"
+             sourcepath="${core.src}" 
+             destdir="${javadocs}"
+             windowtitle="Abdera"
+             classpathref="jar.dependencies"/>
+    <copy file="${basedir}/docs/index.html" todir="${docs}" />
+  </target>
+  
+  <target name="test" depends="build">
+    <!--java classpathref="jar.dependencies" 
+          classpath="${core.work}:${parser.work}:${server.work}:${test.work}"
+          classname="org.apache.abdera.test.TestSuite" /-->
+  </target>
+
+  <target name="clean">
+    <delete dir="${work}" />
+  	<delete dir="${test}" />
+    <delete dir="${dist}" />
+  </target>
+  
+  <target name="dist" depends="clean,build,test,docs">
+    <mkdir dir="${dist}" />
+    <mkdir dir="${dist_lib}" />
+    <jar destfile="${core.jar}"   basedir="${core.work}" />
+    <jar destfile="${parser.jar}" basedir="${parser.work}" />
+    <copy todir="${dist_lib}">
+      <fileset dir="${dependencies}"  />
+    </copy>
+  	<delete dir="${work}" />
+  	<delete dir="${test}" />
+  </target>
+  
+  <target name="zip" depends="dist"> 
+    <zip destfile="${basedir}/${ant.project.name}.${version}.zip">
+      <fileset dir="${dist}">
+        <include name="**/*.jar" />
+      </fileset>
+      <fileset dir="${docs}" includes="**/*" />
+    </zip>
+  </target>
+
+  <target name="download" depends="init">
+    <echo>Downloading project dependencies.. this may take a moment</echo>
+    <parallel>
+    <get src="http://www.apache.org/dist/java-repository/org.apache.geronimo.specs/jars/geronimo-activation_1.0.2_spec-1.0.jar"
+         dest="${dependencies}/geronimo-activation_1.0.2_spec-1.0.jar" usetimestamp="true" />
+    <get src="http://www.apache.org/dist/java-repository/org.apache.geronimo.specs/jars/geronimo-javamail_1.3.1_spec-1.0.jar"
+         dest="${dependencies}/geronimo-javamail_1.3.1_spec-1.0.jar" usetimestamp="true" />
+    <get src="http://www.apache.org/dist/java-repository/ws-commons/jars/axiom-api-1.0.jar"
+         dest="${dependencies}/axiom-api-1.0.jar" usetimestamp="true" />
+    <get src="http://www.apache.org/dist/java-repository/ws-commons/jars/axiom-impl-1.0.jar"
+         dest="${dependencies}/axiom-impl-1.0.jar" usetimestamp="true" />
+    <get src="http://dist.codehaus.org/jaxen/jars/jaxen-1.1-beta-7.jar"
+         dest="${dependencies}/jaxen-1.1-beta-7.jar" usetimestamp="true" />
+    <get src="http://www.apache.org/dist/java-repository/log4j/jars/log4j-1.2.12.jar"
+         dest="${dependencies}/log4j-1.2.12.jar" usetimestamp="true" />
+    <get src="http://dist.codehaus.org/stax/jars/stax-1.1.2-dev.jar"
+         dest="${dependencies}/stax-1.1.2-dev.jar" usetimestamp="true" />
+    <get src="http://dist.codehaus.org/stax/jars/stax-api-1.0.jar"
+         dest="${dependencies}/stax-api-1.0.jar" usetimestamp="true" />
+    <get src="http://www.apache.org/dist/java-repository/commons-logging/jars/commons-logging-1.0.4.jar"
+         dest="${dependencies}/commons-logging-1.0.4.jar" usetimestamp="true" />
+    <get src="http://www.apache.org/dist/java-repository/commons-codec/jars/commons-codec-1.3.jar"
+         dest="${dependencies}/commons-codec-1.3.jar" usetimestamp="true" />
+    <get src="http://www.apache.org/dist/java-repository/commons-httpclient/jars/commons-httpclient-3.0.1.jar"
+         dest="${dependencies}/commons-httpclient-3.0.1.jar" usetimestamp="true" />
+    <get src="http://www.ibiblio.org/maven/junit/jars/junit-3.8.1.jar"
+         dest="${dependencies}/junit-3.8.1.jar" usetimestamp="true" />
+    <get src="http://woodstox.codehaus.org/2.0.5/wstx-asl-2.0.5.jar"
+         dest="${dependencies}/wstx-asl-2.0.5.jar" usetimestamp="true" />
+    </parallel>
+  </target>
+  
+  <target name="clean-downloads" depends="init">
+    <delete><fileset dir="${dependencies}" includes="**/*.jar" /></delete>
+  </target>
+
+  <target name="site-docs" depends="docs">
+    <mkdir dir="${site}/docs/api" />
+    <copy todir="${site}/docs/api">
+      <fileset dir="${javadocs}" />
+    </copy>
+  </target>
+  
+</project>

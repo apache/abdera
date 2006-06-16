@@ -1,0 +1,5 @@
+# To register Extension factories, rename this file to
+# org.apache.abdera.factory.ExtensionFactory and list
+# each of the Extension Factories below (as illustrated)
+com.foo.factories.MyExtensionFactory
+com.foo.factories.MyOtherExtensionFactory

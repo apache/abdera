@@ -1,0 +1,3 @@
+The ant build no longer runs the unit tests.  We need to get that working again.
+The ant download dependency step currently needs to be run separately before the build.  It should be automatic.
+

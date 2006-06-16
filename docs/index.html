@@ -1,0 +1,266 @@
+<html>
+<head>
+<title>Atom Reference Implementation</title>
+<style>
+  pre {
+    border: 1pt solid black;
+    background-color: lightblue;
+    padding: 10pt;
+  }
+</style>
+</head>
+<body>
+<h1>Abdera</h1>
+<hr/>
+<p>Atom Implementation<br />Version 0.1</p>
+<hr/>
+<p>Abdera is an implementation of the <a href="http://www.ietf.org/rfc/rfc4287.txt">Atom Syndication Format</a> 
+and <a href="http://www.ietf.org/internet-drafts/draft-ietf-atompub-protocol-08.txt">Atom Publishing Protocol</a> 
+specifications published by the IETF Atompub working group.  At the core of the implementation is the 
+"Feed Object Model" (<a href="api/index.html">javadoc</a>), a set of interfaces for reading and building 
+Atom documents.</p>
+
+<h2>Parsing Atom Documents</h2>
+
+<p>The Parser interface is used to parse Atom documents.</p>
+
+<pre>
+  Parser parser = Parser.INSTANCE;
+  URI baseUri = {The Base URI of the Document to Parse}
+  InputStream inputStream = {acquire input stream}
+  ParserOptions options = parser.getDefaultParserOptions();
+    // set parser options
+  Document document = Parser.INSTANCE.parse(stream, baseUri, options);
+</pre>
+
+<p>The architecture of Abdera is such that applications may plug in their 
+own parser implementations.  The default parser that ships with Abdera 
+is based on the StAX XML parser and the Apache Axiom object model and is 
+capable of parsing Atom Feed documents, Entry documents and Atom Publishing 
+Protocol Introspection documents.</p>
+
+<pre>
+  // Parsing a feed document
+  Document&lt;Feed> document = 
+    Parser.INSTANCE.parse(stream, baseUri, options);
+  Feed feed = document.getRoot();
+  
+  // Parsing an entry document
+  Document&lt;Entry> document =
+    Parser.INSTANCE.parse(stream, baseUri, options);
+  Entry entry = document.getRoot();
+    
+  // Parsing an introspection document
+  Document&lt;Service> document = 
+    Parser.INSTANCE.parse(stream, baseUri, options);    
+  Service service = document.getRoot();
+</pre>
+
+<h3>Parser Options</h3>
+
+<p>TBD</p>
+
+<h2>Building Atom Documents</h2>
+
+<p>The Factory interface is used to build Atom documents.</p>
+
+<pre>
+  // Build the feed
+  Feed feed = Factory.INSTANCE.newFeed();
+  feed.setId("tag:example.org,2006:/foo", false);
+  feed.setTitleAsText("My Feed);
+  feed.setSubtitleAsText("My Feed Subtitle");
+  feed.setUpdated(new Date());
+  feed.addLink("http://example.org");
+  feed.addLink("self", "http://example.org/atom.xml");
+  feed.addAuthor("John Doe", "jdoe@example.com", "http://example.com");
+  
+  // Build the entry
+  Entry entry = feed.insertEntry();
+  entry.setId("tag:example.org,2006:/foo/1", false);
+  entry.setTitleAsHtml("&lt;b>My Title&lt;/b>");
+  entry.setUpdated(new Date());
+  entry.addLik("http://example.org");
+  entry.setContentAsHtml("This is &lt;i>HTML&lt;/i> content");
+
+  // Serialize the feed document
+  feed.getDocument().writeTo(System.out);
+</pre>
+
+<h2>The Atom Publishing Protocol</h2>
+
+<p>TBD</p>
+
+<h2>Extended Features</h2>
+
+<p>To be completed</p>
+
+<h3>Relative URI References</h3>
+
+<p>Abdera provides full support for Relative URI references through the use
+of xml:base, Content-Location and request URI's.  Every method on the Feed 
+Object Model that is capable of returning a relative URI reference has an
+alternative getResolved___ form that returns the fully qualified form of the 
+URI resolved according to the in-scope base URI.<p>
+
+<pre>
+  &lt;feed xmlns="http://www.w3.org/2005/Atom" xml:base="http://example.org/blog/"&gt;
+  ...
+    &lt;link rel="alternate" href="/index.html" />
+    &lt;link rel="self" href="index.atom" />
+  ...
+  &lt;/feed&gt;
+</pre>
+
+<pre>
+  FeedDocument doc = (FeedDocument)Parser.INSTANCE.parse(inputStream);
+  Feed feed = doc.getFeed();
+  Link alt = feed.getAlternateLink();
+  System.out.println(alt.getHref());         // outputs /index.html
+  System.out.println(alt.getResolvedHref()); // outputs http://example.org/index.html
+  
+  Link self = feed.SelfLink();
+  System.out.println(self.getHref());         // outputs index.atom
+  System.out.println(self.getResolvedHref()); // outputs http://example.org/blog/index.atom    
+</pre>
+
+<h3>XPath Support</h3>
+
+<pre>
+  Feed feed = Factory.INSTANCE.newFeed();
+  feed.setTitleAsText("Foo");
+  
+  Map<String,String> namespaces = XPath.INSTANCE.getDefaultNamespaces();
+  namespaces.put("a", "http://www.w3.org/2005/Atom");
+  String title = XPath.INSTANCE.valueOf("a:title", feed, namespaces);
+  System.out.println(title);  // "Foo"
+</pre>
+
+<h3>Feed Thread Extension Support</h3>
+
+<pre>
+  Entry entry1 = Factory.INSTANCE.newEntry();
+  entry1.setId("tag:example.org,2006:foo:1", false);
+  ...
+  
+  Entry entry2 = Factory.INSTANCE.newEntry();
+  entry2.setId("tag:example.org,2006:foo:2", false);
+  entry2.addInReplyTo(entry1);
+  ...
+</pre>
+
+<p>Produces,</p>
+
+<pre>
+  &lt;entry xmlns="..." xmlns:thr="...">
+    &lt;id>tag:example.org,2006:foo:2&lt;/id>
+    &lt;thr:in-reply-to ref="tag:example.org,2006:foo:1" />
+  &lt;/entry>  
+</pre>
+
+<h3>Extension Elements</h3>
+
+<p>The Feed Object Model provides an API for working with extensions to the Atom
+format. The API allows developers to work with extensions dynamically or via
+static Java classes and custom factories.</p>
+
+<p>Namespaced extension attributes may be added to any Feed Object Model object. 
+For instance, the example below:</p>
+
+<pre>
+  Entry entry = Factory.INSTANCE.newEntry();
+  ...
+  Link link = entry.addLink("replies", "http://www.example.org");
+  link.setAttributeValue(
+    "http://purl.org/syndication/thread/1.0",
+    "count", "thr", "10");
+</pre>
+
+<p>Produces the following,</p>
+
+<pre>
+  &lt;entry xmlns="http://www.w3.org/2005/Atom">
+    ...
+    &lt;link rel="replies" href="http://www.example.org" thr:count="10"
+      xmlns:thr="http://purl.org/syndication/thread/1.0" />
+    ...
+  &lt;/entry>
+</pre>
+
+<p>Namespaced extension elements may be added to any Feed Object Model object
+that implements the ExtensibleElement interface.</p>
+
+<pre>
+  Entry entry = Factory.INSTANCE.newEntry();
+  ...
+  entry.addSimpleExtension("urn:foo", "foo", "f", "bar");
+</pre>
+
+<p>Produces the following,</p>
+
+<pre>
+  &lt;entry xmlns="http://www.w3.org/2005/Atom">
+    ...
+    &lt;f:foo xmlns:f="urn:foo">bar&lt;/f:foo>
+    ...
+  &lt;/entry>
+</pre>
+
+<p>TODO: Complete discussion of static extensions</p>
+
+<h3>XML Digital Signature Support</h3>
+
+<p>Note: XML Digital Signature Support is currently not built by default!</p>
+
+<pre>
+  Signature sig = Signature.INSTANCE;
+  SignatureOptions options = sig.getDefaultSignatureOptions();
+  // set signature options (e.g. signing key)
+  
+  Entry entry = Factory.INSTANCE.newEntry();
+  // set entry data
+  
+  // sign the entry
+  entry = sig.sign(entry, options);
+  
+  // validate the signature
+  boolean valid = sig.verify(entry, options);
+</pre>
+
+<h3>XML Encryption Support</h3>
+
+<p>Note: XML Digital Signature Support is currently not built by default!</p>
+
+<pre>
+  Encryption enc = Encryption.INSTANCE;
+  EncryptionOptions options = enc.getDefaultEncryptionOptions();
+  // set encryption options (e.g. algorithm, key encryption key, etc)
+  
+  Feed feed = Factory.INSTANCE.newFeed();
+  // set feed data
+  
+  // encrypt the feed
+  Document doc = enc.encrypt(feed.getDocument(), options);
+  
+  // decrypt the feed
+  Document doc = enc.decrypt(doc, options);
+</pre>
+
+<h2>Configuation Guide</h2>
+
+<p>TBD</p>
+
+<h2>Developers Guide</h2>
+
+<p>TBD</p>
+
+<h3>Extending Abdera</h3>
+
+<p>TBD</p>
+
+<h3>Writing your own parser implementation?</h3>
+
+<p>TBD</p>
+
+</body>
+</html>

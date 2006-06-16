@@ -12,6 +12,7 @@
   <property name="version" value="0.1" />
   <property name="site" value="../site" />
   <property name="work" value="${basedir}/build/work" />
+	<property name="test" value="${basedir}/build/test" />
   <property name="dist" value="${basedir}/dist" />
   <property name="dist_lib" value="${dist}/lib" />
   <property name="docs" value="${dist}/docs" />
@@ -44,6 +45,7 @@ ${ant.project.name}, ${version}
 Working directory: ${work}
 =====================================================
     </echo>
+  	<mkdir dir="${test}" />
   </target>
   
   <target name="compile.core" depends="init">
@@ -67,7 +69,11 @@ Working directory: ${work}
   	       destdir="${test}"
   	       classpathref="jar.dependencies"
   	       classpath="${core.work};${parser.work}" />
-      <copydir dest="${test}" src="${parser.test}" />
+  	<copy todir="${test}">
+  	  <fileset dir="${parser.test}">
+  	    <include name="*.xml"/>
+  	  </fileset>
+  	</copy>
   </target>
 
   <target name="build" depends="init,compile.core,compile.parser"></target>
@@ -84,7 +90,7 @@ Working directory: ${work}
   
   <target name="test" depends="build">
     <!--java classpathref="jar.dependencies" 
-          classpath="${core.work}:${parser.work}:${server.work}:${test.work}"
+          classpath="${core.work}:${parser.work}:${server.work}:${test}"
           classname="org.apache.abdera.test.TestSuite" /-->
   </target>
 

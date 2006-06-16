@@ -28,7 +28,7 @@ import org.apache.abdera.xpath.XPath;
 
 import junit.framework.TestCase;
 
-public class CoreTests extends TestCase {
+public class CoreTest extends TestCase {
 
   public static void testDefaultConfigurationProperties() {
     assertEquals(

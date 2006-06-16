@@ -22,3 +22,46 @@ To build with ant:
   ant -f build/build.xml clean-downloads
 
 
+To build with Eclipse.  
+
+There are two methods depending on whether or not you're comfortable with Maven
+
+With Maven:
+  Check out java/trunk, and from java/trunk run "mvn eclipse:eclipse".  Then
+  import each project.  If you have the SVN checkout as a project in Maven, 
+  you'll need an Eclipse 3.2 to import these projects without an error 
+  regarding "overlapping projects'.  The alternative is to run
+  "mvn -Declipse.workspace=/path/to/workspace eclipse:eclipse", which
+  will set up a project where the source files are linked to the actual
+  location.
+
+  You'll also need to have a buid path variable for "M2_REPO" defined to match 
+  your local repository (~/.m2/repository). You can do this manually, or by 
+  running "mvn -Declipse.workspace=<path-to-eclipse-workspace> eclipse:add-maven-repo" 
+
+Without Maven:
+  From within eclipse, check out each of the following
+  as projects.  Do not worry about the project type for now:
+  
+     * /java/trunk/build              project name: build
+     * /java/trunk/core               project name: core
+     * /java/trunk/dependencies       project name: dependencies
+     * /java/trunk/docs               project name: docs
+     * /java/trunk/examples           project name: examples
+     * /java/trunk/parser             project name: parser
+     * /java/trunk/server             project name: server
+     * /java/trunk/security           project name: security
+     * /java/branches/snell_sandbox   project name: snell_sandbox
+  
+    Then, from the eclipse workspace root, invoke
+      ant -f snell_sandbox/eclipse/setupeclipse.xml
+  
+    This will copy all of the necessary eclipse project files over to
+    the appropriate projects in the eclipse workspace.  Restart your
+    eclipse workbench and all of your projects should be ready to go.
+  
+    Note: the security module will contain compile errors due to missing
+    XML Security jars.  To build and use that module, you'll need to
+    download the Apache XML Security and the Bouncy Castle Crypto
+    implementation.
+ 

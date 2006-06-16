@@ -1,6 +1,6 @@
 <project name="eclipse" default="copy" basedir="../..">
   <target name="copy">
-    <copy todir=".">
+    <copy todir="." overwrite="true">
     	<fileset dir="snell_sandbox/eclipse" includes="*/**" excludes="setupeclipse.xml"/>
     </copy>
   </target>

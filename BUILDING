@@ -1,10 +1,10 @@
-To build with maven:
+To build with maven (http://maven.apache.org/):
 
   mvn install
   
 The jars will be compiled and installed in your local Maven repository
   
-To build with ant:
+To build with ant (http://ant.apache.org/):
 
   # download the project dependencies. This is mandatory before you build!
   ant -f build/build.xml download 
@@ -22,7 +22,7 @@ To build with ant:
   ant -f build/build.xml clean-downloads
 
 
-To build with Eclipse.  
+To build with Eclipse (http://www.eclipse.org).  
 
 There are two methods depending on whether or not you're comfortable with Maven
 

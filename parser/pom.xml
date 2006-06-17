@@ -45,6 +45,10 @@
       <artifactId>stax</artifactId>
     </dependency>
     <dependency>
+      <groupId>wstx</groupId>
+      <artifactId>wstx-asl</artifactId>
+    </dependency>
+    <dependency>
       <groupId>jaxen</groupId>
       <artifactId>jaxen</artifactId>
     </dependency>

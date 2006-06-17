@@ -26,6 +26,7 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.filter.ParseFilter;
 import org.apache.abdera.filter.TextFilter;
+import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
@@ -181,7 +182,7 @@ public class FOMTest extends TestCase   {
       public String filterText(String text, Element parent) {
         ExtensionElement ee = (ExtensionElement) parent;
         QName qname = ee.getQName();
-        Element elparent = parent.getParentElement();
+        Base elparent = parent.getParentElement();
         if (Constants.NAME.equals(qname)) {
           text = "Jane Doe";
         } else if (Constants.TITLE.equals(qname) && elparent instanceof Entry) {

@@ -227,6 +227,7 @@ public class FOMEntry
         Content.Type.XHTML, null);
     if (baseUri != null) content.setBaseUri(baseUri);
     content.setValue(value);
+    setContentElement(content);
     return content;
   }
   

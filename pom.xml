@@ -127,4 +127,12 @@
     <module>security</module>
     <module>examples</module>
   </modules>
+  
+  <distributionManagement>
+    <repository>
+      <id>apache-maven-test-builds</id>
+      <name>Apache Maven Repository (Test Builds)</name>
+      <url>scp://people.apache.org/www/cvs.apache.org/maven-snapshot-repository</url>
+    </repository>
+  </distributionManagement>
 </project>

@@ -24,7 +24,9 @@
   <property name="core.jar" value="${dist}/${ant.project.name}.core.${version}.jar" />
   <property name="parser" value="${basedir}/parser" />
   <property name="parser.src" value="${parser}/src/main/java" />
-  <property name="parser.test" value="${parser}/src/test/java" />
+  <property name="parser.test" value="${parser}/src/test" />
+  <property name="parser.test.java" value="${parser}/src/test/java" />
+  <property name="parser.test.resources" value="${parser}/src/test/resources" />
   <property name="parser.work" value="${work}/parser" />
   <property name="parser.jar" value="${dist}/${ant.project.name}.parser.${version}.jar" />
 
@@ -90,12 +92,12 @@ Working directory: ${work}
            destdir="${parser.work}"
            classpathref="jar.dependencies" 
            classpath="${core.work}" />
-  	<javac srcdir="${parser.test}"
+  	<javac srcdir="${parser.test.java}"
   	       destdir="${test}"
   	       classpathref="jar.dependencies"
   	       classpath="${core.work};${parser.work}" />
   	<copy todir="${test}">
-  	  <fileset dir="${parser.test}">
+  	  <fileset dir="${parser.test.resources}">
   	    <include name="*.xml"/>
   	  </fileset>
   	</copy>
@@ -114,9 +116,15 @@ Working directory: ${work}
   </target>
   
   <target name="test" depends="build">
-    <!--java classpathref="jar.dependencies" 
+    <echo>Running Core Tests...</echo>
+    <java classpathref="jar.dependencies" 
           classpath="${core.work}:${parser.work}:${server.work}:${test}"
-          classname="org.apache.abdera.test.TestSuite" /-->
+          classname="org.apache.abdera.test.core.TestSuite" />
+
+    <echo>Running Stax Parser Tests...</echo>
+    <java classpathref="jar.dependencies" 
+          classpath="${core.work}:${parser.work}:${server.work}:${test}"
+          classname="org.apache.abdera.test.parser.stax.TestSuite" />
   </target>
 
   <target name="clean">

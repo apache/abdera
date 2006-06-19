@@ -24,5 +24,6 @@ public abstract interface Version {
 
   public static final String APP_NAME = "Abdera";
   public static final String VERSION = "v0.1";
+  public static final String URI = "http://incubator.apache.org/abdera";
   
 }

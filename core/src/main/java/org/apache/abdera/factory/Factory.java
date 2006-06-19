@@ -251,8 +251,12 @@ public interface Factory {
   
   StringElement newStringElement(QName qname, Element parent);
   
+  StringElement newStringElement(QName qname, Document parent);
+  
   StringElement newStringElement(QName qname, String value, Element parent);
 
+  StringElement newStringElement(QName qname, String value, Document parent);
+  
   ExtensionElement newExtensionElement(QName qname, Base parent);
   
   Control newControl(Element parent);

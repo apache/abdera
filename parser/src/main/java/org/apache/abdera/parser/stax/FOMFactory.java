@@ -277,7 +277,7 @@ public class FOMFactory
     ExtensionElement value, Element parent) {
       Content content = 
         newContent(
-          Content.Type.MEDIA, 
+          Content.Type.XML, 
           mediaType, 
           parent);
       if (src != null) content.setSrc(src);
@@ -362,9 +362,12 @@ public class FOMFactory
   
   public Generator newDefaultGenerator(
     Element parent) {
-      Generator generator = newDefaultGenerator(parent);
+      Generator generator = newGenerator(parent);
       generator.setVersion(Version.VERSION);
       generator.setValue(Version.APP_NAME);
+      try {
+        generator.setUri(Version.URI);
+      } catch (Exception e) {}
       return generator;
   }
   
@@ -643,6 +646,12 @@ public class FOMFactory
 
   public StringElement newStringElement(
     QName qname, 
+    Document parent) {
+      return new FOMStringElement(qname, (OMContainer)parent, this);
+  }
+  
+  public StringElement newStringElement(
+    QName qname, 
     String value,
     Element parent) {
     StringElement el = newStringElement(qname, parent);
@@ -651,6 +660,16 @@ public class FOMFactory
     return el;
   }
 
+  public StringElement newStringElement(
+    QName qname, 
+    String value,
+    Document parent) {
+    StringElement el = newStringElement(qname, parent);
+    if (value != null)
+      el.setValue(value);
+    return el;
+  }
+  
   public ExtensionElement newExtensionElement(
     QName qname, 
     Base parent) {
@@ -688,6 +707,10 @@ public class FOMFactory
       } else {
         if (parent instanceof Element)
           element = newStringElement(qname, (Element)parent);
+        else if (parent instanceof Document)
+          element = newStringElement(qname, (Document)parent);
+        else 
+          element = newStringElement(qname, (Element)null);
       }
       return element;
   }

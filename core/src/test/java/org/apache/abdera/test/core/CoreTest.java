@@ -42,12 +42,6 @@ public class CoreTest extends TestCase {
       "org.apache.abdera.parser.stax.FOMXPath");
   }
   
-  public static void testMinimalConfiguration() {
-    assertNotNull(Factory.INSTANCE);
-    assertNotNull(Parser.INSTANCE);
-    assertNotNull(XPath.INSTANCE);
-  }
-  
   public static void testUriNormalization() {
     try {
       assertEquals(

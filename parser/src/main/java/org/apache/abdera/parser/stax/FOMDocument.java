@@ -24,7 +24,9 @@ import java.net.URISyntaxException;
 import java.util.Date;
 
 import javax.activation.MimeType;
+import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Document;
@@ -33,6 +35,7 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMOutputFormat;
 import org.apache.axiom.om.OMXMLParserWrapper;
+import org.apache.axiom.om.impl.MTOMXMLStreamWriter;
 import org.apache.axiom.om.impl.llom.OMDocumentImpl;
 
 
@@ -100,16 +103,34 @@ public class FOMDocument<T extends Element>
   }
 
   public void writeTo(OutputStream out) throws IOException {
-    try {
-      setComplete(true);      
+    try {    
       OMOutputFormat outputFormat = new OMOutputFormat();
       outputFormat.setCharSetEncoding(this.getCharsetEncoding());
-      serializeAndConsume(out, outputFormat);
+      MTOMXMLStreamWriter omwriter = new MTOMXMLStreamWriter(out, outputFormat);
+      internalSerialize(omwriter, true);
+      omwriter.flush();
     } catch (XMLStreamException e) {
       throw new FOMException(e);
     }
   }
 
+  public void writeTo(java.io.Writer writer) throws IOException {
+    try {
+      setComplete(true);      
+      OMOutputFormat outputFormat = new OMOutputFormat();
+      outputFormat.setCharSetEncoding(this.getCharsetEncoding());
+      XMLStreamWriter streamwriter = 
+        XMLOutputFactory.newInstance().createXMLStreamWriter(
+          writer);
+      MTOMXMLStreamWriter omwriter = new MTOMXMLStreamWriter(streamwriter);
+      omwriter.setOutputFormat(outputFormat);
+      this.internalSerializeAndConsume(omwriter);
+      omwriter.flush();
+    } catch (XMLStreamException e) {
+      throw new FOMException(e);
+    }
+  }
+  
   public MimeType getContentType() {
     return contentType;
   }
@@ -145,4 +166,5 @@ public class FOMDocument<T extends Element>
   public Factory getFactory() {
     return (Factory) this.factory;
   }
+  
 }

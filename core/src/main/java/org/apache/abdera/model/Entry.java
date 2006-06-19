@@ -212,7 +212,6 @@ public interface Entry
   /**
    * Sets the content for this entry as @type="html".
    * @param value The unescaped HTML string to set as the content
-   * @param baseUri The value of the content element's xml:base. Null if none. 
    */
   Content setContentAsHtml(String value);
   
@@ -229,7 +228,6 @@ public interface Entry
    * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
    * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
    * @param value A string containing the XHTML.
-   * @param baseUri The value of the content element's xml:base. Null if none.
    */
   Content setContentAsXhtml(String value);
   
@@ -255,7 +253,6 @@ public interface Entry
    * Sets the content for this entry as @type="xhtml". The value is passed 
    * in as a parsed org.apache.abdera.model.Div
    * @param value A Div containing the XHTML
-   * @param baseUri The value of the content element's xml:base. Null if none
    */
   Content setContentAsXhtml(Div value);
   
@@ -562,7 +559,6 @@ public interface Entry
   /**
    * Sets the value of the rights element as type="html"
    * @param value The string containing the unescaped HTML
-   * @param baseUri The content element's xml:base. Null if none
    */
   Text setRightsAsHtml(String value);
 
@@ -571,14 +567,12 @@ public interface Entry
    * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
    * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
    * @param value The string containing an unparsed XHTML div
-   * @param baseUri The right element's xml:base. Null if none
    */
   Text setRightsAsXhtml(String value);
   
   /**
    * Sets the value of the rights element as type="xhtml"
    * @param value The XHTML Div
-   * @param baseUri The right element's xml:base. Null if none
    */
   Text setRightsAsXhtml(Div value);
 
@@ -705,7 +699,6 @@ public interface Entry
    * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
    * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
    * @param value The string containing an unparsed XHTML div
-   * @param baseUri The summary element's xml:base. Null if none
    */
   Text setSummaryAsXhtml(String value);
   
@@ -789,14 +782,12 @@ public interface Entry
    * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
    * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
    * @param value The string containing an unparsed XHTML div
-   * @param baseUri The title element's xml:base. Null if none
    */
   Text setTitleAsXhtml(String value);
   
   /**
    * Sets the title for this entry as type="xhtml".
    * @param value The parsed XHTML Div
-   * @param baseUri The title element's xml:base. Null if none
    */
   Text setTitleAsXhtml(Div value);
   

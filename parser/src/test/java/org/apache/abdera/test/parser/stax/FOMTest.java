@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.test.parser.stax;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
@@ -588,5 +589,66 @@ public class FOMTest extends TestCase   {
     factory.registerAsSimpleExtension(qname);
     el = (StringElement) factory.newExtensionElement(qname, null);
     assertEquals(el.getQName(), qname);
+  }
+  
+  public void testRoundtrip() throws Exception {
+
+    Feed feed = Factory.INSTANCE.newFeed();
+    feed.setLanguage("en-US");
+    feed.setBaseUri("http://example.org");
+    
+    feed.setTitleAsText("Example Feed");
+    feed.addLink("http://example.org/");
+    feed.addAuthor("John Doe");
+    feed.setId("urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6", false);
+    feed.addContributor("Bob Jones");
+    feed.addCategory("example");
+    
+    Entry entry = feed.insertEntry();
+    entry.setTitleAsText("Atom-Powered Robots Run Amok");
+    entry.addLink("http://example.org/2003/12/13/atom03");
+    entry.setId("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a", false);
+    entry.setSummaryAsText("Some text.");
+    
+    Entry entry2 = feed.insertEntry();
+    entry2.setTitleAsText("re: Atom-Powered Robots Run Amok");
+    entry2.addLink("/2003/12/13/atom03/1");
+    entry2.setId("urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b", false);
+    entry2.setSummaryAsText("A response");
+    entry2.addInReplyTo(entry);
+    
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    feed.getDocument().writeTo(out);
+    
+    ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+    Document<Feed> doc = Parser.INSTANCE.parse(in);
+    feed = doc.getRoot();
+    
+    assertEquals(feed.getLanguage(), "en-US");
+    assertEquals(feed.getBaseUri().toString(), "http://example.org");
+    assertEquals(feed.getTitle(), "Example Feed");
+    assertEquals(feed.getAlternateLink().getHref().toString(), "http://example.org/");
+    assertEquals(feed.getAuthor().getName(), "John Doe");
+    assertEquals(feed.getId().toString(), "urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6");
+    assertEquals(feed.getContributors().get(0).getName(), "Bob Jones");
+    assertEquals(feed.getCategories().get(0).getTerm(), "example");
+    
+    assertEquals(feed.getEntries().size(), 2);
+    entry = feed.getFirstChild(Constants.ENTRY);
+    assertNotNull(entry);
+    assertEquals(entry.getTitle(), "re: Atom-Powered Robots Run Amok");
+    assertEquals(entry.getAlternateLink().getHref().toString(), "/2003/12/13/atom03/1");
+    assertEquals(entry.getAlternateLink().getResolvedHref().toString(), "http://example.org/2003/12/13/atom03/1");
+    assertEquals(entry.getId().toString(), "urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b");
+    assertEquals(entry.getSummary(), "A response");
+    assertNotNull(entry.getInReplyTo());
+    assertEquals(entry.getInReplyTo().getRef().toString(), "urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a");
+    
+    entry = entry.getNextSibling(Constants.ENTRY);
+    assertNotNull(entry);
+    assertEquals(entry.getTitle(), "Atom-Powered Robots Run Amok");
+    assertEquals(entry.getAlternateLink().getHref().toString(), "http://example.org/2003/12/13/atom03");
+    assertEquals(entry.getId().toString(), "urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a");
+    assertEquals(entry.getSummary(), "Some text.");
   }
 }

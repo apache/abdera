@@ -139,7 +139,7 @@ public interface Content extends StringElement {
    * the src attribute is provided, Atom Processors MUST behave as though
    * the type attribute were present with a value of "text".
    * 
-   * @returns null if type = text, html or xhtml
+   * @return null if type = text, html or xhtml
    */
   MimeType getMimeType();
 

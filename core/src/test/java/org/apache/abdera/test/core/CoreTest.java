@@ -19,12 +19,9 @@ package org.apache.abdera.test.core;
 
 import java.util.Date;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.AtomDate;
-import org.apache.abdera.parser.Parser;
 import org.apache.abdera.util.ConfigProperties;
 import org.apache.abdera.util.URIHelper;
-import org.apache.abdera.xpath.XPath;
 
 import junit.framework.TestCase;
 

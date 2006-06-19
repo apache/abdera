@@ -18,6 +18,7 @@
 package org.apache.abdera.util;
 
 import java.io.InputStream;
+import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -57,6 +58,36 @@ public abstract class AbstractParser
   
   public <T extends Element>Document<T> parse(
     InputStream in, 
+    String base, 
+    ParserOptions options) 
+      throws ParseException, 
+             URISyntaxException {
+    return parse(in, new URI(base), options);
+  }
+  
+  public <T extends Element>Document<T> parse(
+    Reader in) 
+      throws ParseException {
+    return parse(in, (URI)null, getDefaultParserOptions());
+  }
+
+  public <T extends Element>Document<T> parse(
+    Reader in, 
+    URI base) 
+      throws ParseException {
+    return parse(in, base, getDefaultParserOptions());
+  }
+
+  public <T extends Element>Document<T> parse(
+    Reader in, 
+    String base) 
+      throws ParseException, 
+             URISyntaxException {
+    return parse(in, new URI(base), getDefaultParserOptions());
+  }
+  
+  public <T extends Element>Document<T> parse(
+    Reader in, 
     String base, 
     ParserOptions options) 
       throws ParseException, 

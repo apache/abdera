@@ -18,6 +18,7 @@
 package org.apache.abdera.parser;
 
 import java.io.InputStream;
+import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -66,5 +67,31 @@ public interface Parser {
     ParserOptions options) 
       throws ParseException, URISyntaxException;
 
+  <T extends Element>Document<T> parse(
+      Reader in) 
+        throws ParseException;
+    
+  <T extends Element>Document<T> parse(
+    Reader in, 
+    URI base) 
+      throws ParseException;
+  
+  <T extends Element>Document<T> parse(
+    Reader in, 
+    URI base, 
+    ParserOptions options) 
+      throws ParseException;
+  
+  <T extends Element>Document<T> parse(
+    Reader in, 
+    String base) 
+      throws ParseException, URISyntaxException;
+  
+  <T extends Element>Document<T> parse(
+    Reader in, 
+    String base, 
+    ParserOptions options) 
+      throws ParseException, URISyntaxException;
+  
   ParserOptions getDefaultParserOptions();
 }

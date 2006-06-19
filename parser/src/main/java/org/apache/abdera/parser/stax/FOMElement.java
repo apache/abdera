@@ -27,7 +27,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.namespace.QName;
+import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Base;
@@ -51,6 +53,7 @@ import org.apache.axiom.om.OMOutputFormat;
 import org.apache.axiom.om.OMProcessingInstruction;
 import org.apache.axiom.om.OMText;
 import org.apache.axiom.om.OMXMLParserWrapper;
+import org.apache.axiom.om.impl.MTOMXMLStreamWriter;
 import org.apache.axiom.om.impl.llom.OMElementImpl;
 
 
@@ -291,12 +294,31 @@ public class FOMElement
     try {
       OMOutputFormat outputFormat = new OMOutputFormat();
       outputFormat.setCharSetEncoding(getDocument().getCharset());
-      serializeAndConsume(out, outputFormat);
+      MTOMXMLStreamWriter omwriter = 
+        new MTOMXMLStreamWriter(out, outputFormat);
+      internalSerialize(omwriter, true);
+      omwriter.flush();
     } catch (XMLStreamException e) {
       throw new FOMException(e);
     }
   }
 
+  public void writeTo(java.io.Writer writer) throws IOException {
+    try { 
+      OMOutputFormat outputFormat = new OMOutputFormat();
+      outputFormat.setCharSetEncoding(getDocument().getCharset());
+      XMLStreamWriter streamwriter = 
+        XMLOutputFactory.newInstance().createXMLStreamWriter(
+          writer);
+      MTOMXMLStreamWriter omwriter = new MTOMXMLStreamWriter(streamwriter);
+      omwriter.setOutputFormat(outputFormat);
+      this.internalSerialize(omwriter, true);
+      omwriter.flush();
+    } catch (XMLStreamException e) {
+      throw new FOMException(e);
+    }
+  }
+  
   @SuppressWarnings("unchecked")
   public <T extends Element>Document<T> getDocument() {
     Document<T> document = null;
@@ -472,8 +494,6 @@ public class FOMElement
   
   @SuppressWarnings("unchecked")
   public <T extends Base>T clone() {
-    // TODO: axiom 1.0 now has a clone method, but it doesn't seem
-    // to want to work with this.  we need to investigate
     OMElement el = _create(this);
     _copyElement(this, el);
     return (T) el;

@@ -19,6 +19,7 @@ package org.apache.abdera.model;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 
 import org.apache.abdera.factory.Factory;
 
@@ -32,6 +33,11 @@ public interface Base extends Cloneable {
    * Serializes the model component out to the specified stream
    */
   void writeTo(OutputStream out) throws IOException;
+  
+  /**
+   * Serializes the model component out to the specified writer
+   */
+  void writeTo(Writer writer) throws IOException;
   
   <T extends Base>T clone();
   

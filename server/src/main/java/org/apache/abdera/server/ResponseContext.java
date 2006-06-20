@@ -27,7 +27,7 @@ public interface ResponseContext {
   
   CachePolicy getCachePolicy();
   
-  boolean hasOutput();
+  boolean hasEntity();
   
   void writeTo(OutputStream out) throws IOException;
   

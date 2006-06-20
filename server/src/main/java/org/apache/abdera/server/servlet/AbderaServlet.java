@@ -65,7 +65,7 @@ public class AbderaServlet
       if (context.getLocation() != null)
         response.setHeader("Location", context.getLocation().toString());
       handleCachePolicy(response, context.getCachePolicy());
-      if (context.hasOutput())
+      if (context.hasEntity())
         context.writeTo(response.getOutputStream());
     } else {
       response.sendError(

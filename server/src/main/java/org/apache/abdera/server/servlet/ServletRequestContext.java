@@ -69,7 +69,11 @@ public class ServletRequestContext
   
   public URI getPathInfo() {
 	try {
-		return new URI(servletRequest.getPathInfo());
+		String pathInfo = servletRequest.getPathInfo();
+		if(pathInfo == null) {
+			pathInfo = "";
+		}
+		return new URI(pathInfo);
 	} catch (URISyntaxException e) {
 		throw new RuntimeException(e);
 	}

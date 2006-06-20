@@ -1,4 +1,0 @@
-This is a first pass at an abstraction of the server api from a couple of
-APP server implementations.  Elias is also working on an alternative set of 
-interfaces and an implementation.  This will continue to evolve over the 
-next week or so.

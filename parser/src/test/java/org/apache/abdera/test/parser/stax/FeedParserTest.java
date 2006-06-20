@@ -20,7 +20,6 @@ package org.apache.abdera.test.parser.stax;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.net.URI;
 
 import javax.activation.DataHandler;
 
@@ -36,32 +35,22 @@ import junit.framework.TestCase;
 
 public class FeedParserTest extends TestCase {
 
-  private static URI baseURI = null;
-  
-  private static Document<Feed> get(URI uri) {
+  private static Document<Feed> parse(String name) {
     try {
-      return Parser.INSTANCE.parse(uri.toURL().openStream(), uri);
+      String path = "/feedparser/" + name;
+      InputStream stream = FeedParserTest.class.getResourceAsStream(path);
+      return Parser.INSTANCE.parse(stream);
     } catch (Exception e) {}
     return null;
   }
   
-  @Override
-  protected void setUp() throws Exception {
-    try {
-      baseURI = new URI("http://www.feedparser.org/tests/wellformed/atom10/");
-    } catch (Exception e) {}
-    super.setUp();
-  }
-  
   public void testAtom10Namespace() throws Exception {
-    URI uri = baseURI.resolve("atom10_namespace.xml");
-    Document doc = get(uri);
+    Document doc = parse("atom10_namespace.xml");
     assertNotNull(doc);
   }
   
   public void testEntryAuthorEmail() throws Exception {
-    URI uri = baseURI.resolve("entry_author_email.xml");
-    Document doc = get(uri);
+    Document doc = parse("entry_author_email.xml");
     Feed feed = (Feed) doc.getRoot();
     Entry entry = feed.getEntries().get(0);
     Person person = entry.getAuthor();
@@ -69,8 +58,7 @@ public class FeedParserTest extends TestCase {
   }
   
   public void testEntryAuthorName() throws Exception {
-    URI uri = baseURI.resolve("entry_author_name.xml");
-    Document doc = get(uri);
+    Document doc = parse("entry_author_name.xml");
     Feed feed = (Feed) doc.getRoot();
     Entry entry = feed.getEntries().get(0);
     Person person = entry.getAuthor();
@@ -78,8 +66,7 @@ public class FeedParserTest extends TestCase {
   }
   
   public void testEntryContentBase64() throws Exception {
-    URI uri = baseURI.resolve("entry_content_base64.xml");
-    Document doc = get(uri);
+    Document doc = parse("entry_content_base64.xml");
     Feed feed = (Feed)doc.getRoot();
     Entry entry = feed.getEntries().get(0);
     Content mediaContent = entry.getContentElement();
@@ -93,8 +80,7 @@ public class FeedParserTest extends TestCase {
   }
   
   public void testEntryContentBase642() throws Exception {
-    URI uri = baseURI.resolve("entry_content_base64_2.xml");
-    Document doc = get(uri);
+    Document doc = parse("entry_content_base64_2.xml");
     Feed feed = (Feed)doc.getRoot();
     Entry entry = feed.getEntries().get(0);
     Content mediaContent = entry.getContentElement();

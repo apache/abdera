@@ -29,6 +29,11 @@
   <property name="parser.test.resources" value="${parser}/src/test/resources" />
   <property name="parser.work" value="${work}/parser" />
   <property name="parser.jar" value="${dist}/${ant.project.name}.parser.${version}.jar" />
+  <property name="server" value="${basedir}/server" />
+  <property name="server.src" value="${server}/src/main/java" />
+  <property name="server.work" value="${work}/server" />
+  <property name="server.jar" value="${dist}/${ant.project.name}.server.${version}.jar" />
+  	
 
   <property name="dependencies" value="${basedir}/dependencies" />
   <property file="${dependencies}/deps.properties" />
@@ -58,6 +63,7 @@ Working directory: ${work}
         <and>
           <available file="${dependencies}/${geronimo.activation.jar}" />
           <available file="${dependencies}/${geronimo.javamail.jar}" />
+          <available file="${dependencies}/${geronimo.servlet.jar}" />        	
           <available file="${dependencies}/${axiom.api.jar}" />
           <available file="${dependencies}/${axiom.impl.jar}" />
           <available file="${dependencies}/${jaxen.jar}" />
@@ -108,8 +114,16 @@ Working directory: ${work}
   	  </fileset>
   	</copy>
   </target>
+	
+  <target name="compile.server" depends="init, compile.core">
+    <mkdir dir="${server.work}" />
+    <javac srcdir="${server.src}"
+           destdir="${server.work}"
+           classpathref="jar.dependencies"
+           classpath="${core.work}" />
+  </target>	
 
-  <target name="build" depends="init,compile.core,compile.parser"></target>
+  <target name="build" depends="init,compile.core,compile.parser,compile.server"></target>
 
   <target name="docs" depends="init">
     <javadoc packagenames="org.apache.abdera.*"
@@ -144,6 +158,7 @@ Working directory: ${work}
     <mkdir dir="${dist_lib}" />
     <jar destfile="${core.jar}"   basedir="${core.work}" />
     <jar destfile="${parser.jar}" basedir="${parser.work}" />
+    <jar destfile="${server.jar}" basedir="${server.work}" />  	
     <copy todir="${dist_lib}">
       <fileset dir="${dependencies}"  />
     </copy>
@@ -169,6 +184,9 @@ Working directory: ${work}
       <get src="${geronimo.javamail.dir}/${geronimo.javamail.jar}"
            dest="${dependencies}/${geronimo.javamail.jar}"
            usetimestamp="true" />
+      <get src="${geronimo.servlet.dir}/${geronimo.servlet.jar}"
+             dest="${dependencies}/${geronimo.servlet.jar}"
+             usetimestamp="true" />    	
       <get src="${axiom.dir}/${axiom.api.jar}"
            dest="${dependencies}/${axiom.api.jar}"
            usetimestamp="true" />

@@ -67,7 +67,7 @@ public class AbderaServerException
     return null;
   }
 
-  public boolean hasOutput() {
+  public boolean hasEntity() {
     return false;
   }
 

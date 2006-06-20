@@ -28,6 +28,10 @@ import java.util.Date;
 import javax.activation.DataHandler;
 import javax.activation.MimeType;
 import javax.xml.namespace.QName;
+import javax.xml.transform.Result;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.filter.ParseFilter;
@@ -60,6 +64,7 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.parser.stax.FOMEntry;
 import org.apache.abdera.parser.stax.FOMFactory;
+import org.apache.abdera.util.AbderaSource;
 import org.apache.abdera.util.BlackListParseFilter;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
@@ -671,6 +676,37 @@ public class FOMTest extends TestCase   {
      Feed feed = doc.getRoot();
      entry = feed.getEntries().get(0);
      assertTrue(entry instanceof MyEntry);
+  }
+  
+  public void testSourceResult() throws Exception {
+    try {
+      // Apply an XSLT transform to the entire Feed
+      TransformerFactory factory = TransformerFactory.newInstance();
+      Document xslt = Parser.INSTANCE.parse(FOMTest.class.getResourceAsStream("/test.xslt"));
+      AbderaSource xsltSource = new AbderaSource(xslt);
+      Transformer transformer = factory.newTransformer(xsltSource);
+      Document<Feed> feed = Parser.INSTANCE.parse(FOMTest.class.getResourceAsStream("/simple.xml"));
+      AbderaSource feedSource = new AbderaSource(feed);
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      Result result = new StreamResult(out);
+      transformer.transform(feedSource, result);
+      assertEquals(out.toString(), "This is a test urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6");
+      
+      // Apply an XSLT transform to XML in the content element
+      xslt = Parser.INSTANCE.parse(FOMTest.class.getResourceAsStream("/content.xslt"));
+      xsltSource = new AbderaSource(xslt);
+      transformer = factory.newTransformer(xsltSource);
+      feed = Parser.INSTANCE.parse(FOMTest.class.getResourceAsStream("/xmlcontent.xml"));
+      Entry entry = feed.getRoot().getEntries().get(0);
+      Content content = entry.getContentElement();
+      AbderaSource contentSource = new AbderaSource(content.getValueElement());
+      out = new ByteArrayOutputStream();
+      result = new StreamResult(out);
+      transformer.transform(contentSource, result);
+      assertEquals(out.toString(), "This is a test test");
+    } catch (Exception exception) {
+      // TrAX is likely not configured, skip the test
+    }
   }
   
   public static class MyFactory extends FOMFactory {

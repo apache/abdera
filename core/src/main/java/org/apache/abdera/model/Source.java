@@ -93,7 +93,6 @@ public interface Source
   
   /**
    * Adds an author
-   * @throws URISyntaxException 
    */
   Person addAuthor(String name);
 
@@ -168,7 +167,6 @@ public interface Source
   
   /**
    * Adds an author
-   * @throws URISyntaxException 
    */
   Person addContributor(String name);
 

@@ -58,6 +58,8 @@ import org.apache.abdera.model.Total;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
+import org.apache.abdera.parser.stax.FOMEntry;
+import org.apache.abdera.parser.stax.FOMFactory;
 import org.apache.abdera.util.BlackListParseFilter;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
@@ -65,6 +67,11 @@ import org.apache.abdera.util.Version;
 import org.apache.abdera.util.WhiteListParseFilter;
 import org.apache.abdera.xpath.XPath;
 import org.apache.axiom.attachments.ByteArrayDataSource;
+import org.apache.axiom.om.OMContainer;
+import org.apache.axiom.om.OMException;
+import org.apache.axiom.om.OMFactory;
+import org.apache.axiom.om.OMNamespace;
+import org.apache.axiom.om.OMXMLParserWrapper;
 
 
 import junit.framework.TestCase;
@@ -650,5 +657,69 @@ public class FOMTest extends TestCase   {
     assertEquals(entry.getAlternateLink().getHref().toString(), "http://example.org/2003/12/13/atom03");
     assertEquals(entry.getId().toString(), "urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a");
     assertEquals(entry.getSummary(), "Some text.");
+  }
+  
+  public void testAlternatives() throws Exception {
+     Factory factory = new MyFactory();
+     Entry entry = factory.newEntry();
+     assertTrue(entry instanceof MyEntry);
+     
+     ParserOptions options = Parser.INSTANCE.getDefaultParserOptions();
+     options.setFactory(factory);
+     InputStream in = FOMTest.class.getResourceAsStream("/simple.xml");
+     Document<Feed> doc = Parser.INSTANCE.parse(in, (URI)null, options);
+     Feed feed = doc.getRoot();
+     entry = feed.getEntries().get(0);
+     assertTrue(entry instanceof MyEntry);
+  }
+  
+  public static class MyFactory extends FOMFactory {
+    public MyFactory() {
+      registerAlternative(FOMEntry.class, MyEntry.class);
+    }
+  }
+  
+  @SuppressWarnings("serial")
+  public static class MyEntry extends FOMEntry{
+
+    public MyEntry(
+      OMContainer parent, 
+      OMFactory factory, 
+      OMXMLParserWrapper builder) 
+        throws OMException {
+      super(parent, factory, builder);
+    }
+
+    public MyEntry(
+      OMContainer parent, 
+      OMFactory factory) 
+        throws OMException {
+      super(parent, factory);
+    }
+
+    public MyEntry(
+      QName qname, 
+      OMContainer parent, 
+      OMFactory factory, 
+      OMXMLParserWrapper builder) {
+        super(qname, parent, factory, builder);
+    }
+
+    public MyEntry(
+      QName qname, 
+      OMContainer parent, 
+      OMFactory factory) {
+        super(qname, parent, factory);
+    }
+
+    public MyEntry(
+      String name, 
+      OMNamespace namespace, 
+      OMContainer parent, 
+      OMFactory factory) 
+        throws OMException {
+      super(name, namespace, parent, factory);
+    }
+    
   }
 }

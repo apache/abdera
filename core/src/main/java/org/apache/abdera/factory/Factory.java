@@ -281,4 +281,6 @@ public interface Factory {
   
   void registerAsSimpleExtension(QName qname);
   
+  <T extends Base>void registerAlternative(Class<T> base, Class<? extends T> alternative);
+  
 }

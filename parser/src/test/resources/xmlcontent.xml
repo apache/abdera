@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xml:base="http://example.org/">
+<feed xmlns="http://www.w3.org/2005/Atom">
   
   <title>Example Feed</title>
-  <link href=""/>
+  <link href="http://example.org/"/>
   <updated>2003-12-13T18:30:02Z</updated>
   <author>
     <name>John Doe</name>
@@ -11,10 +11,10 @@
 
   <entry>
     <title>Atom-Powered Robots Run Amok</title>
-    <link href="/2003/12/13/atom03"/>
+    <link href="http://example.org/2003/12/13/atom03"/>
     <id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</id>
     <updated>2003-12-13T18:30:02Z</updated>
-    <summary>Some text.</summary>
+    <content type="application/xml"><a xmlns="http://example.org"><b><c>test</c></b></a></content>
   </entry>
 
 </feed>

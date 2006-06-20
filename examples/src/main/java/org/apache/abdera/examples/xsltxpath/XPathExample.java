@@ -15,42 +15,34 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.examples.simple;
+package org.apache.abdera.examples.xsltxpath;
 
 import java.io.InputStream;
 
 import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.parser.Parser;
+import org.apache.abdera.xpath.XPath;
 
-
-public class Parse {
+public class XPathExample {
 
   public static void main(String[] args) throws Exception {
     
-    InputStream in = Parse.class.getResourceAsStream("/simple.xml");
+    InputStream in = XPathExample.class.getResourceAsStream("/simple.xml");
     Document<Feed> doc = Parser.INSTANCE.parse(in);
     Feed feed = doc.getRoot();
+    XPath xpath = XPath.INSTANCE;
     
-    System.out.println(feed.getTitle());
-    System.out.println(feed.getTitleType());
-    System.out.println(feed.getAlternateLink().getResolvedHref());
-    System.out.println(feed.getUpdated());
-    System.out.println(feed.getAuthor().getName());
-    System.out.println(feed.getId());
-    
-    Entry entry = feed.getEntries().get(0);
-
-    System.out.println(entry.getTitle());
-    System.out.println(entry.getTitleType());
-    System.out.println(entry.getAlternateLink().getHref());            // relative URI
-    System.out.println(entry.getAlternateLink().getResolvedHref());    // absolute URI resolved against Base URI
-    System.out.println(entry.getId());
-    System.out.println(entry.getUpdated());
-    System.out.println(entry.getSummary());
-    System.out.println(entry.getSummaryType());
+    System.out.println(xpath.evaluate("count(/a:feed)", feed));         // 1.0
+    System.out.println(xpath.numericValueOf("count(/a:feed)", feed));   // 1.0
+    System.out.println(xpath.isTrue("/a:feed/a:entry", feed));          // true (the feed has an entry)
+    System.out.println(xpath.valueOf("/a:feed/a:entry/a:title", feed)); // Atom-Powered Robots Run Amok
+    System.out.println(xpath.selectNodes("/a:feed/a:entry", feed));     // every entry
+    System.out.println(xpath.selectSingleNode("/a:feed", feed));
+    System.out.println(xpath.selectSingleNode("..", feed.getTitleElement()));
+    System.out.println(xpath.selectSingleNode("ancestor::*", feed.getEntries().get(0)));
+    System.out.println(xpath.valueOf("concat('The feed is is ',/a:feed/a:id)", feed)); // "The feed is is urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6"
     
   }
-  
+
 }

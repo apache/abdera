@@ -65,6 +65,9 @@ public class ServletRequestContext
 		buffer.append(servletRequest.getLocalPort());
 	}
 	buffer.append(servletRequest.getServletPath());
+  
+  // So that .resolve() works appropriately.
+  buffer.append("/");
 	try {
 		return new URI(buffer.toString());
 	} catch (URISyntaxException e) {

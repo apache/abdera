@@ -101,6 +101,12 @@ Working directory: ${work}
   	    <include name="*.xml"/>
   	  </fileset>
   	</copy>
+        <mkdir dir="${test}/feedparser" />
+        <copy todir="${test}/feedparser">
+  	  <fileset dir="${parser.test.resources}/feedparser">
+  	    <include name="*.xml"/>
+  	  </fileset>
+  	</copy>
   </target>
 
   <target name="build" depends="init,compile.core,compile.parser"></target>

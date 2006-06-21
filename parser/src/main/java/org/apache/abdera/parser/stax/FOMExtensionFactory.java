@@ -21,8 +21,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.factory.Factory;
-import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Element;
+import org.apache.abdera.model.Base;
 import org.apache.abdera.model.ExtensionElement;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
@@ -31,13 +30,8 @@ public interface FOMExtensionFactory extends ExtensionFactory {
 
   public <T extends ExtensionElement>T newExtensionElement(
     QName qname,
-    Element parent,
+    Base parent,
     Factory factory,
     OMXMLParserWrapper parserWrapper);
 
-  public <T extends ExtensionElement>T newExtensionElement(
-      QName qname,
-      Document parent,
-      Factory factory,
-      OMXMLParserWrapper parserWrapper);
 }

@@ -120,10 +120,10 @@ public final class ServiceUtil
 
   private static List<ExtensionFactory> factories = null;
   
-  public static List<ExtensionFactory> loadExtensionFactories(String id) {
+  public static List<ExtensionFactory> loadExtensionFactories() {
     if (factories == null) {
       factories = new ArrayList<ExtensionFactory>();
-      String sid = "META-INF/services/" + id;
+      String sid = "META-INF/services/org.apache.abdera.factory.ExtensionFactory";
       ClassLoader loader = getClassLoader();
       try {
         Enumeration e = loader.getResources(sid);

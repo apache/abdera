@@ -75,6 +75,38 @@ public class FOMFactory
   extends OMLinkedListImplFactory 
   implements Factory, Constants {
 
+  private final static Map<QName,Class> qclasses = new HashMap<QName,Class>();
+  static {
+    qclasses.put(FEED, FOMFeed.class);
+    qclasses.put(SERVICE, FOMService.class);
+    qclasses.put(ENTRY, FOMEntry.class);
+    qclasses.put(AUTHOR, FOMPerson.class);
+    qclasses.put(CATEGORY, FOMCategory.class);
+    qclasses.put(CONTENT, FOMContent.class);
+    qclasses.put(CONTRIBUTOR, FOMPerson.class);
+    qclasses.put(GENERATOR, FOMGenerator.class);
+    qclasses.put(ICON, FOMIRI.class);
+    qclasses.put(ID, FOMIRI.class);
+    qclasses.put(LOGO, FOMIRI.class);
+    qclasses.put(LINK, FOMLink.class);
+    qclasses.put(PUBLISHED, FOMDateTime.class);
+    qclasses.put(RIGHTS, FOMText.class);
+    qclasses.put(SOURCE, FOMSource.class);
+    qclasses.put(SUBTITLE, FOMText.class);
+    qclasses.put(SUMMARY, FOMText.class);
+    qclasses.put(TITLE, FOMText.class);
+    qclasses.put(UPDATED, FOMDateTime.class);
+    qclasses.put(WORKSPACE, FOMWorkspace.class);
+    qclasses.put(COLLECTION, FOMCollection.class);
+    qclasses.put(NAME, FOMStringElement.class);
+    qclasses.put(EMAIL, FOMStringElement.class);
+    qclasses.put(URI, FOMIRI.class);
+    qclasses.put(CONTROL, FOMControl.class);
+    qclasses.put(DIV, FOMDiv.class);
+    qclasses.put(IN_REPLY_TO, FOMInReplyTo.class);
+    qclasses.put(THRTOTAL, FOMTotal.class);
+  }
+  
   private List<QName> simpleExtensions = null;
   private Map<Class,Class> alternatives = null;
   
@@ -612,36 +644,20 @@ public class FOMFactory
   
   public StringElement newStringElement(
     QName qname, 
-    Element parent) {
-      return _newInstance(FOMStringElement.class, qname, (OMContainer)parent);
-  }
-
-  public StringElement newStringElement(
-    QName qname, 
-    Document parent) {
+    Base parent) {
       return _newInstance(FOMStringElement.class, qname, (OMContainer)parent);
   }
   
   public StringElement newStringElement(
     QName qname, 
     String value,
-    Element parent) {
+    Base parent) {
     StringElement el = newStringElement(qname, parent);
     if (value != null)
       el.setValue(value);
     return el;
   }
 
-  public StringElement newStringElement(
-    QName qname, 
-    String value,
-    Document parent) {
-    StringElement el = newStringElement(qname, parent);
-    if (value != null)
-      el.setValue(value);
-    return el;
-  }
-  
   public ExtensionElement newExtensionElement(
     QName qname, 
     Base parent) {
@@ -651,37 +667,7 @@ public class FOMFactory
   private ExtensionElement newExtensionElement(
     QName qname, 
     OMContainer parent) {
-      ExtensionElement element = null;
-      if (!isSimpleExtension(qname)) {
-        List<ExtensionFactory> factories = 
-          org.apache.abdera.util.ServiceUtil.loadExtensionFactories(
-            "org.apache.abdera.factory.ExtensionFactory");
-        if (factories != null) {
-          for (ExtensionFactory factory : factories) {
-            if ((factory.getNamespace() == null) ? 
-                  qname.getNamespaceURI() == null : 
-                    factory.getNamespace().equals(
-                      qname.getNamespaceURI())) {
-              if (parent instanceof Element)
-                element = factory.newExtensionElement(qname, (Element)parent, this);
-              else if (parent instanceof Document)
-                element = factory.newExtensionElement(qname, (Document)parent, this);
-            }
-          }
-        }
-        if (element == null) {
-          element = 
-            _newInstance(FOMExtensionElement.class, qname, (OMContainer)parent);
-        }
-      } else {
-        if (parent instanceof Element)
-          element = newStringElement(qname, (Element)parent);
-        else if (parent instanceof Document)
-          element = newStringElement(qname, (Document)parent);
-        else 
-          element = newStringElement(qname, (Element)null);
-      }
-      return element;
+      return newExtensionElement(qname, parent, null);
   }
 
   public ExtensionElement newExtensionElement(
@@ -689,30 +675,32 @@ public class FOMFactory
     OMContainer parent,
     OMXMLParserWrapper parserWrapper) {
     ExtensionElement element = null;
-    List<ExtensionFactory> factories = 
-      org.apache.abdera.util.ServiceUtil.loadExtensionFactories(
-        "org.apache.abdera.factory.ExtensionFactory");
-    if (factories != null) {
-      for (ExtensionFactory factory : factories) {
-        if (factory instanceof FOMExtensionFactory &&
-            (factory.getNamespace() == null) ? 
-              qname.getNamespaceURI() == null : 
-                factory.getNamespace().equals(
-                  qname.getNamespaceURI())) {
-          if (parent instanceof Element)
-            element = 
-              ((FOMExtensionFactory)factory).newExtensionElement(
-                qname, (Element)parent, this, parserWrapper);
-          else if (parent instanceof Document)
-            element = 
-              ((FOMExtensionFactory)factory).newExtensionElement(
-                qname, (Document)parent, this, parserWrapper);
+    if (!isSimpleExtension(qname)) {
+      List<ExtensionFactory> factories = 
+        org.apache.abdera.util.ServiceUtil.loadExtensionFactories();
+      if (factories != null) {
+        for (ExtensionFactory factory : factories) {
+          if (factory instanceof FOMExtensionFactory &&
+              factory.handlesNamespace(qname.getNamespaceURI())) {
+              if (parserWrapper != null) {
+                element = ((FOMExtensionFactory)factory).newExtensionElement(
+                  qname, (Base)parent, this, parserWrapper);
+              } else {
+                element = ((FOMExtensionFactory)factory).newExtensionElement(
+                  qname, (Base)parent, this); 
+              }
+          }
         }
       }
-    }
-    if (element == null) {
-      element = 
-        _newInstance(FOMExtensionElement.class, qname, (OMContainer)parent, parserWrapper);
+      if (element == null) {
+        if (parserWrapper != null) {
+          element = _newInstance(FOMExtensionElement.class, qname, (OMContainer)parent, parserWrapper);
+        } else {
+          element = _newInstance(FOMExtensionElement.class, qname, (OMContainer)parent);
+        }
+      }
+    } else {
+      element = newStringElement(qname, (Base) parent);
     }
     return element;
   }
@@ -994,7 +982,19 @@ public class FOMFactory
       parent
     );
   }
-
+  
+  private boolean isContent(QName qname) {
+    return CONTENT.equals(qname);
+  }
+  
+  private boolean isText(QName qname) {
+    return TITLE.equals(qname) ||
+           SUMMARY.equals(qname) ||
+           SUBTITLE.equals(qname) ||
+           RIGHTS.equals(qname);
+  }
+  
+  @SuppressWarnings("unchecked")
   protected OMElement createElement(
       QName qname, 
       OMContainer parent, 
@@ -1005,67 +1005,16 @@ public class FOMFactory
         this.createOMNamespace(
           qname.getNamespaceURI(), 
           qname.getPrefix());
-      if (FEED.equals(qname)) {
-        element = (OMElement) _newInstance(FOMFeed.class, qname.getLocalPart(), namespace, parent);
-      } else if (SERVICE.equals(qname)) {
-        element = (OMElement) _newInstance(FOMService.class, qname.getLocalPart(), namespace, parent);
-      } else if (ENTRY.equals(qname)) {
-        element = (OMElement) _newInstance(FOMEntry.class, qname.getLocalPart(), namespace, parent);
-      } else if (AUTHOR.equals(qname)) {
-        element = (OMElement) _newInstance(FOMPerson.class, qname.getLocalPart(), namespace, parent);
-      } else if (CATEGORY.equals(qname)) {
-        element = (OMElement) _newInstance(FOMCategory.class, qname.getLocalPart(), namespace, parent);
-      } else if (CONTENT.equals(qname)) {
-        Content.Type type = (Content.Type) objecttype;
-        element = (OMElement) _newInstance(FOMContent.class, type, qname.getLocalPart(), namespace, parent);
-      } else if (CONTRIBUTOR.equals(qname)) {
-        element = (OMElement) _newInstance(FOMPerson.class, qname.getLocalPart(), namespace, parent);
-      } else if (GENERATOR.equals(qname)) {
-        element = (OMElement) _newInstance(FOMGenerator.class, qname.getLocalPart(), namespace, parent);
-      } else if (ICON.equals(qname)) {
-        element = (OMElement) _newInstance(FOMIRI.class, qname.getLocalPart(), namespace, parent);
-      } else if (ID.equals(qname)) {
-        element = (OMElement) _newInstance(FOMIRI.class, qname.getLocalPart(), namespace, parent);
-      } else if (LOGO.equals(qname)) {
-        element = (OMElement) _newInstance(FOMIRI.class, qname.getLocalPart(), namespace, parent);
-      } else if (LINK.equals(qname)) {
-        element = (OMElement) _newInstance(FOMLink.class, qname.getLocalPart(), namespace, parent);
-      } else if (PUBLISHED.equals(qname)) {
-        element = (OMElement) _newInstance(FOMDateTime.class, qname.getLocalPart(), namespace, parent);
-      } else if (RIGHTS.equals(qname)) {
-        Text.Type type = (Text.Type) objecttype;
-        element = (OMElement) _newInstance(FOMText.class, type, qname.getLocalPart(), namespace, parent);
-      } else if (SOURCE.equals(qname)) {
-        element = (OMElement) _newInstance(FOMSource.class, qname.getLocalPart(), namespace, parent);
-      } else if (SUBTITLE.equals(qname)) {
-        Text.Type type = (Text.Type) objecttype;
-        element = (OMElement) _newInstance(FOMText.class, type, qname.getLocalPart(), namespace, parent);
-      } else if (SUMMARY.equals(qname)) {
-        Text.Type type = (Text.Type) objecttype;
-        element = (OMElement) _newInstance(FOMText.class, type, qname.getLocalPart(), namespace, parent);
-      } else if (TITLE.equals(qname)) {
-        Text.Type type = (Text.Type) objecttype;
-        element = (OMElement) _newInstance(FOMText.class, type, qname.getLocalPart(), namespace, parent);
-      } else if (UPDATED.equals(qname)) {
-        element = (OMElement) _newInstance(FOMDateTime.class, qname.getLocalPart(), namespace, parent);          
-      } else if (WORKSPACE.equals(qname)) {
-        element = (OMElement) _newInstance(FOMWorkspace.class, qname.getLocalPart(), namespace, parent);
-      } else if (COLLECTION.equals(qname)) {
-        element = (OMElement) _newInstance(FOMCollection.class, qname.getLocalPart(), namespace, parent);
-      } else if (NAME.equals(qname)) {
-        element = (OMElement) _newInstance(FOMStringElement.class, qname.getLocalPart(), namespace, parent);
-      } else if (EMAIL.equals(qname)) {
-        element = (OMElement) _newInstance(FOMStringElement.class, qname.getLocalPart(), namespace, parent);
-      } else if (URI.equals(qname)) {
-        element = (OMElement) _newInstance(FOMIRI.class, qname.getLocalPart(), namespace, parent);
-      } else if (CONTROL.equals(qname)) {
-        element = (OMElement) _newInstance(FOMControl.class, qname.getLocalPart(), namespace, parent);
-      } else if (DIV.equals(qname)) {
-        element = (OMElement) _newInstance(FOMDiv.class, qname.getLocalPart(), namespace, parent);
-      } else if (IN_REPLY_TO.equals(qname)) {
-        element = (OMElement) _newInstance(FOMInReplyTo.class, qname.getLocalPart(), namespace, parent);
-      } else if (THRTOTAL.equals(qname)) {
-        element = (OMElement) _newInstance(FOMTotal.class, qname.getLocalPart(), namespace, parent);
+      if (qclasses.containsKey(qname)) {
+        if (isContent(qname)) {
+          Content.Type type = (Content.Type)objecttype;
+          element = (OMElement) _newInstance(qclasses.get(qname), type, qname.getLocalPart(), namespace, parent);
+        } else if (isText(qname)) {
+          Text.Type type = (Text.Type)objecttype;
+          element = (OMElement) _newInstance(qclasses.get(qname), type, qname.getLocalPart(), namespace, parent);
+        } else {
+          element = (OMElement) _newInstance(qclasses.get(qname), qname.getLocalPart(), namespace, parent);
+        }
       } else if (parent instanceof ExtensibleElement || parent instanceof Document) {
         if (isSimpleExtension(qname)) {
           element = (OMElement) _newInstance(FOMStringElement.class, qname.getLocalPart(), namespace, parent);
@@ -1076,72 +1025,22 @@ public class FOMFactory
       return element;
     }
   
+  @SuppressWarnings("unchecked")
   protected OMElement createElement(
     QName qname, 
     OMContainer parent, 
     FOMBuilder builder) {
-    OMElement element = null;
-    if (FEED.equals(qname)) {
-      element = (OMElement) newFeed(qname, parent, builder);
-    } else if (SERVICE.equals(qname)) {
-      element = (OMElement) newService(qname, parent, builder);
-    } else if (ENTRY.equals(qname)) {
-      element = (OMElement) newEntry(qname, parent, builder);
-    } else if (AUTHOR.equals(qname)) {
-      element = (OMElement) newPerson(qname, parent, builder);
-    } else if (CATEGORY.equals(qname)) {
-      element = (OMElement) newCategory(qname, parent, builder);
-    } else if (CONTENT.equals(qname)) {
-      Content.Type type = builder.getContentType();
-      element = (OMElement) newContent(qname, type, parent, builder);
-    } else if (CONTRIBUTOR.equals(qname)) {
-      element = (OMElement) newPerson(qname, parent, builder);
-    } else if (GENERATOR.equals(qname)) {
-      element = (OMElement) newGenerator(qname, parent, builder);
-    } else if (ICON.equals(qname)) {
-      element = (OMElement) newURIElement(qname, parent, builder);
-    } else if (ID.equals(qname)) {
-      element = (OMElement) newID(qname, parent, builder);
-    } else if (LOGO.equals(qname)) {
-      element = (OMElement) newURIElement(qname, parent, builder);
-    } else if (LINK.equals(qname)) {
-      element = (OMElement) newLink(qname, parent, builder);
-    } else if (PUBLISHED.equals(qname)) {
-      element = (OMElement) newDateTimeElement(qname, parent, builder);
-    } else if (RIGHTS.equals(qname)) {
-      Text.Type type = builder.getTextType();
-      element = (OMElement) newText(qname, type, parent, builder);
-    } else if (SOURCE.equals(qname)) {
-      element = (OMElement) newSource(qname, parent, builder);
-    } else if (SUBTITLE.equals(qname)) {
-      Text.Type type = builder.getTextType();
-      element = (OMElement) newText(qname, type, parent, builder);
-    } else if (SUMMARY.equals(qname)) {
-      Text.Type type = builder.getTextType();
-      element = (OMElement) newText(qname, type, parent, builder);
-    } else if (TITLE.equals(qname)) {
-      Text.Type type = builder.getTextType();
-      element = (OMElement) newText(qname, type, parent, builder);
-    } else if (UPDATED.equals(qname)) {
-      element = (OMElement) newDateTimeElement(qname, parent, builder);          
-    } else if (WORKSPACE.equals(qname)) {
-      element = (OMElement) newWorkspace(qname, parent, builder);
-    } else if (COLLECTION.equals(qname)) {
-      element = (OMElement) newCollection(qname, parent, builder);
-    } else if (NAME.equals(qname)) {
-      element = (OMElement) newStringElement(qname, parent, builder);
-    } else if (EMAIL.equals(qname)) {
-      element = (OMElement) newStringElement(qname, parent, builder);
-    } else if (URI.equals(qname)) {
-      element = (OMElement) newURIElement(qname, parent, builder);
-    } else if (CONTROL.equals(qname)) {
-      element = (OMElement) newControl(qname, parent, builder);
-    } else if (DIV.equals(qname)) {
-      element = (OMElement) newDiv(qname, parent, builder);
-    } else if (IN_REPLY_TO.equals(qname)) {
-      element = (OMElement) newInReplyTo(qname, parent, builder);
-    } else if (THRTOTAL.equals(qname)) {
-      element = (OMElement) newTotal(qname, parent, builder);
+    OMElement element = null;    
+    if (qclasses.containsKey(qname)) {
+      if (isContent(qname)) {
+        Content.Type type = builder.getContentType();
+        element = (OMElement) _newInstance(qclasses.get(qname), qname, type, parent, builder);
+      } else if (isText(qname)) {
+        Text.Type type = builder.getTextType();
+        element = (OMElement) _newInstance(qclasses.get(qname), type, qname, parent, builder);
+      } else {
+        element = (OMElement) _newInstance(qclasses.get(qname), qname, parent, builder);
+      }
     } else if (parent instanceof ExtensibleElement || parent instanceof Document) {
       if (isSimpleExtension(qname)) {
         element = (OMElement) newStringElement(qname, parent, builder);
@@ -1236,6 +1135,15 @@ public class FOMFactory
   };
   
   private static final Class[] CONSTRUCTOR9 = new Class[] {
+    OMFactory.class
+  };
+  
+  private static final Class[] CONSTRUCTOR10 = new Class[] {
+    OMFactory.class,
+    OMXMLParserWrapper.class
+  };
+
+  private static final Class[] CONSTRUCTOR11 = new Class[] {
     Content.Type.class,
     String.class, 
     OMNamespace.class, 
@@ -1243,21 +1151,12 @@ public class FOMFactory
     OMFactory.class
   };
 
-  private static final Class[] CONSTRUCTOR10 = new Class[] {
+  private static final Class[] CONSTRUCTOR12 = new Class[] {
     Text.Type.class,
     String.class, 
     OMNamespace.class, 
     OMContainer.class, 
     OMFactory.class
-  };
-  
-  private static final Class[] CONSTRUCTOR11 = new Class[] {
-    OMFactory.class
-  };
-  
-  private static final Class[] CONSTRUCTOR12 = new Class[] {
-    OMFactory.class,
-    OMXMLParserWrapper.class
   };
   
   @SuppressWarnings("unchecked")
@@ -1335,13 +1234,26 @@ public class FOMFactory
   }
 
   private <T extends Base>T _newInstance(
+    Class<T> _class) {
+      Object[] args = new Object[] {this};
+      return _newInstance(_class, CONSTRUCTOR9, args);
+  }
+
+  private <T extends Base>T _newInstance(
+    Class<T> _class,
+    OMXMLParserWrapper parserWrapper) {
+      Object[] args = new Object[] {this, parserWrapper};
+      return _newInstance(_class, CONSTRUCTOR10, args);
+  }
+  
+  private <T extends Base>T _newInstance(
     Class<T> _class,
     Content.Type type,
     String localPart,
     OMNamespace namespace,
     OMContainer parent) {
       Object[] args = new Object[] {type, localPart, namespace, parent, this};
-      return _newInstance(_class, CONSTRUCTOR9, args);
+      return _newInstance(_class, CONSTRUCTOR11, args);
   }
   
   private <T extends Base>T _newInstance(
@@ -1351,19 +1263,6 @@ public class FOMFactory
     OMNamespace namespace,
     OMContainer parent) {
       Object[] args = new Object[] {type, localPart, namespace, parent, this};
-      return _newInstance(_class, CONSTRUCTOR10, args);
-  }
-  
-  private <T extends Base>T _newInstance(
-    Class<T> _class) {
-      Object[] args = new Object[] {this};
-      return _newInstance(_class, CONSTRUCTOR11, args);
-  }
-
-  private <T extends Base>T _newInstance(
-    Class<T> _class,
-    OMXMLParserWrapper parserWrapper) {
-      Object[] args = new Object[] {this, parserWrapper};
       return _newInstance(_class, CONSTRUCTOR12, args);
   }
   

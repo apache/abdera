@@ -493,10 +493,10 @@ public class FOMElement
   }
   
   @SuppressWarnings("unchecked")
-  public <T extends Base>T clone() {
+  public Object clone() {
     OMElement el = _create(this);
     _copyElement(this, el);
-    return (T) el;
+    return el;
 
   }
   

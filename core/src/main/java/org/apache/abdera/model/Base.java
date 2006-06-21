@@ -39,7 +39,7 @@ public interface Base extends Cloneable {
    */
   void writeTo(Writer writer) throws IOException;
   
-  <T extends Base>T clone();
+  Object clone();
   
   Factory getFactory();
   

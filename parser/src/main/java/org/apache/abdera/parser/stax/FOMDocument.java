@@ -148,7 +148,7 @@ public class FOMDocument<T extends Element>
   }
   
   @SuppressWarnings("unchecked")
-  public Document<T> clone() {
+  public Object clone() {
     T rootClone = (T)getRoot().clone();
     Document<T> doc = ((FOMFactory)factory).newDocument();
     doc.setRoot(rootClone);

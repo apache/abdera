@@ -138,6 +138,7 @@
     <module>core</module>
     <module>parser</module>
     <module>security</module>
+    <module>server</module>
     <module>examples</module>
   </modules>
   

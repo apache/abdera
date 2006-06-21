@@ -19,6 +19,7 @@ package org.apache.abdera.test.parser.stax;
 
 import java.net.URI;
 import java.util.List;
+import java.io.InputStream;
 
 import javax.xml.namespace.QName;
 
@@ -37,6 +38,15 @@ import junit.framework.TestCase;
 
 public class AtomConformanceTest extends TestCase {
 
+  private static Document<Feed> parse(String uri) {
+    try {
+      String path = "/conformance/" + uri.substring(uri.lastIndexOf('/'));
+      InputStream stream = AtomConformanceTest.class.getResourceAsStream(path);
+      return Parser.INSTANCE.parse(stream, uri);
+    } catch (Exception e) {}
+    return null;
+  }
+
   private static Document<Feed> get(URI uri) {
     try {
       return Parser.INSTANCE.parse(uri.toURL().openStream(), uri);
@@ -50,7 +60,7 @@ public class AtomConformanceTest extends TestCase {
    */
   public static void testContentTypes() throws Exception {
     URI uri = new URI("http://www.snellspace.com/public/contentsummary.xml");
-    Document<Feed> doc = get(uri);
+    Document<Feed> doc = parse(uri.toString());
     Feed feed = doc.getRoot();
     int n = 1;
     for (Entry entry : feed.getEntries()) {
@@ -318,7 +328,7 @@ public class AtomConformanceTest extends TestCase {
   public static void testOrder() throws Exception {
     //http://www.snellspace.com/public/ordertest.xml
     URI uri = new URI("http://www.snellspace.com/public/ordertest.xml");
-    Document<Feed> doc = get(uri);
+    Document<Feed> doc = parse(uri.toString());
     assertNotNull(doc);
     Feed feed = doc.getRoot();
     List<Entry> entries = feed.getEntries();
@@ -413,7 +423,7 @@ public class AtomConformanceTest extends TestCase {
   public static void testLink() throws Exception {
     //http://www.snellspace.com/public/linktests.xml
     URI uri = new URI("http://www.snellspace.com/public/linktests.xml");
-    Document<Feed> doc = get(uri);
+    Document<Feed> doc = parse(uri.toString());
     assertNotNull(doc);
     Feed feed = doc.getRoot();
     List<Entry> entries = feed.getEntries();

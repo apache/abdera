@@ -19,8 +19,7 @@ package org.apache.abdera.factory;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Element;
+import org.apache.abdera.model.Base;
 import org.apache.abdera.model.ExtensionElement;
 
 
@@ -50,6 +49,11 @@ import org.apache.abdera.model.ExtensionElement;
 public interface ExtensionFactory {
 
   /**
+   * Returns true if this extension factory handles the specified namespace
+   */
+  boolean handlesNamespace(String namespace);
+  
+  /**
    * Returns the Namespace URI handled by this Extension Factory. Each
    * Extension Factory implementation should handle exactly one namespace.
    * @return The Namespace URI
@@ -66,17 +70,6 @@ public interface ExtensionFactory {
    * @param factory the Factory
    * @return ExtensionElement The created ExtensionElement
    */
-  <T extends ExtensionElement>T newExtensionElement(QName qname, Element parent, Factory factory);
+  <T extends ExtensionElement>T newExtensionElement(QName qname, Base parent, Factory factory);
 
-  /**
-   * Called by the Factory implementaton to create an instance of the 
-   * extension element.  If parent is not null, the new element will
-   * be automatically set as the root of the document.
-   * 
-   * @param qname the QName of the extension element
-   * @param parent the Parent of the extension element
-   * @param factory the Factory
-   * @return ExtensionElement The created ExtensionElement
-   */
-  <T extends ExtensionElement>T newExtensionElement(QName qname, Document parent, Factory factory);
 }

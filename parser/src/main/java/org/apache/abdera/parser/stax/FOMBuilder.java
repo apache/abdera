@@ -68,12 +68,12 @@ public class FOMBuilder
   }
 
   public FOMBuilder(
-      FOMFactory factory, 
-      XMLStreamReader parser) {
-        super(factory, parser);
-        document = factory.createOMDocument(this);
-        fomfactory = factory;
-    }
+    FOMFactory factory, 
+    XMLStreamReader parser) {
+      super(factory, parser);
+      document = factory.createOMDocument(this);
+      fomfactory = factory;
+  }
   
   public FOMBuilder(
     String filePath, 

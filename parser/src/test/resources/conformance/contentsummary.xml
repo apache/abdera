@@ -1,0 +1,88 @@
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>tag:example.org,2006:/contentsummary</id>
+  <title>Content and Summary Test</title>
+  <updated>2006-01-01T12:12:12Z</updated>
+  <author><name>James</name></author>
+  <link href="http://www.snellspace.com" />
+  <link rel="self" href="http://www.snellspace.com/public/contentsummary.xml" />
+  <entry>
+    <id>tag:example.org,2006:/contentsummary/1</id>
+    <title>Content with XML and summary</title>
+    <updated>2006-01-01T12:12:12Z</updated>
+    <link href="http://www.snellspace.com/public/alternate" />
+    <summary>If you're seeing this, your feed reader is doing a good thing. It doesn't understand the content so it is showing the text summary instead.</summary>
+    <content type="application/xml">
+      <a xmlns="tag:example.org,2006:foo"><b>If you're seeing this, something is wrong. 
+      <i>Your</i> feed <blink>reader</blink> is likely <p>trying</p> to render arbitrary <c>XML</c>
+      content as if it were HTML.</b></a>
+    </content>
+  </entry>
+  <entry>
+    <id>tag:example.org,2006:/contentsummary/2</id>
+    <title>Content with src attribute and summary</title>
+    <updated>2006-01-01T12:12:13Z</updated>
+    <link href="http://www.snellspace.com/public/alternate" />
+    <summary>If you're seeing this, your feed reader is doing a good thing. It doesn't understand the content so it is showing the text summary instead.</summary>
+    <content type="application/xml" src="http://www.snellspace.com/public/content.xml" />
+  </entry>
+  <entry>
+    <id>tag:example.org,2006:/contentsummary/3</id>
+    <title>Summary then Content</title>
+    <updated>2006-01-01T12:12:14Z</updated>
+    <link href="http://www.snellspace.com/public/alternate" />
+    <summary>Does it show summary?  It's ok if your reader shows this, but it is good to know whether or not your reader has a preference for showing the summary rather than the content</summary>
+    <content>Does it show content?  It's ok if your reader shows this, but it is good to know whether or not your reader has a preference for showing the content rather than the summary</content>
+  </entry>
+  <entry>
+    <id>tag:example.org,2006:/contentsummary/4</id>
+    <title>Content then Summary</title>
+    <updated>2006-01-01T12:12:15Z</updated>
+    <link href="http://www.snellspace.com/public/alternate" />
+    <content>Does it show content?  It's ok if your reader shows this, but it is good to know whether or not your reader has a preference for showing the content rather than the summary</content>
+    <summary>Does it show summary?  It's ok if your reader shows this, but it is good to know whether or not your reader has a preference for showing the summary rather than the content</summary>
+  </entry>
+  <entry>
+    <id>tag:example.org,2006:/contentsummary/5</id>
+    <title>Content with iCal and Summary</title>
+    <updated>2006-01-01T12:12:16Z</updated>
+    <link href="http://www.snellspace.com/public/alternate" />
+    <summary>If you see this, your feed reader is doing a good thing.  The content contains iCalendar data that shouldn't be displayed. If the reader doesn't understand the content type, it likely should not attempt to display it if a text summary is available.</summary>
+    <content type="text/calendar">BEGIN:VCALENDAR
+END:VCALENDAR
+    </content>
+  </entry>
+  <entry>
+    <id>tag:example.org,2006:/contentsummary/6</id>
+    <title>Content with Base64 encoded image</title>
+    <updated>2006-01-01T12:12:17Z</updated>
+    <link href="http://www.snellspace.com/public/alternate" />
+    <summary>If you're seeing this, your feed reader is doing good.  Alternatively, your feed reader might be smart enough to Base64 decode the content and show you the GIF image.  If all you're seeing is a bunch of Base64 encoded stuff, then your feed reader is broken.</summary>
+    <content type="image/gif">
+R0lGODlhSwBLAKUfAOLcnp61x26Mm9HTx+7qx/z8/GRrQYeMa5Kpt3mUo7TG1NXMdOfp5MnV3re6
+ptrh4/b04KywmfP08eTq73d+W/v68u3w8vP2+IWeq/j5+Z+ki3qevMLEtJSZeoOkwP//////////
+////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////yH5BAEAAB8ALAAAAgBLAEkAAAb+wI9w
+SCwaj8ikcslsOomTyXNKrRYbGIE2ILV6v8aAdixINMBob4NMxqTfUwSbrIDblY/EfBy4+4kMDHl7
+Wx8PD39vAxoUBhwfWYR1BwYUEQOJVg6NBgcOmGJ7CYgDEZSVj5lNm5URDFB6c31EDxEGqKpJA40H
+mEcPkXxJHLy+uUIMHbhLDQEICl1KDrcax4aNHU3RQohLyZ3didMUxkoTAnVCGG5NHLepftMH4cwC
+Z0IICU+7jvEGHa+cKBAQTsGoJwwowUszLdsUMdHW3HOSsF+aAZ2q5KNljwqDRuWsPKBAIWAcdkLO
+pZvysSQYSvSeYEBQJMEsKhgPfLHlwAv+hpvqgE6xtfDJg39ffhZBQNPLAZdUlJmkMiHBSiEBUFY5
+6nDfPwAACECgarVI1i8TKIVcQmmB27dhxzLJM1GIAq1MJjRQEMCDBwwGqjnJSUAIBAIA3i4Qi8dM
+EYPbkDzg6xdBgAaHnsZMYsttYSKI4TI28oDgFdOSKXsIoIBegwQGejL52CH05yKIEy+IS2RNzNeb
+J/d91iDyBwWrD+hkglF2YgByjUDQvVvug7pDHmxr5vcykgl960xba8RWON23pYeuzo1vANYTJyhA
+sBpakgf07zVnorwIBLfQLUFAYeB5sMGBB652BnitmYMcF0PQ5g1SRqA3l4F+ZejXgVf+JdEAfR1+
+8NRURmAUARIEABidERNgqOGLG2BXRIEQGqGBAZsR4U5RuKl4RAAbvChkkMbZ5QECMg7hDnlD2MIk
+EboBUMQDQlZpYIgN+BViEfslwUiO0lloV5BWarhBU0JwV6MSXSLRAVRN/OfZB0CWCaMU+K0GJmkG
+nJjEmyQykWJhddqZ4QZRHLnnL5YoASgVD3hXqKEGSuHAAivO1eifcM7VVwCIKECmoUEKkeJu6eHR
+pxJfNjGZgkM0MKqdG9w0nY9LmKiEk0vId6SMk5a5QUy37pZrbErsqMR8Hmz5gaykOltsqjoa8OQH
+GPHIzadFDiHqrGYKZcSpAZIGUK7+SDy4aKwuHrpBOpmOC+CMTzTD2hAIvNsrX1L4iqCeQjwXLxFy
+jgWMHgkg0C03wZRRh3ZKcLfaNhMc4l+U1IJ23BwHHXHOHs4aghysKTlWBAZXnYoqEmsQUqQcorDI
+bLMxVdXhOTKuxx4RMIPMIiFapCPckd4hoRRHSZpKXVhCxLIHXoYALUAfQFqWNBFHZ9eRgBY6PQfU
+pQHdhwLFOZF1mqg1wZjXbKBJBNtkXJ0EU1d0/BDQSQ70tBUI4AVZFVXt4fbJe6yLxEZE/L0V2won
+AZ7TjVshhllQT8GX1U4c0kWgTQy0zVlVDDAPGk9ZIRHPgztxy0UZQYoO1uIy0Yit4au0/kRVQNlE
+BUh22NKV2WiqNAUlstkxzrVLoVSa3ETwo20a7ljERAD62JV2spUgD4bogRnuOVYJLCzEIp1ojwYD
+N1JQvGRbr6MEA7asas34lFDwfNOzTJ0EK73MDwgH9bvEj/SxvBIxohP3mx8Ab0EBDXDAJHQB3QcY
+wIED/sN886sFJ25xgA4wgiQN3GAlHEA7/wFiAA7QwFNuwUIKHEADn+CcCWdIwxoyIQgAOw==
+    </content>
+  </entry>
+</feed>

@@ -36,16 +36,7 @@ import org.apache.axiom.om.OMElement;
 
 import junit.framework.TestCase;
 
-public class AtomConformanceTest extends TestCase {
-
-  private static Document<Feed> parse(String uri) {
-    try {
-      String path = "/conformance/" + uri.substring(uri.lastIndexOf('/'));
-      InputStream stream = AtomConformanceTest.class.getResourceAsStream(path);
-      return Parser.INSTANCE.parse(stream, uri);
-    } catch (Exception e) {}
-    return null;
-  }
+public class AtomConformanceTest extends BaseParserTestCase {
 
   private static Document<Feed> get(URI uri) {
     try {
@@ -53,14 +44,14 @@ public class AtomConformanceTest extends TestCase {
     } catch (Exception e) {}
     return null;
   }
-  
+
   /**
    * Test to make sure that the parser properly detects the various kinds of
    * extended content types allowed by Atom
    */
   public static void testContentTypes() throws Exception {
     URI uri = new URI("http://www.snellspace.com/public/contentsummary.xml");
-    Document<Feed> doc = parse(uri.toString());
+    Document<Feed> doc = parse(uri);
     Feed feed = doc.getRoot();
     int n = 1;
     for (Entry entry : feed.getEntries()) {
@@ -328,7 +319,7 @@ public class AtomConformanceTest extends TestCase {
   public static void testOrder() throws Exception {
     //http://www.snellspace.com/public/ordertest.xml
     URI uri = new URI("http://www.snellspace.com/public/ordertest.xml");
-    Document<Feed> doc = parse(uri.toString());
+    Document<Feed> doc = parse(uri);
     assertNotNull(doc);
     Feed feed = doc.getRoot();
     List<Entry> entries = feed.getEntries();
@@ -423,7 +414,7 @@ public class AtomConformanceTest extends TestCase {
   public static void testLink() throws Exception {
     //http://www.snellspace.com/public/linktests.xml
     URI uri = new URI("http://www.snellspace.com/public/linktests.xml");
-    Document<Feed> doc = parse(uri.toString());
+    Document<Feed> doc = parse(uri);
     assertNotNull(doc);
     Feed feed = doc.getRoot();
     List<Entry> entries = feed.getEntries();

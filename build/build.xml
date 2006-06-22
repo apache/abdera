@@ -102,23 +102,11 @@ Working directory: ${work}
   	       destdir="${test}"
   	       classpathref="jar.dependencies"
   	       classpath="${core.work};${parser.work}" />
-  	<copy todir="${test}">
-  	  <fileset dir="${parser.test.resources}">
-  	    <include name="*.xml"/>
-  	  </fileset>
-  	</copy>
-        <mkdir dir="${test}/feedparser" />
-        <copy todir="${test}/feedparser">
-  	  <fileset dir="${parser.test.resources}/feedparser">
-  	    <include name="*.xml"/>
-  	  </fileset>
-  	</copy>
-        <mkdir dir="${test}/conformance" />
-        <copy todir="${test}/conformance">
-  	  <fileset dir="${parser.test.resources}/conformance">
-  	    <include name="*.xml"/>
-  	  </fileset>
-  	</copy>
+    <copy todir="${test}">
+      <fileset dir="${parser.test.resources}">
+        <include name="**"/>
+      </fileset>
+    </copy>
   </target>
 	
   <target name="compile.server" depends="init, compile.core">

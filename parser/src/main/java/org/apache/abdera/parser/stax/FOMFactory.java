@@ -62,6 +62,7 @@ import org.apache.abdera.model.Workspace;
 import org.apache.abdera.model.Content.Type;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.util.Constants;
+import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.Version;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
@@ -152,6 +153,10 @@ public class FOMFactory
       return _newInstance(FOMWorkspace.class, qname, parent, parserWrapper);
   }
   
+  public Workspace newWorkspace() {
+    return newWorkspace(null);
+  }
+  
   public Workspace newWorkspace(
     Element parent) {
       return _newInstance(FOMWorkspace.class, (OMContainer)parent);
@@ -162,6 +167,10 @@ public class FOMFactory
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
       return _newInstance(FOMCollection.class, qname, parent, parserWrapper);
+  }
+  
+  public Collection newCollection() {
+    return newCollection(null);
   }
   
   public Collection newCollection(
@@ -215,14 +224,33 @@ public class FOMFactory
       return _newInstance(FOMCategory.class, qname, parent, parserWrapper);
   }
   
+  public Category newCategory() {
+    return newCategory((Element)null);
+  }
+  
   public Category newCategory(
     Element parent) {
       return _newInstance(FOMCategory.class, (OMContainer)parent);
   }
 
+  public Category newCategory(String term) {
+    return newCategory(term, null);
+  }
+  
+  public Category newCategory(String term, Element parent) {
+    return newCategory(term, null, null, parent);
+  }
+  
   public Category newCategory(
-    URI scheme, 
     String term, 
+    URI scheme, 
+    String label) {
+      return newCategory(term, scheme, label, null);
+  }
+  
+  public Category newCategory(
+    String term, 
+    URI scheme, 
     String label, 
     Element parent) {
     Category category = newCategory(parent);
@@ -244,6 +272,19 @@ public class FOMFactory
       return _newInstance(FOMContent.class, qname, type, parent, parserWrapper);
   }
   
+  public Content newContent() {
+    return newContent(Content.Type.TEXT);
+  }
+  
+  public Content newContent(String value) {
+    return newContent(value, Content.Type.TEXT);
+  }
+  
+  public Content newContent(Type type) {
+    if (type == null) type = Content.Type.TEXT;
+    return newContent(type, (Element)null);
+  }
+  
   public Content newContent(
     Type type, 
     Element parent) {
@@ -251,62 +292,100 @@ public class FOMFactory
       return _newInstance(FOMContent.class, type, (OMContainer)parent);
   }
   
-  public Content newHtmlContent(
-    String value, 
-    Element parent) {
-      Content content = newContent(Content.Type.HTML, parent);
-      content.setValue(value);
-      return content;
+  public Content newContent(MimeType mediaType) {
+    return newContent(mediaType, (Element)null);
+  }
+  
+  public Content newContent(String value, Content.Type type) {
+    return newContent(value, type, null);
   }
 
-  public Content newMediaContent(
-    MimeType mediaType, 
-    URI src, 
+  public Content newContent(String value, Content.Type type, Element parent) {
+    Content content = newContent(type, parent);
+    content.setValue(value);
+    return content;
+  }
+  
+  public Content newContent(Content.Type type, ExtensionElement value) {
+    return newContent(value, type, null);
+  }
+  
+  public Content newContent(ExtensionElement value, Content.Type type, Element parent) {
+    Content content = newContent(type, parent);
+    content.setValueElement(value);
+    return content;
+  }
+  
+  public Content newContent(
+    String value, 
+    MimeType mediaType) {
+      return newContent(value, mediaType, null);
+  }
+  
+  public Content newContent(
+    String value,
+    MimeType mediaType,
+    Element parent) {
+    Content content = newContent(mediaType, parent);
+    content.setValue(value);
+    return content;
+  }
+  
+  public Content newContent(
     DataHandler dataHandler, 
-    Element parent) {
-      Content content = newContent(Content.Type.MEDIA, mediaType, parent);
-      if (src != null) content.setSrc(src);
-      if (dataHandler != null) content.setDataHandler(dataHandler);
-      return content;
+    MimeType mediaType) { 
+      return newContent(dataHandler, mediaType, null);
   }
-
-  public Content newTextContent(
-    String value, 
-    Element parent) {
-      Content content = newContent(Content.Type.TEXT, parent);
-      content.setValue(value);
-      return content;
-  }
-
-  public Content newXhtmlContent(
-    Div value, Element parent) {
-      Content content = 
-        newContent(
-          Content.Type.XHTML, 
-          parent);
-      if (value != null)
-        content.setValueElement(value);
-      return content;
-  }
-
-  public Content newXmlContent(
+  
+  public Content newContent(
+    DataHandler dataHandler, 
     MimeType mediaType, 
-    URI src, 
-    ExtensionElement value, Element parent) {
-      Content content = 
-        newContent(
-          Content.Type.XML, 
-          mediaType, 
-          parent);
-      if (src != null) content.setSrc(src);
-      if (value != null) content.setValueElement(value);
+    Element parent) {
+      Content content = newContent(mediaType, parent);
+      if (dataHandler != null)
+        content.setDataHandler(dataHandler);
+      if (mediaType != null)
+        content.setMimeType(mediaType);
       return content;
   }
 
   public Content newContent(
-    Type type, 
+    ExtensionElement value, 
+    MimeType mediaType) {
+      return newContent(value, mediaType, null);
+  }
+  
+  public Content newContent(
+    ExtensionElement value, 
     MimeType mediaType, 
     Element parent) {
+      Content content = 
+        newContent(
+          mediaType, 
+          parent);
+      content.setValueElement(value);
+      return content;
+  }
+
+  public Content newContent(URI src, MimeType mediaType)  {
+    return newContent(src, mediaType, (Element)null);
+  }
+  
+  public Content newContent(URI src, MimeType mediaType, Element parent) {
+    Content content = 
+      newContent(
+        mediaType, 
+        parent);
+    content.setSrc(src);
+    return content;
+  }
+  
+  public Content newContent(
+    MimeType mediaType, 
+    Element parent) {
+    Content.Type type = 
+      (MimeTypeHelper.isXml(mediaType.toString())) ? 
+         Content.Type.XML : Content.Type.MEDIA;
     Content content = newContent(type, parent);
     content.setMimeType(mediaType);
     return content;
@@ -377,6 +456,10 @@ public class FOMFactory
       return _newInstance(FOMGenerator.class, qname, parent, parserWrapper);
   }
   
+  public Generator newDefaultGenerator() {
+    return newDefaultGenerator(null);
+  }
+  
   public Generator newDefaultGenerator(
     Element parent) {
       Generator generator = newGenerator(parent);
@@ -388,11 +471,22 @@ public class FOMFactory
       return generator;
   }
   
+  public Generator newGenerator() {
+    return newGenerator(null);
+  }
+  
   public Generator newGenerator(
       Element parent) {
     return _newInstance(FOMGenerator.class, (OMContainer)parent);
   }
 
+  public Generator newGenerator(
+    URI uri, 
+    String version, 
+    String value) {  
+      return newGenerator(uri, version, value, null);
+  }
+  
   public Generator newGenerator(
     URI uri, 
     String version, 
@@ -413,6 +507,18 @@ public class FOMFactory
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
       return _newInstance(FOMIRI.class, qname, parent, parserWrapper);
+  }
+  
+  public IRI newID() {
+    return newID((Element)null);
+  }
+  
+  public IRI newID(String id) throws URISyntaxException {
+    return newID(id, null);
+  }
+  
+  public IRI newID(URI id) {
+    return newID(id, null);
   }
   
   public IRI newID(
@@ -478,6 +584,31 @@ public class FOMFactory
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
       return _newInstance(FOMLink.class, qname, parent, parserWrapper);
+  }
+  
+  public Link newLink() {
+    return newLink((Element)null);
+  }
+  
+  public Link newLink(
+    String href, 
+    String rel, 
+    MimeType type, 
+    String title, 
+    String hreflang, 
+    long length) 
+      throws URISyntaxException {
+    return newLink(href, rel, type, title, hreflang, length, null);
+  }
+  
+  public Link newLink(
+    URI href, 
+    String rel, 
+    MimeType type, 
+    String title, 
+    String hreflang, 
+    long length) {
+      return newLink(href, rel, type, title, hreflang, length, null);
   }
   
   public Link newLink(
@@ -585,6 +716,10 @@ public class FOMFactory
       return _newInstance(FOMSource.class, qname, parent, parserWrapper);
   }
   
+  public Source newSource() {
+    return newSource((Element)null);
+  }
+  
   public Source newSource(
       Element parent) {
     return _newInstance(FOMSource.class, (OMContainer)parent);
@@ -600,6 +735,12 @@ public class FOMFactory
   }
   
   public Text newText(
+    QName qname,
+    Text.Type type) {
+    return newText(qname, type, (Element)null);
+  }
+  
+  public Text newText(
     QName qname, 
     Text.Type type, 
     Element parent) {
@@ -607,25 +748,30 @@ public class FOMFactory
     return _newInstance(FOMText.class,type, qname,(OMContainer)parent);
   }
   
-  public Text newHtmlText(
+  public Text newText(
     QName qname, 
-    String value, 
+    String value,
+    Text.Type type) {
+      return newText(qname, value, type, null);
+  }
+  
+  public Text newText(
+    QName qname, 
+    String value,
+    Text.Type type,
     Element parent) {
-      Text text = newText(qname, Text.Type.HTML, parent);
+      Text text = newText(qname, type, parent);
       text.setValue(value);
       return text;
   }
 
-  public Text newTextText(
-    QName qname, 
-    String value, 
-    Element parent) {
-      Text text = newText(qname, Text.Type.TEXT, parent);
-      text.setValue(value);
-      return text;
+  public Text newText(
+    QName qname,
+    Div value) {
+    return newText(qname, value, null);
   }
-
-  public Text newXhtmlText(
+  
+  public Text newText(
     QName qname, 
     Div value,
     Element parent) {
@@ -640,6 +786,14 @@ public class FOMFactory
     OMContainer parent,
     OMXMLParserWrapper parserWrapper) {
       return _newInstance(FOMStringElement.class, qname, parent, parserWrapper);
+  }
+  
+  public StringElement newStringElement(QName qname) {
+    return newStringElement(qname, (Element)null);
+  }
+  
+  public StringElement newStringElement(QName qname, String value) {
+    return newStringElement(qname, value, null);
   }
   
   public StringElement newStringElement(
@@ -658,6 +812,10 @@ public class FOMFactory
     return el;
   }
 
+  public ExtensionElement newExtensionElement(QName qname) {
+    return newExtensionElement(qname, (Base)null);
+  }
+  
   public ExtensionElement newExtensionElement(
     QName qname, 
     Base parent) {
@@ -705,6 +863,14 @@ public class FOMFactory
     return element;
   }
   
+  public Control newControl() {
+    return newControl((Element)null);
+  }
+   
+  public Control newControl(boolean draft) {
+    return newControl(draft, null);
+  }
+  
   public Control newControl(Element parent) {
     return _newInstance(FOMControl.class, (OMContainer)parent);
   }
@@ -716,6 +882,30 @@ public class FOMFactory
       return _newInstance(FOMControl.class, qname, parent, parserWrapper);
   }
 
+  public DateTime newPublished() {
+    return newPublished((Element)null);
+  }
+  
+  public DateTime newPublished(AtomDate dateTime) {
+    return newPublished(dateTime, null);
+  }
+  
+  public DateTime newPublished(Date date) {
+    return newPublished(date, null);
+  }
+  
+  public DateTime newPublished(String date) {
+    return newPublished(date, null);
+  }
+  
+  public DateTime newPublished(Calendar date) {
+    return newPublished(date, null);
+  }
+  
+  public DateTime newPublished(long date) {
+    return newPublished(date, null);
+  }
+  
   public DateTime newPublished(Element parent) {
     return newDateTime(Constants.PUBLISHED, parent);
   }
@@ -740,6 +930,30 @@ public class FOMFactory
     return newDateTime(Constants.PUBLISHED, date, parent);
   }
 
+  public DateTime newUpdated() {
+    return newUpdated((Element)null);
+  }
+  
+  public DateTime newUpdated(AtomDate dateTime) {
+    return newUpdated(dateTime, null);
+  }
+  
+  public DateTime newUpdated(Date date) {
+    return newUpdated(date, null);
+  }
+  
+  public DateTime newUpdated(String date) {
+    return newUpdated(date, null);
+  }
+  
+  public DateTime newUpdated(Calendar date) {
+    return newUpdated(date, null);
+  }
+  
+  public DateTime newUpdated(long date) {
+    return newUpdated(date, null);
+  }
+  
   public DateTime newUpdated(Element parent) {
     return newDateTime(Constants.UPDATED, parent);
   }
@@ -764,6 +978,18 @@ public class FOMFactory
     return newDateTime(Constants.UPDATED, date, parent);
   }
 
+  public IRI newIcon() {
+    return newIcon((Element)null);
+  }
+  
+  public IRI newIcon(String uri) throws URISyntaxException {
+    return newIcon(uri, null);
+  }
+  
+  public IRI newIcon(URI uri) {
+    return newIcon(uri, null);
+  }
+  
   public IRI newIcon(Element parent) {
     return newIRIElement(Constants.ICON, parent);
   }
@@ -776,6 +1002,18 @@ public class FOMFactory
     return newIRIElement(Constants.ICON, URI, parent);
   }
 
+  public IRI newLogo() {
+    return newLogo((Element)null);
+  }
+  
+  public IRI newLogo(String uri) throws URISyntaxException {
+    return newLogo(uri, null);
+  }
+  
+  public IRI newLogo(URI uri) {
+    return newLogo(uri, null);
+  }
+  
   public IRI newLogo(Element parent) {
     return newIRIElement(Constants.LOGO, parent);
   }
@@ -788,6 +1026,18 @@ public class FOMFactory
     return newIRIElement(Constants.LOGO, URI, parent);
   }
 
+  public IRI newUri() {
+    return newUri((Element)null);
+  }
+  
+  public IRI newUri(URI uri) {
+    return newUri(uri, null);
+  }
+  
+  public IRI newUri(String uri) throws URISyntaxException {
+    return newUri(uri, null);
+  }
+  
   public IRI newUri(Element parent) {
     return newIRIElement(Constants.URI, parent);
   }
@@ -800,80 +1050,255 @@ public class FOMFactory
     return newIRIElement(Constants.URI, URI, parent);
   }
 
+  public Person newAuthor() {
+    return newAuthor((Element)null);
+  }
+  
+  public Person newAuthor(
+    String name, 
+    String email, 
+    String uri) 
+      throws URISyntaxException {
+    return newAuthor(name, email, uri, null);
+  }
+  
+  public Person newAuthor(
+    String name, 
+    String email, 
+    URI uri) {
+      return newAuthor(name, email, uri, null);
+  }
+  
   public Person newAuthor(Element parent) {
     return newPerson(Constants.AUTHOR, parent);
   }
 
-  public Person newAuthor(String name, String email, String uri, Element parent) throws URISyntaxException {
+  public Person newAuthor(
+    String name, 
+    String email, 
+    String uri, 
+    Element parent) 
+      throws URISyntaxException {
     return newPerson(Constants.AUTHOR, name, email, uri, parent);
   }
 
-  public Person newAuthor(String name, String email, URI uri, Element parent) {
-    return newPerson(Constants.AUTHOR, name, email, uri, parent);
+  public Person newAuthor(
+    String name, 
+    String email, 
+    URI uri, 
+    Element parent) {
+      return newPerson(Constants.AUTHOR, name, email, uri, parent);
   }
 
-  public Person newContributor(Element parent) {
-    return newPerson(Constants.CONTRIBUTOR, parent);
+  public Person newContributor() {
+    return newContributor((Element)null);
   }
 
-  public Person newContributor(String name, String email, String uri, Element parent) throws URISyntaxException {
+  public Person newContributor(
+    String name, 
+    String email, 
+    String uri) 
+      throws URISyntaxException {
+    return newContributor(name, email, uri, null);
+  }
+  
+  public Person newContributor(
+    String name, 
+    String email, 
+    URI uri) {
+      return newContributor(name, email, uri, null);
+  }
+  
+  public Person newContributor(
+    Element parent) {
+      return newPerson(Constants.CONTRIBUTOR, parent);
+  }
+
+  public Person newContributor(
+    String name, 
+    String email, 
+    String uri, 
+    Element parent) 
+      throws URISyntaxException {
     return newPerson(Constants.CONTRIBUTOR, name, email, uri, parent);
   }
 
-  public Person newContributor(String name, String email, URI uri, Element parent) {
-    return newPerson(Constants.CONTRIBUTOR, name, email, uri, parent);
+  public Person newContributor(
+    String name, 
+    String email, 
+    URI uri, 
+    Element parent) {
+      return newPerson(Constants.CONTRIBUTOR, name, email, uri, parent);
   }
 
-  public Text newTextTitle(String value, Element parent) {
-    return newTextText(Constants.TITLE, value, parent);
+  public Text newTitle() {
+    return newTitle(Text.Type.TEXT);
   }
-
-  public Text newHtmlTitle(String value, Element parent) {
-    return newHtmlText(Constants.TITLE, value, parent);
+  
+  public Text newTitle(String value) {
+    return newTitle(value, Text.Type.TEXT);
   }
-
-  public Text newXhtmlTitle(
+  
+  public Text newTitle(Element parent) {
+    return newTitle(Text.Type.TEXT, parent);
+  }
+  
+  public Text newTitle(Text.Type type) {
+    return newTitle(type, (Element)null);
+  }
+  
+  public Text newTitle(Text.Type type, Element parent) {
+    return newText(Constants.TITLE, type, parent);
+  }
+  
+  public Text newTitle(String value, Text.Type type) {
+    return newTitle(value, type, null);
+  }
+  
+  public Text newTitle(String value, Text.Type type, Element parent) {
+    Text text = newText(Constants.TITLE, type, parent);
+    text.setValue(value);
+    return text;
+  }
+  
+  public Text newTitle(Div value) {
+    return newTitle(value, null);
+  }
+  
+  public Text newTitle(
     Div value,
     Element parent) {
-      return newXhtmlText(Constants.TITLE, value, parent);
+      return newText(Constants.TITLE, value, parent);
   }
 
-  public Text newTextSubtitle(String value, Element parent) {
-    return newTextText(Constants.SUBTITLE, value, parent);
+  public Text newSubtitle() {
+    return newSubtitle(Text.Type.TEXT);
+  }
+  
+  public Text newSubtitle(String value) {
+    return newSubtitle(value, Text.Type.TEXT);
+  }
+  
+  public Text newSubtitle(Element parent) {
+    return newSubtitle(Text.Type.TEXT, parent);
+  }
+  
+  public Text newSubtitle(Text.Type type) {
+    return newSubtitle(type, (Element)null);
+  }
+  
+  public Text newSubtitle(Text.Type type, Element parent) {
+    return newText(Constants.SUBTITLE, type, parent);
+  }
+  
+  public Text newSubtitle(String value, Text.Type type) {
+    return newSubtitle(value, type, null);
+  }
+  
+  public Text newSubtitle(String value, Text.Type type, Element parent) {
+    Text text = newText(Constants.SUBTITLE, type, parent);
+    text.setValue(value);
+    return text;
+  }
+  
+  public Text newSubtitle(Div value) {
+    return newSubtitle(value, null);
+  }
+  
+  public Text newSubtitle(
+    Div value,
+    Element parent) {
+      return newText(Constants.SUBTITLE, value, parent);
   }
 
-  public Text newHtmlSubtitle(String value, Element parent) {
-    return newHtmlText(Constants.SUBTITLE, value, parent);
+  public Text newSummary() {
+    return newSummary(Text.Type.TEXT);
+  }
+  
+  public Text newSummary(String value) {
+    return newSummary(value, Text.Type.TEXT);
+  }
+  
+  public Text newSummary(Element parent) {
+    return newSummary(Text.Type.TEXT, parent);
+  }
+  
+  public Text newSummary(Text.Type type) {
+    return newSubtitle(type, (Element)null);
+  }
+  
+  public Text newSummary(Text.Type type, Element parent) {
+    return newText(Constants.SUMMARY, type, parent);
+  }
+  
+  public Text newSummary(String value, Text.Type type) {
+    return newSummary(value, type, null);
+  }
+  
+  public Text newSummary(String value, Text.Type type, Element parent) {
+    Text text = newText(Constants.SUMMARY, type, parent);
+    text.setValue(value);
+    return text;
+  }
+  
+  public Text newSummary(Div value) {
+    return newSummary(value, null);
+  }
+  
+  public Text newSummary(
+    Div value,
+    Element parent) {
+      return newText(Constants.SUMMARY, value, parent);
   }
 
-  public Text newXhtmlSubtitle(Div value, Element parent) {
-    return newXhtmlText(Constants.SUBTITLE, value, parent);
+  public Text newRights() {
+    return newRights(Text.Type.TEXT);
+  }
+  
+  public Text newRights(String value) {
+    return newRights(value, Text.Type.TEXT);
+  }
+  
+  public Text newRights(Element parent) {
+    return newRights(Text.Type.TEXT, parent);
+  }
+  
+  public Text newRights(Text.Type type) {
+    return newRights(type, (Element)null);
+  }
+  
+  public Text newRights(Text.Type type, Element parent) {
+    return newText(Constants.RIGHTS, type, parent);
+  }
+  
+  public Text newRights(String value, Text.Type type) {
+    return newRights(value, type, null);
+  }
+  
+  public Text newRights(String value, Text.Type type, Element parent) {
+    Text text = newText(Constants.RIGHTS, type, parent);
+    text.setValue(value);
+    return text;
+  }
+  
+  public Text newRights(Div value) {
+    return newRights(value, null);
+  }
+  
+  public Text newRights(
+    Div value,
+    Element parent) {
+      return newText(Constants.RIGHTS, value, parent);
   }
 
-  public Text newTextSummary(String value, Element parent) {
-    return newTextText(Constants.SUMMARY, value, parent);
+  public StringElement newName() {
+    return newName((Element)null);
   }
-
-  public Text newHtmlSummary(String value, Element parent) {
-    return newHtmlText(Constants.SUMMARY, value, parent);
+  
+  public StringElement newName(String value) {
+    return newName(value, null);
   }
-
-  public Text newXhtmlSummary(Div value, Element parent) {
-    return newXhtmlText(Constants.SUMMARY, value, parent);
-  }
-
-  public Text newTextRights(String value, Element parent) {
-    return newTextText(Constants.RIGHTS, value, parent);
-  }
-
-  public Text newHtmlRights(String value, Element parent) {
-    return newHtmlText(Constants.RIGHTS, value, parent);
-  }
-
-  public Text newXhtmlRights(Div value, Element parent) {
-    return newXhtmlText(Constants.RIGHTS, value, parent);
-  }
-
+  
   public StringElement newName(Element parent) {
     return newStringElement(Constants.NAME, parent);
   }
@@ -882,6 +1307,14 @@ public class FOMFactory
     return newStringElement(Constants.NAME, value, parent);
   }
 
+  public StringElement newEmail() {
+    return newEmail((Element)null);
+  }
+  
+  public StringElement newEmail(String value) {
+    return newEmail(value, null);
+  }
+  
   public StringElement newEmail(Element parent) {
     return newStringElement(Constants.EMAIL, parent);
   }
@@ -896,6 +1329,10 @@ public class FOMFactory
     return control;
   }
 
+  public Div newDiv() {
+    return newDiv(null);
+  }
+  
   public Div newDiv(Base parent) {
     return _newInstance(FOMDiv.class, Constants.DIV, (OMContainer)parent);
   }
@@ -914,6 +1351,14 @@ public class FOMFactory
       return _newInstance(FOMElement.class, qname, parent, parserWrapper);
   }
 
+  public Total newTotal() {
+    return newTotal((Element)null);
+  }
+  
+  public Total newTotal(int totalResponse) {
+    return newTotal(totalResponse, null);
+  }
+  
   public Total newTotal(Element parent) {
     return _newInstance(FOMTotal.class, (OMContainer)parent);
   }
@@ -929,6 +1374,38 @@ public class FOMFactory
       OMContainer parent, 
       OMXMLParserWrapper parserWrapper) {
     return _newInstance(FOMTotal.class, qname, parent, parserWrapper);
+  }
+  
+  public InReplyTo newInReplyTo() {
+    return newInReplyTo((Element)null);
+  }
+  
+  public InReplyTo newInReplyTo(URI ref) {
+    return newInReplyTo(ref, null);
+  }
+  
+  public InReplyTo newInReplyTo(
+    String ref) 
+      throws URISyntaxException {
+    return newInReplyTo(ref, null);
+  }
+  
+  public InReplyTo newInReplyTo(
+    URI ref, 
+    URI source, 
+    URI href, 
+    MimeType type) {
+      return newInReplyTo(ref, source, href, type, null);
+  }
+  
+  public InReplyTo newInReplyTo(
+    String ref, 
+    String source, 
+    String href, 
+    String type) 
+      throws URISyntaxException, 
+             MimeTypeParseException {
+    return newInReplyTo(ref, source, href, type, null);
   }
   
   public InReplyTo newInReplyTo(
@@ -1008,16 +1485,21 @@ public class FOMFactory
       if (qclasses.containsKey(qname)) {
         if (isContent(qname)) {
           Content.Type type = (Content.Type)objecttype;
-          element = (OMElement) _newInstance(qclasses.get(qname), type, qname.getLocalPart(), namespace, parent);
+          element = (OMElement) _newInstance(
+            qclasses.get(qname), type, qname.getLocalPart(), namespace, parent);
         } else if (isText(qname)) {
           Text.Type type = (Text.Type)objecttype;
-          element = (OMElement) _newInstance(qclasses.get(qname), type, qname.getLocalPart(), namespace, parent);
+          element = (OMElement) _newInstance(
+            qclasses.get(qname), type, qname.getLocalPart(), namespace, parent);
         } else {
-          element = (OMElement) _newInstance(qclasses.get(qname), qname.getLocalPart(), namespace, parent);
+          element = (OMElement) _newInstance(
+            qclasses.get(qname), qname.getLocalPart(), namespace, parent);
         }
-      } else if (parent instanceof ExtensibleElement || parent instanceof Document) {
+      } else if (parent instanceof ExtensibleElement || 
+                 parent instanceof Document) {
         if (isSimpleExtension(qname)) {
-          element = (OMElement) _newInstance(FOMStringElement.class, qname.getLocalPart(), namespace, parent);
+          element = (OMElement) _newInstance(
+            FOMStringElement.class, qname.getLocalPart(), namespace, parent);
         } else {
           element = (OMElement) newExtensionElement(qname, parent);
         }

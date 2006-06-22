@@ -196,81 +196,63 @@ public interface Entry
    * Sets the content for this entry
    */
   void setContentElement(Content content);
+
+  Content setContent();
   
   /**
    * Sets the content for this entry as @type="text"
    */
-  Content setContentAsText(String value);
-  
-  /**
-   * Sets the content for this entry as @type="html".
-   * @param value The unescaped HTML string to set as the content
-   * @param baseUri The value of the content element's xml:base. Null if none. 
-   */
-  Content setContentAsHtml(String value, URI baseUri);
+  Content setContent(String value);
 
   /**
-   * Sets the content for this entry as @type="html".
-   * @param value The unescaped HTML string to set as the content
+   * Sets the content for this entry as @type="html"
    */
   Content setContentAsHtml(String value);
-  
+
   /**
-   * Sets the content for this entry as @type="html".
-   * @param value The unescaped HTML string to set as the content
-   * @param baseUri The value of the content element's xml:base. Null if none. 
-   * @throws URISyntaxException 
-   */
-  Content setContentAsHtml(String value, String baseUri) throws URISyntaxException;
-  
-  /**
-   * Sets the content for this entry as @type="xhtml".  The value is passed in
-   * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
-   * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
-   * @param value A string containing the XHTML.
+   * Sets the content for this entry as @type="xhtml"
    */
   Content setContentAsXhtml(String value);
   
   /**
-   * Sets the content for this entry as @type="xhtml".  The value is passed in
-   * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
-   * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
-   * @param value A string containing the XHTML.
-   * @param baseUri The value of the content element's xml:base. Null if none.
+   * Sets the content for this entry
    */
-  Content setContentAsXhtml(String value, URI baseUri);
+  Content setContent(Content.Type type);
   
   /**
-   * Sets the content for this entry as @type="xhtml".  The value is passed in
-   * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
-   * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
-   * @param value A string containing the XHTML.
-   * @param baseUri The value of the content element's xml:base. Null if none.
+   * Sets the content for this entry
    */
-  Content setContentAsXhtml(String value, String baseUri) throws URISyntaxException;
-
-  /**
-   * Sets the content for this entry as @type="xhtml". The value is passed 
-   * in as a parsed org.apache.abdera.model.Div
-   * @param value A Div containing the XHTML
-   */
-  Content setContentAsXhtml(Div value);
+  Content setContent(String value, Content.Type type);
   
   /**
-   * Sets the content for this entry as @type="xhtml". The value is passed 
-   * in as a parsed org.apache.abdera.model.Div
-   * @param value A Div containing the XHTML
-   * @param baseUri The value of the content element's xml:base. Null if none
+   * Sets the content for this entry
    */
-  Content setContentAsXhtml(Div value, URI baseUri);
-
+  Content setContent(ExtensionElement value, Content.Type type);  
+  
   /**
-   * Sets the content for this entry as @type="xhtml". The value is passed 
-   * in as a parsed org.apache.abdera.model.Div
-   * @param value A Div containing the XHTML
-   * @param baseUri The value of the content element's xml:base. Null if none
+   * Sets the content for this entry
    */
-  Content setContentAsXhtml(Div value, String baseUri) throws URISyntaxException;
+  Content setContent(MimeType mediaType);
+  
+  /**
+   * Sets the content for this entry
+   */
+  Content setContent(URI src, MimeType mediaType);
+  
+  /**
+   * Sets the content for this entry
+   */
+  Content setContent(ExtensionElement element, MimeType mediaType);
+  
+  /**
+   * Sets the content for this entry
+   */
+  Content setContent(DataHandler dataHandler, MimeType mediatype);
+  
+  /**
+   * Sets the content for this entry
+   */
+  Content setContent(String value, MimeType mediatype);
   
   /**
    * Returns the text of the content element
@@ -281,119 +263,6 @@ public interface Entry
    * Returns the content type
    */
   Content.Type getContentType();
-
-  /**
-   * Sets the content for this entry
-   */
-  Content setContentAsXml(String value, MimeType type);
-  
-  /**
-   * Sets the content for this entry
-   */
-  Content setContentAsXml(String value, String type) throws MimeTypeParseException;
-  
-  /**
-   * Sets the content for this entry
-   */
-  Content setContentAsXml(String value, MimeType type, URI baseUri);
-
-  /**
-   * Sets the content for this entry
-   */
-  Content setContentAsXml(String value, MimeType type, String baseUri) throws URISyntaxException;
-  
-  /**
-   * Sets the content for this entry
-   * @throws MimeTypeParseException 
-   */
-  Content setContentAsXml(String value, String type, URI baseUri) throws MimeTypeParseException;  
-
-  /**
-   * Sets the content for this entry
-   * @throws MimeTypeParseException 
-   */
-  Content setContentAsXml(String value, String type, String baseUri) throws MimeTypeParseException, URISyntaxException;  
-
-  /**
-   * Sets the content for this entry
-   */
-  Content setContentAsXml(ExtensionElement value, MimeType type);
-
-  /**
-   * Sets the content for this entry
-   */
-  Content setContentAsXml(ExtensionElement value, String type) throws MimeTypeParseException;
-  
-  /**
-   * Sets the content for this entry
-   */
-  Content setContentAsXml(ExtensionElement value, MimeType type, URI baseUri);
-
-  /**
-   * Sets the content for this entry
-   */
-  Content setContentAsXml(ExtensionElement value, MimeType type, String baseUri) throws URISyntaxException;
-  
-  /**
-   * Sets the content for this entry
-   * @throws MimeTypeParseException 
-   */
-  Content setContentAsXml(ExtensionElement value, String type, URI baseUri) throws MimeTypeParseException;
-
-  /**
-   * Sets the content for this entry
-   * @throws MimeTypeParseException 
-   */
-  Content setContentAsXml(ExtensionElement value, String type, String baseUri) throws MimeTypeParseException, URISyntaxException;  
-  
-  /**
-   * Sets the content for this entry
-   */
-  Content setContentAsMedia(MimeType type, URI src, DataHandler dataHandler);
-
-  /**
-   * Sets the content for this entry
-   * @throws URISyntaxException 
-   */
-  Content setContentAsMedia(MimeType type, String src, DataHandler dataHandler) throws URISyntaxException;
-  
-  /**
-   * Sets the content for this entry
-   * @throws MimeTypeParseException 
-   */
-  Content setContentAsMedia(String type, URI src, DataHandler dataHandler) throws MimeTypeParseException;
-
-  /**
-   * Sets the content for this entry
-   * @throws URISyntaxException 
-   * @throws MimeTypeParseException 
-   */
-  Content setContentAsMedia(String type, String src, DataHandler dataHandler) throws MimeTypeParseException, URISyntaxException;
-  
-  /**
-   * Sets the content for this entry
-   */
-  Content setContentAsMedia(MimeType type, URI src, String value);
-
-  /**
-   * Sets the content for this entry
-   * @throws URISyntaxException 
-   */
-  Content setContentAsMedia(MimeType type, String src, String value) throws URISyntaxException;
-  
-  /**
-   * Sets the content for this entry
-   * @throws MimeTypeParseException 
-   */
-  Content setContentAsMedia(String type, URI src, String value) throws MimeTypeParseException;
-
-  /**
-   * Sets the content for this entry
-   * @throws URISyntaxException 
-   * @throws MimeTypeParseException 
-   */
-  Content setContentAsMedia(String type, String src, String value) throws MimeTypeParseException, URISyntaxException;
-
   
   /**
    * Lists the complete set of contributors for this entry
@@ -551,79 +420,38 @@ public interface Entry
    */
   void setRightsElement(Text text);
   
-  /**
-   * Sets the value of the rights element as type="text"
-   */
-  Text setRightsAsText(String value);
+  Text setRights();
   
   /**
-   * Sets the value of the rights element as type="html"
-   * @param value The string containing the unescaped HTML
+   * Sets the value of the rights as @type="text"
    */
-  Text setRightsAsHtml(String value);
+  Text setRights(String value);
 
   /**
-   * Sets the rights for this entry as @type="xhtml".  The value is passed in
-   * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
-   * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
-   * @param value The string containing an unparsed XHTML div
+   * Sets the value of the rights as @type="html"
+   */
+  Text setRightsAsHtml(String value);
+  
+  /**
+   * Sets the value of the rights as @type="xhtml"
    */
   Text setRightsAsXhtml(String value);
   
   /**
-   * Sets the value of the rights element as type="xhtml"
-   * @param value The XHTML Div
+   * Sets the rights
    */
-  Text setRightsAsXhtml(Div value);
+  Text setRights(Text.Type type);
+  
+  /**
+   * Sets the value of the rights
+   */
+  Text setRights(String value, Text.Type type);
+  
+  /**
+   * Sets the value of the right as @type="xhtml"
+   */
+  Text setRights(Div value);
 
-  
-  /**
-   * Sets the value of the rights element as type="html"
-   * @param value The string containing the unescaped HTML
-   * @param baseUri The content element's xml:base. Null if none
-   */
-  Text setRightsAsHtml(String value, URI baseUri);
-
-  /**
-   * Sets the rights for this entry as @type="xhtml".  The value is passed in
-   * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
-   * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
-   * @param value The string containing an unparsed XHTML div
-   * @param baseUri The right element's xml:base. Null if none
-   */
-  Text setRightsAsXhtml(String value, URI baseUri);
-  
-  /**
-   * Sets the value of the rights element as type="xhtml"
-   * @param value The XHTML Div
-   * @param baseUri The right element's xml:base. Null if none
-   */
-  Text setRightsAsXhtml(Div value, URI baseUri);
-  
-  /**
-   * Sets the value of the rights element as type="html"
-   * @param value The string containing the unescaped HTML
-   * @param baseUri The content element's xml:base. Null if none
-   * @throws URISyntaxException 
-   */
-  Text setRightsAsHtml(String value, String baseUri) throws URISyntaxException;
-
-  /**
-   * Sets the rights for this entry as @type="xhtml".  The value is passed in
-   * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
-   * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
-   * @param value The string containing an unparsed XHTML div
-   * @param baseUri The right element's xml:base. Null if none
-   */
-  Text setRightsAsXhtml(String value, String baseUri) throws URISyntaxException;
-  
-  /**
-   * Sets the value of the rights element as type="xhtml"
-   * @param value The XHTML Div
-   * @param baseUri The right element's xml:base. Null if none
-   */
-  Text setRightsAsXhtml(Div value, String baseUri) throws URISyntaxException;
-  
   /**
    * Return the String value of the atom:rights element
    */
@@ -684,66 +512,37 @@ public interface Entry
    */
   void setSummaryElement(Text text);
   
-  /**
-   * Sets the summary of this entry as type="text"
-   */
-  Text setSummaryAsText(String value);
+  Text setSummary();
   
   /**
-   * Sets the summary of this entry as type="html"
+   * Sets the value of the summary as @type="text"
+   */
+  Text setSummary(String value);
+
+  /**
+   * Sets the value of the summary as @type="html"
    */
   Text setSummaryAsHtml(String value);
   
   /**
-   * Sets the summary for this entry as type="xhtml".  The value is passed in
-   * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
-   * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
-   * @param value The string containing an unparsed XHTML div
+   * Sets the value of the summary as @type="xhtml"
    */
   Text setSummaryAsXhtml(String value);
   
   /**
-   * Sets the summary for this entr as type="xhtml"
+   * Sets the summary
    */
-  Text setSummaryAsXhtml(Div value);
+  Text setSummary(Text.Type type);
   
   /**
-   * Sets the summary of this entry as type="html"
+   * Sets the value of the summary
    */
-  Text setSummaryAsHtml(String value, URI baseUri);
+  Text setSummary(String value, Text.Type type);
   
   /**
-   * Sets the summary for this entry as type="xhtml".  The value is passed in
-   * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
-   * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
-   * @param value The string containing an unparsed XHTML div
-   * @param baseUri The summary element's xml:base. Null if none
+   * Sets the value of the summary as @type="xhtml"
    */
-  Text setSummaryAsXhtml(String value, URI baseUri);
-  
-  /**
-   * Sets the summary for this entr as type="xhtml"
-   */
-  Text setSummaryAsXhtml(Div value, URI baseUri);
-    
-  /**
-   * Sets the summary of this entry as type="html"
-   */
-  Text setSummaryAsHtml(String value, String baseUri) throws URISyntaxException;
-  
-  /**
-   * Sets the summary for this entry as type="xhtml".  The value is passed in
-   * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
-   * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
-   * @param value The string containing an unparsed XHTML div
-   * @param baseUri The summary element's xml:base. Null if none
-   */
-  Text setSummaryAsXhtml(String value, String baseUri) throws URISyntaxException;
-  
-  /**
-   * Sets the summary for this entr as type="xhtml"
-   */
-  Text setSummaryAsXhtml(Div value, String baseUri) throws URISyntaxException;
+  Text setSummary(Div value);
   
   /**
    * Returns the text string value of this summary
@@ -767,71 +566,37 @@ public interface Entry
    */
   void setTitleElement(Text title);
   
-  /**
-   * Sets the value of atom:title as type="text"
-   */
-  Text setTitleAsText(String value);
+  Text setTitle();
   
   /**
-   * Sets the value of atom:title as type="html"
+   * Sets the value of the title as @type="text"
+   */
+  Text setTitle(String value);
+  
+  /**
+   * Sets the value of the title as @type="html"
    */
   Text setTitleAsHtml(String value);
   
   /**
-   * Sets the title for this entry as type="xhtml".  The value is passed in
-   * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
-   * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
-   * @param value The string containing an unparsed XHTML div
+   * Sets the value of the title as @type="xhtml"
    */
   Text setTitleAsXhtml(String value);
   
   /**
-   * Sets the title for this entry as type="xhtml".
-   * @param value The parsed XHTML Div
+   * Sets the title
    */
-  Text setTitleAsXhtml(Div value);
+  Text setTitle(Text.Type type);
   
   /**
-   * Sets the value of atom:title as type="html"
+   * Sets the value of the title
    */
-  Text setTitleAsHtml(String value, URI baseUri);
+  Text setTitle(String value, Text.Type type);
   
   /**
-   * Sets the title for this entry as type="xhtml".  The value is passed in
-   * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
-   * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
-   * @param value The string containing an unparsed XHTML div
-   * @param baseUri The title element's xml:base. Null if none
+   * Sets the value of the title as @type="xhtml"
    */
-  Text setTitleAsXhtml(String value, URI baseUri);
-  
-  /**
-   * Sets the title for this entry as type="xhtml".
-   * @param value The parsed XHTML Div
-   * @param baseUri The title element's xml:base. Null if none
-   */
-  Text setTitleAsXhtml(Div value, URI baseUri);
-  
-  /**
-   * Sets the value of atom:title as type="html"
-   */
-  Text setTitleAsHtml(String value, String baseUri) throws URISyntaxException;
-  
-  /**
-   * Sets the title for this entry as type="xhtml".  The value is passed in
-   * as a string containing unparsed XHTML with a &lt;div&lt; as the root.
-   * For example, "&lt;div xmlns="http://www.w3.org/1999/xhtml">foo&lt;/div>"
-   * @param value The string containing an unparsed XHTML div
-   * @param baseUri The title element's xml:base. Null if none
-   */
-  Text setTitleAsXhtml(String value, String baseUri) throws URISyntaxException;
-  
-  /**
-   * Sets the title for this entry as type="xhtml".
-   * @param value The parsed XHTML Div
-   * @param baseUri The title element's xml:base. Null if none
-   */
-  Text setTitleAsXhtml(Div value, String baseUri) throws URISyntaxException;
+  Text setTitle(Div value);
   
   /**
    * Returns the text string value of the title element

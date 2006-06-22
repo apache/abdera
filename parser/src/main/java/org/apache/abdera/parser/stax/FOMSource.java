@@ -28,6 +28,7 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.DateTime;
 import org.apache.abdera.model.Div;
@@ -37,6 +38,7 @@ import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.model.Text;
+import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
@@ -51,6 +53,10 @@ public class FOMSource
   implements Source {
 
   private static final long serialVersionUID = 9153127297531238021L; 
+  
+  public FOMSource() {
+    super(Constants.SOURCE, null, (OMFactory)Factory.INSTANCE);
+  }
   
   public FOMSource(
     String name,
@@ -170,12 +176,12 @@ public class FOMSource
 
   public Category addCategory(URI scheme, String term, String label) {
     FOMFactory factory = (FOMFactory) this.factory;
-    return factory.newCategory(scheme, term, label, this);
+    return factory.newCategory(term, scheme, label, this);
   }
   
   public Category addCategory(String scheme, String term, String label) throws URISyntaxException {
     FOMFactory factory = (FOMFactory) this.factory;
-    return factory.newCategory(new URI(scheme), term, label, this);    
+    return factory.newCategory(term, new URI(scheme), label, this);    
   }
   
   public List<Person> getContributors() {
@@ -330,22 +336,49 @@ public class FOMSource
     setTextElement(RIGHTS, text, false);
   }
 
-  public Text setRightsAsText(String value) {
-    return setTextText(RIGHTS, value);
-  }  
-  
-  public Text setRightsAsHtml(String value, URI baseUri) {
-    return setHtmlText(RIGHTS, value, baseUri);
+  public Text setRights() {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newRights(Text.Type.TEXT);
+    setRightsElement(text);
+    return text;
   }
   
-  public Text setRightsAsXhtml(String value, URI baseUri) {
-    return setXhtmlText(RIGHTS, value, baseUri);
+  public Text setRights(String value) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newRights(value);
+    setRightsElement(text);
+    return text;
   }
   
-  public Text setRightsAsXhtml(Div value, URI baseUri) {
-    return setXhtmlText(RIGHTS, value, baseUri);
+  public Text setRightsAsHtml(String value) {
+    return setRights(value, Text.Type.HTML);
   }
   
+  public Text setRightsAsXhtml(String value) {
+    return setRights(value, Text.Type.XHTML);
+  }
+  
+  public Text setRights(Text.Type type) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newRights(type);
+    setRightsElement(text);
+    return text;
+  }
+  
+  public Text setRights(String value, Text.Type type) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newRights(value, type);
+    setRightsElement(text);
+    return text;
+  }
+  
+  public Text setRights(Div value) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newRights(value);
+    setRightsElement(text);
+    return text;
+  }
+
   public String getRights() {
     return getText(RIGHTS);
   }
@@ -369,22 +402,49 @@ public class FOMSource
     setTextElement(SUBTITLE, text, false);
   }
 
-  public Text setSubtitleAsText(String value) {
-    return setTextText(SUBTITLE, value);
-  }  
-  
-  public Text setSubtitleAsHtml(String value, URI baseUri) {
-    return setHtmlText(SUBTITLE, value, baseUri);
+  public Text setSubtitle() {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newSubtitle(Text.Type.TEXT);
+    setSubtitleElement(text);
+    return text;
   }
   
-  public Text setSubtitleAsXhtml(String value, URI baseUri) {
-    return setXhtmlText(SUBTITLE, value, baseUri);
+  public Text setSubtitle(String value) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newSubtitle(value);
+    setSubtitleElement(text);
+    return text;
   }
   
-  public Text setSubtitleAsXhtml(Div value, URI baseUri) {
-    return setXhtmlText(SUBTITLE, value, baseUri);
+  public Text setSubtitleAsHtml(String value) {
+    return setSubtitle(value, Text.Type.HTML);
   }
   
+  public Text setSubtitleAsXhtml(String value) {
+    return setSubtitle(value, Text.Type.XHTML);
+  }
+  
+  public Text setSubtitle(Text.Type type) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newSubtitle(type);
+    setSubtitleElement(text);
+    return text;
+  }
+  
+  public Text setSubtitle(String value, Text.Type type) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newSubtitle(value, type);
+    setSubtitleElement(text);
+    return text;
+  }
+  
+  public Text setSubtitle(Div value) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newSubtitle(value);
+    setSubtitleElement(text);
+    return text;
+  }
+
   public String getSubtitle() {
     return getText(SUBTITLE);
   }
@@ -397,22 +457,49 @@ public class FOMSource
     setTextElement(TITLE, text, false);
   }
 
-  public Text setTitleAsText(String value) {
-    return setTextText(TITLE, value);
-  }  
-  
-  public Text setTitleAsHtml(String value, URI baseUri) {
-    return setHtmlText(TITLE, value, baseUri);
+  public Text setTitle() {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newTitle(Text.Type.TEXT);
+    setTitleElement(text);
+    return text;
   }
   
-  public Text setTitleAsXhtml(String value, URI baseUri) {
-    return setXhtmlText(TITLE, value, baseUri);
+  public Text setTitle(String value) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newTitle(value);
+    setTitleElement(text);
+    return text;
   }
   
-  public Text setTitleAsXhtml(Div value, URI baseUri) {
-    return setXhtmlText(TITLE, value, baseUri);
+  public Text setTitleAsHtml(String value) {
+    return setTitle(value, Text.Type.HTML);
   }
   
+  public Text setTitleAsXhtml(String value) {
+    return setTitle(value, Text.Type.XHTML);
+  }
+  
+  public Text setTitle(Text.Type type) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newTitle(type);
+    setTitleElement(text);
+    return text;
+  }
+  
+  public Text setTitle(String value, Text.Type type) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newTitle(value, type);
+    setTitleElement(text);
+    return text;
+  }
+  
+  public Text setTitle(Div value) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newTitle(value);
+    setTitleElement(text);
+    return text;
+  }
+
   public String getTitle() {
     return getText(TITLE);
   }
@@ -620,78 +707,6 @@ public class FOMSource
   public Text.Type getTitleType() {
     Text text = getTitleElement();
     return (text != null) ? text.getTextType() : null;
-  }
-
-  public Text setRightsAsHtml(String value, String baseUri) throws URISyntaxException {
-    return setRightsAsHtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setRightsAsXhtml(String value, String baseUri) throws URISyntaxException {
-    return setRightsAsXhtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setRightsAsXhtml(Div value, String baseUri) throws URISyntaxException {
-    return setRightsAsXhtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setSubtitleAsHtml(String value, String baseUri) throws URISyntaxException {
-    return setSubtitleAsHtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setSubtitleAsXhtml(String value, String baseUri) throws URISyntaxException {
-    return setSubtitleAsXhtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setSubtitleAsXhtml(Div value, String baseUri) throws URISyntaxException {
-    return setSubtitleAsXhtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setTitleAsHtml(String value, String baseUri) throws URISyntaxException {
-    return setTitleAsHtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setTitleAsXhtml(String value, String baseUri) throws URISyntaxException {
-    return setTitleAsXhtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setTitleAsXhtml(Div value, String baseUri) throws URISyntaxException {
-    return setTitleAsXhtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setRightsAsHtml(String value) {
-    return setRightsAsHtml(value, (URI)null);
-  }
-
-  public Text setRightsAsXhtml(String value) {
-    return setRightsAsXhtml(value, (URI)null);
-  }
-
-  public Text setRightsAsXhtml(Div value) {
-    return setRightsAsXhtml(value, (URI)null);
-  }
-
-  public Text setSubtitleAsHtml(String value) {
-    return setSubtitleAsHtml(value, (URI)null);
-  }
-
-  public Text setSubtitleAsXhtml(String value) {
-    return setSubtitleAsXhtml(value, (URI)null);
-  }
-
-  public Text setSubtitleAsXhtml(Div value) {
-    return setSubtitleAsXhtml(value, (URI)null);
-  }
-
-  public Text setTitleAsHtml(String value) {
-    return setTitleAsHtml(value, (URI)null);
-  }
-
-  public Text setTitleAsXhtml(String value) {
-    return setTitleAsXhtml(value, (URI)null);
-  }
-
-  public Text setTitleAsXhtml(Div value) {
-    return setTitleAsXhtml(value, (URI)null);
   }
 
 }

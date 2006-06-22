@@ -21,6 +21,7 @@ import java.net.URI;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Text;
@@ -39,6 +40,11 @@ public class FOMText
 
   private static final long serialVersionUID = 5177795905116574120L;
   protected Type type = null;
+  
+  public FOMText(QName qname, Text.Type type) {
+    super(qname, null, (OMFactory)Factory.INSTANCE);
+    init(type);
+  }
   
   public FOMText(
     Type type,
@@ -80,12 +86,18 @@ public class FOMText
       _setAttributeValue(TYPE, "html");
     else if (Type.XHTML.equals(type))
       _setAttributeValue(TYPE, "xhtml");
+    else 
+      _removeAttribute(TYPE);
   }
   
   public final Type getTextType() {
     return type;
   }
 
+  public void setTextType(Type type) {
+    init(type);
+  }
+  
   public Div getValueElement() {
     return (Div)this.getFirstChildWithName(Constants.DIV);
   }

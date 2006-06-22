@@ -83,6 +83,8 @@ public interface Text
   
   Type getTextType();
   
+  void setTextType(Type type);
+  
   Div getValueElement();
   
   void setValueElement(Div value);

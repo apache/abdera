@@ -24,6 +24,7 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.InReplyTo;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
@@ -39,6 +40,20 @@ public class FOMInReplyTo
 
   private static final long serialVersionUID = 7805672826003392693L;
 
+  public FOMInReplyTo() {
+    super(Constants.IN_REPLY_TO, null, (OMFactory)Factory.INSTANCE);
+  }
+  
+  public FOMInReplyTo(URI ref) {
+    this();
+    setRef(ref);
+  }
+  
+  public FOMInReplyTo(String ref) throws URISyntaxException {
+    this();
+    setRef(ref);
+  }
+  
   public FOMInReplyTo(
     String name,
     OMNamespace namespace,

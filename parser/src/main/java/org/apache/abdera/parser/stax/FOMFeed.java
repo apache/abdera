@@ -22,9 +22,11 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Source;
+import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -38,6 +40,10 @@ public class FOMFeed
   implements Feed {
   
   private static final long serialVersionUID = 4552921210185524535L;
+  
+  public FOMFeed() {
+    super(Constants.FEED, null, (OMFactory)Factory.INSTANCE);
+  }
   
   public FOMFeed(
     String name,

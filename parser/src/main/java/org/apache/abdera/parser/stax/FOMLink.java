@@ -26,7 +26,9 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Link;
+import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
@@ -41,6 +43,39 @@ public class FOMLink
 
   private static final long serialVersionUID = 2239772197929910635L;
 
+  public FOMLink() {
+    super(Constants.LINK, null, (OMFactory)Factory.INSTANCE);
+  }
+  
+  public FOMLink(URI href) {
+    this();
+    setHref(href);
+  }
+  
+  public FOMLink(
+    String href) 
+      throws URISyntaxException {
+    this();
+    setHref(href);
+  }
+  
+  public FOMLink(
+    URI href, 
+    String rel) {
+      this();
+      setHref(href);
+      setRel(rel);
+  }
+  
+  public FOMLink(
+    String href, 
+    String rel) 
+      throws URISyntaxException {
+    this();
+    setHref(href);
+    setRel(rel);
+  }
+  
   public FOMLink(
     String name,
     OMNamespace namespace,

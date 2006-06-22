@@ -23,7 +23,9 @@ import java.net.URISyntaxException;
 import javax.activation.MimeType;
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Collection;
+import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
@@ -38,6 +40,31 @@ public class FOMCollection
 
   private static final long serialVersionUID = -5291734055253987136L;
 
+  public FOMCollection() {
+    super(Constants.COLLECTION, null, (OMFactory)Factory.INSTANCE);
+  }
+  
+  public FOMCollection(
+    String title, 
+    URI href, 
+    String[] accepts) {
+      this();
+      setTitle(title);
+      setHref(href);
+      setAccept(accepts);
+  }
+  
+  public FOMCollection(
+    String title, 
+    String href, 
+    String[] accepts) 
+      throws URISyntaxException {
+    this();
+    setTitle(title);
+    setHref(href);
+    setAccept(accepts);
+  }
+  
   public FOMCollection(
     String name,
     OMNamespace namespace,

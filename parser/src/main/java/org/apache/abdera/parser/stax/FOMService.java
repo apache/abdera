@@ -21,9 +21,11 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
+import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -38,6 +40,10 @@ public class FOMService
  
   private static final long serialVersionUID = 7982751563668891240L;
 
+  public FOMService() {
+    super(Constants.SERVICE, null, (OMFactory)Factory.INSTANCE);
+  }
+  
   public FOMService(
     String name,
     OMNamespace namespace,

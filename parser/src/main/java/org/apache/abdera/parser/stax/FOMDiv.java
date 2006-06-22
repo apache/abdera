@@ -19,7 +19,9 @@ package org.apache.abdera.parser.stax;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Div;
+import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -33,6 +35,10 @@ public class FOMDiv
 
   private static final long serialVersionUID = -2319449893405850433L;
 
+  public FOMDiv() {
+    super(Constants.DIV, null, (OMFactory)Factory.INSTANCE);
+  }
+  
   public FOMDiv(
     String name,
     OMNamespace namespace,

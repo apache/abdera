@@ -81,7 +81,11 @@ public interface Factory {
   
   Service newService(Base parent);
   
+  Workspace newWorkspace();
+  
   Workspace newWorkspace(Element parent);
+  
+  Collection newCollection();
   
   Collection newCollection(Element parent);
   
@@ -92,25 +96,67 @@ public interface Factory {
   Entry newEntry();
   
   Entry newEntry(Base parent);
+
+  Category newCategory();
   
   Category newCategory(Element parent);
   
-  Category newCategory(URI scheme, String term, String label, Element parent);
+  Category newCategory(String term);
+  
+  Category newCategory(String term, Element parent);
+  
+  Category newCategory(String term, URI scheme, String label);
+  
+  Category newCategory(String term, URI scheme, String label, Element parent);
+
+  Content newContent();
+  
+  Content newContent(String value);
+  
+  Content newContent(Content.Type type);
   
   Content newContent(Content.Type type, Element parent);
   
-  Content newContent(Content.Type type, MimeType mediaType, Element parent);
+  Content newContent(String value, Content.Type type);
   
-  Content newTextContent(String value, Element parent);
-  
-  Content newHtmlContent(String value, Element parent);
-  
-  Content newXhtmlContent(Div value, Element parent);
-  
-  Content newXmlContent(MimeType mediaType, URI src, ExtensionElement element, Element parent);
-  
-  Content newMediaContent(MimeType mediaType, URI src, DataHandler dataHandler, Element parent);
+  Content newContent(Content.Type type, ExtensionElement value);
 
+  Content newContent(String value, Content.Type type, Element parent);
+  
+  Content newContent(ExtensionElement value, Content.Type type, Element parent);  
+  
+  Content newContent(MimeType mediaType);
+  
+  Content newContent(MimeType mediaType, Element parent);
+  
+  Content newContent(URI src, MimeType mediaType);
+  
+  Content newContent(URI src, MimeType mediaType, Element parent);
+  
+  Content newContent(ExtensionElement element, MimeType mediaType);
+  
+  Content newContent(ExtensionElement element, MimeType mediaType, Element parent);
+  
+  Content newContent(DataHandler dataHandler, MimeType mediatype);
+  
+  Content newContent(DataHandler dataHandler, MimeType mediaType, Element parent);
+
+  Content newContent(String value, MimeType mediatype);
+  
+  Content newContent(String value, MimeType mediaType, Element parent);
+  
+  DateTime newPublished();
+  
+  DateTime newPublished(AtomDate dateTime);
+  
+  DateTime newPublished(Date date);
+  
+  DateTime newPublished(String date);
+  
+  DateTime newPublished(Calendar date);
+  
+  DateTime newPublished(long date);  
+  
   DateTime newPublished(Element parent);
   
   DateTime newPublished(AtomDate dateTime, Element parent);
@@ -122,6 +168,18 @@ public interface Factory {
   DateTime newPublished(Calendar date, Element parent);
   
   DateTime newPublished(long date, Element parent);  
+  
+  DateTime newUpdated();
+  
+  DateTime newUpdated(AtomDate dateTime);
+  
+  DateTime newUpdated(Date date);
+  
+  DateTime newUpdated(String date);
+  
+  DateTime newUpdated(Calendar date);
+  
+  DateTime newUpdated(long date);
   
   DateTime newUpdated(Element parent);
   
@@ -147,17 +205,35 @@ public interface Factory {
   
   DateTime newDateTime(QName qname, long date, Element parent);
   
+  Generator newDefaultGenerator();
+  
   Generator newDefaultGenerator(Element parent);
+  
+  Generator newGenerator();
   
   Generator newGenerator(Element parent);
   
+  Generator newGenerator(URI uri, String version, String value);
+  
   Generator newGenerator(URI uri, String version, String value, Element parent);
+  
+  IRI newID();
+  
+  IRI newID(String id) throws URISyntaxException;
+  
+  IRI newID(URI id);
   
   IRI newID(Element parent);
   
   IRI newID(String id, Element parent) throws URISyntaxException;
   
   IRI newID(URI id, Element parent);
+
+  IRI newIcon();
+  
+  IRI newIcon(String uri) throws URISyntaxException;
+  
+  IRI newIcon(URI uri);
   
   IRI newIcon(Element parent);
 
@@ -165,35 +241,65 @@ public interface Factory {
   
   IRI newIcon(String URI, Element parent) throws URISyntaxException;
   
+  IRI newLogo();
+  
+  IRI newLogo(String uri) throws URISyntaxException;
+  
+  IRI newLogo(URI uri);
+  
   IRI newLogo(Element parent);
   
   IRI newLogo(URI uri, Element parent);
   
   IRI newLogo(String URI, Element parent) throws URISyntaxException;
+
+  IRI newUri();
+  
+  IRI newUri(URI uri);
+  
+  IRI newUri(String uri) throws URISyntaxException;
   
   IRI newUri(Element parent);
   
   IRI newUri(URI uri, Element parent);
   
-  IRI newUri(String URI, Element parent) throws URISyntaxException;
+  IRI newUri(String uri, Element parent) throws URISyntaxException;
   
   IRI newIRIElement(QName qname, Element parent);
   
   IRI newIRIElement(QName qname, URI uri, Element parent);
   
   IRI newIRIElement(QName qname, String URI, Element parent) throws URISyntaxException;
+
+  Link newLink();
+  
+  Link newLink(String href, String rel, MimeType type, String title, String hreflang, long length) throws URISyntaxException;
+  
+  Link newLink(URI href, String rel, MimeType type, String title, String hreflang, long length);
   
   Link newLink(Element parent);
   
   Link newLink(String href, String rel, MimeType type, String title, String hreflang, long length, Element parent) throws URISyntaxException;
   
   Link newLink(URI href, String rel, MimeType type, String title, String hreflang, long length, Element parent);
+
+  Person newAuthor();
+  
+  Person newAuthor(String name, String email, String uri) throws URISyntaxException;
+  
+  Person newAuthor(String name, String email, URI uri);
   
   Person newAuthor(Element parent);
   
   Person newAuthor(String name, String email, String uri, Element parent) throws URISyntaxException;
   
   Person newAuthor(String name, String email, URI uri, Element parent);  
+
+  Person newContributor();
+
+  Person newContributor(String name, String email, String uri) throws URISyntaxException;
+  
+  Person newContributor(String name, String email, URI uri);  
   
   Person newContributor(Element parent);
 
@@ -207,59 +313,143 @@ public interface Factory {
   
   Person newPerson(QName qname, String name, String email, URI uri, Element parent);
   
+  Source newSource();
+  
   Source newSource(Element parent);
+  
+  Text newText(QName qname, Text.Type type);
   
   Text newText(QName qname, Text.Type type, Element parent);
   
-  Text newTextTitle(String value, Element parent);
+  Text newTitle();
   
-  Text newHtmlTitle(String value, Element parent);
+  Text newTitle(String value);
   
-  Text newXhtmlTitle(Div value, Element parent);
+  Text newTitle(Element parent);
+  
+  Text newTitle(Text.Type type);
+  
+  Text newTitle(Text.Type type, Element parent);
+  
+  Text newTitle(String value, Text.Type type);
+  
+  Text newTitle(String value, Text.Type type, Element parent);
+  
+  Text newTitle(Div value);
+  
+  Text newTitle(Div value, Element parent);
 
-  Text newTextSubtitle(String value, Element parent);
+  Text newSubtitle();
+
+  Text newSubtitle(String value);
   
-  Text newHtmlSubtitle(String value, Element parent);
+  Text newSubtitle(Element parent);
   
-  Text newXhtmlSubtitle(Div value, Element parent);
+  Text newSubtitle(Text.Type type);
   
-  Text newTextSummary(String value, Element parent);
+  Text newSubtitle(Text.Type type, Element parent);
   
-  Text newHtmlSummary(String value, Element parent);
+  Text newSubtitle(String value, Text.Type type);
   
-  Text newXhtmlSummary(Div value, Element parent);
+  Text newSubtitle(String value, Text.Type type, Element parent);
   
-  Text newTextRights(String value, Element parent);
+  Text newSubtitle(Div value);
   
-  Text newHtmlRights(String value, Element parent);
+  Text newSubtitle(Div value, Element parent);
   
-  Text newXhtmlRights(Div value, Element parent);
+  Text newSummary();
   
-  Text newTextText(QName qname, String value, Element parent);
+  Text newSummary(String value);
   
-  Text newHtmlText(QName qname, String value, Element parent);
+  Text newSummary(Element parent);
   
-  Text newXhtmlText(QName qname, Div value, Element parent);
+  Text newSummary(Text.Type type);
+  
+  Text newSummary(Text.Type type, Element parent);
+  
+  Text newSummary(String value, Text.Type type);
+  
+  Text newSummary(String value, Text.Type type, Element parent);
+  
+  Text newSummary(Div value);
+  
+  Text newSummary(Div value, Element parent);
+
+  Text newRights();
+  
+  Text newRights(String value);
+  
+  Text newRights(Element parent);
+  
+  Text newRights(Text.Type type);
+  
+  Text newRights(Text.Type type, Element parent);
+  
+  Text newRights(String value, Text.Type type);
+  
+  Text newRights(String value, Text.Type type, Element parent);
+  
+  Text newRights(Div value);
+  
+  Text newRights(Div value, Element parent);
+
+  Text newText(QName qname, String value, Text.Type type);
+  
+  Text newText(QName qname, String value, Text.Type type, Element parent);
+  
+  Text newText(QName qname, Div value);
+  
+  Text newText(QName qname, Div value, Element parent);
+
+  StringElement newName();
+  
+  StringElement newName(String value);
   
   StringElement newName(Element parent);
   
   StringElement newName(String value, Element parent);
   
+  StringElement newEmail();
+  
+  StringElement newEmail(String value);
+  
   StringElement newEmail(Element parent);
   
   StringElement newEmail(String value, Element parent);
+  
+  StringElement newStringElement(QName qname);
+  
+  StringElement newStringElement(QName qname, String value);
   
   StringElement newStringElement(QName qname, Base parent);
   
   StringElement newStringElement(QName qname, String value, Base parent);
 
+  ExtensionElement newExtensionElement(QName qname);
+  
   ExtensionElement newExtensionElement(QName qname, Base parent);
+  
+  Control newControl();
+  
+  Control newControl(boolean draft);
   
   Control newControl(Element parent);
   
   Control newControl(boolean draft, Element parent);
   
+  Div newDiv();
+  
   Div newDiv(Base parent);
+
+  InReplyTo newInReplyTo();
+  
+  InReplyTo newInReplyTo(URI ref);
+  
+  InReplyTo newInReplyTo(String ref) throws URISyntaxException;
+  
+  InReplyTo newInReplyTo(URI ref, URI source, URI href, MimeType type);
+  
+  InReplyTo newInReplyTo(String ref, String source, String href, String type) throws URISyntaxException, MimeTypeParseException;
   
   InReplyTo newInReplyTo(Element parent);
   
@@ -270,6 +460,10 @@ public interface Factory {
   InReplyTo newInReplyTo(URI ref, URI source, URI href, MimeType type, Element parent);
   
   InReplyTo newInReplyTo(String ref, String source, String href, String type, Element parent) throws URISyntaxException, MimeTypeParseException;
+
+  Total newTotal();
+  
+  Total newTotal(int totalResponse);
   
   Total newTotal(Element parent);
   

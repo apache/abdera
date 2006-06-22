@@ -127,6 +127,8 @@ public interface Content extends StringElement {
   
   Type getContentType();
   
+  void setContentType(Type type);
+  
   <T extends ExtensionElement> T getValueElement();
   
   <T extends ExtensionElement>void setValueElement(T value);

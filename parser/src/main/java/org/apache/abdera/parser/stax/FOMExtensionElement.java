@@ -19,6 +19,7 @@ package org.apache.abdera.parser.stax;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.ExtensionElement;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
@@ -33,6 +34,10 @@ public class FOMExtensionElement
 
   private static final long serialVersionUID = -1874496559841783615L;
 
+  public FOMExtensionElement(QName qname) {
+    super(qname, null, (OMFactory)Factory.INSTANCE);
+  }
+  
   public FOMExtensionElement(
     String name,
     OMNamespace namespace,

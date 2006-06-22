@@ -29,6 +29,7 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Control;
@@ -43,6 +44,7 @@ import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Content.Type;
+import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
@@ -58,6 +60,10 @@ public class FOMEntry
 
   private static final long serialVersionUID = 1L;
 
+  public FOMEntry() {
+    super(Constants.ENTRY, null, (OMFactory)Factory.INSTANCE);
+  }
+  
   public FOMEntry(
     String name,
     OMNamespace namespace,
@@ -170,12 +176,12 @@ public class FOMEntry
 
   public Category addCategory(URI scheme, String term, String label) {
     FOMFactory factory = (FOMFactory) this.factory;
-    return factory.newCategory(scheme, term, label, this);
+    return factory.newCategory(term, scheme, label, this);
   }
   
   public Category addCategory(String scheme, String term, String label) throws URISyntaxException {
     FOMFactory factory = (FOMFactory) this.factory;
-    return factory.newCategory(new URI(scheme), term, label, this);    
+    return factory.newCategory(term, new URI(scheme), label, this);    
   }
   
   @SuppressWarnings("unchecked")
@@ -192,236 +198,112 @@ public class FOMEntry
       _removeElement(CONTENT, false);
     }
   }
-
-  public Content setContentAsText(String value) {
-    if (value == null) {
-      setContentElement(null);
-      return null;
-    }
-    FOMFactory fomfactory = (FOMFactory) factory;
-    Content content = fomfactory.newTextContent(value, null);
-    setContentElement(content);
-    return content;
-  }
-
-  public Content setContentAsHtml(String value, URI baseUri) {
-    if (value == null) {
-      setContentElement(null);
-      return null;
-    }
-    FOMFactory fomfactory = (FOMFactory) factory;
-    Content content = fomfactory.newHtmlContent(value, null);
-    if (baseUri != null) content.setBaseUri(baseUri);
+  
+  public Content setContent() {
+    FOMFactory factory = (FOMFactory) this.factory;
+    Content content = factory.newContent(Content.Type.TEXT);
     setContentElement(content);
     return content;
   }
   
-  public Content setContentAsXhtml(String value, URI baseUri) {
-    if (value == null) {
-      setContentElement(null);
-      return null;
-    }
-    FOMFactory fomfactory = (FOMFactory) factory;
-    Content content = 
-      (Content) fomfactory.newContent(
-        Content.Type.XHTML, null);
-    if (baseUri != null) content.setBaseUri(baseUri);
-    content.setValue(value);
+  /**
+   * Sets the content for this entry as @type="text"
+   */
+  public Content setContent(String value) {
+    FOMFactory factory = (FOMFactory) this.factory;
+    Content content = factory.newContent(value);
     setContentElement(content);
     return content;
   }
   
-  public Content setContentAsXhtml(Div value, URI baseUri) {
-    if (value == null) {
-      setContentElement(null);
-      return null;
-    }
-    FOMFactory fomfactory = (FOMFactory) factory;
-    Content content = fomfactory.newXhtmlContent(value, null);
-    if (baseUri != null) content.setBaseUri(baseUri);
+  public Content setContentAsHtml(String value) {
+    return setContent(value, Content.Type.HTML);
+  }
+  
+  public Content setContentAsXhtml(String value) {
+    return setContent(value, Content.Type.XHTML);
+  }
+  
+  /**
+   * Sets the content for this entry
+   */
+  public Content setContent(Content.Type type) {
+    FOMFactory factory = (FOMFactory) this.factory;
+    Content content = factory.newContent(type);
+    setContentElement(content);
+    return content;
+  }
+  
+  /**
+   * Sets the content for this entry
+   */
+  public Content setContent(String value, Content.Type type) {
+    FOMFactory factory = (FOMFactory) this.factory;
+    Content content = factory.newContent(value, type);
+    setContentElement(content);
+    return content;
+  }
+  
+  /**
+   * Sets the content for this entry
+   */
+  public Content setContent(ExtensionElement value, Content.Type type) {
+    FOMFactory factory = (FOMFactory) this.factory;
+    Content content = factory.newContent(type, value);
+    setContentElement(content);
+    return content;
+  } 
+  
+  /**
+   * Sets the content for this entry
+   */
+  public Content setContent(MimeType mediaType) {
+    FOMFactory factory = (FOMFactory) this.factory;
+    Content content = factory.newContent(mediaType);
+    setContentElement(content);
+    return content;
+  }
+  
+  /**
+   * Sets the content for this entry
+   */
+  public Content setContent(URI src, MimeType mediaType) {
+    FOMFactory factory = (FOMFactory) this.factory;
+    Content content = factory.newContent(src, mediaType);
+    setContentElement(content);
+    return content;
+  }
+  
+  /**
+   * Sets the content for this entry
+   */
+  public Content setContent(ExtensionElement element, MimeType mediaType) {
+    FOMFactory factory = (FOMFactory) this.factory;
+    Content content = factory.newContent(element, mediaType);
+    setContentElement(content);
+    return content;
+  }
+  
+  /**
+   * Sets the content for this entry
+   */
+  public Content setContent(DataHandler dataHandler, MimeType mediatype) {
+    FOMFactory factory = (FOMFactory) this.factory;
+    Content content = factory.newContent(dataHandler, mediatype);
+    setContentElement(content);
+    return content;
+  }
+  
+  /**
+   * Sets the content for this entry
+   */
+  public Content setContent(String value, MimeType mediatype) {
+    FOMFactory factory = (FOMFactory) this.factory;
+    Content content = factory.newContent(value, mediatype);
     setContentElement(content);
     return content;
   }
 
-  public Content setContentAsXml(
-    String value, 
-    MimeType type, 
-    URI baseUri) {
-      if (value == null) {
-        setContentElement(null);
-        return null;
-      }
-      FOMFactory fomfactory = (FOMFactory) factory;
-      Content content = 
-        (Content) fomfactory.newContent(Content.Type.XML, null);
-      if (type != null) content.setMimeType(type);
-      if (baseUri != null) content.setBaseUri(baseUri);
-      content.setValue(value);
-      setContentElement(content);
-      return content;    
-  }
-
-  public Content setContentAsXml(
-    String value, 
-    String type, 
-    URI baseUri) 
-      throws MimeTypeParseException {
-    return setContentAsXml(
-      value, 
-      (type != null) ? new MimeType(type) : null, 
-       baseUri);
-  }
-  
-  public Content setContentAsXml(
-    ExtensionElement value, 
-    MimeType type, 
-    URI baseUri) {
-      if (value == null) {
-        setContentElement(null);
-        return null;
-      }
-      FOMFactory fomfactory = (FOMFactory) factory;
-      Content content = 
-        fomfactory.newXmlContent(
-          type, null, value, null);
-      if (baseUri != null) content.setBaseUri(baseUri);
-      setContentElement(content);
-      return content;    
-  }
-
-  public Content setContentAsXml(
-    ExtensionElement value, 
-    String type, 
-    URI baseUri) 
-      throws MimeTypeParseException {
-    return setContentAsXml(
-      value, 
-      (type != null) ? new MimeType(type) : null, 
-      baseUri);
-  }
-
-  /**
-   * Sets the content for this entry
-   */
-  public Content setContentAsMedia(
-    MimeType type, 
-    URI src, 
-    DataHandler dataHandler) {
-      if (dataHandler == null) {
-        setContentElement(null);
-        return null;
-      }
-      FOMFactory fomfactory = (FOMFactory) factory;
-      Content content = fomfactory.newMediaContent(type, src, dataHandler, null);
-      setContentElement(content);
-      return content;
-  }
-
-  /**
-   * Sets the content for this entry
-   * @throws URISyntaxException 
-   */
-  public Content setContentAsMedia(
-    MimeType type, 
-    String src, 
-    DataHandler dataHandler) 
-      throws URISyntaxException {
-    return setContentAsMedia(
-      type, (src != null) ? new URI(src):null,
-      dataHandler);
-  }
-  
-  /**
-   * Sets the content for this entry
-   * @throws MimeTypeParseException 
-   */
-  public Content setContentAsMedia(
-    String type, 
-    URI src, 
-    DataHandler dataHandler) 
-      throws MimeTypeParseException {
-    return setContentAsMedia(
-      (type != null) ? new MimeType(type) : null, 
-      src,dataHandler);
-  }
-
-  /**
-   * Sets the content for this entry
-   * @throws URISyntaxException 
-   * @throws MimeTypeParseException 
-   */
-  public Content setContentAsMedia(
-    String type, 
-    String src, 
-    DataHandler dataHandler) 
-      throws MimeTypeParseException, URISyntaxException {
-    return setContentAsMedia(
-      (type != null) ? new MimeType(type) : null, 
-      (src != null) ? new URI(src) : null,
-      dataHandler);
-  }
-  
-  /**
-   * Sets the content for this entry
-   */
-  public Content setContentAsMedia(
-    MimeType type, 
-    URI src, 
-    String value) {
-      if (value == null) {
-        setContentElement(null);
-        return null;
-      }
-      FOMFactory fomfactory = (FOMFactory) factory;
-      Content content = fomfactory.newMediaContent(type, src, null, null);
-      content.setValue(value);
-      setContentElement(content);
-      return content;
-  }
-
-  /**
-   * Sets the content for this entry
-   * @throws URISyntaxException 
-   */
-  public Content setContentAsMedia(
-    MimeType type, 
-    String src, 
-    String value) 
-      throws URISyntaxException {
-    return setContentAsMedia(
-      type, (src != null) ? new URI(src):null,
-      value);
-  }
-  
-  /**
-   * Sets the content for this entry
-   * @throws MimeTypeParseException 
-   */
-  public Content setContentAsMedia(
-    String type, 
-    URI src, 
-    String value) 
-      throws MimeTypeParseException {
-    return setContentAsMedia(
-      (type != null) ? new MimeType(type) : null, 
-      src,value);
-  }
-
-  /**
-   * Sets the content for this entry
-   * @throws URISyntaxException 
-   * @throws MimeTypeParseException 
-   */
-  public Content setContentAsMedia(
-    String type, 
-    String src, 
-    String value) 
-      throws MimeTypeParseException, URISyntaxException {
-    return setContentAsMedia(
-      (type != null) ? new MimeType(type) : null, 
-      (src != null) ? new URI(src) : null,
-      value);
-  }
   
   public List<Person> getContributors() {
     return _getChildrenAsSet(CONTRIBUTOR);
@@ -688,23 +570,50 @@ public class FOMEntry
   public void setRightsElement(Text text) {
     setTextElement(RIGHTS, text, false);
   }
+  
+  public Text setRights() {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newRights(Text.Type.TEXT);
+    setRightsElement(text);
+    return text;
+  }
+  
+  public Text setRights(String value) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newRights(value);
+    setRightsElement(text);
+    return text;
+  }
+  
+  public Text setRightsAsHtml(String value) {
+    return setRights(value, Text.Type.HTML);
+  }
+  
+  public Text setRightsAsXhtml(String value) {
+    return setRights(value, Text.Type.XHTML);
+  }
+  
+  public Text setRights(Text.Type type) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newRights(type);
+    setRightsElement(text);
+    return text;
+  }
+  
+  public Text setRights(String value, Text.Type type) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newRights(value, type);
+    setRightsElement(text);
+    return text;
+  }
+  
+  public Text setRights(Div value) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newRights(value);
+    setRightsElement(text);
+    return text;
+  }
 
-  public Text setRightsAsText(String value) {
-    return setTextText(RIGHTS, value);
-  }  
-  
-  public Text setRightsAsHtml(String value, URI baseUri) {
-    return setHtmlText(RIGHTS, value, baseUri);
-  }
-  
-  public Text setRightsAsXhtml(String value, URI baseUri) {
-    return setXhtmlText(RIGHTS, value, baseUri);
-  }
-  
-  public Text setRightsAsXhtml(Div value, URI baseUri) {
-    return setXhtmlText(RIGHTS, value, baseUri);
-  }
-  
   public String getRights() {
     return getText(RIGHTS);
   }
@@ -729,22 +638,49 @@ public class FOMEntry
     setTextElement(SUMMARY, text, false);
   }
   
-  public Text setSummaryAsText(String value) {
-    return setTextText(SUMMARY, value);
-  }  
-  
-  public Text setSummaryAsHtml(String value, URI baseUri) {
-    return setHtmlText(SUMMARY, value, baseUri);
+  public Text setSummary() {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newSummary(Text.Type.TEXT);
+    setSummaryElement(text);
+    return text;
   }
   
-  public Text setSummaryAsXhtml(String value, URI baseUri) {
-    return setXhtmlText(SUMMARY, value, baseUri);
+  public Text setSummary(String value) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newSummary(value);
+    setSummaryElement(text);
+    return text;
   }
   
-  public Text setSummaryAsXhtml(Div value, URI baseUri) {
-    return setXhtmlText(SUMMARY, value, baseUri);
+  public Text setSummaryAsHtml(String value) {
+    return setSummary(value, Text.Type.HTML);
   }
-    
+  
+  public Text setSummaryAsXhtml(String value) {
+    return setSummary(value, Text.Type.XHTML);
+  }
+  
+  public Text setSummary(Text.Type type) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newSummary(type);
+    setSummaryElement(text);
+    return text;
+  }
+  
+  public Text setSummary(String value, Text.Type type) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newSummary(value, type);
+    setSummaryElement(text);
+    return text;
+  }
+  
+  public Text setSummary(Div value) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newSummary(value);
+    setSummaryElement(text);
+    return text;
+  }
+  
   public String getSummary() {
     return getText(SUMMARY);
   }
@@ -758,20 +694,47 @@ public class FOMEntry
     setTextElement(TITLE, title, false);
   }
 
-  public Text setTitleAsText(String value) {
-    return setTextText(TITLE, value);
-  }  
-  
-  public Text setTitleAsHtml(String value, URI baseUri) {
-    return setHtmlText(TITLE, value, baseUri);
+  public Text setTitle() {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newTitle(Text.Type.TEXT);
+    setTitleElement(text);
+    return text;
   }
   
-  public Text setTitleAsXhtml(String value, URI baseUri) {
-    return setXhtmlText(TITLE, value, baseUri);
+  public Text setTitle(String value) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newTitle(value);
+    setTitleElement(text);
+    return text;
   }
   
-  public Text setTitleAsXhtml(Div value, URI baseUri) {
-    return setXhtmlText(TITLE, value, baseUri);
+  public Text setTitleAsHtml(String value) {
+    return setTitle(value, Text.Type.HTML);
+  }
+  
+  public Text setTitleAsXhtml(String value) {
+    return setTitle(value, Text.Type.XHTML);
+  }
+  
+  public Text setTitle(Text.Type type) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newTitle(type);
+    setTitleElement(text);
+    return text;
+  }
+  
+  public Text setTitle(String value, Text.Type type) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newTitle(value, type);
+    setTitleElement(text);
+    return text;
+  }
+  
+  public Text setTitle(Div value) {
+    FOMFactory factory = (FOMFactory)this.factory;
+    Text text = factory.newTitle(value);
+    setTitleElement(text);
+    return text;
   }
   
   public String getTitle() {
@@ -908,144 +871,6 @@ public class FOMEntry
   public Text.Type getTitleType() {
     Text text = getTitleElement();
     return (text != null) ? text.getTextType() : null;
-  }
-
-  public Content setContentAsHtml(String value, String baseUri) throws URISyntaxException {
-    return setContentAsHtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Content setContentAsXhtml(String value, String baseUri) throws URISyntaxException {
-    return setContentAsXhtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Content setContentAsXhtml(Div value, String baseUri) throws URISyntaxException {
-    return setContentAsXhtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Content setContentAsXml(String value, MimeType type, String baseUri) throws URISyntaxException {
-    return setContentAsXml(value, type, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Content setContentAsXml(String value, String type, String baseUri) throws MimeTypeParseException, URISyntaxException {
-    return setContentAsXml(value, type, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Content setContentAsXml(ExtensionElement value, MimeType type, String baseUri) throws URISyntaxException {
-    return setContentAsXml(value, type, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Content setContentAsXml(ExtensionElement value, String type, String baseUri) throws MimeTypeParseException, URISyntaxException {
-    return setContentAsXml(value, type, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setRightsAsHtml(String value, String baseUri) throws URISyntaxException {
-    return setRightsAsHtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setRightsAsXhtml(String value, String baseUri) throws URISyntaxException {
-    return setRightsAsXhtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setRightsAsXhtml(Div value, String baseUri) throws URISyntaxException {
-    return setRightsAsXhtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setSummaryAsHtml(String value, String baseUri) throws URISyntaxException {
-    return setSummaryAsHtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setSummaryAsXhtml(String value, String baseUri) throws URISyntaxException {
-    return setSummaryAsXhtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setSummaryAsXhtml(Div value, String baseUri) throws URISyntaxException {
-    return setSummaryAsXhtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setTitleAsHtml(String value, String baseUri) throws URISyntaxException {
-    return setTitleAsHtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setTitleAsXhtml(String value, String baseUri) throws URISyntaxException {
-    return setTitleAsXhtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Text setTitleAsXhtml(Div value, String baseUri) throws URISyntaxException {
-    return setTitleAsXhtml(value, (baseUri != null) ? new URI(baseUri): null);
-  }
-
-  public Content setContentAsHtml(String value) {
-    return setContentAsHtml(value, (URI)null);
-  }
-
-  public Content setContentAsXhtml(String value) {
-    return setContentAsXhtml(value, (URI)null);
-  }
-
-  public Content setContentAsXhtml(Div value) {
-    return setContentAsXhtml(value, (URI)null);
-  }
-
-  public Content setContentAsXml(
-    String value, 
-    MimeType type) {
-      return setContentAsXml(value, type, (URI)null);
-  }
-
-  public Content setContentAsXml(
-    String value, 
-    String type) 
-      throws MimeTypeParseException {
-    return setContentAsXml(value, type, (URI)null);
-  }
-
-  public Content setContentAsXml(
-    ExtensionElement value, 
-    MimeType type) {
-      return setContentAsXml(value, type, (URI)null);
-  }
-
-  public Content setContentAsXml(
-    ExtensionElement value, 
-    String type) 
-      throws MimeTypeParseException {
-    return setContentAsXml(value, type, (URI)null);
-  }
-
-  public Text setRightsAsHtml(String value) {
-    return setRightsAsHtml(value, (URI)null);
-  }
-
-  public Text setRightsAsXhtml(String value) {
-    return setRightsAsXhtml(value, (URI)null);
-  }
-
-  public Text setRightsAsXhtml(Div value) {
-    return setRightsAsXhtml(value, (URI)null);
-  }
-
-  public Text setSummaryAsHtml(String value) {
-    return setSummaryAsHtml(value, (URI)null);
-  }
-
-  public Text setSummaryAsXhtml(String value) {
-    return setSummaryAsXhtml(value, (URI)null);
-  }
-
-  public Text setSummaryAsXhtml(Div value) {
-    return setSummaryAsXhtml(value, (URI)null);
-  }
-
-  public Text setTitleAsHtml(String value) {
-    return setTitleAsHtml(value, (URI)null);
-  }
-
-  public Text setTitleAsXhtml(String value) {
-    return setTitleAsXhtml(value, (URI)null);
-  }
-
-  public Text setTitleAsXhtml(Div value) {
-    return setTitleAsXhtml(value, (URI)null);
   }
 
   public void addInReplyTo(InReplyTo replyTo) {

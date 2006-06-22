@@ -25,6 +25,7 @@ import javax.activation.MimeType;
 import javax.activation.URLDataSource;
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
@@ -38,13 +39,17 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
-
 public class FOMContent 
   extends FOMExtensibleElement 
   implements Content {
 
   private static final long serialVersionUID = -5499917654824498563L;
   protected Type type = null;
+  
+  public FOMContent(Content.Type type) {
+    super(Constants.CONTENT, null, (OMFactory)Factory.INSTANCE);
+    init(type);
+  }
   
   public FOMContent(
     String name,
@@ -101,12 +106,19 @@ public class FOMContent
       _setAttributeValue(TYPE, "html");
     else if (Type.XHTML.equals(type))
       _setAttributeValue(TYPE, "xhtml");
+    else {
+      _removeAttribute(TYPE);
+    }
   }
   
   public final Type getContentType() {
     return type;
   }
 
+  public void setContentType(Type type) {
+    init(type);
+  }
+  
   @SuppressWarnings("unchecked")
   public <T extends ExtensionElement> T getValueElement() {
     return (T)this.getFirstElement();

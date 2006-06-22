@@ -23,6 +23,7 @@ import java.util.Date;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
+import org.apache.abdera.model.Text;
 
 
 public class Create {
@@ -33,7 +34,7 @@ public class Create {
     feed.setLanguage("en-US");
     feed.setBaseUri("http://example.org");
     
-    feed.setTitleAsText("Example Feed");
+    feed.setTitle("Example Feed");
     feed.addLink("http://example.org/");
     feed.setUpdated(new Date());
     feed.addAuthor("John Doe");
@@ -42,26 +43,26 @@ public class Create {
     feed.addCategory("example");
     
     Entry entry = feed.insertEntry();
-    entry.setTitleAsText("Atom-Powered Robots Run Amok");
+    entry.setTitle("Atom-Powered Robots Run Amok");
     entry.addLink("http://example.org/2003/12/13/atom03");
     entry.setId("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a");
     entry.setUpdated(new Date());
-    entry.setSummaryAsText("Some text.");
+    entry.setSummary("Some text.");
     
     Entry entry2 = feed.insertEntry();
-    entry2.setTitleAsText("re: Atom-Powered Robots Run Amok");
+    entry2.setTitle("re: Atom-Powered Robots Run Amok");
     entry2.addLink("/2003/12/13/atom03/1");
     entry2.setId("urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b");
     entry2.setUpdated(new Date());
-    entry2.setSummaryAsText("A response");
+    entry2.setSummary("A response");
     entry2.addInReplyTo(entry);
     
     Entry entry3 = feed.addEntry();
-    entry3.setTitleAsXhtml("<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Test</p></div>");
+    entry3.setTitle("<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Test</p></div>", Text.Type.XHTML);
     entry3.addLink("/2003/12/13/atom03/2");
     entry3.setId("HTTP://www.Example.org/foo/../bar", true); // normalizes the id to the value http://www.example.org/bar
     entry3.setUpdated(Calendar.getInstance());
-    entry3.setSummaryAsHtml("<p><a href=\"foo\">Test</a></p>", "http://example.org/site/");
+    entry3.setSummaryAsHtml("<p><a href=\"foo\">Test</a></p>").setBaseUri("http://example.org/site/");
     entry3.setSource(feed.getAsSource());
     
     feed.getDocument().writeTo(System.out);

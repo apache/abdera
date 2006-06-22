@@ -51,10 +51,10 @@ public class Main {
     // Create the entry to post to the collection
     Entry entry = Factory.INSTANCE.newEntry();
     entry.setId("tag:example.org,2006:foo", false);
-    entry.setTitleAsText("This is the title");
+    entry.setTitle("This is the title");
     entry.setUpdated(new Date());
     entry.addAuthor("James");
-    entry.setContentAsText("This is the content");
+    entry.setContent("This is the content");
     report("The Entry to Post", entry.toString());
     
     // Post the entry. Be sure to grab the resolved HREF of the collection

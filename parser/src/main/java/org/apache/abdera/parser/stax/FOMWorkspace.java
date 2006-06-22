@@ -23,8 +23,10 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Workspace;
+import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -39,6 +41,15 @@ public class FOMWorkspace
 
   private static final long serialVersionUID = -421749865550509424L; 
 
+  public FOMWorkspace() {
+    super(Constants.WORKSPACE, null, (OMFactory)Factory.INSTANCE);
+  }
+  
+  public FOMWorkspace(String title) {
+    this();
+    setTitle(title);
+  }
+  
   public FOMWorkspace(
     String name,
     OMNamespace namespace,

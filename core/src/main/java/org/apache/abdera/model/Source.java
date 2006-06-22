@@ -392,59 +392,38 @@ public interface Source
    */
   void setRightsElement(Text text);
   
-  /**
-   * Sets the text of atom:rights as type="text"
-   */
-  Text setRightsAsText(String value);
-
-  /**
-   * Sets the text of atom:rights as type="html"
-   */
-  Text setRightsAsHtml(String value);
+  Text setRights();
   
   /**
-   * Sets the content of atom:rights as type="xhtml"
+   * Sets the value of the rights as @type="text"
+   */
+  Text setRights(String value);
+  
+  /**
+   * Sets the value of the rights as @type="html"
+   */
+  Text setRightsAsHtml(String value);
+
+  /**
+   * Sets the value of the rights as @type="xhtml"
    */
   Text setRightsAsXhtml(String value);
   
   /**
-   * Sets the content of atom:rights as type="xhtml"
+   * Sets the rights
    */
-  Text setRightsAsXhtml(Div value);
-
-  /**
-   * Sets the text of atom:rights as type="html"
-   */
-  Text setRightsAsHtml(String value, URI baseUri);
+  Text setRights(Text.Type type);
   
   /**
-   * Sets the content of atom:rights as type="xhtml"
+   * Sets the value of the rights
    */
-  Text setRightsAsXhtml(String value, URI baseUri);
+  Text setRights(String value, Text.Type type);
   
   /**
-   * Sets the content of atom:rights as type="xhtml"
+   * Sets the value of the rights as @type="xhtml"
    */
-  Text setRightsAsXhtml(Div value, URI baseUri);
-
-  /**
-   * Sets the text of atom:rights as type="html"
-   * @throws URISyntaxException 
-   */
-  Text setRightsAsHtml(String value, String baseUri) throws URISyntaxException;
+  Text setRights(Div value);
   
-  /**
-   * Sets the content of atom:rights as type="xhtml"
-   * @throws URISyntaxException 
-   */
-  Text setRightsAsXhtml(String value, String baseUri) throws URISyntaxException;
-  
-  /**
-   * Sets the content of atom:rights as type="xhtml"
-   * @throws URISyntaxException 
-   */
-  Text setRightsAsXhtml(Div value, String baseUri) throws URISyntaxException;
-
   /**
    * Returns the text of atom:rights
    */
@@ -467,58 +446,37 @@ public interface Source
    */  
   void setSubtitleElement(Text text);
   
-  /**
-   * Sets the value of atom:subtitle as type="text"
-   */
-  Text setSubtitleAsText(String value);
+  Text setSubtitle();
   
   /**
-   * Sets the value of atom:subtitle as type="html
+   * Sets the value of the subtitle as @type="text"
+   */
+  Text setSubtitle(String value);
+
+  /**
+   * Sets the value of the subtitle as @type="html"
    */
   Text setSubtitleAsHtml(String value);
-  
+
   /**
-   * Sets the contnt of atom:subtitle as type="xhtml"
+   * Sets the value of the subtitle as @type="xhtml"
    */
   Text setSubtitleAsXhtml(String value);
   
   /**
-   * Sets the content of atom:subtitle as type="xhtml"
+   * Sets the subtitle
    */
-  Text setSubtitleAsXhtml(Div value);
-
-  /**
-   * Sets the value of atom:subtitle as type="html
-   */
-  Text setSubtitleAsHtml(String value, URI baseUri);
+  Text setSubtitle(Text.Type type);
   
   /**
-   * Sets the contnt of atom:subtitle as type="xhtml"
+   * Sets the value of the subtitle
    */
-  Text setSubtitleAsXhtml(String value, URI baseUri);
+  Text setSubtitle(String value, Text.Type type);
   
   /**
-   * Sets the content of atom:subtitle as type="xhtml"
+   * Sets the value of the subtitle as @type="xhtml"
    */
-  Text setSubtitleAsXhtml(Div value, URI baseUri);
-  
-  /**
-   * Sets the value of atom:subtitle as type="html
-   * @throws URISyntaxException 
-   */
-  Text setSubtitleAsHtml(String value, String baseUri) throws URISyntaxException;
-  
-  /**
-   * Sets the contnt of atom:subtitle as type="xhtml"
-   * @throws URISyntaxException 
-   */
-  Text setSubtitleAsXhtml(String value, String baseUri) throws URISyntaxException;
-  
-  /**
-   * Sets the content of atom:subtitle as type="xhtml"
-   * @throws URISyntaxException 
-   */
-  Text setSubtitleAsXhtml(Div value, String baseUri) throws URISyntaxException;
+  Text setSubtitle(Div value);
   
   /**
    * Returns the text value of atom:subtitle
@@ -542,59 +500,38 @@ public interface Source
    */
   void setTitleElement(Text text);
   
-  /**
-   * Sets the value of atom:title as type="text"
-   */
-  Text setTitleAsText(String value);
+  Text setTitle();
   
   /**
-   * Sets the value of atom:title as type="html"
+   * Sets the value of the title as @type="text"
+   */
+  Text setTitle(String value);
+
+  /**
+   * Sets the value of the title as @type="html"
    */
   Text setTitleAsHtml(String value);
   
   /**
-   * Sets the content of atom:title as type="xhtml"
+   * Sets the value of the title as @type="xhtml"
    */
   Text setTitleAsXhtml(String value);
   
   /**
-   * Sets the content of atom:title as type="xhtml"
+   * Sets the title
    */
-  Text setTitleAsXhtml(Div value);
+  Text setTitle(Text.Type type);
   
   /**
-   * Sets the value of atom:title as type="html"
+   * Sets the value of the title
    */
-  Text setTitleAsHtml(String value, URI baseUri);
+  Text setTitle(String value, Text.Type type);
   
   /**
-   * Sets the content of atom:title as type="xhtml"
+   * Sets the value of the title as @type="xhtml"
    */
-  Text setTitleAsXhtml(String value, URI baseUri);
+  Text setTitle(Div value);
   
-  /**
-   * Sets the content of atom:title as type="xhtml"
-   */
-  Text setTitleAsXhtml(Div value, URI baseUri);
-
-  /**
-   * Sets the value of atom:title as type="html"
-   * @throws URISyntaxException 
-   */
-  Text setTitleAsHtml(String value, String baseUri) throws URISyntaxException;
-  
-  /**
-   * Sets the content of atom:title as type="xhtml"
-   * @throws URISyntaxException 
-   */
-  Text setTitleAsXhtml(String value, String baseUri) throws URISyntaxException;
-  
-  /**
-   * Sets the content of atom:title as type="xhtml"
-   * @throws URISyntaxException 
-   */
-  Text setTitleAsXhtml(Div value, String baseUri) throws URISyntaxException;
-
   /**
    * Returns the text of atom:title
    */

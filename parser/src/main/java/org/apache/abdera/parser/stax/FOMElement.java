@@ -65,6 +65,10 @@ public class FOMElement
 
   private static final long serialVersionUID = 8024257594220911953L;
   
+  public FOMElement(QName qname) {
+    super(qname, null, (OMFactory)Factory.INSTANCE);
+  }
+  
   public FOMElement(
     String name,
     OMNamespace namespace,
@@ -406,7 +410,7 @@ public class FOMElement
       return null;
     }
     FOMFactory fomfactory = (FOMFactory) factory;
-    Text text = fomfactory.newText(qname, Text.Type.TEXT, null);
+    Text text = fomfactory.newText(qname, Text.Type.TEXT);
     text.setValue(value);
     setTextElement(qname, text, false);
     return text;
@@ -418,7 +422,7 @@ public class FOMElement
       return null;
     }
     FOMFactory fomfactory = (FOMFactory) factory;
-    Text text = fomfactory.newText(qname, Text.Type.HTML, null);
+    Text text = fomfactory.newText(qname, Text.Type.HTML);
     if (baseUri != null) text.setBaseUri(baseUri);
     text.setValue(value);
     setTextElement(qname, text, false);
@@ -431,7 +435,7 @@ public class FOMElement
       return null;
     }
     FOMFactory fomfactory = (FOMFactory) factory;
-    Text text = fomfactory.newText(qname, Text.Type.XHTML, null);
+    Text text = fomfactory.newText(qname, Text.Type.XHTML);
     if (baseUri != null) text.setBaseUri(baseUri);
     text.setValue(value);
     setTextElement(qname, text, false);
@@ -444,7 +448,7 @@ public class FOMElement
       return null;
     }
     FOMFactory fomfactory = (FOMFactory) factory;
-    Text text = fomfactory.newText(qname, Text.Type.XHTML, null);
+    Text text = fomfactory.newText(qname, Text.Type.XHTML);
     if (baseUri != null) text.setBaseUri(baseUri);
     text.setValueElement(value);
     setTextElement(qname, text, false);

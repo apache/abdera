@@ -141,10 +141,10 @@ public final class AtomDate {
   }
   
   private static final String[] masks = {
-    "yyyy-MM-dd'T'HH:mm:ss.SSz",
-    "yyyy-MM-dd't'HH:mm:ss.SSz",                         // invalid
-    "yyyy-MM-dd'T'HH:mm:ss.SS'Z'",
-    "yyyy-MM-dd't'HH:mm:ss.SS'z'",                       // invalid
+    "yyyy-MM-dd'T'HH:mm:ss.SSSz",
+    "yyyy-MM-dd't'HH:mm:ss.SSSz",                         // invalid
+    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+    "yyyy-MM-dd't'HH:mm:ss.SSS'z'",                       // invalid
     "yyyy-MM-dd'T'HH:mm:ssz",
     "yyyy-MM-dd't'HH:mm:ssz",                            // invalid
     "yyyy-MM-dd'T'HH:mm:ss'Z'",

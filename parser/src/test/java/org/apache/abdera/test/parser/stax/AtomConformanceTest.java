@@ -19,7 +19,6 @@ package org.apache.abdera.test.parser.stax;
 
 import java.net.URI;
 import java.util.List;
-import java.io.InputStream;
 
 import javax.xml.namespace.QName;
 
@@ -32,9 +31,6 @@ import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.parser.Parser;
 import org.apache.axiom.om.OMElement;
-
-
-import junit.framework.TestCase;
 
 public class AtomConformanceTest extends BaseParserTestCase {
 

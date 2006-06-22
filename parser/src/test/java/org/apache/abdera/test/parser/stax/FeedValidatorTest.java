@@ -489,7 +489,7 @@ public class FeedValidatorTest
       List<Category> cats = entry.getCategories();
       for (Category cat : cats) {
         try {
-          System.out.println(cat.getScheme());
+          cat.getScheme();
         } catch (Exception e) {
           assertTrue(e instanceof URISyntaxException);
         }

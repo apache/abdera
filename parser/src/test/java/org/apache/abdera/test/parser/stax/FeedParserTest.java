@@ -29,10 +29,6 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Person;
-import org.apache.abdera.parser.Parser;
-
-
-import junit.framework.TestCase;
 
 public class FeedParserTest extends BaseParserTestCase {
 

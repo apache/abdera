@@ -108,4 +108,9 @@ public class RequestOptions {
   public void setCaptureResponseHeaders(boolean capture) {
     this.captureResponseHeaders = capture;
   }
+  
+  public Map<String, String> getRequestHeaders() {
+    if (requestHeaders == null) requestHeaders = new HashMap<String,String>();
+    return requestHeaders;
+  }  
 }

@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Date;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 import java.util.zip.ZipInputStream;
@@ -574,6 +575,7 @@ System.out.println(method.getResponseBodyAsString());
       throws HttpException, 
              IOException {
     if (options != null) {
+
       if (!options.getAllowCache())
         method.setRequestHeader(
           "Cache-Control", 
@@ -600,6 +602,14 @@ System.out.println(method.getResponseBodyAsString());
             options.getIfModifiedSince()));
       if (options.getUseDeltaEncoding()) 
         method.setRequestHeader("A-IM", "feed");
+      
+      // Lastly, set all custom headers    
+      Map<String, String> custom = options.getRequestHeaders();
+      
+      for(String key : custom.keySet() ) {
+        method.setRequestHeader(key, custom.get(key));
+      }
+            
     }
     int status = client.executeMethod(method);
     if (options != null && options.getCaptureResponseHeaders()) {

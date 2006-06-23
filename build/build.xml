@@ -29,6 +29,11 @@
   <property name="parser.test.resources" value="${parser}/src/test/resources" />
   <property name="parser.work" value="${work}/parser" />
   <property name="parser.jar" value="${dist}/${ant.project.name}.parser.${version}.jar" />
+	<property name="extensions" value="${basedir}/extensions" />
+	<property name="extensions.src" value="${extensions}/src/main/java" />
+	<property name="extensions.resources" value="${extensions}/src/main/resources" />
+	<property name="extensions.work" value="${work}/extensions" />
+  <property name="extensions.jar" value="${dist}/${ant.project.name}.extensions.${version}.jar" />
   <property name="server" value="${basedir}/server" />
   <property name="server.src" value="${server}/src/main/java" />
   <property name="server.work" value="${work}/server" />
@@ -109,6 +114,17 @@ Working directory: ${work}
     </copy>
   </target>
 	
+	<target name="compile.extensions" depends="init, compile.core, compile.parser">
+		<mkdir dir="${extensions.work}" />
+		<javac srcdir="${extensions.src}"
+		       destdir="${extensions.work}"
+		       classpathref="jar.dependencies"
+		       classpath="${core.work};${parser.work}" />
+		<copy todir="${extensions.work}">
+			<fileset dir="${extensions.resources}" includes="**/*" />
+		</copy>
+	</target>
+	
   <target name="compile.server" depends="init, compile.core">
     <mkdir dir="${server.work}" />
     <javac srcdir="${server.src}"
@@ -117,7 +133,7 @@ Working directory: ${work}
            classpath="${core.work}" />
   </target>	
 
-  <target name="build" depends="init,compile.core,compile.parser,compile.server"></target>
+  <target name="build" depends="init,compile.core,compile.parser,compile.server,compile.extensions"></target>
 
   <target name="docs" depends="init">
     <javadoc packagenames="org.apache.abdera.*"
@@ -153,6 +169,7 @@ Working directory: ${work}
     <jar destfile="${core.jar}"   basedir="${core.work}" />
     <jar destfile="${parser.jar}" basedir="${parser.work}" />
     <jar destfile="${server.jar}" basedir="${server.work}" />  	
+  	<jar destfile="${extensions.jar}" basedir="${extensions.work}" />
     <copy todir="${dist_lib}">
       <fileset dir="${dependencies}"  />
     </copy>

@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.server;
 
+import org.apache.abdera.server.exceptions.AbderaServerException;
 import org.apache.abdera.util.ServiceUtil;
 
 public interface RequestHandlerFactory {

@@ -41,12 +41,12 @@ public interface ExtensibleElement extends Element {
    * Returns the complete set of extension elements using the specified
    * XML qualified name
    */
-  List<ExtensionElement> getExtensions(QName qname);
+  <T extends ExtensionElement>List<T> getExtensions(QName qname);
   
   /**
    * Returns the first extension element with the XML qualified name
    */
-  ExtensionElement getExtension(QName qname);
+  <T extends ExtensionElement>T getExtension(QName qname);
   
   /**
    * Adds an individual extension element
@@ -56,12 +56,12 @@ public interface ExtensibleElement extends Element {
   /**
    * Adds an individual extension element
    */
-  ExtensionElement addExtension(QName qname);
+  <T extends ExtensionElement>T addExtension(QName qname);
   
   /**
    * Adds an individual extension element
    */
-  ExtensionElement addExtension(
+  <T extends ExtensionElement>T addExtension(
     String namespace, 
     String localPart,
     String prefix);

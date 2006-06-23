@@ -24,12 +24,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.abdera.server.AbderaServerException;
 import org.apache.abdera.server.CachePolicy;
 import org.apache.abdera.server.RequestContext;
 import org.apache.abdera.server.RequestHandler;
 import org.apache.abdera.server.RequestHandlerFactory;
 import org.apache.abdera.server.ResponseContext;
+import org.apache.abdera.server.exceptions.AbderaServerException;
 import org.apache.abdera.server.exceptions.MethodNotAllowed;
 
 public class AbderaServlet 

@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.server.exceptions;
 
-import org.apache.abdera.server.AbderaServerException;
 
 public class MethodNotAllowed 
   extends AbderaServerException {

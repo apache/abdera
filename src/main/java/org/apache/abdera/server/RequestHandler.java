@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.server;
 
+import org.apache.abdera.server.exceptions.AbderaServerException;
+
 public interface RequestHandler {
 
   ResponseContext invoke(

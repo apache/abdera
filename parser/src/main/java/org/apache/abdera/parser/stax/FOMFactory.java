@@ -289,7 +289,12 @@ public class FOMFactory
     Type type, 
     Element parent) {
       if (type == null) type = Content.Type.TEXT;
-      return _newInstance(FOMContent.class, type, (OMContainer)parent);
+      Content content = 
+        _newInstance(
+          FOMContent.class, type, (OMContainer)parent);
+      if (type.equals(Content.Type.XML))
+        content.setMimeType("application/xml");
+      return content;
   }
   
   public Content newContent(MimeType mediaType) {

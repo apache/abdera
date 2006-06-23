@@ -51,14 +51,12 @@ import org.apache.abdera.model.ExtensionElement;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
 import org.apache.abdera.model.IRI;
-import org.apache.abdera.model.InReplyTo;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.model.StringElement;
 import org.apache.abdera.model.Text;
-import org.apache.abdera.model.Total;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
@@ -137,9 +135,8 @@ public class FOMTest extends TestCase   {
     entry2.addLink("/2003/12/13/atom03/1");
     entry2.setId("urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b", false);
     entry2.setSummary("A response");
-    entry2.addInReplyTo(entry);
     
-    String compare = "<?xml version='1.0' encoding='UTF-8'?><a:feed xmlns:a=\"http://www.w3.org/2005/Atom\" xml:base=\"http://example.org\" xml:lang=\"en-US\"><a:title type=\"text\">Example Feed</a:title><a:link href=\"http://example.org/\" /><a:author><a:name>John Doe</a:name></a:author><a:id>urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6</a:id><a:contributor><a:name>Bob Jones</a:name></a:contributor><a:category term=\"example\" /><a:entry><a:title type=\"text\">re: Atom-Powered Robots Run Amok</a:title><a:link href=\"/2003/12/13/atom03/1\" /><a:id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b</a:id><a:summary type=\"text\">A response</a:summary><thr:in-reply-to xmlns:thr=\"http://purl.org/syndication/thread/1.0\" href=\"http://example.org/2003/12/13/atom03\" ref=\"urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a\" /></a:entry><a:entry><a:title type=\"text\">Atom-Powered Robots Run Amok</a:title><a:link href=\"http://example.org/2003/12/13/atom03\" /><a:id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</a:id><a:summary type=\"text\">Some text.</a:summary></a:entry></a:feed>";
+    String compare = "<?xml version='1.0' encoding='UTF-8'?><a:feed xmlns:a=\"http://www.w3.org/2005/Atom\" xml:base=\"http://example.org\" xml:lang=\"en-US\"><a:title type=\"text\">Example Feed</a:title><a:link href=\"http://example.org/\" /><a:author><a:name>John Doe</a:name></a:author><a:id>urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6</a:id><a:contributor><a:name>Bob Jones</a:name></a:contributor><a:category term=\"example\" /><a:entry><a:title type=\"text\">re: Atom-Powered Robots Run Amok</a:title><a:link href=\"/2003/12/13/atom03/1\" /><a:id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b</a:id><a:summary type=\"text\">A response</a:summary></a:entry><a:entry><a:title type=\"text\">Atom-Powered Robots Run Amok</a:title><a:link href=\"http://example.org/2003/12/13/atom03\" /><a:id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</a:id><a:summary type=\"text\">Some text.</a:summary></a:entry></a:feed>";
     
     ByteArrayOutputStream out = new ByteArrayOutputStream(512);
     feed.getDocument().writeTo(out);
@@ -423,23 +420,6 @@ public class FOMTest extends TestCase   {
     assertEquals(iri.getValue().toString(), "http://example.org/foo");
     iri = factory.newIRIElement(Constants.ID, new URI("http://example.org/foo"), null);
     assertEquals(iri.getValue().toString(), "http://example.org/foo");
-    InReplyTo inreplyto = factory.newInReplyTo();
-    assertNotNull(inreplyto);
-    inreplyto = factory.newInReplyTo("http://example.org/foo");
-    assertNotNull(inreplyto);
-    assertEquals(inreplyto.getRef().toString(), "http://example.org/foo");
-    inreplyto = factory.newInReplyTo(new URI("http://example.org/foo"));
-    assertEquals(inreplyto.getRef().toString(), "http://example.org/foo");
-    inreplyto = factory.newInReplyTo("http://example.org/foo", "http://example.org/foo", "http://example.org/foo", "text/foo");
-    assertEquals(inreplyto.getRef().toString(), "http://example.org/foo");
-    assertEquals(inreplyto.getSource().toString(), "http://example.org/foo");
-    assertEquals(inreplyto.getHref().toString(), "http://example.org/foo");
-    assertEquals(inreplyto.getMimeType().toString(), "text/foo");
-    inreplyto = factory.newInReplyTo(new URI("http://example.org/foo"), new URI("http://example.org/foo"), new URI("http://example.org/foo"), new MimeType("text/foo"));
-    assertEquals(inreplyto.getRef().toString(), "http://example.org/foo");
-    assertEquals(inreplyto.getSource().toString(), "http://example.org/foo");
-    assertEquals(inreplyto.getHref().toString(), "http://example.org/foo");
-    assertEquals(inreplyto.getMimeType().toString(), "text/foo");
     Link link = factory.newLink();
     assertNotNull(link);
     link = factory.newLink("http://example.org/foo", "a", new MimeType("text/foo"), "b", "en", 10);
@@ -534,10 +514,6 @@ public class FOMTest extends TestCase   {
     content = factory.newContent("a",Content.Type.TEXT);
     assertEquals(content.getValue(), "a");
     assertEquals(content.getContentType(), Content.Type.TEXT);
-    Total total = factory.newTotal();
-    assertNotNull(total);
-    total = factory.newTotal(10);
-    assertEquals(total.getValue(), 10);
     now = new Date();
     dateTime = factory.newUpdated(AtomDate.valueOf(now));
     assertEquals(dateTime.getDate(), now);
@@ -623,7 +599,6 @@ public class FOMTest extends TestCase   {
     entry2.addLink("/2003/12/13/atom03/1");
     entry2.setId("urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b", false);
     entry2.setSummary("A response");
-    entry2.addInReplyTo(entry);
     
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     feed.getDocument().writeTo(out);
@@ -649,8 +624,6 @@ public class FOMTest extends TestCase   {
     assertEquals(entry.getAlternateLink().getResolvedHref().toString(), "http://example.org/2003/12/13/atom03/1");
     assertEquals(entry.getId().toString(), "urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b");
     assertEquals(entry.getSummary(), "A response");
-    assertNotNull(entry.getInReplyTo());
-    assertEquals(entry.getInReplyTo().getRef().toString(), "urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a");
     
     entry = entry.getNextSibling(Constants.ENTRY);
     assertNotNull(entry);

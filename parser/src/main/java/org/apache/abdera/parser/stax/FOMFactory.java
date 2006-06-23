@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.parser.stax;
  
-import javax.activation.MimeTypeParseException;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -50,14 +48,12 @@ import org.apache.abdera.model.ExtensionElement;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
 import org.apache.abdera.model.IRI;
-import org.apache.abdera.model.InReplyTo;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.model.StringElement;
 import org.apache.abdera.model.Text;
-import org.apache.abdera.model.Total;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.model.Content.Type;
 import org.apache.abdera.parser.Parser;
@@ -104,8 +100,6 @@ public class FOMFactory
     qclasses.put(URI, FOMIRI.class);
     qclasses.put(CONTROL, FOMControl.class);
     qclasses.put(DIV, FOMDiv.class);
-    qclasses.put(IN_REPLY_TO, FOMInReplyTo.class);
-    qclasses.put(THRTOTAL, FOMTotal.class);
   }
   
   private List<QName> simpleExtensions = null;
@@ -1356,115 +1350,6 @@ public class FOMFactory
       return _newInstance(FOMElement.class, qname, parent, parserWrapper);
   }
 
-  public Total newTotal() {
-    return newTotal((Element)null);
-  }
-  
-  public Total newTotal(int totalResponse) {
-    return newTotal(totalResponse, null);
-  }
-  
-  public Total newTotal(Element parent) {
-    return _newInstance(FOMTotal.class, (OMContainer)parent);
-  }
-  
-  public Total newTotal(int totalResponse, Element parent) {
-    Total total = newTotal(parent);
-    total.setValue(totalResponse);
-    return total;
-  }
-  
-  public Total newTotal(
-      QName qname, 
-      OMContainer parent, 
-      OMXMLParserWrapper parserWrapper) {
-    return _newInstance(FOMTotal.class, qname, parent, parserWrapper);
-  }
-  
-  public InReplyTo newInReplyTo() {
-    return newInReplyTo((Element)null);
-  }
-  
-  public InReplyTo newInReplyTo(URI ref) {
-    return newInReplyTo(ref, null);
-  }
-  
-  public InReplyTo newInReplyTo(
-    String ref) 
-      throws URISyntaxException {
-    return newInReplyTo(ref, null);
-  }
-  
-  public InReplyTo newInReplyTo(
-    URI ref, 
-    URI source, 
-    URI href, 
-    MimeType type) {
-      return newInReplyTo(ref, source, href, type, null);
-  }
-  
-  public InReplyTo newInReplyTo(
-    String ref, 
-    String source, 
-    String href, 
-    String type) 
-      throws URISyntaxException, 
-             MimeTypeParseException {
-    return newInReplyTo(ref, source, href, type, null);
-  }
-  
-  public InReplyTo newInReplyTo(
-    QName qname,
-    OMContainer parent, 
-    OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMInReplyTo.class, qname, parent, parserWrapper);
-  }
-  
-  public InReplyTo newInReplyTo(Element parent) {
-    return _newInstance(FOMInReplyTo.class, (OMContainer)parent);
-  }
-
-  public InReplyTo newInReplyTo(URI ref, Element parent) {
-    InReplyTo replyTo = newInReplyTo(parent);
-    if (ref != null) replyTo.setRef(ref);
-    return replyTo;
-  }
-
-  public InReplyTo newInReplyTo(String ref, Element parent) throws URISyntaxException {
-    return (ref != null) ? newInReplyTo(new URI(ref), parent) : newInReplyTo(parent);
-  }
-
-  public InReplyTo newInReplyTo(
-    URI ref, 
-    URI source, 
-    URI href, 
-    MimeType type, 
-    Element parent) {
-      InReplyTo replyTo = newInReplyTo(parent);
-      if (ref != null) replyTo.setRef(ref);
-      if (source != null) replyTo.setSource(source);
-      if (href != null) replyTo.setHref(href);
-      if (type != null) replyTo.setMimeType(type);
-      return replyTo;
-  }
-
-  public InReplyTo newInReplyTo(
-    String ref, 
-    String source, 
-    String href, 
-    String type, 
-    Element parent) 
-      throws URISyntaxException, 
-             MimeTypeParseException {
-    return newInReplyTo(
-      (ref != null) ? new URI(ref) : null,
-      (source != null) ? new URI(source) : null,
-      (href != null) ? new URI(href) : null,
-      (type != null) ? new MimeType(type) : null,
-      parent
-    );
-  }
-  
   private boolean isContent(QName qname) {
     return CONTENT.equals(qname);
   }

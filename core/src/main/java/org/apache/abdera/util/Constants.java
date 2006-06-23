@@ -139,21 +139,4 @@ public interface Constants {
   public static final String YES   = "yes";
   public static final String NO    = "no";
   
-  // Atom Thread Extensions Support
-  public static final String THR_NS = "http://purl.org/syndication/thread/1.0";
-  public static final String LN_INREPLYTO = "in-reply-to";
-  public static final String LN_REF = "ref";
-  public static final String LN_COUNT = "count";
-  public static final String LN_WHEN = "when";
-  public static final String LN_TOTAL = "total";
-  public static final String THR_PREFIX = "thr";
-  public static final QName IN_REPLY_TO = new QName(THR_NS, LN_INREPLYTO, THR_PREFIX);
-  public static final QName THRCOUNT = new QName(THR_NS, LN_COUNT, THR_PREFIX);
-  /** @deprecated Use Constants.THRUPDATED */
-  public static final QName THRWHEN = new QName(THR_NS, LN_WHEN, THR_PREFIX);
-  public static final QName THRUPDATED = new QName(THR_NS, LN_UPDATED, THR_PREFIX);
-  public static final QName THRTOTAL = new QName(THR_NS, LN_TOTAL, THR_PREFIX);
-  public static final QName THRREF = new QName(LN_REF);
-  public static final QName THRSOURCE = new QName(LN_SOURCE);
- 
 }

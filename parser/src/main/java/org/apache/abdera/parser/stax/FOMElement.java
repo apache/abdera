@@ -297,7 +297,8 @@ public class FOMElement
   public void writeTo(OutputStream out) throws IOException {
     try {
       OMOutputFormat outputFormat = new OMOutputFormat();
-      outputFormat.setCharSetEncoding(getDocument().getCharset());
+      if (getDocument() != null)
+        outputFormat.setCharSetEncoding(getDocument().getCharset());
       MTOMXMLStreamWriter omwriter = 
         new MTOMXMLStreamWriter(out, outputFormat);
       internalSerialize(omwriter, true);

@@ -55,7 +55,6 @@ public class Create {
     entry2.setId("urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b");
     entry2.setUpdated(new Date());
     entry2.setSummary("A response");
-    entry2.addInReplyTo(entry);
     
     Entry entry3 = feed.addEntry();
     entry3.setTitle("<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Test</p></div>", Text.Type.XHTML);

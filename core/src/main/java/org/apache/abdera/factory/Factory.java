@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.factory;
 
-import javax.activation.MimeTypeParseException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Calendar;
@@ -42,14 +41,12 @@ import org.apache.abdera.model.ExtensionElement;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
 import org.apache.abdera.model.IRI;
-import org.apache.abdera.model.InReplyTo;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.model.StringElement;
 import org.apache.abdera.model.Text;
-import org.apache.abdera.model.Total;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.util.ServiceUtil;
@@ -441,34 +438,6 @@ public interface Factory {
   
   Div newDiv(Base parent);
 
-  InReplyTo newInReplyTo();
-  
-  InReplyTo newInReplyTo(URI ref);
-  
-  InReplyTo newInReplyTo(String ref) throws URISyntaxException;
-  
-  InReplyTo newInReplyTo(URI ref, URI source, URI href, MimeType type);
-  
-  InReplyTo newInReplyTo(String ref, String source, String href, String type) throws URISyntaxException, MimeTypeParseException;
-  
-  InReplyTo newInReplyTo(Element parent);
-  
-  InReplyTo newInReplyTo(URI ref, Element parent);
-  
-  InReplyTo newInReplyTo(String ref, Element parent) throws URISyntaxException;
-  
-  InReplyTo newInReplyTo(URI ref, URI source, URI href, MimeType type, Element parent);
-  
-  InReplyTo newInReplyTo(String ref, String source, String href, String type, Element parent) throws URISyntaxException, MimeTypeParseException;
-
-  Total newTotal();
-  
-  Total newTotal(int totalResponse);
-  
-  Total newTotal(Element parent);
-  
-  Total newTotal(int totalResponse, Element parent);
-  
   void registerAsSimpleExtension(QName qname);
   
   <T extends Base>void registerAlternative(Class<T> base, Class<? extends T> alternative);

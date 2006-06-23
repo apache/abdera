@@ -36,7 +36,6 @@ public abstract class AbstractXPath
     namespaces.put(Constants.PREFIX, Constants.ATOM_NS);
     namespaces.put(Constants.APP_PREFIX, Constants.APP_NS);
     namespaces.put(Constants.CONTROL_PREFIX, Constants.CONTROL_NS);
-    namespaces.put(Constants.THR_PREFIX, Constants.THR_NS);
     return namespaces;
   }
 

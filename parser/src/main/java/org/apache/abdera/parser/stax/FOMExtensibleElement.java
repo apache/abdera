@@ -102,29 +102,33 @@ public abstract class FOMExtensibleElement
     return matching;
   }
 
-  public List<ExtensionElement> getExtensions(QName qname) {
-    List<ExtensionElement> matching = new ArrayList<ExtensionElement>();
+  @SuppressWarnings("unchecked")
+  public <T extends ExtensionElement>List<T> getExtensions(QName qname) {
+    List<T> matching = new ArrayList<T>();
     for (Iterator i = this.getChildrenWithName(qname); i.hasNext();) {
-      matching.add((ExtensionElement) i.next());
+      matching.add((T) i.next());
     }
     return matching;
   }
 
-  public ExtensionElement getExtension(QName qname) {
-    return (ExtensionElement) this.getFirstChildWithName(qname);
+  @SuppressWarnings("unchecked")
+  public <T extends ExtensionElement>T getExtension(QName qname) {
+    return (T) this.getFirstChildWithName(qname);
   }
   
   public void addExtension(ExtensionElement extension) {
     addChild((OMElement)extension);
   }
   
-  public ExtensionElement addExtension(QName qname) {
+  @SuppressWarnings("unchecked")
+  public <T extends ExtensionElement>T addExtension(QName qname) {
     FOMFactory fomfactory = (FOMFactory) factory;
-    return fomfactory.newExtensionElement(qname, this);
+    return (T)fomfactory.newExtensionElement(qname, this);
   }
   
-  public ExtensionElement addExtension(String namespace, String localpart, String prefix) {
-    return addExtension(new QName(namespace, localpart, prefix));
+  @SuppressWarnings("unchecked")
+  public <T extends ExtensionElement>T addExtension(String namespace, String localpart, String prefix) {
+    return (T)addExtension(new QName(namespace, localpart, prefix));
   }
 
   public StringElement addSimpleExtension(QName qname, String value) {

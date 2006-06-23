@@ -38,7 +38,6 @@ import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.ExtensionElement;
 import org.apache.abdera.model.IRI;
-import org.apache.abdera.model.InReplyTo;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Source;
@@ -871,75 +870,6 @@ public class FOMEntry
   public Text.Type getTitleType() {
     Text text = getTitleElement();
     return (text != null) ? text.getTextType() : null;
-  }
-
-  public void addInReplyTo(InReplyTo replyTo) {
-    addChild((OMElement)replyTo);
-  }
-  
-  public InReplyTo addInReplyTo() {
-    FOMFactory fomfactory = (FOMFactory) this.factory;
-    InReplyTo replyTo = fomfactory.newInReplyTo(this);
-    return replyTo;
-  }
-
-  public InReplyTo addInReplyTo(Entry ref) {
-    if (ref.equals(this)) return null;
-    InReplyTo irt = addInReplyTo(); 
-    try {
-      irt.setRef(ref.getId());
-      Link altlink = ref.getAlternateLink();
-      if (altlink != null) {
-        irt.setHref(altlink.getResolvedHref());
-        if (altlink.getMimeType() != null) 
-          irt.setMimeType(altlink.getMimeType());
-      }
-      Source src = ref.getSource();
-      if (src != null) {
-        Link selflink = src.getSelfLink();
-        if (selflink != null)
-          irt.setSource(selflink.getResolvedHref());
-      }
-    } catch (Exception e) {}
-    return irt;
-  }
-
-  public InReplyTo addInReplyTo(URI ref) {
-    FOMFactory fomfactory = (FOMFactory) this.factory;
-    return fomfactory.newInReplyTo(ref, this);
-  }
-
-  public InReplyTo addInReplyTo(String ref) throws URISyntaxException {
-    FOMFactory fomfactory = (FOMFactory) this.factory;
-    return fomfactory.newInReplyTo(ref, this);
-  }
-
-  public InReplyTo addInReplyTo(
-    URI ref, 
-    URI source, 
-    URI href, 
-    MimeType type) {
-      FOMFactory fomfactory = (FOMFactory) this.factory;
-      return fomfactory.newInReplyTo(ref, source, href, type, this);
-  }
-
-  public InReplyTo addInReplyTo(
-    String ref, 
-    String source, 
-    String href, 
-    String type) 
-      throws URISyntaxException, 
-             MimeTypeParseException {
-    FOMFactory fomfactory = (FOMFactory) this.factory;
-    return fomfactory.newInReplyTo(ref, source, href, type, this);
-  }
-
-  public InReplyTo getInReplyTo() {
-    return (InReplyTo) getFirstChildWithName(IN_REPLY_TO);
-  }
-
-  public List<InReplyTo> getInReplyTos() {
-    return _getChildrenAsSet(IN_REPLY_TO);
   }
 
 }

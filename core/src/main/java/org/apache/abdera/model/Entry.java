@@ -666,22 +666,4 @@ public interface Entry
    */
   Link getEditLink();
   
-  void addInReplyTo(InReplyTo replyTo);
-  
-  InReplyTo addInReplyTo();
-  
-  InReplyTo addInReplyTo(Entry ref);
-  
-  InReplyTo addInReplyTo(URI ref);
-  
-  InReplyTo addInReplyTo(String ref) throws URISyntaxException;
-  
-  InReplyTo addInReplyTo(URI ref, URI source, URI href, MimeType type);
-  
-  InReplyTo addInReplyTo(String ref, String source, String href, String type) throws URISyntaxException, MimeTypeParseException;
-  
-  InReplyTo getInReplyTo();
-  
-  List<InReplyTo> getInReplyTos();
-  
 }

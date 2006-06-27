@@ -149,12 +149,14 @@ Working directory: ${work}
     <echo>Running Core Tests...</echo>
     <java classpathref="jar.dependencies" 
           classpath="${core.work}:${parser.work}:${server.work}:${test}"
-          classname="org.apache.abdera.test.core.TestSuite" />
+          classname="org.apache.abdera.test.core.TestSuite"
+          fork="yes" />
 
     <echo>Running Stax Parser Tests...</echo>
     <java classpathref="jar.dependencies" 
           classpath="${core.work}:${parser.work}:${server.work}:${test}"
-          classname="org.apache.abdera.test.parser.stax.TestSuite" />
+          classname="org.apache.abdera.test.parser.stax.TestSuite"
+          fork="yes" />
   </target>
 
   <target name="clean">

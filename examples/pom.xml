@@ -25,6 +25,12 @@
       <artifactId>abdera-core</artifactId>
       <version>0.1.0-incubating-SNAPSHOT</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-parser</artifactId>
+      <version>0.1.0-incubating-SNAPSHOT</version>
+      <scope>compile</scope>
     </dependency>    
     <dependency>
       <groupId>commons-httpclient</groupId>

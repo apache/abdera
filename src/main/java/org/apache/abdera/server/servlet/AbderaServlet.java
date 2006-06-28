@@ -18,6 +18,7 @@
 package org.apache.abdera.server.servlet;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -88,10 +89,15 @@ public class AbderaServlet
       // giving the developer an option to replace or set multiple
       // headers. If they want to skip the ones above, they simply
       // don't set them.
-      Map<String, String> headers = context.getHeaders();
+      Map<String, List<String>> headers = context.getHeaders();
       if(headers != null) {
         for(String header : headers.keySet()) {
-          response.setHeader(header, headers.get(header));
+          List<String> values = headers.get(header);
+          if(values == null) 
+            continue;          
+          for(String value : values) {
+            response.setHeader(header, value);
+          }
         }
       }
       

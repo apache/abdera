@@ -27,7 +27,7 @@ import javax.activation.MimeType;
 
 public interface ResponseContext {
 
-  int getStatus();
+  public int getStatus();
   
   public String getStatusText();
   
@@ -55,8 +55,8 @@ public interface ResponseContext {
   
   public Map<String, String> getHeaders();
   
-  boolean hasEntity();
+  public boolean hasEntity();
   
-  void writeTo(OutputStream out) throws IOException;
+  public void writeTo(OutputStream out) throws IOException;
   
 }

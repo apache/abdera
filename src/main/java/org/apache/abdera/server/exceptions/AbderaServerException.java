@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.Date;
+import java.util.Map;
 
 import javax.activation.MimeType;
 
@@ -90,4 +91,20 @@ public class AbderaServerException
     return false;
   }
 
+  public void addHeader(String name, int value) {
+  }
+
+  public void addHeader(String name, String value) {
+  }
+
+  public void setHeader(String name, int value) {
+  }
+
+  public void setHeader(String name, String value) {
+    
+  }
+  
+  public Map<String, String> getHeaders() {
+    return null;
+  }
 }

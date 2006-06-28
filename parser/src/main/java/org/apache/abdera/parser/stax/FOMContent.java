@@ -212,7 +212,8 @@ public class FOMContent
     } else if (Type.HTML.equals(type)) {
       val = getText();
     } else if (Type.XHTML.equals(type)) {
-      val = this.getFirstChildWithName(Constants.DIV).toString();
+      //val = this.getFirstChildWithName(Constants.DIV).toString();
+      val = ((FOMDiv)this.getFirstChildWithName(Constants.DIV)).getInternalValue();
     } else if (Type.XML.equals(type)) {
       val = this.getFirstElement().toString();
     } else if (Type.MEDIA.equals(type)) {
@@ -235,6 +236,7 @@ public class FOMContent
         try {
           baseUri = getResolvedBaseUri();
         } catch (Exception e) {}
+        value = "<div xmlns=\"" + XHTML_NS + "\">" + value + "</div>";
         Element element = _parse(value, baseUri);
         if (element != null && element instanceof Div)
           setValueElement((Div)element);

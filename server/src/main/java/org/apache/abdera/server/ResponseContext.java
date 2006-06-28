@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.activation.MimeType;
@@ -53,7 +54,7 @@ public interface ResponseContext {
   
   public void addHeader(String name, int value);
   
-  public Map<String, String> getHeaders();
+  public Map<String, List<String>> getHeaders();
   
   public boolean hasEntity();
   

@@ -18,6 +18,7 @@
 package org.apache.abdera.parser.stax;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.xml.namespace.QName;
 
@@ -32,7 +33,6 @@ import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
-
 
 public class FOMText 
   extends FOMElement 
@@ -141,6 +141,70 @@ public class FOMText
       }
     } else 
       _removeAllChildren();
+  }
+
+  public String getWrappedValue() {
+    if (Type.XHTML.equals(type)) {
+      return this.getFirstChildWithName(Constants.DIV).toString();
+    } else {
+      return getValue();
+    }
+  }
+
+  public void setWrappedValue(String wrappedValue) {
+    if (Type.XHTML.equals(type)) {
+      URI baseUri = null;
+      try {
+        baseUri = getResolvedBaseUri();
+      } catch (Exception e) {}
+      Element element = _parse(wrappedValue, baseUri);
+      if (element != null && element instanceof Div)
+        setValueElement((Div)element);
+    } else {
+      setValue(wrappedValue);
+    }
+  }
+
+  @Override
+  public URI getBaseUri()
+    throws URISyntaxException {
+      if (Type.XHTML.equals(type)) {
+        Element el = getValueElement();
+        if (el != null) {
+          if (el.getAttributeValue(BASE) != null) {
+            if (getAttributeValue(BASE) != null)
+              return super.getBaseUri().resolve(
+                el.getAttributeValue(BASE));
+            else
+              return _getUriValue(el.getAttributeValue(BASE));
+          }
+        }
+      }
+      return super.getBaseUri();
+  }
+
+  @Override
+  public URI getResolvedBaseUri()
+    throws URISyntaxException {
+      if (Type.XHTML.equals(type)) {
+        Element el = getValueElement();
+        if (el != null) {
+          if (el.getAttributeValue(BASE) != null) {
+            return super.getResolvedBaseUri().resolve(
+              el.getAttributeValue(BASE));
+          }
+        }
+      }
+      return super.getResolvedBaseUri();
+  }
+  
+  @Override
+  public String getLanguage() {
+    return (!Type.XHTML.equals(type)) ?
+      super.getLanguage() : 
+      (getValueElement() != null) ? 
+         getValueElement().getLanguage() : 
+         super.getLanguage();
   }
 
 }

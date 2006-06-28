@@ -30,7 +30,6 @@ import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ExtensionElement;
-import org.apache.abdera.model.Text.Type;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.attachments.DataHandlerUtils;
 import org.apache.axiom.om.OMContainer;

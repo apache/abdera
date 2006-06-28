@@ -18,6 +18,7 @@
 package org.apache.abdera.server.servlet;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -82,6 +83,18 @@ public class AbderaServlet
       if (context.getLocation() != null)
         response.setHeader("Location", context.getLocation().toString());
       handleCachePolicy(response, context.getCachePolicy());
+      
+      // Add any custom headers after we've set the known ones,
+      // giving the developer an option to replace or set multiple
+      // headers. If they want to skip the ones above, they simply
+      // don't set them.
+      Map<String, String> headers = context.getHeaders();
+      if(headers != null) {
+        for(String header : headers.keySet()) {
+          response.setHeader(header, headers.get(header));
+        }
+      }
+      
       if (context.hasEntity())
         context.writeTo(response.getOutputStream());
     } else {

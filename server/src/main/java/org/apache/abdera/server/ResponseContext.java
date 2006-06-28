@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.Date;
+import java.util.Map;
 
 import javax.activation.MimeType;
 
@@ -28,21 +29,31 @@ public interface ResponseContext {
 
   int getStatus();
   
-  String getStatusText();
+  public String getStatusText();
   
-  Date getLastModified();
+  public Date getLastModified();
   
-  String getEntityTag();
+  public String getEntityTag();
   
-  String getContentLanguage();
+  public String getContentLanguage();
   
-  URI getContentLocation();
+  public URI getContentLocation();
    
-  MimeType getContentType();
+  public MimeType getContentType();
   
-  URI getLocation();
+  public URI getLocation();
   
-  CachePolicy getCachePolicy();
+  public CachePolicy getCachePolicy();
+  
+  public void setHeader(String name, String value);
+  
+  public void addHeader(String name, String value);
+  
+  public void setHeader(String name, int value);
+  
+  public void addHeader(String name, int value);
+  
+  public Map<String, String> getHeaders();
   
   boolean hasEntity();
   

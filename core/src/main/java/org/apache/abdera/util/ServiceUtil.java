@@ -122,34 +122,40 @@ public final class ServiceUtil
   
   public static List<ExtensionFactory> loadExtensionFactories() {
     if (factories == null) {
-      factories = new ArrayList<ExtensionFactory>();
-      String sid = "META-INF/services/org.apache.abdera.factory.ExtensionFactory";
-      ClassLoader loader = getClassLoader();
-      try {
-        Enumeration e = loader.getResources(sid);
-        for (;e.hasMoreElements();) {
-          try {
-            URL url = (URL) e.nextElement();
-            InputStream is = url.openStream();
-            if (is != null) {
-              BufferedReader buf = 
-                new BufferedReader(
-                  new InputStreamReader(is));
-              String line = null;
-              while ((line = buf.readLine()) != null) {
-                String s = line.split("#",2)[0].trim();
-                if (!"".equals(s)) { 
-                  ExtensionFactory factory = 
-                    (ExtensionFactory) loader.loadClass(s).newInstance();
-                  factories.add(factory);
-                }
-              }
-            }
-          } catch (Exception ex) {}
-        }
-      } catch (Exception e) {}
+      factories = _loadimpls(
+        "META-INF/services/org.apache.abdera.factory.ExtensionFactory");
     }
     return factories;
   }
   
+  @SuppressWarnings("unchecked")
+  public static <T>List<T> _loadimpls(String sid) {
+    List<T> impls = null;
+    impls = new ArrayList<T>();
+    ClassLoader loader = getClassLoader();
+    try {
+      Enumeration e = loader.getResources(sid);
+      for (;e.hasMoreElements();) {
+        try {
+          URL url = (URL) e.nextElement();
+          InputStream is = url.openStream();
+          if (is != null) {
+            BufferedReader buf = 
+              new BufferedReader(
+                new InputStreamReader(is));
+            String line = null;
+            while ((line = buf.readLine()) != null) {
+              String s = line.split("#",2)[0].trim();
+              if (!"".equals(s)) { 
+                T impl = (T) loader.loadClass(s).newInstance();
+                impls.add(impl);
+              }
+            }
+          }
+        } catch (Exception ex) {}
+      }
+    } catch (Exception e) {}
+    
+    return impls;
+  }
 }

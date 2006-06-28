@@ -89,4 +89,8 @@ public interface Text
   
   void setValueElement(Div value);
   
+  String getWrappedValue();
+  
+  void setWrappedValue(String wrappedValue);
+  
 }

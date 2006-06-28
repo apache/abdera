@@ -279,4 +279,45 @@ public class FOMContent
     }
   }
 
+  @Override
+  public URI getBaseUri()
+    throws URISyntaxException {
+      if (Type.XHTML.equals(type)) {
+        Element el = getValueElement();
+        if (el != null) {
+          if (el.getAttributeValue(BASE) != null) {
+            if (getAttributeValue(BASE) != null)
+              return super.getBaseUri().resolve(
+                el.getAttributeValue(BASE));
+            else
+              return _getUriValue(el.getAttributeValue(BASE));
+          }
+        }
+      }
+      return super.getBaseUri();
+  }
+
+  @Override
+  public URI getResolvedBaseUri()
+    throws URISyntaxException {
+      if (Type.XHTML.equals(type)) {
+        Element el = getValueElement();
+        if (el != null) {
+          if (el.getAttributeValue(BASE) != null) {
+            return super.getResolvedBaseUri().resolve(
+              el.getAttributeValue(BASE));
+          }
+        }
+      }
+      return super.getResolvedBaseUri();
+  }
+  
+  @Override
+  public String getLanguage() {
+    return (!Type.XHTML.equals(type)) ?
+      super.getLanguage() : 
+      (getValueElement() != null) ? 
+         getValueElement().getLanguage() : 
+         super.getLanguage();
+  }
 }

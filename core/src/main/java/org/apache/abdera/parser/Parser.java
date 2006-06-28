@@ -93,5 +93,31 @@ public interface Parser {
     ParserOptions options) 
       throws ParseException, URISyntaxException;
   
+  <T extends Element>Document<T> parse(
+      Object in) 
+        throws ParseException;
+    
+  <T extends Element>Document<T> parse(
+    Object in, 
+    URI base) 
+      throws ParseException;
+  
+  <T extends Element>Document<T> parse(
+    Object in, 
+    URI base, 
+    ParserOptions options) 
+      throws ParseException;
+  
+  <T extends Element>Document<T> parse(
+    Object in, 
+    String base) 
+      throws ParseException, URISyntaxException;
+  
+  <T extends Element>Document<T> parse(
+    Object in, 
+    String base, 
+    ParserOptions options) 
+      throws ParseException, URISyntaxException;
+  
   ParserOptions getDefaultParserOptions();
 }

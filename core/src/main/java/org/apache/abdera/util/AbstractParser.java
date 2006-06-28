@@ -28,7 +28,6 @@ import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 
-
 /**
  * @author James M Snell (jasnell@us.ibm.com)
  */
@@ -88,6 +87,36 @@ public abstract class AbstractParser
   
   public <T extends Element>Document<T> parse(
     Reader in, 
+    String base, 
+    ParserOptions options) 
+      throws ParseException, 
+             URISyntaxException {
+    return parse(in, new URI(base), options);
+  }
+  
+  public <T extends Element>Document<T> parse(
+    Object in) 
+      throws ParseException {
+    return parse(in, (URI)null, getDefaultParserOptions());
+  }
+
+  public <T extends Element>Document<T> parse(
+    Object in, 
+    URI base) 
+      throws ParseException {
+    return parse(in, base, getDefaultParserOptions());
+  }
+
+  public <T extends Element>Document<T> parse(
+    Object in, 
+    String base) 
+      throws ParseException, 
+             URISyntaxException {
+    return parse(in, new URI(base), getDefaultParserOptions());
+  }
+  
+  public <T extends Element>Document<T> parse(
+    Object in, 
     String base, 
     ParserOptions options) 
       throws ParseException, 

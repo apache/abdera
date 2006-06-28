@@ -17,7 +17,12 @@
 */
 package org.apache.abdera.parser.stax;
 
+import java.io.ByteArrayOutputStream;
+import java.util.Iterator;
+
 import javax.xml.namespace.QName;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Div;
@@ -26,6 +31,7 @@ import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
+import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
 
@@ -118,4 +124,20 @@ public class FOMDiv
       _removeAllChildren();
   }
 
+  protected String getInternalValue() {
+    try {
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      XMLStreamWriter writer = 
+        XMLOutputFactory.newInstance().createXMLStreamWriter(out);
+      writer.writeStartElement("");
+      for (Iterator nodes = this.getChildren(); nodes.hasNext();) {
+        OMNode node = (OMNode) nodes.next();
+        node.serialize(writer);
+      }
+      writer.writeEndElement();
+      return out.toString().substring(2);
+    } catch (Exception e) {}
+    return "";
+  }
+  
 }

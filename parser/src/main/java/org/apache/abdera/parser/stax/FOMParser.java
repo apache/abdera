@@ -65,6 +65,10 @@ public class FOMParser
     ParserOptions options)
       throws ParseException {
     Document<T> document = null;
+
+    if (in == null)
+      throw new IllegalArgumentException("InputStream must not be null");
+
     try {
       FOMFactory factory = getFomFactory(options);
       FOMBuilder builder = new FOMBuilder(factory, in, options);
@@ -83,6 +87,10 @@ public class FOMParser
     ParserOptions options) 
       throws ParseException {
     Document<T> document = null;
+
+    if (in == null)
+      throw new IllegalArgumentException("Reader must not be null");
+
     try {
       FOMFactory factory = getFomFactory(options);
       XMLStreamReader xmlreader = 

@@ -257,4 +257,26 @@ public class FOMContent
     }
   }
 
+  public String getWrappedValue() {
+    if (Type.XHTML.equals(type)) {
+      return this.getFirstChildWithName(Constants.DIV).toString();
+    } else {
+      return getValue();
+    }
+  }
+
+  public void setWrappedValue(String wrappedValue) {
+    if (Type.XHTML.equals(type)) {
+      URI baseUri = null;
+      try {
+        baseUri = getResolvedBaseUri();
+      } catch (Exception e) {}
+      Element element = _parse(wrappedValue, baseUri);
+      if (element != null && element instanceof Div)
+        setValueElement((Div)element);
+    } else {
+      setValue(wrappedValue);
+    }
+  }
+
 }

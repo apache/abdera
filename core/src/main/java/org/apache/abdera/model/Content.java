@@ -224,4 +224,7 @@ public interface Content extends StringElement {
    */
   void setDataHandler(DataHandler dataHandler);
 
+  String getWrappedValue();
+  
+  void setWrappedValue(String wrappedValue);
 }

@@ -200,11 +200,12 @@ public class FOMText
   
   @Override
   public String getLanguage() {
-    return (!Type.XHTML.equals(type)) ?
-      super.getLanguage() : 
-      (getValueElement() != null) ? 
-         getValueElement().getLanguage() : 
-         super.getLanguage();
+    if (Type.XHTML.equals(type)) {
+      Element el = getValueElement();
+      if (el.getAttributeValue(LANG) != null)
+        return el.getAttributeValue(LANG);
+    }
+    return super.getLanguage();
   }
 
 }

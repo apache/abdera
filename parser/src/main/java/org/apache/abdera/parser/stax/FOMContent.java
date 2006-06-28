@@ -30,6 +30,7 @@ import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ExtensionElement;
+import org.apache.abdera.model.Text.Type;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.attachments.DataHandlerUtils;
 import org.apache.axiom.om.OMContainer;
@@ -314,10 +315,11 @@ public class FOMContent
   
   @Override
   public String getLanguage() {
-    return (!Type.XHTML.equals(type)) ?
-      super.getLanguage() : 
-      (getValueElement() != null) ? 
-         getValueElement().getLanguage() : 
-         super.getLanguage();
+    if (Type.XHTML.equals(type)) {
+      Element el = getValueElement();
+      if (el.getAttributeValue(LANG) != null)
+        return el.getAttributeValue(LANG);
+    }
+    return super.getLanguage();
   }
 }

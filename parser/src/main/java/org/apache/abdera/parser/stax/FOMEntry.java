@@ -37,6 +37,7 @@ import org.apache.abdera.model.DateTime;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.ExtensionElement;
+import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.IRI;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
@@ -622,10 +623,13 @@ public class FOMEntry
   }
 
   public void setSource(Source source) {
-    if (source != null)
+    if (source != null) {
+      if (source instanceof Feed)
+        source = ((Feed)source).getAsSource();
       _setChild(SOURCE, (OMElement)source);
-    else
+    } else {
       _removeElement(SOURCE, false);
+    }
   }
 
   @SuppressWarnings("unchecked")

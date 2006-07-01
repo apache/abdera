@@ -20,7 +20,9 @@ package org.apache.abdera.server.exceptions;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,8 +42,10 @@ public class AbderaServerException
   private String etag = null;
   private String language = null;
   private URI contentLocation = null;
+  private long contentLength = -1;
   private MimeType contentType = null;
   private URI location = null;
+  private Map<String,List<String>> headers = new HashMap<String, List<String>>();
   
   public AbderaServerException(int status, String text) {
     this.status = status;
@@ -75,6 +79,10 @@ public class AbderaServerException
   public MimeType getContentType() {
     return contentType;
   }
+  
+  public long getContentLength() {
+    return contentLength;
+  }
 
   public URI getLocation() {
     return location;
@@ -93,19 +101,27 @@ public class AbderaServerException
   }
 
   public void addHeader(String name, int value) {
+    addHeader(name, Integer.toString(value));       
   }
 
   public void addHeader(String name, String value) {
+    if(!this.headers.containsKey(name)) {
+      setHeader(name, value);
+    } else {
+      List<String> values = this.headers.get(name);
+      values.add(value);
+    }
+  }
+
+  public Map<String, List<String>> getHeaders() {
+    return this.headers;
   }
 
   public void setHeader(String name, int value) {
+    setHeader(name, Integer.toString(value));    
   }
 
   public void setHeader(String name, String value) {
-    
-  }
-  
-  public Map<String, List<String>> getHeaders() {
-    return null;
+    this.headers.put(name, Arrays.asList(new String[] { value }));    
   }
 }

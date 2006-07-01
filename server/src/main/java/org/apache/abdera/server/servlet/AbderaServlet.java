@@ -83,6 +83,9 @@ public class AbderaServlet
         response.setHeader("ETag", context.getEntityTag());
       if (context.getLocation() != null)
         response.setHeader("Location", context.getLocation().toString());
+      if (context.getContentLength() > -1) {
+        response.setHeader("Content-Length", Long.toString(context.getContentLength()));
+      }
       handleCachePolicy(response, context.getCachePolicy());
       
       // Add any custom headers after we've set the known ones,

@@ -21,8 +21,8 @@
       <artifactId>junit</artifactId>
     </dependency>
     <dependency>
-      <groupId>geronimo</groupId>
-      <artifactId>geronimo-activation</artifactId>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-activation_1.0.2_spec</artifactId>
     </dependency>
   </dependencies>
 </project>

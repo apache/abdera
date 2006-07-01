@@ -39,7 +39,9 @@ public interface ResponseContext {
   public String getContentLanguage();
   
   public URI getContentLocation();
-   
+  
+  public long getContentLength();
+  
   public MimeType getContentType();
   
   public URI getLocation();

@@ -26,8 +26,8 @@ public interface ParserFactory {
     "org.apache.abdera.parser.ParserFactory",
     "org.apache.abdera.parser.stax.FOMParserFactory");
   
-  Parser getInstance();
+  Parser getParser();
   
-  Parser getInstance(String name); 
+  Parser getParser(String name); 
   
 }

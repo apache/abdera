@@ -26,8 +26,8 @@ public interface WriterFactory {
     "org.apache.abdera.writer.WriterFactory",
     "org.apache.abdera.parser.stax.FOMWriterFactory");
   
-  Writer getInstance();
+  Writer getWriter();
   
-  Writer getInstance(String name);
+  Writer getWriter(String name);
   
 }

@@ -29,13 +29,13 @@ import org.apache.abdera.util.ServiceUtil;
 public class FOMParserFactory 
   implements ParserFactory {
 
-  public Parser getInstance() {
+  public Parser getParser() {
     return Parser.INSTANCE;
   }
 
-  public Parser getInstance(String name) {
+  public Parser getParser(String name) {
     return (name != null) ? 
-      loadParsers().get(name) : getInstance();
+      loadParsers().get(name) : getParser();
   }
 
   private static Map<String,NamedParser> parsers = null;

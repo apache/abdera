@@ -29,13 +29,13 @@ import org.apache.abdera.writer.WriterFactory;
 public class FOMWriterFactory 
   implements WriterFactory {
 
-  public Writer getInstance() {
+  public Writer getWriter() {
     return Writer.INSTANCE;
   }
 
-  public Writer getInstance(String name) {
+  public Writer getWriter(String name) {
     return (name != null) ? 
-      loadWriters().get(name) : getInstance();
+      loadWriters().get(name) : getWriter();
   }
 
   private static Map<String,NamedWriter> writers = null;

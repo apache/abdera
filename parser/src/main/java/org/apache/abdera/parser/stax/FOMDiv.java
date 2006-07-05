@@ -18,6 +18,7 @@
 package org.apache.abdera.parser.stax;
 
 import java.io.ByteArrayOutputStream;
+import java.net.URI;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -28,6 +29,7 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
+import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
@@ -114,14 +116,22 @@ public class FOMDiv
   }
 
   public String getValue() {
-    return getText();
+    return getInternalValue();
   }
 
   public void setValue(String value) {
-    if (value != null)
-      setText(value);
-    else 
-      _removeAllChildren();
+    _removeAllChildren();
+    if (value != null) {
+      URI baseUri = null;
+      try {
+        baseUri = getResolvedBaseUri();
+      } catch (Exception e) {}
+      value = "<div xmlns=\"" + XHTML_NS + "\">" + value + "</div>";
+      OMElement element = (OMElement) _parse(value, baseUri);
+      for (Iterator i = element.getChildren(); i.hasNext();) {
+        this.addChild((OMNode)i.next());
+      }
+    }
   }
 
   protected String getInternalValue() {

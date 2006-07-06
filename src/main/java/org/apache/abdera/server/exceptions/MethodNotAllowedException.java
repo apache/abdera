@@ -20,16 +20,16 @@ package org.apache.abdera.server.exceptions;
 import org.apache.abdera.server.RequestContext;
 
 
-public class MethodNotAllowed 
+public class MethodNotAllowedException 
   extends AbderaServerException {
 
   private static final long serialVersionUID = -633052744794889086L;
 
-  public MethodNotAllowed() {
+  public MethodNotAllowedException() {
     super(405, null);
   }
 
-  public MethodNotAllowed(String text) {
+  public MethodNotAllowedException(String text) {
     super(405, text);
   }
   

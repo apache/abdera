@@ -32,7 +32,7 @@ import org.apache.abdera.server.RequestHandler;
 import org.apache.abdera.server.RequestHandlerFactory;
 import org.apache.abdera.server.ResponseContext;
 import org.apache.abdera.server.exceptions.AbderaServerException;
-import org.apache.abdera.server.exceptions.MethodNotAllowed;
+import org.apache.abdera.server.exceptions.MethodNotAllowedException;
 
 public class AbderaServlet 
   extends HttpServlet {
@@ -54,7 +54,7 @@ public class AbderaServlet
       if (handler != null) {
         responseContext = handler.invoke(requestContext);
       } else {
-        throw new MethodNotAllowed(request.getMethod());
+        throw new MethodNotAllowedException(request.getMethod());
       }
     } catch (AbderaServerException exception) {
       responseContext = exception;

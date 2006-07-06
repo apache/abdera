@@ -290,17 +290,16 @@ public class AtomConformanceTest extends BaseParserTestCase {
           assertEquals(value, "<title>");
           break;
         case 6:
-         
           value = title.getValue();
           assertEquals(value, "<title>");
           break;
         case 7:
           Div div = title.getValueElement();
-          assertEquals(div.getValue(), "<title>");
+          assertEquals(div.getValue(), "&lt;title>");
           break;
         case 8:
           div = title.getValueElement();
-          assertEquals(div.getValue(), "<title>");
+          assertEquals(div.getValue(), "&lt;title>");
           break;
       }
       n++;

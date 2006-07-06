@@ -38,21 +38,12 @@
   <property name="server.src" value="${server}/src/main/java" />
   <property name="server.work" value="${work}/server" />
   <property name="server.jar" value="${dist}/${ant.project.name}.server.${version}.jar" />
-  
-	<property name="retro_core.jar" value="${dist}/${ant.project.name}.core.${version}.retro.jar" />
-  <property name="retro_parser.jar" value="${dist}/${ant.project.name}.parser.${version}.retro.jar" />
-  <property name="retro_extensions.jar" value="${dist}/${ant.project.name}.extensions.${version}.retro.jar" />
-  <property name="retro_server.jar" value="${dist}/${ant.project.name}.server.${version}.retro.jar" />
-  	
+    	
   <property name="dependencies" value="${basedir}/dependencies" />
   <property file="${dependencies}/deps.properties" />
 
   <path id="jar.dependencies">
     <fileset dir="${dependencies}" includes="**/*.jar" />
-  </path>
-
-  <path id="jar.retro">
-    <fileset dir="${basedir}/build/tools/retroweaver/release" includes="**/*.jar" />
   </path>
 	
   <target name="dependencies">
@@ -256,28 +247,42 @@ Working directory: ${work}
   </target>
   
 	<target name="retro" >
+		<property name="retrozip" value="${basedir}/build/tools/${retroweaver.zip}" />
+		<property name="retro" value="${basedir}/build/tools/retroweaver-1.2.3" />
+		<property name="retro_core.jar" value="${dist}/${ant.project.name}.core.${version}.retro.jar" />
+	  <property name="retro_parser.jar" value="${dist}/${ant.project.name}.parser.${version}.retro.jar" />
+	  <property name="retro_extensions.jar" value="${dist}/${ant.project.name}.extensions.${version}.retro.jar" />
+	  <property name="retro_server.jar" value="${dist}/${ant.project.name}.server.${version}.retro.jar" />
+		<condition property="do.download.retroweaver">
+			<not><available file="${retrozip}"/></not>
+		</condition>
+		<antcall target="go_retro" />
+    <path id="jar.retro">
+	    <fileset dir="${retro}/release" includes="**/*.jar" />
+	  </path>		
 		<echo>Retroweaving the Jars...</echo>
-    <java classpathref="jar.retro" 
-          classname="com.rc.retroweaver.Weaver"
-          fork="yes">
+		<java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
     	<arg line="-jar ${core.jar} ${retro_core.jar}" />
     </java>
-    <java classpathref="jar.retro" 
-          classname="com.rc.retroweaver.Weaver"
-          fork="yes">
+    <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
     	<arg line="-jar ${parser.jar} ${retro_parser.jar}"/>
     </java>
-    <java classpathref="jar.retro" 
-          classname="com.rc.retroweaver.Weaver"
-          fork="yes">
+    <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
       <arg line="-jar ${server.jar} ${retro_server.jar}" />
     </java>
-    <java classpathref="jar.retro" 
-          classname="com.rc.retroweaver.Weaver"
-          fork="yes">
+    <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
       <arg line="-jar ${extensions.jar} ${retro_extensions.jar}" />
 		</java>
-		<copy todir="${dist_lib}" file="${basedir}/build/tools/retroweaver/release/retroweaver-rt-1.2.3.jar" />
+		<copy todir="${dist_lib}" file="${retro}/release/retroweaver-rt-1.2.3.jar" />
+	</target>
+	
+	<target name="go_retro" if="do.download.retroweaver">
+		<echo>Downloading Retroweaver...</echo>
+		<get src="${retroweaver.dir}/${retroweaver.zip}"
+		     dest="${basedir}/build/tools/${retroweaver.zip}"
+		     usetimestamp="true" />
+		<unzip src="${basedir}/build/tools/${retroweaver.zip}"
+		     dest="${basedir}/build/tools/" overwrite="true"/>
 	</target>
 	
 </project>

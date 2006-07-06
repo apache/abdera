@@ -246,7 +246,7 @@ Working directory: ${work}
     </copy>
   </target>
   
-	<target name="retro" >
+	<target name="retro" depends="dist">
 		<property name="retrozip" value="${basedir}/build/tools/${retroweaver.zip}" />
 		<property name="retro" value="${basedir}/build/tools/retroweaver-1.2.3" />
 		<property name="retro_core.jar" value="${dist}/${ant.project.name}.core.${version}.retro.jar" />
@@ -278,6 +278,7 @@ Working directory: ${work}
 	
 	<target name="go_retro" if="do.download.retroweaver">
 		<echo>Downloading Retroweaver...</echo>
+		<mkdir dir="${basedir}/build/tools" />
 		<get src="${retroweaver.dir}/${retroweaver.zip}"
 		     dest="${basedir}/build/tools/${retroweaver.zip}"
 		     usetimestamp="true" />

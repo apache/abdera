@@ -49,7 +49,7 @@ import javax.activation.MimeTypeParseException;
  * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Link 
-  extends ExtensibleElement, StringElement {
+  extends ExtensibleElement {
 
   public static final String REL_ALTERNATE = "alternate";
   public static final String REL_CURRENT = "current";

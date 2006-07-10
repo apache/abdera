@@ -123,12 +123,17 @@ public class FOMText
     return val;
   }
 
+  public void setText(String value) {
+    init(Text.Type.TEXT);
+    super.setText(value);
+  }
+  
   public void setValue(String value) {
     if (value != null) {
       if (Type.TEXT.equals(type)) {
-        setText(value);
+        super.setText(value);
       } else if (Type.HTML.equals(type)) {
-        setText(value);
+        super.setText(value);
       } else if (Type.XHTML.equals(type)) {
         URI baseUri = null;
         try {

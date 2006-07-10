@@ -23,8 +23,7 @@ package org.apache.abdera.model;
  * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Div 
-  extends ExtensibleElement, 
-          StringElement {
+  extends ExtensibleElement {
 
   /**
    * Returns the array of class attribute values on the div
@@ -56,4 +55,7 @@ public interface Div
    */
   void setXhtmlClass(String[] classes);
   
+  String getValue();
+  
+  void setValue(String value);
 }

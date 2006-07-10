@@ -20,8 +20,7 @@ package org.apache.abdera.factory;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Base;
-import org.apache.abdera.model.ExtensionElement;
-
+import org.apache.abdera.model.Element;
 
 /**
  * @author James M Snell (jasnell@us.ibm.com)
@@ -70,6 +69,6 @@ public interface ExtensionFactory {
    * @param factory the Factory
    * @return ExtensionElement The created ExtensionElement
    */
-  <T extends ExtensionElement>T newExtensionElement(QName qname, Base parent, Factory factory);
+  <T extends Element>T newExtensionElement(QName qname, Base parent, Factory factory);
 
 }

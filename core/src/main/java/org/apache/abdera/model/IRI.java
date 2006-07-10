@@ -27,7 +27,7 @@ import java.net.URISyntaxException;
  * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface IRI 
-  extends  ExtensionElement {
+  extends  Element {
   
   /**
    * Returns the value of the element as a java.net.URI 

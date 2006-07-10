@@ -33,7 +33,7 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 
 
 public class FOMGenerator 
-  extends FOMStringElement 
+  extends FOMElement 
   implements Generator {
   
   private static final long serialVersionUID = -8441971633807437976L;
@@ -47,7 +47,7 @@ public class FOMGenerator
     String version, 
     URI uri) {
       this();
-      setValue(value);
+      setText(value);
       setVersion(version);
       setUri(uri);
   }
@@ -58,7 +58,7 @@ public class FOMGenerator
     String uri) 
       throws URISyntaxException {
     this();
-    setValue(value);
+    setText(value);
     setVersion(version);
     setUri(uri);
   }

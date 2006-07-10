@@ -46,7 +46,7 @@ import javax.activation.MimeTypeParseException;
  * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Collection 
-  extends ExtensibleElement, ExtensionElement {
+  extends ExtensibleElement {
 
   /**
    * APP Draft-08: The app:collection element MUST contain a "title" 

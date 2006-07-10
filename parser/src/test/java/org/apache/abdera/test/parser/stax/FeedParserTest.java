@@ -48,7 +48,7 @@ public class FeedParserTest extends BaseParserTestCase {
     Feed feed = (Feed) doc.getRoot();
     Entry entry = feed.getEntries().get(0);
     Person person = entry.getAuthor();
-    assertEquals(person.getEmailElement().getValue(), "me@example.com");
+    assertEquals(person.getEmail(), "me@example.com");
   }
   
   public void testEntryAuthorName() throws Exception {
@@ -56,7 +56,7 @@ public class FeedParserTest extends BaseParserTestCase {
     Feed feed = (Feed) doc.getRoot();
     Entry entry = feed.getEntries().get(0);
     Person person = entry.getAuthor();
-    assertEquals(person.getNameElement().getValue(), "Example author");    
+    assertEquals(person.getName(), "Example author");    
   }
   
   public void testEntryContentBase64() throws Exception {

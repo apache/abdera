@@ -22,13 +22,13 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Base;
-import org.apache.abdera.model.ExtensionElement;
+import org.apache.abdera.model.Element;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
 
 public interface FOMExtensionFactory extends ExtensionFactory {
 
-  public <T extends ExtensionElement>T newExtensionElement(
+  public <T extends Element>T newExtensionElement(
     QName qname,
     Base parent,
     Factory factory,

@@ -47,7 +47,6 @@ import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
-import org.apache.abdera.model.ExtensionElement;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
 import org.apache.abdera.model.IRI;
@@ -55,7 +54,6 @@ import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Source;
-import org.apache.abdera.model.StringElement;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.Parser;
@@ -220,8 +218,7 @@ public class FOMTest extends TestCase   {
     TextFilter filter = new TextFilter() {
       @Override
       public String filterText(String text, Element parent) {
-        ExtensionElement ee = (ExtensionElement) parent;
-        QName qname = ee.getQName();
+        QName qname = parent.getQName();
         Base elparent = parent.getParentElement();
         if (Constants.NAME.equals(qname)) {
           text = "Jane Doe";
@@ -354,22 +351,22 @@ public class FOMTest extends TestCase   {
     assertEquals(dateTime.getDate(), now);
     Generator generator = factory.newDefaultGenerator();
     assertNotNull(generator);
-    assertEquals(generator.getValue(), Version.APP_NAME);
+    assertEquals(generator.getText(), Version.APP_NAME);
     assertEquals(generator.getVersion(), Version.VERSION);
     assertEquals(generator.getUri().toString(), Version.URI);
     Div div = factory.newDiv();
     assertNotNull(div);
     Document doc = factory.newDocument();
     assertNotNull(doc);
-    StringElement el = factory.newEmail();
+    Element el = factory.newEmail();
     assertNotNull(el);
     el = factory.newEmail("a");
-    assertEquals(el.getValue(), "a");
+    assertEquals(el.getText(), "a");
     Entry entry = factory.newEntry();
     assertNotNull(entry);
     entry = factory.newEntry();
     assertNotNull(entry);
-    ExtensionElement ee = factory.newExtensionElement(new QName("urn:foo", "bar", "b"));
+    Element ee = factory.newExtensionElement(new QName("urn:foo", "bar", "b"));
     assertNotNull(ee);
     assertEquals(ee.getQName(), new QName("urn:foo", "bar", "b"));
     Feed feed = factory.newFeed();
@@ -378,7 +375,7 @@ public class FOMTest extends TestCase   {
     assertNotNull(generator);
     generator = factory.newGenerator(new URI(Version.URI), Version.VERSION, Version.APP_NAME);
     assertNotNull(generator);
-    assertEquals(generator.getValue(), Version.APP_NAME);
+    assertEquals(generator.getText(), Version.APP_NAME);
     assertEquals(generator.getVersion(), Version.VERSION);
     assertEquals(generator.getUri().toString(), Version.URI);
     content = factory.newContent("a", Content.Type.HTML);
@@ -452,7 +449,7 @@ public class FOMTest extends TestCase   {
     el = factory.newName();
     assertNotNull(el);
     el = factory.newName("a");
-    assertEquals(el.getValue(), "a");
+    assertEquals(el.getText(), "a");
     Parser parser = factory.newParser();
     assertNotNull(parser);
     Person person = factory.newPerson(Constants.AUTHOR, null);
@@ -485,13 +482,13 @@ public class FOMTest extends TestCase   {
     assertNotNull(service);
     Source source = factory.newSource();
     assertNotNull(source);
-    el = factory.newStringElement(Constants.NAME);
+    el = factory.newElement(Constants.NAME);
     assertNotNull(el);
     assertEquals(el.getQName(), Constants.NAME);
-    el = factory.newStringElement(Constants.NAME, "a");
+    el = factory.newElement(Constants.NAME, "a");
     assertNotNull(el);
     assertEquals(el.getQName(), Constants.NAME);
-    assertEquals(el.getValue(), "a");
+    assertEquals(el.getText(), "a");
     text = factory.newText(Constants.TITLE, Text.Type.TEXT);
     assertNotNull(text);
     assertEquals(text.getTextType(), Text.Type.TEXT);
@@ -538,7 +535,7 @@ public class FOMTest extends TestCase   {
     Workspace workspace = factory.newWorkspace();
     assertNotNull(workspace);
     div = factory.newDiv();
-    content = factory.newContent(Content.Type.XHTML, div);
+    content = factory.newContent(div, Content.Type.XHTML);
     assertNotNull(content);
     assertEquals(content.getContentType(), Content.Type.XHTML);
     assertNotNull(content.getValueElement());
@@ -569,10 +566,6 @@ public class FOMTest extends TestCase   {
     assertNotNull(text);
     assertEquals(text.getTextType(), Text.Type.XHTML);
     assertEquals(text.getValueElement(), div);
-    QName qname = new QName("urn:foo", "bar");
-    factory.registerAsSimpleExtension(qname);
-    el = (StringElement) factory.newExtensionElement(qname);
-    assertEquals(el.getQName(), qname);
   }
   
   public void testRoundtrip() throws Exception {

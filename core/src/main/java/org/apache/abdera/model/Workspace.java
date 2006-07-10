@@ -44,7 +44,7 @@ import java.util.List;
  * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Workspace 
-  extends ExtensibleElement, ExtensionElement {
+  extends ExtensibleElement {
 
   /**
    * APP Draft-08: The app:workspace element MUST contain a "title" 

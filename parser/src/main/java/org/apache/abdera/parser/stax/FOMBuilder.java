@@ -334,7 +334,7 @@ public class FOMBuilder
     QName qname = parser.getName();
     element = fomfactory.createElement(qname, parent, this);
     if (element == null) {
-      element = new FOMExtensionElement(qname, parent, fomfactory, this);
+      element = new FOMElement(qname, parent, fomfactory, this);
     }
     if (element != null) {
       this.processNamespaceData(element);

@@ -23,7 +23,7 @@ import java.net.URISyntaxException;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
-import org.apache.abdera.model.ExtensionElement;
+import org.apache.abdera.model.Element;
 
 /**
  * Provides an interface for the Atom Threading Extension in-reply-to
@@ -31,7 +31,7 @@ import org.apache.abdera.model.ExtensionElement;
  * a response to another resource.
  */
 public interface InReplyTo 
-  extends ExtensionElement {
+  extends Element {
   
   /**
    * Returns the persistent and universally unique identifier of the 

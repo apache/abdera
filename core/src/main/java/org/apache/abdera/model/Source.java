@@ -70,7 +70,7 @@ import javax.activation.MimeTypeParseException;
  * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Source 
-  extends ExtensibleElement, ExtensionElement {
+  extends ExtensibleElement {
   /**
    * Returns the first author listed for the entry
    */

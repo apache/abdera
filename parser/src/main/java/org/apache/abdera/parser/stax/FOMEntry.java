@@ -128,12 +128,20 @@ public class FOMEntry
 
   public Person addAuthor(String name, String email, String uri) throws URISyntaxException {
     FOMFactory fomfactory = (FOMFactory) this.factory;
-    return fomfactory.newAuthor(name, email, uri, this);
+    Person person = fomfactory.newAuthor(this);
+    person.setName(name);
+    person.setEmail(email);
+    person.setUri(uri);
+    return person;
   }
   
   public Person addAuthor(String name, String email, URI uri) {
     FOMFactory fomfactory = (FOMFactory) this.factory;
-    return fomfactory.newAuthor(name, email, uri, this);    
+    Person person = fomfactory.newAuthor(this);
+    person.setName(name);
+    person.setEmail(email);
+    person.setUri(uri);
+    return person;    
   }
 
   public List<Category> getCategories() {
@@ -176,12 +184,20 @@ public class FOMEntry
 
   public Category addCategory(URI scheme, String term, String label) {
     FOMFactory factory = (FOMFactory) this.factory;
-    return factory.newCategory(term, scheme, label, this);
+    Category category = factory.newCategory(this);
+    category.setTerm(term);
+    category.setScheme(scheme);
+    category.setLabel(label);
+    return category;
   }
   
   public Category addCategory(String scheme, String term, String label) throws URISyntaxException {
     FOMFactory factory = (FOMFactory) this.factory;
-    return factory.newCategory(term, new URI(scheme), label, this);    
+    Category category = factory.newCategory(this);
+    category.setTerm(term);
+    category.setScheme(scheme);
+    category.setLabel(label);
+    return category;    
   }
   
   @SuppressWarnings("unchecked")
@@ -211,7 +227,8 @@ public class FOMEntry
    */
   public Content setContent(String value) {
     FOMFactory factory = (FOMFactory) this.factory;
-    Content content = factory.newContent(value);
+    Content content = factory.newContent();
+    content.setValue(value);
     setContentElement(content);
     return content;
   }
@@ -239,7 +256,8 @@ public class FOMEntry
    */
   public Content setContent(String value, Content.Type type) {
     FOMFactory factory = (FOMFactory) this.factory;
-    Content content = factory.newContent(value, type);
+    Content content = factory.newContent(type);
+    content.setValue(value);
     setContentElement(content);
     return content;
   }
@@ -249,7 +267,8 @@ public class FOMEntry
    */
   public Content setContent(Element value, Content.Type type) {
     FOMFactory factory = (FOMFactory) this.factory;
-    Content content = factory.newContent(value, type);
+    Content content = factory.newContent(type);
+    content.setValueElement(value);
     setContentElement(content);
     return content;
   } 
@@ -269,7 +288,8 @@ public class FOMEntry
    */
   public Content setContent(URI src, MimeType mediaType) {
     FOMFactory factory = (FOMFactory) this.factory;
-    Content content = factory.newContent(src, mediaType);
+    Content content = factory.newContent(mediaType);
+    content.setSrc(src);
     setContentElement(content);
     return content;
   }
@@ -289,7 +309,8 @@ public class FOMEntry
    */
   public Content setContent(DataHandler dataHandler, MimeType mediatype) {
     FOMFactory factory = (FOMFactory) this.factory;
-    Content content = factory.newContent(dataHandler, mediatype);
+    Content content = factory.newContent(mediatype);
+    content.setDataHandler(dataHandler);
     setContentElement(content);
     return content;
   }
@@ -299,7 +320,8 @@ public class FOMEntry
    */
   public Content setContent(String value, MimeType mediatype) {
     FOMFactory factory = (FOMFactory) this.factory;
-    Content content = factory.newContent(value, mediatype);
+    Content content = factory.newContent(mediatype);
+    content.setValue(value);
     setContentElement(content);
     return content;
   }
@@ -330,7 +352,11 @@ public class FOMEntry
     String uri) 
       throws URISyntaxException {
     FOMFactory fomfactory = (FOMFactory) this.factory;
-    return fomfactory.newContributor(name, email, uri, this);
+    Person person = fomfactory.newContributor(this);
+    person.setName(name);
+    person.setEmail(email);
+    person.setUri(uri);
+    return person;
   }
   
   public Person addContributor(
@@ -338,7 +364,11 @@ public class FOMEntry
     String email, 
     URI uri) {
       FOMFactory fomfactory = (FOMFactory) this.factory;
-      return fomfactory.newContributor(name, email, uri, this);    
+      Person person = fomfactory.newContributor(this);
+      person.setName(name);
+      person.setEmail(email);
+      person.setUri(uri);
+      return person;    
   }
   
   public IRI getIdElement() {
@@ -377,8 +407,9 @@ public class FOMEntry
       return id;
     } else {
       FOMFactory fomfactory = (FOMFactory) factory;
-      return fomfactory.newID(
-        (normalize) ? URIHelper.normalize(value) : value, this);
+      IRI iri = fomfactory.newID(this);
+      iri.setValue((normalize) ? URIHelper.normalize(value) : value);
+      return iri;
     }
   }
   
@@ -422,7 +453,10 @@ public class FOMEntry
   
   public Link addLink(String href, String rel) throws URISyntaxException {
     FOMFactory fomfactory = (FOMFactory) factory;
-    return fomfactory.newLink(href, rel, null, null, null, -1, this);    
+    Link link = fomfactory.newLink(this);
+    link.setHref(href);
+    if (rel != null) link.setRel(rel);
+    return link;    
   }
   
   public Link addLink(URI href) {
@@ -431,7 +465,10 @@ public class FOMEntry
   
   public Link addLink(URI href, String rel) {
     FOMFactory fomfactory = (FOMFactory) factory;
-    return fomfactory.newLink(href, rel, null, null, null, -1, this);
+    Link link = fomfactory.newLink(this);
+    link.setHref(href);
+    link.setRel(rel);
+    return link;
   }
   
   public Link addLink(
@@ -442,8 +479,14 @@ public class FOMEntry
     String hreflang, 
     long length) {
     FOMFactory fomfactory = (FOMFactory) factory;
-    return fomfactory.newLink(
-      href, rel, type, title, hreflang, length, this);
+    Link link = fomfactory.newLink(this);
+    link.setHref(href);
+    link.setRel(rel);
+    link.setMimeType(type);
+    link.setTitle(title);
+    link.setHrefLang(hreflang);
+    link.setLength(length);
+    return link;    
   }
   
   public Link addLink(
@@ -455,8 +498,14 @@ public class FOMEntry
     long length) 
       throws URISyntaxException {
     FOMFactory fomfactory = (FOMFactory) factory;
-    return fomfactory.newLink(
-      href, rel, type, title, hreflang, length, this);
+    Link link = fomfactory.newLink(this);
+    link.setHref(href);
+    link.setRel(rel);
+    link.setMimeType(type);
+    link.setTitle(title);
+    link.setHrefLang(hreflang);
+    link.setLength(length);
+    return link;
   }
   
   public Link addLink(
@@ -468,8 +517,14 @@ public class FOMEntry
     long length) 
       throws MimeTypeParseException {
     FOMFactory fomfactory = (FOMFactory) factory;
-    return fomfactory.newLink(
-      href, rel, new MimeType(type), title, hreflang, length, this);
+    Link link = fomfactory.newLink(this);
+    link.setHref(href);
+    link.setRel(rel);
+    link.setMimeType(type);
+    link.setTitle(title);
+    link.setHrefLang(hreflang);
+    link.setLength(length);
+    return link;
   }
   
   public Link addLink(
@@ -481,8 +536,14 @@ public class FOMEntry
     long length) 
       throws URISyntaxException, MimeTypeParseException {
     FOMFactory fomfactory = (FOMFactory) factory;
-    return fomfactory.newLink(
-      href, rel, new MimeType(type), title, hreflang, length, this);
+    Link link = fomfactory.newLink(this);
+    link.setHref(href);
+    link.setRel(rel);
+    link.setMimeType(type);
+    link.setTitle(title);
+    link.setHrefLang(hreflang);
+    link.setLength(length);
+    return link;
   }
   
   public DateTime getPublishedElement() {
@@ -517,7 +578,9 @@ public class FOMEntry
       return dte;
     } else {
       FOMFactory fomfactory = (FOMFactory) factory;
-      return fomfactory.newPublished(value, this);
+      DateTime dt = fomfactory.newPublished(this);
+      dt.setDate(value);
+      return dt;
     }
   }
   
@@ -532,7 +595,9 @@ public class FOMEntry
       return dte;
     } else {
       FOMFactory fomfactory = (FOMFactory) factory;
-      return fomfactory.newPublished(value, this);
+      DateTime dt = fomfactory.newPublished(this);
+      dt.setCalendar(value);
+      return dt;
     }
   }
   
@@ -543,7 +608,9 @@ public class FOMEntry
       return dte;
     } else {
       FOMFactory fomfactory = (FOMFactory) factory;
-      return fomfactory.newPublished(value, this);
+      DateTime dt = fomfactory.newPublished(this);
+      dt.setTime(value);
+      return dt;
     }
   }
   
@@ -558,7 +625,9 @@ public class FOMEntry
       return dte;
     } else {
       FOMFactory fomfactory = (FOMFactory) factory;
-      return fomfactory.newPublished(value, this);
+      DateTime dt = fomfactory.newPublished(this);
+      dt.setString(value);
+      return dt;
     }
   }
   
@@ -580,7 +649,8 @@ public class FOMEntry
   
   public Text setRights(String value) {
     FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newRights(value);
+    Text text = factory.newRights();
+    text.setValue(value);
     setRightsElement(text);
     return text;
   }
@@ -602,7 +672,8 @@ public class FOMEntry
   
   public Text setRights(String value, Text.Type type) {
     FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newRights(value, type);
+    Text text = factory.newRights(type);
+    text.setValue(value);
     setRightsElement(text);
     return text;
   }
@@ -650,7 +721,8 @@ public class FOMEntry
   
   public Text setSummary(String value) {
     FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newSummary(value);
+    Text text = factory.newSummary();
+    text.setValue(value);
     setSummaryElement(text);
     return text;
   }
@@ -672,7 +744,8 @@ public class FOMEntry
   
   public Text setSummary(String value, Text.Type type) {
     FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newSummary(value, type);
+    Text text = factory.newSummary(type);
+    text.setValue(value);
     setSummaryElement(text);
     return text;
   }
@@ -706,7 +779,8 @@ public class FOMEntry
   
   public Text setTitle(String value) {
     FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newTitle(value);
+    Text text = factory.newTitle();
+    text.setValue(value);
     setTitleElement(text);
     return text;
   }
@@ -728,7 +802,8 @@ public class FOMEntry
   
   public Text setTitle(String value, Text.Type type) {
     FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newTitle(value, type);
+    Text text = factory.newTitle(type);
+    text.setValue(value);
     setTitleElement(text);
     return text;
   }
@@ -776,7 +851,9 @@ public class FOMEntry
       return dte;
     } else {
       FOMFactory fomfactory = (FOMFactory) factory;
-      return fomfactory.newUpdated(value, this);
+      DateTime dt = fomfactory.newUpdated(this);
+      dt.setDate(value);
+      return dt;
     }
   }
   
@@ -791,7 +868,9 @@ public class FOMEntry
       return dte;
     } else {
       FOMFactory fomfactory = (FOMFactory) factory;
-      return fomfactory.newUpdated(value, this);
+      DateTime dt = fomfactory.newUpdated(this);
+      dt.setCalendar(value);
+      return dt;
     }
   }
   
@@ -802,7 +881,9 @@ public class FOMEntry
       return dte;
     } else {
       FOMFactory fomfactory = (FOMFactory) factory;
-      return fomfactory.newUpdated(value, this);
+      DateTime dt = fomfactory.newUpdated(this);
+      dt.setTime(value);
+      return dt;
     }
   }
   
@@ -817,7 +898,9 @@ public class FOMEntry
       return dte;
     } else {
       FOMFactory fomfactory = (FOMFactory) factory;
-      return fomfactory.newUpdated(value, this);
+      DateTime dt = fomfactory.newUpdated(this);
+      dt.setString(value);
+      return dt;
     }
   }
 

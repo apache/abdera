@@ -133,7 +133,9 @@ public abstract class FOMExtensibleElement
 
   public Element addSimpleExtension(QName qname, String value) {
     FOMFactory fomfactory = (FOMFactory) factory;
-    return fomfactory.newElement(qname, value, this);
+    Element el = fomfactory.newElement(qname, this);
+    el.setText(value);
+    return el;
   }
   
   public Element addSimpleExtension(

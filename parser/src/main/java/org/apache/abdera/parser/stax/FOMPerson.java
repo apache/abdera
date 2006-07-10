@@ -115,7 +115,8 @@ public class FOMPerson
   public Element setName(String name) {
     if (name != null) {
       FOMFactory fomfactory = (FOMFactory) factory;
-      Element el = fomfactory.newName(name, null);
+      Element el = fomfactory.newName(null);
+      el.setText(name);
       _setChild(NAME, (OMElement)el);
       return el;
     } else {
@@ -143,7 +144,8 @@ public class FOMPerson
   public Element setEmail(String email) {
     if (email != null) {
       FOMFactory fomfactory = (FOMFactory) factory;
-      Element el = fomfactory.newEmail(email, null);
+      Element el = fomfactory.newEmail(null);
+      el.setText(email);
       _setChild(EMAIL, (OMElement)el);
       return el;
     } else {
@@ -171,7 +173,8 @@ public class FOMPerson
   public IRI setUri(URI uri) {
     if (uri != null) {
       FOMFactory fomfactory = (FOMFactory) factory;
-      IRI el = fomfactory.newUri(uri, null);
+      IRI el = fomfactory.newUri(null);
+      el.setValue(uri);
       _setChild(URI, (OMElement)el);
       return el;
     } else {
@@ -183,7 +186,8 @@ public class FOMPerson
   public IRI setUri(String uri) throws URISyntaxException {
     if (uri != null) {
       FOMFactory fomfactory = (FOMFactory) factory;
-      IRI el = fomfactory.newUri(uri, null);
+      IRI el = fomfactory.newUri(null);
+      el.setValue(uri);
       _setChild(URI, (OMElement)el);
       return el;
     } else {

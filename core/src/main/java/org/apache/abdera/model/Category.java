@@ -43,7 +43,7 @@ import java.net.URISyntaxException;
  * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Category 
-  extends ExtensibleElement, StringElement {
+  extends ExtensibleElement {
 
   /**
    * RFC4287: The "term" attribute is a string that identifies the 

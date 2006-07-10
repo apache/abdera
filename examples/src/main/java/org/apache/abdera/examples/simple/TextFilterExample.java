@@ -27,7 +27,6 @@ import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
-import org.apache.abdera.model.ExtensionElement;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
@@ -41,8 +40,7 @@ public class TextFilterExample {
     TextFilter filter = new TextFilter() {
       @Override
       public String filterText(String text, Element element) {
-        ExtensionElement ee = (ExtensionElement) element;
-        QName qname = ee.getQName();
+        QName qname = element.getQName();
         Base elparent = element.getParentElement();
         if (Constants.NAME.equals(qname)) {
           text = "Jane Doe";

@@ -29,7 +29,6 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
-import org.apache.abdera.model.ExtensionElement;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.attachments.DataHandlerUtils;
 import org.apache.axiom.om.OMContainer;
@@ -120,11 +119,11 @@ public class FOMContent
   }
   
   @SuppressWarnings("unchecked")
-  public <T extends ExtensionElement> T getValueElement() {
+  public <T extends Element> T getValueElement() {
     return (T)this.getFirstElement();
   }
 
-  public <T extends ExtensionElement> void setValueElement(T value) {
+  public <T extends Element> void setValueElement(T value) {
     if (value != null) {
       if (this.getFirstElement() != null)
         this.getFirstElement().discard();
@@ -212,7 +211,6 @@ public class FOMContent
     } else if (Type.HTML.equals(type)) {
       val = getText();
     } else if (Type.XHTML.equals(type)) {
-      //val = this.getFirstChildWithName(Constants.DIV).toString();
       val = ((FOMDiv)this.getFirstChildWithName(Constants.DIV)).getInternalValue();
     } else if (Type.XML.equals(type)) {
       val = this.getFirstElement().toString();
@@ -222,15 +220,20 @@ public class FOMContent
     return val;
   }
 
+  public void setText(String value) {
+    init(Content.Type.TEXT);
+    super.setText(value);
+  }
+  
   public void setValue(String value) {
     if (value != null) setSrc((URI)null);
     if (value != null) {
       if (Type.TEXT.equals(type)) {
         _removeAllChildren();
-        setText(value); 
+        super.setText(value); 
       } else if (Type.HTML.equals(type)) {
         _removeAllChildren();
-        setText(value);
+        super.setText(value);
       } else if (Type.XHTML.equals(type)) {
         URI baseUri = null;
         try {
@@ -246,11 +249,11 @@ public class FOMContent
           baseUri = getResolvedBaseUri();
         } catch (Exception e) {}
         Element element = _parse(value, baseUri);
-        if (element != null && element instanceof ExtensionElement)
-          setValueElement((ExtensionElement)element);
+        if (element != null)
+          setValueElement(element);
       } else if (Type.MEDIA.equals(type)) {
         _removeAllChildren();
-        setText(value);
+        super.setText(value);
       }
     } else {
       _removeAllChildren();
@@ -261,7 +264,7 @@ public class FOMContent
     if (Type.XHTML.equals(type)) {
       return this.getFirstChildWithName(Constants.DIV).toString();
     } else {
-      return getValue();
+      return getText();
     }
   }
 
@@ -275,7 +278,7 @@ public class FOMContent
       if (element != null && element instanceof Div)
         setValueElement((Div)element);
     } else {
-      setValue(wrappedValue);
+      setText(wrappedValue);
     }
   }
 

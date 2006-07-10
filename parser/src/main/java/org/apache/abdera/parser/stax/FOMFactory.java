@@ -19,7 +19,6 @@ package org.apache.abdera.parser.stax;
  
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,7 +43,6 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.ExtensibleElement;
-import org.apache.abdera.model.ExtensionElement;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
 import org.apache.abdera.model.IRI;
@@ -52,7 +50,6 @@ import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Source;
-import org.apache.abdera.model.StringElement;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.model.Content.Type;
@@ -66,7 +63,6 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.llom.factory.OMLinkedListImplFactory;
-
 
 public class FOMFactory 
   extends OMLinkedListImplFactory 
@@ -95,15 +91,15 @@ public class FOMFactory
     qclasses.put(UPDATED, FOMDateTime.class);
     qclasses.put(WORKSPACE, FOMWorkspace.class);
     qclasses.put(COLLECTION, FOMCollection.class);
-    qclasses.put(NAME, FOMStringElement.class);
-    qclasses.put(EMAIL, FOMStringElement.class);
+    qclasses.put(NAME, FOMElement.class);
+    qclasses.put(EMAIL, FOMElement.class);
     qclasses.put(URI, FOMIRI.class);
     qclasses.put(CONTROL, FOMControl.class);
     qclasses.put(DIV, FOMDiv.class);
   }
   
-  private List<QName> simpleExtensions = null;
   private Map<Class,Class> alternatives = null;
+  private Map<QName,Class> extensions = null;
   
   public Parser newParser() {
     return new FOMParser();
@@ -305,11 +301,11 @@ public class FOMFactory
     return content;
   }
   
-  public Content newContent(Content.Type type, ExtensionElement value) {
+  public Content newContent(Element value, Content.Type type) {
     return newContent(value, type, null);
   }
   
-  public Content newContent(ExtensionElement value, Content.Type type, Element parent) {
+  public Content newContent(Element value, Content.Type type, Element parent) {
     Content content = newContent(type, parent);
     content.setValueElement(value);
     return content;
@@ -349,13 +345,13 @@ public class FOMFactory
   }
 
   public Content newContent(
-    ExtensionElement value, 
+    Element value,
     MimeType mediaType) {
       return newContent(value, mediaType, null);
   }
   
   public Content newContent(
-    ExtensionElement value, 
+    Element value, 
     MimeType mediaType, 
     Element parent) {
       Content content = 
@@ -463,7 +459,7 @@ public class FOMFactory
     Element parent) {
       Generator generator = newGenerator(parent);
       generator.setVersion(Version.VERSION);
-      generator.setValue(Version.APP_NAME);
+      generator.setText(Version.APP_NAME);
       try {
         generator.setUri(Version.URI);
       } catch (Exception e) {}
@@ -497,7 +493,7 @@ public class FOMFactory
     if (version != null)
       generator.setVersion(version);
     if (value != null)
-      generator.setValue(value);
+      generator.setText(value);
     return generator;
   }
 
@@ -780,86 +776,84 @@ public class FOMFactory
       return text;
   }
 
-  public StringElement newStringElement(
-    QName qname,
-    OMContainer parent,
-    OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMStringElement.class, qname, parent, parserWrapper);
+  public Element newElement(QName qname) {
+    return newElement(qname, (Element)null);
   }
   
-  public StringElement newStringElement(QName qname) {
-    return newStringElement(qname, (Element)null);
+  public Element newElement(QName qname, String value) {
+    return newElement(qname, value, null);
   }
   
-  public StringElement newStringElement(QName qname, String value) {
-    return newStringElement(qname, value, null);
-  }
-  
-  public StringElement newStringElement(
+  public Element newElement(
     QName qname, 
     Base parent) {
-      return _newInstance(FOMStringElement.class, qname, (OMContainer)parent);
+      return _newInstance(FOMElement.class, qname, (OMContainer)parent);
   }
   
-  public StringElement newStringElement(
+  public Element newElement(
     QName qname, 
     String value,
     Base parent) {
-    StringElement el = newStringElement(qname, parent);
+    Element el = newElement(qname, parent);
     if (value != null)
-      el.setValue(value);
+      el.setText(value);
     return el;
   }
 
-  public ExtensionElement newExtensionElement(QName qname) {
+  public Element newExtensionElement(QName qname) {
     return newExtensionElement(qname, (Base)null);
   }
   
-  public ExtensionElement newExtensionElement(
+  public Element newExtensionElement(
     QName qname, 
     Base parent) {
     return newExtensionElement(qname, (OMContainer)parent);
   }
   
-  private ExtensionElement newExtensionElement(
+  private Element newExtensionElement(
     QName qname, 
     OMContainer parent) {
       return newExtensionElement(qname, parent, null);
   }
 
-  public ExtensionElement newExtensionElement(
+  @SuppressWarnings("unchecked")
+  public Element newExtensionElement(
     QName qname,
     OMContainer parent,
     OMXMLParserWrapper parserWrapper) {
-    ExtensionElement element = null;
-    if (!isSimpleExtension(qname)) {
-      List<ExtensionFactory> factories = 
-        org.apache.abdera.util.ServiceUtil.loadExtensionFactories();
-      if (factories != null) {
-        for (ExtensionFactory factory : factories) {
-          if (factory instanceof FOMExtensionFactory &&
-              factory.handlesNamespace(qname.getNamespaceURI())) {
-              if (parserWrapper != null) {
-                element = ((FOMExtensionFactory)factory).newExtensionElement(
-                  qname, (Base)parent, this, parserWrapper);
-              } else {
-                element = ((FOMExtensionFactory)factory).newExtensionElement(
-                  qname, (Base)parent, this); 
-              }
-          }
+    Element element = null;
+    List<ExtensionFactory> factories = 
+      org.apache.abdera.util.ServiceUtil.loadExtensionFactories();
+    Class _class = getExtensionClass(qname);
+    if (_class == null && factories != null) {
+      for (ExtensionFactory factory : factories) {
+        if (factory instanceof FOMExtensionFactory &&
+            factory.handlesNamespace(qname.getNamespaceURI())) {
+            if (parserWrapper != null) {
+              element = ((FOMExtensionFactory)factory).newExtensionElement(
+                qname, (Base)parent, this, parserWrapper);
+            } else {
+              element = ((FOMExtensionFactory)factory).newExtensionElement(
+                qname, (Base)parent, this); 
+            }
         }
       }
-      if (element == null) {
-        if (parserWrapper != null) {
-          element = _newInstance(FOMExtensionElement.class, qname, (OMContainer)parent, parserWrapper);
-        } else {
-          element = _newInstance(FOMExtensionElement.class, qname, (OMContainer)parent);
-        }
+    }
+    if (_class == null) _class = FOMElement.class;
+    if (element == null) {
+      if (parserWrapper != null) {
+        element = (Element) _newInstance(_class, qname, (OMContainer)parent, parserWrapper);
+      } else {
+        element = (Element) _newInstance(_class, qname, (OMContainer)parent);
       }
-    } else {
-      element = newStringElement(qname, (Base) parent);
     }
     return element;
+  }
+  
+  @SuppressWarnings("unchecked")
+  private Class<Base> getExtensionClass(QName qname) {
+    return (extensions != null && extensions.containsKey(qname)) ? 
+      extensions.get(qname) : null;
   }
   
   public Control newControl() {
@@ -1290,36 +1284,36 @@ public class FOMFactory
       return newText(Constants.RIGHTS, value, parent);
   }
 
-  public StringElement newName() {
+  public Element newName() {
     return newName((Element)null);
   }
   
-  public StringElement newName(String value) {
+  public Element newName(String value) {
     return newName(value, null);
   }
   
-  public StringElement newName(Element parent) {
-    return newStringElement(Constants.NAME, parent);
+  public Element newName(Element parent) {
+    return newElement(Constants.NAME, parent);
   }
 
-  public StringElement newName(String value, Element parent) {
-    return newStringElement(Constants.NAME, value, parent);
+  public Element newName(String value, Element parent) {
+    return newElement(Constants.NAME, value, parent);
   }
 
-  public StringElement newEmail() {
+  public Element newEmail() {
     return newEmail((Element)null);
   }
   
-  public StringElement newEmail(String value) {
+  public Element newEmail(String value) {
     return newEmail(value, null);
   }
   
-  public StringElement newEmail(Element parent) {
-    return newStringElement(Constants.EMAIL, parent);
+  public Element newEmail(Element parent) {
+    return newElement(Constants.EMAIL, parent);
   }
 
-  public StringElement newEmail(String value, Element parent) {
-    return newStringElement(Constants.EMAIL, value, parent);
+  public Element newEmail(String value, Element parent) {
+    return newElement(Constants.EMAIL, value, parent);
   }
 
   public Control newControl(boolean draft, Element parent) {
@@ -1350,6 +1344,8 @@ public class FOMFactory
       return _newInstance(FOMElement.class, qname, parent, parserWrapper);
   }
 
+  
+  
   private boolean isContent(QName qname) {
     return CONTENT.equals(qname);
   }
@@ -1387,12 +1383,7 @@ public class FOMFactory
         }
       } else if (parent instanceof ExtensibleElement || 
                  parent instanceof Document) {
-        if (isSimpleExtension(qname)) {
-          element = (OMElement) _newInstance(
-            FOMStringElement.class, qname.getLocalPart(), namespace, parent);
-        } else {
-          element = (OMElement) newExtensionElement(qname, parent);
-        }
+        element = (OMElement) newExtensionElement(qname, parent);
       }
       return element;
     }
@@ -1414,27 +1405,16 @@ public class FOMFactory
         element = (OMElement) _newInstance(qclasses.get(qname), qname, parent, builder);
       }
     } else if (parent instanceof ExtensibleElement || parent instanceof Document) {
-      if (isSimpleExtension(qname)) {
-        element = (OMElement) newStringElement(qname, parent, builder);
-      } else {
-        element = (OMElement) newExtensionElement(qname, parent, builder);
-      }
+      element = (OMElement) newExtensionElement(qname, parent, builder);
     }
     return element;
   }
 
-  public void registerAsSimpleExtension(QName qname) {
-    if (simpleExtensions == null) 
-      simpleExtensions = new ArrayList<QName>();
-    if (!simpleExtensions.contains(qname)) simpleExtensions.add(qname);
+  public void registerExtension(QName qname, Class impl) {
+    if (extensions == null) extensions = new HashMap<QName,Class>();
+    extensions.put(qname, impl);
   }
-    
-  public boolean isSimpleExtension(QName qname) {
-    if (simpleExtensions == null) 
-      simpleExtensions = new ArrayList<QName>();
-    return simpleExtensions.contains(qname);
-  }
-
+  
   @SuppressWarnings("unchecked")
   public <T extends Base>void registerAlternative(Class<T> base, Class<? extends T> extension) {
     if (!base.isAssignableFrom(extension))

@@ -47,6 +47,8 @@ public interface Element
   
   <T extends Element>T getFirstChild(QName qname);  
   
+  QName getQName();
+  
   /**
    * Returns the value of this elements <code>xml:lang</code> attribute or 
    * null if <code>xml:lang</code> is undefined.
@@ -121,4 +123,7 @@ public interface Element
    */
   void discard();
   
+  String getText();
+  
+  void setText(String text);
 }

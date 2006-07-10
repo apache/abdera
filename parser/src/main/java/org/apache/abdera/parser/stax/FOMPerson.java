@@ -23,16 +23,15 @@ import java.net.URISyntaxException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.model.IRI;
 import org.apache.abdera.model.Person;
-import org.apache.abdera.model.StringElement;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
-
 
 public class FOMPerson
   extends FOMExtensibleElement 
@@ -102,21 +101,21 @@ public class FOMPerson
     done = false;
   }
 
-  public StringElement getNameElement() {
-    return (StringElement)getFirstChildWithName(NAME);
+  public Element getNameElement() {
+    return (Element)getFirstChildWithName(NAME);
   }
 
-  public void setNameElement(StringElement element) {
+  public void setNameElement(Element element) {
     if (element != null)
       _setChild(NAME, (OMElement)element);
     else 
       _removeElement(NAME, false);
   }
 
-  public StringElement setName(String name) {
+  public Element setName(String name) {
     if (name != null) {
       FOMFactory fomfactory = (FOMFactory) factory;
-      StringElement el = fomfactory.newName(name, null);
+      Element el = fomfactory.newName(name, null);
       _setChild(NAME, (OMElement)el);
       return el;
     } else {
@@ -126,25 +125,25 @@ public class FOMPerson
   }
   
   public String getName() {
-    StringElement name = getNameElement();
-    return (name != null) ? name.getValue() : null;
+    Element name = getNameElement();
+    return (name != null) ? name.getText() : null;
   }
 
-  public StringElement getEmailElement() {
-    return (StringElement)getFirstChildWithName(EMAIL);
+  public Element getEmailElement() {
+    return (Element)getFirstChildWithName(EMAIL);
   }
 
-  public void setEmailElement(StringElement element) {
+  public void setEmailElement(Element element) {
     if (element != null)
       _setChild(EMAIL, (OMElement)element);
     else 
       _removeElement(EMAIL, false);
   }
 
-  public StringElement setEmail(String email) {
+  public Element setEmail(String email) {
     if (email != null) {
       FOMFactory fomfactory = (FOMFactory) factory;
-      StringElement el = fomfactory.newEmail(email, null);
+      Element el = fomfactory.newEmail(email, null);
       _setChild(EMAIL, (OMElement)el);
       return el;
     } else {
@@ -154,8 +153,8 @@ public class FOMPerson
   }
   
   public String getEmail() {
-    StringElement email = getEmailElement();
-    return (email != null) ? email.getValue() : null;
+    Element email = getEmailElement();
+    return (email != null) ? email.getText() : null;
   }
 
   public IRI getUriElement() {

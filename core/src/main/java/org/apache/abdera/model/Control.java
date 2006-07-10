@@ -57,8 +57,7 @@ package org.apache.abdera.model;
  * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Control 
-  extends ExtensionElement, 
-          ExtensibleElement {
+  extends ExtensibleElement {
   
   /**
    * <p>Returns true if the entry should <i>not</i> be made publicly visible.</p>

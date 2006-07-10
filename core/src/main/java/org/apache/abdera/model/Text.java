@@ -58,7 +58,7 @@ package org.apache.abdera.model;
  * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Text 
-  extends StringElement {
+  extends Element {
 
   public static enum Type { 
     TEXT, HTML, XHTML;
@@ -88,6 +88,10 @@ public interface Text
   Div getValueElement();
   
   void setValueElement(Div value);
+  
+  String getValue();
+  
+  void setValue(String value);
   
   String getWrappedValue();
   

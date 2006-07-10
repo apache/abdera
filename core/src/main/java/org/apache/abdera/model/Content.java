@@ -100,7 +100,7 @@ import org.apache.abdera.util.MimeTypeHelper;
  * 
  * @author James M Snell (jasnell@us.ibm.com)
  */
-public interface Content extends StringElement {
+public interface Content extends Element {
 
   public enum Type { 
     TEXT, HTML, XHTML, XML, MEDIA;
@@ -129,9 +129,9 @@ public interface Content extends StringElement {
   
   void setContentType(Type type);
   
-  <T extends ExtensionElement> T getValueElement();
+  <T extends Element> T getValueElement();
   
-  <T extends ExtensionElement>void setValueElement(T value);
+  <T extends Element>void setValueElement(T value);
 
   /**
    * RFC4287: On the atom:content element, the value of the "type" 
@@ -223,7 +223,11 @@ public interface Content extends StringElement {
    * @throws UnsupportedOperationException if type = text, html, xhtml, or any application/*+xml, or text/* type
    */
   void setDataHandler(DataHandler dataHandler);
-
+  
+  String getValue();
+  
+  void setValue(String value);
+  
   String getWrappedValue();
   
   void setWrappedValue(String wrappedValue);

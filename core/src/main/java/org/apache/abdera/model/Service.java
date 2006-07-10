@@ -42,7 +42,7 @@ import java.util.List;
  * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Service
-  extends ExtensibleElement, ExtensionElement {
+  extends ExtensibleElement {
 
   /**
    * Return the complete set of workspaces

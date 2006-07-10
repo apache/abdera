@@ -35,8 +35,8 @@ import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Control;
 import org.apache.abdera.model.DateTime;
 import org.apache.abdera.model.Div;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
-import org.apache.abdera.model.ExtensionElement;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.IRI;
 import org.apache.abdera.model.Link;
@@ -247,9 +247,9 @@ public class FOMEntry
   /**
    * Sets the content for this entry
    */
-  public Content setContent(ExtensionElement value, Content.Type type) {
+  public Content setContent(Element value, Content.Type type) {
     FOMFactory factory = (FOMFactory) this.factory;
-    Content content = factory.newContent(type, value);
+    Content content = factory.newContent(value, type);
     setContentElement(content);
     return content;
   } 
@@ -277,9 +277,9 @@ public class FOMEntry
   /**
    * Sets the content for this entry
    */
-  public Content setContent(ExtensionElement element, MimeType mediaType) {
+  public Content setContent(Element element, MimeType mediaType) {
     FOMFactory factory = (FOMFactory) this.factory;
-    Content content = factory.newContent(element, mediaType);
+    Content content = factory.newContent(mediaType, element);
     setContentElement(content);
     return content;
   }

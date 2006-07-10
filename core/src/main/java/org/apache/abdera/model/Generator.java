@@ -45,7 +45,7 @@ import java.net.URISyntaxException;
  * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Generator 
-  extends StringElement {
+  extends Element {
 
   /**
    *  The atom:generator element MAY have a "uri" attribute whose value

@@ -42,7 +42,6 @@ import org.apache.abdera.model.IRI;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Source;
-import org.apache.abdera.model.StringElement;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.parser.Parser;
 import org.apache.axiom.om.OMElement;
@@ -108,11 +107,9 @@ public class FeedValidatorTest
     assertEquals(dt.getTime(), cdt.getTime());
     Person person = feed.getAuthor();
     assertNotNull(person);
-    StringElement name = person.getNameElement();
-    assertNotNull(name);
-    assertEquals(name.getValue(), "John Doe");
-    assertNull(person.getEmailElement());
-    assertNull(person.getUriElement());
+    assertEquals(person.getName(), "John Doe");
+    assertNull(person.getEmail());
+    assertNull(person.getUri());
     IRI id = feed.getIdElement();
     assertNotNull(id);
     assertEquals(id.getValue(), new URI("urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6"));
@@ -203,8 +200,8 @@ public class FeedValidatorTest
     Generator generator = feed.getGenerator();
     assertEquals(generator.getUri(), new URI("http://www.example.com/"));
     assertEquals(generator.getVersion(), "1.0");
-    assertNotNull(generator.getValue());
-    assertEquals(generator.getValue().trim(), "Example Toolkit");
+    assertNotNull(generator.getText());
+    assertEquals(generator.getText().trim(), "Example Toolkit");
     List<Entry> entries = feed.getEntries();
     assertNotNull(entries);
     assertEquals(entries.size(), 1);
@@ -238,10 +235,8 @@ public class FeedValidatorTest
       assertNotNull(entry.getPublishedElement());
       Person person = entry.getAuthor();
       assertNotNull(person);
-      assertNotNull(person.getNameElement());
-      assertEquals(person.getNameElement().getValue(),"Mark Pilgrim");
-      assertNotNull(person.getEmailElement());
-      assertEquals(person.getEmailElement().getValue(), "f8dy@example.com");
+      assertEquals(person.getName(),"Mark Pilgrim");
+      assertEquals(person.getEmail(), "f8dy@example.com");
       assertNotNull(person.getUriElement());
       assertEquals(person.getUriElement().getValue(), new URI("http://example.org/"));
       List<Person> contributors = entry.getContributors();
@@ -306,8 +301,7 @@ public class FeedValidatorTest
     assertNotNull(entry.getSummaryElement());
     assertEquals(entry.getSummaryElement().getTextType(), Text.Type.TEXT);
     assertNotNull(entry.getAuthor());
-    assertNotNull(entry.getAuthor().getNameElement());
-    assertEquals(entry.getAuthor().getNameElement().getValue(), "John Doe");
+    assertEquals(entry.getAuthor().getName(), "John Doe");
   }
   
   public static void testSection2InfosetAttrOrder() throws Exception {
@@ -943,7 +937,7 @@ public class FeedValidatorTest
     List<Person> contr = feed.getContributors();
     for (Person person : contr) {
       try {
-        new URI(person.getEmailElement().getValue()); 
+        new URI(person.getEmail()); 
       } catch (Exception e) {
         assertTrue(e instanceof URISyntaxException);
       }
@@ -961,7 +955,7 @@ public class FeedValidatorTest
     List<Person> contr = feed.getContributors();
     for (Person person : contr) {
       try {
-        new URI(person.getEmailElement().getValue()); 
+        new URI(person.getEmail()); 
       } catch (Exception e) {
         assertTrue(e instanceof URISyntaxException);
       }
@@ -978,7 +972,7 @@ public class FeedValidatorTest
     assertNotNull(feed);
     List<Person> contr = feed.getContributors();
     for (Person person : contr) {
-      new URI(person.getEmailElement().getValue()); 
+      new URI(person.getEmail()); 
     }
   }
 
@@ -993,7 +987,7 @@ public class FeedValidatorTest
     List<Person> contr = feed.getContributors();
     for (Person person : contr) {
       try {
-        new URI(person.getEmailElement().getValue());
+        new URI(person.getEmail());
       } catch (Exception e) {
         assertTrue(e instanceof URISyntaxException);
       }

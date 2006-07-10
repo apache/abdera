@@ -105,7 +105,7 @@ import javax.activation.MimeTypeParseException;
  * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Entry 
-  extends ExtensibleElement, ExtensionElement {
+  extends ExtensibleElement {
 
   /**
    * Returns the first author listed for the entry
@@ -227,7 +227,7 @@ public interface Entry
   /**
    * Sets the content for this entry
    */
-  Content setContent(ExtensionElement value, Content.Type type);  
+  Content setContent(Element value, Content.Type type);  
   
   /**
    * Sets the content for this entry
@@ -242,7 +242,7 @@ public interface Entry
   /**
    * Sets the content for this entry
    */
-  Content setContent(ExtensionElement element, MimeType mediaType);
+  Content setContent(Element element, MimeType mediaType);
   
   /**
    * Sets the content for this entry

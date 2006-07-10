@@ -1,12 +1,12 @@
 package org.apache.abdera.ext.thread;
 
-import org.apache.abdera.model.ExtensionElement;
+import org.apache.abdera.model.Element;
 
 /**
  * Provides an interface for the Atom Threading Extension total
  * element.
  */
-public interface Total extends ExtensionElement {
+public interface Total extends Element {
 
   int getValue();
   

@@ -33,7 +33,7 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 
 
 public class FOMDateTime 
-  extends FOMExtensionElement 
+  extends FOMElement 
   implements DateTime {
   
   private static final long serialVersionUID = -6611503566172011733L;

@@ -41,28 +41,28 @@ import java.net.URISyntaxException;
  * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Person 
-  extends ExtensibleElement, ExtensionElement {
+  extends ExtensibleElement, Element {
 
   /**
    * The "atom:name" element's content conveys a human-readable name for
    * the person.  The content of atom:name is Language-Sensitive.  Person
    * constructs MUST contain exactly one "atom:name" element.
    */
-  StringElement getNameElement();
+  Element getNameElement();
   
   /**
    * The "atom:name" element's content conveys a human-readable name for
    * the person.  The content of atom:name is Language-Sensitive.  Person
    * constructs MUST contain exactly one "atom:name" element.
    */
-  void setNameElement(StringElement element);
+  void setNameElement(Element element);
   
   /**
    * The "atom:name" element's content conveys a human-readable name for
    * the person.  The content of atom:name is Language-Sensitive.  Person
    * constructs MUST contain exactly one "atom:name" element.
    */
-  StringElement setName(String name);
+  Element setName(String name);
   
   /**
    * The "atom:name" element's content conveys a human-readable name for
@@ -77,7 +77,7 @@ public interface Person
    * atom:email element, but MUST NOT contain more than one.  Its content
    * MUST conform to the "addr-spec" production in [RFC2822].
    */
-  StringElement getEmailElement();
+  Element getEmailElement();
   
   /**
    * The "atom:email" element's content conveys an e-mail address
@@ -85,7 +85,7 @@ public interface Person
    * atom:email element, but MUST NOT contain more than one.  Its content
    * MUST conform to the "addr-spec" production in [RFC2822].
    */
-  void setEmailElement(StringElement element);
+  void setEmailElement(Element element);
   
   /**
    * The "atom:email" element's content conveys an e-mail address
@@ -93,7 +93,7 @@ public interface Person
    * atom:email element, but MUST NOT contain more than one.  Its content
    * MUST conform to the "addr-spec" production in [RFC2822].
    */
-  StringElement setEmail(String email);
+  Element setEmail(String email);
   
   /**
    * The "atom:email" element's content conveys an e-mail address

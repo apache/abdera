@@ -26,8 +26,6 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ExtensibleElement;
-import org.apache.abdera.model.ExtensionElement;
-import org.apache.abdera.model.StringElement;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -76,34 +74,36 @@ public abstract class FOMExtensibleElement
     List<E> set = new ArrayList<E>();
     for (Iterator i = getChildren();i.hasNext();) {
       OMNode e = (OMNode) i.next();
-      if (e instanceof ExtensionElement &&
-          !((OMElement)e).getQName().getNamespaceURI().equals(
-            this.getQName().getNamespaceURI())) {
-        set.add((E) e);
+      if (e instanceof Element) {
+        Element el = (Element) e;
+        QName qname = el.getQName();
+        if (!(qname.getNamespaceURI().equals(getQName().getNamespaceURI()))) {
+          set.add((E)e);
+        }
       }
     }
     return set;
   }
   
-  public List<ExtensionElement> getExtensions() {
+  public List<Element> getExtensions() {
     return _getExtensionChildrenAsList();
   }
 
-  public List<ExtensionElement> getExtensions(String uri) {
-    List<ExtensionElement> matching = new ArrayList<ExtensionElement>();
+  public List<Element> getExtensions(String uri) {
+    List<Element> matching = new ArrayList<Element>();
     for (Iterator i = this.getChildElements(); i.hasNext();) {
       OMElement e = (OMElement) i.next();
       if ((uri == null)?
             e.getQName().getNamespaceURI() == null: 
             e.getQName().getNamespaceURI().equals(uri)) {
-        matching.add((ExtensionElement) e);
+        matching.add((Element) e);
       }
     }
     return matching;
   }
 
   @SuppressWarnings("unchecked")
-  public <T extends ExtensionElement>List<T> getExtensions(QName qname) {
+  public <T extends Element>List<T> getExtensions(QName qname) {
     List<T> matching = new ArrayList<T>();
     for (Iterator i = this.getChildrenWithName(qname); i.hasNext();) {
       matching.add((T) i.next());
@@ -112,31 +112,31 @@ public abstract class FOMExtensibleElement
   }
 
   @SuppressWarnings("unchecked")
-  public <T extends ExtensionElement>T getExtension(QName qname) {
+  public <T extends Element>T getExtension(QName qname) {
     return (T) this.getFirstChildWithName(qname);
   }
   
-  public void addExtension(ExtensionElement extension) {
+  public void addExtension(Element extension) {
     addChild((OMElement)extension);
   }
   
   @SuppressWarnings("unchecked")
-  public <T extends ExtensionElement>T addExtension(QName qname) {
+  public <T extends Element>T addExtension(QName qname) {
     FOMFactory fomfactory = (FOMFactory) factory;
     return (T)fomfactory.newExtensionElement(qname, this);
   }
   
   @SuppressWarnings("unchecked")
-  public <T extends ExtensionElement>T addExtension(String namespace, String localpart, String prefix) {
+  public <T extends Element>T addExtension(String namespace, String localpart, String prefix) {
     return (T)addExtension(new QName(namespace, localpart, prefix));
   }
 
-  public StringElement addSimpleExtension(QName qname, String value) {
+  public Element addSimpleExtension(QName qname, String value) {
     FOMFactory fomfactory = (FOMFactory) factory;
-    return fomfactory.newStringElement(qname, value, this);
+    return fomfactory.newElement(qname, value, this);
   }
   
-  public StringElement addSimpleExtension(
+  public Element addSimpleExtension(
     String namespace, 
     String localPart, 
     String prefix, 
@@ -150,8 +150,8 @@ public abstract class FOMExtensibleElement
   }
   
   public String getSimpleExtension(QName qname) {
-    StringElement el  = getExtension(qname);
-    return el.getValue();
+    Element el  = getExtension(qname);
+    return el.getText();
   }
   
   public String getSimpleExtension(
@@ -165,8 +165,8 @@ public abstract class FOMExtensibleElement
           prefix));
   }
   
-  public void addExtensions(List<ExtensionElement> extensions) {
-    for (ExtensionElement e : extensions) {
+  public void addExtensions(List<Element> extensions) {
+    for (Element e : extensions) {
       addExtension(e);
     }
   }
@@ -176,10 +176,10 @@ public abstract class FOMExtensibleElement
    * having to pass in it's QName
    */ 
   @SuppressWarnings("unchecked")
-  public <T extends ExtensionElement> T getExtension(Class<T> _class) {
+  public <T extends Element> T getExtension(Class<T> _class) {
     T t = null;
-    List<ExtensionElement> extensions = getExtensions();
-    for (ExtensionElement ext : extensions) {
+    List<Element> extensions = getExtensions();
+    for (Element ext : extensions) {
       if (_class.isAssignableFrom(ext.getClass())) {
         t = (T)ext;
         break;

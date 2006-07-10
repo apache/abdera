@@ -24,7 +24,7 @@ import org.apache.abdera.ext.thread.impl.FOMTotal;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Base;
-import org.apache.abdera.model.ExtensionElement;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.stax.FOMExtensionFactory;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMFactory;
@@ -43,7 +43,7 @@ public class ThreadExtensionFactory
   }
 
   @SuppressWarnings("unchecked")
-  public <T extends ExtensionElement> T newExtensionElement(
+  public <T extends Element> T newExtensionElement(
     QName qname,
     Base parent, 
     Factory factory) {
@@ -61,7 +61,7 @@ public class ThreadExtensionFactory
   }
 
   @SuppressWarnings("unchecked")
-  public <T extends ExtensionElement> T newExtensionElement(
+  public <T extends Element> T newExtensionElement(
     QName qname,
     Base parent, 
     Factory factory, 

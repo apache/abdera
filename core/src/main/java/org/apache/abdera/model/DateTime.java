@@ -27,7 +27,7 @@ import java.util.Date;
  * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface DateTime 
-  extends  ExtensionElement {
+  extends  Element {
   
   /**
    * Returns the content value of the element as an AtomDate object 

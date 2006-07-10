@@ -37,7 +37,7 @@ import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
-import org.apache.abdera.model.ExtensionElement;
+
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
 import org.apache.abdera.model.IRI;
@@ -45,7 +45,6 @@ import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Source;
-import org.apache.abdera.model.StringElement;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.Parser;
@@ -116,11 +115,11 @@ public interface Factory {
   
   Content newContent(String value, Content.Type type);
   
-  Content newContent(Content.Type type, ExtensionElement value);
+  Content newContent(Element value, Content.Type type);
 
   Content newContent(String value, Content.Type type, Element parent);
   
-  Content newContent(ExtensionElement value, Content.Type type, Element parent);  
+  Content newContent(Element value, Content.Type type, Element parent);  
   
   Content newContent(MimeType mediaType);
   
@@ -130,9 +129,9 @@ public interface Factory {
   
   Content newContent(URI src, MimeType mediaType, Element parent);
   
-  Content newContent(ExtensionElement element, MimeType mediaType);
+  Content newContent(Element element, MimeType mediaType);
   
-  Content newContent(ExtensionElement element, MimeType mediaType, Element parent);
+  Content newContent(Element element, MimeType mediaType, Element parent);
   
   Content newContent(DataHandler dataHandler, MimeType mediatype);
   
@@ -398,33 +397,33 @@ public interface Factory {
   
   Text newText(QName qname, Div value, Element parent);
 
-  StringElement newName();
+  Element newName();
   
-  StringElement newName(String value);
+  Element newName(String value);
   
-  StringElement newName(Element parent);
+  Element newName(Element parent);
   
-  StringElement newName(String value, Element parent);
+  Element newName(String value, Element parent);
   
-  StringElement newEmail();
+  Element newEmail();
   
-  StringElement newEmail(String value);
+  Element newEmail(String value);
   
-  StringElement newEmail(Element parent);
+  Element newEmail(Element parent);
   
-  StringElement newEmail(String value, Element parent);
+  Element newEmail(String value, Element parent);
   
-  StringElement newStringElement(QName qname);
+  Element newElement(QName qname);
   
-  StringElement newStringElement(QName qname, String value);
+  Element newElement(QName qname, String value);
   
-  StringElement newStringElement(QName qname, Base parent);
+  Element newElement(QName qname, Base parent);
   
-  StringElement newStringElement(QName qname, String value, Base parent);
+  Element newElement(QName qname, String value, Base parent);
 
-  ExtensionElement newExtensionElement(QName qname);
+  Element newExtensionElement(QName qname);
   
-  ExtensionElement newExtensionElement(QName qname, Base parent);
+  Element newExtensionElement(QName qname, Base parent);
   
   Control newControl();
   
@@ -438,7 +437,7 @@ public interface Factory {
   
   Div newDiv(Base parent);
 
-  void registerAsSimpleExtension(QName qname);
+  <T extends Base>void registerExtension(QName qname, Class impl);
   
   <T extends Base>void registerAlternative(Class<T> base, Class<? extends T> alternative);
   

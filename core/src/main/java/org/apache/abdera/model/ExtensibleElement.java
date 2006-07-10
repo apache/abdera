@@ -29,39 +29,39 @@ public interface ExtensibleElement extends Element {
   /**
    * Returns the complete set of extension elements
    */
-  List<ExtensionElement> getExtensions();
+  List<Element> getExtensions();
   
   /**
    * Returns the complete set of extension elements using the specified 
    * XML Namespace URI
    */
-  List<ExtensionElement> getExtensions(String uri);
+  List<Element> getExtensions(String uri);
   
   /**
    * Returns the complete set of extension elements using the specified
    * XML qualified name
    */
-  <T extends ExtensionElement>List<T> getExtensions(QName qname);
+  <T extends Element>List<T> getExtensions(QName qname);
   
   /**
    * Returns the first extension element with the XML qualified name
    */
-  <T extends ExtensionElement>T getExtension(QName qname);
+  <T extends Element>T getExtension(QName qname);
   
   /**
    * Adds an individual extension element
    */
-  void addExtension(ExtensionElement extension);
+  void addExtension(Element extension);
 
   /**
    * Adds an individual extension element
    */
-  <T extends ExtensionElement>T addExtension(QName qname);
+  <T extends Element>T addExtension(QName qname);
   
   /**
    * Adds an individual extension element
    */
-  <T extends ExtensionElement>T addExtension(
+  <T extends Element>T addExtension(
     String namespace, 
     String localPart,
     String prefix);
@@ -69,14 +69,14 @@ public interface ExtensibleElement extends Element {
   /**
    * Adds a simple extension (text content only)
    */
-  StringElement addSimpleExtension(
+  Element addSimpleExtension(
     QName qname, 
     String value);
   
   /**
    * Adds a simple extension (text content only)
    */
-  StringElement addSimpleExtension(
+  Element addSimpleExtension(
     String namespace, 
     String localPart, 
     String prefix, 
@@ -95,10 +95,10 @@ public interface ExtensibleElement extends Element {
   /**
    * Adds a list of extensions
    */
-  void addExtensions(List<ExtensionElement> extensions);
+  void addExtensions(List<Element> extensions);
   
   /**
    * Find an extension by Class rather than QName
    */
-  <T extends ExtensionElement> T getExtension(Class<T> _class);
+  <T extends Element> T getExtension(Class<T> _class);
 }

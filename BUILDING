@@ -47,11 +47,15 @@ Without Maven:
      * /java/trunk/core               project name: core
      * /java/trunk/dependencies       project name: dependencies
      * /java/trunk/docs               project name: docs
+     * /java/trunk/extensions         project name: extensions
      * /java/trunk/examples           project name: examples
      * /java/trunk/parser             project name: parser
      * /java/trunk/server             project name: server
      * /java/trunk/security           project name: security
      * /java/branches/snell_sandbox   project name: snell_sandbox
+  
+    From the eclipse workspace root, invoke:
+      ant -f build/build.xml init
   
     Then, from the eclipse workspace root, invoke
       ant -f snell_sandbox/eclipse/setupeclipse.xml

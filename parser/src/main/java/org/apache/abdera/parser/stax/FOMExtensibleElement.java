@@ -149,6 +149,22 @@ public abstract class FOMExtensibleElement
         value);
   }
   
+  public String getSimpleExtension(QName qname) {
+    StringElement el  = getExtension(qname);
+    return el.getValue();
+  }
+  
+  public String getSimpleExtension(
+    String namespace, 
+    String localPart, 
+    String prefix) {
+      return getSimpleExtension(
+        new QName(
+          namespace, 
+          localPart, 
+          prefix));
+  }
+  
   public void addExtensions(List<ExtensionElement> extensions) {
     for (ExtensionElement e : extensions) {
       addExtension(e);

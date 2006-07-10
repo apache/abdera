@@ -83,6 +83,16 @@ public interface ExtensibleElement extends Element {
     String value);
   
   /**
+   * Gets the value of a simple extension
+   */
+  String getSimpleExtension(QName qname);
+  
+  /**
+   * Gets the value of a simple extension
+   */
+  String getSimpleExtension(String namespace, String localPart, String prefix);
+  
+  /**
    * Adds a list of extensions
    */
   void addExtensions(List<ExtensionElement> extensions);

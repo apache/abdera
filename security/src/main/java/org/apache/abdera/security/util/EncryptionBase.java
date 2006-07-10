@@ -18,7 +18,7 @@
 package org.apache.abdera.security.util;
 
 import org.apache.abdera.model.Document;
-import org.apache.abdera.model.ExtensionElement;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.security.Encryption;
 import org.apache.abdera.security.SecurityException;
 
@@ -29,7 +29,7 @@ public abstract class EncryptionBase
 
   public boolean isEncrypted(
     Document doc) throws SecurityException {
-      ExtensionElement el = (ExtensionElement) doc.getRoot();
+      Element el = doc.getRoot();
       return el.getQName().equals(Constants.ENCRYPTEDDATA);
   }
 

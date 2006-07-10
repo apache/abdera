@@ -127,6 +127,10 @@ public class FOMContent
     if (value != null) {
       if (this.getFirstElement() != null)
         this.getFirstElement().discard();
+      if (value instanceof Div && !type.equals(Content.Type.XML)) 
+        init(Content.Type.XHTML);
+      else 
+        init(Content.Type.XML);
       this.setFirstChild((OMElement)value);
     } else {
       _removeAllChildren();

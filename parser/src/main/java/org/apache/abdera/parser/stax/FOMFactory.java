@@ -17,21 +17,15 @@
 */
 package org.apache.abdera.parser.stax;
  
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.activation.DataHandler;
 import javax.activation.MimeType;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.factory.Factory;
-import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
@@ -107,13 +101,13 @@ public class FOMFactory
   
   @SuppressWarnings("unchecked")
   public <T extends Element>Document<T> newDocument() {
-    return _newInstance(FOMDocument.class);
+    return _newInstance(FOMDocument.class, CONSTRUCTORS[8], this);
   }
   
   @SuppressWarnings("unchecked")
   public <T extends Element>Document<T> newDocument(
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMDocument.class, parserWrapper);
+      return _newInstance(FOMDocument.class, CONSTRUCTORS[9], this, parserWrapper);
   }
   
   public <T extends Element>Document<T> newDocument(
@@ -128,19 +122,19 @@ public class FOMFactory
     QName qname,
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMService.class, qname, parent, parserWrapper);
+      return _newInstance(FOMService.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
 
   public Service newService(
     Base parent) {
-      return _newInstance(FOMService.class, (OMContainer)parent);
+      return _newInstance(FOMService.class, CONSTRUCTORS[1], (OMContainer)parent, this);
   }
 
   public Workspace newWorkspace(
     QName qname,
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMWorkspace.class, qname, parent, parserWrapper);
+      return _newInstance(FOMWorkspace.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
   
   public Workspace newWorkspace() {
@@ -149,14 +143,14 @@ public class FOMFactory
   
   public Workspace newWorkspace(
     Element parent) {
-      return _newInstance(FOMWorkspace.class, (OMContainer)parent);
+      return _newInstance(FOMWorkspace.class, CONSTRUCTORS[1], (OMContainer)parent, this);
   }
 
   public Collection newCollection(
     QName qname,
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMCollection.class, qname, parent, parserWrapper);
+      return _newInstance(FOMCollection.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
   
   public Collection newCollection() {
@@ -165,7 +159,7 @@ public class FOMFactory
   
   public Collection newCollection(
     Element parent) {
-      return _newInstance(FOMCollection.class, (OMContainer)parent);
+      return _newInstance(FOMCollection.class, CONSTRUCTORS[1], (OMContainer)parent, this);
   }
 
   public Feed newFeed() {
@@ -187,31 +181,31 @@ public class FOMFactory
     QName qname,
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMFeed.class, qname, parent, parserWrapper);
+      return _newInstance(FOMFeed.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
   
   public Feed newFeed(
     Base parent) {
-      return _newInstance(FOMFeed.class, (OMContainer)parent);
+      return _newInstance(FOMFeed.class, CONSTRUCTORS[1], (OMContainer)parent, this);
   }
 
   public Entry newEntry(
     QName qname,
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMEntry.class, qname, parent, parserWrapper);
+      return _newInstance(FOMEntry.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
   
   public Entry newEntry(
     Base parent) {
-      return _newInstance(FOMEntry.class, (OMContainer)parent);
+      return _newInstance(FOMEntry.class, CONSTRUCTORS[1], (OMContainer)parent, this);
   }
 
   public Category newCategory(
     QName qname,
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMCategory.class, qname, parent, parserWrapper);
+      return _newInstance(FOMCategory.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
   
   public Category newCategory() {
@@ -220,37 +214,7 @@ public class FOMFactory
   
   public Category newCategory(
     Element parent) {
-      return _newInstance(FOMCategory.class, (OMContainer)parent);
-  }
-
-  public Category newCategory(String term) {
-    return newCategory(term, null);
-  }
-  
-  public Category newCategory(String term, Element parent) {
-    return newCategory(term, null, null, parent);
-  }
-  
-  public Category newCategory(
-    String term, 
-    URI scheme, 
-    String label) {
-      return newCategory(term, scheme, label, null);
-  }
-  
-  public Category newCategory(
-    String term, 
-    URI scheme, 
-    String label, 
-    Element parent) {
-    Category category = newCategory(parent);
-    if (scheme != null)
-      category.setScheme(scheme);
-    if (term != null)
-      category.setTerm(term);
-    if (label != null)
-    category.setLabel(label);
-    return category;
+      return _newInstance(FOMCategory.class, CONSTRUCTORS[1], (OMContainer)parent, this);
   }
 
   public Content newContent(
@@ -259,15 +223,12 @@ public class FOMFactory
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
       if (type == null) type = Content.Type.TEXT;
-      return _newInstance(FOMContent.class, qname, type, parent, parserWrapper);
+      return _newInstance(FOMContent.class, CONSTRUCTORS[2], 
+          qname, type, parent, this, parserWrapper);
   }
   
   public Content newContent() {
     return newContent(Content.Type.TEXT);
-  }
-  
-  public Content newContent(String value) {
-    return newContent(value, Content.Type.TEXT);
   }
   
   public Content newContent(Type type) {
@@ -281,7 +242,7 @@ public class FOMFactory
       if (type == null) type = Content.Type.TEXT;
       Content content = 
         _newInstance(
-          FOMContent.class, type, (OMContainer)parent);
+          FOMContent.class, CONSTRUCTORS[3], type, (OMContainer)parent, this);
       if (type.equals(Content.Type.XML))
         content.setMimeType("application/xml");
       return content;
@@ -289,90 +250,6 @@ public class FOMFactory
   
   public Content newContent(MimeType mediaType) {
     return newContent(mediaType, (Element)null);
-  }
-  
-  public Content newContent(String value, Content.Type type) {
-    return newContent(value, type, null);
-  }
-
-  public Content newContent(String value, Content.Type type, Element parent) {
-    Content content = newContent(type, parent);
-    content.setValue(value);
-    return content;
-  }
-  
-  public Content newContent(Element value, Content.Type type) {
-    return newContent(value, type, null);
-  }
-  
-  public Content newContent(Element value, Content.Type type, Element parent) {
-    Content content = newContent(type, parent);
-    content.setValueElement(value);
-    return content;
-  }
-  
-  public Content newContent(
-    String value, 
-    MimeType mediaType) {
-      return newContent(value, mediaType, null);
-  }
-  
-  public Content newContent(
-    String value,
-    MimeType mediaType,
-    Element parent) {
-    Content content = newContent(mediaType, parent);
-    content.setValue(value);
-    return content;
-  }
-  
-  public Content newContent(
-    DataHandler dataHandler, 
-    MimeType mediaType) { 
-      return newContent(dataHandler, mediaType, null);
-  }
-  
-  public Content newContent(
-    DataHandler dataHandler, 
-    MimeType mediaType, 
-    Element parent) {
-      Content content = newContent(mediaType, parent);
-      if (dataHandler != null)
-        content.setDataHandler(dataHandler);
-      if (mediaType != null)
-        content.setMimeType(mediaType);
-      return content;
-  }
-
-  public Content newContent(
-    Element value,
-    MimeType mediaType) {
-      return newContent(value, mediaType, null);
-  }
-  
-  public Content newContent(
-    Element value, 
-    MimeType mediaType, 
-    Element parent) {
-      Content content = 
-        newContent(
-          mediaType, 
-          parent);
-      content.setValueElement(value);
-      return content;
-  }
-
-  public Content newContent(URI src, MimeType mediaType)  {
-    return newContent(src, mediaType, (Element)null);
-  }
-  
-  public Content newContent(URI src, MimeType mediaType, Element parent) {
-    Content content = 
-      newContent(
-        mediaType, 
-        parent);
-    content.setSrc(src);
-    return content;
   }
   
   public Content newContent(
@@ -390,65 +267,20 @@ public class FOMFactory
     QName qname,
     OMContainer parent,
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMDateTime.class, qname, parent, parserWrapper);
+      return _newInstance(FOMDateTime.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
   
   public DateTime newDateTime(
     QName qname, 
     Element parent) {
-      return _newInstance(FOMDateTime.class, qname, (OMContainer)parent);
-  }
-
-  public DateTime newDateTime(
-    QName qname, 
-    AtomDate dateTime, 
-    Element parent) {
-    DateTime dt = newDateTime(qname, parent);
-    dt.setValue(dateTime);
-    return dt;
-  }
-
-  public DateTime newDateTime(
-    QName qname, 
-    Date date, 
-    Element parent) {
-    DateTime dt = newDateTime(qname, parent);
-    dt.setValue(AtomDate.valueOf(date));
-    return dt;
-  }
-
-  public DateTime newDateTime(
-    QName qname, 
-    String date, 
-    Element parent) {
-    DateTime dt = newDateTime(qname, parent);
-    dt.setValue(AtomDate.valueOf(date));
-    return dt;
-  }
-
-  public DateTime newDateTime(
-    QName qname, 
-    Calendar date, 
-    Element parent) {
-    DateTime dt = newDateTime(qname, parent);
-    dt.setValue(AtomDate.valueOf(date));
-    return dt;
-  }
-
-  public DateTime newDateTime(
-    QName qname, 
-    long date, 
-    Element parent) {
-    DateTime dt = newDateTime(qname, parent);
-    dt.setValue(AtomDate.valueOf(date));
-    return dt;
+      return _newInstance(FOMDateTime.class, CONSTRUCTORS[4], qname, (OMContainer)parent, this);
   }
 
   public Generator newGenerator(
     QName qname,
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMGenerator.class, qname, parent, parserWrapper);
+      return _newInstance(FOMGenerator.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
   
   public Generator newDefaultGenerator() {
@@ -472,113 +304,47 @@ public class FOMFactory
   
   public Generator newGenerator(
       Element parent) {
-    return _newInstance(FOMGenerator.class, (OMContainer)parent);
-  }
-
-  public Generator newGenerator(
-    URI uri, 
-    String version, 
-    String value) {  
-      return newGenerator(uri, version, value, null);
-  }
-  
-  public Generator newGenerator(
-    URI uri, 
-    String version, 
-    String value, 
-    Element parent) {
-    Generator generator = newGenerator(parent);
-    if (uri != null)
-      generator.setUri(uri);
-    if (version != null)
-      generator.setVersion(version);
-    if (value != null)
-      generator.setText(value);
-    return generator;
+    return _newInstance(FOMGenerator.class, CONSTRUCTORS[1], (OMContainer)parent, this);
   }
 
   public IRI newID(
     QName qname,
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMIRI.class, qname, parent, parserWrapper);
+      return _newInstance(FOMIRI.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
   
   public IRI newID() {
     return newID((Element)null);
   }
   
-  public IRI newID(String id) throws URISyntaxException {
-    return newID(id, null);
-  }
-  
-  public IRI newID(URI id) {
-    return newID(id, null);
-  }
-  
   public IRI newID(
     Element parent) {
-      return _newInstance(FOMIRI.class, Constants.ID, (OMContainer)parent);
-  }
-
-  public IRI newID(
-    String id, 
-    Element parent) 
-      throws URISyntaxException {
-    IRI _id = newID(parent);
-    if (id != null)
-      _id.setValue(new URI(id));
-    return _id;
-  }
-
-  public IRI newID(
-    URI id, 
-    Element parent) {
-      IRI _id = newID(parent);
-      if (id != null)
-      _id.setValue(id);
-      return _id;
+      return _newInstance(
+          FOMIRI.class, CONSTRUCTORS[4], 
+          Constants.ID, (OMContainer)parent, this);
   }
 
   public IRI newURIElement(
     QName qname,
     OMContainer parent,
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMIRI.class, qname, parent, parserWrapper);
+      return _newInstance(FOMIRI.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
   
   public IRI newIRIElement(
     QName qname, 
     Element parent) {
-      return _newInstance(FOMIRI.class, qname, (OMContainer)parent);
-  }
-
-  public IRI newIRIElement(
-    QName qname, 
-    URI uri, 
-    Element parent) {
-    IRI iri = newIRIElement(qname, parent);
-    if (uri != null)
-      iri.setValue(uri);
-    return iri;
-  }
-
-  public IRI newIRIElement(
-    QName qname, 
-    String URI, 
-    Element parent) 
-      throws URISyntaxException {
-    IRI iri = newIRIElement(qname, parent);
-    if (URI != null)
-      iri.setValue(new URI(URI));
-    return iri;
+      return _newInstance(
+        FOMIRI.class, CONSTRUCTORS[4], 
+        qname, (OMContainer)parent, this);
   }
 
   public Link newLink(
     QName qname,
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMLink.class, qname, parent, parserWrapper);
+      return _newInstance(FOMLink.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
   
   public Link newLink() {
@@ -586,129 +352,30 @@ public class FOMFactory
   }
   
   public Link newLink(
-    String href, 
-    String rel, 
-    MimeType type, 
-    String title, 
-    String hreflang, 
-    long length) 
-      throws URISyntaxException {
-    return newLink(href, rel, type, title, hreflang, length, null);
-  }
-  
-  public Link newLink(
-    URI href, 
-    String rel, 
-    MimeType type, 
-    String title, 
-    String hreflang, 
-    long length) {
-      return newLink(href, rel, type, title, hreflang, length, null);
-  }
-  
-  public Link newLink(
     Element parent) {
-      return _newInstance(FOMLink.class, (OMContainer)parent);
-  }
-
-  public Link newLink(
-    String href, 
-    String rel, 
-    MimeType type, 
-    String title,
-    String hreflang, 
-    long length, 
-    Element parent) throws URISyntaxException {
-    Link link = newLink(parent);
-    if (href != null)
-      link.setHref(new URI(href));
-    if (rel != null)
-      link.setRel(rel);
-    if (title != null)
-      link.setTitle(title);
-    if (type != null)
-      link.setMimeType(type);
-    if (hreflang != null)
-      link.setHrefLang(hreflang);
-    if (length > -1)
-      link.setLength(length);
-    return link;
-  }
-
-  public Link newLink(
-    URI href, 
-    String rel, 
-    MimeType type, 
-    String title, 
-    String hreflang, 
-    long length, 
-    Element parent) {
-    Link link = newLink(parent);
-    if (href != null)
-      link.setHref(href);
-    if (rel != null)
-      link.setRel(rel);
-    if (title != null)
-      link.setTitle(title);
-    if (type != null)
-      link.setMimeType(type);
-    if (hreflang != null)
-      link.setHrefLang(hreflang);
-    if (length > -1)
-      link.setLength(length);
-    return link;
+      return _newInstance(FOMLink.class, CONSTRUCTORS[1], (OMContainer)parent, this);
   }
 
   public Person newPerson(
     QName qname,
     OMContainer parent,
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMPerson.class, qname, parent, parserWrapper);
+      return _newInstance(FOMPerson.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
   
   public Person newPerson(
     QName qname, 
     Element parent) {
-      return _newInstance(FOMPerson.class, qname, (OMContainer)parent);
-  }
-
-  public Person newPerson(
-    QName qname,
-    String name, 
-    String email, 
-    String uri, 
-    Element parent) throws URISyntaxException {
-    Person person = newPerson(qname, parent);
-    if (name != null)
-      person.setName(name);
-    if (email != null)
-      person.setEmail(email);
-    if (uri != null)
-      person.setUri(new URI(uri));
-    return person;
-  }
-
-  public Person newPerson(
-    QName qname, 
-    String name, 
-    String email,
-    URI uri, 
-    Element parent) {
-    Person person = newPerson(qname, parent);
-    if (name != null)
-      person.setName(name);
-    if (email != null)
-      person.setEmail(email);
-    if (uri != null)
-      person.setUri(uri);
-    return person;
+      return _newInstance(
+        FOMPerson.class, CONSTRUCTORS[4], 
+        qname, (OMContainer)parent, this);
   }
 
   public Source newSource(
     QName qname, 
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMSource.class, qname, parent, parserWrapper);
+      return _newInstance(FOMSource.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
   
   public Source newSource() {
@@ -716,8 +383,8 @@ public class FOMFactory
   }
   
   public Source newSource(
-      Element parent) {
-    return _newInstance(FOMSource.class, (OMContainer)parent);
+    Element parent) {
+      return _newInstance(FOMSource.class, CONSTRUCTORS[1], (OMContainer)parent, this);
   }
 
   public Text newText(
@@ -726,7 +393,8 @@ public class FOMFactory
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
     if (type == null) type = Text.Type.TEXT;
-    return _newInstance(FOMText.class, type, qname, parent, parserWrapper);
+    return _newInstance(FOMText.class, CONSTRUCTORS[5], 
+        type, qname, parent, this, parserWrapper);
   }
   
   public Text newText(
@@ -740,66 +408,22 @@ public class FOMFactory
     Text.Type type, 
     Element parent) {
     if (type == null) type = Text.Type.TEXT;
-    return _newInstance(FOMText.class,type, qname,(OMContainer)parent);
+    return _newInstance(FOMText.class, CONSTRUCTORS[6], 
+        type, qname,(OMContainer)parent, this);
   }
   
-  public Text newText(
-    QName qname, 
-    String value,
-    Text.Type type) {
-      return newText(qname, value, type, null);
-  }
-  
-  public Text newText(
-    QName qname, 
-    String value,
-    Text.Type type,
-    Element parent) {
-      Text text = newText(qname, type, parent);
-      text.setValue(value);
-      return text;
-  }
-
-  public Text newText(
-    QName qname,
-    Div value) {
-    return newText(qname, value, null);
-  }
-  
-  public Text newText(
-    QName qname, 
-    Div value,
-    Element parent) {
-      Text text = newText(qname, Text.Type.XHTML, parent);
-      if (value != null)
-        text.setValueElement(value);
-      return text;
-  }
-
   public Element newElement(QName qname) {
     return newElement(qname, (Element)null);
   }
   
-  public Element newElement(QName qname, String value) {
-    return newElement(qname, value, null);
-  }
-  
   public Element newElement(
     QName qname, 
     Base parent) {
-      return _newInstance(FOMElement.class, qname, (OMContainer)parent);
+      return _newInstance(
+        FOMElement.class, CONSTRUCTORS[4], 
+        qname, (OMContainer)parent, this);
   }
   
-  public Element newElement(
-    QName qname, 
-    String value,
-    Base parent) {
-    Element el = newElement(qname, parent);
-    if (value != null)
-      el.setText(value);
-    return el;
-  }
-
   public Element newExtensionElement(QName qname) {
     return newExtensionElement(qname, (Base)null);
   }
@@ -842,9 +466,11 @@ public class FOMFactory
     if (_class == null) _class = FOMElement.class;
     if (element == null) {
       if (parserWrapper != null) {
-        element = (Element) _newInstance(_class, qname, (OMContainer)parent, parserWrapper);
+        element = (Element) _newInstance(_class, CONSTRUCTORS[0], qname, (OMContainer)parent, this, parserWrapper);
       } else {
-        element = (Element) _newInstance(_class, qname, (OMContainer)parent);
+        element = (Element) _newInstance(
+          _class, CONSTRUCTORS[4], 
+          qname, (OMContainer)parent, this);
       }
     }
     return element;
@@ -860,227 +486,63 @@ public class FOMFactory
     return newControl((Element)null);
   }
    
-  public Control newControl(boolean draft) {
-    return newControl(draft, null);
-  }
-  
   public Control newControl(Element parent) {
-    return _newInstance(FOMControl.class, (OMContainer)parent);
+    return _newInstance(FOMControl.class, CONSTRUCTORS[1], (OMContainer)parent, this);
   }
   
   public Control newControl(
     QName qname,
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMControl.class, qname, parent, parserWrapper);
+      return _newInstance(FOMControl.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
 
   public DateTime newPublished() {
     return newPublished((Element)null);
   }
   
-  public DateTime newPublished(AtomDate dateTime) {
-    return newPublished(dateTime, null);
-  }
-  
-  public DateTime newPublished(Date date) {
-    return newPublished(date, null);
-  }
-  
-  public DateTime newPublished(String date) {
-    return newPublished(date, null);
-  }
-  
-  public DateTime newPublished(Calendar date) {
-    return newPublished(date, null);
-  }
-  
-  public DateTime newPublished(long date) {
-    return newPublished(date, null);
-  }
-  
   public DateTime newPublished(Element parent) {
     return newDateTime(Constants.PUBLISHED, parent);
-  }
-
-  public DateTime newPublished(AtomDate dateTime, Element parent) {
-    return newDateTime(Constants.PUBLISHED, dateTime, parent);
-  }
-
-  public DateTime newPublished(Date date, Element parent) {
-    return newDateTime(Constants.PUBLISHED, date, parent);
-  }
-
-  public DateTime newPublished(String date, Element parent) {
-    return newDateTime(Constants.PUBLISHED, date, parent);
-  }
-
-  public DateTime newPublished(Calendar date, Element parent) {
-    return newDateTime(Constants.PUBLISHED, date, parent);
-  }
-
-  public DateTime newPublished(long date, Element parent) {
-    return newDateTime(Constants.PUBLISHED, date, parent);
   }
 
   public DateTime newUpdated() {
     return newUpdated((Element)null);
   }
   
-  public DateTime newUpdated(AtomDate dateTime) {
-    return newUpdated(dateTime, null);
-  }
-  
-  public DateTime newUpdated(Date date) {
-    return newUpdated(date, null);
-  }
-  
-  public DateTime newUpdated(String date) {
-    return newUpdated(date, null);
-  }
-  
-  public DateTime newUpdated(Calendar date) {
-    return newUpdated(date, null);
-  }
-  
-  public DateTime newUpdated(long date) {
-    return newUpdated(date, null);
-  }
-  
   public DateTime newUpdated(Element parent) {
     return newDateTime(Constants.UPDATED, parent);
-  }
-
-  public DateTime newUpdated(AtomDate dateTime, Element parent) {
-    return newDateTime(Constants.UPDATED, dateTime, parent);
-  }
-
-  public DateTime newUpdated(Date date, Element parent) {
-    return newDateTime(Constants.UPDATED, date, parent);
-  }
-
-  public DateTime newUpdated(String date, Element parent) {
-    return newDateTime(Constants.UPDATED, date, parent);
-  }
-
-  public DateTime newUpdated(Calendar date, Element parent) {
-    return newDateTime(Constants.UPDATED, date, parent);
-  }
-
-  public DateTime newUpdated(long date, Element parent) {
-    return newDateTime(Constants.UPDATED, date, parent);
   }
 
   public IRI newIcon() {
     return newIcon((Element)null);
   }
   
-  public IRI newIcon(String uri) throws URISyntaxException {
-    return newIcon(uri, null);
-  }
-  
-  public IRI newIcon(URI uri) {
-    return newIcon(uri, null);
-  }
-  
   public IRI newIcon(Element parent) {
     return newIRIElement(Constants.ICON, parent);
-  }
-
-  public IRI newIcon(URI uri, Element parent) {
-    return newIRIElement(Constants.ICON, uri, parent);
-  }
-
-  public IRI newIcon(String URI, Element parent) throws URISyntaxException {
-    return newIRIElement(Constants.ICON, URI, parent);
   }
 
   public IRI newLogo() {
     return newLogo((Element)null);
   }
   
-  public IRI newLogo(String uri) throws URISyntaxException {
-    return newLogo(uri, null);
-  }
-  
-  public IRI newLogo(URI uri) {
-    return newLogo(uri, null);
-  }
-  
   public IRI newLogo(Element parent) {
     return newIRIElement(Constants.LOGO, parent);
-  }
-
-  public IRI newLogo(URI uri, Element parent) {
-    return newIRIElement(Constants.LOGO, uri, parent);
-  }
-
-  public IRI newLogo(String URI, Element parent) throws URISyntaxException {
-    return newIRIElement(Constants.LOGO, URI, parent);
   }
 
   public IRI newUri() {
     return newUri((Element)null);
   }
   
-  public IRI newUri(URI uri) {
-    return newUri(uri, null);
-  }
-  
-  public IRI newUri(String uri) throws URISyntaxException {
-    return newUri(uri, null);
-  }
-  
   public IRI newUri(Element parent) {
     return newIRIElement(Constants.URI, parent);
-  }
-
-  public IRI newUri(URI uri, Element parent) {
-    return newIRIElement(Constants.URI, uri, parent);
-  }
-
-  public IRI newUri(String URI, Element parent) throws URISyntaxException {
-    return newIRIElement(Constants.URI, URI, parent);
   }
 
   public Person newAuthor() {
     return newAuthor((Element)null);
   }
   
-  public Person newAuthor(
-    String name, 
-    String email, 
-    String uri) 
-      throws URISyntaxException {
-    return newAuthor(name, email, uri, null);
-  }
-  
-  public Person newAuthor(
-    String name, 
-    String email, 
-    URI uri) {
-      return newAuthor(name, email, uri, null);
-  }
-  
   public Person newAuthor(Element parent) {
     return newPerson(Constants.AUTHOR, parent);
-  }
-
-  public Person newAuthor(
-    String name, 
-    String email, 
-    String uri, 
-    Element parent) 
-      throws URISyntaxException {
-    return newPerson(Constants.AUTHOR, name, email, uri, parent);
-  }
-
-  public Person newAuthor(
-    String name, 
-    String email, 
-    URI uri, 
-    Element parent) {
-      return newPerson(Constants.AUTHOR, name, email, uri, parent);
   }
 
   public Person newContributor() {
@@ -1088,48 +550,12 @@ public class FOMFactory
   }
 
   public Person newContributor(
-    String name, 
-    String email, 
-    String uri) 
-      throws URISyntaxException {
-    return newContributor(name, email, uri, null);
-  }
-  
-  public Person newContributor(
-    String name, 
-    String email, 
-    URI uri) {
-      return newContributor(name, email, uri, null);
-  }
-  
-  public Person newContributor(
     Element parent) {
       return newPerson(Constants.CONTRIBUTOR, parent);
   }
 
-  public Person newContributor(
-    String name, 
-    String email, 
-    String uri, 
-    Element parent) 
-      throws URISyntaxException {
-    return newPerson(Constants.CONTRIBUTOR, name, email, uri, parent);
-  }
-
-  public Person newContributor(
-    String name, 
-    String email, 
-    URI uri, 
-    Element parent) {
-      return newPerson(Constants.CONTRIBUTOR, name, email, uri, parent);
-  }
-
   public Text newTitle() {
     return newTitle(Text.Type.TEXT);
-  }
-  
-  public Text newTitle(String value) {
-    return newTitle(value, Text.Type.TEXT);
   }
   
   public Text newTitle(Element parent) {
@@ -1144,32 +570,8 @@ public class FOMFactory
     return newText(Constants.TITLE, type, parent);
   }
   
-  public Text newTitle(String value, Text.Type type) {
-    return newTitle(value, type, null);
-  }
-  
-  public Text newTitle(String value, Text.Type type, Element parent) {
-    Text text = newText(Constants.TITLE, type, parent);
-    text.setValue(value);
-    return text;
-  }
-  
-  public Text newTitle(Div value) {
-    return newTitle(value, null);
-  }
-  
-  public Text newTitle(
-    Div value,
-    Element parent) {
-      return newText(Constants.TITLE, value, parent);
-  }
-
   public Text newSubtitle() {
     return newSubtitle(Text.Type.TEXT);
-  }
-  
-  public Text newSubtitle(String value) {
-    return newSubtitle(value, Text.Type.TEXT);
   }
   
   public Text newSubtitle(Element parent) {
@@ -1184,32 +586,8 @@ public class FOMFactory
     return newText(Constants.SUBTITLE, type, parent);
   }
   
-  public Text newSubtitle(String value, Text.Type type) {
-    return newSubtitle(value, type, null);
-  }
-  
-  public Text newSubtitle(String value, Text.Type type, Element parent) {
-    Text text = newText(Constants.SUBTITLE, type, parent);
-    text.setValue(value);
-    return text;
-  }
-  
-  public Text newSubtitle(Div value) {
-    return newSubtitle(value, null);
-  }
-  
-  public Text newSubtitle(
-    Div value,
-    Element parent) {
-      return newText(Constants.SUBTITLE, value, parent);
-  }
-
   public Text newSummary() {
     return newSummary(Text.Type.TEXT);
-  }
-  
-  public Text newSummary(String value) {
-    return newSummary(value, Text.Type.TEXT);
   }
   
   public Text newSummary(Element parent) {
@@ -1217,39 +595,15 @@ public class FOMFactory
   }
   
   public Text newSummary(Text.Type type) {
-    return newSubtitle(type, (Element)null);
+    return newSummary(type, (Element)null);
   }
   
   public Text newSummary(Text.Type type, Element parent) {
     return newText(Constants.SUMMARY, type, parent);
   }
   
-  public Text newSummary(String value, Text.Type type) {
-    return newSummary(value, type, null);
-  }
-  
-  public Text newSummary(String value, Text.Type type, Element parent) {
-    Text text = newText(Constants.SUMMARY, type, parent);
-    text.setValue(value);
-    return text;
-  }
-  
-  public Text newSummary(Div value) {
-    return newSummary(value, null);
-  }
-  
-  public Text newSummary(
-    Div value,
-    Element parent) {
-      return newText(Constants.SUMMARY, value, parent);
-  }
-
   public Text newRights() {
     return newRights(Text.Type.TEXT);
-  }
-  
-  public Text newRights(String value) {
-    return newRights(value, Text.Type.TEXT);
   }
   
   public Text newRights(Element parent) {
@@ -1264,62 +618,20 @@ public class FOMFactory
     return newText(Constants.RIGHTS, type, parent);
   }
   
-  public Text newRights(String value, Text.Type type) {
-    return newRights(value, type, null);
-  }
-  
-  public Text newRights(String value, Text.Type type, Element parent) {
-    Text text = newText(Constants.RIGHTS, type, parent);
-    text.setValue(value);
-    return text;
-  }
-  
-  public Text newRights(Div value) {
-    return newRights(value, null);
-  }
-  
-  public Text newRights(
-    Div value,
-    Element parent) {
-      return newText(Constants.RIGHTS, value, parent);
-  }
-
   public Element newName() {
     return newName((Element)null);
-  }
-  
-  public Element newName(String value) {
-    return newName(value, null);
   }
   
   public Element newName(Element parent) {
     return newElement(Constants.NAME, parent);
   }
 
-  public Element newName(String value, Element parent) {
-    return newElement(Constants.NAME, value, parent);
-  }
-
   public Element newEmail() {
     return newEmail((Element)null);
   }
   
-  public Element newEmail(String value) {
-    return newEmail(value, null);
-  }
-  
   public Element newEmail(Element parent) {
     return newElement(Constants.EMAIL, parent);
-  }
-
-  public Element newEmail(String value, Element parent) {
-    return newElement(Constants.EMAIL, value, parent);
-  }
-
-  public Control newControl(boolean draft, Element parent) {
-    Control control = newControl(parent);
-    control.setDraft(draft);
-    return control;
   }
 
   public Div newDiv() {
@@ -1327,21 +639,23 @@ public class FOMFactory
   }
   
   public Div newDiv(Base parent) {
-    return _newInstance(FOMDiv.class, Constants.DIV, (OMContainer)parent);
+    return _newInstance(
+      FOMDiv.class, CONSTRUCTORS[4], 
+      Constants.DIV, (OMContainer)parent, this);
   }
   
   public Div newDiv(
     QName qname,
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMDiv.class, qname, parent, parserWrapper);
+      return _newInstance(FOMDiv.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
   
   public Element newElement(
     QName qname,
     OMContainer parent,
     OMXMLParserWrapper parserWrapper) {
-      return _newInstance(FOMElement.class, qname, parent, parserWrapper);
+      return _newInstance(FOMElement.class, CONSTRUCTORS[0], qname, parent, this, parserWrapper);
   }
 
   
@@ -1372,14 +686,19 @@ public class FOMFactory
         if (isContent(qname)) {
           Content.Type type = (Content.Type)objecttype;
           element = (OMElement) _newInstance(
-            qclasses.get(qname), type, qname.getLocalPart(), namespace, parent);
+            qclasses.get(qname), CONSTRUCTORS[10], 
+            type, qname.getLocalPart(), namespace, parent, this);
         } else if (isText(qname)) {
           Text.Type type = (Text.Type)objecttype;
           element = (OMElement) _newInstance(
-            qclasses.get(qname), type, qname.getLocalPart(), namespace, parent);
+            qclasses.get(qname), 
+            CONSTRUCTORS[11], 
+            type, qname.getLocalPart(), 
+            namespace, parent, this);
         } else {
           element = (OMElement) _newInstance(
-            qclasses.get(qname), qname.getLocalPart(), namespace, parent);
+            qclasses.get(qname), CONSTRUCTORS[7], 
+            qname.getLocalPart(), namespace, parent, this);
         }
       } else if (parent instanceof ExtensibleElement || 
                  parent instanceof Document) {
@@ -1397,12 +716,22 @@ public class FOMFactory
     if (qclasses.containsKey(qname)) {
       if (isContent(qname)) {
         Content.Type type = builder.getContentType();
-        element = (OMElement) _newInstance(qclasses.get(qname), qname, type, parent, builder);
+        element = (OMElement) _newInstance(
+          qclasses.get(qname), CONSTRUCTORS[2], 
+          qname, type, parent, this, builder);
       } else if (isText(qname)) {
         Text.Type type = builder.getTextType();
-        element = (OMElement) _newInstance(qclasses.get(qname), type, qname, parent, builder);
+        element = (OMElement) _newInstance(
+            qclasses.get(qname), CONSTRUCTORS[5], 
+            type, qname, parent, this, builder);
       } else {
-        element = (OMElement) _newInstance(qclasses.get(qname), qname, parent, builder);
+        element = (OMElement) _newInstance(
+          qclasses.get(qname), 
+          CONSTRUCTORS[0], 
+          qname, 
+          parent, 
+          this, 
+          builder);
       }
     } else if (parent instanceof ExtensibleElement || parent instanceof Document) {
       element = (OMElement) newExtensionElement(qname, parent, builder);
@@ -1433,191 +762,64 @@ public class FOMFactory
     return (alternatives.containsKey(_class)) ? alternatives.get(_class) : _class;
   }
   
-  private static final Class[] CONSTRUCTOR1 = new Class[] {
-    QName.class, 
-    OMContainer.class,
-    OMFactory.class,
-    OMXMLParserWrapper.class};
-  
-  private static final Class[] CONSTRUCTOR2 = new Class[] {
-    OMContainer.class,
-    OMFactory.class
+  private static final Class[][] CONSTRUCTORS = {
+    new Class[] {
+      QName.class, 
+      OMContainer.class,
+      OMFactory.class,
+      OMXMLParserWrapper.class},
+    new Class[] {
+      OMContainer.class,
+      OMFactory.class},
+    new Class[] {
+      QName.class,
+      Content.Type.class,
+      OMContainer.class,
+      OMFactory.class,
+      OMXMLParserWrapper.class},
+    new Class[] {
+      Content.Type.class,
+      OMContainer.class,
+      OMFactory.class}, 
+    new Class[] {
+      QName.class,
+      OMContainer.class,
+      OMFactory.class}, 
+    new Class[] {
+      Text.Type.class,
+      QName.class,
+      OMContainer.class,
+      OMFactory.class,
+      OMXMLParserWrapper.class},
+    new Class[] {
+      Text.Type.class,
+      QName.class,
+      OMContainer.class,
+      OMFactory.class},
+    new Class[] {
+      String.class, 
+      OMNamespace.class, 
+      OMContainer.class, 
+      OMFactory.class},
+    new Class[] {
+      OMFactory.class},
+    new Class[] {
+      OMFactory.class,
+      OMXMLParserWrapper.class},
+    new Class[] {
+      Content.Type.class,
+      String.class, 
+      OMNamespace.class, 
+      OMContainer.class, 
+      OMFactory.class},
+    new Class[] {
+      Text.Type.class,
+      String.class, 
+      OMNamespace.class, 
+      OMContainer.class, 
+      OMFactory.class}
   };
-  
-  private static final Class[] CONSTRUCTOR3 = new Class[] {
-    QName.class,
-    Content.Type.class,
-    OMContainer.class,
-    OMFactory.class,
-    OMXMLParserWrapper.class
-  };
-
-  private static final Class[] CONSTRUCTOR4 = new Class[] {
-    Content.Type.class,
-    OMContainer.class,
-    OMFactory.class
-  }; 
-  
-  private static final Class[] CONSTRUCTOR5 = new Class[] {
-    QName.class,
-    OMContainer.class,
-    OMFactory.class
-  }; 
-  
-  private static final Class[] CONSTRUCTOR6 = new Class[] {
-    Text.Type.class,
-    QName.class,
-    OMContainer.class,
-    OMFactory.class,
-    OMXMLParserWrapper.class
-  };
-
-  private static final Class[] CONSTRUCTOR7 = new Class[] {
-    Text.Type.class,
-    QName.class,
-    OMContainer.class,
-    OMFactory.class
-  }; 
-  
-  private static final Class[] CONSTRUCTOR8 = new Class[] {
-    String.class, 
-    OMNamespace.class, 
-    OMContainer.class, 
-    OMFactory.class
-  };
-  
-  private static final Class[] CONSTRUCTOR9 = new Class[] {
-    OMFactory.class
-  };
-  
-  private static final Class[] CONSTRUCTOR10 = new Class[] {
-    OMFactory.class,
-    OMXMLParserWrapper.class
-  };
-
-  private static final Class[] CONSTRUCTOR11 = new Class[] {
-    Content.Type.class,
-    String.class, 
-    OMNamespace.class, 
-    OMContainer.class, 
-    OMFactory.class
-  };
-
-  private static final Class[] CONSTRUCTOR12 = new Class[] {
-    Text.Type.class,
-    String.class, 
-    OMNamespace.class, 
-    OMContainer.class, 
-    OMFactory.class
-  };
-  
-  @SuppressWarnings("unchecked")
-  private <T extends Base>T _newInstance(
-    Class<T> _class,
-    QName qname,
-    OMContainer parent, 
-    OMXMLParserWrapper parserWrapper) {
-      Object[] args = new Object[] {qname, parent, this, parserWrapper}; 
-      return _newInstance(_class, CONSTRUCTOR1, args);
-  }
-  
-  @SuppressWarnings("unused")
-  private <T extends Base>T _newInstance(
-    Class<T> _class,
-    OMContainer parent) {
-      Object[] args = new Object[] {parent, this};
-      return _newInstance(_class, CONSTRUCTOR2, args);
-  }
-  
-  private <T extends Base>T _newInstance(
-    Class<T> _class,
-    QName qname,
-    Content.Type type,
-    OMContainer parent,
-    OMXMLParserWrapper parserWrapper) {
-      Object[] args = new Object[] {qname, type, parent, this, parserWrapper};
-      return _newInstance(_class, CONSTRUCTOR3, args);
-  }
-
-  @SuppressWarnings("unused")
-  private <T extends Base>T _newInstance(
-    Class<T> _class,
-    Content.Type type,
-    OMContainer parent) {
-      Object[] args = new Object[] {type, parent, this};
-      return _newInstance(_class, CONSTRUCTOR4, args);
-  }
-
-  @SuppressWarnings("unused")
-  private <T extends Base>T _newInstance(
-    Class<T> _class,
-    QName qname,
-    OMContainer parent) {
-      Object[] args = new Object[] {qname, parent, this};
-      return _newInstance(_class, CONSTRUCTOR5, args);
-  }
-  
-  private <T extends Base>T _newInstance(
-    Class<T> _class,
-    Text.Type type,
-    QName qname,
-    OMContainer parent,
-    OMXMLParserWrapper parserWrapper) {
-      Object[] args = new Object[] {type, qname, parent, this, parserWrapper};
-      return _newInstance(_class, CONSTRUCTOR6, args);
-  }
-
-  private <T extends Base>T _newInstance(
-    Class<T> _class,
-    Text.Type type,
-    QName qname,
-    OMContainer parent) {
-      Object[] args = new Object[] {type, qname, parent, this};
-      return _newInstance(_class, CONSTRUCTOR7, args);
-  }
-
-  private <T extends Base>T _newInstance(
-    Class<T> _class,
-    String localPart,
-    OMNamespace namespace,
-    OMContainer parent) {
-      Object[] args = new Object[] {localPart, namespace, parent, this};
-      return _newInstance(_class, CONSTRUCTOR8, args);
-  }
-
-  private <T extends Base>T _newInstance(
-    Class<T> _class) {
-      Object[] args = new Object[] {this};
-      return _newInstance(_class, CONSTRUCTOR9, args);
-  }
-
-  private <T extends Base>T _newInstance(
-    Class<T> _class,
-    OMXMLParserWrapper parserWrapper) {
-      Object[] args = new Object[] {this, parserWrapper};
-      return _newInstance(_class, CONSTRUCTOR10, args);
-  }
-  
-  private <T extends Base>T _newInstance(
-    Class<T> _class,
-    Content.Type type,
-    String localPart,
-    OMNamespace namespace,
-    OMContainer parent) {
-      Object[] args = new Object[] {type, localPart, namespace, parent, this};
-      return _newInstance(_class, CONSTRUCTOR11, args);
-  }
-  
-  private <T extends Base>T _newInstance(
-    Class<T> _class,
-    Text.Type type,
-    String localPart,
-    OMNamespace namespace,
-    OMContainer parent) {
-      Object[] args = new Object[] {type, localPart, namespace, parent, this};
-      return _newInstance(_class, CONSTRUCTOR12, args);
-  }
-  
+    
   /**
    * This likely has some class loader issues we need to be concerned about
    */
@@ -1625,14 +827,16 @@ public class FOMFactory
   private <T extends Base>T _newInstance(
     Class<T> _class, 
     Class[] argtypes, 
-    Object[] args) {
+    Object... args) {
     Class _altclass = _getAlternative(_class);
     try {
       return (T) _altclass.getConstructor(argtypes).newInstance(args);
     } catch (Exception e) {
       try {
         return (T) _class.getConstructor(argtypes).newInstance(args);
-      } catch (Exception ex) {}
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
     return null;
   }

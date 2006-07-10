@@ -106,6 +106,7 @@ public class FOMText
     if (value != null) {
       if (this.getFirstChildWithName(Constants.DIV) != null)
         this.getFirstChildWithName(Constants.DIV).discard();
+      init(Text.Type.XHTML);
       this.setFirstChild((OMElement)value);
     } else
       _removeAllChildren();

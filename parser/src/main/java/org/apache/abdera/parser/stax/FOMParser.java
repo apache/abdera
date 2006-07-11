@@ -20,7 +20,6 @@ package org.apache.abdera.parser.stax;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
@@ -109,49 +108,6 @@ public class FOMParser
   @Override
   public ParserOptions getDefaultParserOptions() {
     return new FOMParserOptions();
-  }
-
-  public <T extends Element> Document<T> parse(
-    Object in) 
-      throws ParseException {
-    return parse(in, (URI)null, null);
-  }
-
-  public <T extends Element> Document<T> parse(
-    Object in, 
-    URI base) 
-      throws ParseException {
-    return parse(in, base, null);
-  }
-
-  public <T extends Element> Document<T> parse(
-    Object in, 
-    URI base, 
-    ParserOptions options) 
-      throws ParseException {
-    if (in instanceof InputStream)
-      return parse((InputStream)in, base, options);
-    else if (in instanceof Reader)
-      return parse((Reader)in, base, options);
-    else 
-      throw new IllegalArgumentException("Unsupported input");
-  }
-
-  public <T extends Element> Document<T> parse(
-    Object in, 
-    String base) 
-      throws ParseException, 
-             URISyntaxException {
-    return parse(in, new URI(base), null);
-  }
-
-  public <T extends Element> Document<T> parse(
-    Object in, 
-    String base, 
-    ParserOptions options) 
-      throws ParseException, 
-             URISyntaxException {
-    return parse(in, new URI(base), options);
   }
 
 }

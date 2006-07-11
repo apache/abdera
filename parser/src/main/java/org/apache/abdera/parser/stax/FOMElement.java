@@ -474,7 +474,9 @@ public class FOMElement
     List<QName> list = new ArrayList<QName>();
     for (Iterator i = getAllAttributes(); i.hasNext();) {
       OMAttribute attr = (OMAttribute) i.next();
-      String namespace = attr.getNamespace().getName();
+      String namespace = 
+        (attr.getNamespace() != null) ? 
+          attr.getNamespace().getName() : "";
       if (!namespace.equals(getNamespace().getName()) &&
           !namespace.equals(""))
         list.add(attr.getQName());

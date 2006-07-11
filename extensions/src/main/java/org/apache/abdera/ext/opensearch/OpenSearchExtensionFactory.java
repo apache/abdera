@@ -48,18 +48,7 @@ public class OpenSearchExtensionFactory implements ExtensionFactory, FOMExtensio
                                                    Base base,
                                                    Factory factory)
   {
-    if (OpenSearchConstants.TOTAL_RESULTS.equals(qname)) {
-      return (T) new FOMTotalResults(qname, (OMContainer) base, (OMFactory) factory);
-    }
-    else if (OpenSearchConstants.ITEMS_PER_PAGE.equals(qname)) {
-      return (T) new FOMItemsPerPage(qname, (OMContainer) base, (OMFactory) factory);
-    }
-    else if (OpenSearchConstants.START_INDEX.equals(qname)) {
-      return (T) new FOMStartIndex(qname, (OMContainer) base, (OMFactory) factory);
-    }
-    else {
-      return null;
-    }
+    return newExtensionElement(qname, base, factory, null);
   }
 
   @SuppressWarnings("unchecked")
@@ -68,17 +57,23 @@ public class OpenSearchExtensionFactory implements ExtensionFactory, FOMExtensio
                                                    Factory factory,
                                                    OMXMLParserWrapper parserWrapper)
   {
+    OMContainer cbase = (OMContainer) base;
+    OMFactory cfactory = (OMFactory) factory;
     if (OpenSearchConstants.TOTAL_RESULTS.equals(qname)) {
-      return (T) new FOMTotalResults(qname, (OMContainer) base, (OMFactory) factory, parserWrapper);
+      return (parserWrapper != null) ? 
+        (T) new FOMTotalResults(qname, cbase, cfactory, parserWrapper) :
+        (T) new FOMTotalResults(qname, cbase, cfactory);
     }
     else if (OpenSearchConstants.ITEMS_PER_PAGE.equals(qname)) {
-      return (T) new FOMItemsPerPage(qname, (OMContainer) base, (OMFactory) factory, parserWrapper);
+      return (parserWrapper != null) ?
+        (T) new FOMItemsPerPage(qname, cbase, cfactory, parserWrapper) :
+        (T) new FOMItemsPerPage(qname, cbase, cfactory);
     }
     else if (OpenSearchConstants.START_INDEX.equals(qname)) {
-      return (T) new FOMStartIndex(qname, (OMContainer) base, (OMFactory) factory, parserWrapper);
+      return (parserWrapper != null) ?
+        (T) new FOMStartIndex(qname, cbase, cfactory, parserWrapper) :
+        (T) new FOMStartIndex(qname, cbase, cfactory);
     }
-    else {
-      return null;
-    }
+    return null;
   }
 }

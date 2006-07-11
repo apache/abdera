@@ -20,6 +20,7 @@ package org.apache.abdera.model;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import javax.xml.namespace.QName;
 
@@ -98,6 +99,18 @@ public interface Element
 
   String getAttributeValue(QName qname);
 
+  /**
+   * Returns a listing of all attributes on this element
+   */
+  List<QName> getAttributes();
+  
+  /**
+   * Returns a listing of extension attributes on this element
+   * (extension attributes are attributes whose namespace URI
+   * is different than the elements)
+   */
+  List<QName> getExtensionAttributes();
+  
   /**
    * Returns the value of the named attribute
    */

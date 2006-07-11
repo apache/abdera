@@ -461,6 +461,28 @@ public class FOMElement
     return (text != null) ? text.getValue() : null;
   }
   
+  public List<QName> getAttributes() {
+    List<QName> list = new ArrayList<QName>();
+    for (Iterator i = getAllAttributes(); i.hasNext();) {
+      OMAttribute attr = (OMAttribute) i.next();
+      list.add(attr.getQName());
+    }
+    return list;
+  }
+  
+  public List<QName> getExtensionAttributes() {
+    List<QName> list = new ArrayList<QName>();
+    for (Iterator i = getAllAttributes(); i.hasNext();) {
+      OMAttribute attr = (OMAttribute) i.next();
+      String namespace = attr.getNamespace().getName();
+      if (!namespace.equals(getNamespace().getName()) &&
+          !namespace.equals(""))
+        list.add(attr.getQName());
+    }
+    return list;
+  }
+  
+  
   protected Element _parse(String value, URI baseUri) {
     if (value == null) return null;
     FOMFactory fomfactory = (FOMFactory) factory;

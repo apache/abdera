@@ -6,8 +6,11 @@ The jars will be compiled and installed in your local Maven repository
   
 To build with ant (http://ant.apache.org/):
 
-  # download the project dependencies. This is mandatory before you build!
-  ant -f build/build.xml download 
+  # run a basic build
+  ant -f build/build.xml
+
+  # run test tests
+  ant -f build/build.xml test
 
   # perform a complete build, jars and javadocs will be copied to 'dist' folder
   ant -f build/build.xml dist

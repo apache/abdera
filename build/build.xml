@@ -12,7 +12,7 @@
   <property name="version" value="0.1.0-incubating-SNAPSHOT" />
   <property name="site" value="../site" />
   <property name="work" value="${basedir}/build/work" />
-	<property name="test" value="${basedir}/build/test" />
+  <property name="test" value="${basedir}/build/test" />
   <property name="dist" value="${basedir}/dist" />
   <property name="dist_lib" value="${dist}/lib" />
   <property name="docs" value="${dist}/docs" />
@@ -29,23 +29,23 @@
   <property name="parser.test.resources" value="${parser}/src/test/resources" />
   <property name="parser.work" value="${work}/parser" />
   <property name="parser.jar" value="${dist}/${ant.project.name}.parser.${version}.jar" />
-	<property name="extensions" value="${basedir}/extensions" />
-	<property name="extensions.src" value="${extensions}/src/main/java" />
-	<property name="extensions.resources" value="${extensions}/src/main/resources" />
-	<property name="extensions.work" value="${work}/extensions" />
+  <property name="extensions" value="${basedir}/extensions" />
+  <property name="extensions.src" value="${extensions}/src/main/java" />
+  <property name="extensions.resources" value="${extensions}/src/main/resources" />
+  <property name="extensions.work" value="${work}/extensions" />
   <property name="extensions.jar" value="${dist}/${ant.project.name}.extensions.${version}.jar" />
   <property name="server" value="${basedir}/server" />
   <property name="server.src" value="${server}/src/main/java" />
   <property name="server.work" value="${work}/server" />
   <property name="server.jar" value="${dist}/${ant.project.name}.server.${version}.jar" />
-    	
+      
   <property name="dependencies" value="${basedir}/dependencies" />
   <property file="${dependencies}/deps.properties" />
 
   <path id="jar.dependencies">
     <fileset dir="${dependencies}" includes="**/*.jar" />
   </path>
-	
+  
   <target name="dependencies">
     <path id="">
       <fileset dir="dependencies" includes="*.jar" />
@@ -67,7 +67,7 @@ Working directory: ${work}
         <and>
           <available file="${dependencies}/${geronimo.activation.jar}" />
           <available file="${dependencies}/${geronimo.javamail.jar}" />
-          <available file="${dependencies}/${geronimo.servlet.jar}" />        	
+          <available file="${dependencies}/${geronimo.servlet.jar}" />          
           <available file="${dependencies}/${axiom.api.jar}" />
           <available file="${dependencies}/${axiom.impl.jar}" />
           <available file="${dependencies}/${jaxen.jar}" />
@@ -90,10 +90,10 @@ Working directory: ${work}
     <javac srcdir="${core.src}"
            destdir="${core.work}"
            classpathref="jar.dependencies"/>
-  	<javac srcdir="${core.test}"
-  	       destdir="${test}" 
-       	   classpathref="jar.dependencies"
-  		     classpath="${core.work}"/>
+    <javac srcdir="${core.test}"
+           destdir="${test}" 
+            classpathref="jar.dependencies"
+           classpath="${core.work}"/>
   </target>
   
   <target name="compile.parser" depends="init,compile.core">
@@ -102,35 +102,35 @@ Working directory: ${work}
            destdir="${parser.work}"
            classpathref="jar.dependencies" 
            classpath="${core.work}" />
-  	<javac srcdir="${parser.test.java}"
-  	       destdir="${test}"
-  	       classpathref="jar.dependencies"
-  	       classpath="${core.work};${parser.work}" />
+    <javac srcdir="${parser.test.java}"
+           destdir="${test}"
+           classpathref="jar.dependencies"
+           classpath="${core.work};${parser.work}" />
     <copy todir="${test}">
       <fileset dir="${parser.test.resources}">
         <include name="**"/>
       </fileset>
     </copy>
   </target>
-	
-	<target name="compile.extensions" depends="init, compile.core, compile.parser">
-		<mkdir dir="${extensions.work}" />
-		<javac srcdir="${extensions.src}"
-		       destdir="${extensions.work}"
-		       classpathref="jar.dependencies"
-		       classpath="${core.work};${parser.work}" />
-		<copy todir="${extensions.work}">
-			<fileset dir="${extensions.resources}" includes="**/*" />
-		</copy>
-	</target>
-	
+  
+  <target name="compile.extensions" depends="init, compile.core, compile.parser">
+    <mkdir dir="${extensions.work}" />
+    <javac srcdir="${extensions.src}"
+           destdir="${extensions.work}"
+           classpathref="jar.dependencies"
+           classpath="${core.work};${parser.work}" />
+    <copy todir="${extensions.work}">
+      <fileset dir="${extensions.resources}" includes="**/*" />
+    </copy>
+  </target>
+  
   <target name="compile.server" depends="init, compile.core">
     <mkdir dir="${server.work}" />
     <javac srcdir="${server.src}"
            destdir="${server.work}"
            classpathref="jar.dependencies"
            classpath="${core.work}" />
-  </target>	
+  </target>  
 
   <target name="build" depends="init,compile.core,compile.parser,compile.server,compile.extensions"></target>
 
@@ -160,7 +160,7 @@ Working directory: ${work}
 
   <target name="clean">
     <delete dir="${work}" />
-  	<delete dir="${test}" />
+    <delete dir="${test}" />
     <delete dir="${dist}" />
   </target>
   
@@ -169,13 +169,13 @@ Working directory: ${work}
     <mkdir dir="${dist_lib}" />
     <jar destfile="${core.jar}"   basedir="${core.work}" />
     <jar destfile="${parser.jar}" basedir="${parser.work}" />
-    <jar destfile="${server.jar}" basedir="${server.work}" />  	
-  	<jar destfile="${extensions.jar}" basedir="${extensions.work}" />
+    <jar destfile="${server.jar}" basedir="${server.work}" />    
+    <jar destfile="${extensions.jar}" basedir="${extensions.work}" />
     <copy todir="${dist_lib}">
       <fileset dir="${dependencies}"  />
     </copy>
-  	<delete dir="${work}" />
-  	<delete dir="${test}" />
+    <delete dir="${work}" />
+    <delete dir="${test}" />
   </target>
   
   <target name="zip" depends="dist"> 
@@ -198,7 +198,7 @@ Working directory: ${work}
            usetimestamp="true" />
       <get src="${geronimo.servlet.dir}/${geronimo.servlet.jar}"
              dest="${dependencies}/${geronimo.servlet.jar}"
-             usetimestamp="true" />    	
+             usetimestamp="true" />      
       <get src="${axiom.dir}/${axiom.api.jar}"
            dest="${dependencies}/${axiom.api.jar}"
            usetimestamp="true" />
@@ -246,44 +246,44 @@ Working directory: ${work}
     </copy>
   </target>
   
-	<target name="retro" depends="dist">
-		<property name="retrozip" value="${basedir}/build/tools/${retroweaver.zip}" />
-		<property name="retro" value="${basedir}/build/tools/retroweaver-1.2.3" />
-		<property name="retro_core.jar" value="${dist}/${ant.project.name}.core.${version}.retro.jar" />
-	  <property name="retro_parser.jar" value="${dist}/${ant.project.name}.parser.${version}.retro.jar" />
-	  <property name="retro_extensions.jar" value="${dist}/${ant.project.name}.extensions.${version}.retro.jar" />
-	  <property name="retro_server.jar" value="${dist}/${ant.project.name}.server.${version}.retro.jar" />
-		<condition property="do.download.retroweaver">
-			<not><available file="${retrozip}"/></not>
-		</condition>
-		<antcall target="go_retro" />
+  <target name="retro" depends="dist">
+    <property name="retrozip" value="${basedir}/build/tools/${retroweaver.zip}" />
+    <property name="retro" value="${basedir}/build/tools/retroweaver-1.2.3" />
+    <property name="retro_core.jar" value="${dist}/${ant.project.name}.core.${version}.retro.jar" />
+    <property name="retro_parser.jar" value="${dist}/${ant.project.name}.parser.${version}.retro.jar" />
+    <property name="retro_extensions.jar" value="${dist}/${ant.project.name}.extensions.${version}.retro.jar" />
+    <property name="retro_server.jar" value="${dist}/${ant.project.name}.server.${version}.retro.jar" />
+    <condition property="do.download.retroweaver">
+      <not><available file="${retrozip}"/></not>
+    </condition>
+    <antcall target="go_retro" />
     <path id="jar.retro">
-	    <fileset dir="${retro}/release" includes="**/*.jar" />
-	  </path>		
-		<echo>Retroweaving the Jars...</echo>
-		<java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
-    	<arg line="-jar ${core.jar} ${retro_core.jar}" />
+      <fileset dir="${retro}/release" includes="**/*.jar" />
+    </path>    
+    <echo>Retroweaving the Jars...</echo>
+    <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
+      <arg line="-jar ${core.jar} ${retro_core.jar}" />
     </java>
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
-    	<arg line="-jar ${parser.jar} ${retro_parser.jar}"/>
+      <arg line="-jar ${parser.jar} ${retro_parser.jar}"/>
     </java>
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
       <arg line="-jar ${server.jar} ${retro_server.jar}" />
     </java>
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
       <arg line="-jar ${extensions.jar} ${retro_extensions.jar}" />
-		</java>
-		<copy todir="${dist_lib}" file="${retro}/release/retroweaver-rt-1.2.3.jar" />
-	</target>
-	
-	<target name="go_retro" if="do.download.retroweaver">
-		<echo>Downloading Retroweaver...</echo>
-		<mkdir dir="${basedir}/build/tools" />
-		<get src="${retroweaver.dir}/${retroweaver.zip}"
-		     dest="${basedir}/build/tools/${retroweaver.zip}"
-		     usetimestamp="true" />
-		<unzip src="${basedir}/build/tools/${retroweaver.zip}"
-		     dest="${basedir}/build/tools/" overwrite="true"/>
-	</target>
-	
+    </java>
+    <copy todir="${dist_lib}" file="${retro}/release/retroweaver-rt-1.2.3.jar" />
+  </target>
+  
+  <target name="go_retro" if="do.download.retroweaver">
+    <echo>Downloading Retroweaver...</echo>
+    <mkdir dir="${basedir}/build/tools" />
+    <get src="${retroweaver.dir}/${retroweaver.zip}"
+         dest="${basedir}/build/tools/${retroweaver.zip}"
+         usetimestamp="true" />
+    <unzip src="${basedir}/build/tools/${retroweaver.zip}"
+         dest="${basedir}/build/tools/" overwrite="true"/>
+  </target>
+  
 </project>

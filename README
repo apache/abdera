@@ -1,22 +1,25 @@
 Apache Abdera
 ============================
 
-Apache Abdera is a high-performance, functionally complete implementation 
-of the IETF Atom Syndication Format and Atom Publishing Protocol specifications.
+Apache Abdera is a high-performance, functionally complete
+implementation of the IETF Atom Syndication Format (RFC 4287) and Atom
+Publishing Protocol specifications.
 
 Incubation Disclaimer
 ============================
-Abdera is an effort undergoing incubation at the Apache Software 
+
+Abdera is an effort undergoing incubation at the Apache Software
 Foundation (ASF), sponsored by the Apache Incubator PMC. Incubation is
-required of all newly accepted projects until a further review indicates
-that the infrastructure, communications, and decision making process have
-stabilized in a manner consistent with other successful ASF projects.
-While incubation status is not necessarily a reflection of the completeness
-or stability of the code, it does indicate that the project has yet to be
-fully endorsed by the ASF.
+required of all newly accepted projects until a further review
+indicates that the infrastructure, communications, and decision making
+process have stabilized in a manner consistent with other successful
+ASF projects.  While incubation status is not necessarily a reflection
+of the completeness or stability of the code, it does indicate that
+the project has yet to be fully endorsed by the ASF.
 
 Getting Started
 ============================
+
 See the Getting Started Guide @ 
   
   http://incubator.apache.org/abdera/docs/gettingstarted.html
@@ -30,7 +33,9 @@ http://incubator.apache.org/abdera/faq.html
 
 Please refer to the website for details of finding the issue tracker, 
 email lists, wiki or IRC channel
-http://incubator.apache.org/abdera/
 
-Please help us make Apache Abdera better - we appreciate any feedback you may have.
+  http://incubator.apache.org/abdera/
+
+Please help us make Apache Abdera better - we appreciate any feedback
+you may have.
 

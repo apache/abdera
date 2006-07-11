@@ -48,7 +48,7 @@ public class OpenSearchExtensionFactory implements ExtensionFactory, FOMExtensio
                                                    Base base,
                                                    Factory factory)
   {
-    return newExtensionElement(qname, base, factory, null);
+    return (T) newExtensionElement(qname, base, factory, null);
   }
 
   @SuppressWarnings("unchecked")
@@ -60,7 +60,7 @@ public class OpenSearchExtensionFactory implements ExtensionFactory, FOMExtensio
     OMContainer cbase = (OMContainer) base;
     OMFactory cfactory = (OMFactory) factory;
     if (OpenSearchConstants.TOTAL_RESULTS.equals(qname)) {
-      return (parserWrapper != null) ? 
+      return (parserWrapper != null) ?
         (T) new FOMTotalResults(qname, cbase, cfactory, parserWrapper) :
         (T) new FOMTotalResults(qname, cbase, cfactory);
     }

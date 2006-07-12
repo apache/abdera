@@ -94,7 +94,7 @@ Working directory: ${work}
            classpathref="jar.dependencies"/>
     <javac srcdir="${core.test}"
            destdir="${test}" 
-            classpathref="jar.dependencies"
+           classpathref="jar.dependencies"
            classpath="${core.work}"/>
   </target>
   
@@ -212,8 +212,8 @@ Working directory: ${work}
            dest="${dependencies}/${geronimo.javamail.jar}"
            usetimestamp="true" />
       <get src="${geronimo.servlet.dir}/${geronimo.servlet.jar}"
-             dest="${dependencies}/${geronimo.servlet.jar}"
-             usetimestamp="true" />      
+           dest="${dependencies}/${geronimo.servlet.jar}"
+           usetimestamp="true" />      
       <get src="${axiom.dir}/${axiom.api.jar}"
            dest="${dependencies}/${axiom.api.jar}"
            usetimestamp="true" />
@@ -298,7 +298,6 @@ Working directory: ${work}
          dest="${basedir}/build/tools/${retroweaver.zip}"
          usetimestamp="true" />
     <unzip src="${basedir}/build/tools/${retroweaver.zip}"
-         dest="${basedir}/build/tools/" overwrite="true"/>
+           dest="${basedir}/build/tools/" overwrite="true"/>
   </target>
-  
 </project>

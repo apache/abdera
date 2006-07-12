@@ -36,7 +36,7 @@ public class SniffingInputStream
   private boolean bomset = false;
   
   public SniffingInputStream(InputStream in) {
-    super(new BufferedInputStream(in,4));
+    super(new BufferedInputStream(in));
     try {
       encoding = detectEncoding();
     } catch (IOException e) {}
@@ -88,7 +88,6 @@ public class SniffingInputStream
       charset = "edbdic";
     } 
     bomset = false;
-    pin.mark(pin.available());
     try {
       XMLStreamReader xmlreader = 
         XMLInputFactory.newInstance().createXMLStreamReader(pin);
@@ -96,7 +95,11 @@ public class SniffingInputStream
       if (cs != null) charset = cs;
     } catch (Exception e) {
     } finally {
-      pin.reset();
+      try {
+        pin.reset();
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
     return charset;
   }

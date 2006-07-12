@@ -31,6 +31,8 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
 import javax.xml.namespace.QName;
+import java.util.List;
+import java.util.ArrayList;
 
 public class OpenSearchExtensionFactory implements ExtensionFactory, FOMExtensionFactory {
   public boolean handlesNamespace(String ns)
@@ -38,9 +40,11 @@ public class OpenSearchExtensionFactory implements ExtensionFactory, FOMExtensio
     return OpenSearchConstants.OPENSEARCH_NS.equals(ns);
   }
 
-  public String getNamespace()
+  public List<String> getNamespaces()
   {
-    return OpenSearchConstants.OPENSEARCH_NS;
+    List<String> lst = new ArrayList<String>();
+    lst.add(OpenSearchConstants.OPENSEARCH_NS);
+    return lst;
   }
 
   @SuppressWarnings("unchecked")

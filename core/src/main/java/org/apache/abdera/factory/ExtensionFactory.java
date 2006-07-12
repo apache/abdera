@@ -22,6 +22,8 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Element;
 
+import java.util.List;
+
 /**
  * @author James M Snell (jasnell@us.ibm.com)
  * 
@@ -51,14 +53,14 @@ public interface ExtensionFactory {
    * Returns true if this extension factory handles the specified namespace
    */
   boolean handlesNamespace(String namespace);
-  
+
   /**
-   * Returns the Namespace URI handled by this Extension Factory. Each
-   * Extension Factory implementation should handle exactly one namespace.
-   * @return The Namespace URI
+   * Returns the Namespace URIs handled by this Extension Factory.
+   *
+   * @return A List of Namespace URIs Supported by this Extension
    */
-  String getNamespace();
-  
+  List<String> getNamespaces();
+
   /**
    * Called by the Factory implementaton to create an instance of the 
    * extension element.  If parent is not null, the new element will 

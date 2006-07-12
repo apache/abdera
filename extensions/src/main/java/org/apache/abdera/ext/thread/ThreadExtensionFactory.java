@@ -18,6 +18,8 @@
 package org.apache.abdera.ext.thread;
 
 import javax.xml.namespace.QName;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.abdera.ext.thread.impl.FOMInReplyTo;
 import org.apache.abdera.ext.thread.impl.FOMTotal;
@@ -38,8 +40,10 @@ public class ThreadExtensionFactory
     return (ThreadConstants.THR_NS.equals(namespace));
   }
 
-  public String getNamespace() {
-    return ThreadConstants.THR_NS;
+  public List<String> getNamespaces() {
+    List<String> lst = new ArrayList<String>();
+    lst.add(ThreadConstants.THR_NS);
+    return lst;
   }
 
   @SuppressWarnings("unchecked")

@@ -1,9 +1,5 @@
 package org.apache.abdera.server.exceptions;
 
-/**
- * @author Elias Torres (<a href="mailto:eliast@us.ibm.com">eliast@us.ibm.com</a>)
- *
- */
 public class NotFoundException extends AbderaServerException {
   
   /**

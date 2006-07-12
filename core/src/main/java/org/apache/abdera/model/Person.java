@@ -37,8 +37,6 @@ import java.net.URISyntaxException;
  *      &amp; extensionElement*)
  *
  * </pre>
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Person 
   extends ExtensibleElement, Element {

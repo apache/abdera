@@ -38,8 +38,6 @@ import java.util.List;
  *          &amp; extensionElement* )
  *     }
  * </pre>
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Service
   extends ExtensibleElement {

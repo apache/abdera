@@ -31,8 +31,6 @@ import javax.activation.MimeType;
  * Feed Object Model supports four basic types of documents: FeedDocument,
  * EntryDocument, ServiceDocument (Atom Publishing Protocol Introspection
  * Documents) and XmlDocument (any arbitrary XML).</p>
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Document<T extends Element>  
   extends Base, Serializable {  

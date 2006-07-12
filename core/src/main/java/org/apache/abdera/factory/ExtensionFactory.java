@@ -25,8 +25,6 @@ import org.apache.abdera.model.Element;
 import java.util.List;
 
 /**
- * @author James M Snell (jasnell@us.ibm.com)
- * 
  * Extension Factories are used to provide a means of dynamically resolving
  * builders for namespaced extension elements
  * 

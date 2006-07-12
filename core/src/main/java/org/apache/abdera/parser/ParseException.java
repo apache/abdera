@@ -17,9 +17,6 @@
 */
 package org.apache.abdera.parser;
 
-/**
- * @author James M Snell (jasnell@us.ibm.com)
- */
 public class ParseException 
   extends RuntimeException {
 

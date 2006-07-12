@@ -59,8 +59,6 @@ import java.util.TimeZone;
  *  timestamp to several entries that were published during the course of
  *  a single day.
  *  </pre>
- *  
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public final class AtomDate {
 

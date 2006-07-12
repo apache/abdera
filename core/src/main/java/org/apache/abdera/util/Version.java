@@ -17,9 +17,6 @@
 */
 package org.apache.abdera.util;
 
-/**
- * @author James M Snell (jasnell@us.ibm.com)
- */
 public abstract interface Version {
 
   public static final String APP_NAME = "Abdera";

@@ -41,8 +41,6 @@ import java.net.URISyntaxException;
  *  The atom:generator element MAY have a "version" attribute that
  *  indicates the version of the generating agent.
  * </pre>
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Generator 
   extends Element {

@@ -19,8 +19,6 @@ package org.apache.abdera.model;
 
 /**
  * <p>Represents an XHTML div tag.</p>
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Div 
   extends ExtensibleElement {

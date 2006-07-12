@@ -21,9 +21,6 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
-/**   
- * @author James M Snell (jasnell@us.ibm.com)
- */
 public interface ExtensibleElement extends Element {
 
   /**

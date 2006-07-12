@@ -101,8 +101,6 @@ import javax.activation.MimeTypeParseException;
   * o  atom:entry elements MUST contain exactly one atom:title element.
   * o  atom:entry elements MUST contain exactly one atom:updated element.
  * </pre>
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Entry 
   extends ExtensibleElement {

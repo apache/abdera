@@ -53,8 +53,6 @@ package org.apache.abdera.model;
  *  outlined in Section 6 of [RFC4287].  Both clients and servers MUST
  *  ignore foreign markup present in the pub:control element.
  * </pre>
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Control 
   extends ExtensibleElement {

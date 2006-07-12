@@ -92,8 +92,6 @@ import java.util.List;
   * One typical behavior would be to display only the entry with the
   * latest atom:updated timestamp.
  * </pre>
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Feed 
   extends Source {

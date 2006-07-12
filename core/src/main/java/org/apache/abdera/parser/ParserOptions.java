@@ -23,8 +23,6 @@ import org.apache.abdera.filter.TextFilter;
 
 
 /**
- * @author James M Snell (jasnell@us.ibm.com)
- * 
  * Parser options are used to modify the behavior of the parser. 
  */
 public interface ParserOptions {

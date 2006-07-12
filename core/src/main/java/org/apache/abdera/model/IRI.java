@@ -24,7 +24,6 @@ import java.net.URISyntaxException;
  * <p>The IRIElement interface provides a common base for a set of feed and 
  * entry elements whose content value must be a valid IRI/URI reference.  
  * These include the elements atom:icon, atom:logo, and atom:id.</p>
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface IRI 
   extends  Element {

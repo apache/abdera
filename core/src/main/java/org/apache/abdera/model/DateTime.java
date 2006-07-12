@@ -23,8 +23,6 @@ import java.util.Date;
 /**
  * <p>An element conforming to the Atom Date Construct.  The data type 
  * implementation for this element is provided by the AtomDate class.</p>
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface DateTime 
   extends  Element {

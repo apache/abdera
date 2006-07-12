@@ -31,9 +31,6 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.xpath.XPath;
 
 
-/**
- * @author James M Snell (jasnell@us.ibm.com)
- */
 public final class ServiceUtil 
   implements Constants {
 

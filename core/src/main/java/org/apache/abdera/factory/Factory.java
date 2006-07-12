@@ -44,8 +44,6 @@ import org.apache.abdera.util.ServiceUtil;
 
 
 /**
- * @author James M Snell (jasnell@us.ibm.com)
- * 
  * The Factory interface is the primary means by which Feed Object Model
  * instances are built.  Factories are specific to parser implementations.
  * Users will generally not have to know anything about the Factory 

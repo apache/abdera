@@ -66,8 +66,6 @@ import javax.activation.MimeTypeParseException;
  *  feed-level Metadata elements (atom:id, atom:title, and atom:updated)
  *  in the atom:source element.
  * </pre>
- *  
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Source 
   extends ExtensibleElement {

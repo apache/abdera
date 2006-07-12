@@ -40,8 +40,6 @@ import java.util.List;
  *     }
  *
  * </pre>
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Workspace 
   extends ExtensibleElement {

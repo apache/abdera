@@ -26,8 +26,6 @@ import javax.xml.namespace.QName;
 
 /**
  * Root interface for all elements in the Feed Object Model
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Element 
   extends Base, Serializable {

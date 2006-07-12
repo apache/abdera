@@ -42,8 +42,6 @@ import javax.activation.MimeTypeParseException;
  *          &amp; extensionElement* )
  *     }
  * </pre>
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Collection 
   extends ExtensibleElement {

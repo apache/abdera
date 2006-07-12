@@ -97,8 +97,6 @@ import org.apache.abdera.util.MimeTypeHelper;
  *   | atomOutOfLineContent
  *
  * </pre>
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Content extends Element {
 

@@ -28,9 +28,6 @@ import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 
-/**
- * @author James M Snell (jasnell@us.ibm.com)
- */
 public abstract class AbstractParser 
   implements Parser {
 

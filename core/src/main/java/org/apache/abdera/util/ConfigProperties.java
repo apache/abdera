@@ -19,9 +19,6 @@ package org.apache.abdera.util;
 
 import java.util.ResourceBundle;
 
-/**
- * @author James M Snell (jasnell@us.ibm.com)
- */
 public final class ConfigProperties 
   implements Constants {
   

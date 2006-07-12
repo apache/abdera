@@ -28,8 +28,6 @@ import org.apache.abdera.util.ServiceUtil;
 
 
 /**
- * @author James M Snell (jasnell@us.ibm.com)
- * 
  * The Parser is the interface through which developers parse feed documents.
  * 
  * <code>Document doc = Parser.INSTANCE.parse(inputStream, baseUri, options);</code>

@@ -45,8 +45,6 @@ import javax.activation.MimeTypeParseException;
  *        undefinedContent
  *     }
  * </pre>
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Link 
   extends ExtensibleElement {

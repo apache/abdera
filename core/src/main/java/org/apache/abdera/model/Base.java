@@ -24,9 +24,6 @@ import java.io.Writer;
 import org.apache.abdera.factory.Factory;
 
 
-/**
- * @author James M Snell (jasnell@us.ibm.com)
- */
 public interface Base extends Cloneable {
 
   /**

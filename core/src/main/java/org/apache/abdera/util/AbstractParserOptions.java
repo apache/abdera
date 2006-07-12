@@ -22,9 +22,6 @@ import org.apache.abdera.filter.ParseFilter;
 import org.apache.abdera.filter.TextFilter;
 import org.apache.abdera.parser.ParserOptions;
 
-/**
- * @author James M Snell (jasnell@us.ibm.com)
- */
 public abstract class AbstractParserOptions 
   implements ParserOptions {
 

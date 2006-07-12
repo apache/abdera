@@ -54,8 +54,6 @@ package org.apache.abdera.model;
  *
  *  atomTextConstruct = atomPlainTextConstruct | atomXHTMLTextConstruct
  * </pre>
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Text 
   extends Element {

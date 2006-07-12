@@ -39,8 +39,6 @@ import java.net.URISyntaxException;
  *        undefinedContent
  *     }
  * </pre>
- * 
- * @author James M Snell (jasnell@us.ibm.com)
  */
 public interface Category 
   extends ExtensibleElement {

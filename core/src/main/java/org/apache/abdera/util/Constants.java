@@ -19,9 +19,6 @@ package org.apache.abdera.util;
 
 import javax.xml.namespace.QName;
 
-/**
- * @author James M Snell (jasnell@us.ibm.com)
- */
 public interface Constants {
 
   public static final String CONFIG_PARSER        = "org.apache.abdera.parser.Parser";

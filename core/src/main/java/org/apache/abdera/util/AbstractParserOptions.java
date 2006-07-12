@@ -32,6 +32,7 @@ public abstract class AbstractParserOptions
   protected String charset = null;
   protected ParseFilter parseFilter = null;
   protected TextFilter textFilter = null;
+  protected boolean detect = true;
 
   protected abstract void initFactory();
   protected abstract void checkFactory(Factory factory);
@@ -67,5 +68,13 @@ public abstract class AbstractParserOptions
   
   public void setTextFilter(TextFilter textFilter) {
     this.textFilter = textFilter;
+  }
+  
+  public boolean getAutodetectCharset() {
+    return this.detect;
+  }
+  
+  public void setAutodetectCharset(boolean detect) {
+    this.detect = detect;
   }
 }

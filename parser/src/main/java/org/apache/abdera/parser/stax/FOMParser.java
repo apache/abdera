@@ -18,6 +18,7 @@
 package org.apache.abdera.parser.stax;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
 
@@ -31,6 +32,7 @@ import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.util.AbstractParser;
+//import org.apache.abdera.util.SniffingInputStream;
 import org.apache.axiom.om.OMDocument;
 
 public class FOMParser 
@@ -53,10 +55,14 @@ public class FOMParser
     ParserOptions options) {
       Document<T> document = builder.getFomDocument();
       document.setBaseUri(base);
-      if (options.getCharset() != null) {
-        ((OMDocument)document).setCharsetEncoding(options.getCharset());
-      }
       return document;
+  }
+  
+  private void setCharset(ParserOptions options, String charset, Document doc) {
+    if (charset != null) doc.setCharset(charset);
+    if (options.getCharset() != null) {
+      ((OMDocument)doc).setCharsetEncoding(options.getCharset());
+    }    
   }
   
   public <T extends Element>Document<T> parse(
@@ -65,14 +71,27 @@ public class FOMParser
     ParserOptions options)
       throws ParseException {
     Document<T> document = null;
-
     if (in == null)
       throw new IllegalArgumentException("InputStream must not be null");
-
     try {
-      FOMFactory factory = getFomFactory(options);
-      FOMBuilder builder = new FOMBuilder(factory, in, options);
-      document = getDocument(builder, base, options);
+      String charset = (options != null) ? options.getCharset() : null;
+      boolean detect = (options != null) ? options.getAutodetectCharset() : true;
+      if (charset == null && detect) {
+        SniffingInputStream sin = 
+          (in instanceof SniffingInputStream) ? 
+            (SniffingInputStream)in : 
+            new SniffingInputStream(in);
+        charset = sin.getEncoding();
+        in = sin;
+      }
+      Reader isr = null;
+      if (charset == null) {
+        isr = new InputStreamReader(in);
+      } else {
+        isr = new InputStreamReader(in,charset);
+      }
+      if (options != null && charset != null) options.setCharset(charset);
+      document = parse(isr, base, options);
     } catch (Exception e) {
       if (!(e instanceof ParseException))
         e = new ParseException(e);
@@ -87,16 +106,15 @@ public class FOMParser
     ParserOptions options) 
       throws ParseException {
     Document<T> document = null;
-
     if (in == null)
       throw new IllegalArgumentException("Reader must not be null");
-
     try {
       FOMFactory factory = getFomFactory(options);
       XMLStreamReader xmlreader = 
         XMLInputFactory.newInstance().createXMLStreamReader(in);
       FOMBuilder builder = new FOMBuilder(factory, xmlreader, options);
       document = getDocument(builder, base, options);
+      setCharset(options, xmlreader.getCharacterEncodingScheme(), document);
     } catch (Exception e) {
       if (!(e instanceof ParseException))
         e = new ParseException(e);

@@ -76,4 +76,8 @@ public interface ParserOptions {
    * character strings encountered during the parse process.
    */
   void setTextFilter(TextFilter textFilter);
+  
+  boolean getAutodetectCharset();
+  
+  void setAutodetectCharset(boolean detect);
 }

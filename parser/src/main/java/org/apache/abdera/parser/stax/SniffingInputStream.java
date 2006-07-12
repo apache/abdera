@@ -15,12 +15,15 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.util;
+package org.apache.abdera.parser.stax;
 
+import java.io.BufferedInputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PushbackInputStream;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
 
 /**
  * Will attempt to autodetect the character encoding from the stream
@@ -32,9 +35,11 @@ public class SniffingInputStream
   private String encoding = null;
   private boolean bomset = false;
   
-  protected SniffingInputStream(InputStream in) throws IOException {
-    super(new PushbackInputStream(in,4));
-    encoding = detectEncoding(); 
+  public SniffingInputStream(InputStream in) {
+    super(new BufferedInputStream(in,4));
+    try {
+      encoding = detectEncoding();
+    } catch (IOException e) {}
   }
 
   public boolean isBomSet() {
@@ -46,10 +51,12 @@ public class SniffingInputStream
   }
   
   private String detectEncoding() throws IOException {
-    PushbackInputStream pin = (PushbackInputStream) this.in;
+    BufferedInputStream pin = (BufferedInputStream) this.in;
     byte[] bom = new byte[4];
+    pin.mark(pin.available());
     pin.read(bom);
-    pin.unread(bom);    
+    pin.reset();  
+    String charset = null;
     if (bom[0] == 0x00 && bom[1] == 0x00 && bom[2] == 0xFFFFFFFE && bom[3] == 0xFFFFFFFF) {
       bomset = true;
       return "utf-32be";
@@ -70,17 +77,28 @@ public class SniffingInputStream
       bomset = true;
       return "utf-8";
     } else if (bom[0] == 0x00 && bom[1] == 0x00 && bom[2] == 0x00 && bom[3] == 0x3C) {
-      return "utf-32be";
+      charset = "utf-32be";
     } else if (bom[0] == 0x3C && bom[1] == 0x00 && bom[2] == 0x00 && bom[3] == 0x00) {
-      return "utf-32le";
+      charset = "utf-32le";
     } else if (bom[0] == 0x00 && bom[1] == 0x3C && bom[2] == 0x00 && bom[3] == 0x3F) {
-      return "utf-16be";
+      charset = "utf-16be";
     } else if (bom[0] == 0x3C && bom[1] == 0x00 && bom[2] == 0x3F && bom[3] == 0x00) {
-      return "utf-16le";
+      charset = "utf-16le";
     } else if (bom[0] == 0x4C && bom[1] == 0x6F && bom[2] == 0xA7 && bom[3] == 0x94) {
-      return "edbdic";
+      charset = "edbdic";
+    } 
+    bomset = false;
+    pin.mark(pin.available());
+    try {
+      XMLStreamReader xmlreader = 
+        XMLInputFactory.newInstance().createXMLStreamReader(pin);
+      String cs = xmlreader.getCharacterEncodingScheme();
+      if (cs != null) charset = cs;
+    } catch (Exception e) {
+    } finally {
+      pin.reset();
     }
-    return null;
+    return charset;
   }
   
 }

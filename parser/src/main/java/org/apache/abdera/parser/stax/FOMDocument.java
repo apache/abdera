@@ -19,24 +19,30 @@ package org.apache.abdera.parser.stax;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Date;
+import java.util.Iterator;
 
 import javax.activation.MimeType;
-import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
+import org.apache.axiom.om.OMComment;
+import org.apache.axiom.om.OMDocType;
+import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
+import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMOutputFormat;
+import org.apache.axiom.om.OMProcessingInstruction;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.MTOMXMLStreamWriter;
 import org.apache.axiom.om.impl.llom.OMDocumentImpl;
+import org.apache.axiom.om.util.StAXUtils;
 
 
 public class FOMDocument<T extends Element> 
@@ -103,29 +109,20 @@ public class FOMDocument<T extends Element>
   }
 
   public void writeTo(OutputStream out) throws IOException {
-    try {    
-      OMOutputFormat outputFormat = new OMOutputFormat();
-      outputFormat.setCharSetEncoding(this.getCharsetEncoding());
-      MTOMXMLStreamWriter omwriter = new MTOMXMLStreamWriter(out, outputFormat);
-      internalSerialize(omwriter, true);
-      omwriter.flush();
-    } catch (XMLStreamException e) {
-      throw new FOMException(e);
-    }
+    writeTo(new OutputStreamWriter(out));
   }
 
   public void writeTo(java.io.Writer writer) throws IOException {
-    try {
-      setComplete(true);      
+    try {      
       OMOutputFormat outputFormat = new OMOutputFormat();
-      outputFormat.setCharSetEncoding(this.getCharsetEncoding());
-      XMLStreamWriter streamwriter = 
-        XMLOutputFactory.newInstance().createXMLStreamWriter(
-          writer);
-      MTOMXMLStreamWriter omwriter = new MTOMXMLStreamWriter(streamwriter);
+      if (this.getCharsetEncoding() != null)
+        outputFormat.setCharSetEncoding(this.getCharsetEncoding());
+      MTOMXMLStreamWriter omwriter = 
+        new MTOMXMLStreamWriter(
+          StAXUtils.createXMLStreamWriter(writer));
       omwriter.setOutputFormat(outputFormat);
-      this.internalSerializeAndConsume(omwriter);
-      omwriter.flush();
+      this.internalSerialize(omwriter);
+      omwriter.flush();    
     } catch (XMLStreamException e) {
       throw new FOMException(e);
     }
@@ -149,9 +146,29 @@ public class FOMDocument<T extends Element>
   
   @SuppressWarnings("unchecked")
   public Object clone() {
-    T rootClone = (T)getRoot().clone();
     Document<T> doc = ((FOMFactory)factory).newDocument();
-    doc.setRoot(rootClone);
+    OMDocument omdoc = (OMDocument) doc;
+    for (Iterator i = getChildren(); i.hasNext();) {
+      OMNode node = (OMNode) i.next();
+      switch(node.getType()) {
+        case OMNode.COMMENT_NODE:
+          OMComment comment = (OMComment) node;
+          factory.createOMComment(omdoc, comment.getValue());
+          break;
+        case OMNode.DTD_NODE:
+          OMDocType doctype = (OMDocType) node;
+          factory.createOMDocType(omdoc, doctype.getValue());
+          break;
+        case OMNode.ELEMENT_NODE:
+          Element el = (Element) node;
+          omdoc.addChild((OMNode) el.clone());
+          break;
+        case OMNode.PI_NODE:
+          OMProcessingInstruction pi = (OMProcessingInstruction) node;
+          factory.createOMProcessingInstruction(omdoc, pi.getTarget(), pi.getValue());
+          break;
+      }
+    }
     return doc;
   }
 

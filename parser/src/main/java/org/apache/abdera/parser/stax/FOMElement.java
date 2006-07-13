@@ -20,6 +20,7 @@ package org.apache.abdera.parser.stax;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -27,9 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Base;
@@ -53,9 +52,7 @@ import org.apache.axiom.om.OMOutputFormat;
 import org.apache.axiom.om.OMProcessingInstruction;
 import org.apache.axiom.om.OMText;
 import org.apache.axiom.om.OMXMLParserWrapper;
-import org.apache.axiom.om.impl.MTOMXMLStreamWriter;
 import org.apache.axiom.om.impl.llom.OMElementImpl;
-
 
 public class FOMElement 
   extends OMElementImpl 
@@ -295,30 +292,15 @@ public class FOMElement
   }
 
   public void writeTo(OutputStream out) throws IOException {
-    try {
-      OMOutputFormat outputFormat = new OMOutputFormat();
-      if (getDocument() != null)
-        outputFormat.setCharSetEncoding(getDocument().getCharset());
-      MTOMXMLStreamWriter omwriter = 
-        new MTOMXMLStreamWriter(out, outputFormat);
-      internalSerialize(omwriter, true);
-      omwriter.flush();
-    } catch (XMLStreamException e) {
-      throw new FOMException(e);
-    }
+    writeTo(new OutputStreamWriter(out));
   }
 
   public void writeTo(java.io.Writer writer) throws IOException {
     try { 
       OMOutputFormat outputFormat = new OMOutputFormat();
-      outputFormat.setCharSetEncoding(getDocument().getCharset());
-      XMLStreamWriter streamwriter = 
-        XMLOutputFactory.newInstance().createXMLStreamWriter(
-          writer);
-      MTOMXMLStreamWriter omwriter = new MTOMXMLStreamWriter(streamwriter);
-      omwriter.setOutputFormat(outputFormat);
-      this.internalSerialize(omwriter, true);
-      omwriter.flush();
+      if (getDocument() != null && getDocument().getCharset() != null)
+        outputFormat.setCharSetEncoding(getDocument().getCharset());
+      serializeAndConsume(writer, outputFormat);
     } catch (XMLStreamException e) {
       throw new FOMException(e);
     }

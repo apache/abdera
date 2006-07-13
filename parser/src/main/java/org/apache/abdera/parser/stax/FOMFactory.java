@@ -696,7 +696,7 @@ public class FOMFactory
           Content.Type type = (Content.Type)objecttype;
           element = (OMElement) _newInstance(
             qclasses.get(qname), CONSTRUCTORS[10], 
-            type, qname.getLocalPart(), namespace, parent, this);
+            qname.getLocalPart(), namespace, type, parent, this);
         } else if (isText(qname)) {
           Text.Type type = (Text.Type)objecttype;
           element = (OMElement) _newInstance(
@@ -820,9 +820,9 @@ public class FOMFactory
       OMFactory.class,
       OMXMLParserWrapper.class},
     new Class[] {
-      Content.Type.class,
       String.class, 
-      OMNamespace.class, 
+      OMNamespace.class,
+      Content.Type.class,
       OMContainer.class, 
       OMFactory.class},
     new Class[] {

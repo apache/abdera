@@ -42,7 +42,7 @@ public class FOMFeed
   private static final long serialVersionUID = 4552921210185524535L;
   
   public FOMFeed() {
-    super(Constants.FEED, null, (OMFactory)Factory.INSTANCE);
+    super(Constants.FEED, new FOMDocument(), (OMFactory)Factory.INSTANCE);
   }
   
   public FOMFeed(

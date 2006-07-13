@@ -41,7 +41,7 @@ public class FOMService
   private static final long serialVersionUID = 7982751563668891240L;
 
   public FOMService() {
-    super(Constants.SERVICE, null, (OMFactory)Factory.INSTANCE);
+    super(Constants.SERVICE, new FOMDocument(), (OMFactory)Factory.INSTANCE);
   }
   
   public FOMService(

@@ -175,11 +175,11 @@ Working directory: ${work}
 
   <target name="docs" depends="init">
     <javadoc packagenames="org.apache.abdera.*"
-             excludepackagenames="org.apache.abdera.util"
-             sourcepath="${core.src}" 
+             excludepackagenames="org.apache.abdera.util,org.apache.abdera.ext.*.impl,org.apache.abdera.parser.**,org.apache.abdera.security.**"
+             sourcepath="${core.src}:${extensions.src}:${security.src}:${server.src}:${parser.src}" 
              destdir="${javadocs}"
              windowtitle="Abdera"
-             classpathref="jar.dependencies"/>
+             classpathref="jar.dependencies" />
     <copy file="${basedir}/docs/index.html" todir="${docs}" />
   </target>
   

@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.parser.stax;
  
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +95,7 @@ public class FOMFactory
   
   private Map<Class,Class> alternatives = null;
   private Map<QName,Class> extensions = null;
+  private List<ExtensionFactory> factories = null;
   
   public Parser newParser() {
     return new FOMParser();
@@ -440,14 +442,21 @@ public class FOMFactory
       return newExtensionElement(qname, parent, null);
   }
 
+  private List<ExtensionFactory> getExtensionFactories() {
+    if (factories == null) {
+      factories = new ArrayList<ExtensionFactory>(
+        org.apache.abdera.util.ServiceUtil.loadExtensionFactories());
+    }
+    return factories;
+  }
+  
   @SuppressWarnings("unchecked")
   public Element newExtensionElement(
     QName qname,
     OMContainer parent,
     OMXMLParserWrapper parserWrapper) {
     Element element = null;
-    List<ExtensionFactory> factories = 
-      org.apache.abdera.util.ServiceUtil.loadExtensionFactories();
+    List<ExtensionFactory> factories = getExtensionFactories();
     Class _class = getExtensionClass(qname);
     if (_class == null && factories != null) {
       for (ExtensionFactory factory : factories) {
@@ -742,6 +751,10 @@ public class FOMFactory
   public void registerExtension(QName qname, Class impl) {
     if (extensions == null) extensions = new HashMap<QName,Class>();
     extensions.put(qname, impl);
+  }
+  
+  public void registerExtension(ExtensionFactory factory) {
+    getExtensionFactories().add(factory);
   }
   
   @SuppressWarnings("unchecked")

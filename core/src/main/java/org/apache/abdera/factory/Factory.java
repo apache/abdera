@@ -211,8 +211,20 @@ public interface Factory {
   
   Div newDiv(Base parent);
 
+  /**
+   * Registers an extension implementation class for this Factory instance only
+   */
   <T extends Base>void registerExtension(QName qname, Class impl);
   
+  /**
+   * Registers an extension factory for this Factory instance only
+   */
+  void registerExtension(ExtensionFactory extensionFactory);
+  
+  /**
+   * Registers an alternative implementation class for the specified base
+   * for this Factory instance.  The alternative MUST extend the base
+   */
   <T extends Base>void registerAlternative(Class<T> base, Class<? extends T> alternative);
   
 }

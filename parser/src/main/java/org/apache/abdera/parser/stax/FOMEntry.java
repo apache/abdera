@@ -61,7 +61,7 @@ public class FOMEntry
   private static final long serialVersionUID = 1L;
 
   public FOMEntry() {
-    super(Constants.ENTRY, null, (OMFactory)Factory.INSTANCE);
+    super(Constants.ENTRY, new FOMDocument(), (OMFactory)Factory.INSTANCE);
   }
   
   public FOMEntry(

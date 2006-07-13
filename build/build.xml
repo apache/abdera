@@ -8,6 +8,9 @@
       * dist  (compile, test and create jars)
       * clean (rather self explanatory)
       * docs  (build the javadocs)
+      
+   Set the ABDERA_XMLSECURITY=yes environment variable to build the security module
+   
 -->
   <property name="version" value="0.1.0-incubating-SNAPSHOT" />
   <property name="site" value="../site" />
@@ -40,10 +43,15 @@
   <property name="server.src" value="${server}/src/main/java" />
   <property name="server.work" value="${work}/server" />
   <property name="server.jar" value="${dist}/${ant.project.name}.server.${version}.jar" />
+  <property name="security" value="${basedir}/security" />
+  <property name="security.src" value="${security}/src/main/java" />
+  <property name="security.work" value="${work}/security" />
+  <property name="security.jar" value="${dist}/${ant.project.name}.security.${version}.jar" />
+  <property environment="env" />
       
   <property name="dependencies" value="${basedir}/dependencies" />
   <property file="${dependencies}/deps.properties" />
-
+  
   <path id="jar.dependencies">
     <fileset dir="${dependencies}" includes="**/*.jar" />
   </path>
@@ -84,7 +92,21 @@ Working directory: ${work}
         </and>
       </not>
     </condition>
+    <condition property="do.download.security">
+      <not>
+        <and>
+          <available file="${dependencies}/${xmlsecurity.jar}" />
+        </and>
+      </not>
+    </condition>
+    <condition property="do.security">
+      <istrue value="${env.ABDERA_XMLSECURITY}"/>
+    </condition>
+    <condition property="do.onejar">
+      <istrue value="${env.ABDERA_ONEJAR}"/>
+    </condition>
     <antcall target="download"/>
+    <antcall target="downloadsecurity" />
   </target>
   
   <target name="compile.core" depends="init">
@@ -140,8 +162,16 @@ Working directory: ${work}
            classpathref="jar.dependencies"
            classpath="${core.work}" />
   </target>  
+  
+  <target name="compile.security" depends="init, compile.core" if="do.security">
+    <mkdir dir="${security.work}" />
+    <javac srcdir="${security.src}"
+           destdir="${security.work}"
+           classpathref="jar.dependencies"
+           classpath="${core.work}" />    
+  </target>
 
-  <target name="build" depends="init,compile.core,compile.parser,compile.server,compile.extensions"></target>
+  <target name="build" depends="init,compile.core,compile.parser,compile.server,compile.extensions,compile.security"></target>
 
   <target name="docs" depends="init">
     <javadoc packagenames="org.apache.abdera.*"
@@ -186,11 +216,16 @@ Working directory: ${work}
     <jar destfile="${parser.jar}" basedir="${parser.work}" />
     <jar destfile="${server.jar}" basedir="${server.work}" />    
     <jar destfile="${extensions.jar}" basedir="${extensions.work}" />
+    <antcall target="dist.security" />
     <copy todir="${dist_lib}">
       <fileset dir="${dependencies}"  />
     </copy>
     <delete dir="${work}" />
     <delete dir="${test}" />
+  </target>
+  
+  <target name="dist.security" if="do.security">
+    <jar destfile="${security.jar}" basedir="${security.work}" />
   </target>
   
   <target name="zip" depends="dist"> 
@@ -202,6 +237,11 @@ Working directory: ${work}
     </zip>
   </target>
 
+  <target name="downloadsecurity" if="do.download.security,do.security">
+    <get src="${xmlsecurity.dir}/${xmlsecurity.jar}"
+         dest="${dependencies}/${xmlsecurity.jar}"
+         usetimestamp="true" />
+  </target>
   <target name="download" if="do.download">
     <echo>Downloading project dependencies.  This may take a moment</echo>
     <parallel>
@@ -277,18 +317,26 @@ Working directory: ${work}
     </path>    
     <echo>Retroweaving the Jars...</echo>
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
-      <arg line="-jar ${core.jar} ${retro_core.jar}" />
+      <arg line="-jar &quot;${core.jar}&quot; &quot;${retro_core.jar}&quot;" />
     </java>
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
-      <arg line="-jar ${parser.jar} ${retro_parser.jar}"/>
+      <arg line="-jar &quot;${parser.jar}&quot; &quot;${retro_parser.jar}&quot;"/>
     </java>
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
-      <arg line="-jar ${server.jar} ${retro_server.jar}" />
+      <arg line="-jar &quot;${server.jar}&quot; &quot;${retro_server.jar}&quot;" />
     </java>
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
-      <arg line="-jar ${extensions.jar} ${retro_extensions.jar}" />
+      <arg line="-jar &quot;${extensions.jar}&quot; &quot;${retro_extensions.jar}&quot;" />
     </java>
+    <antcall target="retro.security" />
     <copy todir="${dist_lib}" file="${retro}/release/retroweaver-rt-1.2.3.jar" />
+  </target>
+  
+  <target name="retro.security" if="do.security">
+    <property name="retro_security.jar" value="${dist}/${ant.project.name}.security.${version}.retro.jar" />
+    <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
+      <arg line="-jar &quot;${security.jar}&quot; &quot;${retro_security.jar}&quot;" />
+    </java>
   </target>
   
   <target name="go_retro" if="do.download.retroweaver">

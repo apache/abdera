@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>Apache Abdera</title>
+</head>
+
+<body>
+  <!-- Header -->
+  <div id="banner">
+    <h1><a href="http://incubator.apache.org/abdera">Apache Abdera</a></h1>
+    <p>Version 0.1-SNAPSHOT (Incubating)</p>
+    <hr/>
+  </div>
+  <div id="divider"></div>
+
+  <div>      
+    <div id="content">
+    
+    <h1>Getting Started</h1>
+    
+    <h2>Downloading and Building the Source</h2>
+    
+    <p>Before you can use Abdera, you need to download and build the source.
+    Instructions for bulding are available in the <a href="building.html">Builder's Guide</a>.
+    
+    <h2>Parsing Atom Feed and Entry Documents</h2>
+    
+    <p>The Abdera parser is capable of handling Atom Feed and Entry documents,
+    Atom Publishing Protocol Introspection Documents, and any other arbitrary, 
+    well-formed XML document.</p>
+    
+    <p>User's can either use the default <code>org.apache.abdera.parser.Parser</code> 
+    instance by calling <code>Parser.INSTANCE</code>, or they may create an new
+    <code>Parser</code> instance.
+    
+    <pre>Parser parser = Parser.INSTANCE;
+// or
+Parser parser = new FOMParser();
+// or
+Parser parser = new MyCustomParser();</pre>
+
+    <p>The <code>Parser</code> will automatically detect the kind of document
+    being parsed and will return an appropriate <code>org.apache.abdera.model.Document</code>.
+    
+    <h3>Parsing an Atom Feed</h3>
+        
+    <pre>URI uri = new URI("http://example.org/feed.xml");
+InputStream in = uri.toURL().openStream();
+Document&lt;Feed&gt; doc = Parser.INSTANCE.parse(in, uri);</pre>
+
+    <p>The <code>uri</code> parameter on the <code>parse</code> method establishes
+    the Base URI for the parsed document and is used as the basis for relative
+    URI resolution throughout the document.</p>
+
+    <h3>Parsing an Atom Entry</h3>
+    <pre>URI uri = new URI("http://example.org/entry.xml");
+InputStream in = uri.toURL().openStream();
+Document&lt;Entry&gt; doc = Parser.INSTANCE.parse(in, uri);</pre>
+   
+    <h3>Configuring the Parser</h3>
+    
+    <pre>URI uri = new URI("http://example.org/feed.xml");
+InputStream in = uri.toURL().openStream();
+<b>ParserOptions options = Parser.INSTANCE.getDefaultParserOptions();
+options.setCharset('utf-8');
+//.. set other parser options</b>
+Document&lt;Feed&gt; doc = Parser.INSTANCE.parse(in, uri, options);</pre>
+    
+    <h2>Creating Atom Feed and Entry Documents</h2>
+    
+    <t>Atom Feed and Entry documents are created using instances of the 
+    <code>org.apache.abdera.factory.Factory</code> interface.  User's can
+    either use the default configured Factory by calling <code>Factory.INSTANCE</code>,
+    or may create their own Factory instance.</t>
+    
+    <pre>Factory factory = Factory.INSTANCE;
+// or
+Factory factory = new FOMFactory();
+// or
+Factory factory = new MyCustomFactory();</pre>
+
+    <h3>Creating Atom Feed Documents</h3>
+    
+    <pre>Feed feed = Factory.INSTANCE.newFeed();
+feed.setId("tag:example.org,2005:/myfeed", false);
+feed.setTitle("My Example Feed");
+// .. set other feed properties
+Document&lt;Feed&gt; doc = feed.getDocument();
+doc.writeTo(System.out); // serializes the feed document to System.out
+    </pre>
+    
+    <h3>Creating Atom Entry Documents</h3>
+
+    <pre>Entry entry = Factory.INSTANCE.newEntry();
+entry.setId("tag:example.org,2005:/myentry", false);
+entry.setTitle("My Example Entry");
+// .. set other feed properties
+Document&lt;Entry&gt; doc = entry.getDocument();
+doc.writeTo(System.out); // serializes the entry document to System.out
+    </pre>
+    
+    <h2>The Feed Object Model</h2>
+    
+    <p>The Feed Object Model (FOM) is a set of interfaces designed around the 
+    Atom Syndication Format data model.  The object model provides the API 
+    by which Atom documents are read and created.</p>
+    
+    <pre>URI uri = ...
+InputStream inputStream = ...
+Document&lt;Feed&gt; doc = Parser.INSTANCE.parse(inputStream, uri);
+Feed feed = doc.getRoot();
+URI id = feed.getId();
+Text.Type titleType = feed.getTitleType();
+String title = feed.getTitle();
+
+List&lt;Entry&gt; entries = feed.getEntries();
+for (Entry entry : entries) {
+  URI entryId = entry.getId();
+  Text.Type entryTitleType = entry.getTitleType();
+  String entryTitle = entry.getTitle();
+}
+...</pre>
+    
+    <h2>Using XPath</h2>
+    
+    <p>As an alternative to navigating the Feed Object Model manually, developer's
+    may use XPath to query a parsed <code>Document</code>.
+    
+    <pre>URI uri = ...
+InputStream inputStream = ...
+Document&lt;Feed&gt; doc = Parser.INSTANCE.parse(inputStream, uri);
+
+// Select the id of the document
+String id = XPath.INSTANCE.valueOf("/a:feed/a:id", doc);
+
+// Select all entries from the document
+List entries = XPath.INSTANCE.valueOf("//a:entry", doc);
+for (Iterator i = entries.iterator(); i.hasNext();) {
+  Entry entry = (Entry)i.next();
+  //...
+}
+
+// Determine if a feed contains a specific extension
+boolean hasFoo = XPath.INSTANCE.isTrue("//x:foo", doc);
+
+// The XPath support works on any element in the FOM
+Entry entry = (Entry)XPath.INSTANCE.selectSingleNode("//a:entry", doc);
+String id = XPath.INSTANCE.valueOf("a:id", entry);</pre>
+    
+    <h2>Using Extensions</h2>
+    
+    <p>The Feed Object Model is designed to fully and dynamically support 
+    extensions to the Atom Feed format.</p>
+    
+    <pre>Feed feed = Factory.INSTANCE.newFeed();
+// ... set other feed properties
+feed.addSimpleExtension(
+  new QName("urn:foo", "myExtension", "a"), 
+  "This is an extension"
+);
+
+Link link = feed.addLink("http://example.org");
+link.setAttributeValue(
+  new QName("urn:foo", "myAttribute", "a"), 
+  "My Attribute");</pre>
+  
+    <p>This results in the following Atom feed:</p>
+    
+    <pre>&lt;?xml version='1.0' ?&gt;
+&lt;feed xmlns='http://www.w3.org/2005/Atom'&gt;
+  ...
+  &lt;a:myExtension xmlns:a="urn:foo">This is an extension&lt;/a:myExtension>
+  &lt;link href="http://example.org" 
+        xmlns:a="urn:foo" 
+        a:myAttribute="My Attribute" />
+&lt;/feed&gt;
+    </pre>
+    
+    <p>As an alternative to using the dynamic extensions support built into the
+    Feed Object Model, developers may configure static extensions using the 
+    <code>org.apache.abdera.factory.ExtensionFactory</code> mechanism.
+    Extension Factories are covered in detail in the <a href="developers.html">Developer's Guide</a>.</p>
+    
+    <h2>Signing and Encrypting Atom Documents</h2>
+    
+    <p>Atom Feed and Entry documents may be digitally signed and/or encrypted 
+    by using the <i>optional</i> Abdera Security module.  The security module currently 
+    depends on the Apache Xerces, Apache XML Security Projects and the Bouncy 
+    Castle Java cryptography implementation.</p>
+    
+    <h3>Digitally Signing Atom Documents</h3>
+    
+    <pre>Feed feed = Factory.INSTANCE.newFeed();
+PrivateKey myPrivateKey = ...
+X509Certificate myX509Cert = ...
+Signature sig = Signature.INSTANCE;
+SignatureOptions options = sig.getDefaultSignatureOptions();
+options.setSigningKey(myPrivateKey);
+options.setCertificate(myX509Cert);
+feed = sig.sign(feed, options);
+//any modifications to the feed after this point will break the signature</pre>
+
+    <h3>Encrypting Atom Documents</h3>
+    
+    <pre>Feed feed = Factory.INSTANCE.newFeed();
+Key kek = ... // Key encryption key
+Key dek = ... // Data encryption key
+Encryption enc = Encryption.INSTANCE;
+EncryptionOptions options = enc.getDefaultEncryptionOptions();
+options.setKeyEncryptionKey(kek);
+options.setDataEncryptionKey(dek);
+options.setIncludeKeyInfo(true);
+Document doc = enc.encrypt(feed.getDocument(), options);
+doc.writeTo(System.out); // outs the encrypted XML</pre>
+
+    </div>
+
+    <div id="footer">
+      Copyright &#xA9 2006, The Apache Software Foundation
+    </div>
+
+  </div>
+  
+
+</body>
+
+</html>

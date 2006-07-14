@@ -177,7 +177,9 @@ Working directory: ${work}
              destdir="${javadocs}"
              windowtitle="Abdera"
              classpathref="jar.dependencies" />
-    <copy file="${basedir}/docs/index.html" todir="${docs}" />
+    <copy  todir="${docs}">
+      <fileset dir="${basedir}/docs/" includes="*.html" />
+    </copy>
   </target>
   
   <target name="test" depends="build">

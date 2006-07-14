@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>Apache Abdera</title>
+<link rel="stylesheet" href="../style/main.css" type="text/css" />
+</head>
+
+<body>
+  <!-- Header -->
+  <div id="banner">
+    <h1><a href="http://incubator.apache.org/abdera">Apache Abdera</a></h1>
+    <p>Version 0.1-SNAPSHOT (Incubating)</p>
+    <hr/>
+  </div>
+  <div id="divider"></div>
+
+  <div>  
+    <div id="content">
+    
+    <h1>Building Abdera</h1>
+    
+    <h2>Abdera Java Project Layout</h2>
+    
+    <p>The Abdera project consists of a set of individual modules.  The <code>core</code>
+    module contains the source of the Feed Object Model.  The <code>parser</code>
+    module contains the default StAX and Axiom based parser implementation.</p>
+    
+    <ul class="folderlayout">
+      <li>%Abdera_Home</li>
+      <ul>
+        <li>/java</li>
+        <ul>
+          <li>/build</li>
+          <li>/core</li>
+          <li>/dependencies</li>
+          <li>/docs</li>
+          <li>/examples</li>
+          <li>/extensions</li>
+          <li>/parser</li>
+          <li>/security</li>
+          <li>/server</li>
+        </ul>
+      </ul>
+    </ul>
+    
+    <h2>Building with Maven</h2>
+    
+    <p>To build with Maven, navigate to %Abdera_Home/java in a console window and type:</p>
+    
+    <pre>mvn install</pre>
+    
+    <p>The compiled jar files will be added to your local Maven repository.</p>
+    
+    <h2>Building with Ant</h2>
+    
+    <p>To build with Ant, navigate to %Abdera_Home/java in a console window and type:</p>
+    
+    <pre>ant -f build/build.xml dist</pre>
+    
+    <p>The compiled jar files will be available under a newly created %Abdera_Home/java/dist directory</p>
+    
+    <h2>Building with Eclipse</h2>
+    
+    <p>TODO</p>
+    
+    <h2>Building with {other IDE}</h2>
+    
+    <p>TODO</p>
+    
+    </div>
+
+    <div id="footer">
+      Copyright &#xA9 2006, The Apache Software Foundation
+    </div>
+
+  </div>
+  
+
+</body>
+
+</html>

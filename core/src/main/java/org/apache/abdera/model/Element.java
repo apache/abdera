@@ -109,11 +109,8 @@ public interface Element
    */
   List<QName> getExtensionAttributes();
   
-  /**
-   * Returns the value of the named attribute
-   */
-  String getAttributeValue(String namespace, String localPart);
-    
+  void removeAttribute(QName qname);
+  
   /**
    * Sets the value of the named attribute
    */
@@ -123,11 +120,6 @@ public interface Element
    * Sets the value of the named attribute
    */
   void setAttributeValue(QName qname, String value);
-  
-  /**
-   * Sets the value of the named attribute
-   */
-  void setAttributeValue(String namespace, String localPart, String prefix, String value);
   
   /**
    * Removes this element from its current document

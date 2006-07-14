@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.model;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -69,22 +68,10 @@ public interface Workspace
   Collection getCollection(String title);
   
   /**
-   * Sets the full set of collections for this workspace
-   */
-  void setCollection(List<Collection> collections);
-  
-  /**
    * Adds an individual collection to this workspace
    */
   void addCollection(Collection collection);
 
-  /**
-   * Adds an individual collection to this workspace
-   */
-  Collection addCollection(
-    String title, 
-    URI href);
-  
   /**
    * Adds an individual collection to this workspace
    */

@@ -68,13 +68,6 @@ public interface Category
    * RFC4287: The "scheme" attribute is an IRI that identifies a 
    * categorization scheme.  Category elements MAY have a "scheme" 
    * attribute.
-   */
-  void setScheme(URI scheme);
-  
-  /**
-   * RFC4287: The "scheme" attribute is an IRI that identifies a 
-   * categorization scheme.  Category elements MAY have a "scheme" 
-   * attribute.
    * @throws URISyntaxException 
    */
   void setScheme(String scheme) throws URISyntaxException;

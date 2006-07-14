@@ -100,13 +100,6 @@ public interface Link
    * RFC4287: The "href" attribute contains the link's IRI. atom:link 
    * elements MUST have an href attribute, whose value MUST be a IRI 
    * reference [RFC3987].
-   */
-  void setHref(URI href);
-  
-  /**
-   * RFC4287: The "href" attribute contains the link's IRI. atom:link 
-   * elements MUST have an href attribute, whose value MUST be a IRI 
-   * reference [RFC3987].
    * @throws URISyntaxException 
    */
   void setHref(String href) throws URISyntaxException;
@@ -157,17 +150,6 @@ public interface Link
    */
   MimeType getMimeType() throws MimeTypeParseException;
 
-  /**
-   * RFC4287: On the link element, the "type" attribute's value is an advisory
-   * media type: it is a hint about the type of the representation that is
-   * expected to be returned when the value of the href attribute is
-   * dereferenced.  Note that the type attribute does not override the
-   * actual media type returned with the representation.  Link elements
-   * MAY have a type attribute, whose value MUST conform to the syntax of
-   * a MIME media type [MIMEREG].
-   */
-  void setMimeType(MimeType type);
-  
   /**
    * RFC4287: On the link element, the "type" attribute's value is an advisory
    * media type: it is a hint about the type of the representation that is

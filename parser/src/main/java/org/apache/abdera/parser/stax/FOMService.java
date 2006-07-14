@@ -99,10 +99,6 @@ public class FOMService
     return workspace;
   }
 
-  public void setWorkspaces(List<Workspace> workspaces) {
-    _setChildrenFromSet(WORKSPACE, workspaces);
-  }
-
   public void addWorkspace(Workspace workspace) {
     addChild((OMElement) workspace);
   }

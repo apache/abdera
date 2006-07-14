@@ -81,13 +81,13 @@ public class FOMText
   private void init(Type type) {
     this.type = type;
     if (Type.TEXT.equals(type))
-      _setAttributeValue(TYPE, "text");
+      setAttributeValue(TYPE, "text");
     else if (Type.HTML.equals(type)) 
-      _setAttributeValue(TYPE, "html");
+      setAttributeValue(TYPE, "html");
     else if (Type.XHTML.equals(type))
-      _setAttributeValue(TYPE, "xhtml");
+      setAttributeValue(TYPE, "xhtml");
     else 
-      _removeAttribute(TYPE);
+      removeAttribute(TYPE);
   }
   
   public final Type getTextType() {

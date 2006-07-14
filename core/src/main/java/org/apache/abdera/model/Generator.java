@@ -65,14 +65,6 @@ public interface Generator
    *  MUST be an IRI reference [RFC3987].  When dereferenced, the resulting
    *  URI (mapped from an IRI, if necessary) SHOULD produce a
    *  representation that is relevant to that agent.
-   */
-  void setUri(URI uri);
-  
-  /**
-   *  The atom:generator element MAY have a "uri" attribute whose value
-   *  MUST be an IRI reference [RFC3987].  When dereferenced, the resulting
-   *  URI (mapped from an IRI, if necessary) SHOULD produce a
-   *  representation that is relevant to that agent.
    * @throws URISyntaxException 
    */
   void setUri(String uri) throws URISyntaxException;

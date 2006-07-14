@@ -45,16 +45,6 @@ public class FOMGenerator
   public FOMGenerator(
     String value, 
     String version, 
-    URI uri) {
-      this();
-      setText(value);
-      setVersion(version);
-      setUri(uri);
-  }
-
-  public FOMGenerator(
-    String value, 
-    String version, 
     String uri) 
       throws URISyntaxException {
     this();
@@ -103,28 +93,30 @@ public class FOMGenerator
   }
   
   public URI getUri() throws URISyntaxException {
-    String value = _getAttributeValue(AURI);
+    String value = getAttributeValue(AURI);
     return (value != null) ? new URI(value) : null;
 }
 
   public URI getResolvedUri() throws URISyntaxException {
     return _resolve(getResolvedBaseUri(), getUri());
   }
-  
-  public void setUri(URI uri) {
-    _setAttributeValue(AURI, (uri != null) ? uri.toString() : null);
-  }
 
   public void setUri(String uri) throws URISyntaxException {
-    setUri((uri != null) ? new URI(uri) : null);
+    if (uri != null)
+      setAttributeValue(AURI, (new URI(uri)).toString());
+    else 
+      removeAttribute(AURI);
   }
   
   public String getVersion() {
-    return _getAttributeValue(VERSION);
+    return getAttributeValue(VERSION);
   }
 
   public void setVersion(String version) {
-    _setAttributeValue(VERSION, version);
+    if (version != null)
+      setAttributeValue(VERSION, version);
+    else
+      removeAttribute(VERSION);
   }
 
 }

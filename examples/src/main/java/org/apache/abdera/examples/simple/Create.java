@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.examples.simple;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.abdera.factory.Factory;
@@ -60,7 +59,7 @@ public class Create {
     entry3.setTitle("<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Test</p></div>", Text.Type.XHTML);
     entry3.addLink("/2003/12/13/atom03/2");
     entry3.setId("HTTP://www.Example.org/foo/../bar", true); // normalizes the id to the value http://www.example.org/bar
-    entry3.setUpdated(Calendar.getInstance());
+    entry3.setUpdated(new Date());
     entry3.setSummaryAsHtml("<p><a href=\"foo\">Test</a></p>").setBaseUri("http://example.org/site/");
     entry3.setSource(feed.getAsSource());
     

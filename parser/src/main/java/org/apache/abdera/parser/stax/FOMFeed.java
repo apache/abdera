@@ -88,10 +88,6 @@ public class FOMFeed
     return _getChildrenAsSet(ENTRY);
   }
 
-  public void setEntries(List<Entry> entries) {
-    _setChildrenFromSet(ENTRY, entries);
-  }
-
   public void addEntry(Entry entry) {
     addChild((OMElement)entry);
   }

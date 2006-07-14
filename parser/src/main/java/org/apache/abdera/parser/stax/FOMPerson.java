@@ -54,17 +54,6 @@ public class FOMPerson
     QName qname, 
     String name, 
     String email, 
-    URI uri) {
-      this(qname);
-      setName(name);
-      setEmail(email);
-      setUri(uri);
-  }
-
-  public FOMPerson(
-    QName qname, 
-    String name, 
-    String email, 
     String uri) 
       throws URISyntaxException {
     this(qname);
@@ -109,7 +98,7 @@ public class FOMPerson
     if (element != null)
       _setChild(NAME, (OMElement)element);
     else 
-      _removeElement(NAME, false);
+      _removeChildren(NAME, false);
   }
 
   public Element setName(String name) {
@@ -120,7 +109,7 @@ public class FOMPerson
       _setChild(NAME, (OMElement)el);
       return el;
     } else {
-      _removeElement(NAME, false);
+      _removeChildren(NAME, false);
       return null;
     }
   }
@@ -138,7 +127,7 @@ public class FOMPerson
     if (element != null)
       _setChild(EMAIL, (OMElement)element);
     else 
-      _removeElement(EMAIL, false);
+      _removeChildren(EMAIL, false);
   }
 
   public Element setEmail(String email) {
@@ -149,7 +138,7 @@ public class FOMPerson
       _setChild(EMAIL, (OMElement)el);
       return el;
     } else {
-      _removeElement(EMAIL, false);
+      _removeChildren(EMAIL, false);
       return null;
     }
   }
@@ -167,22 +156,9 @@ public class FOMPerson
     if (uri != null) 
       _setChild(URI, (OMElement)uri);
     else 
-      _removeElement(URI, false);
+      _removeChildren(URI, false);
   }
 
-  public IRI setUri(URI uri) {
-    if (uri != null) {
-      FOMFactory fomfactory = (FOMFactory) factory;
-      IRI el = fomfactory.newUri(null);
-      el.setValue(uri);
-      _setChild(URI, (OMElement)el);
-      return el;
-    } else {
-      _removeElement(URI, false);
-      return null;
-    }
-  }
-  
   public IRI setUri(String uri) throws URISyntaxException {
     if (uri != null) {
       FOMFactory fomfactory = (FOMFactory) factory;
@@ -191,7 +167,7 @@ public class FOMPerson
       _setChild(URI, (OMElement)el);
       return el;
     } else {
-      _removeElement(URI, false);
+      _removeChildren(URI, false);
       return null;
     }
   }

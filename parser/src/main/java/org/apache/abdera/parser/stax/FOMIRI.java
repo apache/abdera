@@ -42,11 +42,6 @@ public class FOMIRI
     super(qname, null, (OMFactory)Factory.INSTANCE);
   }
   
-  public FOMIRI(QName qname, URI value) {
-    this(qname);
-    setValue(value);
-  }
-
   public FOMIRI(QName qname, String value) throws URISyntaxException {
     this(qname);
     setValue(value);
@@ -82,29 +77,22 @@ public class FOMIRI
     return _getUriValue(getText());
   }
 
-  public void setValue(URI iri) {
+  public void setValue(String iri) throws URISyntaxException {
     if (iri != null)
-      setText(_getStringValue(iri));
+      setText((new URI(iri)).toString());
     else
       _removeAllChildren();
-  }
 
-  public void setValue(String iri) throws URISyntaxException {
-    setValue((iri != null) ? new URI(iri) : null);
   }
   
   public java.net.URI getResolvedValue() throws URISyntaxException {
     return _resolve(getResolvedBaseUri(), getValue());
   }
 
-  public void setNormalizedValue(URI uri) throws URISyntaxException {
+  public void setNormalizedValue(String uri) throws URISyntaxException {
     if (uri != null)
       setValue(URIHelper.normalize(uri));
     else 
-      setValue((URI)null);
-  }
-
-  public void setNormalizedValue(String id) throws URISyntaxException {
-    setNormalizedValue((id != null)?new URI(id):null);
+      setValue(null);
   }
 }

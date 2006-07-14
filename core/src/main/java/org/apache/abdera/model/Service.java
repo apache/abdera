@@ -53,11 +53,6 @@ public interface Service
   Workspace getWorkspace(String title);
   
   /**
-   * Set the complete set of workspaces
-   */
-  void setWorkspaces(List<Workspace> workspaces);
-  
-  /**
    * Add an individual workspace
    */
   void addWorkspace(Workspace workspace);

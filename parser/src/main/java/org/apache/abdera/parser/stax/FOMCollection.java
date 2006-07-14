@@ -46,16 +46,6 @@ public class FOMCollection
   
   public FOMCollection(
     String title, 
-    URI href, 
-    String[] accepts) {
-      this();
-      setTitle(title);
-      setHref(href);
-      setAccept(accepts);
-  }
-  
-  public FOMCollection(
-    String title, 
     String href, 
     String[] accepts) 
       throws URISyntaxException {
@@ -103,33 +93,29 @@ public class FOMCollection
   }
   
   public String getTitle() {
-    return _getAttributeValue(ATITLE);
+    return getAttributeValue(ATITLE);
   }
 
   public void setTitle(String title) {
     if (title != null)
-      _setAttributeValue(ATITLE, title);
+      setAttributeValue(ATITLE, title);
     else 
-      _removeAttribute(ATITLE);
+      removeAttribute(ATITLE);
   }
 
   public URI getHref() throws URISyntaxException {
-    return _getUriValue(_getAttributeValue(HREF));
+    return _getUriValue(getAttributeValue(HREF));
   }
 
   public URI getResolvedHref() throws URISyntaxException {
     return _resolve(getResolvedBaseUri(), getHref());
   }
   
-  public void setHref(URI href) {
-    if (href != null)
-      _setAttributeValue(HREF, _getStringValue(href));
-    else 
-      _removeAttribute(HREF);
-  }
-
   public void setHref(String href) throws URISyntaxException {
-    setHref((href != null) ? new URI(href) : null);
+    if (href != null)
+      setAttributeValue(HREF, (new URI(href).toString()));
+    else 
+      removeAttribute(HREF);
   }
   
   public String[] getAccept(){
@@ -150,7 +136,7 @@ public class FOMCollection
       }
       _setElementValue(ACCEPT, value);
     } else {
-      _removeElement(ACCEPT, false);
+      _removeChildren(ACCEPT, false);
     }
   }
 

@@ -102,11 +102,6 @@ public interface Feed
   List<Entry> getEntries();
   
   /**
-   * Sets the complete set of entries for this feed
-   */
-  void setEntries(List<Entry> entries);
-  
-  /**
    * Adds a new Entry to the <i>end</i> of the Feeds collection of entries
    */
   void addEntry(Entry entry);

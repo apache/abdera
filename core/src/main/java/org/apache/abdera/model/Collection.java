@@ -71,12 +71,6 @@ public interface Collection
   /**
    * APP Draft-08: The app:collection element MUST contain a "href" 
    * attribute, whose value gives the IRI of the collection.
-   */
-  void setHref(URI href);
-  
-  /**
-   * APP Draft-08: The app:collection element MUST contain a "href" 
-   * attribute, whose value gives the IRI of the collection.
    * @throws URISyntaxException 
    */
   void setHref(String href) throws URISyntaxException;

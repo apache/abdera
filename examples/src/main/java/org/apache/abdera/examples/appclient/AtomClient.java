@@ -564,7 +564,7 @@ System.out.println(method.getResponseBodyAsString());
           "charset"));
     }
     Document<T> doc = parser.parse(in, uri, parserOptions);
-    doc.setContentType(mimeType);
+    doc.setContentType(mimeType.toString());
     doc.setLastModified(_getLastModified(method));
     return doc;
   }

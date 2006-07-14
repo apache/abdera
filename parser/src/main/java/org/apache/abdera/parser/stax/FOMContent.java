@@ -22,6 +22,7 @@ import java.net.URISyntaxException;
 
 import javax.activation.DataHandler;
 import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
 import javax.activation.URLDataSource;
 import javax.xml.namespace.QName;
 
@@ -100,13 +101,13 @@ public class FOMContent
   private void init(Type type) {
     this.type = type;
     if (Type.TEXT.equals(type))
-      _setAttributeValue(TYPE, "text");
+      setAttributeValue(TYPE, "text");
     else if (Type.HTML.equals(type)) 
-      _setAttributeValue(TYPE, "html");
+      setAttributeValue(TYPE, "html");
     else if (Type.XHTML.equals(type))
-      _setAttributeValue(TYPE, "xhtml");
+      setAttributeValue(TYPE, "xhtml");
     else {
-      _removeAttribute(TYPE);
+      removeAttribute(TYPE);
     }
   }
   
@@ -139,7 +140,7 @@ public class FOMContent
 
   public MimeType getMimeType() {
     MimeType type = null;
-    String mimeType = _getAttributeValue(TYPE);
+    String mimeType = getAttributeValue(TYPE);
     if (mimeType != null) {
       try {
         type = new MimeType(mimeType);
@@ -148,34 +149,27 @@ public class FOMContent
     return type;
   }
   
-  public void setMimeType(MimeType type) {
+  public void setMimeType(String type) throws MimeTypeParseException {
     if (type != null)
-      _setAttributeValue(TYPE, type.toString());
-    else 
-      _removeAttribute(TYPE);
-  }
-
-  public void setMimeType(String type) {
-    _setAttributeValue(TYPE, type);
+      setAttributeValue(TYPE, (new MimeType(type)).toString());
+    else
+      removeAttribute(TYPE);
   }
 
   public URI getSrc() throws URISyntaxException {
-    return _getUriValue(_getAttributeValue(SRC));
+    return _getUriValue(getAttributeValue(SRC));
   }
 
   public URI getResolvedSrc() throws URISyntaxException {
     return _resolve(getResolvedBaseUri(), getSrc());
   }
   
-  public void setSrc(URI src) {
-    if (src != null)
-      _setAttributeValue(SRC, _getStringValue(src));
-    else 
-      _removeAttribute(SRC);
-  }
-  
   public void setSrc(String src) throws URISyntaxException {
-    setSrc((src != null) ? new URI(src) : null);
+    if (src != null)
+      setAttributeValue(SRC, (new URI(src)).toString());
+    else 
+      removeAttribute(SRC);
+
   }
 
   public DataHandler getDataHandler() {
@@ -201,7 +195,7 @@ public class FOMContent
     if (!Type.MEDIA.equals(type)) throw new IllegalArgumentException();
     if (dataHandler.getContentType() != null) {
       try {
-        setMimeType(new MimeType(dataHandler.getContentType()));
+        setMimeType(dataHandler.getContentType());
       } catch (Exception e) {}
     }
     _removeAllChildren();
@@ -230,7 +224,7 @@ public class FOMContent
   }
   
   public void setValue(String value) {
-    if (value != null) setSrc((URI)null);
+    if (value != null) removeAttribute(SRC);
     if (value != null) {
       if (Type.TEXT.equals(type)) {
         _removeAllChildren();
@@ -255,9 +249,15 @@ public class FOMContent
         Element element = _parse(value, baseUri);
         if (element != null)
           setValueElement(element);
+        try {
+          setMimeType("application/xml");
+        } catch (Exception e) {}
       } else if (Type.MEDIA.equals(type)) {
         _removeAllChildren();
         super.setText(value);
+        try {
+          setMimeType("text/plain");
+        } catch (Exception e) {}
       }
     } else {
       _removeAllChildren();

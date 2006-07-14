@@ -92,7 +92,7 @@ public class FOMInReplyTo
   }
 
   public void setRef(URI ref) {
-    this._setAttributeValue(ThreadConstants.THRREF, ref.toString());
+    this.setAttributeValue(ThreadConstants.THRREF, ref.toString());
   }
   
   public void setRef(String ref) throws URISyntaxException {
@@ -108,7 +108,7 @@ public class FOMInReplyTo
   }
 
   public void setHref(URI ref) {
-    this._setAttributeValue(HREF, ref.toString());
+    this.setAttributeValue(HREF, ref.toString());
   }
 
   public void setHref(String ref) throws URISyntaxException {
@@ -117,7 +117,7 @@ public class FOMInReplyTo
   
   public MimeType getMimeType() throws MimeTypeParseException {
     MimeType type = null;
-    String value = _getAttributeValue(TYPE);
+    String value = getAttributeValue(TYPE);
     if (value != null) {
       type = new MimeType(value);
     }
@@ -125,7 +125,7 @@ public class FOMInReplyTo
   }
 
   public void setMimeType(MimeType mimeType) {
-    this._setAttributeValue(TYPE, mimeType.toString());
+    this.setAttributeValue(TYPE, mimeType.toString());
   }
   
   public void setMimeType(String mimeType) throws MimeTypeParseException {
@@ -141,7 +141,7 @@ public class FOMInReplyTo
   }
 
   public void setSource(URI source) {
-    this._setAttributeValue(ThreadConstants.THRSOURCE, source.toString());
+    this.setAttributeValue(ThreadConstants.THRSOURCE, source.toString());
   }
   
   public void setSource(String source) throws URISyntaxException {

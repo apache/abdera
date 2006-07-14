@@ -49,16 +49,6 @@ public class FOMCategory
   
   public FOMCategory(
     String term, 
-    URI scheme, 
-    String label) {
-      this();
-      setTerm(term);
-      setScheme(scheme);
-      setLabel(label);
-  }
-  
-  public FOMCategory(
-    String term, 
     String scheme, 
     String label) 
       throws URISyntaxException {
@@ -106,32 +96,37 @@ public class FOMCategory
   }
   
   public String getTerm() {
-    return _getAttributeValue(TERM);
+    return getAttributeValue(TERM);
   }
 
   public void setTerm(String term) {
-    _setAttributeValue(TERM, term);
+    if (term != null)
+      setAttributeValue(TERM, term);
+    else
+      removeAttribute(TERM);
   }
 
   public URI getScheme() throws URISyntaxException {
-    String value = _getAttributeValue(SCHEME);
+    String value = getAttributeValue(SCHEME);
     return (value != null) ? new URI(value) : null;
   }
 
-  public void setScheme(URI scheme) {
-    _setAttributeValue(SCHEME, (scheme != null) ? scheme.toString() : null);
-  }
-
   public void setScheme(String scheme) throws URISyntaxException {
-    setScheme((scheme != null) ? new URI(scheme) : null);
+    if (scheme != null)
+      setAttributeValue(SCHEME, (scheme != null) ? new URI(scheme).toString() : null);
+    else 
+      removeAttribute(SCHEME);
   }
   
   public String getLabel() {
-    return _getAttributeValue(LABEL);
+    return getAttributeValue(LABEL);
   }
 
   public void setLabel(String label) {
-    _setAttributeValue(LABEL, label);
+    if (label != null)
+      setAttributeValue(LABEL, label);
+    else
+      removeAttribute(LABEL);
   }
 
   public String getValue() {

@@ -92,16 +92,22 @@ Working directory: ${work}
         </and>
       </not>
     </condition>
-    <condition property="do.download.security">
-      <not>
-        <and>
-          <available file="${dependencies}/${xmlsecurity.jar}" />
-        </and>
-      </not>
-    </condition>
     <condition property="do.security">
       <istrue value="${env.ABDERA_XMLSECURITY}"/>
     </condition>
+    <condition property="do.download.security">
+      <and>
+        <istrue value="${do.security}" />
+        <not>
+          <and>
+            <available file="${dependencies}/${xmlsecurity.jar}" />
+          </and>
+        </not>
+      </and>
+    </condition>
+    
+    <echo>Building Security? ${do.security}</echo>
+    
     <antcall target="download"/>
     <antcall target="downloadsecurity" />
   </target>
@@ -206,6 +212,9 @@ Working directory: ${work}
     <delete dir="${work}" />
     <delete dir="${test}" />
     <delete dir="${dist}" />
+    <delete> 
+      <fileset dir="${basedir}" includes="*.zip" />
+    </delete>
   </target>
   
   <target name="dist" depends="clean,build,test,docs">
@@ -227,16 +236,44 @@ Working directory: ${work}
     <jar destfile="${security.jar}" basedir="${security.work}" />
   </target>
   
-  <target name="zip" depends="dist"> 
+  <target name="zip" depends="retro"> 
     <zip destfile="${basedir}/${ant.project.name}.${version}.zip">
       <fileset dir="${dist}">
         <include name="**/*.jar" />
+        <include name="**/legal/*" />
+        <exclude name="**/*.retro.jar" />
+        <exclude name="**/retroweaver-rt-1.2.3.jar" />
       </fileset>
       <fileset dir="${docs}" includes="**/*" />
+      <fileset dir="${basedir}">
+        <include name="LICENSE" />
+        <include name="NOTICE" />
+        <include name="README" />
+      </fileset>
+    </zip>
+      <zip destfile="${basedir}/${ant.project.name}.${version}.jdk142.zip">
+        <fileset dir="${dist}">
+          <include name="**/*.jar" />
+          <include name="**/legal/*" />
+          <exclude name="**/*.${version}.jar" />
+        </fileset>
+        <fileset dir="${docs}" includes="**/*" />
+        <fileset dir="${basedir}">
+          <include name="LICENSE" />
+          <include name="NOTICE" />
+          <include name="README" />
+        </fileset>
+      </zip>
+    <zip destfile="${basedir}/${ant.project.name}.${version}.src.zip">
+      <fileset dir="${basedir}">
+        <exclude name="dist/**/*" />
+        <exclude name="**/*.zip" />
+        <exclude name="**/.project" />
+      </fileset>
     </zip>
   </target>
 
-  <target name="downloadsecurity" if="do.download.security,do.security">
+  <target name="downloadsecurity" if="do.download.security">
     <get src="${xmlsecurity.dir}/${xmlsecurity.jar}"
          dest="${dependencies}/${xmlsecurity.jar}"
          usetimestamp="true" />

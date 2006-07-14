@@ -108,7 +108,7 @@ public class JSONWriter implements NamedWriter {
     for(Link link : links) {
       JSONObject jslink = new JSONObject();
       jslink.put("href", link.getHref().toString());
-      jslink.put("rel", link.getRel().toString());
+      jslink.put("rel", link.getRel());
       jslinks.put(jslink);
     }
     jsentry.put("links", jslinks);
@@ -229,7 +229,7 @@ public class JSONWriter implements NamedWriter {
     for(Link link : links) {
       JSONObject jslink = new JSONObject();
       jslink.put("href", link.getHref().toString());
-      jslink.put("rel", link.getRel().toString());
+      jslink.put("rel", link.getRel());
       jslinks.put(jslink);
     }        
     jsfeed.put("links", jslinks);

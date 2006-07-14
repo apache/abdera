@@ -50,12 +50,29 @@
   <property environment="env" />
       
   <property name="dependencies" value="${basedir}/dependencies" />
+  <property name="dependencies.work" value="${dependencies}/work" />
+  <property name="dependencies.src" value="${dependencies}/src" />
+  <property name="dependencies.src.java"
+            value="${dependencies.src}/main/java" />
+
+  <property name="json.jar" value="${dependencies}/json.jar" />
+
   <property file="${dependencies}/deps.properties" />
   
   <path id="jar.dependencies">
     <fileset dir="${dependencies}" includes="**/*.jar" />
   </path>
-  
+ 
+  <target name="compile.dependencies">
+    <mkdir dir="${dependencies.work}" />
+
+    <javac srcdir="${dependencies.src.java}" destdir="${dependencies.work}" />
+
+    <jar destfile="${json.jar}"
+         basedir="${dependencies.work}"
+         includes="org/json/*.class" />
+  </target>
+ 
   <target name="dependencies">
     <path id="">
       <fileset dir="dependencies" includes="*.jar" />
@@ -140,7 +157,7 @@ Working directory: ${work}
     </copy>
   </target>
   
-  <target name="compile.extensions" depends="init, compile.core, compile.parser">
+  <target name="compile.extensions" depends="init, compile.core, compile.parser, compile.dependencies">
     <mkdir dir="${extensions.work}" />
     <javac srcdir="${extensions.src}"
            destdir="${extensions.work}"
@@ -212,6 +229,8 @@ Working directory: ${work}
     <delete dir="${work}" />
     <delete dir="${test}" />
     <delete dir="${dist}" />
+    <delete dir="${dependencies.work}" />
+    <delete file="${json.jar}" />
     <delete> 
       <fileset dir="${basedir}" includes="*.zip" />
     </delete>

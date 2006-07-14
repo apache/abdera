@@ -102,9 +102,6 @@ Working directory: ${work}
     <condition property="do.security">
       <istrue value="${env.ABDERA_XMLSECURITY}"/>
     </condition>
-    <condition property="do.onejar">
-      <istrue value="${env.ABDERA_ONEJAR}"/>
-    </condition>
     <antcall target="download"/>
     <antcall target="downloadsecurity" />
   </target>

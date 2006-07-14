@@ -14,3 +14,9 @@ informally known as the "Abdera CLA".
 
 This software's test suite contains data files derived from the
 Universal Feed Parser, Copyright (c) 2002-2005, Mark Pilgrim.
+
+This software's extensions module contains a JSON writer for Atom XML
+that utilizes a JSON parser, Copyright (c) 2002, json.org. The code was 
+licensed using Apache License by the author Douglas Crockford and made 
+available at http://json.org/java/apache.zip We have included portions 
+of the code in the extensions module.

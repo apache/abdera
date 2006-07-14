@@ -49,7 +49,7 @@ import java.util.List;
  * <p>
  *   Note that at this time, ExtensionFactories are specific to the parser 
  *   implementation used.  That is, if you're using the default StAX-based 
- *   FOMParser and FOMFactory implementation, your ExtensionFactores will 
+ *   FOMParser and FOMFactory implementation, your ExtensionFactories will 
  *   need to also implement FOMExtensionFactory.
  * </p>
  */

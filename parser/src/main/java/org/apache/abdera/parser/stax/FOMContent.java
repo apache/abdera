@@ -250,13 +250,15 @@ public class FOMContent
         if (element != null)
           setValueElement(element);
         try {
-          setMimeType("application/xml");
+          if (getMimeType() == null)
+            setMimeType("application/xml");
         } catch (Exception e) {}
       } else if (Type.MEDIA.equals(type)) {
         _removeAllChildren();
         super.setText(value);
         try {
-          setMimeType("text/plain");
+          if (getMimeType() == null)
+            setMimeType("text/plain");
         } catch (Exception e) {}
       }
     } else {

@@ -209,9 +209,11 @@ public class FOMContent
     } else if (Type.HTML.equals(type)) {
       val = getText();
     } else if (Type.XHTML.equals(type)) {
-      val = ((FOMDiv)this.getFirstChildWithName(Constants.DIV)).getInternalValue();
+      FOMDiv div = (FOMDiv)this.getFirstChildWithName(Constants.DIV);
+      if (div != null) val = div.getInternalValue();
     } else if (Type.XML.equals(type)) {
-      val = this.getFirstElement().toString();
+      OMElement el = this.getFirstElement();
+      if (el != null) val = el.toString();
     } else if (Type.MEDIA.equals(type)) {
       val = getText();
     }

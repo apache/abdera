@@ -29,7 +29,7 @@ public abstract class AbstractParserOptions
   protected String charset = null;
   protected ParseFilter parseFilter = null;
   protected TextFilter textFilter = null;
-  protected boolean detect = true;
+  protected boolean detect = false;
   protected boolean ignoredtd = false;
   protected boolean ignorecomments = false;
   protected boolean ignorepi = false;

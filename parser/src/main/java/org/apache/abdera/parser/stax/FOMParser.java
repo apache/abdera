@@ -52,8 +52,7 @@ public class FOMParser
   
   private <T extends Element>Document<T> getDocument(
     FOMBuilder builder, 
-    URI base, 
-    ParserOptions options) {
+    URI base) {
       Document<T> document = builder.getFomDocument();
       try {
         document.setBaseUri(base.toString());
@@ -116,7 +115,7 @@ public class FOMParser
       XMLStreamReader xmlreader = 
         XMLInputFactory.newInstance().createXMLStreamReader(in);
       FOMBuilder builder = new FOMBuilder(factory, xmlreader, options);
-      document = getDocument(builder, base, options);
+      document = getDocument(builder, base);
       setCharset(options, xmlreader.getCharacterEncodingScheme(), document);
     } catch (Exception e) {
       if (!(e instanceof ParseException))

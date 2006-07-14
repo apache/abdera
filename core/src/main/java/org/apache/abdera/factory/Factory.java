@@ -50,7 +50,9 @@ import org.apache.abdera.util.ServiceUtil;
  * implementation, which will be automatically selected based on the
  * Abdera configuration options.
  * 
- * <code>Factory factory = Factory.INSTANCE;</code>
+ * <p>
+ *   <code>Factory factory = Factory.INSTANCE;</code>
+ * </p>
  */
 public interface Factory {
 

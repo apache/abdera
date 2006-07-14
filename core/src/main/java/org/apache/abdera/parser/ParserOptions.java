@@ -78,4 +78,13 @@ public interface ParserOptions {
   boolean getAutodetectCharset();
   
   void setAutodetectCharset(boolean detect);
+  
+  void setIgnoreDoctype(boolean ignore);
+  void setIgnoreComments(boolean ignore);
+  void setIgnoreWhitespace(boolean ignore);
+  void setIgnoreProcessingInstructions(boolean ignore);
+  boolean getIgnoreDoctype();
+  boolean getIgnoreComments();
+  boolean getIgnoreWhitespace();
+  boolean getIgnoreProcessingInstructions();
 }

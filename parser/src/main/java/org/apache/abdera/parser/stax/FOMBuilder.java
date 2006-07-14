@@ -212,6 +212,7 @@ public class FOMBuilder
   
   private OMNode applyTextFilter(int type) {
     if (parserOptions != null) { 
+      if (parser.isWhiteSpace() && parserOptions.getIgnoreWhitespace()) return createOMText("",type);
       TextFilter filter = parserOptions.getTextFilter();
       if (filter != null) {
         String value = parser.getText();
@@ -291,16 +292,20 @@ public class FOMBuilder
                 ((OMContainerEx) this.document).setComplete(true);
                 break;
             case XMLStreamConstants.SPACE:
-                lastNode = createOMText(XMLStreamConstants.SPACE);
+                if (!parserOptions.getIgnoreWhitespace())
+                  lastNode = createOMText(XMLStreamConstants.SPACE);
                 break;
             case XMLStreamConstants.COMMENT:
-                createComment();
+                if (!parserOptions.getIgnoreComments())
+                  createComment();
                 break;
             case XMLStreamConstants.DTD:
-                createDTD();
+                if (!parserOptions.getIgnoreDoctype())
+                  createDTD();
                 break;
             case XMLStreamConstants.PROCESSING_INSTRUCTION:
-                createPI();
+                if (!parserOptions.getIgnoreProcessingInstructions())
+                  createPI();
                 break;
             case XMLStreamConstants.ENTITY_REFERENCE:
                 lastNode = createOMText(XMLStreamConstants.ENTITY_REFERENCE);

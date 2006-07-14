@@ -25,25 +25,33 @@ import org.apache.abdera.model.Element;
 import java.util.List;
 
 /**
- * Extension Factories are used to provide a means of dynamically resolving
- * builders for namespaced extension elements
+ * <p>
+ *   Extension Factories are used to provide a means of dynamically resolving
+ *   builders for namespaced extension elements
+ * </p>
+ *
+ * <p>There are four ways of supporting extension elements.</p>
  * 
- * There are four ways of supporting extension elements.
+ * <ol>
+ *   <li>Implement your own Factory (hard)</li>
+ *   <li>Subclass the default Axiom-based Factory (also somewhat difficult)</li>
+ *   <li>Implement and register an ExtensionFactory (wonderfully simple)</li>
+ *   <li>Use the Feed Object Model's dynamic support for extensions (also very simple)</li>
+ * </ol>
  * 
- * 1. Implement your own Factory (hard)
- * 2. Subclass the default Axiom-based Factory (also somewhat difficult)
- * 3. Implement and register an ExtensionFactory (wonderfully simple)
- * 4. Use the Feed Object Model's dynamic support for extensions (also very simple)
+ * <p>
+ *   Registering an Extension Factory requires generally nothing more than 
+ *   implementing ExtensionFactory and then creating the file 
+ *   META-INF/services/org.apache.abdera.factory.ExtensionFactory and listing
+ *   the class names of each ExtensionFactory you wish to register.
+ * </p>
  * 
- * Registering an Extension Factory requires generally nothing more than 
- * implementing ExtensionFactory and then creating the file 
- * META-INF/services/org.apache.abdera.factory.ExtensionFactory and listing
- * the class names of each ExtensionFactory you wish to register.
- * 
- * Note that at this time, ExtensionFactories are specific to the parser 
- * implementation used.  That is, if you're using the default StAX-based 
- * FOMParser and FOMFactory implementation, your ExtensionFactores will 
- * need to also implement FOMExtensionFactory.
+ * <p>
+ *   Note that at this time, ExtensionFactories are specific to the parser 
+ *   implementation used.  That is, if you're using the default StAX-based 
+ *   FOMParser and FOMFactory implementation, your ExtensionFactores will 
+ *   need to also implement FOMExtensionFactory.
+ * </p>
  */
 public interface ExtensionFactory {
 

@@ -18,7 +18,6 @@
 package org.apache.abdera.model;
 
 /**
-/**
  * <p>Represents an Atom Text Contruct.</p>
  * 
  * <p>Atom allows three kinds of Text constructs:</p>

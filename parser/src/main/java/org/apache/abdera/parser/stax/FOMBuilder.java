@@ -63,6 +63,7 @@ public class FOMBuilder
     XMLStreamReader parser, 
     ParserOptions parserOptions) {
       super(factory, parser);
+      document = (OMDocument) factory.newDocument();
       this.parserOptions = parserOptions;
       fomfactory = factory;
   }
@@ -71,7 +72,7 @@ public class FOMBuilder
     FOMFactory factory, 
     XMLStreamReader parser) {
       super(factory, parser);
-      document = factory.createOMDocument(this);
+      document = (OMDocument) factory.newDocument();
       fomfactory = factory;
   }
   
@@ -81,6 +82,7 @@ public class FOMBuilder
       throws XMLStreamException, 
              FileNotFoundException {
     super(filePath);
+    document = (OMDocument) Factory.INSTANCE.newDocument();
     this.parserOptions = parserOptions;
     fomfactory = getFomFactory();
     setOMBuilderFactory(fomfactory);
@@ -93,6 +95,7 @@ public class FOMBuilder
       throws XMLStreamException, 
              FileNotFoundException {
     super(filePath);
+    document = (OMDocument) factory.newDocument();
     this.parserOptions = parserOptions;
     fomfactory = factory;
     setOMBuilderFactory(fomfactory);
@@ -103,6 +106,7 @@ public class FOMBuilder
     ParserOptions parserOptions) 
       throws XMLStreamException {
     super(inStream);
+    document = (OMDocument) Factory.INSTANCE.newDocument();
     this.parserOptions = parserOptions;
     fomfactory = getFomFactory();
     setOMBuilderFactory(fomfactory);
@@ -114,6 +118,7 @@ public class FOMBuilder
     ParserOptions parserOptions) 
       throws XMLStreamException {
     super(inStream);
+    document = (OMDocument) factory.newDocument();
     this.parserOptions = parserOptions;
     fomfactory = factory;
     setOMBuilderFactory(fomfactory);
@@ -123,6 +128,7 @@ public class FOMBuilder
     XMLStreamReader parser, 
     ParserOptions parserOptions) {
       super(parser);
+      document = (OMDocument) Factory.INSTANCE.newDocument();
       this.parserOptions = parserOptions;
       fomfactory = getFomFactory();
       setOMBuilderFactory(fomfactory);
@@ -133,6 +139,7 @@ public class FOMBuilder
     FOMFactory factory, 
     ParserOptions parserOptions) {
       super(factory, parser);
+      document = (OMDocument) factory.newDocument();
       this.parserOptions = parserOptions;
       fomfactory = factory;
   }
@@ -322,7 +329,7 @@ public class FOMBuilder
   }
   
   private void initDocument(String name) {
-    fomDocument = fomfactory.newDocument();
+    fomDocument = (Document) document;
     String enc = parser.getCharacterEncodingScheme();
     getDocument().setCharsetEncoding(enc != null ? enc : "utf-8");
     getDocument().setXMLVersion(

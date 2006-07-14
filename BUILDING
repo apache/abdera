@@ -24,6 +24,8 @@ To build with ant (http://ant.apache.org/):
   # delete downloaded dependencies
   ant -f build/build.xml clean-downloads
 
+Note: To build with XML Security support, set the ABDERA_XMLSECURITY environment
+variable to "yes" prior to running the ant build
 
 To build with Eclipse (http://www.eclipse.org).  
 

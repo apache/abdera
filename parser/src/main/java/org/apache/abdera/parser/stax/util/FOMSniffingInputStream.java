@@ -29,13 +29,13 @@ import javax.xml.stream.XMLStreamReader;
  * Will attempt to autodetect the character encoding from the stream
  * This will preserve the BOM if it exists
  */
-public class SniffingInputStream 
+public class FOMSniffingInputStream 
   extends FilterInputStream {
 
   private String encoding = null;
   private boolean bomset = false;
   
-  public SniffingInputStream(InputStream in) {
+  public FOMSniffingInputStream(InputStream in) {
     super(new BufferedInputStream(in));
     try {
       encoding = detectEncoding();

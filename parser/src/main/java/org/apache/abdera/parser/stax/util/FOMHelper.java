@@ -29,13 +29,13 @@ public class FOMHelper implements Constants {
 
   @SuppressWarnings("unchecked")
   public static List<Category> getCategories(Element element, String scheme) {
-    Iterator i = new ElementIterator(element, Category.class, SCHEME, scheme, null);
+    Iterator i = new FOMElementIterator(element, Category.class, SCHEME, scheme, null);
     return new FOMList<Category>(i);
   }
   
   @SuppressWarnings("unchecked")
   public static List<Link> getLinks(Element element, String rel) {
-    Iterator i = new LinkIterator(element, Link.class, REL, rel, Link.REL_ALTERNATE);
+    Iterator i = new FOMLinkIterator(element, Link.class, REL, rel, Link.REL_ALTERNATE);
     return new FOMList<Link>(i);
   }
 }

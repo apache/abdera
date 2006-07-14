@@ -31,7 +31,7 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
-import org.apache.abdera.parser.stax.util.SniffingInputStream;
+import org.apache.abdera.parser.stax.util.FOMSniffingInputStream;
 import org.apache.abdera.util.AbstractParser;
 //import org.apache.abdera.util.SniffingInputStream;
 import org.apache.axiom.om.OMDocument;
@@ -80,10 +80,10 @@ public class FOMParser
       String charset = (options != null) ? options.getCharset() : null;
       boolean detect = (options != null) ? options.getAutodetectCharset() : true;
       if (charset == null && detect) {
-        SniffingInputStream sin = 
-          (in instanceof SniffingInputStream) ? 
-            (SniffingInputStream)in : 
-            new SniffingInputStream(in);
+        FOMSniffingInputStream sin = 
+          (in instanceof FOMSniffingInputStream) ? 
+            (FOMSniffingInputStream)in : 
+            new FOMSniffingInputStream(in);
         charset = sin.getEncoding();
         in = sin;
       }

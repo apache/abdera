@@ -23,7 +23,7 @@ import org.apache.abdera.model.Element;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.impl.traverse.OMChildrenIterator;
 
-public class ElementIterator extends OMChildrenIterator {
+public class FOMElementIterator extends OMChildrenIterator {
 
   /**
    * Field givenQName
@@ -49,12 +49,12 @@ public class ElementIterator extends OMChildrenIterator {
    * @param currentChild
    * @param givenQName
    */
-  public ElementIterator(Element parent, Class _class) {
+  public FOMElementIterator(Element parent, Class _class) {
     super(((OMElement)parent).getFirstOMChild());
     this._class = _class;
   }
   
-  public ElementIterator(Element parent, Class _class, QName attribute, String value, String defaultValue) {
+  public FOMElementIterator(Element parent, Class _class, QName attribute, String value, String defaultValue) {
     this(parent, _class);
     this.attribute = attribute;
     this.value = value;

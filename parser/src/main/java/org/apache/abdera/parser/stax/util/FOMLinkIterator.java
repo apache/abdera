@@ -23,13 +23,13 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.parser.stax.FOMLink;
 
-public class LinkIterator extends ElementIterator {
+public class FOMLinkIterator extends FOMElementIterator {
 
-  public LinkIterator(Element parent, Class _class, QName attribute, String value, String defaultValue) {
+  public FOMLinkIterator(Element parent, Class _class, QName attribute, String value, String defaultValue) {
     super(parent, _class, attribute, (value != null) ? FOMLink.getRelEquiv(value) : Link.REL_ALTERNATE, defaultValue);
   }
 
-  public LinkIterator(Element parent, Class _class) {
+  public FOMLinkIterator(Element parent, Class _class) {
     super(parent, _class);
   }
 

@@ -32,6 +32,7 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
+import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
 
@@ -123,6 +124,18 @@ public class FOMFeed
       }
     }
     return source;
+  }
+
+  @Override
+  public void addChild(OMNode node) {
+    if (isComplete() && node instanceof OMElement && !(node instanceof Entry)) {
+      OMElement el = this.getFirstChildWithName(ENTRY);
+      if (el != null) {
+        el.insertSiblingBefore(node);
+        return;
+      }
+    }
+    super.addChild(node);
   }
  
 }

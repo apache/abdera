@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.Iterator;
 
 import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.abdera.factory.Factory;
@@ -100,12 +101,8 @@ public class FOMDocument<T extends Element>
     return base;
   }
 
-  public void setBaseUri(URI base) {
-    this.base = base;
-  }
-  
   public void setBaseUri(String base) throws URISyntaxException {
-    setBaseUri((base != null) ? new URI(base) : null);
+    this.base = new URI(base);
   }
 
   public void writeTo(OutputStream out) throws IOException {
@@ -132,8 +129,10 @@ public class FOMDocument<T extends Element>
     return contentType;
   }
   
-  public void setContentType(MimeType contentType) {
-    this.contentType = contentType;
+  public void setContentType(String contentType) throws MimeTypeParseException {
+    this.contentType = new MimeType(contentType);
+    if (this.contentType.getParameter("charset") != null)
+      setCharset(this.contentType.getParameter("charset"));
   }
   
   public Date getLastModified() {

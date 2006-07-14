@@ -23,6 +23,7 @@ import java.net.URISyntaxException;
 import java.util.Date;
 
 import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
 
 /**
  * <p>The top level artifact of the Feed Object Model.  The Parser component
@@ -54,12 +55,6 @@ public interface Document<T extends Element>
   /**
    * Sets the Base URI of the document.  All relative URI's contained in the 
    * document will be resolved according to this base.
-   */
-  void setBaseUri(URI base);
-
-  /**
-   * Sets the Base URI of the document.  All relative URI's contained in the 
-   * document will be resolved according to this base.
    * @throws URISyntaxException 
    */
   void setBaseUri(String base) throws URISyntaxException;
@@ -71,8 +66,9 @@ public interface Document<T extends Element>
   
   /**
    * Sets the content type for this document
+   * @throws MimeTypeParseException 
    */
-  void setContentType(MimeType contentType);
+  void setContentType(String contentType) throws MimeTypeParseException;
   
   /**
    * Returns the last modified date for this document

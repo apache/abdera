@@ -296,7 +296,7 @@ public class FOMTest extends TestCase   {
     author = factory.newAuthor();
     author.setName("a");
     author.setEmail("b");
-    author.setUri(new URI("c"));
+    author.setUri("c");
     assertNotNull(author);
     assertEquals(author.getName(),"a");
     assertEquals(author.getEmail(), "b");
@@ -340,7 +340,7 @@ public class FOMTest extends TestCase   {
     contributor = factory.newContributor();
     contributor.setName("a");
     contributor.setEmail("b");
-    contributor.setUri(new URI("c"));
+    contributor.setUri("c");
     assertNotNull(contributor);
     assertEquals(contributor.getName(),"a");
     assertEquals(contributor.getEmail(), "b");
@@ -396,7 +396,7 @@ public class FOMTest extends TestCase   {
     generator = factory.newGenerator();
     assertNotNull(generator);
     generator = factory.newGenerator();
-    generator.setUri(new URI(Version.URI));
+    generator.setUri(Version.URI);
     generator.setVersion(Version.VERSION);
     generator.setText(Version.APP_NAME);
     assertNotNull(generator);
@@ -436,7 +436,7 @@ public class FOMTest extends TestCase   {
     iri.setValue("http://example.org/foo");
     assertEquals(iri.getValue().toString(), "http://example.org/foo");
     iri = factory.newIcon();
-    iri.setValue(new URI("http://example.org/foo"));
+    iri.setValue("http://example.org/foo");
     assertEquals(iri.getValue().toString(), "http://example.org/foo");
     iri = factory.newID();
     assertNotNull(iri);
@@ -444,7 +444,7 @@ public class FOMTest extends TestCase   {
     iri.setValue("http://example.org/foo");
     assertEquals(iri.getValue().toString(), "http://example.org/foo");
     iri = factory.newID();
-    iri.setValue(new URI("http://example.org/foo"));
+    iri.setValue("http://example.org/foo");
     assertEquals(iri.getValue().toString(), "http://example.org/foo");
     iri = factory.newIRIElement(Constants.ID, null);
     assertNotNull(iri);
@@ -452,14 +452,14 @@ public class FOMTest extends TestCase   {
     iri.setValue("http://example.org/foo");
     assertEquals(iri.getValue().toString(), "http://example.org/foo");
     iri = factory.newIRIElement(Constants.ID, null);
-    iri.setValue(new URI("http://example.org/foo"));
+    iri.setValue("http://example.org/foo");
     assertEquals(iri.getValue().toString(), "http://example.org/foo");
     Link link = factory.newLink();
     assertNotNull(link);
     link = factory.newLink();
     link.setHref("http://example.org/foo");
     link.setRel("a");
-    link.setMimeType(new MimeType("text/foo"));
+    link.setMimeType("text/foo");
     link.setTitle("b");
     link.setHrefLang("en");
     link.setLength(10);
@@ -470,9 +470,9 @@ public class FOMTest extends TestCase   {
     assertEquals(link.getHrefLang(), "en");
     assertEquals(link.getLength(), 10);
     link = factory.newLink();
-    link.setHref(new URI("http://example.org/foo"));
+    link.setHref("http://example.org/foo");
     link.setRel("a");
-    link.setMimeType(new MimeType("text/foo"));
+    link.setMimeType("text/foo");
     link.setTitle("b");
     link.setHrefLang("en");
     link.setLength(10);
@@ -488,10 +488,10 @@ public class FOMTest extends TestCase   {
     iri.setValue("http://example.org/foo");
     assertEquals(iri.getValue().toString(), "http://example.org/foo");
     iri = factory.newLogo();
-    iri.setValue(new URI("http://example.org/foo"));
+    iri.setValue("http://example.org/foo");
     assertEquals(iri.getValue().toString(), "http://example.org/foo");
     content = factory.newContent(new MimeType("text/foo"));
-    content.setSrc(new URI("foo"));
+    content.setSrc("foo");
     assertNotNull(content);
     assertEquals(content.getMimeType().toString(), "text/foo");
     assertEquals(content.getSrc().toString(), "foo");
@@ -519,7 +519,7 @@ public class FOMTest extends TestCase   {
     person = factory.newPerson(Constants.AUTHOR, null);
     person.setName("a");
     person.setEmail("b");
-    person.setUri(new URI("c"));
+    person.setUri("c");
     assertEquals(person.getName(),"a");
     assertEquals(person.getEmail(), "b");
     assertEquals(person.getUri().toString(), "c");
@@ -609,7 +609,7 @@ public class FOMTest extends TestCase   {
     iri.setValue("http://example.org/foo");
     assertEquals(iri.getValue().toString(), "http://example.org/foo");
     iri = factory.newUri();
-    iri.setValue(new URI("http://example.org/foo"));
+    iri.setValue("http://example.org/foo");
     assertEquals(iri.getValue().toString(), "http://example.org/foo");
     Workspace workspace = factory.newWorkspace();
     assertNotNull(workspace);

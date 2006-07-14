@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.parser.stax;
+package org.apache.abdera.parser.stax.util;
 
 import java.io.BufferedInputStream;
 import java.io.FilterInputStream;

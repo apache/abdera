@@ -31,6 +31,7 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
+import org.apache.abdera.parser.stax.util.SniffingInputStream;
 import org.apache.abdera.util.AbstractParser;
 //import org.apache.abdera.util.SniffingInputStream;
 import org.apache.axiom.om.OMDocument;
@@ -54,7 +55,9 @@ public class FOMParser
     URI base, 
     ParserOptions options) {
       Document<T> document = builder.getFomDocument();
-      document.setBaseUri(base);
+      try {
+        document.setBaseUri(base.toString());
+      } catch (Exception e) {}
       return document;
   }
   

@@ -47,24 +47,11 @@ public class FOMLink
     super(Constants.LINK, null, (OMFactory)Factory.INSTANCE);
   }
   
-  public FOMLink(URI href) {
-    this();
-    setHref(href);
-  }
-  
   public FOMLink(
     String href) 
       throws URISyntaxException {
     this();
     setHref(href);
-  }
-  
-  public FOMLink(
-    URI href, 
-    String rel) {
-      this();
-      setHref(href);
-      setRel(rel);
   }
   
   public FOMLink(
@@ -118,65 +105,67 @@ public class FOMLink
   }
   
   public URI getHref() throws URISyntaxException {
-    return _getUriValue(_getAttributeValue(HREF));
+    return _getUriValue(getAttributeValue(HREF));
   }
 
   public URI getResolvedHref() throws URISyntaxException {
     return _resolve(getResolvedBaseUri(), getHref());
   }
   
-  public void setHref(URI href) {
-    _setAttributeValue(HREF, _getStringValue(href));
-  }
-
   public void setHref(String href) throws URISyntaxException {
-    setHref((href != null) ? new URI(href) : null);
+    if (href != null)
+      setAttributeValue(HREF, (new URI(href)).toString());
+    else 
+      removeAttribute(HREF);
   }
   
   public String getRel() {
-    return _getAttributeValue(REL);
+    return getAttributeValue(REL);
   }
 
   public void setRel(String rel) {
-    _setAttributeValue(REL, rel);
+    setAttributeValue(REL, rel);
   }
 
   public MimeType getMimeType() throws MimeTypeParseException {
-    String type = _getAttributeValue(TYPE);
+    String type = getAttributeValue(TYPE);
     return (type != null) ? new MimeType(type) : null;
   }
   
   public void setMimeType(MimeType type) {
-    _setAttributeValue(TYPE, (type != null) ? type.toString() : null);
+    setAttributeValue(TYPE, (type != null) ? type.toString() : null);
   }
 
   public void setMimeType(String type) throws MimeTypeParseException {
-    setMimeType(new MimeType(type));
+    if (type != null) 
+      setAttributeValue(TYPE, (new MimeType(type)).toString());
+    else
+      removeAttribute(TYPE);
   }
 
   public String getHrefLang() {
-    return _getAttributeValue(HREFLANG);
+    return getAttributeValue(HREFLANG);
   }
 
   public void setHrefLang(String lang) {
-    _setAttributeValue(HREFLANG, lang);
+    setAttributeValue(HREFLANG, lang);
   }
 
   public String getTitle() {
-    return _getAttributeValue(ATITLE);
+    return getAttributeValue(ATITLE);
   }
 
   public void setTitle(String title) {
-    _setAttributeValue(ATITLE, title);
+    setAttributeValue(ATITLE, title);
   }
 
   public long getLength() {
-    String l = _getAttributeValue(LENGTH);
+    String l = getAttributeValue(LENGTH);
     return (l != null) ? Long.valueOf(l) : -1;
   }
 
   public void setLength(long length) {
-    _setAttributeValue(LENGTH, (length >= 0) ? String.valueOf(length) : "0");
+    setAttributeValue(LENGTH, (length >= 0) ? String.valueOf(length) : "0");
   }
 
   

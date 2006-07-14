@@ -74,7 +74,7 @@ public class FOMDiv
   }
 
   public String[] getXhtmlClass() {
-    String _class = _getAttributeValue(CLASS);
+    String _class = getAttributeValue(CLASS);
     String[] classes = null;
     if (_class != null) {
       classes = _class.split(" ");
@@ -83,25 +83,25 @@ public class FOMDiv
   }
 
   public String getId() {
-    return _getAttributeValue(AID);
+    return getAttributeValue(AID);
   }
 
   public String getTitle() {
-    return _getAttributeValue(ATITLE);
+    return getAttributeValue(ATITLE);
   }
 
   public void setId(String id) {
     if (id != null)
-      _setAttributeValue(AID, id);
+      setAttributeValue(AID, id);
     else 
-      _removeAttribute(AID);
+      removeAttribute(AID);
   }
   
   public void setTitle(String title) {
     if (title != null)
-      _setAttributeValue(ATITLE, title);
+      setAttributeValue(ATITLE, title);
     else 
-      _removeAttribute(ATITLE);
+      removeAttribute(ATITLE);
   }
   
   public void setXhtmlClass(String[] classes) {
@@ -111,8 +111,8 @@ public class FOMDiv
         if (s.length() > 0) val += " ";
         val += s;
       }
-      _setAttributeValue(CLASS, val);
-    } else _removeAttribute(CLASS);
+      setAttributeValue(CLASS, val);
+    } else removeAttribute(CLASS);
   }
 
   public String getValue() {

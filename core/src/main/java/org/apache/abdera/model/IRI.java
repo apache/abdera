@@ -35,16 +35,9 @@ public interface IRI
   
   /**
    * Sets the value of the element
-   */
-  void setValue(URI iri);
-  
-  /**
-   * Sets the value of the element
    * @throws URISyntaxException 
    */
   void setValue(String iri) throws URISyntaxException;
-  
-  void setNormalizedValue(URI id) throws URISyntaxException;
   
   void setNormalizedValue(String id) throws URISyntaxException;
   

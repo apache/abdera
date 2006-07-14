@@ -19,16 +19,14 @@ package org.apache.abdera.parser.stax;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
+import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.DateTime;
 import org.apache.abdera.model.Div;
@@ -38,6 +36,7 @@ import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.model.Text;
+import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
 import org.apache.axiom.om.OMContainer;
@@ -46,7 +45,6 @@ import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
-
 
 public class FOMSource
   extends FOMExtensibleElement 
@@ -107,10 +105,6 @@ public class FOMSource
     return _getChildrenAsSet(AUTHOR);
   }
 
-  public void setAuthors(List<Person> people) {
-    _setChildrenFromSet(AUTHOR, people);
-  }
-
   public void addAuthor(Person person) {
     addChild((OMElement)person);
   }
@@ -131,42 +125,14 @@ public class FOMSource
     return person;
   }
   
-  public Person addAuthor(String name, String email, URI uri) {
-    FOMFactory fomfactory = (FOMFactory) this.factory;
-    Person person = fomfactory.newAuthor(this);
-    person.setName(name);
-    person.setEmail(email);
-    person.setUri(uri);
-    return person;
-  }
-
   public List<Category> getCategories() {
     return _getChildrenAsSet(CATEGORY);
   }
 
-  public List<Category> getCategories(URI scheme) {
-    List<Category> categories = getCategories();
-    List<Category> matching = new ArrayList<Category>();
-    for (Category category : categories) {
-      try {
-        URI uri = category.getScheme();
-        if ((uri != null && uri.equals(scheme)) ||
-            (uri == null && scheme == null)) {
-          matching.add(category);
-        }
-      } catch (Exception e) {}
-    }
-    return matching;
-  }
-  
   public List<Category> getCategories(String scheme) throws URISyntaxException {
-    return getCategories((scheme != null) ? new URI(scheme) : null);
+    return FOMHelper.getCategories(this, scheme);
   }
   
-  public void setCategories(List<Category> categories) {
-    _setChildrenFromSet(CATEGORY, categories);
-  }
-
   public void addCategory(Category category) {
     addChild((OMElement)category);
   }
@@ -178,15 +144,6 @@ public class FOMSource
     return category;
   }
 
-  public Category addCategory(URI scheme, String term, String label) {
-    FOMFactory factory = (FOMFactory) this.factory;
-    Category category = factory.newCategory(this);
-    category.setTerm(term);
-    category.setScheme(scheme);
-    category.setLabel(label);
-    return category;
-  }
-  
   public Category addCategory(String scheme, String term, String label) throws URISyntaxException {
     FOMFactory factory = (FOMFactory) this.factory;
     Category category = factory.newCategory(this);
@@ -198,10 +155,6 @@ public class FOMSource
   
   public List<Person> getContributors() {
     return _getChildrenAsSet(CONTRIBUTOR);
-  }
-
-  public void setContributors(List<Person> people) {
-    _setChildrenFromSet(CONTRIBUTOR, people);
   }
 
   public void addContributor(Person person) {
@@ -224,15 +177,6 @@ public class FOMSource
     return person;
   }
   
-  public Person addContributor(String name, String email, URI uri) {
-    FOMFactory fomfactory = (FOMFactory) this.factory;
-    Person person = fomfactory.newContributor(this);
-    person.setName(name);
-    person.setEmail(email);
-    person.setUri(uri);
-    return person;    
-  }
-  
   public IRI getIdElement() {
     return (IRI)getFirstChildWithName(ID);
   }
@@ -241,7 +185,7 @@ public class FOMSource
     if (id != null)
       _setChild(ID, (OMElement)id);
     else 
-      _removeElement(ID, false);
+      _removeChildren(ID, false);
   }
 
   public URI getId() throws URISyntaxException {
@@ -249,17 +193,13 @@ public class FOMSource
     return (id != null) ? id.getValue() : null;
   }
   
-  public IRI setId(URI value) throws URISyntaxException {
-    return setId(value, false);
-  }
-  
   public IRI setId(String value) throws URISyntaxException {
     return setId(value, false);
   }
-  
-  public IRI setId(URI value, boolean normalize) throws URISyntaxException {
+    
+  public IRI setId(String value, boolean normalize) throws URISyntaxException {
     if (value == null) {
-      _removeElement(ID, false);
+      _removeChildren(ID, false);
       return null;
     }
     IRI id = getIdElement();
@@ -274,36 +214,13 @@ public class FOMSource
       return iri;
     }
   }
-    
-  public IRI setId(String value, boolean normalize) throws URISyntaxException {
-    return setId((value != null) ? new URI(value) : null, normalize);
-  }
   
   public List<Link> getLinks() {
     return _getChildrenAsSet(LINK);
   }
   
   public List<Link> getLinks(String rel) {
-    if (rel == null) return getLinks();
-    List<Link> links = getLinks();
-    List<Link> matching = new ArrayList<Link>();
-    for (Link link : links) {
-      String value = FOMLink.getRelEquiv(link.getRel());
-      rel = FOMLink.getRelEquiv(rel);
-      if (rel.equalsIgnoreCase(Link.REL_ALTERNATE) && 
-          (value == null || 
-            value.equalsIgnoreCase(Link.REL_ALTERNATE) ||
-            value.equalsIgnoreCase(Link.REL_ALTERNATE_IANA))) {
-        matching.add(link);
-      } else if (rel.equalsIgnoreCase(value)) {
-        matching.add(link);
-      }
-    }
-    return matching;
-  }
-
-  public void setLinks(List<Link> links) {
-    _setChildrenFromSet(LINK, links);
+    return FOMHelper.getLinks(this, rel);
   }
 
   public void addLink(Link link) {
@@ -320,54 +237,6 @@ public class FOMSource
     link.setHref(href);
     if (rel != null) link.setRel(rel);
     return link;    
-  }
-  
-  public Link addLink(URI href) {
-    return addLink(href, null);
-  }
-  
-  public Link addLink(URI href, String rel) {
-    FOMFactory fomfactory = (FOMFactory) factory;
-    Link link = fomfactory.newLink(this);
-    link.setHref(href);
-    link.setRel(rel);
-    return link;
-  }
-  
-  public Link addLink(URI href, String rel, MimeType type, String title, String hreflang, long length) {
-    FOMFactory fomfactory = (FOMFactory) factory;
-    Link link = fomfactory.newLink(this);
-    link.setHref(href);
-    link.setRel(rel);
-    link.setMimeType(type);
-    link.setTitle(title);
-    link.setHrefLang(hreflang);
-    link.setLength(length);
-    return link;
-  }
-  
-  public Link addLink(String href, String rel, MimeType type, String title, String hreflang, long length) throws URISyntaxException {
-    FOMFactory fomfactory = (FOMFactory) factory;
-    Link link = fomfactory.newLink(this);
-    link.setHref(href);
-    link.setRel(rel);
-    link.setMimeType(type);
-    link.setTitle(title);
-    link.setHrefLang(hreflang);
-    link.setLength(length);
-    return link;
-  }
-  
-  public Link addLink(URI href, String rel, String type, String title, String hreflang, long length) throws MimeTypeParseException {
-    FOMFactory fomfactory = (FOMFactory) factory;
-    Link link = fomfactory.newLink(this);
-    link.setHref(href);
-    link.setRel(rel);
-    link.setMimeType(type);
-    link.setTitle(title);
-    link.setHrefLang(hreflang);
-    link.setLength(length);
-    return link;
   }
   
   public Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws URISyntaxException, MimeTypeParseException {
@@ -391,13 +260,6 @@ public class FOMSource
     setTextElement(RIGHTS, text, false);
   }
 
-  public Text setRights() {
-    FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newRights(Text.Type.TEXT);
-    setRightsElement(text);
-    return text;
-  }
-  
   public Text setRights(String value) {
     FOMFactory factory = (FOMFactory)this.factory;
     Text text = factory.newRights();
@@ -412,13 +274,6 @@ public class FOMSource
   
   public Text setRightsAsXhtml(String value) {
     return setRights(value, Text.Type.XHTML);
-  }
-  
-  public Text setRights(Text.Type type) {
-    FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newRights(type);
-    setRightsElement(text);
-    return text;
   }
   
   public Text setRights(String value, Text.Type type) {
@@ -440,17 +295,6 @@ public class FOMSource
     return getText(RIGHTS);
   }
   
-  public Source getSource() {
-    return (Source)getFirstChildWithName(SOURCE);
-  }
-
-  public void setSource(Source source) {
-    if (source != null)
-      _setChild(SOURCE, (OMElement)source);
-    else
-      _removeElement(SOURCE, false);
-  }
-
   public Text getSubtitleElement() {
     return getTextElement(SUBTITLE);
   }
@@ -459,13 +303,6 @@ public class FOMSource
     setTextElement(SUBTITLE, text, false);
   }
 
-  public Text setSubtitle() {
-    FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newSubtitle(Text.Type.TEXT);
-    setSubtitleElement(text);
-    return text;
-  }
-  
   public Text setSubtitle(String value) {
     FOMFactory factory = (FOMFactory)this.factory;
     Text text = factory.newSubtitle();
@@ -480,13 +317,6 @@ public class FOMSource
   
   public Text setSubtitleAsXhtml(String value) {
     return setSubtitle(value, Text.Type.XHTML);
-  }
-  
-  public Text setSubtitle(Text.Type type) {
-    FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newSubtitle(type);
-    setSubtitleElement(text);
-    return text;
   }
   
   public Text setSubtitle(String value, Text.Type type) {
@@ -516,13 +346,6 @@ public class FOMSource
     setTextElement(TITLE, text, false);
   }
 
-  public Text setTitle() {
-    FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newTitle(Text.Type.TEXT);
-    setTitleElement(text);
-    return text;
-  }
-  
   public Text setTitle(String value) {
     FOMFactory factory = (FOMFactory)this.factory;
     Text text = factory.newTitle();
@@ -537,13 +360,6 @@ public class FOMSource
   
   public Text setTitleAsXhtml(String value) {
     return setTitle(value, Text.Type.XHTML);
-  }
-  
-  public Text setTitle(Text.Type type) {
-    FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newTitle(type);
-    setTitleElement(text);
-    return text;
   }
   
   public Text setTitle(String value, Text.Type type) {
@@ -573,7 +389,7 @@ public class FOMSource
     if (updated != null)
       _setChild(UPDATED, (OMElement)updated);
     else 
-      _removeElement(UPDATED, false);
+      _removeChildren(UPDATED, false);
   }
 
   public String getUpdatedString() {
@@ -586,68 +402,29 @@ public class FOMSource
     return (dte != null) ? dte.getDate() : null;
   }
   
+  private DateTime setUpdated(AtomDate value) {
+    if (value == null) {
+      _removeChildren(UPDATED, false);
+      return null;
+    }
+    DateTime dte = getUpdatedElement();
+    if (dte != null) {
+      dte.setValue(value);
+      return dte;
+    } else {
+      FOMFactory fomfactory = (FOMFactory) factory;
+      DateTime dt = fomfactory.newUpdated(this);
+      dt.setValue(value);
+      return dt;
+    }
+  }
+  
   public DateTime setUpdated(Date value) {
-    if (value == null) {
-      _removeElement(UPDATED, false);
-      return null;
-    }
-    DateTime dte = getUpdatedElement();
-    if (dte != null) {
-      dte.setDate(value);
-      return dte;
-    } else {
-      FOMFactory fomfactory = (FOMFactory) factory;
-      DateTime dt = fomfactory.newUpdated(this);
-      dt.setDate(value);
-      return dt;
-    }
-  }
-  
-  public DateTime setUpdated(Calendar value) {
-    if (value == null) {
-      _removeElement(UPDATED, false);
-      return null;
-    }
-    DateTime dte = getUpdatedElement();
-    if (dte != null) {
-      dte.setCalendar(value);
-      return dte;
-    } else {
-      FOMFactory fomfactory = (FOMFactory) factory;
-      DateTime dt = fomfactory.newUpdated(this);
-      dt.setCalendar(value);
-      return dt;
-    }
-  }
-  
-  public DateTime setUpdated(long value) {
-    DateTime dte = getUpdatedElement();
-    if (dte != null) {
-      dte.setTime(value);
-      return dte;
-    } else {
-      FOMFactory fomfactory = (FOMFactory) factory;
-      DateTime dt = fomfactory.newUpdated(this);
-      dt.setTime(value);
-      return dt;
-    }
+    return setUpdated((value != null) ? AtomDate.valueOf(value) : null);
   }
   
   public DateTime setUpdated(String value) {
-    if (value == null) {
-      _removeElement(UPDATED, false);
-      return null;
-    }
-    DateTime dte = getUpdatedElement();
-    if (dte != null) {
-      dte.setString(value);
-      return dte;
-    } else {
-      FOMFactory fomfactory = (FOMFactory) factory;
-      DateTime dt = fomfactory.newUpdated(this);
-      dt.setString(value);
-      return dt;
-    }
+    return setUpdated((value != null) ? AtomDate.valueOf(value) : null);
   }
   
   public Generator getGenerator() {
@@ -658,18 +435,9 @@ public class FOMSource
     if (generator != null)
       _setChild(GENERATOR, (OMElement) generator);
     else 
-      _removeElement(GENERATOR, false);
+      _removeChildren(GENERATOR, false);
   }
 
-  public Generator setGenerator(URI uri, String version, String value) {
-    FOMFactory fomfactory = (FOMFactory) factory;
-    Generator generator = fomfactory.newGenerator(this);
-    generator.setUri(uri);
-    generator.setVersion(version);
-    generator.setText(value);
-    return generator;
-  }
-  
   public Generator setGenerator(
     String uri, 
     String version, 
@@ -677,9 +445,9 @@ public class FOMSource
       throws URISyntaxException {
     FOMFactory fomfactory = (FOMFactory) factory;
     Generator generator = fomfactory.newGenerator(this);
-    if (uri != null) generator.setUri(new URI(uri));
-    generator.setVersion(version);
-    generator.setText(value);
+    if (uri != null) generator.setUri(uri);
+    if (version != null) generator.setVersion(version);
+    if (value != null) generator.setText(value);
     return generator;    
   }
   
@@ -691,29 +459,18 @@ public class FOMSource
     if (iri != null)
       _setChild(ICON, (OMElement) iri);
     else 
-      _removeElement(ICON, false);
+      _removeChildren(ICON, false);
   }
 
   public IRI setIcon(String value) throws URISyntaxException {
     if (value == null) {
-      _removeElement(ICON, false);
+      _removeChildren(ICON, false);
       return null;
     }
     FOMFactory fomfactory = (FOMFactory) factory;
     IRI iri = fomfactory.newIcon(this);
     iri.setValue(value);
     return iri;
-  }
-  
-  public IRI setIcon(URI value) {
-    if (value == null) {
-      _removeElement(ICON, false);
-      return null;
-    }
-    FOMFactory fomfactory = (FOMFactory) factory;
-    IRI iri = fomfactory.newIcon(this);
-    iri.setValue(value);
-    return iri;    
   }
   
   public URI getIcon() throws URISyntaxException {
@@ -729,29 +486,18 @@ public class FOMSource
     if (iri != null)
       _setChild(LOGO, (OMElement)iri);
     else 
-      _removeElement(LOGO, false);
+      _removeChildren(LOGO, false);
   }
 
   public IRI setLogo(String value) throws URISyntaxException {
     if (value == null) {
-      _removeElement(LOGO, false);
+      _removeChildren(LOGO, false);
       return null;
     }
     FOMFactory fomfactory = (FOMFactory) factory;
     IRI iri = fomfactory.newLogo(this);
     iri.setValue(value);
     return iri;
-  }
-  
-  public IRI setLogo(URI value) {
-    if (value == null) {
-      _removeElement(LOGO, false);
-      return null;
-    }
-    FOMFactory fomfactory = (FOMFactory) factory;
-    IRI iri = fomfactory.newLogo(this);
-    iri.setValue(value);
-    return iri;    
   }
   
   public URI getLogo() throws URISyntaxException {

@@ -122,14 +122,6 @@ public interface Person
    * person.  Person constructs MAY contain an atom:uri element, but MUST
    * NOT contain more than one.  The content of atom:uri in a Person
    * construct MUST be an IRI reference [RFC3987].
-   */
-  IRI setUri(URI uri);
-
-  /**
-   * The "atom:uri" element's content conveys an IRI associated with the
-   * person.  Person constructs MAY contain an atom:uri element, but MUST
-   * NOT contain more than one.  The content of atom:uri in a Person
-   * construct MUST be an IRI reference [RFC3987].
    * @throws URISyntaxException 
    */
   IRI setUri(String uri) throws URISyntaxException;

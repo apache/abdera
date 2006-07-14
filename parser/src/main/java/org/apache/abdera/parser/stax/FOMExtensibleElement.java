@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.parser.stax;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -26,12 +24,13 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ExtensibleElement;
+import org.apache.abdera.parser.stax.util.FOMExtensionIterator;
+import org.apache.abdera.parser.stax.util.FOMList;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
-import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
 
@@ -70,45 +69,18 @@ public abstract class FOMExtensibleElement
   }
 
   @SuppressWarnings("unchecked")
-  protected <E extends Element>List<E> _getExtensionChildrenAsList() {
-    List<E> set = new ArrayList<E>();
-    for (Iterator i = getChildren();i.hasNext();) {
-      OMNode e = (OMNode) i.next();
-      if (e instanceof Element) {
-        Element el = (Element) e;
-        QName qname = el.getQName();
-        if (!(qname.getNamespaceURI().equals(getQName().getNamespaceURI()))) {
-          set.add((E)e);
-        }
-      }
-    }
-    return set;
-  }
-  
   public List<Element> getExtensions() {
-    return _getExtensionChildrenAsList();
+    return new FOMList<Element>(new FOMExtensionIterator(this));
   }
 
+  @SuppressWarnings("unchecked")
   public List<Element> getExtensions(String uri) {
-    List<Element> matching = new ArrayList<Element>();
-    for (Iterator i = this.getChildElements(); i.hasNext();) {
-      OMElement e = (OMElement) i.next();
-      if ((uri == null)?
-            e.getQName().getNamespaceURI() == null: 
-            e.getQName().getNamespaceURI().equals(uri)) {
-        matching.add((Element) e);
-      }
-    }
-    return matching;
+    return new FOMList<Element>(new FOMExtensionIterator(this, uri));
   }
 
   @SuppressWarnings("unchecked")
   public <T extends Element>List<T> getExtensions(QName qname) {
-    List<T> matching = new ArrayList<T>();
-    for (Iterator i = this.getChildrenWithName(qname); i.hasNext();) {
-      matching.add((T) i.next());
-    }
-    return matching;
+    return new FOMList<T>(getChildrenWithName(qname));
   }
 
   @SuppressWarnings("unchecked")

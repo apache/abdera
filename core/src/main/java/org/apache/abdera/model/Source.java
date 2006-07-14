@@ -19,11 +19,9 @@ package org.apache.abdera.model;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 /**
@@ -80,11 +78,6 @@ public interface Source
   List<Person> getAuthors();
   
   /**
-   * Sets the complete set of authors for the entry
-   */
-  void setAuthors(List<Person> people);
-  
-  /**
    * Adds an individual author to the entry
    */
   void addAuthor(Person person);
@@ -101,12 +94,6 @@ public interface Source
   Person addAuthor(String name, String email, String uri) throws URISyntaxException;
   
   /**
-   * Adds an author
-   * @throws URISyntaxException 
-   */
-  Person addAuthor(String name, String email, URI uri) throws URISyntaxException;
-  
-  /**
    * Lists the complete set of categories listed for the entry
    */
   List<Category> getCategories();
@@ -116,16 +103,6 @@ public interface Source
    * @throws URISyntaxException 
    */
   List<Category> getCategories(String scheme) throws URISyntaxException;
-  
-  /**
-   * Lists the complete set of categories using the specified scheme
-   */
-  List<Category> getCategories(URI scheme);  
-  
-  /**
-   * Sets the complete set of categories
-   */
-  void setCategories(List<Category> categories);
   
   /**
    * Adds an individual category to the entry
@@ -139,11 +116,6 @@ public interface Source
 
   /**
    * Adds a category to the feed
-   */
-  Category addCategory(URI scheme, String term, String label);
-  
-  /**
-   * Adds a category to the feed
    * @throws URISyntaxException 
    */
   Category addCategory(String scheme, String term, String label) throws URISyntaxException;
@@ -152,11 +124,6 @@ public interface Source
    * Lists the complete set of contributors for this entry
    */
   List<Person> getContributors();
-  
-  /**
-   * Sets the complete list of contributors for this entry
-   */
-  void setContributors(List<Person> people);
   
   /**
    * Adds an individual contributor to this entry
@@ -169,16 +136,10 @@ public interface Source
   Person addContributor(String name);
 
   /**
-   * Adds an author
+   * Adds a contributor
    * @throws URISyntaxException 
    */
   Person addContributor(String name, String email, String uri) throws URISyntaxException;
-  
-  /**
-   * Adds an author
-   * @throws URISyntaxException 
-   */
-  Person addContributor(String name, String email, URI uri) throws URISyntaxException;
   
   /**
    * RFC4287: The "atom:generator" element's content identifies the 
@@ -192,15 +153,6 @@ public interface Source
    */
   void setGenerator(Generator generator);
 
-  /**
-   * RFC4287: The "atom:generator" element's content identifies the 
-   * agent used to generate a feed, for debugging and other purposes.
-   */
-  Generator setGenerator(
-    URI uri, 
-    String version, 
-    String value);
-  
   /**
    * RFC4287: The "atom:generator" element's content identifies the 
    * agent used to generate a feed, for debugging and other purposes.
@@ -245,15 +197,6 @@ public interface Source
    *  identification for a feed... The image SHOULD have an aspect ratio 
    *  of one (horizontal) to one (vertical) and SHOULD be suitable for 
    *  presentation at a small size.
-   */
-  IRI setIcon(URI iri);
-  
-  /** 
-   * RFC4287: The "atom:icon" element's content is an IRI reference 
-   * [RFC3987] that identifies an image that provides iconic visual
-   *  identification for a feed... The image SHOULD have an aspect ratio 
-   *  of one (horizontal) to one (vertical) and SHOULD be suitable for 
-   *  presentation at a small size.
    * @throws URISyntaxException 
    */
   URI getIcon() throws URISyntaxException;
@@ -278,20 +221,10 @@ public interface Source
 
   /**
    * Sets the universally unique identifier for this feed
-   */
-  IRI setId(URI id) throws URISyntaxException;
-
-  /**
-   * Sets the universally unique identifier for this feed
    * @throws URISyntaxException 
    */
   IRI setId(String id) throws URISyntaxException;
   
-  /**
-   * Sets the universally unique identifier for this feed
-   */
-  IRI setId(URI id, boolean normalize) throws URISyntaxException;
-
   /**
    * Sets the universally unique identifier for this feed
    * @throws URISyntaxException 
@@ -309,11 +242,6 @@ public interface Source
   List<Link> getLinks(String rel);
   
   /**
-   * Sets the complete set of links for the entry
-   */
-  void setLinks(List<Link> links);
-  
-  /**
    * Adds an individual link to the entry
    */
   void addLink(Link link);
@@ -322,19 +250,8 @@ public interface Source
   
   Link addLink(String href, String rel) throws URISyntaxException;
   
-  Link addLink(URI href);
-  
-  Link addLink(URI href, String rel);
-  
-  Link addLink(URI href, String rel, MimeType type, String title, String hreflang, long length);
-  
-  Link addLink(String href, String rel, MimeType type, String title, String hreflang, long length) throws URISyntaxException;
-  
-  Link addLink(URI href, String rel, String type, String title, String hreflang, long length) throws MimeTypeParseException;
-  
   Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws URISyntaxException, MimeTypeParseException;
- 
-  
+   
   /**
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
    * that identifies an image that provides visual identification for a feed.
@@ -361,13 +278,6 @@ public interface Source
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
    * that identifies an image that provides visual identification for a feed.
    * The image SHOULD have an aspect ratio of 2 (horizontal) to 1 (vertical).
-   */
-  IRI setLogo(URI iri);
-  
-  /**
-   * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
-   * that identifies an image that provides visual identification for a feed.
-   * The image SHOULD have an aspect ratio of 2 (horizontal) to 1 (vertical).
    * @throws URISyntaxException 
    */
   URI getLogo() throws URISyntaxException;
@@ -390,8 +300,6 @@ public interface Source
    */
   void setRightsElement(Text text);
   
-  Text setRights();
-  
   /**
    * Sets the value of the rights as @type="text"
    */
@@ -406,11 +314,6 @@ public interface Source
    * Sets the value of the rights as @type="xhtml"
    */
   Text setRightsAsXhtml(String value);
-  
-  /**
-   * Sets the rights
-   */
-  Text setRights(Text.Type type);
   
   /**
    * Sets the value of the rights
@@ -444,8 +347,6 @@ public interface Source
    */  
   void setSubtitleElement(Text text);
   
-  Text setSubtitle();
-  
   /**
    * Sets the value of the subtitle as @type="text"
    */
@@ -460,11 +361,6 @@ public interface Source
    * Sets the value of the subtitle as @type="xhtml"
    */
   Text setSubtitleAsXhtml(String value);
-  
-  /**
-   * Sets the subtitle
-   */
-  Text setSubtitle(Text.Type type);
   
   /**
    * Sets the value of the subtitle
@@ -498,8 +394,6 @@ public interface Source
    */
   void setTitleElement(Text text);
   
-  Text setTitle();
-  
   /**
    * Sets the value of the title as @type="text"
    */
@@ -514,11 +408,6 @@ public interface Source
    * Sets the value of the title as @type="xhtml"
    */
   Text setTitleAsXhtml(String value);
-  
-  /**
-   * Sets the title
-   */
-  Text setTitle(Text.Type type);
   
   /**
    * Sets the value of the title
@@ -561,10 +450,6 @@ public interface Source
   Date getUpdated();
   
   DateTime setUpdated(Date value);
-  
-  DateTime setUpdated(Calendar value);
-  
-  DateTime setUpdated(long value);
   
   DateTime setUpdated(String value);
   

@@ -150,18 +150,9 @@ public interface Content extends Element {
    * be a composite type.  If neither the type attribute nor
    * the src attribute is provided, Atom Processors MUST behave as though
    * the type attribute were present with a value of "text".
+   * @throws MimeTypeParseException 
    */
-  void setMimeType(MimeType type);
-  
-  /**
-   * RFC4287: On the atom:content element, the value of the "type" 
-   * attribute MAY be one of "text", "html", or "xhtml".  Failing that, 
-   * it MUST conform to the syntax of a MIME media type, but MUST NOT 
-   * be a composite type.  If neither the type attribute nor
-   * the src attribute is provided, Atom Processors MUST behave as though
-   * the type attribute were present with a value of "text".
-   */
-  void setMimeType(String type);
+  void setMimeType(String type) throws MimeTypeParseException;
 
   /**
    * <p>RFC4287: atom:content MAY have a "src" attribute, whose value MUST 
@@ -180,19 +171,6 @@ public interface Content extends Element {
    * Returns the fully qualified URI form of the content src attribute.
    */
   URI getResolvedSrc() throws URISyntaxException;
-
-  /**
-   * <p>RFC4287: atom:content MAY have a "src" attribute, whose value MUST 
-   * be an IRI reference.  If the "src" attribute is present, atom:content
-   * MUST be empty.  Atom Processors MAY use the IRI to retrieve the
-   * content and MAY choose to ignore remote content or to present it in a
-   * different manner than local content.</p>
-   *
-   * <p>If the "src" attribute is present, the "type" attribute SHOULD be
-   * provided and MUST be a MIME media type, rather than "text", "html", 
-   * or "xhtml".</p>
-   */
-  void setSrc(URI src);
 
   /**
    * <p>RFC4287: atom:content MAY have a "src" attribute, whose value MUST 

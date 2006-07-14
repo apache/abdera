@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.parser.stax;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -92,11 +91,11 @@ public class FOMWorkspace
   }
   
   public String getTitle() {
-    return _getAttributeValue(ATITLE);
+    return getAttributeValue(ATITLE);
   }
 
   public void setTitle(String title) {
-    _setAttributeValue(ATITLE, title);
+    setAttributeValue(ATITLE, title);
   }
 
   public List<Collection> getCollections() {
@@ -115,23 +114,15 @@ public class FOMWorkspace
     return col;
   }
 
-  public void setCollection(List<Collection> collections) {
-    _setChildrenFromSet(COLLECTION, collections);
-  }
-
   public void addCollection(Collection collection) {
     addChild((OMElement)collection);
   }
 
-  public Collection addCollection(String title, URI href) {
+  public Collection addCollection(String title, String href) throws URISyntaxException {
     FOMFactory fomfactory = (FOMFactory) factory;
     Collection collection = fomfactory.newCollection(this);
     collection.setTitle(title);
     collection.setHref(href);
     return collection;
-  }
-  
-  public Collection addCollection(String title, String href) throws URISyntaxException {
-    return addCollection(title, (href != null) ? new URI(href) : null);
   }
 }

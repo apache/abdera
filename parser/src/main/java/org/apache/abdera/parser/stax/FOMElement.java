@@ -24,6 +24,7 @@ import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,6 +40,7 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
+import org.apache.abdera.parser.stax.util.FOMList;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMComment;
@@ -162,15 +164,15 @@ public class FOMElement
   }
   
   public String getLanguage() {
-    return _getAttributeValue(LANG);
+    return getAttributeValue(LANG);
   }
 
   public void setLanguage(String language) {
-    _setAttributeValue(LANG,language);
+    setAttributeValue(LANG,language);
   }
 
   public URI getBaseUri() throws URISyntaxException {
-    URI uri = _getUriValue(_getAttributeValue(BASE));
+    URI uri = _getUriValue(getAttributeValue(BASE));
     if (uri == null) {
       if (parent instanceof Element) {
         uri = ((Element)parent).getBaseUri();
@@ -183,7 +185,7 @@ public class FOMElement
 
   public URI getResolvedBaseUri() throws URISyntaxException {
     URI baseUri = null;
-    URI uri = _getUriValue(_getAttributeValue(BASE));
+    URI uri = _getUriValue(getAttributeValue(BASE));
     if (parent instanceof Element) 
       baseUri = ((Element)parent).getResolvedBaseUri();
     else if (parent instanceof Document)
@@ -201,19 +203,19 @@ public class FOMElement
   }
   
   public void setBaseUri(URI base) {
-    _setAttributeValue(BASE,_getStringValue(base));
+    setAttributeValue(BASE,_getStringValue(base));
   }
   
   public void setBaseUri(String base) throws URISyntaxException {
     setBaseUri((base != null) ? new URI(base) : null);
   }
   
-  protected String _getAttributeValue(QName qname) {
+  public String getAttributeValue(QName qname) {
     OMAttribute attr = getAttribute(qname);
     return (attr != null) ? attr.getAttributeValue() : null;    
   }
   
-  protected void _setAttributeValue(QName qname, String value) {
+  public void setAttributeValue(QName qname, String value) {
     OMAttribute attr = this.getAttribute(qname);
     if (attr != null && value != null) {
       attr.setAttributeValue(value);
@@ -241,22 +243,7 @@ public class FOMElement
   
   @SuppressWarnings("unchecked")
   protected <E extends Element>List<E> _getChildrenAsSet(QName qname) {
-    List<E> set = new ArrayList<E>();
-    for (Iterator i = getChildrenWithName(qname);i.hasNext();) {
-      set.add((E)i.next());
-    }
-    return set;
-  }
-  
-  protected <E extends Element> void _setChildrenFromSet(QName qname, List<E> set) {
-    for (Iterator i = getChildrenWithName(qname);i.hasNext();) {
-      ((OMElement)i.next()).discard();
-    }
-    if (set != null) {
-      for (Element element : set) {
-        addChild((OMElement)element);
-      }
-    }
+    return new FOMList(getChildrenWithName(qname));
   }
   
   protected void _setChild(QName qname, OMElement element) {
@@ -319,27 +306,6 @@ public class FOMElement
     return document;
   }
 
-  public void setAttributeValue(QName qname, String value) {
-    _setAttributeValue(qname, value);
-  }
-
-  public void setAttributeValue(
-    String namespace, 
-    String localPart, 
-    String prefix, 
-    String value) {
-      setAttributeValue(new QName(namespace, localPart, prefix), value);
-  }
-  
-  public String getAttributeValue(QName qname) {
-    OMAttribute attr = getAttribute(qname);
-    return (attr != null) ? attr.getAttributeValue() : null;
-  }
-  
-  public String getAttributeValue(String namespace, String localPart) {
-    return this.getAttributeValue(new QName(namespace, localPart));
-  }
-
   public String getAttributeValue(String name) {
     return getAttributeValue(new QName(name));
   }
@@ -384,7 +350,7 @@ public class FOMElement
         if (el != null) el.discard();
       }
       _setChild(qname, (OMElement)text);
-    } else _removeElement(qname, false);
+    } else _removeChildren(qname, false);
   }
 
   protected Text setTextText(QName qname, String value) {
@@ -449,7 +415,7 @@ public class FOMElement
       OMAttribute attr = (OMAttribute) i.next();
       list.add(attr.getQName());
     }
-    return list;
+    return Collections.unmodifiableList(list);
   }
   
   public List<QName> getExtensionAttributes() {
@@ -463,7 +429,7 @@ public class FOMElement
           !namespace.equals(""))
         list.add(attr.getQName());
     }
-    return list;
+    return Collections.unmodifiableList(list);
   }
   
   
@@ -479,12 +445,16 @@ public class FOMElement
     return doc.getRoot();
   }
 
-  protected void _removeAttribute(QName qname) {
-    if (getAttribute(qname) != null)
-      removeAttribute(getAttribute(qname));
+  public void removeAttribute(QName qname) {
+    OMAttribute attr = getAttribute(qname);
+    if (attr != null) removeAttribute(attr);
   }
   
-  protected void _removeElement(QName qname, boolean many) {
+  public void removeAttribute(String name) {
+    removeAttribute(getAttribute(new QName(name)));
+  }
+  
+  protected void _removeChildren(QName qname, boolean many) {
     if (many) {
       for (Iterator i = getChildrenWithName(qname); i.hasNext();) {
         OMElement element = (OMElement) i.next();

@@ -90,11 +90,6 @@ public interface ExtensibleElement extends Element {
   String getSimpleExtension(String namespace, String localPart, String prefix);
   
   /**
-   * Adds a list of extensions
-   */
-  void addExtensions(List<Element> extensions);
-  
-  /**
    * Find an extension by Class rather than QName
    */
   <T extends Element> T getExtension(Class<T> _class);

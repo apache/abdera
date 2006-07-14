@@ -245,8 +245,10 @@ public class FOMFactory
       Content content = 
         _newInstance(
           FOMContent.class, CONSTRUCTORS[3], type, (OMContainer)parent, this);
-      if (type.equals(Content.Type.XML))
-        content.setMimeType("application/xml");
+      try {
+        if (type.equals(Content.Type.XML))
+          content.setMimeType("application/xml");
+      } catch (Exception e) {}
       return content;
   }
   
@@ -261,7 +263,9 @@ public class FOMFactory
       (MimeTypeHelper.isXml(mediaType.toString())) ? 
          Content.Type.XML : Content.Type.MEDIA;
     Content content = newContent(type, parent);
-    content.setMimeType(mediaType);
+    try {
+      content.setMimeType(mediaType.toString());
+    } catch (Exception e) {}
     return content;
   }
 

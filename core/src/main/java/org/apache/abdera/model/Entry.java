@@ -19,12 +19,10 @@ package org.apache.abdera.model;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.activation.DataHandler;
-import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 /**
@@ -116,11 +114,6 @@ public interface Entry
   List<Person> getAuthors();
   
   /**
-   * Sets the complete set of authors for the entry
-   */
-  void setAuthors(List<Person> people);
-  
-  /**
    * Adds an individual author to the entry
    */
   void addAuthor(Person person);
@@ -138,12 +131,6 @@ public interface Entry
   Person addAuthor(String name, String email, String uri) throws URISyntaxException;
   
   /**
-   * Adds an author
-   * @throws URISyntaxException 
-   */
-  Person addAuthor(String name, String email, URI uri) throws URISyntaxException;
-  
-  /**
    * Lists the complete set of categories listed for the entry
    */
   List<Category> getCategories();
@@ -155,16 +142,6 @@ public interface Entry
   List<Category> getCategories(String scheme) throws URISyntaxException;
 
   /**
-   * Lists the complete set of categories using the specified scheme
-   */
-  List<Category> getCategories(URI scheme);
-  
-  /**
-   * Sets the complete set of categories
-   */
-  void setCategories(List<Category> categories);
-  
-  /**
    * Adds an individual category to the entry
    */
   void addCategory(Category category);
@@ -174,11 +151,6 @@ public interface Entry
    */
   Category addCategory(String term);
 
-  /**
-   * Adds a category to the entry
-   */
-  Category addCategory(URI scheme, String term, String label);
-  
   /**
    * Adds a category to the entry
    * @throws URISyntaxException 
@@ -195,8 +167,6 @@ public interface Entry
    */
   void setContentElement(Content content);
 
-  Content setContent();
-  
   /**
    * Sets the content for this entry as @type="text"
    */
@@ -215,42 +185,34 @@ public interface Entry
   /**
    * Sets the content for this entry
    */
-  Content setContent(Content.Type type);
-  
-  /**
-   * Sets the content for this entry
-   */
   Content setContent(String value, Content.Type type);
   
   /**
    * Sets the content for this entry
    */
-  Content setContent(Element value, Content.Type type);  
+  Content setContent(Element value);  
+  
+  /**
+   * Sets the content for this entry
+   * @throws MimeTypeParseException 
+   */
+  Content setContent(Element element, String mediaType) throws MimeTypeParseException;
+  
+  /**
+   * Sets the content for this entry
+   * @throws MimeTypeParseException 
+   */
+  Content setContent(DataHandler dataHandler) throws MimeTypeParseException;
   
   /**
    * Sets the content for this entry
    */
-  Content setContent(MimeType mediaType);
+  Content setContent(DataHandler dataHandler, String mediatype) throws MimeTypeParseException;;
   
   /**
    * Sets the content for this entry
    */
-  Content setContent(URI src, MimeType mediaType);
-  
-  /**
-   * Sets the content for this entry
-   */
-  Content setContent(Element element, MimeType mediaType);
-  
-  /**
-   * Sets the content for this entry
-   */
-  Content setContent(DataHandler dataHandler, MimeType mediatype);
-  
-  /**
-   * Sets the content for this entry
-   */
-  Content setContent(String value, MimeType mediatype);
+  Content setContent(String value, String mediatype) throws MimeTypeParseException;;
   
   /**
    * Returns the text of the content element
@@ -268,11 +230,6 @@ public interface Entry
   List<Person> getContributors();
   
   /**
-   * Sets the complete list of contributors for this entry
-   */
-  void setContributors(List<Person> people);
-  
-  /**
    * Adds an individual contributor to this entry
    */
   void addContributor(Person person);
@@ -288,13 +245,6 @@ public interface Entry
    * @throws URISyntaxException 
    */
   Person addContributor(String name, String email, String uri) throws URISyntaxException;
-  
-  /**
-   * Adds an author
-   * @throws URISyntaxException 
-   */
-  Person addContributor(String name, String email, URI uri) throws URISyntaxException;
-
   
   /**
    * Returns the universally unique identifier for this entry
@@ -316,20 +266,8 @@ public interface Entry
    * Sets the universally unique identifier for this entry
    * @throws URISyntaxException 
    */
-  IRI setId(URI id) throws URISyntaxException;
-
-  /**
-   * Sets the universally unique identifier for this entry
-   * @throws URISyntaxException 
-   */
   IRI setId(String id) throws URISyntaxException;
   
-  /**
-   * Sets the universally unique identifier for this entry
-   * @throws URISyntaxException 
-   */
-  IRI setId(URI id, boolean normalize) throws URISyntaxException;
-
   /**
    * Sets the universally unique identifier for this entry
    * @throws URISyntaxException 
@@ -347,11 +285,6 @@ public interface Entry
   List<Link> getLinks(String rel);
   
   /**
-   * Sets the complete set of links for the entry
-   */
-  void setLinks(List<Link> links);
-  
-  /**
    * Adds an individual link to the entry
    */
   void addLink(Link link);
@@ -359,16 +292,6 @@ public interface Entry
   Link addLink(String href) throws URISyntaxException;
   
   Link addLink(String href, String rel) throws URISyntaxException;
-  
-  Link addLink(URI href);
-  
-  Link addLink(URI href, String rel);
-  
-  Link addLink(URI href, String rel, MimeType type, String title, String hreflang, long length);
-  
-  Link addLink(String href, String rel, MimeType type, String title, String hreflang, long length) throws URISyntaxException;
-  
-  Link addLink(URI href, String rel, String type, String title, String hreflang, long length) throws MimeTypeParseException;
   
   Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws URISyntaxException, MimeTypeParseException;
   
@@ -388,15 +311,9 @@ public interface Entry
    */
   void setPublishedElement(DateTime dateTime);
   
-  String getPublishedString();
-  
   Date getPublished();
   
   DateTime setPublished(Date value);
-  
-  DateTime setPublished(Calendar value);
-  
-  DateTime setPublished(long value);
   
   DateTime setPublished(String value);
   
@@ -418,8 +335,6 @@ public interface Entry
    */
   void setRightsElement(Text text);
   
-  Text setRights();
-  
   /**
    * Sets the value of the rights as @type="text"
    */
@@ -434,11 +349,6 @@ public interface Entry
    * Sets the value of the rights as @type="xhtml"
    */
   Text setRightsAsXhtml(String value);
-  
-  /**
-   * Sets the rights
-   */
-  Text setRights(Text.Type type);
   
   /**
    * Sets the value of the rights
@@ -510,8 +420,6 @@ public interface Entry
    */
   void setSummaryElement(Text text);
   
-  Text setSummary();
-  
   /**
    * Sets the value of the summary as @type="text"
    */
@@ -526,11 +434,6 @@ public interface Entry
    * Sets the value of the summary as @type="xhtml"
    */
   Text setSummaryAsXhtml(String value);
-  
-  /**
-   * Sets the summary
-   */
-  Text setSummary(Text.Type type);
   
   /**
    * Sets the value of the summary
@@ -564,8 +467,6 @@ public interface Entry
    */
   void setTitleElement(Text title);
   
-  Text setTitle();
-  
   /**
    * Sets the value of the title as @type="text"
    */
@@ -580,11 +481,6 @@ public interface Entry
    * Sets the value of the title as @type="xhtml"
    */
   Text setTitleAsXhtml(String value);
-  
-  /**
-   * Sets the title
-   */
-  Text setTitle(Text.Type type);
   
   /**
    * Sets the value of the title
@@ -622,15 +518,9 @@ public interface Entry
    */
   void setUpdatedElement(DateTime updated);
   
-  String getUpdatedString();
-  
   Date getUpdated();
   
   DateTime setUpdated(Date value);
-  
-  DateTime setUpdated(Calendar value);
-  
-  DateTime setUpdated(long value);
   
   DateTime setUpdated(String value);
   

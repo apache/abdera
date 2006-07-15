@@ -122,6 +122,7 @@ public class PeekAheadInputStream
 
   @Override
   public int read(byte[] b, int off, int len) throws IOException {
+    this.available(); // workaround for a problem in PushbackInputStream, without this, the amount of bytes read from some streams will be incorrect
     int r = super.read(b, off, len);
     if (pos >= buf.length && buf.length > origsize) shrink();
     return r;

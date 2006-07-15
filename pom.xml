@@ -9,7 +9,7 @@
   <artifactId>abdera</artifactId>
   <packaging>pom</packaging>
   <name>Apache Abdera</name>  
-  <version>0.1.0-incubating-SNAPSHOT</version>  
+  <version>0.1.0-incubating</version>  
   <description>Atom Specification Implementation</description>
   <inceptionYear>2006</inceptionYear>
   <url>http://incubator.apache.org/projects/abdera.html</url>

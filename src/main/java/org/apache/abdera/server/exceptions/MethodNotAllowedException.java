@@ -17,9 +17,6 @@
 */
 package org.apache.abdera.server.exceptions;
 
-import org.apache.abdera.server.RequestContext;
-
-
 public class MethodNotAllowedException 
   extends AbderaServerException {
 
@@ -33,15 +30,15 @@ public class MethodNotAllowedException
     super(405, text);
   }
   
-  public void setAllow(RequestContext.Method[] methods) {
+  public void setAllow(String[] methods) {
     if(methods == null || methods.length == 0) {
       throw new IllegalArgumentException("Methods argument must not be empty or null.");
     }
     boolean first = true;
     StringBuffer value = new StringBuffer();
-    for(RequestContext.Method method : methods) {
+    for(String method : methods) {
       if(first) {
-        value.append(method.toString());
+        value.append(method.toString().toUpperCase());
         first = false;
         continue;
       }

@@ -39,8 +39,8 @@ public class ServletRequestContext
     this.servletRequest = request;
   }
   
-  public Method getMethod() {
-    return Method.valueOf(servletRequest.getMethod());
+  public String getMethod() {
+    return servletRequest.getMethod();
   }
   
   public URI getRequestUri() {

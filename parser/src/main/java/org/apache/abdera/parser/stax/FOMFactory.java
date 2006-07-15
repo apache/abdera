@@ -21,8 +21,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.net.URISyntaxException;
 
 import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.ExtensionFactory;
@@ -112,6 +114,7 @@ public class FOMFactory
       return _newInstance(FOMDocument.class, CONSTRUCTORS[9], this, parserWrapper);
   }
   
+  @SuppressWarnings("unchecked")
   public <T extends Element>Document<T> newDocument(
     T root, 
     OMXMLParserWrapper parserWrapper) {
@@ -211,7 +214,7 @@ public class FOMFactory
   }
   
   public Category newCategory() {
-    return newCategory((Element)null);
+    return newCategory(null);
   }
   
   public Category newCategory(
@@ -235,7 +238,7 @@ public class FOMFactory
   
   public Content newContent(Type type) {
     if (type == null) type = Content.Type.TEXT;
-    return newContent(type, (Element)null);
+    return newContent(type, null);
   }
   
   public Content newContent(
@@ -248,12 +251,12 @@ public class FOMFactory
       try {
         if (type.equals(Content.Type.XML))
           content.setMimeType("application/xml");
-      } catch (Exception e) {}
+      } catch (MimeTypeParseException e) { /* Can't happen */ }
       return content;
   }
   
   public Content newContent(MimeType mediaType) {
-    return newContent(mediaType, (Element)null);
+    return newContent(mediaType, null);
   }
   
   public Content newContent(
@@ -265,7 +268,7 @@ public class FOMFactory
     Content content = newContent(type, parent);
     try {
       content.setMimeType(mediaType.toString());
-    } catch (Exception e) {}
+    } catch (MimeTypeParseException e) { /* Can't happen */ }
     return content;
   }
 
@@ -300,7 +303,7 @@ public class FOMFactory
       generator.setText(Version.APP_NAME);
       try {
         generator.setUri(Version.URI);
-      } catch (Exception e) {}
+      } catch (URISyntaxException e) { /* Can't happen */ }
       return generator;
   }
   
@@ -321,7 +324,7 @@ public class FOMFactory
   }
   
   public IRI newID() {
-    return newID((Element)null);
+    return newID(null);
   }
   
   public IRI newID(
@@ -354,7 +357,7 @@ public class FOMFactory
   }
   
   public Link newLink() {
-    return newLink((Element)null);
+    return newLink(null);
   }
   
   public Link newLink(
@@ -385,7 +388,7 @@ public class FOMFactory
   }
   
   public Source newSource() {
-    return newSource((Element)null);
+    return newSource(null);
   }
   
   public Source newSource(
@@ -406,7 +409,7 @@ public class FOMFactory
   public Text newText(
     QName qname,
     Text.Type type) {
-    return newText(qname, type, (Element)null);
+    return newText(qname, type, null);
   }
   
   public Text newText(
@@ -419,7 +422,7 @@ public class FOMFactory
   }
   
   public Element newElement(QName qname) {
-    return newElement(qname, (Element)null);
+    return newElement(qname, null);
   }
   
   public Element newElement(
@@ -470,8 +473,7 @@ public class FOMFactory
               element = ((FOMExtensionFactory)factory).newExtensionElement(
                 qname, (Base)parent, this, parserWrapper);
             } else {
-              element = ((FOMExtensionFactory)factory).newExtensionElement(
-                qname, (Base)parent, this); 
+              element = factory.newExtensionElement(qname, (Base)parent, this); 
             }
         }
       }
@@ -496,7 +498,7 @@ public class FOMFactory
   }
   
   public Control newControl() {
-    return newControl((Element)null);
+    return newControl(null);
   }
    
   public Control newControl(Element parent) {
@@ -511,7 +513,7 @@ public class FOMFactory
   }
 
   public DateTime newPublished() {
-    return newPublished((Element)null);
+    return newPublished(null);
   }
   
   public DateTime newPublished(Element parent) {
@@ -519,7 +521,7 @@ public class FOMFactory
   }
 
   public DateTime newUpdated() {
-    return newUpdated((Element)null);
+    return newUpdated(null);
   }
   
   public DateTime newUpdated(Element parent) {
@@ -527,7 +529,7 @@ public class FOMFactory
   }
 
   public IRI newIcon() {
-    return newIcon((Element)null);
+    return newIcon(null);
   }
   
   public IRI newIcon(Element parent) {
@@ -535,7 +537,7 @@ public class FOMFactory
   }
 
   public IRI newLogo() {
-    return newLogo((Element)null);
+    return newLogo(null);
   }
   
   public IRI newLogo(Element parent) {
@@ -543,7 +545,7 @@ public class FOMFactory
   }
 
   public IRI newUri() {
-    return newUri((Element)null);
+    return newUri(null);
   }
   
   public IRI newUri(Element parent) {
@@ -551,7 +553,7 @@ public class FOMFactory
   }
 
   public Person newAuthor() {
-    return newAuthor((Element)null);
+    return newAuthor(null);
   }
   
   public Person newAuthor(Element parent) {
@@ -559,7 +561,7 @@ public class FOMFactory
   }
 
   public Person newContributor() {
-    return newContributor((Element)null);
+    return newContributor(null);
   }
 
   public Person newContributor(
@@ -576,7 +578,7 @@ public class FOMFactory
   }
   
   public Text newTitle(Text.Type type) {
-    return newTitle(type, (Element)null);
+    return newTitle(type, null);
   }
   
   public Text newTitle(Text.Type type, Element parent) {
@@ -592,7 +594,7 @@ public class FOMFactory
   }
   
   public Text newSubtitle(Text.Type type) {
-    return newSubtitle(type, (Element)null);
+    return newSubtitle(type, null);
   }
   
   public Text newSubtitle(Text.Type type, Element parent) {
@@ -608,7 +610,7 @@ public class FOMFactory
   }
   
   public Text newSummary(Text.Type type) {
-    return newSummary(type, (Element)null);
+    return newSummary(type, null);
   }
   
   public Text newSummary(Text.Type type, Element parent) {
@@ -624,7 +626,7 @@ public class FOMFactory
   }
   
   public Text newRights(Text.Type type) {
-    return newRights(type, (Element)null);
+    return newRights(type, null);
   }
   
   public Text newRights(Text.Type type, Element parent) {
@@ -632,7 +634,7 @@ public class FOMFactory
   }
   
   public Element newName() {
-    return newName((Element)null);
+    return newName(null);
   }
   
   public Element newName(Element parent) {
@@ -640,7 +642,7 @@ public class FOMFactory
   }
 
   public Element newEmail() {
-    return newEmail((Element)null);
+    return newEmail(null);
   }
   
   public Element newEmail(Element parent) {
@@ -850,7 +852,7 @@ public class FOMFactory
       return (T) _altclass.getConstructor(argtypes).newInstance(args);
     } catch (Exception e) {
       try {
-        return (T) _class.getConstructor(argtypes).newInstance(args);
+        return _class.getConstructor(argtypes).newInstance(args);
       } catch (Exception ex) {
         ex.printStackTrace();
       }

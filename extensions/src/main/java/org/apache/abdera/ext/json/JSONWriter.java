@@ -26,6 +26,7 @@ import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Content;
+import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
@@ -79,6 +80,8 @@ public class JSONWriter implements NamedWriter {
       return toJSON((Entry) object);
     } else if(object instanceof Service) {
       return toJSON((Service) object);
+    } else if(object instanceof Document) {
+      return toJSON(((Document)object).getRoot());
     }
     return new IllegalArgumentException("Element is not supported by JSONWriter.");
   }

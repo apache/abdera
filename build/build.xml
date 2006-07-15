@@ -292,6 +292,7 @@ Working directory: ${work}
     <zip destfile="${basedir}/${ant.project.name}.${version}.src.zip">
       <fileset dir="${basedir}">
         <exclude name="dist/**/*" />
+        <exclude name="**/*.jar" />
         <exclude name="**/*.zip" />
         <exclude name="**/.project" />
       </fileset>

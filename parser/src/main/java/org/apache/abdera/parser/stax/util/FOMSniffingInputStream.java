@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.parser.stax.util;
 
-import java.io.BufferedInputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,10 +35,12 @@ public class FOMSniffingInputStream
   private boolean bomset = false;
   
   public FOMSniffingInputStream(InputStream in) {
-    super(new BufferedInputStream(in));
+    super(new PeekAheadInputStream(in,4));
     try {
       encoding = detectEncoding();
-    } catch (IOException e) {}
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public boolean isBomSet() {
@@ -51,11 +52,9 @@ public class FOMSniffingInputStream
   }
   
   private String detectEncoding() throws IOException {
-    BufferedInputStream pin = (BufferedInputStream) this.in;
+    PeekAheadInputStream pin = (PeekAheadInputStream) this.in;
     byte[] bom = new byte[4];
-    pin.mark(pin.available());
-    pin.read(bom);
-    pin.reset();  
+    pin.peek(bom);
     String charset = null;
     if (bom[0] == 0x00 && bom[1] == 0x00 && bom[2] == 0xFFFFFFFE && bom[3] == 0xFFFFFFFF) {
       bomset = true;
@@ -88,19 +87,15 @@ public class FOMSniffingInputStream
       charset = "edbdic";
     } 
     bomset = false;
-    try {
+    try { 
+      byte[] p = new byte[200];
+      pin.peek(p);
       XMLStreamReader xmlreader = 
-        XMLInputFactory.newInstance().createXMLStreamReader(pin);
+        XMLInputFactory.newInstance().createXMLStreamReader(
+          new java.io.ByteArrayInputStream(p));
       String cs = xmlreader.getCharacterEncodingScheme();
       if (cs != null) charset = cs;
-    } catch (Exception e) {
-    } finally {
-      try {
-        pin.reset();
-      } catch (Exception ex) {
-        ex.printStackTrace();
-      }
-    }
+    } catch (Exception e) {}
     return charset;
   }
   

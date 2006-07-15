@@ -52,8 +52,9 @@ public class AbderaSource
       pipeout.flush();
       pipeout.close();
       return pipein;
-    } catch (IOException e) {}
-    return null;
+    } catch (IOException e) {
+      return null;
+    }
   }
 
   @Override

@@ -93,12 +93,12 @@ public class AbderaServlet
       // headers. If they want to skip the ones above, they simply
       // don't set them.
       Map<String, List<String>> headers = context.getHeaders();
-      if(headers != null) {
-        for(String header : headers.keySet()) {
+      if (headers != null) {
+        for (String header : headers.keySet()) {
           List<String> values = headers.get(header);
-          if(values == null) 
+          if (values == null) 
             continue;          
-          for(String value : values) {
+          for (String value : values) {
             response.setHeader(header, value);
           }
         }
@@ -107,8 +107,7 @@ public class AbderaServlet
       if (context.hasEntity())
         context.writeTo(response.getOutputStream());
     } else {
-      response.sendError(
-        HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
   }
   

@@ -119,9 +119,8 @@ public interface Content extends Element {
         }
       }
       return type;
-    }
-    
-  };
+    } 
+  }
   
   Type getContentType();
   
@@ -195,7 +194,6 @@ public interface Content extends Element {
   /**
    * Sets the string value of the content element by Base64 encoding the
    * specifed byte array.
-   * @throws MimeTypeParseException 
    * @throws UnsupportedOperationException if type = text, html, xhtml, or any application/*+xml, or text/* type
    */
   void setDataHandler(DataHandler dataHandler);

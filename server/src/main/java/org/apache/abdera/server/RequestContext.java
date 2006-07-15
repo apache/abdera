@@ -23,12 +23,8 @@ import java.net.URI;
 import java.util.List;
 
 public interface RequestContext {
-
-  public static enum Method {
-    GET, POST, PUT, DELETE, OPTIONS, HEAD
-  }
   
-  public Method getMethod();
+  public String getMethod();
   
   public URI getRequestUri();
   

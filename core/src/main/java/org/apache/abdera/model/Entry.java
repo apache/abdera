@@ -120,7 +120,6 @@ public interface Entry
 
   /**
    * Adds an author
-   * @throws URISyntaxException 
    */
   Person addAuthor(String name);
 
@@ -207,12 +206,12 @@ public interface Entry
   /**
    * Sets the content for this entry
    */
-  Content setContent(DataHandler dataHandler, String mediatype) throws MimeTypeParseException;;
+  Content setContent(DataHandler dataHandler, String mediatype) throws MimeTypeParseException;
   
   /**
    * Sets the content for this entry
    */
-  Content setContent(String value, String mediatype) throws MimeTypeParseException;;
+  Content setContent(String value, String mediatype) throws MimeTypeParseException;
   
   /**
    * Returns the text of the content element
@@ -235,8 +234,7 @@ public interface Entry
   void addContributor(Person person);
   
   /**
-   * Adds an author
-   * @throws URISyntaxException 
+   * Adds a contributor 
    */
   Person addContributor(String name);
 

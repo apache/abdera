@@ -51,9 +51,9 @@
       
   <property name="dependencies" value="${basedir}/dependencies" />
   <property name="dependencies.work" value="${dependencies}/work" />
-  <property name="dependencies.src" value="${dependencies}/src" />
-  <property name="dependencies.src.java"
-            value="${dependencies.src}/main/java" />
+  <property name="json.src" value="${dependencies}/json/src" />
+  <property name="json.src.java"
+            value="${json.src}/main/java" />
 
   <property name="json.jar" value="${dependencies}/json.jar" />
 
@@ -64,13 +64,17 @@
   </path>
  
   <target name="compile.dependencies">
-    <mkdir dir="${dependencies.work}" />
+    <mkdir dir="${dependencies.work}/json" />
 
-    <javac srcdir="${dependencies.src.java}" destdir="${dependencies.work}" />
+    <!-- build json -->
+    <javac srcdir="${json.src.java}" destdir="${dependencies.work}/json" />
 
     <jar destfile="${json.jar}"
-         basedir="${dependencies.work}"
+         basedir="${dependencies.work}/json"
          includes="org/json/*.class" />
+    
+    <delete dir="${dependencies.work}" />
+    
   </target>
  
   <target name="dependencies">
@@ -266,6 +270,7 @@ Working directory: ${work}
       <fileset dir="${dist}">
         <include name="**/*.jar" />
         <include name="**/legal/*" />
+        <exclude name="**/json/*" />
         <exclude name="**/*.retro.jar" />
         <exclude name="**/retroweaver-rt-1.2.3.jar" />
       </fileset>
@@ -280,6 +285,7 @@ Working directory: ${work}
         <fileset dir="${dist}">
           <include name="**/*.jar" />
           <include name="**/legal/*" />
+          <exclude name="**/json/*" />
           <exclude name="**/*.${version}.jar" />
         </fileset>
         <fileset dir="${docs}" includes="**/*" />

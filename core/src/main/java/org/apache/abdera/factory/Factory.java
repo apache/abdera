@@ -222,11 +222,5 @@ public interface Factory {
    * Registers an extension factory for this Factory instance only
    */
   void registerExtension(ExtensionFactory extensionFactory);
-  
-  /**
-   * Registers an alternative implementation class for the specified base
-   * for this Factory instance.  The alternative MUST extend the base
-   */
-  <T extends Base>void registerAlternative(Class<T> base, Class<? extends T> alternative);
-  
+    
 }

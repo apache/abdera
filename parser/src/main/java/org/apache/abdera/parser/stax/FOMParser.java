@@ -18,7 +18,6 @@
 package org.apache.abdera.parser.stax;
 
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
 
@@ -33,7 +32,6 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.parser.stax.util.FOMSniffingInputStream;
 import org.apache.abdera.util.AbstractParser;
-//import org.apache.abdera.util.SniffingInputStream;
 import org.apache.axiom.om.OMDocument;
 
 public class FOMParser 
@@ -86,14 +84,13 @@ public class FOMParser
         charset = sin.getEncoding();
         in = sin;
       }
-      Reader isr = null;
-      if (charset == null) {
-        isr = new InputStreamReader(in);
-      } else {
-        isr = new InputStreamReader(in,charset);
-      }
+      XMLStreamReader xmlreader = 
+        XMLInputFactory.newInstance().createXMLStreamReader(in);
       if (options != null && charset != null) options.setCharset(charset);
-      document = parse(isr, base, options);
+      FOMFactory factory = getFomFactory(options);
+      FOMBuilder builder = new FOMBuilder(factory, xmlreader, options);
+      document = getDocument(builder, base);
+      setCharset(options, xmlreader.getCharacterEncodingScheme(), document);
     } catch (Exception e) {
       if (!(e instanceof ParseException))
         e = new ParseException(e);

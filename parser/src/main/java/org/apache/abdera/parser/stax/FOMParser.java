@@ -21,7 +21,6 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
 
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.abdera.factory.Factory;
@@ -33,6 +32,7 @@ import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.parser.stax.util.FOMSniffingInputStream;
 import org.apache.abdera.util.AbstractParser;
 import org.apache.axiom.om.OMDocument;
+import org.apache.axiom.om.util.StAXUtils;
 
 public class FOMParser 
   extends AbstractParser 
@@ -84,8 +84,7 @@ public class FOMParser
         charset = sin.getEncoding();
         in = sin;
       }
-      XMLStreamReader xmlreader = 
-        XMLInputFactory.newInstance().createXMLStreamReader(in);
+      XMLStreamReader xmlreader = StAXUtils.createXMLStreamReader(in);
       if (options != null && charset != null) options.setCharset(charset);
       FOMFactory factory = getFomFactory(options);
       FOMBuilder builder = new FOMBuilder(factory, xmlreader, options);
@@ -109,8 +108,7 @@ public class FOMParser
       throw new IllegalArgumentException("Reader must not be null");
     try {
       FOMFactory factory = getFomFactory(options);
-      XMLStreamReader xmlreader = 
-        XMLInputFactory.newInstance().createXMLStreamReader(in);
+      XMLStreamReader xmlreader = StAXUtils.createXMLStreamReader(in);
       FOMBuilder builder = new FOMBuilder(factory, xmlreader, options);
       document = getDocument(builder, base);
       setCharset(options, xmlreader.getCharacterEncodingScheme(), document);

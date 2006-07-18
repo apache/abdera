@@ -43,7 +43,7 @@
       <artifactId>stax</artifactId>
     </dependency>
     <dependency>
-      <groupId>wstx</groupId>
+      <groupId>woodstox</groupId>
       <artifactId>wstx-asl</artifactId>
     </dependency>
     <dependency>

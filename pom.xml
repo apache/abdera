@@ -98,7 +98,7 @@
       </dependency>
       
       <dependency>
-        <groupId>wstx</groupId>
+        <groupId>woodstox</groupId>
         <artifactId>wstx-asl</artifactId>
         <version>2.0.5</version>
         <scope>runtime</scope>	    
@@ -135,6 +135,7 @@
   </dependencyManagement>
   
   <modules>
+    <module>dependencies/json</module>
     <module>core</module>
     <module>parser</module>
     <module>security</module>

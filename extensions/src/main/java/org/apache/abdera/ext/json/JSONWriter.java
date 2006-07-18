@@ -26,6 +26,7 @@ import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Content;
+import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
@@ -79,6 +80,8 @@ public class JSONWriter implements NamedWriter {
       return toJSON((Entry) object);
     } else if(object instanceof Service) {
       return toJSON((Service) object);
+    } else if(object instanceof Document) {
+      return toJSON(((Document)object).getRoot());
     }
     return new IllegalArgumentException("Element is not supported by JSONWriter.");
   }
@@ -109,12 +112,21 @@ public class JSONWriter implements NamedWriter {
     
     JSONArray jscategories = new JSONArray();
     List<Category> categories = entry.getCategories();
-    for(Category category : categories) {
-      JSONObject jscategory = new JSONObject();
-      jscategory.put("scheme", category.getScheme().toString());
-      jscategory.put("term", category.getTerm());
-      jscategory.put("label", category.getLabel());
-      jscategories.put(jscategory);
+    for(Category category : categories) {      
+      if(category.getScheme() != null || 
+          category.getLabel() != null ||
+          category.getTerm() != null) {
+        JSONObject jscategory = new JSONObject();
+        if(category.getScheme() != null)
+          jscategory.put("scheme", category.getScheme().toString());
+        
+        if(category.getTerm() != null)
+          jscategory.put("term", category.getTerm());
+        
+        if(category.getLabel() != null)
+          jscategory.put("label", category.getLabel());
+        jscategories.put(jscategory);
+      }
     }
     jsentry.put("categories", jscategories);
     

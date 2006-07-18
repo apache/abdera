@@ -29,6 +29,12 @@
       <scope>compile</scope>
     </dependency>   
     <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>json</artifactId>
+      <version>1.0</version>
+      <scope>compile</scope>
+    </dependency>   
+    <dependency>
       <groupId>ws-commons</groupId>
       <artifactId>axiom-api</artifactId>
     </dependency>
@@ -45,7 +51,7 @@
       <artifactId>stax</artifactId>
     </dependency>
     <dependency>
-      <groupId>wstx</groupId>
+      <groupId>woodstox</groupId>
       <artifactId>wstx-asl</artifactId>
     </dependency> 
   </dependencies>

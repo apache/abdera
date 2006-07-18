@@ -135,6 +135,7 @@
   </dependencyManagement>
   
   <modules>
+    <module>dependencies/json</module>
     <module>core</module>
     <module>parser</module>
     <module>security</module>

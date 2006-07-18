@@ -54,8 +54,9 @@
   <property name="json.src" value="${dependencies}/json/src" />
   <property name="json.src.java"
             value="${json.src}/main/java" />
+  <property name="json.version" value="1.0" />
 
-  <property name="json.jar" value="${dependencies}/json.jar" />
+  <property name="json.jar" value="${dependencies}/json-${json.version}.jar" />
 
   <property file="${dependencies}/deps.properties" />
   

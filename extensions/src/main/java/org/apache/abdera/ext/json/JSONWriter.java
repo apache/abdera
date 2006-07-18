@@ -69,6 +69,7 @@ public class JSONWriter implements NamedWriter {
       Object result = toJSON(base);
       out.write(result.toString());
     } catch(Exception e) {
+      e.printStackTrace();
       throw new IOException(e.getMessage());
     }    
   }
@@ -112,12 +113,21 @@ public class JSONWriter implements NamedWriter {
     
     JSONArray jscategories = new JSONArray();
     List<Category> categories = entry.getCategories();
-    for(Category category : categories) {
-      JSONObject jscategory = new JSONObject();
-      jscategory.put("scheme", category.getScheme().toString());
-      jscategory.put("term", category.getTerm());
-      jscategory.put("label", category.getLabel());
-      jscategories.put(jscategory);
+    for(Category category : categories) {      
+      if(category.getScheme() != null || 
+          category.getLabel() != null ||
+          category.getTerm() != null) {
+        JSONObject jscategory = new JSONObject();
+        if(category.getScheme() != null)
+          jscategory.put("scheme", category.getScheme().toString());
+        
+        if(category.getTerm() != null)
+          jscategory.put("term", category.getTerm());
+        
+        if(category.getLabel() != null)
+          jscategory.put("label", category.getLabel());
+        jscategories.put(jscategory);
+      }
     }
     jsentry.put("categories", jscategories);
     

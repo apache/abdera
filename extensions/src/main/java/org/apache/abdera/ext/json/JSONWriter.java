@@ -69,7 +69,6 @@ public class JSONWriter implements NamedWriter {
       Object result = toJSON(base);
       out.write(result.toString());
     } catch(Exception e) {
-      e.printStackTrace();
       throw new IOException(e.getMessage());
     }    
   }

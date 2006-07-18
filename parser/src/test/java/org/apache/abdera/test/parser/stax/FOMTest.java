@@ -20,7 +20,6 @@ package org.apache.abdera.test.parser.stax;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
-import java.net.URI;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,8 +57,6 @@ import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
-import org.apache.abdera.parser.stax.FOMEntry;
-import org.apache.abdera.parser.stax.FOMFactory;
 import org.apache.abdera.util.AbderaSource;
 import org.apache.abdera.util.BlackListParseFilter;
 import org.apache.abdera.util.Constants;
@@ -68,12 +65,6 @@ import org.apache.abdera.util.Version;
 import org.apache.abdera.util.WhiteListParseFilter;
 import org.apache.abdera.xpath.XPath;
 import org.apache.axiom.attachments.ByteArrayDataSource;
-import org.apache.axiom.om.OMContainer;
-import org.apache.axiom.om.OMException;
-import org.apache.axiom.om.OMFactory;
-import org.apache.axiom.om.OMNamespace;
-import org.apache.axiom.om.OMXMLParserWrapper;
-
 
 import junit.framework.TestCase;
 
@@ -134,13 +125,15 @@ public class FOMTest extends TestCase   {
     entry2.setId("urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b", false);
     entry2.setSummary("A response");
     
-    String compare = "<?xml version='1.0' encoding='UTF-8'?><a:feed xmlns:a=\"http://www.w3.org/2005/Atom\" xml:base=\"http://example.org\" xml:lang=\"en-US\"><a:title type=\"text\">Example Feed</a:title><a:link href=\"http://example.org/\" /><a:author><a:name>John Doe</a:name></a:author><a:id>urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6</a:id><a:contributor><a:name>Bob Jones</a:name></a:contributor><a:category term=\"example\" /><a:entry><a:title type=\"text\">re: Atom-Powered Robots Run Amok</a:title><a:link href=\"/2003/12/13/atom03/1\" /><a:id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b</a:id><a:summary type=\"text\">A response</a:summary></a:entry><a:entry><a:title type=\"text\">Atom-Powered Robots Run Amok</a:title><a:link href=\"http://example.org/2003/12/13/atom03\" /><a:id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</a:id><a:summary type=\"text\">Some text.</a:summary></a:entry></a:feed>";
+    //TODO: we can't compare the serializations.  different 
+    // stax impls serialize with slight variances
+    //String compare = "<?xml version='1.0' encoding='UTF-8'?><a:feed xmlns:a=\"http://www.w3.org/2005/Atom\" xml:base=\"http://example.org\" xml:lang=\"en-US\"><a:title type=\"text\">Example Feed</a:title><a:link href=\"http://example.org/\" /><a:author><a:name>John Doe</a:name></a:author><a:id>urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6</a:id><a:contributor><a:name>Bob Jones</a:name></a:contributor><a:category term=\"example\" /><a:entry><a:title type=\"text\">re: Atom-Powered Robots Run Amok</a:title><a:link href=\"/2003/12/13/atom03/1\" /><a:id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b</a:id><a:summary type=\"text\">A response</a:summary></a:entry><a:entry><a:title type=\"text\">Atom-Powered Robots Run Amok</a:title><a:link href=\"http://example.org/2003/12/13/atom03\" /><a:id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</a:id><a:summary type=\"text\">Some text.</a:summary></a:entry></a:feed>";
     
-    ByteArrayOutputStream out = new ByteArrayOutputStream(512);
-    feed.getDocument().writeTo(out);
-    String actual = out.toString();
+    //ByteArrayOutputStream out = new ByteArrayOutputStream(512);
+    //feed.getDocument().writeTo(out);
+    //String actual = out.toString();
     
-    assertEquals(actual, compare);
+    //assertEquals(actual, compare);
     
     assertEquals(feed.getEntries().get(0).getId().toString(), "urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b");
     assertEquals(feed.getEntries().get(1).getId().toString(), "urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a");
@@ -712,20 +705,6 @@ public class FOMTest extends TestCase   {
     assertEquals(entry.getSummary(), "Some text.");
   }
   
-  public void testAlternatives() throws Exception {
-     Factory factory = new MyFactory();
-     Entry entry = factory.newEntry();
-     assertTrue(entry instanceof MyEntry);
-     
-     ParserOptions options = Parser.INSTANCE.getDefaultParserOptions();
-     options.setFactory(factory);
-     InputStream in = FOMTest.class.getResourceAsStream("/simple.xml");
-     Document<Feed> doc = Parser.INSTANCE.parse(in, (URI)null, options);
-     Feed feed = doc.getRoot();
-     entry = feed.getEntries().get(0);
-     assertTrue(entry instanceof MyEntry);
-  }
-  
   public void testSourceResult() throws Exception {
     try {
       // Apply an XSLT transform to the entire Feed
@@ -757,53 +736,4 @@ public class FOMTest extends TestCase   {
     }
   }
   
-  public static class MyFactory extends FOMFactory {
-    public MyFactory() {
-      registerAlternative(FOMEntry.class, MyEntry.class);
-    }
-  }
-  
-  @SuppressWarnings("serial")
-  public static class MyEntry extends FOMEntry{
-
-    public MyEntry(
-      OMContainer parent, 
-      OMFactory factory, 
-      OMXMLParserWrapper builder) 
-        throws OMException {
-      super(parent, factory, builder);
-    }
-
-    public MyEntry(
-      OMContainer parent, 
-      OMFactory factory) 
-        throws OMException {
-      super(parent, factory);
-    }
-
-    public MyEntry(
-      QName qname, 
-      OMContainer parent, 
-      OMFactory factory, 
-      OMXMLParserWrapper builder) {
-        super(qname, parent, factory, builder);
-    }
-
-    public MyEntry(
-      QName qname, 
-      OMContainer parent, 
-      OMFactory factory) {
-        super(qname, parent, factory);
-    }
-
-    public MyEntry(
-      String name, 
-      OMNamespace namespace, 
-      OMContainer parent, 
-      OMFactory factory) 
-        throws OMException {
-      super(name, namespace, parent, factory);
-    }
-    
-  }
 }

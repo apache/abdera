@@ -102,7 +102,7 @@ public interface Content extends Element {
 
   public enum Type { 
     TEXT, HTML, XHTML, XML, MEDIA;
-  
+    
     public static Type typeFromString(String val) {
       Type type = TEXT;
       if (val != null) {

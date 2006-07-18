@@ -57,6 +57,10 @@ package org.apache.abdera.model;
 public interface Text 
   extends Element {
 
+  public static final int TYPE_TEXT = 0;
+  public static final int TYPE_HTML = 1;
+  public static final int TYPE_XHTML = 2;
+  
   public static enum Type { 
     TEXT, HTML, XHTML;
     

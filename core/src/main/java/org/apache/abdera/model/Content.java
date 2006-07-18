@@ -100,15 +100,9 @@ import org.apache.abdera.util.MimeTypeHelper;
  */
 public interface Content extends Element {
 
-  public static final int TYPE_TEXT = 0;
-  public static final int TYPE_HTML = 1;
-  public static final int TYPE_XHTML = 2;
-  public static final int TYPE_XML = 3;
-  public static final int TYPE_MEDIA = 4;
-  
   public enum Type { 
     TEXT, HTML, XHTML, XML, MEDIA;
-  
+    
     public static Type typeFromString(String val) {
       Type type = TEXT;
       if (val != null) {

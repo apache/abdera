@@ -28,8 +28,8 @@ import java.util.Map;
 
 import javax.activation.MimeType;
 
-import org.apache.abdera.server.CachePolicy;
 import org.apache.abdera.server.ResponseContext;
+import org.apache.abdera.server.cache.CachePolicy;
 
 @SuppressWarnings("serial")
 public class AbderaServerException 

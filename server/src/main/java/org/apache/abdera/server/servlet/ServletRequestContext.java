@@ -77,65 +77,65 @@ public class ServletRequestContext
   }
   
   public URI getBaseUri() {
-	// TODO: this should be done from properties
-	StringBuffer buffer = new StringBuffer("http://");
-	buffer.append(servletRequest.getServerName());
-	if (servletRequest.getLocalPort() != 80) {
-		buffer.append(":");
-		buffer.append(servletRequest.getLocalPort());
-	}
-	buffer.append(servletRequest.getServletPath());
-  
-  // So that .resolve() works appropriately.
-  buffer.append("/");
-	try {
-		return new URI(buffer.toString());
-	} catch (URISyntaxException e) {
-		throw new RuntimeException(e);
-	}
+    // TODO: this should be done from properties
+    StringBuffer buffer = new StringBuffer("http://");
+    buffer.append(servletRequest.getServerName());
+    if (servletRequest.getLocalPort() != 80) {
+      buffer.append(":");
+      buffer.append(servletRequest.getLocalPort());
+    }
+    buffer.append(servletRequest.getServletPath());
+    
+    // So that .resolve() works appropriately.
+    buffer.append("/");
+    try {
+      return new URI(buffer.toString());
+    } catch (URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
   }
   
   public String getHeader(String name) {
-	  return servletRequest.getHeader(name);
+    return servletRequest.getHeader(name);
   }
 
   @SuppressWarnings("unchecked")
   public List<String> getHeaders(String name) {
-	  return Collections.list(servletRequest.getHeaders(name));
+    return Collections.list(servletRequest.getHeaders(name));
   }
-  
+
   @SuppressWarnings("unchecked")
   public List<String> getHeaderNames() {
-	  return Collections.list(servletRequest.getHeaderNames());
+    return  Collections.list(servletRequest.getHeaderNames());
   }
-  
+    
   public URI getPathInfo() {
-	try {
-		String pathInfo = servletRequest.getPathInfo();
-		if(pathInfo == null) {
-			pathInfo = "";
-		}
-		return new URI(pathInfo);
-	} catch (URISyntaxException e) {
-		throw new RuntimeException(e);
-	}
+    try {
+      String pathInfo = servletRequest.getPathInfo();
+      if(pathInfo == null)  {
+        pathInfo = "";
+      }
+      return new URI(pathInfo);
+    } catch (URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
   }
   
   public String getParameter(String name) {
-	  return servletRequest.getParameter(name);
-  }
-  
-  public List<String> getParameters(String name) {
-	  return Arrays.asList(servletRequest.getParameterValues(name)); 
-  }
-  
-  @SuppressWarnings("unchecked")
-  public List<String> getParameterNames() {
-	  return Collections.list(servletRequest.getParameterNames());
+    return  servletRequest.getParameter(name);
   }
     
+  public List<String> getParameters(String name) {
+   return Arrays.asList(servletRequest.getParameterValues(name));  
+  }
+
+  @SuppressWarnings("unchecked") 
+  public List<String> getParameterNames() { 
+    return Collections.list(servletRequest.getParameterNames());
+  }
+        
   public InputStream getInputStream() throws IOException {
-	  return servletRequest.getInputStream();
+    return servletRequest.getInputStream();
   }
 
 }

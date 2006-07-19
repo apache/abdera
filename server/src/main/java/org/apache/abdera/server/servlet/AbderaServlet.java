@@ -44,7 +44,7 @@ public class AbderaServlet
     HttpServletRequest request, 
     HttpServletResponse response) 
       throws ServletException, IOException {
-    RequestContext requestContext = new ServletRequestContext(request);
+    RequestContext requestContext = new ServletRequestContext(request, true);
     ResponseContext responseContext = null;
     RequestHandler handler = null;
     try {

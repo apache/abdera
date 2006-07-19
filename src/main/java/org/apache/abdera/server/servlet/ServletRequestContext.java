@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -33,14 +32,35 @@ import org.apache.abdera.server.RequestContext;
 public class ServletRequestContext 
   implements RequestContext {
 
-  private HttpServletRequest servletRequest = null;
+  public static final String X_OVERRIDE_HEADER = "X-Method-Override";
   
-  public ServletRequestContext(HttpServletRequest request) {
-    this.servletRequest = request;
+  private HttpServletRequest servletRequest = null;
+  private boolean use_post_tunnel = true;
+  private String method = null;
+  
+  public ServletRequestContext(
+    HttpServletRequest request) {
+      this.servletRequest = request;
+  }
+  
+  public ServletRequestContext(
+    HttpServletRequest request, 
+    boolean use_post_tunnel) {
+      this(request);
+      this.use_post_tunnel = use_post_tunnel;
   }
   
   public String getMethod() {
-    return servletRequest.getMethod();
+    if (method == null) {
+      method = servletRequest.getMethod();
+      if (use_post_tunnel && method.equalsIgnoreCase("POST")) {
+        String override = servletRequest.getHeader(X_OVERRIDE_HEADER);
+        if(override != null) {
+          method = override.toUpperCase();
+        }
+      }
+    }
+    return method;
   }
   
   public URI getRequestUri() {
@@ -79,10 +99,12 @@ public class ServletRequestContext
 	  return servletRequest.getHeader(name);
   }
 
+  @SuppressWarnings("unchecked")
   public List<String> getHeaders(String name) {
 	  return Collections.list(servletRequest.getHeaders(name));
   }
   
+  @SuppressWarnings("unchecked")
   public List<String> getHeaderNames() {
 	  return Collections.list(servletRequest.getHeaderNames());
   }
@@ -107,6 +129,7 @@ public class ServletRequestContext
 	  return Arrays.asList(servletRequest.getParameterValues(name)); 
   }
   
+  @SuppressWarnings("unchecked")
   public List<String> getParameterNames() {
 	  return Collections.list(servletRequest.getParameterNames());
   }

@@ -26,6 +26,8 @@ import java.util.Map;
 
 import javax.activation.MimeType;
 
+import org.apache.abdera.server.cache.CachePolicy;
+
 public interface ResponseContext {
 
   public int getStatus();

@@ -54,8 +54,9 @@
   <property name="json.src" value="${dependencies}/json/src" />
   <property name="json.src.java"
             value="${json.src}/main/java" />
+  <property name="json.version" value="1.0" />
 
-  <property name="json.jar" value="${dependencies}/json.jar" />
+  <property name="json.jar" value="${dependencies}/json-${json.version}.jar" />
 
   <property file="${dependencies}/deps.properties" />
   
@@ -318,7 +319,7 @@ Working directory: ${work}
     </copy>
     <zip destfile="${basedir}/${ant.project.name}.${version}.src.zip"
       basedir="${work}/dist/" />
-    <delete dir="${work}/dist/${ant.project.name}.${version}" />
+    <delete dir="${work}" />
   </target>
 
   <target name="downloadsecurity" if="do.download.security">

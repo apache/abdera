@@ -267,7 +267,8 @@ Working directory: ${work}
   </target>
   
   <target name="zip" depends="retro"> 
-    <zip destfile="${basedir}/${ant.project.name}.${version}.zip">
+    <mkdir dir="${work}/dist/${ant.project.name}.${version}"/>
+    <copy todir="${work}/dist/${ant.project.name}.${version}">
       <fileset dir="${dist}">
         <include name="**/*.jar" />
         <include name="**/legal/*" />
@@ -281,30 +282,44 @@ Working directory: ${work}
         <include name="NOTICE" />
         <include name="README" />
       </fileset>
-    </zip>
-      <zip destfile="${basedir}/${ant.project.name}.${version}.jdk142.zip">
-        <fileset dir="${dist}">
-          <include name="**/*.jar" />
-          <include name="**/legal/*" />
-          <exclude name="**/json/*" />
-          <exclude name="**/*.${version}.jar" />
-        </fileset>
-        <fileset dir="${docs}" includes="**/*" />
-        <fileset dir="${basedir}">
-          <include name="LICENSE" />
-          <include name="NOTICE" />
-          <include name="README" />
-        </fileset>
-      </zip>
-    <zip destfile="${basedir}/${ant.project.name}.${version}.src.zip">
+    </copy>
+    <zip destfile="${basedir}/${ant.project.name}.${version}.zip" 
+         basedir="${work}/dist/" />
+    <delete dir="${work}/dist/${ant.project.name}.${version}" />
+    <mkdir dir="${work}/dist/${ant.project.name}.${version}"/>
+    <copy todir="${work}/dist/${ant.project.name}.${version}">
+      <fileset dir="${dist}">
+        <include name="**/*.jar" />
+        <include name="**/legal/*" />
+        <exclude name="**/json/*" />
+        <exclude name="**/*.${version}.jar" />
+      </fileset>
+      <fileset dir="${docs}" includes="**/*" />
+      <fileset dir="${basedir}">
+        <include name="LICENSE" />
+        <include name="NOTICE" />
+        <include name="README" />
+      </fileset>
+    </copy>
+    <zip destfile="${basedir}/${ant.project.name}.${version}.jdk142.zip" 
+      basedir="${work}/dist/" />
+    <delete dir="${work}/dist/${ant.project.name}.${version}" />
+    <mkdir dir="${work}/dist/${ant.project.name}.${version}"/>
+    <copy todir="${work}/dist/${ant.project.name}.${version}">
       <fileset dir="${basedir}">
         <exclude name="dist/**/*" />
+        <exclude name="build/tools" />
+        <exclude name="build/work" />
         <exclude name="build/tools/**/*" />
+        <exclude name="build/work/**/*" />
         <exclude name="**/*.jar" />
         <exclude name="**/*.zip" />
         <exclude name="**/.project" />
       </fileset>
-    </zip>
+    </copy>
+    <zip destfile="${basedir}/${ant.project.name}.${version}.src.zip"
+      basedir="${work}/dist/" />
+    <delete dir="${work}" />
   </target>
 
   <target name="downloadsecurity" if="do.download.security">

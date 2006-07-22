@@ -30,6 +30,7 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Base;
@@ -287,7 +288,7 @@ public class FOMElement
       OMOutputFormat outputFormat = new OMOutputFormat();
       if (getDocument() != null && getDocument().getCharset() != null)
         outputFormat.setCharSetEncoding(getDocument().getCharset());
-      serializeAndConsume(writer, outputFormat);
+      serialize(writer, outputFormat);
     } catch (XMLStreamException e) {
       throw new FOMException(e);
     }
@@ -537,5 +538,20 @@ public class FOMElement
   
   public Factory getFactory() {
     return (Factory) this.factory;
+  }
+
+  @Override
+  protected void internalSerialize(
+    XMLStreamWriter writer, 
+    boolean bool) throws XMLStreamException {
+    if (this.getNamespace() != null)
+      this.declareNamespace(this.getNamespace());
+    Iterator i = this.getAllAttributes();
+    while (i.hasNext()) {
+      OMAttribute attr = (OMAttribute) i.next();
+      if (attr.getNamespace() != null)
+        this.declareNamespace(attr.getNamespace());
+    }
+    super.internalSerialize(writer, bool);
   }
 }

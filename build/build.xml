@@ -272,6 +272,7 @@ Working directory: ${work}
       <fileset dir="${dist}">
         <include name="**/*.jar" />
         <include name="**/legal/*" />
+        <exclude name="**/legal/retroweaver-LICENSE.txt" />
         <exclude name="**/json/*" />
         <exclude name="**/*.retro.jar" />
         <exclude name="**/retroweaver-rt-1.2.3.jar" />

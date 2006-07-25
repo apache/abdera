@@ -35,32 +35,14 @@ public class ServletRequestContext
   public static final String X_OVERRIDE_HEADER = "X-Method-Override";
   
   private HttpServletRequest servletRequest = null;
-  private boolean use_post_tunnel = true;
-  private String method = null;
   
   public ServletRequestContext(
     HttpServletRequest request) {
       this.servletRequest = request;
   }
   
-  public ServletRequestContext(
-    HttpServletRequest request, 
-    boolean use_post_tunnel) {
-      this(request);
-      this.use_post_tunnel = use_post_tunnel;
-  }
-  
   public String getMethod() {
-    if (method == null) {
-      method = servletRequest.getMethod();
-      if (use_post_tunnel && method.equalsIgnoreCase("POST")) {
-        String override = servletRequest.getHeader(X_OVERRIDE_HEADER);
-        if(override != null) {
-          method = override.toUpperCase();
-        }
-      }
-    }
-    return method;
+    return servletRequest.getMethod();
   }
   
   public URI getRequestUri() {

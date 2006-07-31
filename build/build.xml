@@ -159,6 +159,13 @@ Working directory: ${work}
            destdir="${test}" 
            classpathref="jar.dependencies"
            classpath="${core.work}"/>
+    <mkdir dir="${core.work}/META-INF" />
+    <copy todir="${core.work}/META-INF">
+      <fileset dir="${basedir}">
+        <include name="LICENSE" />
+        <include name="NOTICE" />
+      </fileset>
+    </copy>
   </target>
   
   <target name="compile.parser" depends="init,compile.core">
@@ -171,6 +178,13 @@ Working directory: ${work}
            destdir="${test}"
            classpathref="jar.dependencies"
            classpath="${core.work};${parser.work}" />
+    <mkdir dir="${parser.work}/META-INF" />
+    <copy todir="${parser.work}/META-INF">
+      <fileset dir="${basedir}">
+        <include name="LICENSE" />
+        <include name="NOTICE" />
+      </fileset>
+    </copy>
     <copy todir="${test}">
       <fileset dir="${parser.test.resources}">
         <include name="**"/>
@@ -188,6 +202,13 @@ Working directory: ${work}
            destdir="${test}"
            classpathref="jar.dependencies"
            classpath="${core.work};${parser.work};${extensions.work}" />
+    <mkdir dir="${extensions.work}/META-INF" />
+    <copy todir="${extensions.work}/META-INF">
+      <fileset dir="${basedir}">
+        <include name="LICENSE" />
+        <include name="NOTICE" />
+      </fileset>
+    </copy>
     <copy todir="${extensions.work}">
       <fileset dir="${extensions.resources}" includes="**/*" />
     </copy>
@@ -202,6 +223,13 @@ Working directory: ${work}
            destdir="${server.work}"
            classpathref="jar.dependencies"
            classpath="${core.work}" />
+    <mkdir dir="${server.work}/META-INF" />
+    <copy todir="${server.work}/META-INF">
+      <fileset dir="${basedir}">
+        <include name="LICENSE" />
+        <include name="NOTICE" />
+      </fileset>
+    </copy>
   </target>  
   
   <target name="compile.security" depends="init, compile.core" if="do.security">
@@ -210,6 +238,13 @@ Working directory: ${work}
            destdir="${security.work}"
            classpathref="jar.dependencies"
            classpath="${core.work}" />    
+    <mkdir dir="${security.work}/META-INF" />
+    <copy todir="${security.work}/META-INF">
+      <fileset dir="${basedir}">
+        <include name="LICENSE" />
+        <include name="NOTICE" />
+      </fileset>
+    </copy>
   </target>
 
   <target name="build" depends="init,compile.core,compile.parser,compile.server,compile.extensions,compile.security"></target>

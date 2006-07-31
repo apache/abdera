@@ -1,4 +1,4 @@
-To build with maven (http://maven.apache.org/):
+To build with maven 2.x (http://maven.apache.org/):
 
   mvn install
   

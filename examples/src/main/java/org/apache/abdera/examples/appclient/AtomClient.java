@@ -163,7 +163,6 @@ public class AtomClient {
       if (ServerException.isServerException(status)) 
         throw new ServerException(status, method.getStatusText());
       if (status == 304) throw new NotModifiedException();
-System.out.println(method.getResponseBodyAsString());
       return _parse(method, new URI(method.getURI().toString()));
     } finally {
       if (bufferStream)

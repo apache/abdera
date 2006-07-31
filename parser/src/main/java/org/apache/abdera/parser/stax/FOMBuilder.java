@@ -146,8 +146,8 @@ public class FOMBuilder
  
   private FOMFactory getFomFactory() {
     FOMFactory factory = 
-      (parserOptions != null && parserOptions.getFactory() != null) ? 
-      (FOMFactory)parserOptions.getFactory() : null;
+      (parserOptions != null) ? 
+        (FOMFactory)parserOptions.getFactory() : null;
     if (factory == null)
       factory = (Factory.INSTANCE instanceof FOMFactory) ? 
           (FOMFactory)Factory.INSTANCE : new FOMFactory();

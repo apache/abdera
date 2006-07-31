@@ -144,6 +144,16 @@ Working directory: ${work}
       </and>
     </condition>
     
+    <mkdir dir="${work}" />
+    <manifest file="${work}/MANIFEST.MF">
+    <attribute name="Specification-Title" value="Apache Abdera"/>
+    <attribute name="Specification-Version" value="${version}"/>
+    <attribute name="Specification-Vendor" value="The Apache Software Foundation - Incubator"/>
+    <attribute name="Implementation-Title" value="org.apache.abdera"/>
+    <attribute name="Implementation-Version" value="${version}"/> 
+    <attribute name="Implementation-Vendor" value="The Apache Software Foundation - Incubator"/>
+    </manifest>
+    
     <echo>Building Security? ${do.security}</echo>
     
     <antcall target="download"/>
@@ -301,10 +311,10 @@ Working directory: ${work}
   <target name="dist" depends="clean,build,test,docs">
     <mkdir dir="${dist}" />
     <mkdir dir="${dist_lib}" />
-    <jar destfile="${core.jar}"   basedir="${core.work}" />
-    <jar destfile="${parser.jar}" basedir="${parser.work}" />
-    <jar destfile="${server.jar}" basedir="${server.work}" />    
-    <jar destfile="${extensions.jar}" basedir="${extensions.work}" />
+    <jar destfile="${core.jar}"   basedir="${core.work}" manifest="${work}/MANIFEST.MF" />
+    <jar destfile="${parser.jar}" basedir="${parser.work}" manifest="${work}/MANIFEST.MF" />
+    <jar destfile="${server.jar}" basedir="${server.work}" manifest="${work}/MANIFEST.MF" />    
+    <jar destfile="${extensions.jar}" basedir="${extensions.work}" manifest="${work}/MANIFEST.MF" />
     <antcall target="dist.security" />
     <copy todir="${dist_lib}">
       <fileset dir="${dependencies}"  />
@@ -314,7 +324,7 @@ Working directory: ${work}
   </target>
   
   <target name="dist.security" if="do.security">
-    <jar destfile="${security.jar}" basedir="${security.work}" />
+    <jar destfile="${security.jar}" basedir="${security.work}" manifest="${work}/MANIFEST.MF" />
   </target>
   
   <target name="zip" depends="retro"> 

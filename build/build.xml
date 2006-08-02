@@ -293,7 +293,7 @@ Working directory: ${work}
     <echo>Running Extension Tests...</echo>
     <java classpathref="jar.dependencies"
           classpath="${core.work}:${parser.work}:${server.work}:${extensions.work}:${test}"
-          classname="org.apache.abdera.test.ext.opensearch.TestSuite"
+          classname="org.apache.abdera.test.ext.TestSuite"
           fork="yes" />
   </target>
 

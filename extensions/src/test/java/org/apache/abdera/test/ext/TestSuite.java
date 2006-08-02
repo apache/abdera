@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.test.ext.opensearch;
+package org.apache.abdera.test.ext;
 
 import org.apache.abdera.test.ext.opensearch.*;
 

@@ -42,14 +42,14 @@ public class PeekAheadInputStream
     this.origsize = initialSize;
   }
 
-  public int clear() {
+  public synchronized int clear() {
     int m = buf.length;
     buf = new byte[origsize];
     pos = origsize;
     return m;
   }
   
-  public int shrink() {
+  public synchronized int shrink() {
     byte[] old = buf;
     if (pos == 0) return 0; // nothing to do
     int n = old.length - pos;
@@ -80,7 +80,7 @@ public class PeekAheadInputStream
   }
 
   @Override
-  public void unread(byte[] b, int off, int len) throws IOException {
+  public synchronized void unread(byte[] b, int off, int len) throws IOException {
     if (len > pos && pos + len > buf.length) {
       resize(len-pos);
       pos += len-pos;
@@ -89,7 +89,7 @@ public class PeekAheadInputStream
   }
 
   @Override
-  public void unread(int b) throws IOException {
+  public synchronized void unread(int b) throws IOException {
     if (pos == 0) {
       resize(1);
       pos++;
@@ -97,31 +97,31 @@ public class PeekAheadInputStream
     super.unread(b);
   }
   
-  public int peek() throws IOException {
+  public synchronized int peek() throws IOException {
     int m = read();
     unread(m);
     return m;
   }
   
-  public int peek(byte[] buf) throws IOException {
+  public synchronized int peek(byte[] buf) throws IOException {
     return peek(buf, 0, buf.length);
   }
   
-  public int peek(byte[] buf, int off, int len) throws IOException {
+  public synchronized int peek(byte[] buf, int off, int len) throws IOException {
     int r = read(buf, off, len);
     unread(buf,off,len);
     return r;
   }
 
   @Override
-  public int read() throws IOException {
+  public synchronized int read() throws IOException {
     int m = super.read();
     if (pos >= buf.length && buf.length > origsize) shrink();
     return m;
   }
 
   @Override
-  public int read(byte[] b, int off, int len) throws IOException {
+  public synchronized int read(byte[] b, int off, int len) throws IOException {
     this.available(); // workaround for a problem in PushbackInputStream, without this, the amount of bytes read from some streams will be incorrect
     int r = super.read(b, off, len);
     if (pos >= buf.length && buf.length > origsize) shrink();
@@ -129,7 +129,7 @@ public class PeekAheadInputStream
   }
 
   @Override
-  public long skip(long n) throws IOException {
+  public synchronized long skip(long n) throws IOException {
     long r = super.skip(n);
     if (pos >= buf.length && buf.length > origsize) shrink();
     return r;

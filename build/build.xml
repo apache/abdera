@@ -63,6 +63,11 @@
   <property name="security.src" value="${security}/src/main/java" />
   <property name="security.work" value="${work}/security" />
   <property name="security.jar" value="${dist}/${ant.project.name}.security.${version}.jar" />
+  <property name="client" value="${basedir}/client" />
+  <property name="client.src" value="${client}/src/main/java" />
+  <property name="client.work" value="${work}/client" />
+  <property name="client.jar" value="${dist}/${ant.project.name}.client.${version}.jar" />
+  
   <property environment="env" />
       
   <property name="dependencies" value="${basedir}/dependencies" />
@@ -257,12 +262,27 @@ Working directory: ${work}
     </copy>
   </target>
 
-  <target name="build" depends="init,compile.core,compile.parser,compile.server,compile.extensions,compile.security"></target>
+  <target name="compile.client" depends="init,compile.core">
+    <mkdir dir="${client.work}" />
+    <javac srcdir="${client.src}"
+           destdir="${client.work}"
+           classpathref="jar.dependencies"
+           classpath="${core.work}" />
+    <mkdir dir="${client.work}/META-INF" />
+    <copy todir="${client.work}/META-INF">
+      <fileset dir="${basedir}">
+        <include name="LICENSE" />
+        <include name="NOTICE" />
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="build" depends="init,compile.core,compile.parser,compile.server,compile.extensions,compile.client,compile.security"></target>
 
   <target name="docs" depends="init">
     <javadoc packagenames="org.apache.abdera.*"
              excludepackagenames="org.apache.abdera.util,org.apache.abdera.ext.*.impl,org.apache.abdera.parser.**,org.apache.abdera.security.**"
-             sourcepath="${core.src}:${extensions.src}:${security.src}:${server.src}:${parser.src}" 
+             sourcepath="${core.src}:${extensions.src}:${security.src}:${server.src}:${parser.src}:${client.src}" 
              destdir="${javadocs}"
              windowtitle="Abdera"
              classpathref="jar.dependencies" />
@@ -315,6 +335,7 @@ Working directory: ${work}
     <jar destfile="${parser.jar}" basedir="${parser.work}" manifest="${work}/MANIFEST.MF" />
     <jar destfile="${server.jar}" basedir="${server.work}" manifest="${work}/MANIFEST.MF" />    
     <jar destfile="${extensions.jar}" basedir="${extensions.work}" manifest="${work}/MANIFEST.MF" />
+    <jar destfile="${client.jar}" basedir="${client.work}" manifest="${work}/MANIFEST.MF" />
     <antcall target="dist.security" />
     <copy todir="${dist_lib}">
       <fileset dir="${dependencies}"  />
@@ -455,6 +476,7 @@ Working directory: ${work}
     <property name="retro_parser.jar" value="${dist}/${ant.project.name}.parser.${version}.retro.jar" />
     <property name="retro_extensions.jar" value="${dist}/${ant.project.name}.extensions.${version}.retro.jar" />
     <property name="retro_server.jar" value="${dist}/${ant.project.name}.server.${version}.retro.jar" />
+    <property name="retro_client.jar" value="${dist}/${ant.project.name}.client.${version}.retro.jar" />
     <condition property="do.download.retroweaver">
       <not><available file="${retrozip}"/></not>
     </condition>
@@ -474,6 +496,9 @@ Working directory: ${work}
     </java>
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${extensions.jar}&quot; &quot;${retro_extensions.jar}&quot;" />
+    </java>
+    <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
+      <arg line="-jar &quot;${client.jar}&quot; &quot;${retro_client.jar}&quot;" />
     </java>
     <antcall target="retro.security" />
     <copy todir="${dist_lib}" file="${retro}/release/retroweaver-rt-1.2.3.jar" />

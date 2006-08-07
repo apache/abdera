@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.abdera.protocol.client.Response;
-import org.apache.abdera.protocol.util.CachingInputStream;
 
 public class InMemoryCachedResponse 
   extends CachedResponseBase
@@ -37,8 +36,7 @@ public class InMemoryCachedResponse
   private String status_text = null;
   private String uri = null;
   private Map<String,List<String>> headers = null;
-  private ByteArrayOutputStream out;
-  private InputStream in = null;
+  private byte[] buf = null;
   
   public InMemoryCachedResponse(
     Cache cache,
@@ -59,11 +57,26 @@ public class InMemoryCachedResponse
     }
     getServerDate();
     getInitialAge();
-    out = new ByteArrayOutputStream();
-    in = new CachingInputStream(response.getInputStream(),out,true);
-    response.setInputStream(in);
+    cacheStream(response.getInputStream());
+    response.setInputStream(getInputStream());
   }
 
+  /**
+   * This is terribly inefficient, but it is an in-memory cache
+   * that is being used by parsers that incrementally consume 
+   * InputStreams at different rates.  There's really no other
+   * way to do it.
+   */
+  private void cacheStream(InputStream in) throws IOException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
+    byte[] buf = new byte[1024];
+    int m = -1;
+    while((m = in.read(buf)) != -1) {
+      out.write(buf,0,m);
+    }
+    this.buf = buf;
+  }
+  
   private Map<String,List<String>> getHeaders() {
     if (headers == null)
       headers = new HashMap<String,List<String>>();
@@ -118,7 +131,7 @@ public class InMemoryCachedResponse
 
   @Override
   public InputStream getInputStream() throws IOException {
-    return new ByteArrayInputStream(out.toByteArray());
+    return new ByteArrayInputStream(this.buf);
   }
 
   @Override

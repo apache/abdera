@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.Response;
+import org.apache.abdera.protocol.util.CacheControlUtil;
 
 public abstract class CacheBase 
   implements Cache {
@@ -118,11 +119,13 @@ public abstract class CacheBase
   }
   
   public Response update(
+    String method,
     String uri, 
     RequestOptions options,
     Response response) {
     CacheKey key = getCacheKey(uri, options,response);
-    if ((response != null && response.isNoStore())) {
+    if ((response != null && response.isNoStore()) || 
+        !CacheControlUtil.isIdempotent(method)) {
 // TODO: Need to get clarification on this.. if the request is no-store, can
 //       the response be cached.
 //    if ((response != null && response.isNoStore()) ||

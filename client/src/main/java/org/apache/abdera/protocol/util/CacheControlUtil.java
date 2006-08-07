@@ -22,6 +22,12 @@ import org.apache.abdera.protocol.client.ResponseBase;
 
 public class CacheControlUtil {
 
+  public static boolean isIdempotent(String method) {
+    return (method.equalsIgnoreCase("GET") ||
+            method.equalsIgnoreCase("HEAD") ||
+            method.equalsIgnoreCase("OPTIONS"));
+  }
+  
   private static long value(String val) {
     return (val != null) ? Long.parseLong(val) : -1; 
   }

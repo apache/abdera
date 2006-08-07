@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.abdera.protocol.cache.Cache;
 import org.apache.abdera.protocol.cache.CacheDisposition;
 import org.apache.abdera.protocol.cache.CachedResponse;
+import org.apache.abdera.protocol.util.CacheControlUtil;
 import org.apache.abdera.protocol.util.ExtensionMethod;
 import org.apache.abdera.util.Version;
 import org.apache.commons.httpclient.Credentials;
@@ -68,16 +69,6 @@ public class CommonsClient extends Client {
       HttpClientParams.USE_EXPECT_CONTINUE, true);    
   }
   
-  /**
-   * We're only going to cache GET, HEAD and OPTIONS requests.
-   * State modifying requests will be passed on through to the server
-   */
-  private boolean isPassthroughMethod(String method) {
-    return (!method.equals("GET") &&
-            !method.equals("HEAD") &&
-            !method.equals("OPTIONS"));
-  }
-  
   @Override
   public Response execute(
     String method, 
@@ -90,7 +81,7 @@ public class CommonsClient extends Client {
         CachedResponse cached_response = null;
         Cache cache = getCache();
         CacheDisposition disp = CacheDisposition.TRANSPARENT;
-        if (!isPassthroughMethod(method) &&
+        if (CacheControlUtil.isIdempotent(method) &&
             cache != null && 
             options.getNoCache() == false && 
             options.getNoStore() == false &&
@@ -136,7 +127,7 @@ public class CommonsClient extends Client {
             response = new CommonsResponse(httpMethod);
             if (cache != null) 
               response = cache.update(
-                uri, options, response);
+                method, uri, options, response);
           }
         }
         return response;

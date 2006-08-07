@@ -89,4 +89,15 @@ public interface Document<T extends Element>
    * Sets the charset used for this document
    */
   void setCharset(String charset);
+  
+  /**
+   * Add a processing instruction to the document
+   */
+  void addProcessingInstruction(String target, String value);
+  
+  /**
+   * Add a xml-stylesheet processing instruction to the document
+   */
+  void addStylesheet(String href, String media);
+  
 }

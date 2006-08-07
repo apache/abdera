@@ -40,4 +40,9 @@ public interface Base extends Cloneable {
   
   Factory getFactory();
   
+  /**
+   * Add a comment
+   */
+  void addComment(String value);
+  
 }

@@ -58,7 +58,7 @@ public class BaseRequestEntity
       type = ((Document)base).getContentType().toString();
     } else if (base instanceof Feed || base instanceof Entry) {
       Document doc = ((Element)base).getDocument();
-      if (doc != null)
+      if (doc != null && doc.getContentType() != null)
         type = doc.getContentType().toString();
       if (type == null)
         type = "application/atom+xml";

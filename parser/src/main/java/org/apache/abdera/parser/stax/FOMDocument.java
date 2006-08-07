@@ -182,5 +182,37 @@ public class FOMDocument<T extends Element>
   public Factory getFactory() {
     return (Factory) this.factory;
   }
+
+  public void addProcessingInstruction(String target, String value) {
+    OMProcessingInstruction pi = 
+      this.factory.createOMProcessingInstruction(
+        null, target, value);
+    if (this.getOMDocumentElement() != null) {
+      this.getOMDocumentElement().insertSiblingBefore(pi);
+    } else {
+      this.addChild(pi);
+    }
+  }
+
+  public void addStylesheet(String href, String media) {
+    if (media == null) {
+      addProcessingInstruction(
+        "xml-stylesheet", "href=\"" + href + "\"");
+    } else {
+      addProcessingInstruction(
+        "xml-stylesheet", "href=\"" + href + 
+        "\" media=\"" + media + "\"");
+    }
+  }
+
+  public void addComment(String value) {
+    OMComment comment =
+      this.factory.createOMComment(null, value);
+    if (this.getOMDocumentElement() != null) {
+      this.getOMDocumentElement().insertSiblingBefore(comment);
+    } else {
+      this.addChild(comment);
+    }
+  }
   
 }

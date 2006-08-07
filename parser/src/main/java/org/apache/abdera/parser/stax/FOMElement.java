@@ -554,4 +554,8 @@ public class FOMElement
     }
     super.internalSerialize(writer, bool);
   }
+  
+  public void addComment(String value) {
+    factory.createOMComment(this, value);
+  }
 }

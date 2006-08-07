@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.client;
+package org.apache.abdera.protocol.util;
 
 import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
 
@@ -24,7 +24,7 @@ public final class ExtensionMethod
 
   private String method = null;
   
-  protected ExtensionMethod(String method) {
+  public ExtensionMethod(String method) {
     super(method);
     this.method = method;
   }

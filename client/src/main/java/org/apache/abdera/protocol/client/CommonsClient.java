@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.abdera.protocol.cache.Cache;
 import org.apache.abdera.protocol.cache.CacheDisposition;
 import org.apache.abdera.protocol.cache.CachedResponse;
+import org.apache.abdera.protocol.util.ExtensionMethod;
 import org.apache.abdera.util.Version;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;

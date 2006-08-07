@@ -49,7 +49,8 @@ public class InMemoryCachedResponse
     this.uri = response.getUri();
     String[] headers = response.getHeaderNames();
     for (String header : headers) {
-      if (!isNoCacheOrPrivate(header, response)) {
+      if (!isNoCacheOrPrivate(header, response) &&
+          !isHopByHop(header)) {
         String[] values = response.getHeaders(header);
         List<String> list = Arrays.asList(values);
         getHeaders().put(header, list);
@@ -61,6 +62,23 @@ public class InMemoryCachedResponse
     response.setInputStream(getInputStream());
   }
 
+  /**
+   * We don't cache hop-by-hop headers
+   * TODO: There may actually be other hop-by-hop headers we need to filter 
+   *       out.  They'll be listed in the Connection header. see Section 14.10
+   *       of RFC2616 (last paragraph)
+   */
+  private boolean isHopByHop(String header) {
+    return (header.equalsIgnoreCase("Connection") ||
+            header.equalsIgnoreCase("Keep-Alive") ||
+            header.equalsIgnoreCase("Proxy-Authenticate") ||
+            header.equalsIgnoreCase("Proxy-Authorization") ||
+            header.equalsIgnoreCase("TE") ||
+            header.equalsIgnoreCase("Trailers") ||
+            header.equalsIgnoreCase("Transfer-Encoding") ||
+            header.equalsIgnoreCase("Upgrade"));
+  }
+  
   /**
    * This is terribly inefficient, but it is an in-memory cache
    * that is being used by parsers that incrementally consume 

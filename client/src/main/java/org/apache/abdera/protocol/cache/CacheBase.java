@@ -122,8 +122,11 @@ public abstract class CacheBase
     RequestOptions options,
     Response response) {
     CacheKey key = getCacheKey(uri, options,response);
-    if ((response != null && response.isNoStore()) ||
-        options != null && options.getNoStore()) {
+    if ((response != null && response.isNoStore())) {
+// TODO: Need to get clarification on this.. if the request is no-store, can
+//       the response be cached.
+//    if ((response != null && response.isNoStore()) ||
+//        options != null && options.getNoStore()) {
      remove(key);
    } else {
      try {

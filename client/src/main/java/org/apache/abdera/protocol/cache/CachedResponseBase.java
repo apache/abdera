@@ -68,7 +68,11 @@ public abstract class CachedResponseBase
   }
 
   public long getCachedTime() {
-    return getServerDate().getTime();
+    Date serverDate = getServerDate();
+    if (serverDate != null)
+      return serverDate.getTime();
+    else
+      return 0;
   }
   
   public long getResidentAge() {

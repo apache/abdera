@@ -67,11 +67,12 @@ public class CommonsClient extends Client {
     RequestEntity entity,
     RequestOptions options) {
       try {
+        if (options == null) options = getDefaultRequestOptions();
         Response response = null;
         CachedResponse cached_response = null;
         Cache cache = getCache();
         CacheDisposition disp = CacheDisposition.TRANSPARENT;
-        if (cache != null) {
+        if (cache != null && options.getNoCache() == false && options.getNoStore() == false) {
           disp = cache.getDisposition(uri,options);
           cached_response = cache.get(uri, options);
           switch(disp) {
@@ -94,18 +95,16 @@ public class CommonsClient extends Client {
         }
         if (response == null) {
           HttpMethod httpMethod = createMethod(method, uri, entity);
-          if (options != null) {
-            String[] headers = options.getHeaderNames();
-            for (String header : headers) {
-              String[] values = options.getHeaders(header);
-              for (String value : values) {
-                httpMethod.addRequestHeader(header, value);
-              }
+          String[] headers = options.getHeaderNames();
+          for (String header : headers) {
+            String[] values = options.getHeaders(header);
+            for (String value : values) {
+              httpMethod.addRequestHeader(header, value);
             }
-            String cc = options.getCacheControl();
-            if (cc != null && cc.length() != 0)
-              httpMethod.setRequestHeader("Cache-Control", cc);
           }
+          String cc = options.getCacheControl();
+          if (cc != null && cc.length() != 0)
+            httpMethod.setRequestHeader("Cache-Control", cc);
           int n = client.executeMethod(httpMethod);
           if (n == 304 || n == 412 && 
               cached_response != null &&

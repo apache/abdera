@@ -46,7 +46,7 @@ public abstract class InMemoryCache
   }
 
   public CachedResponse get(
-    CacheKey key) {
+    CacheKey key) {   
       return cache.get(key);
   }
 

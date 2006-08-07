@@ -230,7 +230,7 @@ public class RequestOptions {
   
   public void setOnlyIfCached(boolean condition) {
     if (condition) flags |= ONLYIFCACHED;
-    else flags ^= ONLYIFCACHED;
+    else if (getOnlyIfCached()) flags ^= ONLYIFCACHED;
   }
   
   public boolean getNoTransform() {
@@ -239,7 +239,7 @@ public class RequestOptions {
   
   public void setNoTransform(boolean condition) {
     if (condition) flags |= NOTRANSFORM;
-    else flags ^= NOTRANSFORM;
+    else if (getNoTransform()) flags ^= NOTRANSFORM;
   }
   
   public boolean getNoCache() {
@@ -248,7 +248,7 @@ public class RequestOptions {
   
   public void setNoCache(boolean condition) {
     if (condition) flags |= NOCACHE;
-    else flags ^= NOCACHE;
+    else if (getNoCache()) flags ^= NOCACHE;
   }
   
   public boolean getNoStore() {
@@ -257,7 +257,7 @@ public class RequestOptions {
   
   public void setNoStore(boolean condition) {
     if (condition) flags |= NOSTORE;
-    else flags ^= NOSTORE;
+    else if (getNoStore()) flags ^= NOSTORE;
   }
   
   public long getMaxAge() {

@@ -29,13 +29,13 @@ import org.apache.commons.httpclient.util.DateUtil;
 
 public abstract class ResponseBase implements Response {
 
-  protected byte flags = 0;
-  protected final static byte NOCACHE = 1;
-  protected final static byte NOSTORE = 2;
-  protected final static byte NOTRANSFORM = 4;
-  protected final static byte PUBLIC = 8;
-  protected final static byte PRIVATE = 16;
-  protected final static byte REVALIDATE = 32;
+  protected int flags = 0;
+  protected final static int NOCACHE = 1;
+  protected final static int NOSTORE = 2;
+  protected final static int NOTRANSFORM = 4;
+  protected final static int PUBLIC = 8;
+  protected final static int PRIVATE = 16;
+  protected final static int REVALIDATE = 32;
   protected String[] nocache_headers = null;
   protected String[] private_headers = null;
   protected long max_age = -1;
@@ -155,32 +155,32 @@ public abstract class ResponseBase implements Response {
   
   public void setMustRevalidate(boolean val) {
     if (val) flags |= REVALIDATE;
-    else flags ^= REVALIDATE;
+    else if (isMustRevalidate()) flags ^= REVALIDATE;
   }
   
   public void setNoCache(boolean val) {
     if (val) flags |= NOCACHE;
-    else flags ^= NOCACHE;
+    else if (isNoCache()) flags ^= NOCACHE;
   }
   
   public void setNoStore(boolean val) {
     if (val) flags |= NOSTORE;
-    else flags ^= NOSTORE;
+    else if (isNoStore()) flags ^= NOSTORE;
   }
   
   public void setNoTransform(boolean val) {
     if (val) flags |= NOTRANSFORM;
-    else flags ^= NOTRANSFORM;
+    else if (isNoTransform()) flags ^= NOTRANSFORM;
   }
   
   public void setPublic(boolean val) {
     if (val) flags |= PUBLIC;
-    else flags ^= PUBLIC;
+    else if (isPublic()) flags ^= PUBLIC;
   }
   
   public void setPrivate(boolean val) {
     if (val) flags |= PRIVATE;
-    else flags ^= PRIVATE;
+    else if (isPrivate()) flags ^= PRIVATE;
   }
   
   public void setPrivateHeaders(String... headers) {

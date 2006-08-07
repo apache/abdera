@@ -92,7 +92,7 @@ public class InMemoryCachedResponse
     while((m = in.read(buf)) != -1) {
       out.write(buf,0,m);
     }
-    this.buf = buf;
+    this.buf = out.toByteArray();
   }
   
   private Map<String,List<String>> getHeaders() {

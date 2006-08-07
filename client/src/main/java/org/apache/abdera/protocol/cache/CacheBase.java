@@ -122,10 +122,6 @@ public abstract class CacheBase
     RequestOptions options,
     Response response) {
     CacheKey key = getCacheKey(uri, options,response);
-System.out.println(response);
-System.out.println(response.isNoStore());
-System.out.println(options);
-System.out.println(options.getNoStore());
     if ((response != null && response.isNoStore()) ||
         options != null && options.getNoStore()) {
      remove(key);

@@ -25,7 +25,7 @@ public abstract class CachedResponseBase
   extends ResponseBase 
   implements CachedResponse {
 
-  protected CacheKey key = null;;
+  protected CacheKey key = null;
   protected Cache cache = null;
   protected long initial_age = -1;
   

@@ -18,10 +18,14 @@
 package org.apache.abdera.protocol.client;
 
 import java.io.InputStream;
+import java.net.URISyntaxException;
 
 import org.apache.abdera.model.Base;
 import org.apache.abdera.protocol.cache.Cache;
 import org.apache.abdera.protocol.cache.CacheFactory;
+import org.apache.commons.httpclient.Credentials;
+import org.apache.commons.httpclient.auth.AuthPolicy;
+import org.apache.commons.httpclient.auth.AuthScheme;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.RequestEntity;
 
@@ -30,6 +34,15 @@ public abstract class Client {
   protected Cache cache = null;
 
   public abstract RequestOptions getDefaultRequestOptions();
+  
+  public abstract void addCredentials(
+    String target, 
+    String realm,
+    String scheme,
+    Credentials credentials) 
+      throws URISyntaxException;
+  
+  public abstract void setAuthenticationSchemePriority(String... scheme);
   
   public abstract void usePreemptiveAuthentication(boolean val);
   
@@ -158,4 +171,8 @@ public abstract class Client {
     String uri, 
     RequestEntity entity, 
     RequestOptions options);
+  
+  public static void registerScheme(String name, Class<AuthScheme> scheme) {
+    AuthPolicy.registerAuthScheme(name, scheme);
+  }
 }

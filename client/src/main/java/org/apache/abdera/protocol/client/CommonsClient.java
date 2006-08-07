@@ -17,12 +17,19 @@
 */
 package org.apache.abdera.protocol.client;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+
 import org.apache.abdera.protocol.cache.Cache;
 import org.apache.abdera.protocol.cache.CacheDisposition;
 import org.apache.abdera.protocol.cache.CachedResponse;
 import org.apache.abdera.util.Version;
+import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.auth.AuthPolicy;
+import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -188,4 +195,27 @@ public class CommonsClient extends Client {
     return options;
   }
 
+  @Override
+  public void addCredentials(
+    String target,
+    String realm,
+    String scheme,
+    Credentials credentials) 
+      throws URISyntaxException {
+    URI uri = new URI(target);
+    AuthScope scope = 
+      new AuthScope(
+        uri.getHost(), 
+        uri.getPort(), 
+        realm, scheme);
+    client.getState().setCredentials(
+      scope, credentials);
+  }
+
+  public void setAuthenticationSchemePriority(String... scheme) {
+    List authPrefs = java.util.Arrays.asList(scheme);
+    client.getParams().setParameter(
+      AuthPolicy.AUTH_SCHEME_PRIORITY, 
+      authPrefs);
+  }
 }

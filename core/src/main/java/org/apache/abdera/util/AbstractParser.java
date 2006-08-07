@@ -58,7 +58,7 @@ public abstract class AbstractParser
     ParserOptions options) 
       throws ParseException, 
              URISyntaxException {
-    return parse(in, new URI(base), options);
+    return parse(in, (base != null) ? new URI(base) : null, options);
   }
   
   public <T extends Element>Document<T> parse(

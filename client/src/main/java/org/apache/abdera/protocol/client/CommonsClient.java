@@ -60,6 +60,16 @@ public class CommonsClient extends Client {
       HttpClientParams.USE_EXPECT_CONTINUE, true);    
   }
   
+  /**
+   * We're only going to cache GET, HEAD and OPTIONS requests.
+   * State modifying requests will be passed on through to the server
+   */
+  private boolean isPassthroughMethod(String method) {
+    return (!method.equals("GET") &&
+            !method.equals("HEAD") &&
+            !method.equals("OPTIONS"));
+  }
+  
   @Override
   public Response execute(
     String method, 
@@ -72,7 +82,8 @@ public class CommonsClient extends Client {
         CachedResponse cached_response = null;
         Cache cache = getCache();
         CacheDisposition disp = CacheDisposition.TRANSPARENT;
-        if (cache != null && 
+        if (!isPassthroughMethod(method) &&
+            cache != null && 
             options.getNoCache() == false && 
             options.getNoStore() == false &&
             options.getUseLocalCache()) {

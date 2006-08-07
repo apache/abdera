@@ -18,7 +18,7 @@
 package org.apache.abdera.protocol.cache.lru;
 
 import java.util.LinkedHashMap;
-import java.util.Map.Entry;
+import java.util.Map;
 
 import org.apache.abdera.protocol.cache.Cache;
 import org.apache.abdera.protocol.cache.CacheKey;
@@ -40,9 +40,10 @@ public class LRUCache
     setMap(
       new LinkedHashMap<CacheKey,CachedResponse>(size,0.75f,true) {
         @Override
-        protected boolean removeEldestEntry(
-          Entry<CacheKey, CachedResponse> eldest) {
-            return size() > size;
+        protected boolean removeEldestEntry(Map.Entry<CacheKey,
+                                                      CachedResponse> eldest)
+        {
+          return size() > size;
         }
       }
     );

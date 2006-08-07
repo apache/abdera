@@ -40,6 +40,7 @@ public class RequestOptions {
   private long max_age = -1;
   private long max_stale = -1;
   private long min_fresh = -1;
+  private boolean noLocalCache = false;
   
   private Map<String,List<String>> headers = null;  
   
@@ -58,6 +59,19 @@ public class RequestOptions {
     return v;
   }
     
+  /**
+   * The difference between this and getNoCache is that this
+   * only disables the local cache without affecting the 
+   * Cache-Control header.
+   */
+  public boolean getUseLocalCache() {
+    return !noLocalCache;
+  }
+  
+  public void setUseLocalCache(boolean use_cache) {
+    this.noLocalCache = !use_cache;
+  }
+  
   public void setContentType(String value) {
     setHeader("Content-Type", value);
   }

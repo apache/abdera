@@ -72,7 +72,10 @@ public class CommonsClient extends Client {
         CachedResponse cached_response = null;
         Cache cache = getCache();
         CacheDisposition disp = CacheDisposition.TRANSPARENT;
-        if (cache != null && options.getNoCache() == false && options.getNoStore() == false) {
+        if (cache != null && 
+            options.getNoCache() == false && 
+            options.getNoStore() == false &&
+            options.getUseLocalCache()) {
           disp = cache.getDisposition(uri,options);
           cached_response = cache.get(uri, options);
           switch(disp) {

@@ -83,7 +83,13 @@ public class FOMElement
     OMContainer parent, 
     OMFactory factory) 
       throws OMException {
-    super(qname, parent, factory);
+    super(
+        qname.getLocalPart(), 
+        factory.createOMNamespace(
+          qname.getNamespaceURI(), 
+          qname.getPrefix()),
+        parent,
+        factory);
   }
 
   public FOMElement(

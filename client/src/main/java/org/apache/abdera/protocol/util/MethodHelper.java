@@ -25,6 +25,7 @@ import java.util.Map;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.Response;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -128,13 +129,13 @@ public class MethodHelper {
       HttpMethod httpMethod = null;
       switch(m) {
         case GET:     httpMethod = new GetMethod(uri); break;
-        case POST:    httpMethod = getMethod(new PostMethod(), entity); break;
-        case PUT:     httpMethod = getMethod(new PutMethod(), entity); break;
+        case POST:    httpMethod = getMethod(new PostMethod(uri), entity); break;
+        case PUT:     httpMethod = getMethod(new PutMethod(uri), entity); break;
         case DELETE:  httpMethod = new DeleteMethod(uri); break;
         case HEAD:    httpMethod = new HeadMethod(uri); break;
         case OPTIONS: httpMethod = new OptionsMethod(uri); break;
         case TRACE:   httpMethod = new TraceMethod(uri); break;
-        default:      httpMethod = getMethod(new ExtensionMethod(method), entity);
+        default:      httpMethod = getMethod(new ExtensionMethod(method,uri), entity);
       }
       initHeaders(options, httpMethod);
       return httpMethod;
@@ -156,8 +157,11 @@ public class MethodHelper {
   public static final class ExtensionMethod 
     extends EntityEnclosingMethod {
     private String method = null;
-    public ExtensionMethod(String method) {
+    public ExtensionMethod(String method, String uri) {
       super(method);
+      try {
+        this.setURI(new URI(uri, false));
+      } catch (Exception e) {}
       this.method = method;
     }
     @Override

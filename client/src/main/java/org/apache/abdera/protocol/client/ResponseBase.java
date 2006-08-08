@@ -41,6 +41,7 @@ public abstract class ResponseBase implements Response {
   protected long max_age = -1;
   protected InputStream in = null;
   protected Date response_date = null;
+  protected Date now = new Date();
   
   public InputStream getInputStream() throws IOException {
     return in;
@@ -90,8 +91,7 @@ public abstract class ResponseBase implements Response {
   public Date getServerDate() {
     if (response_date == null) {
       Date date = getDateHeader("Date");
-      if (date != null)
-        response_date = date;
+      response_date = (date != null) ? date : now;
     }
     return response_date;
   }

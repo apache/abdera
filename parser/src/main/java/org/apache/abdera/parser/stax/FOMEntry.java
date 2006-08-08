@@ -259,6 +259,19 @@ public class FOMEntry
     setContentElement(content);
     return content;
   }
+  
+  /**
+   * Sets the content for this entry
+   * @throws MimeTypeParseException 
+ * @throws URISyntaxException 
+   */
+  public Content setContent(URI uri, String mediatype) throws MimeTypeParseException, URISyntaxException {
+    FOMFactory factory = (FOMFactory) this.factory;
+    Content content = factory.newContent(new MimeType(mediatype));
+    content.setSrc(uri.toString());
+    setContentElement(content);
+    return content;
+  }
 
   
   public List<Person> getContributors() {

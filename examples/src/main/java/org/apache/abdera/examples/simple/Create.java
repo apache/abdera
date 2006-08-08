@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.examples.simple;
 
+import java.net.URI;
 import java.util.Date;
 
 import org.apache.abdera.factory.Factory;
@@ -63,6 +64,14 @@ public class Create {
     entry3.setSummaryAsHtml("<p><a href=\"foo\">Test</a></p>").setBaseUri("http://example.org/site/");
     entry3.setSource(feed.getAsSource());
     
+    // Out-of-line content
+    Entry entry4 = feed.addEntry();
+    entry4.setTitle("re: Atom-Powered Robots Run Amok");
+    entry4.addLink("/2003/12/13/atom03/3");
+    entry4.setId("urn:uuid:1225c695-cfb8-4ebb-aaaa-cafebabecafe");
+    entry4.setUpdated(new Date());
+    entry4.setSummary("An entry with out-of-line content");
+    entry4.setContent(new URI("http://example.org/0xcafebabe"), "text/html");
     feed.getDocument().writeTo(System.out);
   }
 

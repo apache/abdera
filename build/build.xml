@@ -66,6 +66,7 @@
   <property name="client" value="${basedir}/client" />
   <property name="client.src" value="${client}/src/main/java" />
   <property name="client.work" value="${work}/client" />
+  <property name="client.test.java" value="${client}/src/test/java" />
   <property name="client.jar" value="${dist}/${ant.project.name}.client.${version}.jar" />
   
   <property environment="env" />
@@ -129,6 +130,8 @@ Working directory: ${work}
           <available file="${dependencies}/${commons.httpclient.jar}" />
           <available file="${dependencies}/${junit.jar}" />
           <available file="${dependencies}/${wstx.jar}" />
+          <available file="${dependencies}/${jetty.jar}" />
+          <available file="${dependencies}/${jetty-util.jar}" />
         </and>
       </not>
     </condition>
@@ -265,6 +268,10 @@ Working directory: ${work}
            destdir="${client.work}"
            classpathref="jar.dependencies"
            classpath="${core.work}" />
+    <javac srcdir="${client.test.java}"
+           destdir="${test}"
+           classpathref="jar.dependencies"
+           classpath="${core.work};${parser.work};${extensions.work};${client.work}" />
     <mkdir dir="${client.work}/META-INF" />
     <copy todir="${client.work}/META-INF">
       <fileset dir="${basedir}">
@@ -451,6 +458,12 @@ Working directory: ${work}
            usetimestamp="true" />
       <get src="${wstx.dir}/${wstx.jar}"
            dest="${dependencies}/${wstx.jar}"
+           usetimestamp="true" />
+      <get src="${jetty.dir}/${jetty.jar}"
+           dest="${dependencies}/${jetty.jar}"
+           usetimestamp="true" />
+      <get src="${jetty-util.dir}/${jetty-util.jar}"
+           dest="${dependencies}/${jetty-util.jar}"
            usetimestamp="true" />
     </parallel>
   </target>

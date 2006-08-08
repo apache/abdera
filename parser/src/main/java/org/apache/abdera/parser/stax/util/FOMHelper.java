@@ -24,6 +24,7 @@ import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.util.Constants;
+import org.apache.axiom.om.util.UUIDGenerator;
 
 public class FOMHelper implements Constants {
 
@@ -37,5 +38,9 @@ public class FOMHelper implements Constants {
   public static List<Link> getLinks(Element element, String rel) {
     Iterator i = new FOMLinkIterator(element, Link.class, REL, rel, Link.REL_ALTERNATE);
     return new FOMList<Link>(i);
+  }
+  
+  public static String generateUuid() {
+    return UUIDGenerator.getUUID();
   }
 }

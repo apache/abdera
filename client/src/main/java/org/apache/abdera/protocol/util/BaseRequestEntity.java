@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.client;
+package org.apache.abdera.protocol.util;
 
 import java.io.IOException;
 import java.io.OutputStream;

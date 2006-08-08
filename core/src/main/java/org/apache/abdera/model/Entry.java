@@ -214,6 +214,17 @@ public interface Entry
   Content setContent(String value, String mediatype) throws MimeTypeParseException;
   
   /**
+   * Sets the content for this entry as out of line.
+   * 
+   * @param uri URI of the content (value of the "src" attribute).
+   * @param mediatype Type of the content.
+   * @return The new content element.
+   * @throws MimeTypeParseException if the mime type is invalid.
+   * @throws URISyntaxException if the URI is invalid.
+   */
+  Content setContent(URI uri, String mediatype) throws MimeTypeParseException, URISyntaxException;
+  
+  /**
    * Returns the text of the content element
    */
   String getContent();

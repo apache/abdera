@@ -37,7 +37,12 @@ import org.apache.axiom.om.util.StAXUtils;
 public class FOMParser 
   extends AbstractParser 
   implements Parser {
-  
+
+  /**
+   * The current set of default ParserOptions.
+   *
+   * This field is protected by synchronizing on "this".
+   */
   protected ParserOptions options = null;
   
   private FOMFactory getFomFactory(ParserOptions options) {
@@ -123,13 +128,21 @@ public class FOMParser
   }
   
   @Override
-  public ParserOptions getDefaultParserOptions() {
+  public synchronized ParserOptions getDefaultParserOptions() {
     if (options == null)
       options = new FOMParserOptions();
-    return options;
+    
+    try {
+      return (ParserOptions) options.clone();
+    } catch (CloneNotSupportedException cnse) {
+      // Nothing... 
+    }
+    
+    // About the best we can do if clone doesn't work :(
+    return new FOMParserOptions();
   }
 
-  public void setDefaultParserOptions(ParserOptions options) {
+  public synchronized void setDefaultParserOptions(ParserOptions options) {
     this.options = options;
   }
 

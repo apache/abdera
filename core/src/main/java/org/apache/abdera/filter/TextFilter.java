@@ -26,8 +26,12 @@ import org.apache.abdera.model.Element;
  * from elements in the Atom feed, including unwanted text and
  * markup in HTML entries.
  */
-public abstract class TextFilter {
+public abstract class TextFilter implements Cloneable {
 
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
+  }
+  
   public String filterText(String text, Element parent) {
     return text;
   }

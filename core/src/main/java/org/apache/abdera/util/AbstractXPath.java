@@ -33,9 +33,9 @@ public abstract class AbstractXPath
   public Map<String, String> getDefaultNamespaces() {
     if (namespaces == null) 
       namespaces = new HashMap<String,String>();
-    namespaces.put(Constants.PREFIX, Constants.ATOM_NS);
-    namespaces.put(Constants.APP_PREFIX, Constants.APP_NS);
-    namespaces.put(Constants.CONTROL_PREFIX, Constants.CONTROL_NS);
+    namespaces.put("a", Constants.ATOM_NS);
+    namespaces.put("app", Constants.APP_NS);
+    namespaces.put("pub", Constants.CONTROL_NS);
     return namespaces;
   }
 

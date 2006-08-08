@@ -93,23 +93,34 @@ public class RequestOptions {
   }
   
   public void setHeader(String header, String value) {
-    setHeader(header, new String[] {value});
+    if (value != null)
+      setHeader(header, new String[] {value});
+    else
+      removeHeaders(header);
   }
 
   public void setHeader(String header, String... values) {
-    List<String> list = Arrays.asList(new String[] {combine(values)});
-    getHeaders().put(header, list);
+    if (values != null && values.length > 0) {
+      List<String> list = Arrays.asList(new String[] {combine(values)});
+      getHeaders().put(header, list);
+    } else {
+      removeHeaders(header);
+    }
   }
   
   public void setDateHeader(String header, Date value) {
-    setHeader(header, DateUtil.formatDate(value));
+    if (value != null) 
+      setHeader(header, DateUtil.formatDate(value));
+    removeHeaders(header);
   }
   
   public void addHeader(String header, String value) {
-    addHeader(header, new String[] {value});
+    if (value != null)
+      addHeader(header, new String[] {value});
   }
   
   public void addHeader(String header, String... values) {
+    if (values == null || values.length == 0) return;
     List<String> list = getHeaders().get(header);
     String value = combine(values);
     if (list != null) {
@@ -121,6 +132,7 @@ public class RequestOptions {
   }
 
   public void addDateHeader(String header, Date value) {
+    if (value == null) return;
     addHeader(header, DateUtil.formatDate(value));
   }
   
@@ -300,6 +312,10 @@ public class RequestOptions {
   
   public void setCacheControl(String cc) {
     CacheControlUtil.parseCacheControl(cc, this);
+  }
+  
+  public void removeHeaders(String name) {
+    getHeaders().remove(name);
   }
   
   public String getCacheControl() {

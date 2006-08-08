@@ -23,6 +23,7 @@ import java.net.URISyntaxException;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.protocol.cache.Cache;
 import org.apache.abdera.protocol.cache.CacheFactory;
+import org.apache.abdera.protocol.cache.lru.LRUCache;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScheme;
@@ -53,6 +54,8 @@ public abstract class Client {
       CacheFactory factory = CacheFactory.INSTANCE;
       if (factory != null)
         cache = factory.getCache();
+      if (cache == null) 
+        cache = new LRUCache();
     }
     return cache;
   }

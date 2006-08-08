@@ -41,7 +41,7 @@ public abstract class ResponseBase implements Response {
   protected long max_age = -1;
   protected InputStream in = null;
   protected Date response_date = null;
-  protected Date now = new Date();
+  protected Date now = new Date(); 
   
   public InputStream getInputStream() throws IOException {
     return in;
@@ -51,13 +51,16 @@ public abstract class ResponseBase implements Response {
     this.in = in;
   }
 
-  public ResponseType getResponseClass() {
-    int status = getStatus();
+  public static ResponseType getResponseClass(int status) {
     if (status >= 200 && status < 300) return ResponseType.SUCCESS;
     if (status >= 300 && status < 400) return ResponseType.REDIRECTION;
     if (status >= 400 && status < 500) return ResponseType.CLIENT_ERROR;
     if (status >= 500 && status < 600) return ResponseType.SERVER_ERROR;
     return ResponseType.UNKNOWN;
+  }
+  
+  public ResponseType getResponseClass() {
+    return getResponseClass(getStatus());
   }
   
   public Date getDateHeader(String header) {
@@ -79,7 +82,7 @@ public abstract class ResponseBase implements Response {
     } catch (Exception e) {}
     return null;  // shouldn't happen
   } 
-
+  
   public String getEntityTag() {
     return getHeader("ETag");
   }

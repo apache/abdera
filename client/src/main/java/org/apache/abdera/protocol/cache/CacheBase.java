@@ -117,29 +117,71 @@ public abstract class CacheBase
       }
       return response;
   }
+
+  private boolean shouldUpdateCache(
+    Response response,
+    boolean allowedByDefault) {
+    // TODO: we should probably include pragma: no-cache headers in here 
+      if (allowedByDefault) {
+        return !response.isNoCache() &&
+               !response.isNoStore() &&
+               response.getMaxAge() != 0;
+      } else {
+        return response.getExpires() != null ||
+               response.getMaxAge() > 0 ||
+               response.isMustRevalidate() ||
+               response.isPublic() ||
+               response.isPrivate();
+      }
+  }
   
   public Response update(
-    String method,
-    String uri, 
+    RequestOptions options,
+    Response response,
+    Response cached_response) {
+      int status = response.getStatus();  
+      String uri = response.getUri();
+      String method = response.getMethod();
+      // if the method changes state on the server, don't cache and 
+      // clear what we already have
+      if (!CacheControlUtil.isIdempotent(method)) {
+        remove(uri,options);
+        return response;
+      }
+      // otherwise, base the decision on the response status code
+      switch(status) {
+        case 200: case 203: case 300: case 301: case 410:
+          // rfc2616 says these are cacheable unless otherwise noted
+          if (shouldUpdateCache(response,true))
+            return update(options, response);
+          else remove(uri, options);
+          break;
+        case 304: case 412:
+          // if not revalidated, fall through
+          if (cached_response != null) 
+            return cached_response;
+        default:
+          // rfc2616 says are *not* cacheable unless otherwise noted
+          if (shouldUpdateCache(response,false))
+            return update(options, response);
+          else remove(uri, options);
+          break;
+      }
+      return response;
+  }
+   
+  private Response update(
     RequestOptions options,
     Response response) {
-    CacheKey key = getCacheKey(uri, options,response);
-    if ((response != null && response.isNoStore()) || 
-        !CacheControlUtil.isIdempotent(method)) {
-// TODO: Need to get clarification on this.. if the request is no-store, can
-//       the response be cached.
-//    if ((response != null && response.isNoStore()) ||
-//        options != null && options.getNoStore()) {
-     remove(key);
-   } else {
-     try {
-       CachedResponse cachedResponse = createCachedResponse(response, key);
-       add(key, cachedResponse);
-     } catch (IOException e) {
-       throw new CacheException(e);
-     }
-   }
-   return response;
+      String uri = response.getUri();
+      CacheKey key = getCacheKey(uri, options,response);
+      try {
+        CachedResponse cachedResponse = createCachedResponse(response, key);
+        add(key, cachedResponse);
+        return cachedResponse;
+       } catch (IOException e) {
+        throw new CacheException(e);
+      }
   }
 
 }

@@ -21,17 +21,18 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.abdera.protocol.client.Response;
+import org.apache.abdera.protocol.util.MethodHelper;
 
 public class InMemoryCachedResponse 
   extends CachedResponseBase
   implements CachedResponse {
 
+  private String method = null;
   private int status = 0;
   private String status_text = null;
   private String uri = null;
@@ -44,41 +45,17 @@ public class InMemoryCachedResponse
     Response response) 
       throws IOException {
     super(key,cache);
+    this.method = response.getMethod();
     this.status = response.getStatus();
     this.status_text = response.getStatusText();
     this.uri = response.getUri();
-    String[] headers = response.getHeaderNames();
-    for (String header : headers) {
-      if (!isNoCacheOrPrivate(header, response) &&
-          !isHopByHop(header)) {
-        String[] values = response.getHeaders(header);
-        List<String> list = Arrays.asList(values);
-        getHeaders().put(header, list);
-      }
-    }
+    this.headers = MethodHelper.getCacheableHeaders(response);
     getServerDate();
     getInitialAge();
     cacheStream(response.getInputStream());
     response.setInputStream(getInputStream());
   }
 
-  /**
-   * We don't cache hop-by-hop headers
-   * TODO: There may actually be other hop-by-hop headers we need to filter 
-   *       out.  They'll be listed in the Connection header. see Section 14.10
-   *       of RFC2616 (last paragraph)
-   */
-  private boolean isHopByHop(String header) {
-    return (header.equalsIgnoreCase("Connection") ||
-            header.equalsIgnoreCase("Keep-Alive") ||
-            header.equalsIgnoreCase("Proxy-Authenticate") ||
-            header.equalsIgnoreCase("Proxy-Authorization") ||
-            header.equalsIgnoreCase("TE") ||
-            header.equalsIgnoreCase("Trailers") ||
-            header.equalsIgnoreCase("Transfer-Encoding") ||
-            header.equalsIgnoreCase("Upgrade"));
-  }
-  
   /**
    * This is terribly inefficient, but it is an in-memory cache
    * that is being used by parsers that incrementally consume 
@@ -101,22 +78,8 @@ public class InMemoryCachedResponse
     return headers;
   }
   
-  private boolean isNoCacheOrPrivate(
-    String header, 
-    Response response) {
-      String[] no_cache_headers = response.getNoCacheHeaders();
-      String[] private_headers = response.getPrivateHeaders();
-      return contains(no_cache_headers,header) ||
-             contains(private_headers,header);
-  }
-
-  private boolean contains(String[] headers, String header) {
-    if (headers != null) {
-      for (String h : headers) {
-        if (h.equals(header)) return true;
-      }
-    } 
-    return false;
+  public String getMethod() {
+    return method;
   }
   
   public String getHeader(String header) {

@@ -23,6 +23,11 @@ import java.util.Date;
 
 import javax.activation.MimeType;
 
+import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Element;
+import org.apache.abdera.parser.ParseException;
+import org.apache.abdera.parser.Parser;
+import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.protocol.util.CacheControlUtil;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
@@ -42,6 +47,34 @@ public abstract class ResponseBase implements Response {
   protected InputStream in = null;
   protected Date response_date = null;
   protected Date now = new Date(); 
+  
+  public <T extends Element>Document<T> getDocument() 
+    throws ParseException {
+      return getDocument(Parser.INSTANCE);
+  }
+  
+  public <T extends Element>Document<T> getDocument(
+    ParserOptions options) 
+      throws ParseException {
+    return getDocument(Parser.INSTANCE, options);
+  }
+
+  public <T extends Element>Document<T> getDocument(
+    Parser parser) 
+      throws ParseException {
+    return getDocument(parser, parser.getDefaultParserOptions());
+  }
+  
+  public <T extends Element>Document<T> getDocument(
+    Parser parser, 
+    ParserOptions options) 
+      throws ParseException {
+    try {
+      return parser.parse(getInputStream(), getUri(), options);
+    } catch (Exception e) {
+      throw new ParseException(e);
+    }
+  }
   
   public InputStream getInputStream() throws IOException {
     return in;

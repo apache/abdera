@@ -28,6 +28,11 @@ import org.apache.abdera.filter.TextFilter;
 public interface ParserOptions {
 
   /**
+   * Return a duplicate of this options object.
+   */
+  Object clone() throws CloneNotSupportedException;
+
+  /**
    * Returns the factory the parser should use
    */
   Factory getFactory();

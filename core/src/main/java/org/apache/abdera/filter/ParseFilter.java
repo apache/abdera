@@ -29,10 +29,14 @@ import javax.xml.namespace.QName;
  * within a parsed document.  They are set via the ParserOptions.setParseFilter
  * method.
  */
-public abstract class ParseFilter {
+public abstract class ParseFilter implements Cloneable {
   
   private List<QName> qnames = null;
   private Map<QName,List<QName>> attributes = null;
+  
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
+  }
   
   public void add(QName qname) {
     if (qnames == null) qnames = new ArrayList<QName>();

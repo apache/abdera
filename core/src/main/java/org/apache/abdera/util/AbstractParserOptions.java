@@ -23,7 +23,7 @@ import org.apache.abdera.filter.TextFilter;
 import org.apache.abdera.parser.ParserOptions;
 
 public abstract class AbstractParserOptions 
-  implements ParserOptions {
+  implements ParserOptions, Cloneable {
 
   protected Factory factory = null;
   protected String charset = null;
@@ -37,7 +37,23 @@ public abstract class AbstractParserOptions
 
   protected abstract void initFactory();
   protected abstract void checkFactory(Factory factory);
-  
+
+  public Object clone() throws CloneNotSupportedException {
+    AbstractParserOptions copy = (AbstractParserOptions) super.clone();
+   
+    // Object's clone implementation takes care of the rest, we just need
+    // deep copies of the two filters, in case they're carrying around some
+    // state with them.
+ 
+    if (parseFilter != null)
+      copy.parseFilter = (ParseFilter) parseFilter.clone();
+    
+    if (textFilter != null)
+      copy.textFilter = (TextFilter) textFilter.clone();
+    
+    return copy;
+  }
+
   public Factory getFactory() {
     if (factory == null) initFactory();
     return factory;

@@ -38,6 +38,8 @@ public class FOMParser
   extends AbstractParser 
   implements Parser {
   
+  protected ParserOptions options = null;
+  
   private FOMFactory getFomFactory(ParserOptions options) {
     FOMFactory factory = 
       (options != null && options.getFactory() != null) ? 
@@ -122,7 +124,13 @@ public class FOMParser
   
   @Override
   public ParserOptions getDefaultParserOptions() {
-    return new FOMParserOptions();
+    if (options == null)
+      options = new FOMParserOptions();
+    return options;
+  }
+
+  public void setDefaultParserOptions(ParserOptions options) {
+    this.options = options;
   }
 
 }

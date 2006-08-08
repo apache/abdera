@@ -94,4 +94,7 @@ public interface Parser {
       throws ParseException, URISyntaxException;
   
   ParserOptions getDefaultParserOptions();
+  
+  void setDefaultParserOptions(ParserOptions options);
+  
 }

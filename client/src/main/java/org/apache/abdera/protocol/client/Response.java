@@ -23,6 +23,12 @@ import java.util.Date;
 
 import javax.activation.MimeType;
 
+import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Element;
+import org.apache.abdera.parser.ParseException;
+import org.apache.abdera.parser.Parser;
+import org.apache.abdera.parser.ParserOptions;
+
 public interface Response {
 
   public static enum ResponseType {
@@ -64,6 +70,14 @@ public interface Response {
   InputStream getInputStream() throws IOException;
   
   void setInputStream(InputStream in);
+  
+  <T extends Element>Document<T> getDocument() throws ParseException;
+  
+  <T extends Element>Document<T> getDocument(ParserOptions options) throws ParseException;
+
+  <T extends Element>Document<T> getDocument(Parser parser) throws ParseException;
+  
+  <T extends Element>Document<T> getDocument(Parser parser, ParserOptions options) throws ParseException;
   
   boolean isPrivate();
   

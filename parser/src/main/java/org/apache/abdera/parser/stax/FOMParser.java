@@ -131,19 +131,31 @@ public class FOMParser
   public synchronized ParserOptions getDefaultParserOptions() {
     if (options == null)
       options = new FOMParserOptions();
-    
+
+    // Make a copy of the options, so that changes to it don't result in
+    // changes to the Parser's defaults.  Also, this allows us to remain
+    // thread safe without having to make ParseOptions implementations
+    // synchronized.
+
     try {
       return (ParserOptions) options.clone();
     } catch (CloneNotSupportedException cnse) {
-      // Nothing... 
+      // This shouldn't actually happen
+      throw new RuntimeException(cnse);
     }
-    
-    // About the best we can do if clone doesn't work :(
-    return new FOMParserOptions();
   }
 
   public synchronized void setDefaultParserOptions(ParserOptions options) {
-    this.options = options;
+    // Ok, we need to make a defensive copy of the options, since otherwise
+    // the caller still has access to the object, which means our access to
+    // it isn't certain to be thread safe.
+
+    try {
+      this.options = (ParserOptions) options.clone();
+    } catch (CloneNotSupportedException cnse) {
+      // This shouldn't actually happen
+      throw new RuntimeException(cnse);
+    }
   }
 
 }

@@ -21,6 +21,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.mortbay.jetty.Server;
+import org.mortbay.jetty.Connector;
+import org.mortbay.jetty.bio.SocketConnector;
+import org.mortbay.jetty.servlet.ServletHandler;
+
 import org.apache.abdera.protocol.client.Client;
 import org.apache.abdera.protocol.client.CommonsClient;
 import org.apache.abdera.protocol.client.RequestOptions;
@@ -28,19 +33,79 @@ import org.apache.abdera.protocol.client.Response;
 
 import junit.framework.TestCase;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+
 /**
- * For now these are hitting Mark Nottingham's set of caching tests.  We'll
- * need to set up our own server.  The hard part about testing caching is
- * that we need a server endpoint to test against.  Also, the test results 
- * can be affected by proxies and intermediate caches.  If we want to run
- * these tests in an offline configuration, we'll need to provide instructions
- * on how to set up a local server and have a portable suite of tests. 
+ * These cache tests were originally based on Mark Nottingham's javascript
+ * cache tests, available at:
+ * 
+ *   http://www.mnot.net/javascript/xmlhttprequest/cache.html
+ * 
+ * They have since been modified to use an embedded Jetty server instead of
+ * going off over the internet to hit Mark's server, since there are too many
+ * things that can get in the way of those sort things (proxies, intermediate
+ * caches, etc) if you try to talk to a remote server.
  */
 public class CacheTests extends TestCase {
+
+  private static final String PORT_PROP = "abdera.test.client.cache.port";
+  private static String CHECK_CACHE_INVALIDATE;
+  private static int PORT;
   
-  private final static String CHECK_CACHE_INVALIDATE = 
-    "http://www.mnot.net/javascript/xmlhttprequest/check_cache_invalidate.s";
-  
+  static {
+    if (System.getProperty(PORT_PROP) != null) {
+      PORT = Integer.parseInt(System.getProperty(PORT_PROP));  
+    } else {
+      PORT = 8080;
+    }
+    
+    CHECK_CACHE_INVALIDATE = "http://localhost:" + PORT + "/";
+  }
+
+  private static Server server;
+
+  protected void setUp() throws Exception {
+    if (server == null) {
+      server = new Server();
+
+      Connector connector = new SocketConnector();
+
+      connector.setPort(PORT);
+
+      server.setConnectors(new Connector[]{connector});
+
+      ServletHandler handler = new ServletHandler();
+
+      server.setHandler(handler);
+
+      handler.addServletWithMapping(
+        "org.apache.abdera.test.client.cache.CacheTests$Servlet",
+        "/"
+      );
+
+      server.start();
+    }
+  }
+
+  public static class Servlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request,
+                         HttpServletResponse response)
+      throws ServletException, IOException
+    {
+      String reqnum = request.getHeader("X-Reqnum");
+
+      response.setContentType("text/plain");
+      response.setStatus(HttpServletResponse.SC_OK);
+      response.setHeader("Cache-Control", "max-age=60");
+      response.setDateHeader("Date", System.currentTimeMillis());
+
+      response.getWriter().println(reqnum);
+    }
+  }
+
   public static void testRequestNoStore() throws Exception {
     
       Client client = new CommonsClient();

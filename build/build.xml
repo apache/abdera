@@ -314,6 +314,12 @@ Working directory: ${work}
           classname="org.apache.abdera.test.parser.stax.TestSuite"
           fork="yes" />
 
+    <echo>Running Client Tests...</echo>
+    <java classpathref="jar.dependencies"
+          classpath="${core.work}:${parser.work}:${server.work}:${client.work}:${test}"
+          classname="org.apache.abdera.test.client.TestSuite"
+          fork="yes" />
+
     <echo>Running Extension Tests...</echo>
     <java classpathref="jar.dependencies"
           classpath="${core.work}:${parser.work}:${server.work}:${extensions.work}:${test}"

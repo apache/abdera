@@ -44,6 +44,34 @@ public class RequestOptions {
   
   private Map<String,List<String>> headers = null;  
   
+  public RequestOptions() {}
+
+  public RequestOptions(Date ifModifiedSince) {
+    setIfModifiedSince(ifModifiedSince);
+  }
+  
+  public RequestOptions(String ifNoneMatch) {
+    setIfNoneMatch(ifNoneMatch);
+  }
+  
+  public RequestOptions(String... ifNoneMatch) {
+    setIfNoneMatch(ifNoneMatch);
+  }
+  
+  public RequestOptions(Date ifModifiedSince, String ifNoneMatch) {
+    setIfModifiedSince(ifModifiedSince);
+    setIfNoneMatch(ifNoneMatch);
+  }
+  
+  public RequestOptions(Date ifModifiedSince, String... ifNoneMatch) {
+    setIfModifiedSince(ifModifiedSince);
+    setIfNoneMatch(ifNoneMatch);
+  }
+  
+  public RequestOptions(boolean no_cache) {
+    setNoCache(no_cache);
+  }
+  
   private Map<String,List<String>> getHeaders() {
     if (headers == null)
       headers = new HashMap<String,List<String>>();

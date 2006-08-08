@@ -24,6 +24,7 @@ import org.apache.abdera.model.Base;
 import org.apache.abdera.protocol.cache.Cache;
 import org.apache.abdera.protocol.cache.CacheFactory;
 import org.apache.abdera.protocol.cache.lru.LRUCache;
+import org.apache.abdera.protocol.util.BaseRequestEntity;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScheme;

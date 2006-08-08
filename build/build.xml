@@ -94,9 +94,6 @@
     <jar destfile="${json.jar}"
          basedir="${dependencies.work}/json"
          includes="org/json/*.class" />
-    
-    <delete dir="${dependencies.work}" />
-    
   </target>
  
   <target name="dependencies">

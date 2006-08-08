@@ -31,6 +31,8 @@ public interface Response {
 
   ResponseType getResponseClass();
   
+  String getMethod();
+  
   int getStatus();
   
   String getUri();

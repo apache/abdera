@@ -51,9 +51,8 @@ public interface Cache {
     CacheKey key);
   
   Response update(
-    String method,
-    String uri, 
     RequestOptions options, 
-    Response response);
+    Response response,
+    Response cached_response);
   
 }

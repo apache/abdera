@@ -44,8 +44,12 @@ public class CommonsResponse
     getServerDate();
   }
 
-  public HttpMethod getMethod() {
+  public HttpMethod getHttpMethod() {
     return method;
+  }
+  
+  public String getMethod() {
+    return method.getName();
   }
   
   public int getStatus() {

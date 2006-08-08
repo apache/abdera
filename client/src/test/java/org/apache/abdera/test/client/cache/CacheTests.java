@@ -55,6 +55,11 @@ public class CacheTests extends TestCase {
   private static String CHECK_CACHE_INVALIDATE;
   private static int PORT;
   
+  private static Server server;
+
+  private static int NUM_TESTS = 3;
+  private static int testsRun  = 0;
+
   static {
     if (System.getProperty(PORT_PROP) != null) {
       PORT = Integer.parseInt(System.getProperty(PORT_PROP));  
@@ -63,31 +68,34 @@ public class CacheTests extends TestCase {
     }
     
     CHECK_CACHE_INVALIDATE = "http://localhost:" + PORT + "/";
+
+    server = new Server();
+
+    Connector connector = new SocketConnector();
+
+    connector.setPort(PORT);
+
+    server.setConnectors(new Connector[]{connector});
+
+    ServletHandler handler = new ServletHandler();
+
+    server.setHandler(handler);
+
+    handler.addServletWithMapping(
+      "org.apache.abdera.test.client.cache.CacheTests$Servlet",
+      "/"
+    );
+
+    try {
+      server.start();
+    } catch (Exception e) {
+      // Nothing...
+    }
   }
 
-  private static Server server;
-
-  protected void setUp() throws Exception {
-    if (server == null) {
-      server = new Server();
-
-      Connector connector = new SocketConnector();
-
-      connector.setPort(PORT);
-
-      server.setConnectors(new Connector[]{connector});
-
-      ServletHandler handler = new ServletHandler();
-
-      server.setHandler(handler);
-
-      handler.addServletWithMapping(
-        "org.apache.abdera.test.client.cache.CacheTests$Servlet",
-        "/"
-      );
-
-      server.start();
-    }
+  public void tearDown() throws Exception {
+    if (++testsRun == NUM_TESTS)
+      server.stop();
   }
 
   public static class Servlet extends HttpServlet {

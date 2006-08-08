@@ -27,9 +27,9 @@ public interface Constants {
   public static final String DEFAULT_PARSER       = "org.apache.abdera.parser.stax.FOMParser";
   public static final String DEFAULT_FACTORY      = "org.apache.abdera.parser.stax.FOMFactory";
   public static final String DEFAULT_XPATH        = "org.apache.abdera.parser.stax.FOMXPath";
-  public static final String PREFIX               = "a";
-  public static final String APP_PREFIX           = "app";
-  public static final String CONTROL_PREFIX       = "pub";
+  public static final String PREFIX               = "";
+  public static final String APP_PREFIX           = "";
+  public static final String CONTROL_PREFIX       = "";
   
   public static final String ATOM_MEDIA_TYPE      = "application/atom+xml";
   public static final String MULTIPART_MEDIA_TYPE = "multipart/related";
@@ -83,7 +83,7 @@ public interface Constants {
   public static final String LN_CONTROL           = "control";
   public static final String LN_DRAFT             = "draft";
   
-  public static final QName DIV                   = new QName(XHTML_NS, LN_DIV, "xhtml");
+  public static final QName DIV                   = new QName(XHTML_NS, LN_DIV, "");
   public static final QName CONTROL               = new QName(CONTROL_NS, LN_CONTROL, CONTROL_PREFIX);
   public static final QName DRAFT                 = new QName(CONTROL_NS, LN_DRAFT, CONTROL_PREFIX);
   public static final QName FEED                  = new QName(ATOM_NS, LN_FEED, PREFIX);

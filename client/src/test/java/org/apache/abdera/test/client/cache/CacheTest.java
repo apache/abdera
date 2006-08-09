@@ -49,7 +49,7 @@ import javax.servlet.ServletException;
  * things that can get in the way of those sort things (proxies, intermediate
  * caches, etc) if you try to talk to a remote server.
  */
-public class CacheTests extends TestCase {
+public class CacheTest extends TestCase {
 
   private static final String PORT_PROP = "abdera.test.client.cache.port";
   private static String CHECK_CACHE_INVALIDATE;
@@ -82,7 +82,7 @@ public class CacheTests extends TestCase {
     server.setHandler(handler);
 
     handler.addServletWithMapping(
-      "org.apache.abdera.test.client.cache.CacheTests$Servlet",
+      "org.apache.abdera.test.client.cache.CacheTest$Servlet",
       "/"
     );
 

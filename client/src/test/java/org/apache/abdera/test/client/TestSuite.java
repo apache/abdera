@@ -27,6 +27,6 @@ public class TestSuite extends junit.framework.TestSuite {
 
   public TestSuite()
   {
-    addTestSuite(CacheTests.class);
+    addTestSuite(CacheTest.class);
   }
 }

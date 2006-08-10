@@ -31,12 +31,29 @@ import org.apache.commons.httpclient.auth.AuthScheme;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.RequestEntity;
 
+/**
+ * An Atom Publishing Protocol client.
+ */
 public abstract class Client {
 
   protected Cache cache = null;
 
+  /**
+   * Get the default request options used by this client.
+   */
   public abstract RequestOptions getDefaultRequestOptions();
-  
+
+  /**
+   * Add a set of authentication credentials to the client.
+   * 
+   * @param target The URI for which you wish to authenticate
+   * @param realm The authentication realm these credentials apply to,
+   *              or null if the credentials apply to any realm
+   * @param scheme The authentication scheme these credentials apply to,
+   *               or null if the credentials apply to any scheme
+   * @param credentials The credentials to use
+   * @throws URISyntaxException
+   */
   public abstract void addCredentials(
     String target, 
     String realm,
@@ -44,8 +61,13 @@ public abstract class Client {
     Credentials credentials) 
       throws URISyntaxException;
   
+  /** Set the order in which authentication schemes should be used. */
   public abstract void setAuthenticationSchemePriority(String... scheme);
   
+  /**
+   * Indicates if the client should authenticate before attempting to do
+   * anything else.
+   */
   public abstract void usePreemptiveAuthentication(boolean val);
   
   public abstract void init(String userAgent);
@@ -169,13 +191,28 @@ public abstract class Client {
     String uri) {
       return delete(uri, getDefaultRequestOptions());
   }
-  
+
+  /**
+   * Execute an arbitrary HTTP request
+   * 
+   * @param method The method name
+   * @param uri The URI to execute the request on
+   * @param entity The request entity to use for generating the request
+   * @param options The options to use for this request
+   * @return the server's response
+   */
   public abstract Response execute(
     String method, 
     String uri, 
     RequestEntity entity, 
     RequestOptions options);
-  
+
+  /**
+   * Register a new authentication scheme.
+   * 
+   * @param name
+   * @param scheme
+   */
   public static void registerScheme(String name, Class<AuthScheme> scheme) {
     AuthPolicy.registerAuthScheme(name, scheme);
   }

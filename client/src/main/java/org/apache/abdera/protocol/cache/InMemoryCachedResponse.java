@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.abdera.protocol.client.Response;
+import org.apache.abdera.protocol.util.CacheControlUtil;
 import org.apache.abdera.protocol.util.MethodHelper;
 
 public class InMemoryCachedResponse 
@@ -50,6 +51,7 @@ public class InMemoryCachedResponse
     this.status_text = response.getStatusText();
     this.uri = response.getUri();
     this.headers = MethodHelper.getCacheableHeaders(response);
+    CacheControlUtil.parseCacheControl(this.getHeader("Cache-Control"), this);
     getServerDate();
     getInitialAge();
     cacheStream(response.getInputStream());

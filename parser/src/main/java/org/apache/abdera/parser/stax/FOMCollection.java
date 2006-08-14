@@ -127,7 +127,7 @@ public class FOMCollection
     return list;
   }
 
-  public void setAccept(String[] mediaRanges) {
+  public void setAccept(String... mediaRanges) {
     if (mediaRanges != null) {
       String value = "";
       for (String type : mediaRanges) {

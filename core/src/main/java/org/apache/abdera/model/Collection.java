@@ -83,7 +83,7 @@ public interface Collection
   /**
    * PaceMediaEntries5 (proposed change to APP Draft-08)
    */
-  void setAccept(String[] mediaRanges);
+  void setAccept(String... mediaRanges);
   
   /**
    * Returns true if the collection accepts the specified media type

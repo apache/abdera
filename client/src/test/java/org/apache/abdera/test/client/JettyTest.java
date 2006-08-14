@@ -1,0 +1,61 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one or more
+* contributor license agreements.  The ASF licenses this file to You
+* under the Apache License, Version 2.0 (the "License"); you may not
+* use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.  For additional information regarding
+* copyright in this work, please see the NOTICE file in the top level
+* directory of this distribution.
+*/
+package org.apache.abdera.test.client;
+
+import org.mortbay.jetty.Connector;
+import org.mortbay.jetty.Server;
+import org.mortbay.jetty.bio.SocketConnector;
+import org.mortbay.jetty.servlet.ServletHandler;
+
+import junit.framework.TestCase;
+
+public class JettyTest extends TestCase {
+ 
+  private static final String PORT_PROP = "abdera.test.client.cache.port";
+  
+  private static int PORT = 8080;
+  protected static Server server;
+  
+  protected JettyTest(String... servletMappings) {
+    if (System.getProperty(PORT_PROP) != null) {
+      PORT = Integer.parseInt(System.getProperty(PORT_PROP));  
+    }
+    server = new Server();
+    Connector connector = new SocketConnector();
+    connector.setPort(PORT);
+    server.setConnectors(new Connector[]{connector});
+    ServletHandler handler = new ServletHandler();
+    server.setHandler(handler);
+    for (int n = 0; n < servletMappings.length; n = n + 2) {
+      String name = servletMappings[n];
+      String root = servletMappings[n+1];
+      handler.addServletWithMapping(name, root);
+    }
+    try {
+      server.start();
+    } catch (Exception e) {}
+  }
+  
+  protected String getBase() {
+    return "http://localhost:" + PORT;
+  }
+  
+  public void tearDown() throws Exception {
+    server.stop();
+  }
+}

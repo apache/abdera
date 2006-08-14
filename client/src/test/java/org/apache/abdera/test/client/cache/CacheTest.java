@@ -22,18 +22,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.bio.SocketConnector;
-import org.mortbay.jetty.servlet.ServletHandler;
-
 import org.apache.abdera.protocol.client.Client;
 import org.apache.abdera.protocol.client.CommonsClient;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.Response;
+import org.apache.abdera.test.client.JettyTest;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
-
-import junit.framework.TestCase;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -51,63 +45,22 @@ import javax.servlet.ServletException;
  * things that can get in the way of those sort things (proxies, intermediate
  * caches, etc) if you try to talk to a remote server.
  */
-public class CacheTest extends TestCase {
+public class CacheTest extends JettyTest {
 
-  private static final String PORT_PROP = "abdera.test.client.cache.port";
   private static String CHECK_CACHE_INVALIDATE;
   private static String CHECK_NO_CACHE;
   private static String CHECK_AUTH;
-  private static int PORT;
-
-  private static Server server;
-  private static int NUM_TESTS = 10;
-  private static int testsRun  = 0;
-
-  static {
-    if (System.getProperty(PORT_PROP) != null) {
-      PORT = Integer.parseInt(System.getProperty(PORT_PROP));  
-    } else {
-      PORT = 8080;
-    }
-    
-    CHECK_CACHE_INVALIDATE = "http://localhost:" + PORT + "/check_cache_invalidate";
-    CHECK_NO_CACHE = "http://localhost:" + PORT + "/no_cache";
-    CHECK_AUTH = "http://localhost:" + PORT + "/auth";
-
-    server = new Server();
-
-    Connector connector = new SocketConnector();
-
-    connector.setPort(PORT);
-
-    server.setConnectors(new Connector[]{connector});
-
-    ServletHandler handler = new ServletHandler();
-
-    server.setHandler(handler);
-
-    handler.addServletWithMapping(
-      "org.apache.abdera.test.client.cache.CacheTest$CheckCacheInvalidateServlet",
-      "/check_cache_invalidate"
+  
+  public CacheTest() {
+    super(
+      "org.apache.abdera.test.client.cache.CacheTest$CheckCacheInvalidateServlet","/check_cache_invalidate",
+      "org.apache.abdera.test.client.cache.CacheTest$NoCacheServlet", "/no_cache",
+      "org.apache.abdera.test.client.cache.CacheTest$AuthServlet", "/auth"
     );
-    handler.addServletWithMapping(
-      "org.apache.abdera.test.client.cache.CacheTest$NoCacheServlet",
-      "/no_cache"
-    );
-    handler.addServletWithMapping(
-      "org.apache.abdera.test.client.cache.CacheTest$AuthServlet",
-      "/auth"
-    );
-    try {
-      server.start();
-    } catch (Exception e) {
-      // Nothing...
-    }
-  }
-
-  public void tearDown() throws Exception {
-    if (++testsRun == NUM_TESTS)
-      server.stop();
+    String base = getBase();
+    CHECK_CACHE_INVALIDATE = base + "/check_cache_invalidate";
+    CHECK_NO_CACHE = base + "/no_cache";
+    CHECK_AUTH = base + "/auth";
   }
   
   @SuppressWarnings("serial")

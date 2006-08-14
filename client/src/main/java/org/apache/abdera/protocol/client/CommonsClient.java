@@ -70,6 +70,18 @@ public class CommonsClient extends Client {
         options.getUseLocalCache();
   }
   
+  private boolean mustRevalidate(RequestOptions options, CachedResponse response) {
+    if (options.getRevalidateWithAuth()) {
+      if (options.getAuthorization() != null) return true;
+      if (client.getParams().getBooleanParameter(
+        HttpClientParams.PREEMPTIVE_AUTHENTICATION, false)) return true;
+      if (response != null) {
+        if (response.isPublic()) return false;
+      }
+    }
+    return false;
+  }
+  
   @Override
   public Response execute(
     String method, 
@@ -84,14 +96,22 @@ public class CommonsClient extends Client {
             cache.getDisposition(uri, options) : 
             CacheDisposition.TRANSPARENT;
         CachedResponse cached_response = cache.get(uri, options);
+        disp = (!disp.equals(CacheDisposition.TRANSPARENT) && 
+                mustRevalidate(options, cached_response)) ? 
+                  CacheDisposition.STALE : 
+                  disp;
         switch(disp) {
           case FRESH:                                                            // CACHE HIT: FRESH
             if (cached_response != null)
               return cached_response;
           case STALE:                                                            // CACHE HIT: STALE
             // revalidate the cached entry
-            options.setIfModifiedSince(cached_response.getLastModified());
-            options.setIfNoneMatch(cached_response.getEntityTag());
+            if (cached_response != null) {
+              options.setIfModifiedSince(cached_response.getLastModified());
+              options.setIfNoneMatch(cached_response.getEntityTag());
+            } else {
+              disp = CacheDisposition.TRANSPARENT;
+            }
           default:                                                               // CACHE MISS
             HttpMethod httpMethod = 
               MethodHelper.createMethod(
@@ -103,6 +123,7 @@ public class CommonsClient extends Client {
               response;
         }
       } catch (Throwable t) {
+        t.printStackTrace();
         throw new ClientException(t);
       }
   }
@@ -111,7 +132,7 @@ public class CommonsClient extends Client {
   public RequestOptions getDefaultRequestOptions() {
     return MethodHelper.createDefaultRequestOptions();
   }
-
+  
   @Override
   public void addCredentials(
     String target,

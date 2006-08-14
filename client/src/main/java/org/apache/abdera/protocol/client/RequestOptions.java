@@ -41,6 +41,7 @@ public class RequestOptions {
   private long max_stale = -1;
   private long min_fresh = -1;
   private boolean noLocalCache = false;
+  private boolean revalidateAuth = false;
   
   private Map<String,List<String>> headers = null;  
   
@@ -363,4 +364,11 @@ public class RequestOptions {
     buf.append(value);
   }
   
+  public boolean getRevalidateWithAuth() {
+    return revalidateAuth;
+  }
+  
+  public void setRevalidateWithAuth(boolean revalidateAuth) {
+    this.revalidateAuth= revalidateAuth;
+  }
 }

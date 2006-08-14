@@ -123,7 +123,6 @@ public class CommonsClient extends Client {
               response;
         }
       } catch (Throwable t) {
-        t.printStackTrace();
         throw new ClientException(t);
       }
   }

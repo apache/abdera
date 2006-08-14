@@ -64,6 +64,7 @@ public class CacheControlUtil {
   public static void parseCacheControl(
     String cc, 
     ResponseBase response) {
+      if (cc == null) return;
       CacheControlParser parser = new CacheControlParser(cc);
       response.setNoCache(false);
       response.setNoStore(false);

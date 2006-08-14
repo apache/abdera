@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.abdera.protocol.cache.CachedResponse;
 import org.apache.abdera.protocol.client.Client;
 import org.apache.abdera.protocol.client.CommonsClient;
 import org.apache.abdera.protocol.client.RequestOptions;
@@ -45,25 +46,54 @@ import javax.servlet.ServletException;
  * things that can get in the way of those sort things (proxies, intermediate
  * caches, etc) if you try to talk to a remote server.
  */
+@SuppressWarnings("serial")
 public class CacheTest extends JettyTest {
 
   private static String CHECK_CACHE_INVALIDATE;
   private static String CHECK_NO_CACHE;
   private static String CHECK_AUTH;
+  private static String CHECK_MUST_REVALIDATE;
   
   public CacheTest() {
     super(
       "org.apache.abdera.test.client.cache.CacheTest$CheckCacheInvalidateServlet","/check_cache_invalidate",
       "org.apache.abdera.test.client.cache.CacheTest$NoCacheServlet", "/no_cache",
-      "org.apache.abdera.test.client.cache.CacheTest$AuthServlet", "/auth"
+      "org.apache.abdera.test.client.cache.CacheTest$AuthServlet", "/auth",
+      "org.apache.abdera.test.client.cache.CacheTest$CheckMustRevalidateServlet", "/must_revalidate"
     );
     String base = getBase();
     CHECK_CACHE_INVALIDATE = base + "/check_cache_invalidate";
     CHECK_NO_CACHE = base + "/no_cache";
     CHECK_AUTH = base + "/auth";
+    CHECK_MUST_REVALIDATE = base + "/must_revalidate";
   }
   
-  @SuppressWarnings("serial")
+  
+  public static class CheckMustRevalidateServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request,
+        HttpServletResponse response)
+          throws ServletException, IOException
+      {
+      String reqnum = request.getHeader("X-Reqnum");
+      int req = Integer.parseInt(reqnum);
+      response.setContentType("text/plain");
+      if (req == 1) {
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setHeader("Cache-Control", "must-revalidate");
+        response.setDateHeader("Date", System.currentTimeMillis());      
+        response.getWriter().println(reqnum);
+      } else if (req == 2) {
+        response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+        response.setDateHeader("Date", System.currentTimeMillis());
+        return;
+      } else if (req == 3) {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        response.setDateHeader("Date", System.currentTimeMillis());
+        return;
+      }
+      }
+  }
+
   public static class CheckCacheInvalidateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
@@ -80,7 +110,6 @@ public class CacheTest extends JettyTest {
     }
   }
 
-  @SuppressWarnings("serial")
   public static class NoCacheServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
@@ -102,7 +131,6 @@ public class CacheTest extends JettyTest {
     }
   }
   
-  @SuppressWarnings("serial")
   public static class AuthServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
@@ -223,6 +251,30 @@ public class CacheTest extends JettyTest {
     resp1 = getResponse(response.getInputStream());
     assertEquals(response.getStatus(), HttpServletResponse.SC_OK);
     assertEquals(resp1, "5");
+  }
+  
+  public static void testResponseMustRevalidate() throws Exception {
+    Client client = new CommonsClient();
+    RequestOptions options = client.getDefaultRequestOptions();
+    options.setHeader("x-reqnum", "1");
+    Response response = client.get(CHECK_MUST_REVALIDATE, options);
+  
+    String resp1 = getResponse(response.getInputStream());
+    assertEquals(resp1, "1");
+    
+    // Should be revalidated and use the cache
+    options.setHeader("x-reqnum", "2");
+    response = client.get(CHECK_MUST_REVALIDATE, options);
+    assertTrue(response instanceof CachedResponse);
+    
+    String resp2 = getResponse(response.getInputStream());
+    assertEquals(resp2, "1");
+    
+    // Should be revalidated and return a 404
+    options.setHeader("x-reqnum", "3");
+    response = client.get(CHECK_MUST_REVALIDATE, options);  
+    assertEquals(response.getStatus(), 404);
+
   }
   
   private static void _methodInvalidates(int type) throws Exception {

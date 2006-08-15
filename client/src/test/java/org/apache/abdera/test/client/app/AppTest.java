@@ -47,6 +47,7 @@ import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.Response;
 import org.apache.abdera.test.client.JettyTest;
 import org.apache.abdera.util.MimeTypeHelper;
+import org.mortbay.jetty.servlet.ServletHandler;
 
 /**
  * Test to make sure that we can operate as a simple APP client
@@ -54,6 +55,12 @@ import org.apache.abdera.util.MimeTypeHelper;
 @SuppressWarnings("serial")
 public class AppTest extends JettyTest {
 
+  private static ServletHandler handler = 
+    JettyTest.getServletHandler(
+      ServiceDocumentServlet.class.getName(), "/service",
+      CollectionServlet.class.getName(), "/collections/*"
+    );
+  
   private static AppTest INSTANCE = null;
   
   private static Document<Service> init_service_document(String base) {
@@ -152,7 +159,6 @@ public class AppTest extends JettyTest {
             if (m != null) {
               response.setStatus(HttpServletResponse.SC_OK);
               response.setContentType("text/plain");
-              response.setHeader("Cache-Control", "no-cache");
               response.getWriter().write(m);
               break;
             } else {
@@ -308,12 +314,13 @@ public class AppTest extends JettyTest {
   }
   
   public AppTest() {
-    super(
-      ServiceDocumentServlet.class.getName(), "/service",
-      CollectionServlet.class.getName(), "/collections/*"
-    );
+    super(1);
     AppTest.INSTANCE = this;
   }
+  
+  protected ServletHandler getServletHandler() {
+    return AppTest.handler;
+  }  
   
   public void testAppClient() throws Exception {
     
@@ -440,7 +447,8 @@ public class AppTest extends JettyTest {
     assertEquals(404, response.getStatus());
 
     // is the media resource gone?
-    response = client.get(media);
+    options.setNoCache(true); // need to force revalidation to check
+    response = client.get(media, options);
     assertEquals(404, response.getStatus());
     
     // YAY! We can handle media link entries 

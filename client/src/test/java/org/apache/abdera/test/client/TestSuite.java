@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.test.client;
 
+import org.apache.abdera.test.client.app.AppTest;
 import org.apache.abdera.test.client.cache.*;
 
 public class TestSuite extends junit.framework.TestSuite {
@@ -28,5 +29,6 @@ public class TestSuite extends junit.framework.TestSuite {
   public TestSuite()
   {
     addTestSuite(CacheTest.class);
+    addTestSuite(AppTest.class);
   }
 }

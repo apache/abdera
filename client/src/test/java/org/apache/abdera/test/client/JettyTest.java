@@ -17,45 +17,40 @@
 */
 package org.apache.abdera.test.client;
 
-import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.servlet.ServletHandler;
 
 import junit.framework.TestCase;
 
-public class JettyTest extends TestCase {
- 
-  private static final String PORT_PROP = "abdera.test.client.cache.port";
+public abstract class JettyTest extends TestCase {
   
-  private static int PORT = 8080;
-  protected static Server server;
+  protected int numtests = 0;
+  protected int testsrun = 0;
   
-  protected JettyTest(String... servletMappings) {
-    if (System.getProperty(PORT_PROP) != null) {
-      PORT = Integer.parseInt(System.getProperty(PORT_PROP));  
-    }
-    server = new Server();
-    Connector connector = new SocketConnector();
-    connector.setPort(PORT);
-    server.setConnectors(new Connector[]{connector});
+  protected JettyTest(int numtests) {
+    this.numtests = numtests;
+  }
+  
+  protected static ServletHandler getServletHandler(String... servletMappings) {
     ServletHandler handler = new ServletHandler();
-    server.setHandler(handler);
     for (int n = 0; n < servletMappings.length; n = n + 2) {
       String name = servletMappings[n];
       String root = servletMappings[n+1];
       handler.addServletWithMapping(name, root);
     }
     try {
-      server.start();
+      JettyUtil.addHandler(handler);
     } catch (Exception e) {}
+    return handler;
   }
+    
+  protected abstract ServletHandler getServletHandler();
   
   protected String getBase() {
-    return "http://localhost:" + PORT;
+    return "http://localhost:" + JettyUtil.getPort();
   }
   
   public void tearDown() throws Exception {
-    server.stop();
+    if (++testsrun == numtests)
+      JettyUtil.removeHandler(getServletHandler());
   }
 }

@@ -29,6 +29,7 @@ import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.Response;
 import org.apache.abdera.test.client.JettyTest;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.mortbay.jetty.servlet.ServletHandler;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -49,18 +50,21 @@ import javax.servlet.ServletException;
 @SuppressWarnings("serial")
 public class CacheTest extends JettyTest {
 
+  private static ServletHandler handler = 
+    JettyTest.getServletHandler(
+      "org.apache.abdera.test.client.cache.CacheTest$CheckCacheInvalidateServlet","/check_cache_invalidate",
+      "org.apache.abdera.test.client.cache.CacheTest$NoCacheServlet", "/no_cache",
+      "org.apache.abdera.test.client.cache.CacheTest$AuthServlet", "/auth",
+      "org.apache.abdera.test.client.cache.CacheTest$CheckMustRevalidateServlet", "/must_revalidate"
+    );
+  
   private static String CHECK_CACHE_INVALIDATE;
   private static String CHECK_NO_CACHE;
   private static String CHECK_AUTH;
   private static String CHECK_MUST_REVALIDATE;
   
   public CacheTest() {
-    super(
-      "org.apache.abdera.test.client.cache.CacheTest$CheckCacheInvalidateServlet","/check_cache_invalidate",
-      "org.apache.abdera.test.client.cache.CacheTest$NoCacheServlet", "/no_cache",
-      "org.apache.abdera.test.client.cache.CacheTest$AuthServlet", "/auth",
-      "org.apache.abdera.test.client.cache.CacheTest$CheckMustRevalidateServlet", "/must_revalidate"
-    );
+    super(11);
     String base = getBase();
     CHECK_CACHE_INVALIDATE = base + "/check_cache_invalidate";
     CHECK_NO_CACHE = base + "/no_cache";
@@ -68,6 +72,9 @@ public class CacheTest extends JettyTest {
     CHECK_MUST_REVALIDATE = base + "/must_revalidate";
   }
   
+  protected ServletHandler getServletHandler() {
+    return CacheTest.handler;
+  }
   
   public static class CheckMustRevalidateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request,
@@ -321,8 +328,7 @@ public class CacheTest extends JettyTest {
     Client client = new CommonsClient();
     RequestOptions options = client.getDefaultRequestOptions();
     options.setHeader("x-reqnum", "1");
-    Response response = client.get(CHECK_CACHE_INVALIDATE, options);
-  
+    Response response = client.get(CHECK_CACHE_INVALIDATE, options);  
     String resp1 = getResponse(response.getInputStream());
     assertEquals(resp1, "1");
     

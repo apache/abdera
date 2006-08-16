@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.namespace.QName;
 
@@ -53,6 +54,11 @@ public interface Element
    * null if <code>xml:lang</code> is undefined.
    */
   String getLanguage();
+  
+  /**
+   * Returns a Locale object created from the <code>xml:lang</code> attribute
+   */
+  Locale getLocale();
   
   /**
    * Sets the value of this elements <code>xml:lang</code> attribute.

@@ -34,7 +34,12 @@ public abstract class BaseParserTestCase extends TestCase {
       String path = uriStr.substring(uriStr.indexOf("//") + 1);
       InputStream stream = BaseParserTestCase.class.getResourceAsStream(path);
       return Parser.INSTANCE.parse(stream, uri);
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      // when getting it local fails, fall back to getting it from the server
+      try {
+        return Parser.INSTANCE.parse(uri.toURL().openStream(), uri);
+      } catch (Exception ex) {}
+    }
     return null;
   }
 

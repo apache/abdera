@@ -43,7 +43,6 @@ import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.model.Text;
-import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 
 public class FeedValidatorTest 

@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
@@ -563,5 +564,19 @@ public class FOMElement
   
   public void addComment(String value) {
     factory.createOMComment(this, value);
+  }
+  
+  public Locale getLocale() {
+    String tag = getLanguage();
+    if (tag == null || tag.length() == 0) return null;
+    String[] tokens = tag.split("-");
+    Locale locale = null;
+    switch(tokens.length) {
+      case 0:  break;
+      case 1:  locale = new Locale(tokens[0]); break;
+      case 2:  locale = new Locale(tokens[0],tokens[1]); break;
+      default: locale = new Locale(tokens[0],tokens[1],tokens[2]); break;
+    }
+    return locale;
   }
 }

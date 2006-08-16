@@ -119,7 +119,8 @@ public class FOMText
     } else if (Type.HTML.equals(type)) {
       val = getText();
     } else if (Type.XHTML.equals(type)) {
-      val = ((FOMDiv)this.getFirstChildWithName(Constants.DIV)).getInternalValue();
+      FOMDiv div = (FOMDiv) this.getFirstChildWithName(Constants.DIV);
+      val = (div != null) ? div.getInternalValue() : null;
     }
     return val;
   }

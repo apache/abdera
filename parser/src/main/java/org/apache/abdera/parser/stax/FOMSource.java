@@ -475,7 +475,7 @@ public class FOMSource
   
   public URI getIcon() throws URISyntaxException {
     IRI iri = getIconElement();
-    return (iri != null) ? iri.getValue() : null;
+    return (iri != null) ? iri.getResolvedValue() : null;
   }
 
   public IRI getLogoElement() {
@@ -502,7 +502,7 @@ public class FOMSource
   
   public URI getLogo() throws URISyntaxException {
     IRI iri = getLogoElement();
-    return (iri != null) ? iri.getValue() : null;
+    return (iri != null) ? iri.getResolvedValue() : null;
   }
   
   public Link getLink(String rel) {

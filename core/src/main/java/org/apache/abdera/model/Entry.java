@@ -230,6 +230,12 @@ public interface Entry
   String getContent();
   
   /**
+   * Returns the content/@src attribute, if any
+   * @throws URISyntaxException 
+   */
+  URI getContentSrc() throws URISyntaxException;
+  
+  /**
    * Returns the content type
    */
   Content.Type getContentType();

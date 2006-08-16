@@ -43,21 +43,18 @@ import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.model.Text;
-import org.apache.abdera.parser.Parser;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 
-
-import junit.framework.TestCase;
-
 public class FeedValidatorTest 
-  extends TestCase {
+  extends BaseParserTestCase { //extends TestCase {
 
   private static URI baseURI = null;
   
   private static <T extends Element> Document<T> get(URI uri) {
     try {
-      return Parser.INSTANCE.parse(uri.toURL().openStream(), uri);
+      //return Parser.INSTANCE.parse(uri.toURL().openStream(), uri);
+      return parse(uri);
     } catch (Exception e) {}
     return null;
   }

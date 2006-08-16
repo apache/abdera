@@ -113,6 +113,11 @@ Working directory: ${work}
 
     <mkdir dir="${test}" />
 
+    <condition property="do.download.feedvalidator.tests">
+      <not>
+        <available file="${parser.test.resources}/feedvalidator.org/testcases/atom" />
+      </not>
+    </condition>
     <condition property="do.download">
       <not>
         <and>
@@ -301,7 +306,7 @@ Working directory: ${work}
     </copy>
   </target>
   
-  <target name="test" depends="build">
+  <target name="test" depends="build, download_feedvalidator_tests">
     <echo>Running Core Tests...</echo>
     <java classpathref="jar.dependencies" 
           classpath="${core.work}:${parser.work}:${server.work}:${test}"
@@ -535,5 +540,16 @@ Working directory: ${work}
          usetimestamp="true" />
     <unzip src="${basedir}/build/tools/${retroweaver.zip}"
            dest="${basedir}/build/tools/" overwrite="true"/>
+  </target>
+  
+  <target name="download_feedvalidator_tests" 
+    depends="init" if="do.download.feedvalidator.tests" >
+    <mkdir dir="${parser.test.resources}/feedvalidator.org" />
+    <exec 
+      failifexecutionfails="false"
+      dir="${parser.test.resources}/feedvalidator.org" 
+      executable="svn">
+      <arg line="co https://svn.sourceforge.net/svnroot/feedvalidator/trunk/feedvalidator/testcases/atom testcases/atom" />
+    </exec>
   </target>
 </project>

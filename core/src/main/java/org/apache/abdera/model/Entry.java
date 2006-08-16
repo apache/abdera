@@ -563,4 +563,20 @@ public interface Entry
    */
   Link getEditLink();
   
+  /**
+   * Returns this entries first edit-media link (if any)
+   */
+  Link getEditMediaLink();
+  
+  /**
+   * Returns this entries first self link
+   */
+  Link getSelfLink();
+ 
+  URI getLinkResolvedHref(String rel) throws URISyntaxException;
+  URI getAlternateLinkResolvedHref() throws URISyntaxException;
+  URI getEnclosureLinkResolvedHref() throws URISyntaxException;
+  URI getEditLinkResolvedHref() throws URISyntaxException;
+  URI getEditMediaLinkResolvedHref() throws URISyntaxException;
+  URI getSelfLinkResolvedHref() throws URISyntaxException;
 }

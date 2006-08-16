@@ -641,6 +641,39 @@ public class FOMEntry
     return getLink(Link.REL_EDIT);
   }
   
+  public Link getSelfLink() {
+    return getLink(Link.REL_SELF);
+  }
+  
+  public Link getEditMediaLink() {
+    return getLink(Link.REL_EDIT_MEDIA);
+  }
+  
+  public URI getLinkResolvedHref(String rel) throws URISyntaxException {
+    Link link = getLink(rel);
+    return (link != null) ? link.getResolvedHref() : null;
+  }
+  public URI getAlternateLinkResolvedHref() throws URISyntaxException {
+    Link link = getAlternateLink();
+    return (link != null) ? link.getResolvedHref() : null;
+  }
+  public URI getEnclosureLinkResolvedHref() throws URISyntaxException {
+    Link link = getEnclosureLink();
+    return (link != null) ? link.getResolvedHref() : null;
+  }
+  public URI getEditLinkResolvedHref() throws URISyntaxException {
+    Link link = getEditLink();
+    return (link != null) ? link.getResolvedHref() : null;
+  }
+  public URI getEditMediaLinkResolvedHref() throws URISyntaxException {
+    Link link = getEditMediaLink();
+    return (link != null) ? link.getResolvedHref() : null;
+  }
+  public URI getSelfLinkResolvedHref() throws URISyntaxException {
+    Link link = getSelfLink();
+    return (link != null) ? link.getResolvedHref() : null;
+  }
+  
   public String getContent() {
     Content content = getContentElement();
     return (content != null) ? content.getValue() : null;

@@ -520,6 +520,19 @@ public class FOMSource
     return getLink(Link.REL_ALTERNATE);
   }
 
+  public URI getLinkResolvedHref(String rel) throws URISyntaxException {
+    Link link = getLink(rel);
+    return (link != null) ? link.getResolvedHref() : null;
+  }
+  public URI getSelfLinkResolvedHref() throws URISyntaxException {
+    Link link = getSelfLink();
+    return (link != null) ? link.getResolvedHref() : null;
+  }
+  public URI getAlternateLinkResolvedHref() throws URISyntaxException {
+    Link link = getAlternateLink();
+    return (link != null) ? link.getResolvedHref() : null;
+  }
+  
   public Text.Type getRightsType() {
     Text text = getRightsElement();
     return (text != null) ? text.getTextType() : null;

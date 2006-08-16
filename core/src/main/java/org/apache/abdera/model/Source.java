@@ -468,4 +468,7 @@ public interface Source
    */
   Link getAlternateLink();
   
+  URI getLinkResolvedHref(String rel) throws URISyntaxException;
+  URI getSelfLinkResolvedHref() throws URISyntaxException;
+  URI getAlternateLinkResolvedHref() throws URISyntaxException;
 }

@@ -679,6 +679,11 @@ public class FOMEntry
     return (content != null) ? content.getValue() : null;
   }
   
+  public URI getContentSrc() throws URISyntaxException {
+    Content content = getContentElement();
+    return (content != null) ? content.getResolvedSrc() : null;
+  }
+  
   public Type getContentType() {
     Content content = getContentElement();
     return (content != null) ? content.getContentType() : null;

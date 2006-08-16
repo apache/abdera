@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.activation.DataHandler;
@@ -700,7 +701,10 @@ public class FeedValidatorTest
   
   public static void testSection3WsLinkRel() throws Exception {
     //http://feedvalidator.org/testcases/atom/3/ws-link-rel.xml
-    //Note: validation of link rels not yet implemented
+    URI uri = baseURI.resolve("3/ws-link-rel.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertNull(doc.getRoot().getAlternateLink());
   }
   
   public static void testSection3WsXmlBase() throws Exception {
@@ -912,17 +916,23 @@ public class FeedValidatorTest
   
   public static void testSection321MultipleNames() throws Exception {
     //http://feedvalidator.org/testcases/atom/3.2.1/multiple-names.xml
-    //Note: not validating input right now
+    URI uri = baseURI.resolve("3.2.1/multiple-names.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getContributors().get(0).getName(),"George Washington");
   }
   
   public static void testSection321NoName() throws Exception {
     //http://feedvalidator.org/testcases/atom/3.2.1/no-name.xml
-    //Note: not validating input right now
+    URI uri = baseURI.resolve("3.2.1/no-name.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertNull(doc.getRoot().getContributors().get(0).getName());
   }
   
   public static void testSection322InvalidUri() throws Exception {
     //http://feedvalidator.org/testcases/atom/3.2.2/invalid-uri.xml
-    URI uri = baseURI.resolve("3.1.1.3/missing_xhtml_div.xml");
+    URI uri = baseURI.resolve("3.2.2/invalid-uri.xml");
     Document<Feed> doc = get(uri);
     assertNotNull(doc);
     
@@ -940,7 +950,10 @@ public class FeedValidatorTest
   
   public static void testSection322MultipleUris() throws Exception {
     //http://feedvalidator.org/testcases/atom/3.2.2/multiple-uris.xml
-    //Note: not validating input right now
+    URI uri = baseURI.resolve("3.2.2/multiple-uris.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getContributors().get(0).getUri(), new URI("http://example.com/~jane/"));
   }
   
   public static void testSection322RelativeRef() throws Exception {
@@ -1028,12 +1041,22 @@ public class FeedValidatorTest
   
   public static void testSection323MultipleEmails() throws Exception {
     //http://feedvalidator.org/testcases/atom/3.2.3/multiple-emails.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("3.2.3/multiple-emails.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getContributors().get(0).getEmail(), "jane@example.com");
   }
   
   public static void testSection33DuplicateUpdated() throws Exception {
     //http://feedvalidator.org/testcases/atom/3.3/duplicate-updated.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("3.3/duplicate-updated.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Date d = AtomDate.parse("2003-12-13T18:30:02Z");
+    for (Entry entry : doc.getRoot().getEntries()) {
+      Date date = entry.getUpdated();
+      assertEquals(date,d);
+    }
   }
   
   public static void testSection33LowercaseUpdated() throws Exception {
@@ -1053,32 +1076,58 @@ public class FeedValidatorTest
   
   public static void testSection33PublishedBadDay() throws Exception {
     //http://feedvalidator.org/testcases/atom/3.3/published_bad_day.xml
-    //Note: not yet implemented
+    URI uri = baseURI.resolve("3.3/published_bad_day.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Date d = AtomDate.parse("2003-07-32T15:51:30-05:00");
+    assertEquals(doc.getRoot().getEntries().get(0).getPublished(),d);
   }
   
   public static void testSection33PublishedBadDay2() throws Exception {
     //http://feedvalidator.org/testcases/atom/3.3/published_bad_day2.xml
-    //Note: not yet implemented
+    URI uri = baseURI.resolve("3.3/published_bad_day2.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    // this is an invalid date, but we don't care because we're not doing
+    // validation.  Better run those feeds through the feed validator :-)
+    Date d = AtomDate.parse("2003-06-31T15:51:30-05:00");
+    assertEquals(doc.getRoot().getEntries().get(0).getPublished(),d);
   }
   
   public static void testSection33PublishedBadHours() throws Exception {
     //http://feedvalidator.org/testcases/atom/3.3/published_bad_hours.xml
-    //Note: not yet implemented
+    URI uri = baseURI.resolve("3.3/published_bad_hours.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Date d = AtomDate.parse("2003-07-01T25:51:30-05:00");
+    assertEquals(doc.getRoot().getEntries().get(0).getPublished(),d);
   }
   
   public static void testSecton33PublishedBadMinutes() throws Exception {
     //http://feedvalidator.org/testcases/atom/3.3/published_bad_minutes.xml
-    //Note: not yet implemented
+    URI uri = baseURI.resolve("3.3/published_bad_minutes.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Date d = AtomDate.parse("2003-07-01T01:61:30-05:00");
+    assertEquals(doc.getRoot().getEntries().get(0).getPublished(),d);
   }
   
   public static void testSection33PublishedBadMonth() throws Exception {
     //http://feedvalidator.org/testcases/atom/3.3/published_bad_month.xml
-    //Note: not yet implemented
+    URI uri = baseURI.resolve("3.3/published_bad_month.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Date d = AtomDate.parse("2003-13-01T15:51:30-05:00");
+    assertEquals(doc.getRoot().getEntries().get(0).getPublished(),d);
   }
   
   public static void testSection33PublishedBadSeconds() throws Exception {
     //http://feedvalidator.org/testcases/atom/3.3/published_bad_seconds.xml
-    //Note: not yet implemented
+    URI uri = baseURI.resolve("3.3/published_bad_seconds.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Date d = AtomDate.parse("2003-07-01T01:55:61-05:00");
+    assertEquals(doc.getRoot().getEntries().get(0).getPublished(),d);
   }
   
   public static void testSection33PublishedDateOnly() throws Exception {
@@ -1437,12 +1486,20 @@ public class FeedValidatorTest
   
   public static void testSection33UpdatedFuture() throws Exception {
     //http://feedvalidator.org/testcases/atom/3.3/updated-future.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("3.3/updated-future.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);    
+    Date d = AtomDate.parse("2103-12-13T18:30:02Z");
+    assertEquals(doc.getRoot().getEntries().get(0).getUpdated(),d);
   }
   
   public static void testSection33UpdatedPast() throws Exception {
     //http://feedvalidator.org/testcases/atom/3.3/updated-past.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("3.3/updated-past.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);    
+    Date d = AtomDate.parse("0103-12-13T18:30:02Z");
+    assertEquals(doc.getRoot().getEntries().get(0).getUpdated(),d);
   }
   
   public static void testSection411AuthorAtEntryOnly() throws Exception {
@@ -1517,37 +1574,63 @@ public class FeedValidatorTest
   
   public static void testSection411DuplicateEntries() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/duplicate-entries.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/duplicate-entries.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry e1 = doc.getRoot().getEntries().get(0);
+    Entry e2 = doc.getRoot().getEntries().get(1);
+    assertEquals(e1.getId(),e2.getId());
+    assertEquals(e1.getUpdated(),e2.getUpdated());
   }
   
   public static void testSection411LinkRelFull() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/link-rel-full.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/link-rel-full.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Link link = doc.getRoot().getLink("http://xmlns.com/foaf/0.1/");
+    assertNotNull(link);
+    assertEquals(link.getResolvedHref(), new URI("http://example.org/foaf"));
   }
   
   public static void testSection411MisplacedMetadata() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/misplaced-metadata.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/misplaced-metadata.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getId(),new URI("urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6"));
   }
   
   public static void testSection411MissingId() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/missing-id.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/missing-id.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertNull(doc.getRoot().getId());
   }
   
   public static void testSection411MissingSelf() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/missing-self.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/missing-self.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertNull(doc.getRoot().getSelfLink());
   }  
   
   public static void testSection411MissingTitles() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/missing-titles.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/missing-titles.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertNull(doc.getRoot().getTitle());
   }
   
   public static void testSection411MissingUpdated() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/missing-updated.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/missing-updated.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertNull(doc.getRoot().getUpdated());
   }
   
   public static void testSection411MultipleAlternatesDiffering() throws Exception {
@@ -1564,7 +1647,10 @@ public class FeedValidatorTest
   
   public static void testSection411MultipleAlternatesMatching() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/multiple-alternates-matching.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/multiple-alternates-matching.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getAlternateLink().getResolvedHref(), new URI("http://example.org/front-page.html"));
   }
   
   public static void testSection411MultipleAuthors() throws Exception {
@@ -1605,47 +1691,80 @@ public class FeedValidatorTest
   
   public static void testSection411MultipleGenerators() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/multiple-generators.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/multiple-generators.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Generator g = doc.getRoot().getGenerator();
+    assertEquals(g.getResolvedUri(), new URI("http://www.example.com/"));
+    assertEquals(g.getText().trim(), "Example Toolkit");
   }
   
   public static void testSection411MultipleIcons() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/multiple-icons.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/multiple-icons.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getIcon(),new URI("http://feedvalidator.org/big.icon"));
   }
   
   public static void testSection411MultipleIds() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/multiple-ids.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/multiple-ids.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getId(), new URI("urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6"));
   }  
   
   public static void testSection411MultipleLogos() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/multiple-logos.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/multiple-logos.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getLogo(),new URI("http://feedvalidator.org/small.jpg"));
   }
   
   public static void testSection411MultipleRelatedMatching() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/multiple-related-matching.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/multiple-related-matching.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    List<Link> links = doc.getRoot().getLinks("related");
+    assertEquals(links.size(),2);
+    assertEquals(links.get(0).getResolvedHref(), new URI("http://example.org/front-page.html"));
+    assertEquals(links.get(1).getResolvedHref(), new URI("http://example.org/second-page.html"));
   }
   
   public static void testSection411MultipleRights() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/multiple-rights.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/multiple-rights.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getRights(),"Public Domain");
   }
   
   public static void testSection411MultipleSubtitles() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/multiple-subtitles.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/multiple-subtitles.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getSubtitle(), "A unique feed, just like all the others");
   }
   
   public static void testSection411MultipleTitles() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/multiple-titles.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/multiple-titles.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getTitle(), "Example Feed");
   }
   
   public static void testSection411MultipleUpdateds() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1/multiple-updateds.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1/multiple-updateds.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Date d = AtomDate.parse("2003-12-13T18:30:02Z");
+    assertEquals(doc.getRoot().getUpdated(), d);
   }
   
   public static void testSection411ZeroEntries() throws Exception {
@@ -1676,17 +1795,28 @@ public class FeedValidatorTest
   
   public static void testSection4111EmptyContent() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1.1/empty-content.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1.1/empty-content.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getEntries().get(0).getContent(),"");
   }
   
   public static void testSection4111EmptyTitle() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1.1/empty-title.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1.1/empty-title.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getEntries().get(0).getTitle(),"");
   }  
   
   public static void testSection4111NoContentOrSummary() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.1.1/no-content-or-summary.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.1.1/no-content-or-summary.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    assertNull(entry.getContent());
+    assertNull(entry.getSummary());
   }
   
   public static void testSection412AlternateNoContent() throws Exception {
@@ -1743,7 +1873,12 @@ public class FeedValidatorTest
   
   public static void testSection412ContentSrcNoSummary() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/content-src-no-summary.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/content-src-no-summary.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    assertNull(entry.getSummary());
+    assertEquals(entry.getContentElement().getResolvedSrc(), new URI("http://example.org/2003/12/13/atom03"));
   }
   
   public static void testSection412EntrySourceAuthor() throws Exception {
@@ -1789,32 +1924,58 @@ public class FeedValidatorTest
   
   public static void testSection412LinkSameRelTypeDifferentHreflang() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/link-same-rel-type-different-hreflang.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/link-same-rel-type-different-hreflang.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    List<Link> links = doc.getRoot().getEntries().get(0).getLinks("alternate");
+    assertEquals(links.size(),2);
+    assertEquals(links.get(0).getHrefLang(), "es-es");
+    assertEquals(links.get(1).getHrefLang(), "en-us");
   }
   
   public static void testSection412LinkSameRelTypeHreflang() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/link-same-rel-type-hreflang.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/link-same-rel-type-hreflang.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    assertEquals(entry.getAlternateLink().getResolvedHref(), new URI("http://example.org/2003/12/13/atom02"));
   }
   
   public static void testSection412LinkSameRelTypeNoHreflang() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/link-same-rel-type-no-hreflang.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/link-same-rel-type-no-hreflang.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    assertEquals(entry.getAlternateLink().getResolvedHref(), new URI("http://example.org/2003/12/13/atom02"));
   }
   
   public static void testSection412MissingId() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/missing-id.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/missing-id.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    assertNull(entry.getId());
   }  
 
   public static void testSection412MissingTitle() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/missing-title.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/missing-title.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    assertNull(entry.getTitle());
   }  
   
   public static void testSection412MissingUpdated() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/missing-updated.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/missing-updated.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    assertNull(entry.getUpdated());
   }  
   
   public static void testSection412MultiEnclosureTest() throws Exception {
@@ -1850,6 +2011,11 @@ public class FeedValidatorTest
   public static void testSection412MultipleContents() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/multiple-contents.xml
     //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/multiple-contents.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    assertEquals(entry.getContent(), "No big deal");
   }   
   
   public static void testSection412MultipleContributors() throws Exception {
@@ -1869,47 +2035,88 @@ public class FeedValidatorTest
   
   public static void testSection412MultipleIds() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/multiple-ids.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/multiple-ids.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getEntries().get(0).getId(), new URI("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a"));
   }   
   
   public static void testSection412MultiplePublished() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/multiple-published.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/multiple-published.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Date d = AtomDate.parse("2003-12-11T11:13:56Z");
+    assertEquals(doc.getRoot().getEntries().get(0).getPublished(), d);
   }   
   
   public static void testSection412MultipleRights() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/multiple-rights.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/multiple-rights.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    assertEquals(entry.getRights(), "Public Domain");
   }   
   
   public static void testSection412MultipleSources() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/multiple-sources.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/multiple-sources.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    Source source = entry.getSource();
+    assertEquals(source.getId(), new URI("urn:uuid:9b056ae0-f778-11d9-8cd6-0800200c9a66"));
   }   
   
   public static void testSection412MultipleSummaries() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/multiple-summaries.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/multiple-summaries.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    assertEquals(entry.getSummary(), "Some text.");
   }   
   
   public static void testSection412MultipleTitles() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/multiple-titles.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/multiple-titles.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    assertEquals(entry.getTitle(), "Atom-Powered Robots Run Amok");
   }   
   
   public static void testSection412MultipleUpdated() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/multiple-updated.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/multiple-updated.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    Date d = AtomDate.parse("2003-12-13T18:30:02Z");
+    assertEquals(entry.getUpdated(), d);
   }   
   
   public static void testSection412NoContentOrAlternate() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/no-content-or-alternate.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/no-content-or-alternate.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    assertNull(entry.getContent());
+    assertNull(entry.getAlternateLink());
   }   
   
   public static void testSection412RelatedSameRelTypeHreflang() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.2/related-same-rel-type-hreflang.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.2/related-same-rel-type-hreflang.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    List<Link> links = entry.getLinks("related");
+    assertEquals(links.size(),2);
+    assertEquals(links.get(0).getResolvedHref(), new URI("http://example.org/2003/12/13/atom02"));
+    assertEquals(links.get(1).getResolvedHref(), new URI("http://example.org/2003/12/13/atom03"));
   }   
       
   public static void testSection412SummaryContentBase64() throws Exception {
@@ -1964,9 +2171,13 @@ public class FeedValidatorTest
     }
   }
   
-  public static void testSectoin413TypeMultipartAlternative() throws Exception {
+  public static void testSection413TypeMultipartAlternative() throws Exception {
     //http://feedvalidator.org/testcases/atom/4.1.3.1/type-multipart-alternative.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("4.1.3.1/type-multipart-alternative.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    assertEquals(entry.getContentElement().getMimeType().toString(), "multipart/alternative");
   }
   
   public static void testSection4131TypeTextHtml() throws Exception {
@@ -2033,12 +2244,25 @@ public class FeedValidatorTest
    
    public static void testSection4132ContentSrcExtraChild() throws Exception {
      //http://feedvalidator.org/testcases/atom/4.1.3.2/content-src-extra-child.xml
-     //Note: not implemented
+     URI uri = baseURI.resolve("4.1.3.2/content-src-extra-child.xml");
+     Document<Feed> doc = get(uri);
+     assertNotNull(doc);
+     Entry entry = doc.getRoot().getEntries().get(0);
+     Content content = entry.getContentElement();
+     assertEquals(content.getResolvedSrc(), new URI("http://example.org/2003/12/13/atom03"));
+     assertEquals(entry.getContent().trim(), "extraneous text");
    }
    
    public static void testSection4132ContentSrcExtraText() throws Exception {
      //http://feedvalidator.org/testcases/atom/4.1.3.2/content-src-extra-text.xml
-     //Note: not implemented
+     try {
+       URI uri = baseURI.resolve("4.1.3.2/content-src-extra-text.xml");
+       Document<Feed> doc = get(uri);
+       assertNotNull(doc);
+       Entry entry = doc.getRoot().getEntries().get(0);
+       Content content = entry.getContentElement();
+       assertEquals(content.getResolvedSrc(), new URI("http://example.org/2003/12/13/atom03"));
+     } catch (Exception e) {}
    }
    
    public static void testSection4132ContentSrcInvalidIri() throws Exception {
@@ -2063,12 +2287,24 @@ public class FeedValidatorTest
    
    public static void testSection4132ContentSrcNoTypeNoError() throws Exception {
      //http://feedvalidator.org/testcases/atom/4.1.3.2/content-src-no-type-no-error.xml
-     //Note: not implemented
+     URI uri = baseURI.resolve("4.1.3.2/content-src-no-type-no-error.xml");
+     Document<Feed> doc = get(uri);
+     assertNotNull(doc);
+     Entry entry = doc.getRoot().getEntries().get(0);
+     Content content = entry.getContentElement();
+     assertEquals(content.getResolvedSrc(), new URI("http://example.org/2003/12/13/atom03"));
+     assertNull(content.getMimeType());
    }
    
    public static void testSection4132ContentSrcNoType() throws Exception {
      //http://feedvalidator.org/testcases/atom/4.1.3.2/content-src-no-type.xml
-     //Note: not implemented
+     URI uri = baseURI.resolve("4.1.3.2/content-src-no-type.xml");
+     Document<Feed> doc = get(uri);
+     assertNotNull(doc);
+     Entry entry = doc.getRoot().getEntries().get(0);
+     Content content = entry.getContentElement();
+     assertEquals(content.getResolvedSrc(), new URI("http://example.org/2003/12/13/atom03"));
+     assertNull(content.getMimeType());
    }
    
    public static void testSection4132ContentSrcRelativeRef() throws Exception {

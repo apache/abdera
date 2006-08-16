@@ -252,6 +252,7 @@ public class FeedValidatorTest
     Document doc = null;
     doc = get(uri);
     assertNotNull(doc);
+    assertFalse(doc.getRoot() instanceof Feed);
   }
   
   public static void testSection12PrefixedNamespace() throws Exception {
@@ -261,8 +262,7 @@ public class FeedValidatorTest
     assertNotNull(doc);
     Feed feed = doc.getRoot();
     assertNotNull(feed);
-    OMElement omElement = (OMElement) feed;
-    assert(omElement.getQName().getPrefix().equals("atom"));
+    assert(feed.getQName().getPrefix().equals("atom"));
   }
   
   public static void testSection12WrongNamespaceCase() throws Exception {
@@ -271,6 +271,7 @@ public class FeedValidatorTest
     Document doc = null;
     doc = get(uri);
     assertNotNull(doc);
+    assertFalse(doc.getRoot() instanceof Feed);
   }
 
   public static void testSection12WrongNamespace() throws Exception {
@@ -279,6 +280,7 @@ public class FeedValidatorTest
     Document doc = null;
     doc = get(uri);
     assertNotNull(doc);
+    assertFalse(doc.getRoot() instanceof Feed);
   }
   
   public static void testSection2BriefEntry() throws Exception {
@@ -351,27 +353,44 @@ public class FeedValidatorTest
   
   public static void testSection2InfosetElementWhitespace() throws Exception {
     //http://feedvalidator.org/testcases/atom/2/infoset-element-whitespace.xml
-    //Note: we're not doing any actual validation of the Atom right now,
-    //so we're skipping this test
+    URI uri = baseURI.resolve("2/infoset-element-whitespace.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Feed feed = doc.getRoot();
+    assertNotNull(feed);
+    Link link = feed.getAlternateLink();
+    assertEquals(link.getResolvedHref(), new URI("http://example.org/"));
+    // the feed has a second alternate link that we will ignore
   }
   
   public static void testSection2InfosetEmpty1() throws Exception {
     //http://feedvalidator.org/testcases/atom/2/infoset-empty1.xml
-    //Note: we're not doing ay actual validation on the Atom right now,
-    //so we're skipping this test
+    URI uri = baseURI.resolve("2/infoset-empty1.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Feed feed = doc.getRoot();
+    assertNotNull(feed);
+    Entry entry = feed.getEntries().get(0);
+    assertEquals(entry.getTitle(),"");
   }
   
   public static void testSection2InfosetEmpty2() throws Exception {
     //http://feedvalidator.org/testcases/atom/2/infoset-empty2.xml
-    //Note: validation not implemented yet
+    URI uri = baseURI.resolve("2/infoset-empty2.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Feed feed = doc.getRoot();
+    assertNotNull(feed);
+    Entry entry = feed.getEntries().get(0);
+    assertEquals(entry.getTitle(),"");
   }
   
   public static void testSection2InfosetSingleQuote() throws Exception {
     //http://feedvalidator.org/testcases/atom/2/infoset-quote-single.xml
     URI uri = baseURI.resolve("2/infoset-quote-single.xml");
-    Document doc = get(uri);
+    Document<Feed> doc = get(uri);
     assertNotNull(doc);
-    
+    assertEquals(doc.getRoot().getAlternateLink().getResolvedHref(), new URI("http://example.org/"));
   }
   
   public static void testSection2InvalidXmlBase() throws Exception {
@@ -389,7 +408,10 @@ public class FeedValidatorTest
   
   public static void testSection2InvalidXmlLang() throws Exception {
     //http://feedvalidator.org/testcases/atom/2/invalid-xml-lang.xml
-    //Note: not yet implemented
+    URI uri = baseURI.resolve("2/invalid-xml-lang.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertFalse(java.util.Locale.US.equals(doc.getRoot().getLocale()));
   }
   
   public static void testSection2Iri() throws Exception {
@@ -407,17 +429,27 @@ public class FeedValidatorTest
   
   public static void testSection2XmlBaseAmbiguous() throws Exception {
     //http://feedvalidator.org/testcases/atom/2/xml-base-ambiguous.xml
-    //Note: not yet implemented
+    URI uri = baseURI.resolve("2/xml-base-ambiguous.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getAlternateLink().getResolvedHref(), new URI("http://example.org/"));
   }
   
   public static void testSection2XmlBaseElemEqDoc() throws Exception {
     //http://feedvalidator.org/testcases/atom/2/xml-base-elem-eq-doc.xml
-    //Note: not yet implemented
+    URI uri = baseURI.resolve("2/xml-base-elem-eq-doc.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    Entry entry = doc.getRoot().getEntries().get(0);
+    assertEquals(entry.getAlternateLink().getResolvedHref(), new URI("http://www.feedvalidator.org/2003/12/13/atom03"));
   }
   
   public static void testSection2XmlBaseElemNeDoc() throws Exception {
     //http://feedvalidator.org/testcases/atom/2/xml-base-elem-ne-doc.xml
-    //Note: not yet implemented
+    URI uri = baseURI.resolve("2/xml-base-elem-ne-doc.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertEquals(doc.getRoot().getSelfLink().getResolvedHref(),new URI("http://www.feedvalidator.org/testcases/atom/2/xml-base-elem-ne-doc.xml"));
   }
   
   public static void testSection2XmlBase() throws Exception {
@@ -436,7 +468,10 @@ public class FeedValidatorTest
   
   public static void testSection2XmlLangBlank() throws Exception {
     //http://feedvalidator.org/testcases/atom/2/xml-lang-blank.xml
-    //Note: not implemented
+    URI uri = baseURI.resolve("2/xml-lang-blank.xml");
+    Document<Feed> doc = get(uri);
+    assertNotNull(doc);
+    assertNull(doc.getRoot().getLocale());
   }
   
   public static void testSection2XmlLang() throws Exception {
@@ -448,6 +483,7 @@ public class FeedValidatorTest
     Feed feed = doc.getRoot();
     assertNotNull(feed);
     assertEquals(feed.getLanguage(), "en-us");
+    assertTrue(feed.getLocale().equals(java.util.Locale.US));
   }
   
   public static void testSection3WsAuthorUri() throws Exception {

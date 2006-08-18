@@ -17,6 +17,9 @@
 */
 package org.apache.abdera.parser.stax;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -138,4 +141,33 @@ public class FOMFeed
     super.addChild(node);
   }
  
+  public void sortEntriesByUpdated(boolean new_first) {
+    sortEntries(new UpdatedComparator(new_first));
+  }
+  
+  public void sortEntries(Comparator<Entry> comparator) {
+    if (comparator == null) return;
+    List<Entry> entries = this.getEntries();
+    Entry[] a = entries.toArray(new Entry[entries.size()]);
+    Arrays.sort(a, comparator);
+    for (Entry e: entries) { e.discard(); }
+    for (Entry e: a) { addEntry(e); }
+  }
+  
+  private static class UpdatedComparator implements Comparator<Entry> {
+    private boolean new_first = true;
+    UpdatedComparator(boolean new_first) {
+      this.new_first = new_first;
+    }
+    public int compare(Entry o1, Entry o2) {
+      Date d1 = o1.getUpdated();
+      Date d2 = o2.getUpdated();
+      if (d1 == null && d2 == null) return 0;
+      if (d1 == null && d2 != null) return -1;
+      if (d1 != null && d2 == null) return 1;
+      int r = d1.compareTo(d2);
+      return (new_first) ? -r : r;
+    }
+  };
+
 }

@@ -152,6 +152,8 @@ public class MethodHelper {
     String cc = options.getCacheControl();
     if (cc != null && cc.length() != 0)
       method.setRequestHeader("Cache-Control", cc);
+    if (options.getAuthorization() != null)
+      method.setDoAuthentication(false);
   }
   
   public static final class ExtensionMethod 

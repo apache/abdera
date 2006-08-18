@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.parser.stax;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -170,4 +172,13 @@ public class FOMFeed
     }
   };
 
+  public Entry getEntry(String id) throws URISyntaxException {
+    if (id == null) return null;
+    List<Entry> l = getEntries();
+    for (Entry e : l) {
+      URI eid = e.getId();
+      if (eid != null && eid.equals(new URI(id))) return e;
+    }
+    return null;
+  }
 }

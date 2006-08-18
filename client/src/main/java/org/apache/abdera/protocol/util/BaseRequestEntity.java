@@ -55,7 +55,19 @@ public class BaseRequestEntity
   public String getContentType() {
     String type = null;
     if (base instanceof Document) {
-      type = ((Document)base).getContentType().toString();
+      Document doc = (Document) base;
+      if (doc.getContentType() != null) {
+        type = doc.getContentType().toString();
+      } else {
+        if (doc.getRoot() instanceof Feed ||
+            doc.getRoot() instanceof Entry) {
+          type = "application/atom+xml";
+        } else if (doc.getRoot() instanceof Service) {
+          type = "application/atomserv+xml";
+        } else {
+          type = "application/xml";
+        }
+      }
     } else if (base instanceof Feed || base instanceof Entry) {
       Document doc = ((Element)base).getDocument();
       if (doc != null && doc.getContentType() != null)

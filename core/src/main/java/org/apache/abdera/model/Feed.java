@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.model;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -125,4 +126,15 @@ public interface Feed
    * Creates a Source element from this Feed
    */
   Source getAsSource();
+  
+  /**
+   * Sorts entries by the atom:updated property
+   * @param new_first If true, entries with newer atom:updated values will come first
+   */
+  void sortEntriesByUpdated(boolean new_first);
+  
+  /**
+   * Sorts entries using the given comparator
+   */
+  void sortEntries(Comparator<Entry> comparator);
 }

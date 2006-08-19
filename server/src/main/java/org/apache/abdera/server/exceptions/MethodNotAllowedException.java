@@ -38,11 +38,11 @@ public class MethodNotAllowedException
     StringBuffer value = new StringBuffer();
     for(String method : methods) {
       if(first) {
-        value.append(method.toString().toUpperCase());
+        value.append(method.toUpperCase());
         first = false;
         continue;
       }
-      value.append(", " + method.toString());
+        value.append(", ").append(method);
     }
     setHeader("Allow", value.toString());
   }

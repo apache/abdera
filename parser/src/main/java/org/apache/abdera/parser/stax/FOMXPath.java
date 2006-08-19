@@ -41,9 +41,8 @@ public class FOMXPath extends AbstractXPath {
     DocumentNavigator nav = new DocumentNavigator();
     XPath contextpath = new BaseXPath(path, nav);
     if (namespaces != null) {
-      for (String key : namespaces.keySet()) {
-        String value = namespaces.get(key);
-        contextpath.addNamespace(key, value);
+      for (Map.Entry<String, String> entry : namespaces.entrySet()) {
+        contextpath.addNamespace(entry.getKey(), entry.getValue());
       }
     }
     

@@ -94,12 +94,12 @@ public class AbderaServlet
       // don't set them.
       Map<String, List<String>> headers = context.getHeaders();
       if (headers != null) {
-        for (String header : headers.keySet()) {
-          List<String> values = headers.get(header);
+        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+          List<String> values = entry.getValue();
           if (values == null) 
             continue;          
           for (String value : values) {
-            response.setHeader(header, value);
+            response.setHeader(entry.getKey(), value);
           }
         }
       }

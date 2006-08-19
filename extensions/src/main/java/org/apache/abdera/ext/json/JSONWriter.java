@@ -20,7 +20,10 @@ package org.apache.abdera.ext.json;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.util.List;
+
+import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Category;
@@ -37,6 +40,7 @@ import org.apache.abdera.model.Workspace;
 import org.apache.abdera.model.Content.Type;
 import org.apache.abdera.writer.NamedWriter;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JSONWriter implements NamedWriter {
@@ -93,6 +97,23 @@ public class JSONWriter implements NamedWriter {
     
     if(entry.getSummary() != null)
         jsentry.put("summary", entry.getSummary());
+                
+    if(entry.getId() != null)
+        jsentry.put("id", entry.getId().toString());
+       
+    if(entry.getUpdated() != null)
+        jsentry.put("updated", entry.getUpdated().toString());
+    
+    if(entry.getPublished() != null)
+        jsentry.put("published", entry.getPublished().toString());
+    
+    jsentry.put("authors", personsToJSON(entry.getAuthors()));    
+    
+    jsentry.put("contributors", personsToJSON(entry.getContributors()));
+    
+    jsentry.put("categories", categoriesToJSON(entry.getCategories()));    
+    
+    jsentry.put("links", linksToJSON(entry.getLinks()));
     
     JSONObject jscontent = new JSONObject();
     if(entry.getContentElement() != null) {
@@ -102,94 +123,19 @@ public class JSONWriter implements NamedWriter {
         if (type.equals(Content.Type.HTML) || 
             type.equals(Content.Type.XHTML) || 
             type.equals(Content.Type.TEXT)) {
-          jscontent.put("type", type.toString());
+          jscontent.put("type", type.toString().toLowerCase());
         } else {
           jscontent.put("type", content.getMimeType().toString());
         }
-        jscontent.put("value", content.getValue());
+        jscontent.put("value", JSONObject.quote(content.getValue()));
         jsentry.put("content", jscontent);
-    }
-    
-    JSONArray jscategories = new JSONArray();
-    List<Category> categories = entry.getCategories();
-    for(Category category : categories) {      
-      if(category.getScheme() != null || 
-          category.getLabel() != null ||
-          category.getTerm() != null) {
-        JSONObject jscategory = new JSONObject();
-        if(category.getScheme() != null)
-          jscategory.put("scheme", category.getScheme().toString());
-        
-        if(category.getTerm() != null)
-          jscategory.put("term", category.getTerm());
-        
-        if(category.getLabel() != null)
-          jscategory.put("label", category.getLabel());
-        jscategories.put(jscategory);
-      }
-    }
-    jsentry.put("categories", jscategories);
-    
-    if(entry.getId() != null)
-        jsentry.put("id", entry.getId().toString());
-    
-    JSONArray jslinks = new JSONArray();
-    List<Link> links = entry.getLinks();
-    for(Link link : links) {
-      JSONObject jslink = new JSONObject();
-      jslink.put("href", link.getHref().toString());
-      jslink.put("rel", link.getRel());
-      jslinks.put(jslink);
-    }
-    jsentry.put("links", jslinks);
-    
-    if(entry.getUpdated() != null)
-        jsentry.put("updated", entry.getUpdated().toString());
-    
-    if(entry.getPublished() != null)
-        jsentry.put("published", entry.getPublished().toString());
-    
-    // authors
-    List<Person> authors = entry.getAuthors();
-    JSONArray jsauthors = new JSONArray();
-    for (Person p : authors) {
-      JSONObject jsauthor = new JSONObject();
-      if(p.getName() != null)
-        jsauthor.put("name", p.getName());
-      if(p.getUri() != null)
-        jsauthor.put("uri", p.getUri().toString());
-      if(p.getEmail() != null)
-        jsauthor.put("email", p.getEmail());
-      jsauthors.put(jsauthor);
     }    
-    if(jsauthors.length() > 0)
-      jsentry.put("authors", jsauthors);
-    
-    // contributors
-    List<Person> contributors = entry.getContributors();
-    JSONArray jscontributors = new JSONArray();
-    for (Person p : contributors) {
-      JSONObject jscontributor = new JSONObject();
-      if(p.getName() != null)
-        jscontributor.put("name", p.getName());
-      if(p.getUri() != null)
-        jscontributor.put("uri", p.getUri().toString());
-      if(p.getEmail() != null)
-        jscontributor.put("email", p.getEmail());
-      jscontributors.put(jscontributor);
-    }    
-    if(jsauthors.length() > 0)
-      jsentry.put("contributors", jscontributors);
     
     return jsentry;
   }
 
   public static JSONObject toJSON(Feed feed) throws Exception {
     JSONObject jsfeed = new JSONObject();
-    
-    if (feed.getId() != null) {
-      jsfeed.put("id",feed.getId().toString());
-    }
     
     if (feed.getGenerator() != null) {
       Generator gen = feed.getGenerator();
@@ -206,6 +152,10 @@ public class JSONWriter implements NamedWriter {
       jsfeed.put("subtitle",feed.getSubtitle());
     }
     
+    if (feed.getId() != null) {
+      jsfeed.put("id",feed.getId().toString());
+    }    
+    
     if (feed.getRights() != null) {
       jsfeed.put("rights",feed.getRights());
     }
@@ -214,66 +164,21 @@ public class JSONWriter implements NamedWriter {
       jsfeed.put("logo",feed.getLogo().toString());
     }
     
-    if (feed.getUpdatedString() != null) {
-      jsfeed.put("updated",feed.getUpdatedString());
-    }
-    
     if (feed.getIcon() != null) {
       jsfeed.put("icon",feed.getIcon().toString());
-    }
-    
-    //  authors
-    List<Person> authors = feed.getAuthors();
-    JSONArray jsauthors = new JSONArray();
-    for (Person p : authors) {
-      JSONObject jsauthor = new JSONObject();
-      if(p.getName() != null)
-        jsauthor.put("name", p.getName());
-      if(p.getUri() != null)
-        jsauthor.put("uri", p.getUri().toString());
-      if(p.getEmail() != null)
-        jsauthor.put("email", p.getEmail());
-      jsauthors.put(jsauthor);
     }    
-    if(jsauthors.length() > 0)
-      jsfeed.put("authors", jsauthors);
     
-    // contributors
-    List<Person> contributors = feed.getContributors();
-    JSONArray jscontributors = new JSONArray();
-    for (Person p : contributors) {
-      JSONObject jscontributor = new JSONObject();
-      if(p.getName() != null)
-        jscontributor.put("name", p.getName());
-      if(p.getUri() != null)
-        jscontributor.put("uri", p.getUri().toString());
-      if(p.getEmail() != null)
-        jscontributor.put("email", p.getEmail());
-      jscontributors.put(jscontributor);
-    }    
-    if(jsauthors.length() > 0)
-      jsfeed.put("contributors", jscontributors);
-    
-    JSONArray jslinks = new JSONArray();
-    List<Link> links = feed.getLinks();
-    for(Link link : links) {
-      JSONObject jslink = new JSONObject();
-      jslink.put("href", link.getHref().toString());
-      jslink.put("rel", link.getRel());
-      jslinks.put(jslink);
+    if (feed.getUpdatedString() != null) {
+      jsfeed.put("updated",feed.getUpdatedString());
     }        
-    jsfeed.put("links", jslinks);
     
-    JSONArray jscategories = new JSONArray();
-    List<Category> categories = feed.getCategories();
-    for(Category category : categories) {
-      JSONObject jscategory = new JSONObject();
-      jscategory.put("scheme", category.getScheme().toString());
-      jscategory.put("term", category.getTerm());
-      jscategory.put("label", category.getLabel());
-      jscategories.put(jscategory);
-    }
-    jsfeed.put("categories", jscategories);
+    jsfeed.put("authors", personsToJSON(feed.getAuthors()));
+    
+    jsfeed.put("contributors", personsToJSON(feed.getContributors()));
+   
+    jsfeed.put("categories", categoriesToJSON(feed.getCategories()));
+    
+    jsfeed.put("links", linksToJSON(feed.getLinks()));    
     
     JSONArray jsentries = new JSONArray();
     List<Entry> entries = feed.getEntries();
@@ -282,6 +187,7 @@ public class JSONWriter implements NamedWriter {
     }
     
     jsfeed.put("entries", jsentries);
+    
     return jsfeed;
   }
 
@@ -313,5 +219,61 @@ public class JSONWriter implements NamedWriter {
     
     return jssvc;
   }  
+  
+  private static JSONArray categoriesToJSON(List<Category> categories) throws URISyntaxException, JSONException {
+    JSONArray jscategories = new JSONArray();
+    for (Category category : categories) {
+      if (category.getScheme() != null || category.getLabel() != null || category.getTerm() != null) {
+        JSONObject jscategory = new JSONObject();
+        if (category.getScheme() != null)
+          jscategory.put("scheme", category.getScheme().toString());
+
+        if (category.getTerm() != null)
+          jscategory.put("term", category.getTerm());
+
+        if (category.getLabel() != null)
+          jscategory.put("label", category.getLabel());
+        jscategories.put(jscategory);
+      }
+    }
+    return jscategories;
+  }
+  
+  private static JSONArray personsToJSON(List<Person> persons) throws URISyntaxException, JSONException {
+    JSONArray jspersons = new JSONArray();
+    for (Person p : persons) {
+      if(p.getName() != null || p.getUri() != null || p.getEmail() != null) {
+      JSONObject jsperson = new JSONObject();
+      if(p.getName() != null)
+        jsperson.put("name", p.getName());
+      if(p.getUri() != null)
+        jsperson.put("uri", p.getUri().toString());
+      if(p.getEmail() != null)
+        jsperson.put("email", p.getEmail());
+      jspersons.put(jsperson);
+      }
+    }    
+    return jspersons;
+  }
+  
+  private static JSONArray linksToJSON(List<Link> links) throws URISyntaxException, MimeTypeParseException, JSONException {
+    JSONArray jslinks = new JSONArray();
+    for(Link link : links) {
+      JSONObject jslink = new JSONObject();
+      if(link.getHref() != null) {
+        jslink.put("href", link.getHref().toString());
+        
+        if(link.getRel() != null)
+          jslink.put("rel", link.getRel());
+        
+        if(link.getMimeType() != null)
+          jslink.put("type", link.getMimeType().getBaseType());
+        
+        if(link.getHrefLang() != null)
+          jslink.put("hreflang", link.getHrefLang());
+      }
+    }
+    return jslinks;
+  }
   
 }

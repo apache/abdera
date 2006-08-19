@@ -42,7 +42,7 @@ public class MethodNotAllowedException
         first = false;
         continue;
       }
-        value.append(", ").append(method);
+      value.append(", ").append(method);
     }
     setHeader("Allow", value.toString());
   }

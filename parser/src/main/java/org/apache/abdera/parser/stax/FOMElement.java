@@ -579,4 +579,9 @@ public class FOMElement
     }
     return locale;
   }
+  
+  public void addChild(OMNode node) {
+    if (node.getParent() == this) return;
+    super.addChild(node);
+  }    
 }

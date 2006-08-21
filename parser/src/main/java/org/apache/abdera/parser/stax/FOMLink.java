@@ -148,7 +148,10 @@ public class FOMLink
   }
 
   public void setHrefLang(String lang) {
-    setAttributeValue(HREFLANG, lang);
+    if (lang != null)
+      setAttributeValue(HREFLANG, lang);
+    else 
+      removeAttribute(HREFLANG);
   }
 
   public String getTitle() {
@@ -156,7 +159,10 @@ public class FOMLink
   }
 
   public void setTitle(String title) {
-    setAttributeValue(ATITLE, title);
+    if (title != null)
+      setAttributeValue(ATITLE, title);
+    else 
+      removeAttribute(ATITLE);
   }
 
   public long getLength() {
@@ -165,7 +171,10 @@ public class FOMLink
   }
 
   public void setLength(long length) {
-    setAttributeValue(LENGTH, (length >= 0) ? String.valueOf(length) : "0");
+    if (length > -1)
+      setAttributeValue(LENGTH, (length >= 0) ? String.valueOf(length) : "0");
+    else
+      removeAttribute(LENGTH);
   }
 
   

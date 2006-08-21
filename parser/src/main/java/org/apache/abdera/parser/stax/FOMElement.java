@@ -580,8 +580,4 @@ public class FOMElement
     return locale;
   }
   
-  public void addChild(OMNode node) {
-    assert node.getParent() != this;
-    super.addChild(node);
-  }    
 }

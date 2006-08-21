@@ -133,7 +133,6 @@ public class FOMFeed
 
   @Override
   public void addChild(OMNode node) {
-    assert node.getParent() != this;
     if (isComplete() && node instanceof OMElement && !(node instanceof Entry)) {
       OMElement el = this.getFirstChildWithName(ENTRY);
       if (el != null) {

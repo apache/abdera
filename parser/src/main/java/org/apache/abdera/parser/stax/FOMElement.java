@@ -581,7 +581,7 @@ public class FOMElement
   }
   
   public void addChild(OMNode node) {
-    if (node.getParent() == this) return;
+    assert node.getParent() != this;
     super.addChild(node);
   }    
 }

@@ -80,12 +80,13 @@ public class RequestOptions {
   }
 
   private String combine(String ... values) {
-    String v = "";
+    StringBuffer v = new StringBuffer();
     for (String val : values) {
-      if (v.length() > 0) v += ", ";
-      v += val;
+      if (v.length() > 0)
+        v.append(", ");
+      v.append(val);
     }
-    return v;
+    return v.toString();
   }
     
   /**

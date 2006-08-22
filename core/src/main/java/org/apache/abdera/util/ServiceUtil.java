@@ -20,6 +20,7 @@ package org.apache.abdera.util;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -76,7 +77,9 @@ public final class ServiceUtil
     if (object == null && _default != null) {
       try {
         object = getClassLoader().loadClass(_default).newInstance();
-      } catch (Exception e) {}
+      } catch (Exception e) {
+        // Nothing
+      }
     }
     return object;
   }
@@ -92,7 +95,9 @@ public final class ServiceUtil
     if (s != null) {
       try {
         object = getClassLoader().loadClass(s).newInstance();
-      } catch (Exception e) {}
+      } catch (Exception e) {
+        // Nothing
+      }
     } 
     return object;
   }
@@ -101,17 +106,28 @@ public final class ServiceUtil
     Object object = null;
     String sid = "META-INF/services/" + id;
     ClassLoader loader = getClassLoader();
+    BufferedReader buf = null;
     try {
       InputStream is = loader.getResourceAsStream(sid);
       if (is != null) {
-        BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+        buf = new BufferedReader(new InputStreamReader(is));
         String line = buf.readLine();
         if (line != null) {
           String s = line.split("#",2)[0].trim();
           object = loader.loadClass(s).newInstance();
         }
       }
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      // Nothing
+    } finally {
+      if (buf != null) {
+        try {
+          buf.close();
+        } catch (IOException ioe) {
+          // Nothing
+        }
+      }
+    }
     return object;
   }
 
@@ -127,20 +143,18 @@ public final class ServiceUtil
   
   @SuppressWarnings("unchecked")
   public static <T>List<T> _loadimpls(String sid) {
-    List<T> impls = null;
-    impls = new ArrayList<T>();
+    List<T> impls = new ArrayList<T>();
     ClassLoader loader = getClassLoader();
     try {
       Enumeration e = loader.getResources(sid);
       for (;e.hasMoreElements();) {
+        BufferedReader buf = null;
         try {
           URL url = (URL) e.nextElement();
           InputStream is = url.openStream();
           if (is != null) {
-            BufferedReader buf = 
-              new BufferedReader(
-                new InputStreamReader(is));
-            String line = null;
+            buf = new BufferedReader(new InputStreamReader(is));
+            String line;
             while ((line = buf.readLine()) != null) {
               String s = line.split("#",2)[0].trim();
               if (!"".equals(s)) { 
@@ -149,9 +163,21 @@ public final class ServiceUtil
               }
             }
           }
-        } catch (Exception ex) {}
+        } catch (Exception ex) {
+          // Nothing
+        } finally {
+          if (buf != null) {
+            try {
+              buf.close();
+            } catch (IOException ioe) {
+              // Nothing
+            }
+          }
+        }
       }
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      // Nothing
+    }
     
     return impls;
   }

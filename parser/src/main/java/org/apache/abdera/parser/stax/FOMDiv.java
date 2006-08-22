@@ -106,12 +106,13 @@ public class FOMDiv
   
   public void setXhtmlClass(String[] classes) {
     if (classes != null) {
-      String val = "";
+      StringBuffer val = new StringBuffer();
       for (String s : classes) {
-        if (s.length() > 0) val += " ";
-        val += s;
+        if (s.length() > 0)
+          val.append(" ");
+        val.append(s);
       }
-      setAttributeValue(CLASS, val);
+      setAttributeValue(CLASS, val.toString());
     } else removeAttribute(CLASS);
   }
 

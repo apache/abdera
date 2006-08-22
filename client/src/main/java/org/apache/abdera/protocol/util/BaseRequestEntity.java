@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.protocol.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -34,10 +35,17 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 public class BaseRequestEntity 
   implements RequestEntity {
 
-  Base base = null;
+  private Base base = null;
+  private byte[] buf = null;
+  private boolean use_chunked = true;
   
   public BaseRequestEntity(Base base) {
     this.base = base;
+  }
+  
+  public BaseRequestEntity(Base base, boolean use_chunked) {
+    this(base);
+    this.use_chunked = use_chunked;
   }
   
   public boolean isRepeatable() {
@@ -45,11 +53,35 @@ public class BaseRequestEntity
   }
 
   public void writeRequest(OutputStream out) throws IOException {
-    base.writeTo(out);
+    if (use_chunked)
+      base.writeTo(out);
+    else {
+      // if we're not using chunked requests, the getContentLength method
+      // has likely already been called and we want to just go ahead and
+      // use the buffered output rather than reserialize
+      if (buf == null) getContentLength();  // ensures that the content is buffered
+      out.write(buf);
+      out.flush();
+    }
   }
 
   public long getContentLength() {
-    return -1;  // chunk the response
+    if (use_chunked)
+      return -1;  // chunk the response
+    else {
+      // this is ugly, but some proxies and server configurations (e.g. gdata)
+      // require that requests contain the Content-Length header.  The only
+      // way to get that is to serialize the document into a byte array, which
+      // we buffer into memory.
+      if (buf == null) {
+        try {
+          ByteArrayOutputStream out = new ByteArrayOutputStream();
+          base.writeTo(out);
+          buf = out.toByteArray();
+        } catch (Exception e) {}
+      }
+      return buf.length;
+    }
   }
 
   public String getContentType() {

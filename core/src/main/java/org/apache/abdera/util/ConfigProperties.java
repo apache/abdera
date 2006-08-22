@@ -24,18 +24,29 @@ public final class ConfigProperties
   
   ConfigProperties() {}
   
-  private static ResourceBundle BUNDLE = null;
-  private static String parser = null;
-  private static String factory = null;
-  private static String xpath = null;
+  private static ThreadLocal bundleStore = new ThreadLocal();
+  
+  @SuppressWarnings("unchecked")
+  private static void storeBundle(ResourceBundle bundle) {
+    bundleStore.set(bundle);
+  }
+  
+  private static ResourceBundle retrieveBundle() {
+    return (ResourceBundle) bundleStore.get();
+  }
   
   private static ResourceBundle getBundle() {
-    if (BUNDLE == null) {
+    ResourceBundle bundle = retrieveBundle();
+    if (bundle == null) {
       try {
-        BUNDLE = ResourceBundle.getBundle("abdera");
+        bundle = ResourceBundle.getBundle(
+          "abdera", 
+          java.util.Locale.getDefault(), 
+          ServiceUtil.getClassLoader());
+        storeBundle(bundle);
       } catch (Exception e) {}
     } 
-    return BUNDLE;
+    return bundle;
   }
 
   public static String getConfigurationOption(String id) {
@@ -48,20 +59,17 @@ public final class ConfigProperties
   }
   
   public static String getDefaultXPath() {
-    if (xpath == null)
-      xpath = getConfigurationOption(CONFIG_XPATH);
+    String xpath = getConfigurationOption(CONFIG_XPATH);
     return (xpath != null) ? xpath : DEFAULT_XPATH;
   }
   
   public static String getDefaultParser() {
-    if (parser == null)
-      parser = getConfigurationOption(CONFIG_PARSER);
+    String parser = getConfigurationOption(CONFIG_PARSER);
     return (parser != null) ? parser : DEFAULT_PARSER;
   }
   
   public static String getDefaultFactory() {
-    if (factory == null)
-      factory = getConfigurationOption(CONFIG_FACTORY);
+    String factory = getConfigurationOption(CONFIG_FACTORY);
     return (factory != null) ? factory : DEFAULT_FACTORY;
   }
   

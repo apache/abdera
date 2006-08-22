@@ -129,12 +129,13 @@ public class FOMCollection
 
   public void setAccept(String... mediaRanges) {
     if (mediaRanges != null) {
-      String value = "";
+      StringBuffer value = new StringBuffer();
       for (String type : mediaRanges) {
-        if (value.length() > 0) value+=",";
-        value += type;
+        if (value.length() > 0)
+          value.append(",");
+        value.append(type);
       }
-      _setElementValue(ACCEPT, value);
+      _setElementValue(ACCEPT, value.toString());
     } else {
       _removeChildren(ACCEPT, false);
     }

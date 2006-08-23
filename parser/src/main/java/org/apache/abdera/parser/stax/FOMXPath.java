@@ -29,7 +29,7 @@ import org.jaxen.JaxenException;
 import org.jaxen.XPath;
 
 public class FOMXPath extends AbstractXPath {
-
+  
   public static XPath getXPath(String path) throws JaxenException {
     return getXPath(path, null);
   }

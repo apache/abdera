@@ -29,14 +29,13 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Text;
-import org.apache.abdera.parser.Parser;
 import org.apache.axiom.om.OMElement;
 
 public class AtomConformanceTest extends BaseParserTestCase {
-
+  
   private static Document<Feed> get(URI uri) {
     try {
-      return Parser.INSTANCE.parse(uri.toURL().openStream(), uri);
+      return getParser().parse(uri.toURL().openStream(), uri);
     } catch (Exception e) {}
     return null;
   }

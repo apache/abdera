@@ -67,7 +67,7 @@ public class FOMElement
   private static final long serialVersionUID = 8024257594220911953L;
   
   public FOMElement(QName qname) {
-    super(qname, null, (OMFactory)Factory.INSTANCE);
+    super(qname, null, null);
   }
   
   public FOMElement(
@@ -579,5 +579,5 @@ public class FOMElement
     }
     return locale;
   }
-  
+
 }

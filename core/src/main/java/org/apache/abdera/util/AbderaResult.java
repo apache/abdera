@@ -26,9 +26,9 @@ import java.io.Writer;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
-import org.apache.abdera.parser.Parser;
 
 /**
  * Provides a simple (and likely somewhat inefficient) implementation of 
@@ -41,15 +41,24 @@ public class AbderaResult
   extends StreamResult 
   implements Result {
 
+  private Abdera abdera = null;
   private PipedOutputStream pipeout = null;
   private PipedInputStream pipein = null;
   private Document doc = null;
+  
+  public AbderaResult() {
+    this.abdera = new Abdera();
+  }
+  
+  public AbderaResult(Abdera abdera) {
+    this.abdera = abdera;
+  }
   
   @SuppressWarnings("unchecked")
   public <T extends Element>Document<T> getDocument() {
     if (doc == null) {
       if (pipein == null) return null;
-      doc = Parser.INSTANCE.parse(pipein);
+      doc = abdera.getParser().parse(pipein);
     } 
     return doc;
   }

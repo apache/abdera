@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.security.xmlsec;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.security.SecurityOptions;
 
@@ -25,9 +26,14 @@ public abstract class XmlSecurityOptions
   implements SecurityOptions {
 
   protected Parser parser = null;
-
+  protected Abdera abdera = null;
+  
+  protected XmlSecurityOptions(Abdera abdera) {
+    this.abdera = abdera;
+  }
+  
   public Parser getParser() {
-    return (parser != null) ? parser : Parser.INSTANCE;
+    return (parser != null) ? parser : abdera.getParser();
   }
 
   public void setParser(Parser parser) {

@@ -25,7 +25,7 @@ public class FOMParserOptions
   extends AbstractParserOptions {
 
   protected void initFactory() {
-    factory = (Factory.INSTANCE instanceof FOMFactory) ? (FOMFactory)Factory.INSTANCE : new FOMFactory();
+    factory = new FOMFactory();
   }
   
   protected void checkFactory(Factory factory) {

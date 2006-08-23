@@ -20,24 +20,41 @@ package org.apache.abdera.protocol.client;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 
+import javax.net.ssl.TrustManager;
+
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.protocol.cache.Cache;
 import org.apache.abdera.protocol.cache.CacheFactory;
 import org.apache.abdera.protocol.cache.lru.LRUCache;
 import org.apache.abdera.protocol.util.BaseRequestEntity;
+import org.apache.abdera.protocol.util.SimpleSSLProtocolSocketFactory;
+import org.apache.abdera.util.ServiceUtil;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScheme;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.protocol.Protocol;
+import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 
 /**
  * An Atom Publishing Protocol client.
  */
 public abstract class Client {
 
+  protected Abdera abdera = null;
   protected Cache cache = null;
+  protected CacheFactory cacheFactory = null;
 
+  public Client() {
+    this.abdera = new Abdera();
+  }
+  
+  protected Client(Abdera abdera) {
+    this.abdera = abdera;
+  }
+  
   /**
    * Get the default request options used by this client.
    */
@@ -72,9 +89,19 @@ public abstract class Client {
   
   public abstract void init(String userAgent);
   
+  private CacheFactory getCacheFactory() {
+    if (cacheFactory == null) {
+      cacheFactory = (CacheFactory)ServiceUtil.newInstance(
+        "org.apache.abdera.protocol.cache.CacheFactory",
+        "org.apache.abdera.protocol.cache.lru.LRUCacheFactory", 
+        abdera);
+    }
+    return cacheFactory;
+  }
+  
   public Cache getCache() {
     if (cache == null) {
-      CacheFactory factory = CacheFactory.INSTANCE;
+      CacheFactory factory = getCacheFactory();
       if (factory != null)
         cache = factory.getCache();
       if (cache == null) 
@@ -213,7 +240,42 @@ public abstract class Client {
    * @param name
    * @param scheme
    */
-  public static void registerScheme(String name, Class<AuthScheme> scheme) {
-    AuthPolicy.registerAuthScheme(name, scheme);
+  public static void registerScheme(
+    String name, 
+    Class<AuthScheme> scheme) {
+      AuthPolicy.registerAuthScheme(name, scheme);
+  }
+  
+  public static void registerTrustManager(
+    TrustManager trustManager) {
+      registerTrustManager(trustManager,443);
+  }
+  
+  public static void registerTrustManager() {
+    registerTrustManager(443);
+  }
+  
+  public static void registerTrustManager(
+    TrustManager trustManager, 
+    int port) {
+      SimpleSSLProtocolSocketFactory f = 
+        new SimpleSSLProtocolSocketFactory(trustManager);
+      registerFactory(f,port);
+  }
+  
+  public static void registerTrustManager(int port) {
+    SimpleSSLProtocolSocketFactory f = 
+      new SimpleSSLProtocolSocketFactory();
+    registerFactory(f,port);
+  }
+  
+  private static void registerFactory(
+    SimpleSSLProtocolSocketFactory factory, 
+    int port) {
+      Protocol.registerProtocol(
+        "https", 
+        new Protocol(
+          "https", 
+          (ProtocolSocketFactory)factory, port));
   }
 }

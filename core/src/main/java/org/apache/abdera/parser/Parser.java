@@ -24,8 +24,6 @@ import java.net.URISyntaxException;
 
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
-import org.apache.abdera.util.ServiceUtil;
-
 
 /**
  * The Parser is the interface through which developers parse feed documents.
@@ -35,11 +33,6 @@ import org.apache.abdera.util.ServiceUtil;
  * </p>
  */
 public interface Parser {
-
-  /**
-   * The default Parser instance
-   */
-  public static final Parser INSTANCE = ServiceUtil.newParserInstance();
   
   <T extends Element>Document<T> parse(
     InputStream in) 

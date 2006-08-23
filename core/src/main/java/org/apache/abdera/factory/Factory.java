@@ -40,7 +40,6 @@ import org.apache.abdera.model.Source;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.Parser;
-import org.apache.abdera.util.ServiceUtil;
 
 
 /**
@@ -56,11 +55,6 @@ import org.apache.abdera.util.ServiceUtil;
  */
 public interface Factory {
 
-  /**
-   * The default Factory instance
-   */
-  public static final Factory INSTANCE = ServiceUtil.newFactoryInstance();
-  
   Parser newParser();
   
   <T extends Element>Document<T> newDocument();

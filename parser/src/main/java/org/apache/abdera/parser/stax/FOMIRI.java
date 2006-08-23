@@ -22,7 +22,6 @@ import java.net.URISyntaxException;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.IRI;
 import org.apache.abdera.util.URIHelper;
 import org.apache.axiom.om.OMContainer;
@@ -31,7 +30,6 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
-
 public class FOMIRI 
   extends FOMElement 
   implements IRI {
@@ -39,7 +37,7 @@ public class FOMIRI
   private static final long serialVersionUID = -8434722753544181200L;
 
   public FOMIRI(QName qname) {
-    super(qname, null, (OMFactory)Factory.INSTANCE);
+    super(qname);
   }
   
   public FOMIRI(QName qname, String value) throws URISyntaxException {

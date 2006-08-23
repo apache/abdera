@@ -17,14 +17,7 @@
 */
 package org.apache.abdera.parser;
 
-import org.apache.abdera.util.ServiceUtil;
-
 public interface ParserFactory {
-
-  public static final ParserFactory INSTANCE = 
-    (ParserFactory) ServiceUtil.newInstance(
-    "org.apache.abdera.parser.ParserFactory",
-    "org.apache.abdera.parser.stax.FOMParserFactory");
   
   Parser getParser();
   

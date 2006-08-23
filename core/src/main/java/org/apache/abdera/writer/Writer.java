@@ -21,15 +21,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.abdera.model.Base;
-import org.apache.abdera.util.ServiceUtil;
 
 public interface Writer {
 
-  public static final Writer INSTANCE = 
-    (Writer) ServiceUtil.newInstance(
-    "org.apache.abdera.writer.Writer",
-    "org.apache.abdera.parser.stax.FOMWriter");
-  
   void writeTo(Base base, 
     OutputStream out) 
       throws IOException;

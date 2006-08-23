@@ -32,6 +32,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.filter.ParseFilter;
 import org.apache.abdera.filter.TextFilter;
@@ -56,13 +57,16 @@ import org.apache.abdera.model.Source;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.Parser;
+import org.apache.abdera.parser.ParserFactory;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.util.AbderaSource;
-import org.apache.abdera.util.BlackListParseFilter;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.util.Version;
-import org.apache.abdera.util.WhiteListParseFilter;
+import org.apache.abdera.util.filter.BlackListParseFilter;
+import org.apache.abdera.util.filter.WhiteListParseFilter;
+import org.apache.abdera.writer.Writer;
+import org.apache.abdera.writer.WriterFactory;
 import org.apache.abdera.xpath.XPath;
 import org.apache.axiom.attachments.ByteArrayDataSource;
 
@@ -70,16 +74,45 @@ import junit.framework.TestCase;
 
 public class FOMTest extends TestCase   {
 
+  private static Abdera abdera = new Abdera();
+  
+  private static Parser getParser() {
+    return abdera.getParser();
+  }
+  
+  private static Factory getFactory() {
+    return abdera.getFactory();
+  }
+  
+  private static XPath getXPath() {
+    return abdera.getXPath();
+  }
+  
+  private static WriterFactory getWriterFactory() {
+    return abdera.getWriterFactory();
+  }
+  
+  private static ParserFactory getParserFactory() {
+    return abdera.getParserFactory();
+  }
+  
+  private static Writer getWriter() {
+    return abdera.getWriter();
+  }
+  
   public static void testMinimalConfiguration() {
-    assertNotNull(Factory.INSTANCE);
-    assertNotNull(Parser.INSTANCE);
-    assertNotNull(XPath.INSTANCE);
+    assertNotNull(getFactory());
+    assertNotNull(getParser());
+    assertNotNull(getXPath());
+    assertNotNull(getWriterFactory());
+    assertNotNull(getParserFactory());
+    assertNotNull(getWriter());
   }
   
   public void testParser() throws Exception {
     
     InputStream in = FOMTest.class.getResourceAsStream("/simple.xml");
-    Document<Feed> doc = Parser.INSTANCE.parse(in);
+    Document<Feed> doc = getParser().parse(in);
     Feed feed = doc.getRoot();
     
     assertEquals(feed.getTitle(),"Example Feed");
@@ -102,7 +135,7 @@ public class FOMTest extends TestCase   {
   }
 
   public void testCreate() throws Exception {
-    Feed feed = Factory.INSTANCE.newFeed();
+    Feed feed = getFactory().newFeed();
     feed.setLanguage("en-US");
     feed.setBaseUri("http://example.org");
     
@@ -147,13 +180,13 @@ public class FOMTest extends TestCase   {
     filter.add(Constants.ENTRY);
     filter.add(Constants.TITLE);
     filter.add(Constants.ID);
-    ParserOptions options = Parser.INSTANCE.getDefaultParserOptions();
+    ParserOptions options = getParser().getDefaultParserOptions();
     options.setParseFilter(filter);
     
     URL url = FOMTest.class.getResource("/simple.xml");
     InputStream in = url.openStream();
 
-    Document<Feed> doc = Parser.INSTANCE.parse(in, url.toURI(), options);
+    Document<Feed> doc = getParser().parse(in, url.toURI(), options);
     Feed feed = doc.getRoot();
     
     assertEquals(feed.getTitle(),"Example Feed");
@@ -178,13 +211,13 @@ public class FOMTest extends TestCase   {
     
     ParseFilter filter = new BlackListParseFilter();
     filter.add(Constants.UPDATED);
-    ParserOptions options = Parser.INSTANCE.getDefaultParserOptions();
+    ParserOptions options = getParser().getDefaultParserOptions();
     options.setParseFilter(filter);
     
     URL url = FOMTest.class.getResource("/simple.xml");
     InputStream in = url.openStream();
 
-    Document<Feed> doc = Parser.INSTANCE.parse(in, url.toURI(), options);
+    Document<Feed> doc = getParser().parse(in, url.toURI(), options);
     Feed feed = doc.getRoot();
     
     assertEquals(feed.getTitle(),"Example Feed");
@@ -222,12 +255,12 @@ public class FOMTest extends TestCase   {
       }
     };
     
-    ParserOptions options = Parser.INSTANCE.getDefaultParserOptions();
+    ParserOptions options = getParser().getDefaultParserOptions();
     options.setTextFilter(filter);
     
     URL url = FOMTest.class.getResource("/simple.xml");
     InputStream in = url.openStream();
-    Document<Feed> doc = Parser.INSTANCE.parse(in, url.toURI(), options);
+    Document<Feed> doc = getParser().parse(in, url.toURI(), options);
     Feed feed = doc.getRoot();
     
     assertEquals(feed.getTitle(),"Example Feed");
@@ -252,9 +285,9 @@ public class FOMTest extends TestCase   {
   public void testXPath() throws Exception {
     
     InputStream in = FOMTest.class.getResourceAsStream("/simple.xml");
-    Document<Feed> doc = Parser.INSTANCE.parse(in);
+    Document<Feed> doc = getParser().parse(in);
     Feed feed = doc.getRoot();
-    XPath xpath = XPath.INSTANCE;
+    XPath xpath = getXPath();
     assertEquals(xpath.evaluate("count(/a:feed)", feed), 1.0d);
     assertTrue(xpath.isTrue("/a:feed/a:entry", feed));
     assertEquals(xpath.numericValueOf("count(/a:feed)", feed), 1.0d);
@@ -275,7 +308,7 @@ public class FOMTest extends TestCase   {
   }
   
   public void testFactory() throws Exception {
-    Factory factory = Factory.INSTANCE;
+    Factory factory = getFactory();
     Person author = factory.newAuthor();
     assertNotNull(author);
     author = factory.newAuthor();
@@ -649,7 +682,7 @@ public class FOMTest extends TestCase   {
   
   public void testRoundtrip() throws Exception {
 
-    Feed feed = Factory.INSTANCE.newFeed();
+    Feed feed = getFactory().newFeed();
     feed.setLanguage("en-US");
     feed.setBaseUri("http://example.org");
     
@@ -676,7 +709,7 @@ public class FOMTest extends TestCase   {
     feed.getDocument().writeTo(out);
     
     ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
-    Document<Feed> doc = Parser.INSTANCE.parse(in);
+    Document<Feed> doc = getParser().parse(in);
     feed = doc.getRoot();
     
     assertEquals(feed.getLanguage(), "en-US");
@@ -709,10 +742,10 @@ public class FOMTest extends TestCase   {
     try {
       // Apply an XSLT transform to the entire Feed
       TransformerFactory factory = TransformerFactory.newInstance();
-      Document xslt = Parser.INSTANCE.parse(FOMTest.class.getResourceAsStream("/test.xslt"));
+      Document xslt = getParser().parse(FOMTest.class.getResourceAsStream("/test.xslt"));
       AbderaSource xsltSource = new AbderaSource(xslt);
       Transformer transformer = factory.newTransformer(xsltSource);
-      Document<Feed> feed = Parser.INSTANCE.parse(FOMTest.class.getResourceAsStream("/simple.xml"));
+      Document<Feed> feed = getParser().parse(FOMTest.class.getResourceAsStream("/simple.xml"));
       AbderaSource feedSource = new AbderaSource(feed);
       ByteArrayOutputStream out = new ByteArrayOutputStream();
       Result result = new StreamResult(out);
@@ -720,10 +753,10 @@ public class FOMTest extends TestCase   {
       assertEquals(out.toString(), "This is a test urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6");
       
       // Apply an XSLT transform to XML in the content element
-      xslt = Parser.INSTANCE.parse(FOMTest.class.getResourceAsStream("/content.xslt"));
+      xslt = getParser().parse(FOMTest.class.getResourceAsStream("/content.xslt"));
       xsltSource = new AbderaSource(xslt);
       transformer = factory.newTransformer(xsltSource);
-      feed = Parser.INSTANCE.parse(FOMTest.class.getResourceAsStream("/xmlcontent.xml"));
+      feed = getParser().parse(FOMTest.class.getResourceAsStream("/xmlcontent.xml"));
       Entry entry = feed.getRoot().getEntries().get(0);
       Content content = entry.getContentElement();
       AbderaSource contentSource = new AbderaSource(content.getValueElement());

@@ -27,6 +27,7 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Base;
@@ -65,11 +66,24 @@ public class FOMFactory
   extends OMLinkedListImplFactory 
   implements Factory, Constants, ExtensionFactory, FOMExtensionFactory {
 
+  private Abdera abdera = null;
   private Map<QName,Class> extensions = null;
   private List<ExtensionFactory> factories = null;
   
+  public FOMFactory() {
+    this.abdera = new Abdera();
+  }
+  
+  public FOMFactory(Abdera abdera) {
+    this.abdera = abdera;
+  }
+  
   public Parser newParser() {
     return new FOMParser();
+  }
+  
+  private Abdera getAbdera() {
+    return abdera;
   }
   
   @SuppressWarnings("unchecked")
@@ -409,7 +423,7 @@ public class FOMFactory
   private List<ExtensionFactory> getExtensionFactories() {
     if (factories == null) {
       factories = new ArrayList<ExtensionFactory>(
-        org.apache.abdera.util.ServiceUtil.loadExtensionFactories());
+        getAbdera().getConfiguration().getExtensionFactories());
     }
     factories.add(0, this);
     return factories;

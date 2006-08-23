@@ -24,6 +24,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
@@ -35,18 +36,20 @@ public class XsltExample {
 
   public static void main(String[] args) {
     
+    Parser parser = Abdera.getNewParser();
+    
     try {
       
       // Apply an XSLT transform to the entire Feed
       TransformerFactory factory = TransformerFactory.newInstance();
       
       // Abdera is capable of parsing any well-formed XML document, even XSLT
-      Document xslt = Parser.INSTANCE.parse(XsltExample.class.getResourceAsStream("/test.xslt"));
+      Document xslt = parser.parse(XsltExample.class.getResourceAsStream("/test.xslt"));
       AbderaSource xsltSource = new AbderaSource(xslt);
       Transformer transformer = factory.newTransformer(xsltSource);
       
       // Now let's get the feed we're going to transform
-      Document<Feed> feed = Parser.INSTANCE.parse(XsltExample.class.getResourceAsStream("/simple.xml"));
+      Document<Feed> feed = parser.parse(XsltExample.class.getResourceAsStream("/simple.xml"));
       AbderaSource feedSource = new AbderaSource(feed);
       
       // Prepare the output
@@ -56,11 +59,11 @@ public class XsltExample {
       System.out.println(out); // "This is a test urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6"
       
       // Apply an XSLT transform to XML in the content element
-      xslt = Parser.INSTANCE.parse(XsltExample.class.getResourceAsStream("/content.xslt"));
+      xslt = parser.parse(XsltExample.class.getResourceAsStream("/content.xslt"));
       xsltSource = new AbderaSource(xslt);
       transformer = factory.newTransformer(xsltSource);
       
-      feed = Parser.INSTANCE.parse(XsltExample.class.getResourceAsStream("/xmlcontent.xml"));
+      feed = parser.parse(XsltExample.class.getResourceAsStream("/xmlcontent.xml"));
       Entry entry = feed.getRoot().getEntries().get(0);
       Content content = entry.getContentElement();
       AbderaSource contentSource = new AbderaSource(content.getValueElement());

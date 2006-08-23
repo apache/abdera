@@ -21,17 +21,20 @@ import java.net.URI;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.filter.ParseFilter;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.parser.stax.FOMException;
-import org.apache.abdera.util.BlackListParseFilter;
+import org.apache.abdera.util.filter.BlackListParseFilter;
 
 public class UnacceptableElementsExample {
 
   public static void main(String[] args) throws Exception {
+    
+    Parser parser = Abdera.getNewParser();
     
     /**
      * By subclassing BlackListParseFilter, we can throw an error 
@@ -54,9 +57,9 @@ public class UnacceptableElementsExample {
     };
     exceptionFilter.add(new QName("http://example.org", "a"));
     
-    ParserOptions options = Parser.INSTANCE.getDefaultParserOptions();
+    ParserOptions options = parser.getDefaultParserOptions();
     options.setParseFilter(exceptionFilter);
-    Document<Feed> doc = Parser.INSTANCE.parse(
+    Document<Feed> doc = parser.parse(
       UnacceptableElementsExample.class.getResourceAsStream("/xmlcontent.xml"), 
       (URI)null, options);
     

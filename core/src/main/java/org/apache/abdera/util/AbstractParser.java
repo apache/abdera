@@ -22,6 +22,8 @@ import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.abdera.Abdera;
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.ParseException;
@@ -31,6 +33,24 @@ import org.apache.abdera.parser.ParserOptions;
 public abstract class AbstractParser 
   implements Parser {
 
+  protected Abdera abdera = null;
+  
+  protected AbstractParser() {
+    this.abdera = new Abdera();
+  }
+  
+  protected AbstractParser(Abdera abdera) {
+    this.abdera = abdera;
+  }
+  
+  public Abdera getAbdera() {
+    return abdera;
+  }
+  
+  public Factory getFactory() {
+    return getAbdera().getFactory();
+  }
+  
   public <T extends Element>Document<T> parse(
     InputStream in) 
       throws ParseException {

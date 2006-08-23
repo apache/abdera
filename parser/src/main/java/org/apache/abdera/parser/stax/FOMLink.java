@@ -26,7 +26,6 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
@@ -36,7 +35,6 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
-
 public class FOMLink 
   extends FOMExtensibleElement 
   implements Link {
@@ -44,7 +42,7 @@ public class FOMLink
   private static final long serialVersionUID = 2239772197929910635L;
 
   public FOMLink() {
-    super(Constants.LINK, null, (OMFactory)Factory.INSTANCE);
+    super(Constants.LINK);
   }
   
   public FOMLink(

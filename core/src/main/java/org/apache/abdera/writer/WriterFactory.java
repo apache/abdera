@@ -17,14 +17,7 @@
 */
 package org.apache.abdera.writer;
 
-import org.apache.abdera.util.ServiceUtil;
-
 public interface WriterFactory {
-
-  public static final WriterFactory INSTANCE = 
-    (WriterFactory) ServiceUtil.newInstance(
-    "org.apache.abdera.writer.WriterFactory",
-    "org.apache.abdera.parser.stax.FOMWriterFactory");
   
   Writer getWriter();
   

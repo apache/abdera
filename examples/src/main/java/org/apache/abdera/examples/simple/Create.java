@@ -20,6 +20,7 @@ package org.apache.abdera.examples.simple;
 import java.net.URI;
 import java.util.Date;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
@@ -29,8 +30,9 @@ import org.apache.abdera.model.Text;
 public class Create {
 
   public static void main(String[] args) throws Exception {
-    
-    Feed feed = Factory.INSTANCE.newFeed();
+
+    Factory factory = Abdera.getNewFactory();
+    Feed feed = factory.newFeed();
     feed.setLanguage("en-US");
     feed.setBaseUri("http://example.org");
     

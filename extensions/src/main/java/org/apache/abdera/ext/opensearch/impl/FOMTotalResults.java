@@ -21,7 +21,6 @@ import org.apache.abdera.parser.stax.FOMElement;
 
 import org.apache.abdera.ext.opensearch.TotalResults;
 import org.apache.abdera.ext.opensearch.OpenSearchConstants;
-import org.apache.abdera.factory.Factory;
 
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMFactory;
@@ -32,9 +31,11 @@ import org.apache.axiom.om.OMException;
 import javax.xml.namespace.QName;
 
 public class FOMTotalResults extends FOMElement implements TotalResults {
+  private static final long serialVersionUID = -369536025664751894L;
+
   public FOMTotalResults()
   {
-    super(OpenSearchConstants.TOTAL_RESULTS, null, (OMFactory) Factory.INSTANCE);
+    super(OpenSearchConstants.TOTAL_RESULTS);
   }
 
   public FOMTotalResults(String name,

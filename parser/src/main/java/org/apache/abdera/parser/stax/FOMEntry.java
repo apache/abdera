@@ -27,7 +27,6 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Content;
@@ -60,7 +59,7 @@ public class FOMEntry
   private static final long serialVersionUID = 1L;
 
   public FOMEntry() {
-    super(Constants.ENTRY, new FOMDocument(), (OMFactory)Factory.INSTANCE);
+    super(Constants.ENTRY, new FOMDocument(), new FOMFactory());
   }
   
   public FOMEntry(

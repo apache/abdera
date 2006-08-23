@@ -22,7 +22,6 @@ import java.net.URISyntaxException;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
@@ -39,7 +38,7 @@ public class FOMCategory
   private static final long serialVersionUID = -4313042828936786803L;
   
   public FOMCategory() {
-    super(Constants.CATEGORY, null, (OMFactory)Factory.INSTANCE);
+    super(Constants.CATEGORY);
   }
   
   public FOMCategory(String term) {

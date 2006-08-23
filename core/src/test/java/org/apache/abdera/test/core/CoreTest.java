@@ -20,7 +20,7 @@ package org.apache.abdera.test.core;
 import java.util.Date;
 
 import org.apache.abdera.model.AtomDate;
-import org.apache.abdera.util.ConfigProperties;
+import org.apache.abdera.util.AbderaConfiguration;
 import org.apache.abdera.util.URIHelper;
 
 import junit.framework.TestCase;
@@ -28,14 +28,15 @@ import junit.framework.TestCase;
 public class CoreTest extends TestCase {
 
   public static void testDefaultConfigurationProperties() {
+    AbderaConfiguration config = new AbderaConfiguration();
     assertEquals(
-      ConfigProperties.getDefaultFactory(), 
+      config.getDefaultFactory(), 
       "org.apache.abdera.parser.stax.FOMFactory");
     assertEquals(
-      ConfigProperties.getDefaultParser(),
+      config.getDefaultParser(),
       "org.apache.abdera.parser.stax.FOMParser");
     assertEquals(
-      ConfigProperties.getDefaultXPath(),
+      config.getDefaultXPath(),
       "org.apache.abdera.parser.stax.FOMXPath");
   }
   

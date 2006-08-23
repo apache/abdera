@@ -19,8 +19,8 @@ package org.apache.abdera.security.xmlsec;
 
 import java.security.Key;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
-import org.apache.abdera.security.Encryption;
 import org.apache.abdera.security.EncryptionOptions;
 import org.apache.abdera.security.SecurityException;
 import org.apache.abdera.security.util.EncryptionBase;
@@ -31,12 +31,19 @@ import org.apache.xml.security.keys.KeyInfo;
 
 
 public class XmlEncryption 
-  extends EncryptionBase 
-  implements Encryption {
+  extends EncryptionBase {
 
   static {
     if (!org.apache.xml.security.Init.isInitialized())
       org.apache.xml.security.Init.init();
+  }
+
+  public XmlEncryption() {
+    super(new Abdera());
+  }
+  
+  public XmlEncryption(Abdera abdera) {
+    super(abdera);
   }
   
   public Document encrypt(
@@ -89,7 +96,7 @@ public class XmlEncryption
 
 
   public EncryptionOptions getDefaultEncryptionOptions() {
-    return new XmlEncryptionOptions();
+    return new XmlEncryptionOptions(getAbdera());
   }
 
 }

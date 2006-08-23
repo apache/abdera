@@ -22,11 +22,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
 
 public class FOMWriter 
   implements org.apache.abdera.writer.Writer {
 
+  public FOMWriter() {}
+  
+  public FOMWriter(Abdera abdera) {}
+  
   public void writeTo(
     Base base, 
     OutputStream out) 

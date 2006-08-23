@@ -17,15 +17,11 @@
 */
 package org.apache.abdera.parser.stax;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.filter.ParseFilter;
 import org.apache.abdera.filter.TextFilter;
 import org.apache.abdera.model.Content;
@@ -47,7 +43,6 @@ import org.apache.axiom.om.impl.OMNodeEx;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axiom.om.impl.util.OMSerializerUtil;
 
-
 public class FOMBuilder 
   extends StAXOMBuilder
   implements Constants {
@@ -63,97 +58,11 @@ public class FOMBuilder
     XMLStreamReader parser, 
     ParserOptions parserOptions) {
       super(factory, parser);
-      document = (OMDocument) factory.newDocument();
+      this.document = (OMDocument) factory.newDocument();
       this.parserOptions = parserOptions;
-      fomfactory = factory;
-  }
-
-  public FOMBuilder(
-    FOMFactory factory, 
-    XMLStreamReader parser) {
-      super(factory, parser);
-      document = (OMDocument) factory.newDocument();
-      fomfactory = factory;
-  }
-  
-  public FOMBuilder(
-    String filePath, 
-    ParserOptions parserOptions) 
-      throws XMLStreamException, 
-             FileNotFoundException {
-    super(filePath);
-    document = (OMDocument) Factory.INSTANCE.newDocument();
-    this.parserOptions = parserOptions;
-    fomfactory = getFomFactory();
-    setOMBuilderFactory(fomfactory);
-  }
-
-  public FOMBuilder(
-    FOMFactory factory, 
-    String filePath, 
-    ParserOptions parserOptions) 
-      throws XMLStreamException, 
-             FileNotFoundException {
-    super(filePath);
-    document = (OMDocument) factory.newDocument();
-    this.parserOptions = parserOptions;
-    fomfactory = factory;
-    setOMBuilderFactory(fomfactory);
-  }
-  
-  public FOMBuilder(
-    InputStream inStream, 
-    ParserOptions parserOptions) 
-      throws XMLStreamException {
-    super(inStream);
-    document = (OMDocument) Factory.INSTANCE.newDocument();
-    this.parserOptions = parserOptions;
-    fomfactory = getFomFactory();
-    setOMBuilderFactory(fomfactory);
-  }
-
-  public FOMBuilder(
-    FOMFactory factory, 
-    InputStream inStream, 
-    ParserOptions parserOptions) 
-      throws XMLStreamException {
-    super(inStream);
-    document = (OMDocument) factory.newDocument();
-    this.parserOptions = parserOptions;
-    fomfactory = factory;
-    setOMBuilderFactory(fomfactory);
-  }
-
-  public FOMBuilder(
-    XMLStreamReader parser, 
-    ParserOptions parserOptions) {
-      super(parser);
-      document = (OMDocument) Factory.INSTANCE.newDocument();
-      this.parserOptions = parserOptions;
-      fomfactory = getFomFactory();
-      setOMBuilderFactory(fomfactory);
-  }
-  
-  public FOMBuilder(
-    XMLStreamReader parser, 
-    FOMFactory factory, 
-    ParserOptions parserOptions) {
-      super(factory, parser);
-      document = (OMDocument) factory.newDocument();
-      this.parserOptions = parserOptions;
-      fomfactory = factory;
+      this.fomfactory = factory;
   }
  
-  private FOMFactory getFomFactory() {
-    FOMFactory factory = 
-      (parserOptions != null) ? 
-        (FOMFactory)parserOptions.getFactory() : null;
-    if (factory == null)
-      factory = (Factory.INSTANCE instanceof FOMFactory) ? 
-          (FOMFactory)Factory.INSTANCE : new FOMFactory();
-    return factory;
-  }
-  
   public ParserOptions getParserOptions() {
     return parserOptions;
   }

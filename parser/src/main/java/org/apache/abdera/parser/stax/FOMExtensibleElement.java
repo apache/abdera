@@ -21,7 +21,6 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ExtensibleElement;
 import org.apache.abdera.parser.stax.util.FOMExtensionIterator;
@@ -33,13 +32,12 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
-
 public abstract class FOMExtensibleElement 
   extends FOMElement 
   implements ExtensibleElement {
 
   public FOMExtensibleElement(QName qname) {
-    super(qname, null, (OMFactory)Factory.INSTANCE);
+    super(qname);
   }
   
   public FOMExtensibleElement(

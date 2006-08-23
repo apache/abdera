@@ -21,7 +21,6 @@ import org.apache.abdera.parser.stax.FOMElement;
 
 import org.apache.abdera.ext.opensearch.OpenSearchConstants;
 import org.apache.abdera.ext.opensearch.ItemsPerPage;
-import org.apache.abdera.factory.Factory;
 
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMFactory;
@@ -32,9 +31,11 @@ import org.apache.axiom.om.OMException;
 import javax.xml.namespace.QName;
 
 public class FOMItemsPerPage extends FOMElement implements ItemsPerPage {
+  private static final long serialVersionUID = 4343427206133794002L;
+
   public FOMItemsPerPage()
   {
-    super(OpenSearchConstants.ITEMS_PER_PAGE, null, (OMFactory) Factory.INSTANCE);
+    super(OpenSearchConstants.ITEMS_PER_PAGE);
   }
 
   public FOMItemsPerPage(String name,

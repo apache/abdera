@@ -15,10 +15,15 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.util;
+package org.apache.abdera.server.exceptions;
 
-import org.apache.abdera.filter.TextFilter;
+public abstract class RequestException 
+  extends AbderaServerException {
 
-public class NonOpTextFilter extends TextFilter {
+  private static final long serialVersionUID = -776170778154933680L;
+
+  public RequestException(int status, String text) {
+    super(status, text);
+  }
 
 }

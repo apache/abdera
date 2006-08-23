@@ -22,6 +22,7 @@ import java.net.URL;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.filter.TextFilter;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
@@ -35,6 +36,8 @@ import org.apache.abdera.util.Constants;
 public class TextFilterExample {
 
   public static void main(String[] args) throws Exception {
+    
+    Parser parser = Abdera.getNewParser();
     
     // First create the text filter
     TextFilter filter = new TextFilter() {
@@ -52,13 +55,13 @@ public class TextFilterExample {
     };
     
     // Set the filter using the ParserOptions
-    ParserOptions options = Parser.INSTANCE.getDefaultParserOptions();
+    ParserOptions options = parser.getDefaultParserOptions();
     options.setTextFilter(filter);
     
     // Parse!
     URL url = TextFilterExample.class.getResource("/simple.xml");
     InputStream in = url.openStream();
-    Document<Feed> doc = Parser.INSTANCE.parse(in, url.toURI(), options);
+    Document<Feed> doc = parser.parse(in, url.toURI(), options);
     Feed feed = doc.getRoot();
     System.out.println(feed.getAuthor().getName());          // Jane Doe
     System.out.println(feed.getEntries().get(0).getTitle()); // Atom-Powered Robots Run Crazy

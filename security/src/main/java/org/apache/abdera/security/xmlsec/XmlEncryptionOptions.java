@@ -19,8 +19,8 @@ package org.apache.abdera.security.xmlsec;
 
 import java.security.Key;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.security.EncryptionOptions;
-
 
 public class XmlEncryptionOptions 
   extends XmlSecurityOptions
@@ -31,6 +31,10 @@ public class XmlEncryptionOptions
   private String kca = "http://www.w3.org/2001/04/xmlenc#kw-aes128";
   private String dca = "http://www.w3.org/2001/04/xmlenc#aes128-cbc";
   private boolean setki = false;
+  
+  protected XmlEncryptionOptions(Abdera abdera) {
+    super(abdera);
+  }
   
   public Key getDataEncryptionKey() {
     return dek;

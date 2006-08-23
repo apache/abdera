@@ -21,14 +21,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.abdera.model.Base;
-import org.apache.abdera.util.ServiceUtil;
 
 /**
  * Used to execute XPath queries over Feed Object Model instances.
  */
 public interface XPath {
-
-  public static final XPath INSTANCE = ServiceUtil.newXPathInstance();
   
   Map<String,String> getDefaultNamespaces();
   

@@ -25,7 +25,6 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
@@ -36,7 +35,6 @@ import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
-
 public class FOMDiv 
   extends FOMExtensibleElement 
   implements Div {
@@ -44,7 +42,7 @@ public class FOMDiv
   private static final long serialVersionUID = -2319449893405850433L;
 
   public FOMDiv() {
-    super(Constants.DIV, null, (OMFactory)Factory.INSTANCE);
+    super(Constants.DIV);
   }
   
   public FOMDiv(

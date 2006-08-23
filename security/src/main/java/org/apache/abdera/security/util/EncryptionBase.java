@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.security.util;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.security.Encryption;
@@ -26,7 +27,11 @@ import org.apache.abdera.security.SecurityException;
 public abstract class EncryptionBase 
   extends SecurityBase
   implements Encryption {
-
+  
+  public EncryptionBase(Abdera abdera) {
+    super(abdera);
+  }
+  
   public boolean isEncrypted(
     Document doc) throws SecurityException {
       Element el = doc.getRoot();

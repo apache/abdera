@@ -21,25 +21,30 @@ import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Service;
+import org.apache.abdera.protocol.client.Client;
+import org.apache.abdera.protocol.client.CommonsClient;
 
 
 public class Main {
 
   public static void main(String[] args) throws Exception {
     
-    AtomClient client = new AtomClient();
+    Abdera abdera = new Abdera();
+    Client client = new CommonsClient(abdera);
+    Factory factory = abdera.getFactory();
     
     // Perform introspection.  This is an optional step.  If you already
     // know the URI of the APP collection to POST to, you can skip it.
     Document<Service> introspection = 
       client.get(
-        args[0]);
+        args[0]).getDocument();
     Service service = 
       introspection.getRoot();
     Collection collection = 
@@ -49,7 +54,7 @@ public class Main {
     report("The Collection Element", collection.toString());
     
     // Create the entry to post to the collection
-    Entry entry = Factory.INSTANCE.newEntry();
+    Entry entry = factory.newEntry();
     entry.setId("tag:example.org,2006:foo", false);
     entry.setTitle("This is the title");
     entry.setUpdated(new Date());
@@ -58,7 +63,9 @@ public class Main {
     report("The Entry to Post", entry.toString());
     
     // Post the entry. Be sure to grab the resolved HREF of the collection
-    Document<Entry> doc = client.post(collection.getResolvedHref(), entry);
+    Document<Entry> doc = client.post(
+      collection.getResolvedHref().toString(), 
+      entry).getDocument();
     
     // In some implementations (such as Google's GData API, the entry URI is 
     // distinct from it's edit URI.  To be safe, we should assume it may be 
@@ -73,16 +80,16 @@ public class Main {
     // If there is an Edit Link, we can edit the entry
     if (editUri != null) {
       // Before we can edit, we need to grab an "editable" representation
-      doc = client.get(editUri);    
+      doc = client.get(editUri.toString()).getDocument();    
       
       // Change whatever you want in the retrieved entry
       doc.getRoot().getTitleElement().setValue("This is the changed title");
       
       // Put it back to the server
-      client.put(editUri, doc.getRoot());
+      client.put(editUri.toString(), doc.getRoot());
       
       // This is just to show that the entry has been modified
-      doc = client.get(entryUri);
+      doc = client.get(entryUri.toString()).getDocument();
       report("The Modified Entry", doc.getRoot().toString());
     } else {
       // Otherwise, the entry cannot be modified (no suitable edit link was found)
@@ -91,10 +98,10 @@ public class Main {
 
     // Delete the entry.  Again, we need to make sure that we have the current
     // edit link for the entry
-    doc = client.get(entryUri);
+    doc = client.get(entryUri.toString()).getDocument();
     editUri = getEditUri(doc.getRoot());
     if (editUri != null) {
-      client.delete(editUri);
+      client.delete(editUri.toString());
       report("The Enry has been deleted", null);
     } else {
       report("The Entry cannot be deleted", null);

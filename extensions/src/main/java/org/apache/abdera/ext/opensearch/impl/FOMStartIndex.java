@@ -20,7 +20,6 @@ package org.apache.abdera.ext.opensearch.impl;
 import org.apache.abdera.ext.opensearch.OpenSearchConstants;
 import org.apache.abdera.ext.opensearch.StartIndex;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.parser.stax.FOMElement;
 
 import org.apache.axiom.om.OMNamespace;
@@ -32,9 +31,11 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 import javax.xml.namespace.QName;
 
 public class FOMStartIndex extends FOMElement implements StartIndex {
+  private static final long serialVersionUID = -8365709284324867565L;
+
   public FOMStartIndex()
   {
-    super(OpenSearchConstants.START_INDEX, null, (OMFactory) Factory.INSTANCE);
+    super(OpenSearchConstants.START_INDEX);
   }
 
   public FOMStartIndex(String name,

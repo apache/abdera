@@ -19,6 +19,7 @@ package org.apache.abdera.examples.simple;
 
 import java.io.InputStream;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
@@ -29,8 +30,10 @@ public class Parse {
 
   public static void main(String[] args) throws Exception {
     
+    Parser parser = Abdera.getNewParser();
+    
     InputStream in = Parse.class.getResourceAsStream("/simple.xml");
-    Document<Feed> doc = Parser.INSTANCE.parse(in);
+    Document<Feed> doc = parser.parse(in);
     Feed feed = doc.getRoot();
     
     System.out.println(feed.getTitle());

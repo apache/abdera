@@ -15,43 +15,34 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.parser.stax;
+package org.apache.abdera.util.filter;
 
-import java.util.Map;
+import javax.xml.namespace.QName;
 
-import org.apache.abdera.Abdera;
-import org.apache.abdera.writer.NamedWriter;
-import org.apache.abdera.writer.Writer;
-import org.apache.abdera.writer.WriterFactory;
+import org.apache.abdera.filter.ParseFilter;
 
-public class FOMWriterFactory 
-  implements WriterFactory {
+/**
+ * WhiteList Implementation of ParseFilter.  Only the 
+ * QNames listed will be considered acceptable 
+ */
+public class WhiteListParseFilter extends ParseFilter {
 
-  private Abdera abdera = null;
+  boolean listAttributesExplicitly = false;
   
-  public FOMWriterFactory() {
-    this.abdera = new Abdera();
-  }
+  public WhiteListParseFilter() {}
   
-  public FOMWriterFactory(Abdera abdera) {
-    this.abdera = abdera;
+  public WhiteListParseFilter(boolean listAttributesExplicitly) {
+    this.listAttributesExplicitly = listAttributesExplicitly;
   }
   
-  protected Abdera getAbdera() {
-    return abdera;
-  }
-  
-  public Writer getWriter() {
-    return getAbdera().getWriter();
+  public boolean acceptable(QName qname) {
+    return contains(qname);
   }
 
-  public Writer getWriter(String name) {
-    return (name != null) ? 
-      loadWriters().get(name) : getWriter();
+  public boolean acceptableAttribute(QName qname, QName attribute) {
+    return (listAttributesExplicitly) ? 
+      containsAttribute(qname, attribute) :
+      containsAttribute(qname, attribute) || acceptable(qname);
   }
 
-  private Map<String,NamedWriter> loadWriters() {
-    return getAbdera().getConfiguration().getNamedWriters();
-  }
-  
 }

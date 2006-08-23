@@ -22,7 +22,6 @@ import java.net.URISyntaxException;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Generator;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
@@ -31,7 +30,6 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
-
 public class FOMGenerator 
   extends FOMElement 
   implements Generator {
@@ -39,7 +37,7 @@ public class FOMGenerator
   private static final long serialVersionUID = -8441971633807437976L;
 
   public FOMGenerator() {
-    super(Constants.GENERATOR, null, (OMFactory)Factory.INSTANCE);
+    super(Constants.GENERATOR);
   }
   
   public FOMGenerator(

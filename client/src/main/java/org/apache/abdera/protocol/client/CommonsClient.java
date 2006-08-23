@@ -21,6 +21,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.cache.Cache;
 import org.apache.abdera.protocol.cache.CacheDisposition;
 import org.apache.abdera.protocol.cache.CachedResponse;
@@ -43,7 +44,16 @@ public class CommonsClient extends Client {
     this(Version.APP_NAME + "/" + Version.VERSION);
   }
   
+  public CommonsClient(Abdera abdera) {
+    this(Version.APP_NAME + "/" + Version.VERSION, abdera);
+  }
+  
   public CommonsClient(String userAgent) {
+    init(userAgent);
+  }
+  
+  public CommonsClient(String userAgent,Abdera abdera) {
+    super(abdera);
     init(userAgent);
   }
   

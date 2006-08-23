@@ -15,27 +15,10 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.examples.appclient;
+package org.apache.abdera.util.filter;
 
-public class ClientException extends Exception {
+import org.apache.abdera.filter.TextFilter;
 
-  private static final long serialVersionUID = -5346983237731736209L;
-  private int status = 400;
-  
-  public ClientException(String message) {
-    super(message);
-  }
-  
-  public ClientException(int status, String message) {
-    super(message);
-    this.status = status;
-  }
-  
-  public int getStatus() {
-    return status;
-  }
-  
-  public static boolean isClientException(int status) {
-    return (status >= 400 && status < 500);
-  }
+public class NonOpTextFilter extends TextFilter {
+
 }

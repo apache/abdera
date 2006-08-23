@@ -15,23 +15,35 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.util;
+package org.apache.abdera.server;
 
-import javax.xml.namespace.QName;
+import org.apache.abdera.Abdera;
+import org.apache.abdera.util.ServiceUtil;
 
-import org.apache.abdera.filter.ParseFilter;
+public class AbderaServer {
 
-/**
- * BlackList Implementation of ParseFilter.  The 
- * QNames listed will be considered unacceptable 
- */
-public class BlackListParseFilter extends ParseFilter {
-
-  public boolean acceptable(QName qname) {
-    return !contains(qname);
+  public static final String HANDLER_FACTORY = "org.apache.abdera.server.RequestHandlerFactory";
+  
+  private Abdera abdera = null;
+  private RequestHandlerFactory handlerFactory = null;
+  
+  public AbderaServer() {
+    abdera = new Abdera();
   }
-
-  public boolean acceptableAttribute(QName qname, QName attribute) {
-    return !containsAttribute(qname, attribute);
+  
+  public AbderaServer(Abdera abdera) {
+    this.abdera = abdera;
   }
+  
+  public RequestHandlerFactory newRequestHandlerFactory() {
+    return (RequestHandlerFactory) ServiceUtil.newInstance(
+      HANDLER_FACTORY, "", abdera);
+  }
+  
+  public RequestHandlerFactory getRequestHandlerFactory() {
+    if (handlerFactory == null)
+      handlerFactory = newRequestHandlerFactory();
+    return handlerFactory;
+  }
+  
 }

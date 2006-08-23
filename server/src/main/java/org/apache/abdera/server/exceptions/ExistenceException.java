@@ -15,12 +15,15 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.examples.appclient;
+package org.apache.abdera.server.exceptions;
 
-public class NotModifiedException extends Exception {
+public abstract class ExistenceException 
+  extends AbderaServerException {
 
-  private static final long serialVersionUID = -8929777553527707483L;
+  private static final long serialVersionUID = -8319652197313604062L;
 
-  public NotModifiedException() {}
-  
+  public ExistenceException(int status, String text) {
+    super(status, text);
+  }
+
 }

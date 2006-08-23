@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.security.util;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.ExtensibleElement;
 import org.apache.abdera.model.Feed;
@@ -27,6 +28,10 @@ import org.apache.abdera.security.Signature;
 public abstract class SignatureBase 
   extends SecurityBase
   implements Signature {
+
+  protected SignatureBase(Abdera abdera) {
+    super(abdera);
+  }
 
   public boolean isSigned(
     Entry entry)  throws SecurityException {

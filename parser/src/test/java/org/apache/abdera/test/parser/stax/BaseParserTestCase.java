@@ -19,6 +19,7 @@ package org.apache.abdera.test.parser.stax;
 
 import junit.framework.TestCase;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.Parser;
@@ -28,16 +29,22 @@ import java.net.URI;
 
 public abstract class BaseParserTestCase extends TestCase {
 
+  private static Abdera abdera = new Abdera();
+  
+  protected static Parser getParser() {
+    return abdera.getParser();
+  }
+  
   protected static <T extends Element>Document<T> parse(URI uri) {
     try {
       String uriStr = uri.toString();
       String path = uriStr.substring(uriStr.indexOf("//") + 1);
       InputStream stream = BaseParserTestCase.class.getResourceAsStream(path);
-      return Parser.INSTANCE.parse(stream, uri);
+      return getParser().parse(stream, uri);
     } catch (Exception e) {
       // when getting it local fails, fall back to getting it from the server
       try {
-        return Parser.INSTANCE.parse(uri.toURL().openStream(), uri);
+        return getParser().parse(uri.toURL().openStream(), uri);
       } catch (Exception ex) {}
     }
     return null;

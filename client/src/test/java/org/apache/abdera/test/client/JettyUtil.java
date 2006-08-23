@@ -65,8 +65,10 @@ public class JettyUtil {
   
   public static void removeHandler(ServletHandler handler) throws Exception {
     if (server == null) return;
+    if (handler.isRunning()) handler.stop();
     server.removeHandler(handler);
     if (server.getHandlers().length == 1) {
+      server.removeHandler(server.getHandler());
       server.stop();
       server = null;
     }

@@ -19,6 +19,7 @@ package org.apache.abdera.examples.xsltxpath;
 
 import java.io.InputStream;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.parser.Parser;
@@ -28,10 +29,13 @@ public class XPathExample {
 
   public static void main(String[] args) throws Exception {
     
+    Abdera abdera = new Abdera();
+    Parser parser = abdera.getParser();
+    XPath xpath = abdera.getXPath();
+    
     InputStream in = XPathExample.class.getResourceAsStream("/simple.xml");
-    Document<Feed> doc = Parser.INSTANCE.parse(in);
+    Document<Feed> doc = parser.parse(in);
     Feed feed = doc.getRoot();
-    XPath xpath = XPath.INSTANCE;
     
     System.out.println(xpath.evaluate("count(/a:feed)", feed));         // 1.0
     System.out.println(xpath.numericValueOf("count(/a:feed)", feed));   // 1.0

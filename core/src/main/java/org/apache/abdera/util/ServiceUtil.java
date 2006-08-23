@@ -21,13 +21,13 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.parser.Parser;
@@ -35,39 +35,8 @@ import org.apache.abdera.xpath.XPath;
 
 public final class ServiceUtil 
   implements Constants {
-
+  
   ServiceUtil() {}
-  
-  private static ThreadLocal cache = new ThreadLocal();
-  
-  @SuppressWarnings("unchecked")
-  private static Map<String,Class> getCache() {
-    Map<String,Class> map;
-    if (cache.get() == null) {
-      map = new HashMap<String,Class>();
-      cache.set(map);
-    } else {
-      map = (Map<String, Class>) cache.get();
-    }
-    return map;
-  }
-  
-  /**
-   * Get the cached Class for a given id.  The cache is contained
-   * in Thread Local storage
-   */
-  private static Class getClass(String id) {
-    return getCache().get(id);
-  }
-  
-  /**
-   * Cache the class resolved for a particular ID so we don't have to 
-   * go looking for it again later.  It's highly unlikely that the 
-   * configured class will change within the context of a given thread
-   */
-  private static void setClass(String id, Class _class) {
-    getCache().put(id,_class);
-  }
   
   /**
    * Returns a new instance of the identified object class.  This will use
@@ -77,35 +46,38 @@ public final class ServiceUtil
    * no instance is configured, the default class name will be used.  Returns
    * null if no instance can be created.
    */
-  public static Object newInstance(String id, String _default) {
-    return ServiceUtil.locate(id, _default);
+  public static Object newInstance(String id, String _default, Abdera abdera) {
+    return locate(id, _default, abdera);
   }
 
   /**
    * Utility method for returning an instance of the default Abdera XPath instance
    */
-  public static XPath newXPathInstance() {
+  public static XPath newXPathInstance(Abdera abdera) {
     return (XPath) newInstance(
       CONFIG_XPATH,
-      ConfigProperties.getDefaultXPath());
+      abdera.getConfiguration().getDefaultXPath(), 
+      abdera);
   }
   
   /**
    * Utility method for returning an instance of the default Abdera Parser instance
    */
-  public static Parser newParserInstance() {
+  public static Parser newParserInstance(Abdera abdera) {
     return (Parser) newInstance(
       CONFIG_PARSER, 
-      ConfigProperties.getDefaultParser());
+      abdera.getConfiguration().getDefaultParser(),
+      abdera);
   }
 
   /**
    * Utility method for returning an instance of the defaul Abdera Factory instance
    */
-  public static Factory newFactoryInstance() {
+  public static Factory newFactoryInstance(Abdera abdera) {
     return (Factory) newInstance(
       CONFIG_FACTORY, 
-      ConfigProperties.getDefaultFactory());
+      abdera.getConfiguration().getDefaultFactory(),
+      abdera);
   }
   
   /**
@@ -115,35 +87,37 @@ public final class ServiceUtil
     return Thread.currentThread().getContextClassLoader();
   }
   
-  public static Object locate(String id, String _default) {
-    Object object = locate(id);
-    if (object == null && _default != null) {
-      object = locateInstance(getClassLoader(), _default);
-    }
-    return object;
+  public static Object locate(
+    String id, 
+    String _default, 
+    Abdera abdera) {
+      Object object = locate(id, abdera);
+      if (object == null && _default != null) {
+        object = locateInstance(getClassLoader(), _default, abdera);
+      }
+      return object;
   }
 
   /**
    * Locate a class instance for the given id
    */
-  public static Object locate(String id) {
-    Object service = checkCache(id);
-    if (service == null) service = checkConfigProperties(id);
-    return ((service != null) ? service : checkMetaInfServices(id));
+  public static Object locate(String id, Abdera abdera) {
+    Object service = checkAbderaConfiguration(id, abdera);
+    return ((service != null) ? service : checkMetaInfServices(id, abdera));
   }
   
   @SuppressWarnings("unchecked")
-  private static <T>T locateInstance(ClassLoader loader, String id) {
+  private static <T>T _create(Class _class, Abdera abdera) {
+    if (_class == null) return null;
     try {
-      Class _class = loader.loadClass(id);
-      setClass(id, _class);
-      return (T) _class.newInstance();
+      if (abdera != null) {
+        Constructor c = _class.getConstructor(new Class[] {Abdera.class});
+        return (T) c.newInstance(new Object[] {abdera});
+      }
     } catch (Exception e) {
       // Nothing
     }
     try {
-      Class _class = ClassLoader.getSystemClassLoader().loadClass(id);
-      setClass(id, _class);
       return (T) _class.newInstance();
     } catch (Exception e) {
       // Nothing
@@ -151,12 +125,29 @@ public final class ServiceUtil
     return null;
   }
   
-  private static InputStream locateStream(ClassLoader loader, String id) {
+  @SuppressWarnings("unchecked")
+  public static <T>T locateInstance(ClassLoader loader, String id, Abdera abdera) {
+    try {
+      Class _class = loader.loadClass(id);
+      return (T)_create(_class, abdera);
+    } catch (Exception e) {
+      // Nothing
+    }
+    try {
+      Class _class = ClassLoader.getSystemClassLoader().loadClass(id);
+      return (T)_create(_class, abdera);
+    } catch (Exception e) {
+      // Nothing
+    }
+    return null;
+  }
+  
+  public static InputStream locateStream(ClassLoader loader, String id) {
     InputStream in = loader.getResourceAsStream(id);
     return (in != null) ? in : ClassLoader.getSystemResourceAsStream(id);
   }
   
-  private static Enumeration<URL> locateResources(ClassLoader loader, String id) {
+  public static Enumeration<URL> locateResources(ClassLoader loader, String id) {
     try {
       return loader.getResources(id);
     } catch (Exception e) {
@@ -170,22 +161,12 @@ public final class ServiceUtil
     return null;
   }
   
-  private static Object checkCache(String id) {
-    try {
-      Class _class = getClass(id);
-      return (_class != null) ? _class.newInstance() : null;
-    } catch (Exception e) {
-      // Nothing
-    }
-    return null;
+  private static Object checkAbderaConfiguration(String id, Abdera abdera) {
+    String s = abdera.getConfiguration().getConfigurationOption(id);
+    return (s != null) ? locateInstance(getClassLoader(), id, abdera) : null;
   }
   
-  private static Object checkConfigProperties(String id) {
-    String s = ConfigProperties.getConfigurationOption(id);
-    return (s != null) ? locateInstance(getClassLoader(), id) : null;
-  }
-  
-  private static Object checkMetaInfServices(String id) {
+  private static Object checkMetaInfServices(String id, Abdera abdera) {
     Object object = null;
     String sid = "META-INF/services/" + id;
     ClassLoader loader = getClassLoader();
@@ -197,7 +178,7 @@ public final class ServiceUtil
         String line = buf.readLine();
         if (line != null) {
           String s = line.split("#",2)[0].trim();
-          object = locateInstance(loader,s);
+          object = locateInstance(loader,s, abdera);
         }
       }
     } catch (Exception e) {
@@ -213,19 +194,16 @@ public final class ServiceUtil
     }
     return object;
   }
-
-  private static List<ExtensionFactory> factories = null;
   
-  public static List<ExtensionFactory> loadExtensionFactories() {
-    if (factories == null) {
-      factories = _loadimpls(
-        "META-INF/services/org.apache.abdera.factory.ExtensionFactory");
-    }
-    return factories;
+  protected static synchronized List<ExtensionFactory> loadExtensionFactories() {
+      List<ExtensionFactory> factories =
+        _loadimpls(
+          "META-INF/services/org.apache.abdera.factory.ExtensionFactory");
+      return factories;
   }
   
   @SuppressWarnings("unchecked")
-  public static <T>List<T> _loadimpls(String sid) {
+  protected static <T>List<T> _loadimpls(String sid) {
     List<T> impls = new ArrayList<T>();
     ClassLoader loader = getClassLoader();
     try {
@@ -241,7 +219,7 @@ public final class ServiceUtil
             while ((line = buf.readLine()) != null) {
               String s = line.split("#",2)[0].trim();
               if (!"".equals(s)) { 
-                T impl = (T) locateInstance(loader,s);
+                T impl = (T) locateInstance(loader,s, null);
                 if (impl != null)
                   impls.add(impl);
               }

@@ -15,28 +15,19 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.examples.appclient;
+package org.apache.abdera.server.exceptions;
 
-public class ServerException extends Exception {
-  
-  private static final long serialVersionUID = 5504210977069968631L;
-  private int status = 500;
-  
-  public ServerException(String message) {
-    super(message);
-  }
-  
-  public ServerException(int status, String message) {
-    super(message);
-    this.status = status;
-  }
-  
-  public int getStatus() {
-    return status;
+public class GoneException 
+  extends ExistenceException {
+
+  private static final long serialVersionUID = -3161208634818367903L;
+
+  public GoneException() {
+    super(410, null);
   }
 
-  public static boolean isServerException(int status) {
-    return (status >= 500 && status < 600);
+  public GoneException(String text) {
+    super(410, text);
   }
   
 }

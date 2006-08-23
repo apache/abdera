@@ -19,6 +19,7 @@ package org.apache.abdera.test.ext.opensearch;
 
 import junit.framework.TestCase;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Document;
 
@@ -34,8 +35,10 @@ import java.io.InputStream;
 public class OpenSearchTest extends TestCase {
   public void testBasics()
   {
+    Parser parser = Abdera.getNewParser();
+    
     InputStream stream = OpenSearchTest.class.getResourceAsStream("/opensearch.xml");
-    Document<Element> doc = Parser.INSTANCE.parse(stream);
+    Document<Element> doc = parser.parse(stream);
 
     TotalResults tr = doc.getRoot().getFirstChild(OpenSearchConstants.TOTAL_RESULTS);
     assertNotNull(tr);

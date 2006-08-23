@@ -17,15 +17,8 @@
 */
 package org.apache.abdera.protocol.cache;
 
-import org.apache.abdera.util.ServiceUtil;
-
 public interface CacheFactory {
 
-  public static final CacheFactory INSTANCE = 
-    (CacheFactory)ServiceUtil.newInstance(
-      "org.apache.abdera.protocol.cache.CacheFactory",
-      "org.apache.abdera.protocol.cache.lru.LRUCacheFactory");
-  
   Cache getCache();
   
 }

@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.examples.appclient;
+package org.apache.abdera.protocol.util;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -37,6 +37,10 @@ public class SimpleSSLProtocolSocketFactory
 
   private SSLContext context = null;
   
+  public SimpleSSLProtocolSocketFactory(TrustManager trustManager) {
+    init(trustManager);
+  }
+  
   public SimpleSSLProtocolSocketFactory() {
     try {
       TrustManager tm = new X509TrustManager() {
@@ -46,11 +50,17 @@ public class SimpleSSLProtocolSocketFactory
           return null;
         }
       };
-      context = SSLContext.getInstance("SSL");
-      context.init(null, new TrustManager[] {tm}, null);
+      init(tm);
     } catch (Exception e) {}
   }
 
+  private void init(TrustManager trustManager) {
+    try {
+      context = SSLContext.getInstance("SSL");
+      context.init(null, new TrustManager[] {trustManager}, null);
+    } catch (Exception e) {}
+  }
+  
   public Socket createSocket(
     Socket socket, 
     String host, 

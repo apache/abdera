@@ -20,12 +20,16 @@ package org.apache.abdera.security.xmlsec;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.security.SignatureOptions;
-
 
 public class XmlSignatureOptions 
   extends XmlSecurityOptions 
   implements SignatureOptions {
+
+  protected XmlSignatureOptions(Abdera abdera) {
+    super(abdera);
+  }
 
   private PrivateKey signingKey = null;
   private X509Certificate cert = null;

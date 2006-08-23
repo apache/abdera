@@ -17,38 +17,34 @@
 */
 package org.apache.abdera.test.parser.stax;
 
-import org.apache.abdera.factory.Factory;
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.parser.Parser;
-import org.apache.abdera.parser.stax.FOMFactory;
-import org.apache.abdera.parser.stax.FOMParser;
-import org.apache.abdera.parser.stax.FOMXPath;
-import org.apache.abdera.xpath.XPath;
 
 import junit.framework.TestCase;
 
 public class ParserTest extends TestCase {
 
-  public static void testConfiguration() {
-    assertTrue(Factory.INSTANCE instanceof FOMFactory);
-    assertTrue(Parser.INSTANCE instanceof FOMParser);
-    assertTrue(XPath.INSTANCE instanceof FOMXPath);
+  private static Abdera abdera = new Abdera();
+  
+  private static Parser getParser() {
+    return abdera.getParser();
   }
   
   public static void testParse() {
     
-    Document<Feed> feedDoc = Parser.INSTANCE.parse(ParserTest.class.getResourceAsStream("/simpleFeed.xml"));
+    Document<Feed> feedDoc = getParser().parse(ParserTest.class.getResourceAsStream("/simpleFeed.xml"));
     assertTrue(feedDoc.getRoot() instanceof Feed);
     assertEquals(feedDoc.getCharset(), "utf-8");
     
-    Document<Entry> entryDoc = Parser.INSTANCE.parse(ParserTest.class.getResourceAsStream("/simpleEntry.xml"));
+    Document<Entry> entryDoc = getParser().parse(ParserTest.class.getResourceAsStream("/simpleEntry.xml"));
     assertTrue(entryDoc.getRoot() instanceof Entry);
     assertEquals(entryDoc.getCharset(), "utf-8");
     
-    Document<Service> serviceDoc = Parser.INSTANCE.parse(ParserTest.class.getResourceAsStream("/simpleService.xml"));
+    Document<Service> serviceDoc = getParser().parse(ParserTest.class.getResourceAsStream("/simpleService.xml"));
     assertTrue(serviceDoc.getRoot() instanceof Service);
     assertEquals(serviceDoc.getCharset(), "utf-8");
     

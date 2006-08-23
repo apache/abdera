@@ -23,6 +23,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
@@ -45,6 +46,14 @@ public class XmlSignature
   static {
     if (!org.apache.xml.security.Init.isInitialized())
       org.apache.xml.security.Init.init();
+  }
+
+  public XmlSignature() {
+    super(new Abdera());
+  }
+  
+  public XmlSignature(Abdera abdera) {
+    super(abdera);
   }
   
   private Element _sign(
@@ -156,7 +165,7 @@ public class XmlSignature
   }
 
   public SignatureOptions getDefaultSignatureOptions() throws SecurityException {
-    return new XmlSignatureOptions();
+    return new XmlSignatureOptions(getAbdera());
   }
 
 }

@@ -26,7 +26,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.ext.thread.InReplyTo;
 import org.apache.abdera.ext.thread.ThreadConstants;
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.parser.stax.FOMElement;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
@@ -42,7 +41,7 @@ public class FOMInReplyTo
   private static final long serialVersionUID = 7805672826003392693L;
 
   public FOMInReplyTo() {
-    super(ThreadConstants.IN_REPLY_TO, null, (OMFactory)Factory.INSTANCE);
+    super(ThreadConstants.IN_REPLY_TO);
   }
   
   public FOMInReplyTo(URI ref) {

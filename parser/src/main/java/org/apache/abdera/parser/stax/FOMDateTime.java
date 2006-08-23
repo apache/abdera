@@ -22,7 +22,6 @@ import java.util.Date;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.DateTime;
 import org.apache.axiom.om.OMContainer;
@@ -31,7 +30,6 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
-
 public class FOMDateTime 
   extends FOMElement 
   implements DateTime {
@@ -39,7 +37,7 @@ public class FOMDateTime
   private static final long serialVersionUID = -6611503566172011733L;
 
   public FOMDateTime(QName qname) {
-    super(qname, null, (OMFactory)Factory.INSTANCE);
+    super(qname);
   }
   
   public FOMDateTime(QName qname, Date date) {

@@ -27,7 +27,7 @@ import org.apache.abdera.xpath.XPathException;
 
 public abstract class AbstractXPath 
   implements XPath {
-
+  
   private Map<String,String> namespaces = null;
   
   public Map<String, String> getDefaultNamespaces() {

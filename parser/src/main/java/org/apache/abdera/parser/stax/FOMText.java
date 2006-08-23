@@ -22,7 +22,6 @@ import java.net.URISyntaxException;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Text;
@@ -42,7 +41,7 @@ public class FOMText
   protected Type type = null;
   
   public FOMText(QName qname, Text.Type type) {
-    super(qname, null, (OMFactory)Factory.INSTANCE);
+    super(qname);
     init(type);
   }
   

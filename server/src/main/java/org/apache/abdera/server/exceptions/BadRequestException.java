@@ -15,34 +15,19 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.util;
+package org.apache.abdera.server.exceptions;
 
-import javax.xml.namespace.QName;
-
-import org.apache.abdera.filter.ParseFilter;
-
-/**
- * WhiteList Implementation of ParseFilter.  Only the 
- * QNames listed will be considered acceptable 
- */
-public class WhiteListParseFilter extends ParseFilter {
-
-  boolean listAttributesExplicitly = false;
+public class BadRequestException 
+  extends RequestException {
   
-  public WhiteListParseFilter() {}
-  
-  public WhiteListParseFilter(boolean listAttributesExplicitly) {
-    this.listAttributesExplicitly = listAttributesExplicitly;
-  }
-  
-  public boolean acceptable(QName qname) {
-    return contains(qname);
+  private static final long serialVersionUID = -3079456119154632842L;
+
+  public BadRequestException() {
+    super(400, null);
   }
 
-  public boolean acceptableAttribute(QName qname, QName attribute) {
-    return (listAttributesExplicitly) ? 
-      containsAttribute(qname, attribute) :
-      containsAttribute(qname, attribute) || acceptable(qname);
+  public BadRequestException(String text) {
+    super(400, text);
   }
-
+  
 }

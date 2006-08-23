@@ -23,6 +23,7 @@ import java.util.Date;
 
 import javax.activation.MimeType;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.ParseException;
@@ -47,16 +48,26 @@ public abstract class ResponseBase implements Response {
   protected InputStream in = null;
   protected Date response_date = null;
   protected Date now = new Date(); 
+  protected Abdera abdera = null;
+  protected Parser parser = null;
+  
+  protected synchronized Parser getParser() {
+    if (parser == null) {
+      if (abdera == null) abdera = new Abdera();
+      parser = abdera.getParser();
+    }
+    return parser;
+  }
   
   public <T extends Element>Document<T> getDocument() 
     throws ParseException {
-      return getDocument(Parser.INSTANCE);
+      return getDocument(getParser());
   }
   
   public <T extends Element>Document<T> getDocument(
     ParserOptions options) 
       throws ParseException {
-    return getDocument(Parser.INSTANCE, options);
+    return getDocument(getParser(), options);
   }
 
   public <T extends Element>Document<T> getDocument(

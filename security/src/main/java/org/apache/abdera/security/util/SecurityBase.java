@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.security.SecurityOptions;
@@ -31,6 +32,16 @@ import org.apache.xml.serialize.XMLSerializer;
 
 
 public abstract class SecurityBase {
+  
+  protected Abdera abdera = null;
+  
+  protected SecurityBase(Abdera abdera) {
+    this.abdera = abdera;
+  }
+  
+  protected Abdera getAbdera() {
+    return abdera;
+  }
   
   protected org.w3c.dom.Document fomToDom(
     Document doc, 

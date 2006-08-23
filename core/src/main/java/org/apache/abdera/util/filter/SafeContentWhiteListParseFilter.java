@@ -15,9 +15,11 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.util;
+package org.apache.abdera.util.filter;
 
 import javax.xml.namespace.QName;
+
+import org.apache.abdera.util.Constants;
 
 public class SafeContentWhiteListParseFilter 
   extends WhiteListParseFilter {

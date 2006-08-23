@@ -15,43 +15,18 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.parser.stax;
+package org.apache.abdera.server.exceptions;
 
-import java.util.Map;
+public class NotModifiedException 
+  extends AbderaServerException {
 
-import org.apache.abdera.Abdera;
-import org.apache.abdera.writer.NamedWriter;
-import org.apache.abdera.writer.Writer;
-import org.apache.abdera.writer.WriterFactory;
+  private static final long serialVersionUID = 1910787283945132627L;
 
-public class FOMWriterFactory 
-  implements WriterFactory {
-
-  private Abdera abdera = null;
-  
-  public FOMWriterFactory() {
-    this.abdera = new Abdera();
+  public NotModifiedException() {
+    super(304, null);
   }
   
-  public FOMWriterFactory(Abdera abdera) {
-    this.abdera = abdera;
+  public NotModifiedException(String text) {
+    super(304, text);
   }
-  
-  protected Abdera getAbdera() {
-    return abdera;
-  }
-  
-  public Writer getWriter() {
-    return getAbdera().getWriter();
-  }
-
-  public Writer getWriter(String name) {
-    return (name != null) ? 
-      loadWriters().get(name) : getWriter();
-  }
-
-  private Map<String,NamedWriter> loadWriters() {
-    return getAbdera().getConfiguration().getNamedWriters();
-  }
-  
 }

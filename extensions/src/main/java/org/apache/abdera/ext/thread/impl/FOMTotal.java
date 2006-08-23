@@ -21,7 +21,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.ext.thread.ThreadConstants;
 import org.apache.abdera.ext.thread.Total;
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.parser.stax.FOMElement;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
@@ -34,7 +33,7 @@ public class FOMTotal extends FOMElement implements Total {
   private static final long serialVersionUID = 241599118592917827L;
 
   public FOMTotal() {
-    super(ThreadConstants.THRTOTAL, null, (OMFactory)Factory.INSTANCE);
+    super(ThreadConstants.THRTOTAL);
   }
   
   public FOMTotal(

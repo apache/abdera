@@ -17,20 +17,32 @@
 */
 package org.apache.abdera.parser.stax;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.parser.NamedParser;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserFactory;
-import org.apache.abdera.util.ServiceUtil;
 
 public class FOMParserFactory 
   implements ParserFactory {
 
+  private Abdera abdera = null;
+  
+  public FOMParserFactory() {
+    this.abdera = new Abdera();
+  }
+  
+  public FOMParserFactory(Abdera abdera) {
+    this.abdera = abdera;
+  }
+  
+  protected Abdera getAbdera() {
+    return abdera;
+  }
+  
   public Parser getParser() {
-    return Parser.INSTANCE;
+    return getAbdera().getParser();
   }
 
   public Parser getParser(String name) {
@@ -38,18 +50,8 @@ public class FOMParserFactory
       loadParsers().get(name) : getParser();
   }
 
-  private static Map<String,NamedParser> parsers = null;
-  
-  public static Map<String,NamedParser> loadParsers() {
-    if (parsers == null) {
-      List<NamedParser> _parsers = 
-        ServiceUtil._loadimpls(
-          "META-INF/services/org.apache.abdera.parser.NamedParser");
-      parsers = new HashMap<String,NamedParser>();
-      for (NamedParser parser : _parsers) {
-        parsers.put(parser.getName(), parser);
-      }
-    }
-    return parsers;
+  private Map<String,NamedParser> loadParsers() {
+    return getAbdera().getConfiguration().getNamedParsers();
   }
+  
 }

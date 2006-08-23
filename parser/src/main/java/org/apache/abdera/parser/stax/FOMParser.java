@@ -23,6 +23,7 @@ import java.net.URI;
 
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
@@ -38,6 +39,14 @@ public class FOMParser
   extends AbstractParser 
   implements Parser {
 
+  public FOMParser() {
+    super();
+  }
+  
+  public FOMParser(Abdera abdera) {
+    super(abdera);
+  }
+  
   /**
    * The current set of default ParserOptions.
    *
@@ -49,9 +58,11 @@ public class FOMParser
     FOMFactory factory = 
       (options != null && options.getFactory() != null) ? 
         (FOMFactory)options.getFactory() : null;
-    if (factory == null)
-      factory = (Factory.INSTANCE instanceof FOMFactory) ? 
-        (FOMFactory)Factory.INSTANCE : new FOMFactory();
+    if (factory == null) {
+      Factory f = getFactory();
+      factory = (f instanceof FOMFactory) ? 
+        (FOMFactory)f : new FOMFactory();
+    }
     return factory;
   }
   

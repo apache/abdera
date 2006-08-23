@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Document;
@@ -55,6 +56,16 @@ import org.mortbay.jetty.servlet.ServletHandler;
 @SuppressWarnings("serial")
 public class AppTest extends JettyTest {
 
+  private static Abdera abdera = new Abdera();
+  
+  private static Factory getFactory() {
+    return abdera.getFactory();
+  }
+  
+  private static Parser getParser() {
+    return abdera.getParser();
+  }
+  
   private static ServletHandler handler = 
     JettyTest.getServletHandler(
       ServiceDocumentServlet.class.getName(), "/service",
@@ -65,7 +76,7 @@ public class AppTest extends JettyTest {
   
   private static Document<Service> init_service_document(String base) {
     try {
-      Service service = Factory.INSTANCE.newService();
+      Service service = getFactory().newService();
       Workspace workspace = service.addWorkspace("Test");
       workspace.addCollection("Entries", base + "/collections/entries").setAccept("entry");
       workspace.addCollection("Other", base + "/collections/other").setAccept("text/plain");
@@ -77,7 +88,7 @@ public class AppTest extends JettyTest {
   
   private static Document<Feed> init_entries_document(String base) {
     try {
-      Feed feed = Factory.INSTANCE.newFeed();
+      Feed feed = getFactory().newFeed();
       feed.setId(base + "/collections/entries");
       feed.setTitle("Entries");
       feed.setUpdated(new Date());
@@ -183,9 +194,9 @@ public class AppTest extends JettyTest {
             MimeType type = new MimeType(request.getContentType());
             String charset = type.getParameter("charset");
             String uri = AppTest.INSTANCE.getBase() + "/collections/entries";
-            ParserOptions options = Parser.INSTANCE.getDefaultParserOptions();
+            ParserOptions options = getParser().getDefaultParserOptions();
             options.setCharset(charset);
-            Document doc = Parser.INSTANCE.parse(request.getInputStream(), uri, options);
+            Document doc = getParser().parse(request.getInputStream(), uri, options);
             if (doc.getRoot() instanceof Entry) {
               Entry entry = (Entry) doc.getRoot().clone();
               String newID = AppTest.INSTANCE.getBase() + "/collections/entries/" + feed.getRoot().getEntries().size();
@@ -204,7 +215,7 @@ public class AppTest extends JettyTest {
           if (MimeTypeHelper.isMatch(request.getContentType(), "text/plain")) {
             int n = feed.getRoot().getEntries().size();
             String media = read(request.getInputStream());
-            Entry entry = Factory.INSTANCE.newEntry();
+            Entry entry = getFactory().newEntry();
             String newID = AppTest.INSTANCE.getBase() + "/collections/entries/" + n;
             String slug = request.getHeader("Slug");
             entry.setId(newID);
@@ -245,9 +256,9 @@ public class AppTest extends JettyTest {
                 MimeType type = new MimeType(request.getContentType());
                 String charset = type.getParameter("charset");
                 String uri = AppTest.INSTANCE.getBase() + "/collections/entries/" + target;
-                ParserOptions options = Parser.INSTANCE.getDefaultParserOptions();
+                ParserOptions options = getParser().getDefaultParserOptions();
                 options.setCharset(charset);
-                Document doc = Parser.INSTANCE.parse(request.getInputStream(), uri, options);
+                Document doc = getParser().parse(request.getInputStream(), uri, options);
                 if (doc.getRoot() instanceof Entry) {
                   Entry newentry = (Entry) doc.getRoot().clone();
                   if (newentry.getId().equals(entry.getId())) {
@@ -325,7 +336,7 @@ public class AppTest extends JettyTest {
   public void testAppClient() throws Exception {
     
     Client client = new CommonsClient();
-    Entry entry = Factory.INSTANCE.newEntry();
+    Entry entry = getFactory().newEntry();
     
     // do the introspection step
     Response response = client.get("http://localhost:8080/service");

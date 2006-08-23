@@ -21,7 +21,6 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
@@ -33,7 +32,6 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
-
 public class FOMService
   extends FOMExtensibleElement 
   implements Service {
@@ -41,7 +39,7 @@ public class FOMService
   private static final long serialVersionUID = 7982751563668891240L;
 
   public FOMService() {
-    super(Constants.SERVICE, new FOMDocument(), (OMFactory)Factory.INSTANCE);
+    super(Constants.SERVICE, new FOMDocument(), new FOMFactory());
   }
   
   public FOMService(

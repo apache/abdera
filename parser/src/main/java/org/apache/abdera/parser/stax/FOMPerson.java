@@ -22,7 +22,6 @@ import java.net.URISyntaxException;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.IRI;
 import org.apache.abdera.model.Person;
@@ -40,7 +39,7 @@ public class FOMPerson
   private static final long serialVersionUID = 2147684807662492625L; 
   
   public FOMPerson(QName qname) { 
-    super(qname, null, (OMFactory)Factory.INSTANCE);
+    super(qname);
   }
   
   public FOMPerson(

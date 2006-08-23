@@ -27,7 +27,6 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Source;
@@ -48,7 +47,7 @@ public class FOMFeed
   private static final long serialVersionUID = 4552921210185524535L;
   
   public FOMFeed() {
-    super(Constants.FEED, new FOMDocument(), (OMFactory)Factory.INSTANCE);
+    super(Constants.FEED, new FOMDocument(), new FOMFactory());
   }
   
   public FOMFeed(

@@ -25,7 +25,6 @@ import java.util.List;
 import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.DateTime;
@@ -53,7 +52,7 @@ public class FOMSource
   private static final long serialVersionUID = 9153127297531238021L; 
   
   public FOMSource() {
-    super(Constants.SOURCE, null, (OMFactory)Factory.INSTANCE);
+    super(Constants.SOURCE);
   }
   
   public FOMSource(

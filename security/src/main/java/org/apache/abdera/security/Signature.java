@@ -19,16 +19,9 @@ package org.apache.abdera.security;
 
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
-import org.apache.abdera.util.ServiceUtil;
-
 
 public interface Signature {
 
-  public static final Signature INSTANCE = 
-    (Signature) ServiceUtil.newInstance(
-      "org.apache.abdera.security.Signature", 
-      "org.apache.abdera.security.xmlsec.XmlSignature");
-  
   boolean isSigned(Entry entry) throws SecurityException;
   
   boolean isSigned(Feed feed) throws SecurityException;

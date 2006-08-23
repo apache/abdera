@@ -18,16 +18,9 @@
 package org.apache.abdera.security;
 
 import org.apache.abdera.model.Document;
-import org.apache.abdera.util.ServiceUtil;
-
 
 public interface Encryption {
 
-  public static final Encryption INSTANCE = 
-    (Encryption) ServiceUtil.newInstance(
-      "org.apache.abdera.security.Encryption", 
-      "org.apache.abdera.security.xmlsec.XmlEncryption");
-  
   Document encrypt(Document doc, EncryptionOptions options) throws SecurityException;
   
   Document decrypt(Document doc, EncryptionOptions options) throws SecurityException;

@@ -26,7 +26,6 @@ import javax.activation.MimeTypeParseException;
 import javax.activation.URLDataSource;
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
@@ -47,7 +46,7 @@ public class FOMContent
   protected Type type = null;
   
   public FOMContent(Content.Type type) {
-    super(Constants.CONTENT, null, (OMFactory)Factory.INSTANCE);
+    super(Constants.CONTENT);
     init(type);
   }
   

@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.filter.ParseFilter;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
@@ -28,7 +29,7 @@ import org.apache.abdera.model.Feed;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.util.Constants;
-import org.apache.abdera.util.WhiteListParseFilter;
+import org.apache.abdera.util.filter.WhiteListParseFilter;
 
 /**
  * Illustrates the use of optimized-parsing using the WhiteListParseFilter.
@@ -40,6 +41,8 @@ public class PrintTitles {
   public static void main(String args[]) {
     InputStream input;
 
+    Parser parser = Abdera.getNewParser();
+    
     try {
       input = new URL(args[0]).openStream();
     } catch (Exception e) {
@@ -47,7 +50,7 @@ public class PrintTitles {
       return;
     }
 
-    ParserOptions opts = Parser.INSTANCE.getDefaultParserOptions();
+    ParserOptions opts = parser.getDefaultParserOptions();
 
     ParseFilter filter = new WhiteListParseFilter();
     filter.add(Constants.FEED);
@@ -58,7 +61,7 @@ public class PrintTitles {
     Document<Feed> doc;
 
     try { 
-      doc = Parser.INSTANCE.parse(input, "", opts);
+      doc = parser.parse(input, "", opts);
     } catch (Exception e) {
       e.printStackTrace();
       return;

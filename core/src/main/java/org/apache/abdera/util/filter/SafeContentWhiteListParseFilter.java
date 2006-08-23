@@ -19,10 +19,11 @@ package org.apache.abdera.util.filter;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.filter.ParseFilter;
 import org.apache.abdera.util.Constants;
 
 public class SafeContentWhiteListParseFilter 
-  extends WhiteListParseFilter {
+  implements ParseFilter {
 
   private static enum xhtml_elements {
     a, abbr, acronym, address, area, b, big, blockquote, 
@@ -46,7 +47,6 @@ public class SafeContentWhiteListParseFilter
     vspace, width,
   };
   
-  @Override
   public boolean acceptable(QName qname) {
     if (qname.getNamespaceURI().equals(Constants.XHTML_NS)) {
       try {
@@ -59,8 +59,7 @@ public class SafeContentWhiteListParseFilter
     }
   }
 
-  @Override
-  public boolean acceptableAttribute(QName qname, QName attribute) {
+  public boolean acceptable(QName qname, QName attribute) {
     if (qname.getNamespaceURI().equals(Constants.XHTML_NS)) {
       try {
         String lp = attribute.getLocalPart();
@@ -76,25 +75,9 @@ public class SafeContentWhiteListParseFilter
       return true;
     }
   }
-  
-  @Override
-  public void add(QName qname) {
-    throw new UnsupportedOperationException();
-  }
 
-  @Override
-  public void addAttribute(QName parent, QName attribute) {
-    throw new UnsupportedOperationException();
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
   }
-
-  @Override
-  public boolean contains(QName qname) {
-    return acceptable(qname);
-  }
-
-  @Override
-  public boolean containsAttribute(QName qname, QName attribute) {
-    return acceptableAttribute(qname, attribute);
-  }
-
 }
+

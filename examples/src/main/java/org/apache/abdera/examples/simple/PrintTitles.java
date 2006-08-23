@@ -22,7 +22,7 @@ import java.net.URL;
 import java.util.List;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.filter.ParseFilter;
+import org.apache.abdera.filter.ListParseFilter;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
@@ -52,7 +52,7 @@ public class PrintTitles {
 
     ParserOptions opts = parser.getDefaultParserOptions();
 
-    ParseFilter filter = new WhiteListParseFilter();
+    ListParseFilter filter = new WhiteListParseFilter();
     filter.add(Constants.FEED);
     filter.add(Constants.ENTRY);
     filter.add(Constants.TITLE);

@@ -32,6 +32,7 @@ import org.apache.abdera.model.Feed;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.util.Constants;
+import org.apache.abdera.util.filter.NonOpTextFilter;
 
 public class TextFilterExample {
 
@@ -40,11 +41,12 @@ public class TextFilterExample {
     Parser parser = Abdera.getNewParser();
     
     // First create the text filter
-    TextFilter filter = new TextFilter() {
+    TextFilter filter = new NonOpTextFilter() {
       @Override
-      public String filterText(String text, Element element) {
+      public String applyFilter(char[] c, int start, int len, Element element) {
         QName qname = element.getQName();
         Base elparent = element.getParentElement();
+        String text = new String(c,start,len);
         if (Constants.NAME.equals(qname)) {
           text = "Jane Doe";
         } else if (Constants.TITLE.equals(qname) && elparent instanceof Entry) {

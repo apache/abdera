@@ -34,7 +34,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
-import org.apache.abdera.filter.ParseFilter;
+import org.apache.abdera.filter.ListParseFilter;
 import org.apache.abdera.filter.TextFilter;
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Base;
@@ -64,6 +64,7 @@ import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.util.Version;
 import org.apache.abdera.util.filter.BlackListParseFilter;
+import org.apache.abdera.util.filter.NonOpTextFilter;
 import org.apache.abdera.util.filter.WhiteListParseFilter;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
@@ -175,7 +176,7 @@ public class FOMTest extends TestCase   {
 
   public void testWhiteListParseFilter() throws Exception {
     
-    ParseFilter filter = new WhiteListParseFilter();
+    ListParseFilter filter = new WhiteListParseFilter();
     filter.add(Constants.FEED);
     filter.add(Constants.ENTRY);
     filter.add(Constants.TITLE);
@@ -209,7 +210,7 @@ public class FOMTest extends TestCase   {
   
   public void testBlackListParseFilter() throws Exception {
     
-    ParseFilter filter = new BlackListParseFilter();
+    ListParseFilter filter = new BlackListParseFilter();
     filter.add(Constants.UPDATED);
     ParserOptions options = getParser().getDefaultParserOptions();
     options.setParseFilter(filter);
@@ -241,11 +242,12 @@ public class FOMTest extends TestCase   {
   
   public void testTextFilter() throws Exception {
     
-    TextFilter filter = new TextFilter() {
+    TextFilter filter = new NonOpTextFilter() {
       @Override
-      public String filterText(String text, Element parent) {
+      public String applyFilter(char[] c, int start, int len, Element parent) {
         QName qname = parent.getQName();
         Base elparent = parent.getParentElement();
+        String text = new String(c,start,len);
         if (Constants.NAME.equals(qname)) {
           text = "Jane Doe";
         } else if (Constants.TITLE.equals(qname) && elparent instanceof Entry) {

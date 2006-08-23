@@ -19,18 +19,24 @@ package org.apache.abdera.util.filter;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.filter.ParseFilter;
 
 /**
  * WhiteList Implementation of ParseFilter.  Only the 
  * QNames listed will be considered acceptable 
  */
-public class WhiteListParseFilter extends ParseFilter {
+public class WhiteListParseFilter 
+  extends AbstractListParseFilter {
 
   boolean listAttributesExplicitly = false;
   
   public WhiteListParseFilter() {}
   
+  /**
+   * If listAttributesExplicity == true, attributes MUST be whitelisted 
+   * independently of the elements on which they appear, otherwise,
+   * all attributes will automatically be considered acceptable if 
+   * the containing element is considered acceptable.
+   */
   public WhiteListParseFilter(boolean listAttributesExplicitly) {
     this.listAttributesExplicitly = listAttributesExplicitly;
   }
@@ -39,10 +45,10 @@ public class WhiteListParseFilter extends ParseFilter {
     return contains(qname);
   }
 
-  public boolean acceptableAttribute(QName qname, QName attribute) {
+  public boolean acceptable(QName qname, QName attribute) {
     return (listAttributesExplicitly) ? 
-      containsAttribute(qname, attribute) :
-      containsAttribute(qname, attribute) || acceptable(qname);
+      contains(qname, attribute) && acceptable(qname) :
+      acceptable(qname);
   }
 
 }

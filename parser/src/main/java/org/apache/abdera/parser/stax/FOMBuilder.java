@@ -216,8 +216,20 @@ public class FOMBuilder
                   createComment();
                 break;
             case XMLStreamConstants.DTD:
-                if (!parserOptions.getIgnoreDoctype())
-                  createDTD();
+// Current StAX cursor model implementations inconsistently handle DTDs.  
+// Woodstox, for instance, does not provide a means of getting to the complete
+// doctype declaration (which is actually valid according to the spec, which 
+// is broken).  The StAX reference impl returns the complete doctype declaration
+// despite the fact that doing so is apparently against the spec.  We can get
+// to the complete declaration in Woodstox if we want to use their proprietary
+// extension APIs.  It's unclear how other Stax impls handle this. So.. for now,
+// we're just going to ignore the DTD.  The DTD will still be processed as far
+// as entities are concerned, but we will not be able to reserialize the parsed
+// document with the DTD.  Since very few folks actually use DTD's in feeds 
+// right now (and we should likely be encouraging folks not to do so), this 
+// shouldn't be that big of a problem
+//                if (!parserOptions.getIgnoreDoctype())
+//                  createDTD();
                 break;
             case XMLStreamConstants.PROCESSING_INSTRUCTION:
                 if (!parserOptions.getIgnoreProcessingInstructions())

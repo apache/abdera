@@ -15,17 +15,35 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server.exceptions;
+package org.apache.abdera.server;
 
-public class NotFoundException extends ExistenceException {
+import org.apache.abdera.Abdera;
+import org.apache.abdera.util.ServiceUtil;
+
+public class AbderaServer {
+
+  public static final String HANDLER_FACTORY = "org.apache.abdera.server.RequestHandlerFactory";
   
-  private static final long serialVersionUID = -3161208634818367903L;
-
-  public NotFoundException() {
-    super(404, null);
+  private Abdera abdera = null;
+  private RequestHandlerFactory handlerFactory = null;
+  
+  public AbderaServer() {
+    abdera = new Abdera();
   }
-
-  public NotFoundException(String text) {
-    super(404, text);
+  
+  public AbderaServer(Abdera abdera) {
+    this.abdera = abdera;
   }
+  
+  public RequestHandlerFactory newRequestHandlerFactory() {
+    return (RequestHandlerFactory) ServiceUtil.newInstance(
+      HANDLER_FACTORY, "", abdera);
+  }
+  
+  public RequestHandlerFactory getRequestHandlerFactory() {
+    if (handlerFactory == null)
+      handlerFactory = newRequestHandlerFactory();
+    return handlerFactory;
+  }
+  
 }

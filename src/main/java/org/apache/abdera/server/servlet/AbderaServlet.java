@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.abdera.server.AbderaServer;
 import org.apache.abdera.server.RequestContext;
 import org.apache.abdera.server.RequestHandler;
 import org.apache.abdera.server.RequestHandlerFactory;
@@ -39,6 +40,8 @@ public class AbderaServlet
 
   private static final long serialVersionUID = -4273782501412352619L;
 
+  private AbderaServer abderaServer = new AbderaServer();
+  
   @Override
   protected void service(
     HttpServletRequest request, 
@@ -48,7 +51,7 @@ public class AbderaServlet
     ResponseContext responseContext = null;
     RequestHandler handler = null;
     try {
-      RequestHandlerFactory factory = RequestHandlerFactory.INSTANCE;            // TODO: improve this
+      RequestHandlerFactory factory = abderaServer.newRequestHandlerFactory();
       if (factory != null)
         handler = factory.newRequestHandler(requestContext);
       if (handler != null) {

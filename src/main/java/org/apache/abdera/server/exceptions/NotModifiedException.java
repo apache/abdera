@@ -17,15 +17,16 @@
 */
 package org.apache.abdera.server.exceptions;
 
-public class NotFoundException extends ExistenceException {
-  
-  private static final long serialVersionUID = -3161208634818367903L;
+public class NotModifiedException 
+  extends AbderaServerException {
 
-  public NotFoundException() {
-    super(404, null);
+  private static final long serialVersionUID = 1910787283945132627L;
+
+  public NotModifiedException() {
+    super(304, null);
   }
-
-  public NotFoundException(String text) {
-    super(404, text);
+  
+  public NotModifiedException(String text) {
+    super(304, text);
   }
 }

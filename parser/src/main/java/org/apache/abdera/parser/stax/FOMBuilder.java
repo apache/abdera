@@ -122,7 +122,7 @@ public class FOMBuilder
     return (filter != null) ? 
       (!attribute) ? 
          filter.acceptable(qname) : 
-         filter.acceptableAttribute(parser.getName(), qname): 
+         filter.acceptable(parser.getName(), qname): 
       true;
   }
   
@@ -133,7 +133,11 @@ public class FOMBuilder
       if (filter != null) {
         String value = parser.getText();
         if (!lastNode.isComplete())
-          value = filter.filterText(value, (Element)lastNode);
+          value = filter.applyFilter(
+            parser.getTextCharacters(), 
+            parser.getTextStart(), 
+            parser.getTextLength(), 
+            (Element)lastNode);
         return createOMText(value, type);
       }
     }
@@ -144,7 +148,7 @@ public class FOMBuilder
     if (parserOptions != null) { 
       TextFilter filter = parserOptions.getTextFilter();
       if (filter != null) {
-        return filter.filterAttributeText(value, attribute, parent);
+        return filter.applyFilter(value, parent, attribute);
       }
     }
     return value;

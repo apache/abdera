@@ -15,32 +15,18 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.util.filter;
+package org.apache.abdera.filter;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.filter.TextFilter;
-import org.apache.abdera.model.Element;
+public interface ListParseFilter extends ParseFilter {
 
-public class NonOpTextFilter 
-  implements TextFilter {
+  public abstract void add(QName qname);
 
-  public String applyFilter(
-    char[] c, 
-    int start, 
-    int len, 
-    Element parent) {
-      return new String(c,start,len);
-  }
+  public abstract boolean contains(QName qname);
 
-  public String applyFilter(
-    String value,
-    Element parent, 
-    QName attribute) {
-      return value;
-  }
+  public abstract void add(QName parent, QName attribute);
 
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
-  }
+  public abstract boolean contains(QName qname, QName attribute);
+  
 }

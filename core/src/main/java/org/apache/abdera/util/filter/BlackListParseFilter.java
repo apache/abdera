@@ -19,19 +19,20 @@ package org.apache.abdera.util.filter;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.filter.ParseFilter;
 
 /**
- * BlackList Implementation of ParseFilter.  The 
- * QNames listed will be considered unacceptable 
+ * BlackList Implementation of ParseFilter.  The QNames listed will be 
+ * considered unacceptable.  In general, black list based filtering is 
+ * problematic, at best, due largely to the fact that it's easier to 
+ * define safe subsets of elements than it is to define unsafe subsets. 
  */
-public class BlackListParseFilter extends ParseFilter {
+public class BlackListParseFilter extends AbstractListParseFilter {
 
   public boolean acceptable(QName qname) {
     return !contains(qname);
   }
 
-  public boolean acceptableAttribute(QName qname, QName attribute) {
-    return !containsAttribute(qname, attribute);
+  public boolean acceptable(QName qname, QName attribute) {
+    return !contains(qname, attribute);
   }
 }

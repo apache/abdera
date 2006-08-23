@@ -17,11 +17,6 @@
 */
 package org.apache.abdera.filter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.xml.namespace.QName;
 
 /**
@@ -29,47 +24,19 @@ import javax.xml.namespace.QName;
  * within a parsed document.  They are set via the ParserOptions.setParseFilter
  * method.
  */
-public abstract class ParseFilter implements Cloneable {
+public interface ParseFilter extends Cloneable {
   
-  private List<QName> qnames = null;
-  private Map<QName,List<QName>> attributes = null;
+  public Object clone() throws CloneNotSupportedException;
+
+  /**
+   * Returns true if elements with the given QName are acceptable
+   */
+  public boolean acceptable(QName qname);
   
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
-  }
+  /**
+   * Returns true if attributes with the given qname appearing on elements
+   * with the given qname are acceptable
+   */
+  public boolean acceptable(QName qname, QName attribute);
   
-  public void add(QName qname) {
-    if (qnames == null) qnames = new ArrayList<QName>();
-    if (!contains(qname)) qnames.add(qname);
-  }
-
-  public boolean contains(QName qname) {
-    if (qnames == null) qnames = new ArrayList<QName>();
-    return qnames.contains(qname);
-  }
-
-  public void addAttribute(QName parent, QName attribute) {
-    if (attributes == null) attributes = new HashMap<QName,List<QName>>();
-    if (attributes.containsKey(parent)) {
-      List<QName> attrs = attributes.get(parent);
-      if (!attrs.contains(attribute)) attrs.add(attribute);
-    } else {
-      List<QName> attrs = new ArrayList<QName>();
-      attrs.add(attribute);
-      attributes.put(parent, attrs);
-    }
-  }
-
-  public boolean containsAttribute(QName qname, QName attribute) {
-    if (attributes == null) attributes = new HashMap<QName,List<QName>>();
-    if (attributes.containsKey(qname)) {
-      List<QName> attrs = attributes.get(qname);
-      return attrs.contains(attribute);
-    } else {
-      return false;
-    }
-  }
-
-  public abstract boolean acceptable(QName qname);
-  public abstract boolean acceptableAttribute(QName qname, QName attribute);
 }

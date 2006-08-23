@@ -22,7 +22,7 @@ import java.net.URI;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.filter.ParseFilter;
+import org.apache.abdera.filter.ListParseFilter;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.parser.Parser;
@@ -40,7 +40,7 @@ public class UnacceptableElementsExample {
      * By subclassing BlackListParseFilter, we can throw an error 
      * when the parsed XML contains any content we don't want
      */
-    ParseFilter exceptionFilter = new BlackListParseFilter() {
+    ListParseFilter exceptionFilter = new BlackListParseFilter() {
       @Override
       public boolean acceptable(QName qname) {
         boolean answer = super.acceptable(qname);
@@ -51,7 +51,7 @@ public class UnacceptableElementsExample {
       }
 
       @Override
-      public boolean acceptableAttribute(QName qname, QName attribute) {
+      public boolean acceptable(QName qname, QName attribute) {
         return true;
       }
     };

@@ -37,7 +37,7 @@ import org.apache.abdera.filter.ParseFilter;
  * </pre>
  */
 public class CompoundParseFilter 
-  extends ParseFilter {
+  implements ParseFilter {
 
   public enum Condition {
     ACCEPTABLE_TO_ALL, 
@@ -63,7 +63,6 @@ public class CompoundParseFilter
     return (filters != null) ? filters : empty;
   }
   
-  @Override
   public boolean acceptable(QName qname) {
     for (ParseFilter filter : getFilters()) {
       if (filter.acceptable(qname)) {
@@ -85,10 +84,9 @@ public class CompoundParseFilter
     return true;
   }
 
-  @Override
-  public boolean acceptableAttribute(QName qname, QName attribute) {
+  public boolean acceptable(QName qname, QName attribute) {
     for (ParseFilter filter : getFilters()) {
-      if (filter.acceptableAttribute(qname,attribute)) {
+      if (filter.acceptable(qname,attribute)) {
         switch(condition) {
           case ACCEPTABLE_TO_ANY:
             return true;
@@ -107,30 +105,7 @@ public class CompoundParseFilter
     return true;
   }
 
-  @Override
-  public void add(QName qname) {
-    throw new UnsupportedOperationException();
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
   }
-
-  @Override
-  public void addAttribute(QName parent, QName attribute) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public boolean contains(QName qname) {
-    for (ParseFilter filter : getFilters()) {
-      if (filter.contains(qname)) return true;
-    }
-    return false;
-  }
-
-  @Override
-  public boolean containsAttribute(QName qname, QName attribute) {
-    for (ParseFilter filter : getFilters()) {
-      if (filter.containsAttribute(qname,attribute)) return true;
-    }
-    return false;
-  }
-
 }

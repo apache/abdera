@@ -24,11 +24,14 @@ public class TestSuite extends junit.framework.TestSuite {
   public static void main(String[] args)
   {
     junit.textui.TestRunner.run(new TestSuite());
+    try {
+      JettyUtil.stop();
+    } catch (Exception e) {}
   }
 
   public TestSuite()
   {
-    //addTestSuite(CacheTest.class);
+    addTestSuite(CacheTest.class);
     addTestSuite(AppTest.class);
   }
 }

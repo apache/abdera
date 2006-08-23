@@ -17,40 +17,33 @@
 */
 package org.apache.abdera.test.client;
 
-import org.mortbay.jetty.servlet.ServletHandler;
-
 import junit.framework.TestCase;
 
 public abstract class JettyTest extends TestCase {
   
-  protected int numtests = 0;
-  protected int testsrun = 0;
+  protected JettyTest() {}
   
-  protected JettyTest(int numtests) {
-    this.numtests = numtests;
-  }
-  
-  protected static ServletHandler getServletHandler(String... servletMappings) {
-    ServletHandler handler = new ServletHandler();
+  protected static void getServletHandler(String... servletMappings) {
     for (int n = 0; n < servletMappings.length; n = n + 2) {
       String name = servletMappings[n];
       String root = servletMappings[n+1];
-      handler.addServletWithMapping(name, root);
+      JettyUtil.addServlet(name, root);
     }
-    try {
-      JettyUtil.addHandler(handler);
-    } catch (Exception e) {}
-    return handler;
   }
     
-  protected abstract ServletHandler getServletHandler();
+  protected abstract void getServletHandler();
   
   protected String getBase() {
     return "http://localhost:" + JettyUtil.getPort();
   }
   
+  @Override
+  protected void setUp() throws Exception {
+    getServletHandler();
+    JettyUtil.start();
+  }
+
   public void tearDown() throws Exception {
-    if (++testsrun == numtests)
-      JettyUtil.removeHandler(getServletHandler());
+    //JettyUtil.stop();
   }
 }

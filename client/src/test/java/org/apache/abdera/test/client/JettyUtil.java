@@ -17,13 +17,9 @@
 */
 package org.apache.abdera.test.client;
 
-import javax.servlet.http.HttpServlet;
-
 import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
-import org.mortbay.jetty.handler.HandlerWrapper;
 import org.mortbay.jetty.servlet.ServletHandler;
 
 public class JettyUtil {
@@ -32,6 +28,7 @@ public class JettyUtil {
   
   private static int PORT = 8080;
   private static Server server = null;
+  private static ServletHandler handler = null;
   
   public static int getPort() {
     if (System.getProperty(PORT_PROP) != null) {
@@ -45,59 +42,31 @@ public class JettyUtil {
     Connector connector = new SocketConnector();
     connector.setPort(getPort());
     server.setConnectors(new Connector[]{connector});
-    server.setHandler(new HandlerWrapper());
+    handler = new ServletHandler();
+    server.setHandler(handler);
+  }
+  
+  public static void addServlet(String path, String _class) {
+    try {
+      if (server == null) initServer();
+    } catch (Exception e) {}
+    handler.addServletWithMapping(path, _class);
+  }
+  
+  public static void start() throws Exception {
+    if (server == null) initServer();
+    if (server.isRunning()) return;
     server.start();
   }
   
-  public static void addHandler(ServletHandler handler) throws Exception {
-    if (server == null) initServer();
-    if (hasHandler(handler)) return;
-    server.addHandler(handler);
-  }
-  
-  private static boolean hasHandler(ServletHandler handler) throws Exception {
-    if (server == null || server.getHandlers() == null) return false;
-    for (Handler h : server.getHandlers()) {
-      if (h.equals(handler)) return true;
-    }
-    return false;
-  }
-  
-  public static void removeHandler(ServletHandler handler) throws Exception {
+  public static void stop() throws Exception {
     if (server == null) return;
-    if (handler.isRunning()) handler.stop();
-    server.removeHandler(handler);
-    if (server.getHandlers().length == 1) {
-      server.removeHandler(server.getHandler());
-      server.stop();
-      server = null;
-    }
+    server.stop();
+    server = null;
   }
   
   public static boolean isRunning() {
     return (server != null);
   }
   
-  public static void main(String[] args) throws Exception {
-    
-    ServletHandler handler1 = new ServletHandler();
-    handler1.addServletWithMapping(TestServlet.class, "/foo");
-    System.out.println(JettyUtil.isRunning());
-    JettyUtil.addHandler(handler1);
-    System.out.println(JettyUtil.isRunning());
-    
-    ServletHandler handler2 = new ServletHandler();
-    handler2.addServletWithMapping(TestServlet.class, "/bar");
-    System.out.println(JettyUtil.isRunning());
-    JettyUtil.addHandler(handler2);
-    System.out.println(JettyUtil.isRunning());
-    
-    JettyUtil.removeHandler(handler1);
-    System.out.println(JettyUtil.isRunning());
-    JettyUtil.removeHandler(handler2);
-    System.out.println(JettyUtil.isRunning());
-  }
-  
-  @SuppressWarnings("serial")
-  private static class TestServlet extends HttpServlet {}
 }

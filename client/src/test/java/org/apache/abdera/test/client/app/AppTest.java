@@ -48,7 +48,6 @@ import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.Response;
 import org.apache.abdera.test.client.JettyTest;
 import org.apache.abdera.util.MimeTypeHelper;
-import org.mortbay.jetty.servlet.ServletHandler;
 
 /**
  * Test to make sure that we can operate as a simple APP client
@@ -65,12 +64,6 @@ public class AppTest extends JettyTest {
   private static Parser getParser() {
     return abdera.getParser();
   }
-  
-  private static ServletHandler handler = 
-    JettyTest.getServletHandler(
-      ServiceDocumentServlet.class.getName(), "/service",
-      CollectionServlet.class.getName(), "/collections/*"
-    );
   
   private static AppTest INSTANCE = null;
   
@@ -109,9 +102,10 @@ public class AppTest extends JettyTest {
       HttpServletRequest request, 
       HttpServletResponse response) 
         throws ServletException, IOException {
-      response.setStatus(HttpServletResponse.SC_OK);
-      response.setContentType("application/atomserv+xml; charset=utf-8");
-      service.writeTo(response.getOutputStream());
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/atomserv+xml; charset=utf-8");
+        service.writeTo(response.getOutputStream());
     }
   }
   
@@ -325,22 +319,25 @@ public class AppTest extends JettyTest {
   }
   
   public AppTest() {
-    super(1);
     AppTest.INSTANCE = this;
   }
   
-  protected ServletHandler getServletHandler() {
-    return AppTest.handler;
+  protected void getServletHandler() {
+      getServletHandler(
+        ServiceDocumentServlet.class.getName(), "/service",
+        CollectionServlet.class.getName(), "/collections/*"
+      );
   }  
   
   public void testAppClient() throws Exception {
     
     Client client = new CommonsClient();
     Entry entry = getFactory().newEntry();
-    
+    RequestOptions options = client.getDefaultRequestOptions();
+    options.setHeader("Connection", "close");
     // do the introspection step
-    Response response = client.get("http://localhost:8080/service");
-    assertEquals(200,response.getStatus());
+    Response response = client.get("http://localhost:8080/service",options);
+    assertEquals(response.getStatus(),200);
     Document<Service> service_doc = response.getDocument();
     assertNotNull(service_doc);
     assertEquals(1,service_doc.getRoot().getWorkspaces().size());
@@ -354,7 +351,7 @@ public class AppTest extends JettyTest {
     String col_uri = getBase() + "/collections/entries";
     
     // post a new entry
-    response = client.post(col_uri, entry);
+    response = client.post(col_uri, entry, options);
     assertEquals(201, response.getStatus());
     assertNotNull(response.getLocation());
     assertNotNull(response.getContentLocation());
@@ -362,13 +359,13 @@ public class AppTest extends JettyTest {
     String self_uri = response.getLocation();
     
     // get the collection to see if our entry is there
-    response = client.get(col_uri);
+    response = client.get(col_uri, options);
     assertEquals(200, response.getStatus());
     Document<Feed> feed_doc = response.getDocument();
     assertEquals(feed_doc.getRoot().getEntries().size(), 1);
     
     // get the entry to see if we can get it
-    response = client.get(self_uri);
+    response = client.get(self_uri, options);
     assertEquals(200, response.getStatus());
     Document<Entry> entry_doc = response.getDocument();
     assertEquals(entry_doc.getRoot().getId().toString(), self_uri); // this isn't always true in real life, but for our tests they are the same
@@ -382,21 +379,21 @@ public class AppTest extends JettyTest {
     entry.setTitle("New title");
     
     // submit the changed entry back to the server
-    response = client.put(edit_uri, entry);
+    response = client.put(edit_uri, entry, options);
     assertEquals(204, response.getStatus());
 
     // check to see if the entry was modified properly
-    response = client.get(self_uri);
+    response = client.get(self_uri, options);
     assertEquals(200, response.getStatus());
     entry_doc = response.getDocument();
     assertEquals(entry_doc.getRoot().getTitle(), "New title");
     
     // delete the entry
-    response = client.delete(edit_uri);
+    response = client.delete(edit_uri, options);
     assertEquals(204, response.getStatus());
     
     // is it gone?
-    response = client.get(self_uri);
+    response = client.get(self_uri, options);
     assertEquals(404, response.getStatus());
     
     // YAY! We're a working APP client
@@ -404,8 +401,9 @@ public class AppTest extends JettyTest {
     // Now let's try to do a media post
     
     // Post the media resource
-    RequestOptions options = new RequestOptions();
+    options = client.getDefaultRequestOptions();
     options.setContentType("text/plain");
+    options.setHeader("Connection", "close");
     response = client.post(col_uri, new ByteArrayInputStream("test".getBytes()), options);
     assertEquals(201, response.getStatus());
     assertNotNull(response.getLocation());
@@ -414,7 +412,9 @@ public class AppTest extends JettyTest {
     self_uri = response.getLocation();
 
     // was an entry created?
-    response = client.get(self_uri);
+    options = client.getDefaultRequestOptions();
+    options.setHeader("Connection", "close");
+    response = client.get(self_uri, options);
     assertEquals(200, response.getStatus());
     entry_doc = response.getDocument();
     assertEquals(entry_doc.getRoot().getId().toString(), self_uri); // this isn't always true in real life, but for our tests they are the same
@@ -430,7 +430,10 @@ public class AppTest extends JettyTest {
     entry.setTitle("New title");
     
     // submit the changes
-    response = client.put(edit_uri, entry);
+    options = client.getDefaultRequestOptions();
+    options.setContentType("application/atom+xml");
+    options.setHeader("Connection", "close");
+    response = client.put(edit_uri, entry, options);
     assertEquals(204, response.getStatus());
 
     // get the media resource
@@ -440,21 +443,24 @@ public class AppTest extends JettyTest {
     assertEquals(mediavalue,"test");
     
     // edit the media resource
+    options = client.getDefaultRequestOptions();
+    options.setHeader("Connection", "close");
+    options.setContentType("text/plain");
     response = client.put(edit_media, new ByteArrayInputStream("TEST".getBytes()), options);
     assertEquals(204, response.getStatus());
 
     // was the resource changed?
-    response = client.get(media);
+    response = client.get(media, options);
     assertEquals(200, response.getStatus());
     mediavalue = read(response.getInputStream());
     assertEquals(mediavalue,"TEST");
     
     // delete the entry
-    response = client.delete(edit_uri);
+    response = client.delete(edit_uri, options);
     assertEquals(204, response.getStatus());
     
     // is the entry gone?
-    response = client.get(self_uri);
+    response = client.get(self_uri, options);
     assertEquals(404, response.getStatus());
 
     // is the media resource gone?

@@ -49,14 +49,6 @@ import javax.servlet.ServletException;
  */
 @SuppressWarnings("serial")
 public class CacheTest extends JettyTest {
-
-  private static ServletHandler handler = 
-    JettyTest.getServletHandler(
-      "org.apache.abdera.test.client.cache.CacheTest$CheckCacheInvalidateServlet","/check_cache_invalidate",
-      "org.apache.abdera.test.client.cache.CacheTest$NoCacheServlet", "/no_cache",
-      "org.apache.abdera.test.client.cache.CacheTest$AuthServlet", "/auth",
-      "org.apache.abdera.test.client.cache.CacheTest$CheckMustRevalidateServlet", "/must_revalidate"
-    );
   
   private static String CHECK_CACHE_INVALIDATE;
   private static String CHECK_NO_CACHE;
@@ -64,7 +56,6 @@ public class CacheTest extends JettyTest {
   private static String CHECK_MUST_REVALIDATE;
   
   public CacheTest() {
-    super(11);
     String base = getBase();
     CHECK_CACHE_INVALIDATE = base + "/check_cache_invalidate";
     CHECK_NO_CACHE = base + "/no_cache";
@@ -72,8 +63,13 @@ public class CacheTest extends JettyTest {
     CHECK_MUST_REVALIDATE = base + "/must_revalidate";
   }
   
-  protected ServletHandler getServletHandler() {
-    return CacheTest.handler;
+  protected void getServletHandler() {
+    getServletHandler(
+        "org.apache.abdera.test.client.cache.CacheTest$CheckCacheInvalidateServlet","/check_cache_invalidate",
+        "org.apache.abdera.test.client.cache.CacheTest$NoCacheServlet", "/no_cache",
+        "org.apache.abdera.test.client.cache.CacheTest$AuthServlet", "/auth",
+        "org.apache.abdera.test.client.cache.CacheTest$CheckMustRevalidateServlet", "/must_revalidate"
+      );
   }
   
   public static class CheckMustRevalidateServlet extends HttpServlet {
@@ -83,18 +79,20 @@ public class CacheTest extends JettyTest {
       {
       String reqnum = request.getHeader("X-Reqnum");
       int req = Integer.parseInt(reqnum);
-      response.setContentType("text/plain");
       if (req == 1) {
         response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("text/plain");
         response.setHeader("Cache-Control", "must-revalidate");
         response.setDateHeader("Date", System.currentTimeMillis());      
         response.getWriter().println(reqnum);
+        response.getWriter().close();
       } else if (req == 2) {
         response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+        response.setContentType("text/plain");
         response.setDateHeader("Date", System.currentTimeMillis());
         return;
       } else if (req == 3) {
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         response.setDateHeader("Date", System.currentTimeMillis());
         return;
       }
@@ -107,14 +105,16 @@ public class CacheTest extends JettyTest {
       throws ServletException, IOException
     {
       String reqnum = request.getHeader("X-Reqnum");
-
-      response.setContentType("text/plain");
       response.setStatus(HttpServletResponse.SC_OK);
-      response.setHeader("Cache-Control", "max-age=60");
       response.setDateHeader("Date", System.currentTimeMillis());
-
+      response.setContentType("text/plain");
+      response.setHeader("Cache-Control", "max-age=60");
       response.getWriter().println(reqnum);
+      response.getWriter().close();
     }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
   }
 
   public static class NoCacheServlet extends HttpServlet {
@@ -135,6 +135,7 @@ public class CacheTest extends JettyTest {
       response.setDateHeader("Date", System.currentTimeMillis());
 
       response.getWriter().println(reqnum);
+      response.getWriter().close();
     }
   }
   
@@ -145,7 +146,6 @@ public class CacheTest extends JettyTest {
     {
       String reqnum = request.getHeader("X-Reqnum");
       int num = Integer.parseInt(reqnum);
-      response.setContentType("text/plain");
       switch (num) {
         case 1: response.setStatus(HttpServletResponse.SC_OK); break;
         case 2: response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); break;
@@ -153,7 +153,9 @@ public class CacheTest extends JettyTest {
           response.setStatus(HttpServletResponse.SC_OK); break;
       }
       response.setDateHeader("Date", System.currentTimeMillis());
+      response.setContentType("text/plain");
       response.getWriter().println(reqnum);
+      response.getWriter().close();
     }
   }
   
@@ -164,109 +166,108 @@ public class CacheTest extends JettyTest {
   private static final int DELETE = 4;
   private static final int PUT = 5;
   
-  public static void testRequestNoStore() throws Exception {
+  public void testRequestNoStore() throws Exception {
     _requestCacheInvalidation(NOSTORE);
   }
 
-  public static void testRequestNoCache() throws Exception {
+  public void testRequestNoCache() throws Exception {
     _requestCacheInvalidation(NOCACHE);    
   }
   
-  public static void testRequestMaxAge0() throws Exception {
+  public void testRequestMaxAge0() throws Exception {
     _requestCacheInvalidation(MAXAGE0);
   }
 
-  public static void testResponseNoStore() throws Exception {
+  public void testResponseNoStore() throws Exception {
     _responseNoCache(NOSTORE);
   }
 
-  public static void testResponseNoCache() throws Exception {
+  public void testResponseNoCache() throws Exception {
     _responseNoCache(NOCACHE);
   }
   
-  public static void testResponseMaxAge0() throws Exception {
+  public void testResponseMaxAge0() throws Exception {
     _responseNoCache(MAXAGE0);
   }
   
-  public static void testPostInvalidates() throws Exception {
+  public void testPostInvalidates() throws Exception {
     _methodInvalidates(POST);
   }
 
-  public static void testPutInvalidates() throws Exception {
+  public void testPutInvalidates() throws Exception {
     _methodInvalidates(PUT);
   }
   
-  public static void testDeleteInvalidates() throws Exception {
+  public void testDeleteInvalidates() throws Exception {
     _methodInvalidates(DELETE);
   }
   
-  public static void testAuthForcesRevalidation() throws Exception {
+  public void testAuthForcesRevalidation() throws Exception {
     
-    // the revalidatewithauth mechanism allows us to revalidate the 
-    // cache when authentication is used, meaning that we'll only
-    // be served data from the cache if our authentication credentials
-    // are valid.
+//TODO: Actually need to rethink this.  Responses to authenticated requests 
+//      should never be cached unless the resource is explicitly marked as
+//      being cacheable (e.g. using Cache-Control: public). So this test 
+//      was testing incorrect behavior. 
     
-    // unfortunately, this only works for preemptive auth and auth using
-    // the RequestOptions.setAuthorization method.  I'm not quite sure
-    // yet how to plug into httpclient's built in auth mechanisms to 
-    // ensure we can invalidate the cache.    
-    
-    Client client = new CommonsClient();
-    client.usePreemptiveAuthentication(true);
-    client.addCredentials(CHECK_AUTH, null, null, new UsernamePasswordCredentials("james","snell"));
-    RequestOptions options = client.getDefaultRequestOptions();
-    options.setRevalidateWithAuth(true);
-    options.setHeader("x-reqnum", "1");
-    Response response = client.get(CHECK_AUTH, options);
-  
-    // first request works as expected. fills the cache
-    String resp1 = getResponse(response.getInputStream());
-    assertEquals(resp1, "1");
-
-    // second request uses authentication, should force revalidation of the cache
-    options.setHeader("x-reqnum", "2");
-    response = client.get(CHECK_AUTH, options);
-  
-    resp1 = getResponse(response.getInputStream());
-    assertEquals(response.getStatus(), HttpServletResponse.SC_UNAUTHORIZED);
-    assertEquals(resp1, "2");
-
-    // third request does not use authentication, but since the previous request
-    // resulted in an "unauthorized" response, the cache needs to be refilled
-    options.setHeader("x-reqnum", "3");
-    client.usePreemptiveAuthentication(false);
-    response = client.get(CHECK_AUTH, options);
-  
-    resp1 = getResponse(response.getInputStream());
-    assertEquals(response.getStatus(), HttpServletResponse.SC_OK);
-    assertEquals(resp1, "3");  
-
-    // fourth request does not use authentication, will pull from the cache
-    options.setHeader("x-reqnum", "4");
-    response = client.get(CHECK_AUTH, options);
-  
-    resp1 = getResponse(response.getInputStream());
-    assertEquals(response.getStatus(), HttpServletResponse.SC_OK);
-    assertEquals(resp1, "3");  
-    
-    // fifth request uses authentication, will force revalidation
-    options.setAuthorization("Basic amFtZXM6c25lbGw=");
-    options.setHeader("x-reqnum", "5");
-    response = client.get(CHECK_AUTH, options);
-    
-    resp1 = getResponse(response.getInputStream());
-    assertEquals(response.getStatus(), HttpServletResponse.SC_OK);
-    assertEquals(resp1, "5");
+//    Client client = new CommonsClient();
+//    client.usePreemptiveAuthentication(true);
+//    client.addCredentials(CHECK_AUTH, null, null, new UsernamePasswordCredentials("james","snell"));
+//    RequestOptions options = client.getDefaultRequestOptions();
+//    options.setHeader("Connection", "close");
+//    options.setRevalidateWithAuth(true);
+//    options.setHeader("x-reqnum", "1");
+//    Response response = client.get(CHECK_AUTH, options);
+//  
+//    // first request works as expected. fills the cache
+//    String resp1 = getResponse(response);
+//    assertEquals(resp1, "1");
+//
+//    // second request uses authentication, should force revalidation of the cache
+//    options.setHeader("x-reqnum", "2");
+//    response = client.get(CHECK_AUTH, options);
+//  
+//    resp1 = getResponse(response);
+//    assertEquals(response.getStatus(), HttpServletResponse.SC_UNAUTHORIZED);
+//    assertEquals(resp1, "2");
+//
+//    // third request does not use authentication, but since the previous request
+//    // resulted in an "unauthorized" response, the cache needs to be refilled
+//    options.setHeader("x-reqnum", "3");
+//    client.usePreemptiveAuthentication(false);
+//    response = client.get(CHECK_AUTH, options);
+//  
+//    resp1 = getResponse(response);
+//    assertEquals(response.getStatus(), HttpServletResponse.SC_OK);
+//    assertEquals(resp1, "3");  
+//
+//    // fourth request does not use authentication, will pull from the cache
+//    options = client.getDefaultRequestOptions();
+//    options.setHeader("x-reqnum", "4");
+//    client.usePreemptiveAuthentication(false);
+//    response = client.get(CHECK_AUTH, options);
+//  
+//    resp1 = getResponse(response);
+//    assertEquals(response.getStatus(), HttpServletResponse.SC_OK);
+//    assertEquals(resp1, "3");  
+//    
+//    // fifth request uses authentication, will force revalidation
+//    options.setAuthorization("Basic amFtZXM6c25lbGw=");
+//    options.setHeader("x-reqnum", "5");
+//    response = client.get(CHECK_AUTH, options);
+//    
+//    resp1 = getResponse(response);
+//    assertEquals(response.getStatus(), HttpServletResponse.SC_OK);
+//    assertEquals(resp1, "5");
   }
   
-  public static void testResponseMustRevalidate() throws Exception {
+  public void testResponseMustRevalidate() throws Exception {
     Client client = new CommonsClient();
     RequestOptions options = client.getDefaultRequestOptions();
+    options.setHeader("Connection", "close");
     options.setHeader("x-reqnum", "1");
     Response response = client.get(CHECK_MUST_REVALIDATE, options);
   
-    String resp1 = getResponse(response.getInputStream());
+    String resp1 = getResponse(response);
     assertEquals(resp1, "1");
     
     // Should be revalidated and use the cache
@@ -274,62 +275,68 @@ public class CacheTest extends JettyTest {
     response = client.get(CHECK_MUST_REVALIDATE, options);
     assertTrue(response instanceof CachedResponse);
     
-    String resp2 = getResponse(response.getInputStream());
+    String resp2 = getResponse(response);
     assertEquals(resp2, "1");
     
     // Should be revalidated and return a 404
     options.setHeader("x-reqnum", "3");
     response = client.get(CHECK_MUST_REVALIDATE, options);  
     assertEquals(response.getStatus(), 404);
+    response.release();
 
   }
   
-  private static void _methodInvalidates(int type) throws Exception {
+  private void _methodInvalidates(int type) throws Exception {
     
     Client client = new CommonsClient();
     RequestOptions options = client.getDefaultRequestOptions();
+    options.setHeader("Connection", "close");
     options.setHeader("x-reqnum", "1");
     Response response = client.get(CHECK_CACHE_INVALIDATE, options);
   
-    String resp1 = getResponse(response.getInputStream());
+    String resp1 = getResponse(response);
+    response.release();
     assertEquals(resp1, "1");
     
     // calling a method that could change state on the server should invalidate the cache
     options.setHeader("x-reqnum", "2");
     switch(type) {
       case POST:  
-        client.post(
+        response = client.post(
           CHECK_CACHE_INVALIDATE, 
           new ByteArrayInputStream("".getBytes()), 
           options);
         break;
       case PUT:
-        client.put(
+        response = client.put(
           CHECK_CACHE_INVALIDATE, 
           new ByteArrayInputStream("".getBytes()), 
           options);
         break;
       case DELETE:
-        client.delete(
+        response = client.delete(
           CHECK_CACHE_INVALIDATE, 
           options);
         break;
     }
+    response.release();
     
     options.setHeader("x-reqnum", "3");
     response = client.get(CHECK_CACHE_INVALIDATE, options);
   
-    resp1 = getResponse(response.getInputStream());
+    resp1 = getResponse(response);
+    response.release();
     assertEquals(resp1, "3");
   }
   
-  private static void _requestCacheInvalidation(int type) throws Exception {
+  private void _requestCacheInvalidation(int type) throws Exception {
     
     Client client = new CommonsClient();
     RequestOptions options = client.getDefaultRequestOptions();
+    options.setHeader("Connection", "close");
     options.setHeader("x-reqnum", "1");
     Response response = client.get(CHECK_CACHE_INVALIDATE, options);  
-    String resp1 = getResponse(response.getInputStream());
+    String resp1 = getResponse(response);
     assertEquals(resp1, "1");
     
     // Should not use the cache
@@ -341,7 +348,7 @@ public class CacheTest extends JettyTest {
     }
     response = client.get(CHECK_CACHE_INVALIDATE, options);
   
-    String resp2 = getResponse(response.getInputStream());
+    String resp2 = getResponse(response);
     assertEquals(resp2, "2");
     
     // Should use the cache
@@ -353,42 +360,45 @@ public class CacheTest extends JettyTest {
     }
     response = client.get(CHECK_CACHE_INVALIDATE, options);
   
-    String resp3 = getResponse(response.getInputStream());
+    String resp3 = getResponse(response);
     assertEquals(resp3, "2");
   }
   
-  private static void _responseNoCache(int type) throws Exception {
+  private void _responseNoCache(int type) throws Exception {
     
     Client client = new CommonsClient();
     RequestOptions options = client.getDefaultRequestOptions();
+    options.setHeader("Connection", "close");
     options.setHeader("x-reqnum", "1");
     options.setHeader("x-reqtest", String.valueOf(type));
     Response response = client.get(CHECK_NO_CACHE, options);
   
-    String resp1 = getResponse(response.getInputStream());
+    String resp1 = getResponse(response);
     assertEquals(resp1, "1");
     
     // Should not use the cache
     options.setHeader("x-reqnum", "2");
     response = client.get(CHECK_NO_CACHE, options);
   
-    String resp2 = getResponse(response.getInputStream());
+    String resp2 = getResponse(response);
     assertEquals(resp2, "2");
     
     // Should use the cache
     options.setHeader("x-reqnum", "3");
     response = client.get(CHECK_NO_CACHE, options);
   
-    String resp3 = getResponse(response.getInputStream());
+    String resp3 = getResponse(response);
     assertEquals(resp3, "3");
   }
   
-  private static String getResponse(InputStream in) throws IOException {
+  private static String getResponse(Response response) throws IOException {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     int m = -1;
+    InputStream in = response.getInputStream();
     while ((m = in.read()) != -1) {
       out.write(m);
     }
+    in.close();
     String resp = new String(out.toByteArray());
     return resp.trim();
   }

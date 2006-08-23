@@ -35,14 +35,14 @@ public abstract class CacheBase
     RequestOptions options) {
       CacheKey key = getCacheKey(uri, options);
       CachedResponse response = get(key);
-      if (response != null) {
+      if (response != null && options != null) {
         String[] pragma = options.getHeaders("Pragma");
         for (String s: pragma) {
           if (s.equalsIgnoreCase("no-cache")) {
             return CacheDisposition.TRANSPARENT;
           }
         }
-        if (options != null && options.getNoCache()) 
+        if (options.getNoCache()) 
           return CacheDisposition.TRANSPARENT;
         else if (response.isNoCache())
           return CacheDisposition.STALE;
@@ -52,14 +52,14 @@ public abstract class CacheBase
           return CacheDisposition.STALE;
         else if (response.getCachedTime() != -1) {
           if (response.isFresh()) {
-            long maxAge = (options != null) ? options.getMaxAge() : -1;
+            long maxAge = options.getMaxAge();
             long currentAge = response.getCurrentAge();
             if (maxAge != -1) {
               return (maxAge > currentAge) ? 
                 CacheDisposition.FRESH:
                 CacheDisposition.STALE;
             }
-            long minFresh = (options != null) ? options.getMinFresh() : -1;
+            long minFresh = options.getMinFresh();
             if (minFresh != -1) {
               long lifetime = response.getFreshnessLifetime();
               long age = currentAge;
@@ -69,7 +69,7 @@ public abstract class CacheBase
             }
             return CacheDisposition.FRESH;
           } else {
-            long maxStale = (options != null) ? options.getMaxStale() : -1;
+            long maxStale = options.getMaxStale();
             if (maxStale != -1) {
               long howStale = response.getHowStale();
               return (maxStale < howStale) ? 

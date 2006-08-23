@@ -112,7 +112,7 @@ public class FOMCategory
 
   public void setScheme(String scheme) throws URISyntaxException {
     if (scheme != null)
-      setAttributeValue(SCHEME, (scheme != null) ? new URI(scheme).toString() : null);
+      setAttributeValue(SCHEME, new URI(scheme).toString());
     else 
       removeAttribute(SCHEME);
   }

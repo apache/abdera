@@ -32,7 +32,7 @@ public final class AbderaConfiguration
   
   private static AbderaConfiguration instance = null;
   
-  public static AbderaConfiguration getDefault() {
+  public static synchronized AbderaConfiguration getDefault() {
     if (instance == null) {
       try {
         ResourceBundle bundle = ResourceBundle.getBundle("abdera");

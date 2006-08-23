@@ -27,7 +27,7 @@ import org.apache.abdera.writer.WriterFactory;
 import org.apache.abdera.xpath.XPath;
 
 public final class Abdera {
-  
+
   private AbderaConfiguration config = null;
   private Factory factory = null;
   private Parser parser = null;
@@ -58,7 +58,7 @@ public final class Abdera {
     return (new Abdera()).newFactory();
   }
 
-  public Parser getParser() {
+  public synchronized Parser getParser() {
     if (parser == null)
       parser = newParser();
     return parser;
@@ -68,7 +68,7 @@ public final class Abdera {
     return (new Abdera()).newParser();
   }
   
-  public XPath getXPath() {
+  public synchronized XPath getXPath() {
     if (xpath == null)
       xpath = newXPath();
     return xpath;
@@ -78,7 +78,7 @@ public final class Abdera {
     return (new Abdera()).newXPath();
   }
 
-  public ParserFactory getParserFactory() {
+  public synchronized ParserFactory getParserFactory() {
     if (parserFactory == null)
       parserFactory = newParserFactory();
     return parserFactory;
@@ -88,7 +88,7 @@ public final class Abdera {
     return (new Abdera()).newParserFactory();
   }
 
-  public WriterFactory getWriterFactory() {
+  public synchronized WriterFactory getWriterFactory() {
     if (writerFactory == null)
       writerFactory = newWriterFactory();
     return writerFactory;
@@ -98,7 +98,7 @@ public final class Abdera {
     return (new Abdera()).newWriterFactory();
   }
 
-  public Writer getWriter() {
+  public synchronized Writer getWriter() {
     if (writer == null)
       writer = newWriter();
     return writer;

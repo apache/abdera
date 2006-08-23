@@ -105,14 +105,11 @@ public class FOMExtensionIterator extends OMChildrenIterator {
   }
 
   private boolean isQNamesMatch(QName elementQName, String namespace) {
-      String elns = elementQName.getNamespaceURI();
+      String elns = elementQName == null ? "" : elementQName.getNamespaceURI();
       boolean namespaceURIMatch =
               (namespace == null)
               || (namespace == "")
-              ||
-              ((elementQName != null)
-              &&
-              elns.equals(namespace));
+              || elns.equals(namespace);
       if (!namespaceURIMatch && extns != null && !elns.equals(extns))
         return false;
       else 

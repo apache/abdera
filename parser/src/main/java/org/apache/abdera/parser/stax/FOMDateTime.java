@@ -102,21 +102,21 @@ public class FOMDateTime
 
   public void setValue(AtomDate dateTime) {
     if (dateTime != null)
-      setText((dateTime != null) ? dateTime.getValue() : null);
+      setText(dateTime.getValue());
     else 
       _removeAllChildren();
   }
 
   public void setDate(Date date) {
     if (date != null)
-      setText((date != null) ? AtomDate.valueOf(date).getValue() : null);
+      setText(AtomDate.valueOf(date).getValue());
     else 
       _removeAllChildren();
   }
 
   public void setCalendar(Calendar date) {
     if (date != null)
-      setText((date != null) ? AtomDate.valueOf(date).getValue() : null);
+      setText(AtomDate.valueOf(date).getValue());
     else 
       _removeAllChildren();
   }
@@ -127,7 +127,7 @@ public class FOMDateTime
 
   public void setString(String date) {
     if (date != null)
-      setText((date != null) ? AtomDate.valueOf(date).getValue() : null);
+      setText(AtomDate.valueOf(date).getValue());
     else 
       _removeAllChildren();
   }

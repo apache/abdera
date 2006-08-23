@@ -199,11 +199,7 @@ public class FOMElement
     else if (parent instanceof Document)
       baseUri = ((Document)parent).getBaseUri();
     if (uri != null && baseUri != null) {
-      if (baseUri != null) {
-        uri = baseUri.resolve(uri);
-      } else {
-        return getBaseUri();
-      }
+      uri = baseUri.resolve(uri);
     } else if (uri == null) {
       uri = baseUri;
     }

@@ -52,7 +52,10 @@ public class FOMBuilder
   private ParserOptions parserOptions = null;
   private int depth = 0;
   private int depthInSkipElement = 0;
-  
+  private boolean ignoreWhitespace = false;
+  private boolean ignoreComments = false;
+  private boolean ignorePI = false;
+
   public FOMBuilder(
     FOMFactory factory, 
     XMLStreamReader parser, 
@@ -61,6 +64,14 @@ public class FOMBuilder
       this.document = (OMDocument) factory.newDocument();
       this.parserOptions = parserOptions;
       this.fomfactory = factory;
+      if (parserOptions != null) {
+        ParseFilter parseFilter = parserOptions.getParseFilter();
+        if (parseFilter != null) {
+          ignoreWhitespace = parseFilter.getIgnoreWhitespace();
+          ignoreComments = parseFilter.getIgnoreComments();
+          ignorePI = parseFilter.getIgnoreProcessingInstructions();
+        }
+      }
   }
  
   public ParserOptions getParserOptions() {
@@ -128,8 +139,11 @@ public class FOMBuilder
   
   private OMNode applyTextFilter(int type) {
     if (parserOptions != null) { 
-      if (parser.isWhiteSpace() && parserOptions.getIgnoreWhitespace()) return createOMText("",type);
       TextFilter filter = parserOptions.getTextFilter();
+      ParseFilter parseFilter = parserOptions.getParseFilter();
+      if (parseFilter != null) {
+        if (parser.isWhiteSpace() && parseFilter.getIgnoreWhitespace()) return createOMText("",type);
+      }
       if (filter != null) {
         String value = parser.getText();
         if (!lastNode.isComplete())
@@ -212,12 +226,11 @@ public class FOMBuilder
                 ((OMContainerEx) this.document).setComplete(true);
                 break;
             case XMLStreamConstants.SPACE:
-                if (!parserOptions.getIgnoreWhitespace())
+                if (!ignoreWhitespace)
                   lastNode = createOMText(XMLStreamConstants.SPACE);
                 break;
             case XMLStreamConstants.COMMENT:
-                if (!parserOptions.getIgnoreComments())
-                  createComment();
+                if (!ignoreComments) createComment();
                 break;
             case XMLStreamConstants.DTD:
 // Current StAX cursor model implementations inconsistently handle DTDs.  
@@ -236,8 +249,7 @@ public class FOMBuilder
 //                  createDTD();
                 break;
             case XMLStreamConstants.PROCESSING_INSTRUCTION:
-                if (!parserOptions.getIgnoreProcessingInstructions())
-                  createPI();
+                if (!ignorePI) createPI();
                 break;
             case XMLStreamConstants.ENTITY_REFERENCE:
                 lastNode = createOMText(XMLStreamConstants.ENTITY_REFERENCE);

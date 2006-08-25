@@ -32,6 +32,7 @@ import org.apache.abdera.filter.ListParseFilter;
  * method.
  */
 public abstract class AbstractListParseFilter 
+  extends AbstractParseFilter
   implements Cloneable, ListParseFilter {
   
   private List<QName> qnames = null;

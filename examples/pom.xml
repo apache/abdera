@@ -49,6 +49,12 @@
       <scope>compile</scope>
     </dependency>    
     <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-client</artifactId>
+      <version>0.2.0-incubating-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
     </dependency>

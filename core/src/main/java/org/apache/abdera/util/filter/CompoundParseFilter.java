@@ -37,6 +37,7 @@ import org.apache.abdera.filter.ParseFilter;
  * </pre>
  */
 public class CompoundParseFilter 
+  extends AbstractParseFilter
   implements ParseFilter {
 
   public enum Condition {

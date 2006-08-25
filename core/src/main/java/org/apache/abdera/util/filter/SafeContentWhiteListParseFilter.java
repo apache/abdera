@@ -23,6 +23,7 @@ import org.apache.abdera.filter.ParseFilter;
 import org.apache.abdera.util.Constants;
 
 public class SafeContentWhiteListParseFilter 
+  extends AbstractParseFilter
   implements ParseFilter {
 
   private static enum xhtml_elements {

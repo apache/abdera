@@ -80,16 +80,17 @@ public interface ParserOptions {
    */
   void setTextFilter(TextFilter textFilter);
   
+  /**
+   * Returns true if the parser should attempt to automatically detect the 
+   * character encoding from the stream
+   */
   boolean getAutodetectCharset();
   
+  /**
+   * If true, the parser will attempt to automatically detect the character
+   * encoding from the stream by checking for the byte order mark or checking
+   * the XML prolog.
+   */
   void setAutodetectCharset(boolean detect);
   
-  void setIgnoreDoctype(boolean ignore);
-  void setIgnoreComments(boolean ignore);
-  void setIgnoreWhitespace(boolean ignore);
-  void setIgnoreProcessingInstructions(boolean ignore);
-  boolean getIgnoreDoctype();
-  boolean getIgnoreComments();
-  boolean getIgnoreWhitespace();
-  boolean getIgnoreProcessingInstructions();
 }

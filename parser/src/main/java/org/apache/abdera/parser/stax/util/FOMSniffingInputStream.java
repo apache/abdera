@@ -31,6 +31,18 @@ import javax.xml.stream.XMLStreamReader;
 public class FOMSniffingInputStream 
   extends FilterInputStream {
 
+  private static byte[] UTF32be  = new byte[] {0x00,0x00,0xFFFFFFFE,0xFFFFFFFF};
+  private static byte[] UTF32le  = new byte[] {0xFFFFFFFF,0xFFFFFFFE,0x00,0x00};
+  private static byte[] INVALID1 = new byte[] {0xFFFFFFFE,0xFFFFFFFF,0x00,0x00};
+  private static byte[] INVALID2 = new byte[] {0x00,0x00,0xFFFFFFFF,0xFFFFFFFE};
+  private static byte[] UTF16be  = new byte[] {0xFFFFFFFE,0xFFFFFFFF};
+  private static byte[] UTF16le  = new byte[] {0xFFFFFFFF,0xFFFFFFFE};
+  private static byte[] UTF8     = new byte[] {0xFFFFFFEF,0xFFFFFFBB,0xFFFFFFBF};
+  private static byte[] UTF32be2 = new byte[] {0x00,0x00,0x00,0x3C};
+  private static byte[] UTF32le2 = new byte[] {0x3C,0x00,0x00,0x00};
+  private static byte[] UTF16be2 = new byte[] {0x00,0x3C,0x00,0x3F};
+  private static byte[] UTF16le2 = new byte[] {0x3C,0x00,0x3F,0x00};
+  
   private String encoding = null;
   private boolean bomset = false;
   
@@ -51,41 +63,46 @@ public class FOMSniffingInputStream
     return encoding;
   }
   
+  private boolean equals(byte[] a1, int start, int len, byte[] a2) {
+    for (int n = start, i = 0; n < start + (len - start); n++, i++) {  
+      if (a1[n] != a2[i]) return false;
+    }
+    return true;
+  }
+  
   private String detectEncoding() throws IOException {
     PeekAheadInputStream pin = (PeekAheadInputStream) this.in;
     byte[] bom = new byte[4];
     pin.peek(bom);
     String charset = null;
-    if (bom[0] == 0x00 && bom[1] == 0x00 && bom[2] == 0xFFFFFFFE && bom[3] == 0xFFFFFFFF) {
+    if (equals(bom,0,4,UTF32be)) {
       bomset = true;
       return "utf-32be";
-    } else if (bom[0] == 0xFFFFFFFF && bom[1] == 0xFFFFFFFE && bom[2] == 0x00 && bom[3] == 0x00) {
+    } else if (equals(bom,0,4,UTF32le)) {
       bomset = true;
       return "utf-32le";
-    } else if ((bom[0] == 0xFFFFFFFE && bom[1] == 0xFFFFFFFF && bom[2] == 0x00 && bom[3] == 0x00) ||
-               (bom[0] == 0x00 && bom[1] == 0x00 && bom[2] == 0xFFFFFFFF && bom[3] == 0xFFFFFFFE)) {
+    } else if ((equals(bom,0,4,INVALID1)) ||
+               (equals(bom,0,4,INVALID2))) {
       bomset = true;
       return null;
-    } else if (bom[0] == 0xFFFFFFFE && bom[1] == 0xFFFFFFFF) {
+    } else if (equals(bom,0,2,UTF16be)) {
       bomset = true;
       return "utf-16be";
-    } else if (bom[0] == 0xFFFFFFFF && bom[1] == 0xFFFFFFFE) {
+    } else if (equals(bom,0,2,UTF16le)) {
       bomset = true;
       return "utf-16le";
-    } else if (bom[0] == 0xFFFFFFEF && bom[1] == 0xFFFFFFBB && bom[2] == 0xFFFFFFBF)  {
+    } else if (equals(bom,0,3,UTF8))  {
       bomset = true;
       return "utf-8";
-    } else if (bom[0] == 0x00 && bom[1] == 0x00 && bom[2] == 0x00 && bom[3] == 0x3C) {
+    } else if (equals(bom,0,4,UTF32be2)) {
       charset = "utf-32be";
-    } else if (bom[0] == 0x3C && bom[1] == 0x00 && bom[2] == 0x00 && bom[3] == 0x00) {
+    } else if (equals(bom,0,4,UTF32le2)) {
       charset = "utf-32le";
-    } else if (bom[0] == 0x00 && bom[1] == 0x3C && bom[2] == 0x00 && bom[3] == 0x3F) {
+    } else if (equals(bom,0,4,UTF16be2)) {
       charset = "utf-16be";
-    } else if (bom[0] == 0x3C && bom[1] == 0x00 && bom[2] == 0x3F && bom[3] == 0x00) {
+    } else if (equals(bom,0,4,UTF16le2)) {
       charset = "utf-16le";
-    } else if (bom[0] == 0x4C && bom[1] == 0x6F && bom[2] == 0xA7 && bom[3] == 0x94) {
-      charset = "edbdic";
-    } 
+    }
     bomset = false;
     try { 
       byte[] p = new byte[200];

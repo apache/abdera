@@ -44,6 +44,7 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.parser.stax.util.FOMList;
 import org.apache.abdera.util.Constants;
+import org.apache.abdera.util.URIHelper;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMComment;
 import org.apache.axiom.om.OMContainer;
@@ -181,6 +182,8 @@ public class FOMElement
 
   public URI getBaseUri() throws URISyntaxException {
     URI uri = _getUriValue(getAttributeValue(BASE));
+    if (URIHelper.isJavascriptUri(uri) || 
+        URIHelper.isMailtoUri(uri)) { uri = null; }
     if (uri == null) {
       if (parent instanceof Element) {
         uri = ((Element)parent).getBaseUri();
@@ -194,6 +197,8 @@ public class FOMElement
   public URI getResolvedBaseUri() throws URISyntaxException {
     URI baseUri = null;
     URI uri = _getUriValue(getAttributeValue(BASE));
+    if (URIHelper.isJavascriptUri(uri) || 
+        URIHelper.isMailtoUri(uri)) { uri = null; }
     if (parent instanceof Element) 
       baseUri = ((Element)parent).getResolvedBaseUri();
     else if (parent instanceof Document)

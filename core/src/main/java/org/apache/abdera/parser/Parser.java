@@ -26,11 +26,7 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 
 /**
- * The Parser is the interface through which developers parse feed documents.
- * 
- * <p>
- *   <code>Document doc = Parser.INSTANCE.parse(inputStream, baseUri, options);</code>
- * </p>
+ * The Parser is the interface through which developers parse feed documents. 
  */
 public interface Parser {
   

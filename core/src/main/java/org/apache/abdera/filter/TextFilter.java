@@ -30,12 +30,20 @@ public interface TextFilter extends Cloneable {
 
   public Object clone() throws CloneNotSupportedException;
   
+  /**
+   * Applies the text filter to the specified element text, 
+   * returns the filtered text
+   */
   public String applyFilter(
     char[] c, 
     int start, 
     int len, 
     Element parent);
   
+  /**
+   * Applies the text filter to the specified attribute text, 
+   * returns the filtered text
+   */
   public String applyFilter(
     String value, 
     Element parent,

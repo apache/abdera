@@ -474,7 +474,9 @@ public class FOMSource
   
   public URI getIcon() throws URISyntaxException {
     IRI iri = getIconElement();
-    return (iri != null) ? iri.getResolvedValue() : null;
+    URI uri = (iri != null) ? iri.getResolvedValue() : null;
+    return (URIHelper.isJavascriptUri(uri) ||
+        URIHelper.isMailtoUri(uri)) ? null : uri;
   }
 
   public IRI getLogoElement() {
@@ -501,7 +503,9 @@ public class FOMSource
   
   public URI getLogo() throws URISyntaxException {
     IRI iri = getLogoElement();
-    return (iri != null) ? iri.getResolvedValue() : null;
+    URI uri = (iri != null) ? iri.getResolvedValue() : null;
+    return (URIHelper.isJavascriptUri(uri) ||
+        URIHelper.isMailtoUri(uri)) ? null : uri;
   }
   
   public Link getLink(String rel) {

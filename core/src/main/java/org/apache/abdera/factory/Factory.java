@@ -48,10 +48,6 @@ import org.apache.abdera.parser.Parser;
  * Users will generally not have to know anything about the Factory 
  * implementation, which will be automatically selected based on the
  * Abdera configuration options.
- * 
- * <p>
- *   <code>Factory factory = Factory.INSTANCE;</code>
- * </p>
  */
 public interface Factory {
 

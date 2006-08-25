@@ -21,12 +21,24 @@ import javax.xml.namespace.QName;
 
 public interface ListParseFilter extends ParseFilter {
 
+  /**
+   * Add an element QName to the parse filter
+   */
   public abstract void add(QName qname);
 
+  /**
+   * Returns true if the given qname has been added to the filter
+   */
   public abstract boolean contains(QName qname);
 
+  /**
+   * Adds an attribute to the parse filter
+   */
   public abstract void add(QName parent, QName attribute);
 
+  /**
+   * Returns true if the given attribute has been added to the filter
+   */
   public abstract boolean contains(QName qname, QName attribute);
   
 }

@@ -19,9 +19,27 @@ package org.apache.abdera.util;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.regex.Pattern;
 
 public class URIHelper {
 
+  private static final Pattern javascript = 
+    Pattern.compile(
+      "\\s*j\\s*a\\s*v\\s*a\\s*s\\s*c\\s*r\\s*i\\s*p\\s*t\\s*:.*");
+  private static final Pattern mailto = 
+    Pattern.compile(
+      "\\s*m\\s*a\\s*i\\s*l\\s*t\\s*o\\s*:.*");
+  
+  public static boolean isJavascriptUri(URI uri) {
+    if (uri == null) return false;
+    return javascript.matcher(uri.toString()).matches();
+  }
+  
+  public static boolean isMailtoUri(URI uri) {
+    if (uri == null) return false;
+    return mailto.matcher(uri.toString()).matches();
+  }
+  
   /**
    * Normalize a URI as specified by RFC4287 Section 4.2.6
    */

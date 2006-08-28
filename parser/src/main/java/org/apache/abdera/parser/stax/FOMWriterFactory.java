@@ -47,7 +47,7 @@ public class FOMWriterFactory
 
   public Writer getWriter(String name) {
     return (name != null) ? 
-      loadWriters().get(name) : getWriter();
+      loadWriters().get(name.toLowerCase()) : getWriter();
   }
 
   private Map<String,NamedWriter> loadWriters() {

@@ -15,13 +15,34 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.writer;
+package org.apache.abdera.util;
 
-public interface WriterFactory {
+import org.apache.abdera.writer.NamedWriter;
+
+public abstract class AbstractNamedWriter 
+  implements NamedWriter {
+
+  protected String name = null;
+  protected String[] formats = null;
   
-  Writer getWriter();
+  protected AbstractNamedWriter(String name, String[] formats ) {
+    this.name = name;
+    this.formats = formats;
+  }
   
-  Writer getWriter(String name);
-  
-  Writer getWriterByMediaType(String mediatype);
+  public String getName() {
+    return name;
+  }
+
+  public String[] getOutputFormats() {
+    return formats;
+  }
+
+  public boolean outputsFormat(String mediatype) {
+    for (String format : formats) {
+      if (MimeTypeHelper.isMatch(format, mediatype))
+        return true;
+    }
+    return false;
+  }
 }

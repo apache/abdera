@@ -18,6 +18,7 @@
 package org.apache.abdera.server.servlet;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -26,28 +27,53 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.server.AbderaServer;
 import org.apache.abdera.server.RequestContext;
 import org.apache.abdera.server.RequestHandler;
 import org.apache.abdera.server.RequestHandlerFactory;
 import org.apache.abdera.server.ResponseContext;
-import org.apache.abdera.server.cache.CachePolicy;
+import org.apache.abdera.server.ServerConstants;
 import org.apache.abdera.server.exceptions.AbderaServerException;
-import org.apache.abdera.server.exceptions.MethodNotAllowedException;
 
 public class AbderaServlet 
-  extends HttpServlet {
+  extends HttpServlet 
+  implements ServerConstants {
 
   private static final long serialVersionUID = -4273782501412352619L;
 
-  private AbderaServer abderaServer = new AbderaServer();
+  private Abdera abdera = null;
+  private AbderaServer abderaServer = null;
+  
+  @Override
+  public void init() throws ServletException {
+    synchronized(this) {
+      abdera = new Abdera();
+      abderaServer = new AbderaServer(abdera);
+    }
+  }
+
+  /**
+   * The RequestContext will either be set on the HttpServletRequest by 
+   * some filter or servlet earlier in the invocation chain or will need
+   * to be created and set on the request 
+   */
+  private RequestContext getRequestContext(HttpServletRequest request) {
+    RequestContext context = 
+      (RequestContext) request.getAttribute(REQUESTCONTEXT);
+    if (context == null) {
+      context = new ServletRequestContext(abdera,request);
+      request.setAttribute(REQUESTCONTEXT, context);
+    }
+    return context;
+  }
   
   @Override
   protected void service(
     HttpServletRequest request, 
     HttpServletResponse response) 
       throws ServletException, IOException {
-    RequestContext requestContext = new ServletRequestContext(request);
+    RequestContext requestContext = getRequestContext(request);
     ResponseContext responseContext = null;
     RequestHandler handler = null;
     try {
@@ -57,10 +83,13 @@ public class AbderaServlet
       if (handler != null) {
         responseContext = handler.invoke(requestContext);
       } else {
-        throw new MethodNotAllowedException(request.getMethod());
+        throw new AbderaServerException(
+          AbderaServerException.Code.NOTFOUND);
       }
     } catch (AbderaServerException exception) {
       responseContext = exception;
+    } catch (Throwable t) {
+      responseContext = new AbderaServerException(t);
     }
     doOutput(response, responseContext); 
   }
@@ -74,35 +103,21 @@ public class AbderaServlet
         response.sendError(context.getStatus(), context.getStatusText());
       else 
         response.setStatus(context.getStatus());
-      if (context.getLastModified() != null)
-        response.setDateHeader("Last-Modified", context.getLastModified().getTime());
-      if (context.getContentLanguage() != null)
-        response.setHeader("Content-Language", context.getContentLanguage());
-      if (context.getContentLocation() != null)
-        response.setHeader("Content-Location", context.getContentLocation().toString());
-      if (context.getContentType() != null)
-        response.setContentType(context.getContentType().toString());
-      if (context.getEntityTag() != null)
-        response.setHeader("ETag", context.getEntityTag());
-      if (context.getLocation() != null)
-        response.setHeader("Location", context.getLocation().toString());
-      if (context.getContentLength() > -1) {
-        response.setHeader("Content-Length", Long.toString(context.getContentLength()));
-      }
-      handleCachePolicy(response, context.getCachePolicy());
-      
-      // Add any custom headers after we've set the known ones,
-      // giving the developer an option to replace or set multiple
-      // headers. If they want to skip the ones above, they simply
-      // don't set them.
-      Map<String, List<String>> headers = context.getHeaders();
+      long cl = context.getContentLength();
+      String cc = context.getCacheControl();
+      if (cl > -1) response.setHeader("Content-Length", Long.toString(cl));
+      if (cc != null) response.setHeader("Cache-Control",cc);      
+      Map<String, List<Object>> headers = context.getHeaders();
       if (headers != null) {
-        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-          List<String> values = entry.getValue();
+        for (Map.Entry<String, List<Object>> entry : headers.entrySet()) {
+          List<Object> values = entry.getValue();
           if (values == null) 
             continue;          
-          for (String value : values) {
-            response.setHeader(entry.getKey(), value);
+          for (Object value : values) {
+            if (value instanceof Date)
+              response.setDateHeader(entry.getKey(), ((Date)value).getTime());
+            else
+              response.setHeader(entry.getKey(), value.toString());
           }
         }
       }
@@ -114,10 +129,4 @@ public class AbderaServlet
     }
   }
   
-  private void handleCachePolicy(
-    HttpServletResponse response, 
-    CachePolicy cachePolicy) {
-      if (cachePolicy == null) return;
-      //TODO
-  }
 }

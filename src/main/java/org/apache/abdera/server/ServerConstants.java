@@ -15,19 +15,16 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server.exceptions;
+package org.apache.abdera.server;
 
-public class BadRequestException 
-  extends RequestException {
+public interface ServerConstants {
+
+  public static final String REQUESTCONTEXT = 
+    "org.apache.abdera.server.RequestContext";
+ 
+  public static final String HANDLER_FACTORY = 
+    "org.apache.abdera.server.RequestHandlerFactory";
   
-  private static final long serialVersionUID = -3079456119154632842L;
-
-  public BadRequestException() {
-    super(400, null);
-  }
-
-  public BadRequestException(String text) {
-    super(400, text);
-  }
-  
+  public static final String X_OVERRIDE_HEADER = 
+    "X-HTTP-Method-Override";
 }

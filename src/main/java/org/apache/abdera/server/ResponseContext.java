@@ -20,13 +20,13 @@ package org.apache.abdera.server;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.activation.MimeType;
-
-import org.apache.abdera.server.cache.CachePolicy;
+import javax.activation.MimeTypeParseException;
 
 public interface ResponseContext {
 
@@ -40,28 +40,54 @@ public interface ResponseContext {
   
   public String getContentLanguage();
   
-  public URI getContentLocation();
+  public URI getContentLocation() throws URISyntaxException;
   
   public long getContentLength();
   
-  public MimeType getContentType();
+  public MimeType getContentType() throws MimeTypeParseException;
   
-  public URI getLocation();
+  public String getAllow();
   
-  public CachePolicy getCachePolicy();
+  public URI getLocation() throws URISyntaxException;
   
-  public void setHeader(String name, String value);
+  public Date getDateHeader(String name);
   
-  public void addHeader(String name, String value);
+  public String getHeader(String name);
   
-  public void setHeader(String name, int value);
+  public List<Object> getHeaders(String name);
   
-  public void addHeader(String name, int value);
-  
-  public Map<String, List<String>> getHeaders();
+  public Map<String, List<Object>> getHeaders();
   
   public boolean hasEntity();
   
   public void writeTo(OutputStream out) throws IOException;
+  
+  boolean isPrivate();
+  
+  boolean isPublic();
+  
+  boolean isNoCache();
+  
+  boolean isNoStore();
+  
+  boolean isNoTransform();
+  
+  boolean isMustRevalidate();
+  
+  boolean isProxyRevalidate();
+  
+  long getMaxAge();
+  
+  long getSMaxAge();
+  
+  long getAge();
+  
+  Date getExpires();
+  
+  String[] getNoCacheHeaders();
+  
+  String[] getPrivateHeaders();
+  
+  String getCacheControl();
   
 }

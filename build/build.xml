@@ -43,6 +43,7 @@
   <property name="core.jar" value="${dist}/${ant.project.name}.core.${version}.jar" />
   <property name="parser" value="${basedir}/parser" />
   <property name="parser.src" value="${parser}/src/main/java" />
+  <property name="parser.resources" value="${parser}/src/main/resources" />
   <property name="parser.test" value="${parser}/src/test" />
   <property name="parser.test.java" value="${parser}/src/test/java" />
   <property name="parser.test.resources" value="${parser}/src/test/resources" />
@@ -204,6 +205,9 @@ Working directory: ${work}
         <include name="LICENSE" />
         <include name="NOTICE" />
       </fileset>
+    </copy>
+    <copy todir="${parser.work}">
+      <fileset dir="${parser.resources}" includes="**/*" />
     </copy>
     <copy todir="${test}">
       <fileset dir="${parser.test.resources}">

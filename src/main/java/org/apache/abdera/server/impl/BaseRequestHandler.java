@@ -23,11 +23,6 @@ import org.apache.abdera.server.ResponseContext;
 import org.apache.abdera.server.cache.Cache;
 import org.apache.abdera.server.cache.CacheEntry;
 import org.apache.abdera.server.exceptions.AbderaServerException;
-import org.apache.abdera.server.exceptions.ExistenceException;
-import org.apache.abdera.server.exceptions.MethodNotAllowedException;
-import org.apache.abdera.server.exceptions.NotFoundException;
-import org.apache.abdera.server.exceptions.NotModifiedException;
-import org.apache.abdera.server.exceptions.RequestException;
 
 public abstract class BaseRequestHandler 
   implements RequestHandler {
@@ -54,7 +49,8 @@ public abstract class BaseRequestHandler
       if (response != null)
         return response;
       else
-        return new NotFoundException();
+        throw new AbderaServerException(
+          AbderaServerException.Code.NOTFOUND);
     } catch (AbderaServerException ase) {
       throw ase;
     } catch (Throwable t) {
@@ -102,14 +98,14 @@ public abstract class BaseRequestHandler
    * MUST throw an appropriate ExistenceException (e.g. not found,
    * gone, moved, etc)
    */
-  protected void checkExists(RequestContext requestContext) throws ExistenceException{}
+  protected void checkExists(RequestContext requestContext) throws AbderaServerException{}
   
   /**
    * Check the request method.  If the method is not supported, 
    * a MethodNotAllowedException MUST be thrown, otherwise the 
    * method should return with no exceptions
    */
-  protected void checkMethod(RequestContext requestContext) throws MethodNotAllowedException {
+  protected void checkMethod(RequestContext requestContext) throws AbderaServerException {
     String method = requestContext.getMethod();
     String[] methods = getAllowedMethods(getResourceType(requestContext));
     java.util.Arrays.sort(methods);
@@ -122,13 +118,13 @@ public abstract class BaseRequestHandler
    * a NotModifiedException MUST be thrown, otherwise the method
    * should return with no exceptions
    */
-  protected void checkModified(RequestContext requestContext) throws NotModifiedException {}
+  protected void checkModified(RequestContext requestContext) {}
   
   /**
    * Check to see if the request is valid. If not, throw an appropriate
    * RequestException
    */
-  protected void checkRequest(RequestContext requestContext) throws RequestException {}
+  protected void checkRequest(RequestContext requestContext) throws AbderaServerException {}
   
   /**
    * Handle the request
@@ -155,9 +151,13 @@ public abstract class BaseRequestHandler
   /**
    * Utility method for reporting MethodNotAllowedExceptions properly
    */
-  protected void notAllowed(RequestContext requestContext) throws MethodNotAllowedException {
-    MethodNotAllowedException notallowed = new MethodNotAllowedException();
-    notallowed.setAllow(getAllowedMethods(getResourceType(requestContext)));
+  protected void notAllowed(RequestContext requestContext) throws AbderaServerException {
+    AbderaServerException notallowed = 
+      new AbderaServerException(
+        AbderaServerException.Code.METHODNOTALLOWED);
+    notallowed.setAllow(
+      getAllowedMethods(
+        getResourceType(requestContext)));
     throw notallowed;
   }
   

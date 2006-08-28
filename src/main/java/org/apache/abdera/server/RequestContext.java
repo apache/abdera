@@ -20,30 +20,100 @@ package org.apache.abdera.server;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
 
 public interface RequestContext {
   
-  public String getMethod();
+  /**
+   * Returns the method 
+   */
+  String getMethod();
   
-  public URI getRequestUri();
+  /**
+   * Returns the complete Request URI
+   */
+  URI getUri();
   
-  public URI getBaseUri();
+  /**
+   * Returns the server base URI
+   */
+  URI getBaseUri();
   
-  public URI getPathInfo();
+  /**
+   * Returns the relative URI (without scheme, host, or port)
+   */
+  URI getPathInfo();
   
-  public String getParameter(String name);
+  /**
+   * Returns a request parameter (e.g. query string param)
+   */
+  String getParameter(String name);
   
-  public List<String> getParameters(String name);
+  /**
+   * Returns a list of request parameter values (e.g. query string params)
+   */
+  List<String> getParameters(String name);
 
-  public List<String> getParameterNames();
+  /**
+   * Returns a listing of request parameter names
+   */
+  List<String> getParameterNames();
   
-  public String getHeader(String name);
+  /**
+   * Returns a request header
+   */
+  String getHeader(String name);
   
-  public List<String> getHeaders(String name);
+  /**
+   * Returns a list of request header values
+   */
+  List<String> getHeaders(String name);
   
-  public List<String> getHeaderNames();
+  /**
+   * Returns a list of request header names
+   */
+  List<String> getHeaderNames();
   
-  public InputStream getInputStream() throws IOException;
+  /**
+   * Returns the input stream for the request
+   */
+  InputStream getInputStream() throws IOException;
+  
+  String getAccept();
+  
+  String getAcceptCharset();
+  
+  String getAcceptEncoding();
+  
+  String getAcceptLanguage();
+  
+  String getAuthorization();
+  
+  String getCacheControl();
+  
+  String getContentType();
+  
+  Date getDateHeader(String name);
+  
+  String getIfMatch();
+  
+  Date getIfModifiedSince();
+  
+  String getIfNoneMatch();
+  
+  Date getIfUnmodifiedSince();
+  
+  long getMaxAge();
+  
+  long getMaxStale();
+  
+  long getMinFresh();
+  
+  boolean getNoCache();
+  
+  boolean getNoStore();
+  
+  boolean getNoTransform();
   
 }

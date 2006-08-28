@@ -140,11 +140,12 @@ public abstract class BaseRequestHandler
    */
   protected String[] getAllowedMethods(Type type) {
     switch (type) {
-      case COLLECTION:    return new String[] { "GET", "POST" };
-      case ENTRY:         return new String[] { "GET" };
-      case ENTRY_EDIT:    return new String[] { "GET", "DELETE", "PUT" };
-      case INTROSPECTION: return new String[] { "GET" };
-      default:            return new String[] { "GET" };
+      case COLLECTION:    return new String[] { "GET", "POST", "HEAD", "OPTIONS" };
+      case ENTRY:         return new String[] { "GET", "HEAD", "OPTIONS" };
+      case ENTRY_EDIT:    return new String[] { "GET", "DELETE", "PUT", "HEAD", "OPTIONS" };
+      case MEDIA_EDIT:    return new String[] { "GET", "DELETE", "PUT", "HEAD", "OPTIONS" };
+      case INTROSPECTION: return new String[] { "GET", "HEAD", "OPTIONS" };
+      default:            return new String[] { "GET", "HEAD", "OPTIONS" };
     }
   }
   

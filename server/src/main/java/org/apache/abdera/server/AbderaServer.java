@@ -20,9 +20,7 @@ package org.apache.abdera.server;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.util.ServiceUtil;
 
-public class AbderaServer {
-
-  public static final String HANDLER_FACTORY = "org.apache.abdera.server.RequestHandlerFactory";
+public class AbderaServer implements ServerConstants {
   
   private Abdera abdera = null;
   private RequestHandlerFactory handlerFactory = null;

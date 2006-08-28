@@ -23,29 +23,46 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.abdera.Abdera;
+import org.apache.abdera.protocol.util.CacheControlParser;
 import org.apache.abdera.server.RequestContext;
+import org.apache.abdera.server.ServerConstants;
 
 public class ServletRequestContext 
-  implements RequestContext {
-
-  public static final String X_OVERRIDE_HEADER = "X-Method-Override";
+  implements RequestContext, ServerConstants {
   
+  private Abdera abdera = null;
   private HttpServletRequest servletRequest = null;
-  
+  private long maxage = -1;
+  private long maxstale = -1;
+  private long minfresh = -1;
+  private boolean nocache = false;
+  private boolean nostore = false;
+  private boolean notransform = false;
+  private String method = null;
+    
   public ServletRequestContext(
+    Abdera abdera,
     HttpServletRequest request) {
+      this.abdera = abdera;
       this.servletRequest = request;
+      get_ccp();
   }
   
   public String getMethod() {
-    return servletRequest.getMethod();
+    if (method == null) {
+      String o = getHeader(X_OVERRIDE_HEADER);
+      method = (o == null) ? servletRequest.getMethod() : o;
+    }
+    return method;
   }
   
-  public URI getRequestUri() {
+  public URI getUri() {
     URI uri = null;
     try {
       StringBuffer buf = 
@@ -58,13 +75,32 @@ public class ServletRequestContext
     return uri;
   }
   
+  private String getHost() {
+    String host = abdera.getConfiguration().getConfigurationOption(
+      "org.apache.abdera.protocol.server.Host");
+    return (host != null) ? 
+      host : 
+      servletRequest.getServerName();
+  }
+  
+  private int getPort() {
+    String port = abdera.getConfiguration().getConfigurationOption(
+      "org.apache.abdera.protocol.server.Port");
+    return (port != null) ? 
+      Integer.parseInt(port) : 
+      servletRequest.getLocalPort();
+  }
+  
   public URI getBaseUri() {
-    // TODO: this should be done from properties
-    StringBuffer buffer = new StringBuffer("http://");
-    buffer.append(servletRequest.getServerName());
-    if (servletRequest.getLocalPort() != 80) {
+    StringBuffer buffer = 
+      new StringBuffer(
+        (servletRequest.isSecure())?
+          "https":"http");
+    buffer.append(getHost());
+    int port = getPort();
+    if (port != 80) {
       buffer.append(":");
-      buffer.append(servletRequest.getLocalPort());
+      buffer.append(port);
     }
     buffer.append(servletRequest.getServletPath());
     
@@ -118,6 +154,102 @@ public class ServletRequestContext
         
   public InputStream getInputStream() throws IOException {
     return servletRequest.getInputStream();
+  }
+
+  public String getAccept() {
+    return servletRequest.getHeader("Accept");
+  }
+
+  public String getAcceptCharset() {
+    return servletRequest.getHeader("Accept-Charset");
+  }
+
+  public String getAcceptEncoding() {
+    return servletRequest.getHeader("Accept-Encoding");
+  }
+
+  public String getAcceptLanguage() {
+    return servletRequest.getHeader("Accept-Language");
+  }
+
+  public String getAuthorization() {
+    return servletRequest.getHeader("Authorization");
+  }
+
+  public String getCacheControl() {
+    return servletRequest.getHeader("Cache-Control");
+  }
+
+  public String getContentType() {
+    return servletRequest.getHeader("Content-Type");
+  }
+
+  public Date getDateHeader(String name) {
+    return new Date(servletRequest.getDateHeader(name));
+  }
+
+  public String getIfMatch() {
+    return servletRequest.getHeader("If-Match");
+  }
+
+  public Date getIfModifiedSince() {
+    return getDateHeader("If-Modified-Since");
+  }
+
+  public String getIfNoneMatch() {
+    return servletRequest.getHeader("If-None-Match");
+  }
+
+  public Date getIfUnmodifiedSince() {
+    return getDateHeader("If-Unmodified-Since");
+  }
+
+  private void get_ccp() {
+    String cc = getCacheControl();
+    if (cc != null) {
+      CacheControlParser ccparser = 
+        new CacheControlParser(getCacheControl());
+      for(String directive : ccparser) {
+        directive = directive.toLowerCase();
+        if (directive.equals("max-age")) {
+          maxage = Long.parseLong(ccparser.getValue(directive));
+        } else if (directive.equals("max-stale")) {
+          maxstale = Long.parseLong(ccparser.getValue(directive));
+        } else if (directive.equals("min-fresh")) {
+          minfresh = Long.parseLong(ccparser.getValue(directive));
+        } else if (directive.equals("no-cache")) {
+          nocache = true;
+        } else if (directive.equals("no-store")) {
+          nostore = true;
+        } else if (directive.equals("no-transform")) {
+          notransform = true;
+        }
+      }
+    }
+  }
+  
+  public long getMaxAge() {
+    return maxage;
+  }
+
+  public long getMaxStale() {
+    return maxstale;
+  }
+
+  public long getMinFresh() {
+    return minfresh;
+  }
+
+  public boolean getNoCache() {
+    return nocache;
+  }
+
+  public boolean getNoStore() {
+    return nostore;
+  }
+
+  public boolean getNoTransform() {
+    return notransform;
   }
 
 }

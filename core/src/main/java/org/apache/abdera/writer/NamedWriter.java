@@ -20,5 +20,15 @@ package org.apache.abdera.writer;
 public interface NamedWriter extends Writer {
 
   String getName();
+
+  /**
+   * Return the media type of the format produced by this writer
+   */
+  String[] getOutputFormats();
   
+  /**
+   * Returns true if the format produced by this writer matches the specified
+   * media type
+   */
+  boolean outputsFormat(String mediatype);
 }

@@ -30,17 +30,26 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
+import org.apache.abdera.util.AbstractNamedWriter;
 import org.apache.abdera.writer.NamedWriter;
 import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.StAXUtils;
 
-public class PrettyWriter implements NamedWriter {
+public class PrettyWriter
+  extends AbstractNamedWriter 
+  implements NamedWriter {
 
-  public String getName() {
-    return "PrettyXML";
+  private static final String[] FORMATS = {
+    "application/atom+xml",
+    "application/atomserv+xml",
+    "application/xml"
+  };
+  
+  public PrettyWriter() {
+    super("PrettyXML", FORMATS);
   }
-
+  
   public Object write(Base base) throws IOException {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     writeTo(base,out);
@@ -259,4 +268,5 @@ public class PrettyWriter implements NamedWriter {
       return spaces;
     }
   }
+
 }

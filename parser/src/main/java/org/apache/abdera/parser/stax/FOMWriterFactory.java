@@ -50,6 +50,14 @@ public class FOMWriterFactory
       loadWriters().get(name.toLowerCase()) : getWriter();
   }
 
+  public Writer getWriterByMediaType(String mediatype) {
+    Map<String,NamedWriter> writers = loadWriters();
+    for (NamedWriter writer : writers.values()) {
+      if (writer.outputsFormat(mediatype)) return writer;
+    }
+    return null;
+  }
+  
   private Map<String,NamedWriter> loadWriters() {
     return getAbdera().getConfiguration().getNamedWriters();
   }

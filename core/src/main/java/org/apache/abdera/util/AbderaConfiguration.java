@@ -136,7 +136,7 @@ public final class AbderaConfiguration
           "META-INF/services/org.apache.abdera.writer.NamedWriter");
       writers = new HashMap<String,NamedWriter>();
       for (NamedWriter writer : _writers) {
-        writers.put(writer.getName(), writer);
+        writers.put(writer.getName().toLowerCase(), writer);
       }
     }
     return writers;
@@ -154,7 +154,7 @@ public final class AbderaConfiguration
           "META-INF/services/org.apache.abdera.parser.NamedParser");
       parsers = new HashMap<String,NamedParser>();
       for (NamedParser parser : _parsers) {
-        parsers.put(parser.getName(), parser);
+        parsers.put(parser.getName().toLowerCase(), parser);
       }
     }
     return parsers;

@@ -47,7 +47,7 @@ public class FOMParserFactory
 
   public Parser getParser(String name) {
     return (name != null) ? 
-      loadParsers().get(name) : getParser();
+      loadParsers().get(name.toLowerCase()) : getParser();
   }
 
   private Map<String,NamedParser> loadParsers() {

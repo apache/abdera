@@ -130,7 +130,7 @@ public class ServletRequestContext
   public URI getPathInfo() {
     try {
       String pathInfo = servletRequest.getPathInfo();
-      if(pathInfo == null)  {
+      if (pathInfo == null)  {
         pathInfo = "";
       }
       return new URI(pathInfo);
@@ -207,9 +207,8 @@ public class ServletRequestContext
   private void get_ccp() {
     String cc = getCacheControl();
     if (cc != null) {
-      CacheControlParser ccparser = 
-        new CacheControlParser(getCacheControl());
-      for(String directive : ccparser) {
+      CacheControlParser ccparser = new CacheControlParser(cc);
+      for (String directive : ccparser) {
         directive = directive.toLowerCase();
         if (directive.equals("max-age")) {
           maxage = Long.parseLong(ccparser.getValue(directive));

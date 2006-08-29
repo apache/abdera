@@ -23,15 +23,12 @@ import org.apache.abdera.server.ResponseContext;
 import org.apache.abdera.server.cache.Cache;
 import org.apache.abdera.server.cache.CacheEntry;
 import org.apache.abdera.server.exceptions.AbderaServerException;
+import org.apache.abdera.server.util.ResourceType;
 
 public abstract class BaseRequestHandler 
   implements RequestHandler {
 
-  public enum Type {
-    UNKNOWN, INTROSPECTION, COLLECTION, ENTRY, ENTRY_EDIT, MEDIA, MEDIA_EDIT
-  };
-  
-  protected Type resourceType = Type.UNKNOWN;
+  protected ResourceType resourceType = ResourceType.UNKNOWN;
   
   public BaseRequestHandler() {}
   
@@ -91,7 +88,7 @@ public abstract class BaseRequestHandler
   /**
    * Returns the type of the requested resource
    */
-  protected abstract Type getResourceType(RequestContext requestContext);
+  protected abstract ResourceType getResourceType(RequestContext requestContext);
   
   /**
    * Check that the requested resource exists.  If not, the method
@@ -138,7 +135,7 @@ public abstract class BaseRequestHandler
    * Implementations should override this to specify customizations to the
    * allowable methods on a particular type of resource
    */
-  protected String[] getAllowedMethods(Type type) {
+  protected String[] getAllowedMethods(ResourceType type) {
     switch (type) {
       case COLLECTION:    return new String[] { "GET", "POST", "HEAD", "OPTIONS" };
       case ENTRY:         return new String[] { "GET", "HEAD", "OPTIONS" };

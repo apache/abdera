@@ -17,40 +17,25 @@
 */
 package org.apache.abdera.protocol.server.impl;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
-
 import org.apache.abdera.protocol.server.ResponseContext;
+import org.apache.abdera.protocol.util.AbstractResponse;
 
-public abstract class AbstractResponseContext 
+public abstract class AbstractResponseContext
+  extends AbstractResponse
   implements ResponseContext {
 
-  protected final static byte NOCACHE = 1;
-  protected final static byte NOSTORE = 2;
-  protected final static byte NOTRANSFORM = 4;
-  protected final static byte MUSTREVALIDATE = 8;
-  protected final static byte PROXYREVALIDATE = 16;
-  protected final static byte PUBLIC = 32;
-  protected final static byte PRIVATE = 64;
   protected static final String[] EMPTY = new String[0];
   
   protected int status = 0;
   protected String status_text = null;
   
   protected Map<String,List<Object>> headers = null;
-  protected byte flags = 0;
-  protected long max_age = -1;
-  protected long smax_age = -1;
-  protected List<String> no_cache_headers = null;
-  protected List<String> private_headers = null;
 
   public void removeHeader(String name) {
     Map<String,List<Object>> headers = getHeaders();
@@ -126,6 +111,11 @@ public abstract class AbstractResponseContext
     return headers.get(name);
   }
 
+  public String[] getHeaderNames() {
+    Map<String,List<Object>> headers = getHeaders();
+    return headers.keySet().toArray(new String[headers.size()]);
+  }
+  
   private void append(StringBuffer buf, String value) {
     if (buf.length() > 0) buf.append(", ");
     buf.append(value);
@@ -135,7 +125,7 @@ public abstract class AbstractResponseContext
     StringBuffer buf = new StringBuffer();
     if (isPublic()) append(buf,"public");
     if (isPrivate()) append(buf,"private");
-    if (private_headers != null && private_headers.size() > 0) {
+    if (private_headers != null && private_headers.length > 0) {
       buf.append("=\"");
       for (String header : private_headers) {
         append(buf,header);
@@ -143,9 +133,9 @@ public abstract class AbstractResponseContext
       buf.append("\"");
     }
     if (isNoCache()) append(buf,"no-cache");
-    if (no_cache_headers != null && no_cache_headers.size() > 0) {
+    if (nocache_headers != null && nocache_headers.length > 0) {
       buf.append("=\"");
-      for (String header : no_cache_headers) {
+      for (String header : nocache_headers) {
         append(buf,header);
       }
       buf.append("\"");
@@ -158,21 +148,12 @@ public abstract class AbstractResponseContext
     return buf.toString();
   }
 
-  public long getAge() {
-    String value = getHeader("Age");
-    return (value != null) ? Long.parseLong(value) : -1;
-  }
-  
   public void setAge(long age) {
     if (age == -1) {
       removeHeader("Age"); 
       return;
     }
     setHeader("Age", String.valueOf(age));
-  }
-  
-  public String getContentLanguage() {
-    return getHeader("Content-Language");
   }
   
   public void setContentLanguage(String language) {
@@ -183,22 +164,12 @@ public abstract class AbstractResponseContext
     setHeader("Content-Language", language);
   }
 
-  public long getContentLength() {
-    String value = getHeader("Content-Length");
-    return (value != null) ? Long.parseLong(value) : -1;
-  }
-  
   public void setContentLength(long length) {
     if (length == -1) {
       removeHeader("Content-Length");
       return;
     }
     setHeader("Content-Length", String.valueOf(length));
-  }
-
-  public URI getContentLocation() throws URISyntaxException {
-    String value = getHeader("Content-Location");
-    return (value != null) ? new URI(value) : null;
   }
 
   public void setContentLocation(String uri) {
@@ -209,11 +180,6 @@ public abstract class AbstractResponseContext
     setHeader("Content-Location", uri);
   }
   
-  public MimeType getContentType() throws MimeTypeParseException {
-    String value = getHeader("Content-Type");
-    return (value != null) ? new MimeType(value) : null;
-  }
-  
   public void setContentType(String type) {
     if (type == null) {
       removeHeader("Content-Type");
@@ -222,20 +188,12 @@ public abstract class AbstractResponseContext
     setHeader("Content-Type", type);
   }
 
-  public String getEntityTag() {
-    return getHeader("ETag");
-  }
-  
   public void setEntityTag(String etag) {
     if (etag == null) {
       removeHeader("ETag");
       return;
     }
     setHeader("ETag", etag);
-  }
-
-  public Date getExpires() {
-    return getDateHeader("Expires");
   }
 
   public void setExpires(Date date) {
@@ -246,21 +204,12 @@ public abstract class AbstractResponseContext
     setHeader("Expires", date);
   }
   
-  public Date getLastModified() {
-    return getDateHeader("Last-Modified");
-  }
-  
   public void setLastModified(Date date) {
     if (date == null) {
       removeHeader("Last-Modified");
       return;
     }
     setHeader("Last-Modified", date);
-  }
-
-  public URI getLocation() throws URISyntaxException {
-    String value = getHeader("Location");
-    return (value != null) ? new URI(value) : null;
   }
 
   public void setLocation(String uri) {
@@ -287,137 +236,6 @@ public abstract class AbstractResponseContext
     this.status_text = text;
   }
 
-  public long getMaxAge() {
-    return max_age;
-  }
-  
-  public void setMaxAge(long max_age) {
-    this.max_age = max_age;
-  }
-
-  public String[] getNoCacheHeaders() {
-    if (no_cache_headers == null) return EMPTY;
-    return no_cache_headers.toArray(new String[no_cache_headers.size()]);
-  }
-  
-  public void setNoCacheHeaders(String header) {
-    if (no_cache_headers == null) no_cache_headers = new ArrayList<String>();
-    no_cache_headers.add(header);
-  }
-  
-  public void setNoCacheHeaders(String... headers) {
-    if (no_cache_headers == null) no_cache_headers = new ArrayList<String>();
-    for (String header : headers) {
-      no_cache_headers.add(header);
-    }
-  }
-
-  public String[] getPrivateHeaders() {
-    if (private_headers == null) return EMPTY;
-    return private_headers.toArray(new String[private_headers.size()]);
-  }
-
-  public void setPrivateHeaders(String header) {
-    if (private_headers == null) private_headers = new ArrayList<String>();
-    private_headers.add(header);
-  }
-  
-  public void setPrivateHeaders(String... headers) {
-    if (private_headers == null) private_headers = new ArrayList<String>();
-    for (String header : headers) {
-      private_headers.add(header);
-    }
-  }
-  
-  public long getSMaxAge() {
-    return smax_age;
-  }
-  
-  public void setSMaxAge(long smax_age) {
-    this.smax_age = smax_age;
-  }
-  
-  public boolean isMustRevalidate() {
-    return (flags & MUSTREVALIDATE) == MUSTREVALIDATE;
-  }
-  
-  public void setMustRevalidate(boolean val) {
-    if (isMustRevalidate() && !val)
-      flags ^= MUSTREVALIDATE;
-    else if (!isMustRevalidate() && val)
-      flags |= MUSTREVALIDATE;
-  }
-
-  public boolean isNoCache() {
-    return (flags & NOCACHE) == NOCACHE;
-  }
-
-  public void setNoCache(boolean val) {
-    if (isNoCache() && !val)
-      flags ^= NOCACHE;
-    else if (!isNoCache() && val)
-      flags |= NOCACHE;
-  }
-  
-  public boolean isNoStore() {
-    return (flags & NOSTORE) == NOSTORE;
-  }
-
-  public void setNoStore(boolean val) {
-    if (isNoStore() && !val)
-      flags ^= NOSTORE;
-    else if (!isNoStore() && val)
-      flags |= NOSTORE;
-  }
-  
-  public boolean isNoTransform() {
-    return (flags & NOTRANSFORM) == NOTRANSFORM;
-  }
-
-  public void setNoTransform(boolean val) {
-    if (isNoTransform() && !val)
-      flags ^= NOTRANSFORM;
-    else if (!isNoTransform() && val)
-      flags |= NOTRANSFORM;
-  }
-  
-  public boolean isPrivate() {
-    return (flags & PRIVATE) == PRIVATE;
-  }
-
-  public void setPrivate(boolean val) {
-    if (isPrivate() && !val)
-      flags ^= PRIVATE;
-    else if (!isPrivate() && val)
-      flags |= PRIVATE;
-  }
-  
-  public boolean isProxyRevalidate() {
-    return (flags & PROXYREVALIDATE) == PROXYREVALIDATE;
-  }
-  
-  public void setProxyRevalidate(boolean val) {
-    if (isProxyRevalidate() && !val)
-      flags ^= PROXYREVALIDATE;
-    else if (!isProxyRevalidate() && val)
-      flags |= PROXYREVALIDATE;
-  }
-
-  public boolean isPublic() {
-    return (flags & PUBLIC) == PUBLIC;
-  }
-
-  public void setPublic(boolean val) {
-    if (isPublic() && !val)
-      flags ^= PUBLIC;
-    else if (!isPublic() && val)
-      flags |= PUBLIC;
-  }  
-  
-  public String getAllow() {
-    return getHeader("Allow");
-  }
-  
   public void setAllow(String method) {
     setHeader("Allow", method);
   }

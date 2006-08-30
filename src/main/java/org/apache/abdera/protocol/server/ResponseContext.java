@@ -19,75 +19,13 @@ package org.apache.abdera.protocol.server;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
-import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
+import org.apache.abdera.protocol.Response;
 
-public interface ResponseContext {
+public interface ResponseContext extends Response {
 
-  public int getStatus();
-  
-  public String getStatusText();
-  
-  public Date getLastModified();
-  
-  public String getEntityTag();
-  
-  public String getContentLanguage();
-  
-  public URI getContentLocation() throws URISyntaxException;
-  
-  public long getContentLength();
-  
-  public MimeType getContentType() throws MimeTypeParseException;
-  
-  public String getAllow();
-  
-  public URI getLocation() throws URISyntaxException;
-  
-  public Date getDateHeader(String name);
-  
-  public String getHeader(String name);
-  
-  public List<Object> getHeaders(String name);
-  
-  public Map<String, List<Object>> getHeaders();
-  
   public boolean hasEntity();
   
   public void writeTo(OutputStream out) throws IOException;
-  
-  boolean isPrivate();
-  
-  boolean isPublic();
-  
-  boolean isNoCache();
-  
-  boolean isNoStore();
-  
-  boolean isNoTransform();
-  
-  boolean isMustRevalidate();
-  
-  boolean isProxyRevalidate();
-  
-  long getMaxAge();
-  
-  long getSMaxAge();
-  
-  long getAge();
-  
-  Date getExpires();
-  
-  String[] getNoCacheHeaders();
-  
-  String[] getPrivateHeaders();
-  
-  String getCacheControl();
-  
+    
 }

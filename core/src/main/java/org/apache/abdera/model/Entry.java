@@ -540,6 +540,20 @@ public interface Entry
   DateTime setUpdated(String value);
   
   /**
+   * APP Introduces a new app:modified element whose value changes 
+   * every time the entry is updated
+   */
+  DateTime getModifiedElement();
+  
+  void setModifiedElement(DateTime modified);
+  
+  Date getModified();
+  
+  DateTime setModified(Date value);
+  
+  DateTime setModified(String value);
+  
+  /**
    * Returns this entries Atom Publishing Protocol control element
    */
   Control getControl();

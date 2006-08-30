@@ -168,6 +168,16 @@ public interface Factory {
   DateTime newUpdated(Element parent);
 
   /**
+   * Create a new app:modified element
+   */
+  DateTime newModified();
+  
+  /**
+   * create a new app:modified element as a child of the given Element
+   */
+  DateTime newModified(Element parent);
+  
+  /**
    * Create a new DateTime element with the given QName as a child of the given Element.
    */
   DateTime newDateTime(QName qname, Element parent);

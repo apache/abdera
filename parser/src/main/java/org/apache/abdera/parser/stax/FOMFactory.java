@@ -489,6 +489,14 @@ public class FOMFactory
     return newDateTime(Constants.UPDATED, parent);
   }
 
+  public DateTime newModified() {
+    return newModified(null);
+  }
+  
+  public DateTime newModified(Element parent) {
+    return newDateTime(Constants.MODIFIED, parent);
+  }
+
   public IRI newIcon() {
     return newIcon(null);
   }
@@ -702,6 +710,8 @@ public class FOMFactory
         element = new FOMDiv(qname.getLocalPart(), namespace, parent, factory);
       } else if (CATEGORIES.equals(qname)) {
         element = new FOMCategories(qname.getLocalPart(), namespace, parent, factory);
+      } else if (MODIFIED.equals(qname)) {
+        element = new FOMDateTime(qname.getLocalPart(), namespace, parent, factory);
       } else if (parent instanceof ExtensibleElement || 
                  parent instanceof Document) {
         element = (OMElement) newExtensionElement(qname, parent);
@@ -774,6 +784,8 @@ public class FOMFactory
       element = (OMElement) newDiv(qname, parent, builder);
     } else if (CATEGORIES.equals(qname)) {
       element = (OMElement) newCategories(qname, parent, builder);
+    } else if (MODIFIED.equals(qname)) {
+      element = (OMElement) newDateTimeElement(qname, parent, builder);
     } else if (parent instanceof ExtensibleElement || parent instanceof Document) {
       element = (OMElement) newExtensionElement(qname, parent, builder);
     }

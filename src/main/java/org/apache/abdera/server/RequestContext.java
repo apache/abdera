@@ -23,7 +23,11 @@ import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.abdera.server.target.Target;
+
 public interface RequestContext {
+  
+  Target getTarget();
   
   /**
    * Returns the method 

@@ -32,10 +32,13 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.util.CacheControlParser;
 import org.apache.abdera.server.RequestContext;
 import org.apache.abdera.server.ServerConstants;
+import org.apache.abdera.server.target.Target;
+import org.apache.abdera.server.target.TargetResolver;
 
 public class ServletRequestContext 
   implements RequestContext, ServerConstants {
   
+  private Target target = null;
   private Abdera abdera = null;
   private HttpServletRequest servletRequest = null;
   private long maxage = -1;
@@ -48,10 +51,16 @@ public class ServletRequestContext
     
   public ServletRequestContext(
     Abdera abdera,
+    TargetResolver resolver,
     HttpServletRequest request) {
       this.abdera = abdera;
       this.servletRequest = request;
       get_ccp();
+      target = resolver.resolve(getUri().toString());
+  }
+  
+  public Target getTarget() {
+    return target;
   }
   
   public String getMethod() {
@@ -68,7 +77,8 @@ public class ServletRequestContext
       StringBuffer buf = 
         new StringBuffer(
           servletRequest.getRequestURI());
-      if (servletRequest.getQueryString() != null)
+      String qs = servletRequest.getQueryString();
+      if (qs != null && qs.length() != 0)
         buf.append("?" + servletRequest.getQueryString());
       uri = new URI(buf.toString());
     } catch (URISyntaxException e) {}

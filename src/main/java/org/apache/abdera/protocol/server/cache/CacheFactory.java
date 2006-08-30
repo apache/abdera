@@ -15,10 +15,12 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server.target;
+package org.apache.abdera.protocol.server.cache;
 
-public interface TargetResolver {
+public interface CacheFactory {
 
-  Target resolve(String uri);
+  public static final CacheFactory INSTANCE = null;
+  
+  Cache newCache();
   
 }

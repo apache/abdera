@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server.servlet;
+package org.apache.abdera.protocol.server.servlet;
 
 import java.io.IOException;
 import java.util.Date;
@@ -29,14 +29,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.server.AbderaServer;
-import org.apache.abdera.server.RequestContext;
-import org.apache.abdera.server.RequestHandler;
-import org.apache.abdera.server.RequestHandlerFactory;
-import org.apache.abdera.server.ResponseContext;
-import org.apache.abdera.server.ServerConstants;
-import org.apache.abdera.server.exceptions.AbderaServerException;
-import org.apache.abdera.server.target.TargetResolver;
+import org.apache.abdera.protocol.server.AbderaServer;
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.RequestHandler;
+import org.apache.abdera.protocol.server.RequestHandlerFactory;
+import org.apache.abdera.protocol.server.ResponseContext;
+import org.apache.abdera.protocol.server.ServerConstants;
+import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
+import org.apache.abdera.protocol.server.target.TargetResolver;
 
 public class AbderaServlet 
   extends HttpServlet 

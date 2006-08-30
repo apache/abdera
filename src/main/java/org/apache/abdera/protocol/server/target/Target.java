@@ -15,16 +15,16 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server.util;
+package org.apache.abdera.protocol.server.target;
 
-public enum ResourceType {
+import org.apache.abdera.protocol.server.util.ResourceType;
 
-  UNKNOWN, 
-  SERVICE, 
-  COLLECTION, 
-  ENTRY, 
-  ENTRY_EDIT, 
-  MEDIA, 
-  MEDIA_EDIT
+public interface Target {
+
+  ResourceType getResourceType();
+  
+  String getValue(int index);
+  
+  boolean hasValue(int index);
   
 }

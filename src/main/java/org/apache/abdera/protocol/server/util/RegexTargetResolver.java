@@ -15,15 +15,15 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server.util;
+package org.apache.abdera.protocol.server.util;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.abdera.server.target.Target;
-import org.apache.abdera.server.target.TargetResolver;
+import org.apache.abdera.protocol.server.target.Target;
+import org.apache.abdera.protocol.server.target.TargetResolver;
 
 /**
  * <p>Provides a utility class helpful for determining which type of resource

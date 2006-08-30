@@ -15,21 +15,16 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server.cache;
+package org.apache.abdera.protocol.server.util;
 
-import org.apache.abdera.server.ResponseContext;
+public enum ResourceType {
 
-public interface CacheEntry extends ResponseContext {
-
-  public static enum CacheDisposition {
-    STALE,        // the cache entry is stale and should not be used
-    FRESH,        // the cache entry is fresh and usable
-    TRANSPARENT   // the cache entry either does not exist, or the request should not be processed by the cache
-  }
-  
-  /**
-   * Returns the current disposition of this cache entry
-   */
-  CacheDisposition getDisposition();
+  UNKNOWN, 
+  SERVICE, 
+  COLLECTION, 
+  ENTRY, 
+  ENTRY_EDIT, 
+  MEDIA, 
+  MEDIA_EDIT
   
 }

@@ -23,6 +23,7 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Collection;
+import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
@@ -30,6 +31,7 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
+import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
 public class FOMWorkspace
@@ -89,11 +91,64 @@ public class FOMWorkspace
   }
   
   public String getTitle() {
-    return getAttributeValue(ATITLE);
+    Text title = this.getFirstChild(TITLE);
+    return (title != null) ? title.getValue() : null;
   }
 
-  public void setTitle(String title) {
-    setAttributeValue(ATITLE, title);
+  private Text setTitle(String title, Text.Type type) {
+    FOMFactory fomfactory = (FOMFactory) factory;
+    Text text = fomfactory.newText(PREFIXED_TITLE,type);
+    text.setValue(title);
+    this._setChild(PREFIXED_TITLE, (OMElement) text);
+    return text;
+  }
+  
+  public Text setTitle(String title) {
+    return setTitle(title, Text.Type.TEXT);
+  }
+
+  public Text setTitleAsHtml(String title) {
+    return setTitle(title, Text.Type.HTML);
+  }
+  
+  public Text setTitleAsXHtml(String title) {
+    return setTitle(title, Text.Type.XHTML);
+  }
+  
+  public Text getTitleElement() {
+    return getFirstChild(TITLE);
+  }
+  
+  public List<Text> getTitleElements() {
+    return _getChildrenAsSet(TITLE);
+  }
+  
+  public Text addTitle(String title) {
+    FOMFactory fomfactory = (FOMFactory) factory;
+    Text text = fomfactory.newTitle(Text.Type.TEXT);
+    text.setValue(title);
+    this.addTitle(text);
+    return text;
+  }
+  
+  public Text addTitleAsHtml(String title) {
+    FOMFactory fomfactory = (FOMFactory) factory;
+    Text text = fomfactory.newTitle(Text.Type.HTML);
+    text.setValue(title);
+    this.addTitle(text);
+    return text;
+  }
+  
+  public Text addTitleAsXhtml(String title) {
+    FOMFactory fomfactory = (FOMFactory) factory;
+    Text text = fomfactory.newTitle(Text.Type.XHTML);
+    text.setValue(title);
+    this.addTitle(text);
+    return text;
+  }
+  
+  public void addTitle(Text title) {
+    addChild((OMNode) title);
   }
 
   public List<Collection> getCollections() {

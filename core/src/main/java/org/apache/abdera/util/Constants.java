@@ -90,9 +90,9 @@ public interface Constants {
   public static final QName DIV                   = new QName(XHTML_NS, LN_DIV, "");
   public static final QName CONTROL               = new QName(APP_NS, LN_CONTROL, "app");
   public static final QName DRAFT                 = new QName(APP_NS, LN_DRAFT, "app");
-  public static final QName CATEGORIES            = new QName(APP_NS, LN_CATEGORIES, "app");
+  public static final QName CATEGORIES            = new QName(APP_NS, LN_CATEGORIES, APP_PREFIX);
   public static final QName FEED                  = new QName(ATOM_NS, LN_FEED, PREFIX);
-  public static final QName SERVICE               = new QName(APP_NS, LN_SERVICE, "app");
+  public static final QName SERVICE               = new QName(APP_NS, LN_SERVICE, APP_PREFIX);
   public static final QName AUTHOR                = new QName(ATOM_NS, LN_AUTHOR, PREFIX);
   public static final QName CATEGORY              = new QName(ATOM_NS, LN_CATEGORY, PREFIX);
   public static final QName CONTENT               = new QName(ATOM_NS, LN_CONTENT, PREFIX);
@@ -108,6 +108,7 @@ public interface Constants {
   public static final QName SUBTITLE              = new QName(ATOM_NS, LN_SUBTITLE, PREFIX);
   public static final QName SUMMARY               = new QName(ATOM_NS, LN_SUMMARY, PREFIX);
   public static final QName TITLE                 = new QName(ATOM_NS, LN_TITLE, PREFIX);
+  public static final QName PREFIXED_TITLE        = new QName(ATOM_NS, LN_TITLE, "atom");
   public static final QName UPDATED               = new QName(ATOM_NS, LN_UPDATED, PREFIX);
   public static final QName MODIFIED              = new QName(APP_NS, LN_MODIFIED, "app");
   public static final QName ENTRY                 = new QName(ATOM_NS, LN_ENTRY, PREFIX);

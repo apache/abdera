@@ -40,6 +40,7 @@ public class FOMService
 
   public FOMService() {
     super(Constants.SERVICE, new FOMDocument(), new FOMFactory());
+    declareAtomNs();
   }
   
   public FOMService(
@@ -49,6 +50,7 @@ public class FOMService
     OMFactory factory)
       throws OMException {
     super(name, namespace, parent, factory);
+    declareAtomNs();
   }
   
   public FOMService(
@@ -56,6 +58,7 @@ public class FOMService
     OMContainer parent,
     OMFactory factory) {
       super(qname, parent, factory);
+      declareAtomNs();
   }
   
   public FOMService(
@@ -64,6 +67,7 @@ public class FOMService
     OMFactory factory,
     OMXMLParserWrapper builder) {
       super(qname, parent, factory, builder);
+      declareAtomNs();
   }
   
   public FOMService(
@@ -71,6 +75,7 @@ public class FOMService
     OMFactory factory) 
       throws OMException {
     super(SERVICE, parent, factory);
+    declareAtomNs();
   }
 
   public FOMService(
@@ -79,6 +84,12 @@ public class FOMService
     OMXMLParserWrapper builder) 
       throws OMException {
     super(SERVICE, parent, factory, builder);
+    declareAtomNs();
+  }
+  
+  private void declareAtomNs() {
+    declareDefaultNamespace(APP_NS);
+    declareNamespace(ATOM_NS, "atom");
   }
   
   public List<Workspace> getWorkspaces() {

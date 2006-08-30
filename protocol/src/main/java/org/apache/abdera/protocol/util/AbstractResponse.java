@@ -60,6 +60,10 @@ public abstract class AbstractResponse
   public URI getContentLocation() throws URISyntaxException {
     return getUriHeader("Content-Location");
   }
+  
+  public String getSlug() {
+    return getHeader("Slug");
+  }
 
   public MimeType getContentType() throws MimeTypeParseException {
     String value = getHeader("Content-Type");

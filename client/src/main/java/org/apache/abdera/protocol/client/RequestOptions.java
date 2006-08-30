@@ -241,7 +241,7 @@ public class RequestOptions {
   }
   
   public void setAccept(String... accept) {
-    setHeader("Accept", accept);
+    setHeader("Accept", combine(accept));
   }
   
   public String getAcceptLanguage() {
@@ -253,7 +253,7 @@ public class RequestOptions {
   }
   
   public void setAcceptLanguage(String... accept) {
-    setHeader("Accept-Language", accept);
+    setHeader("Accept-Language", combine(accept));
   }
   
   public String getAcceptCharset() {
@@ -265,7 +265,7 @@ public class RequestOptions {
   }
   
   public void setAcceptCharset(String... accept) {
-    setHeader("Accept-Charset", accept);
+    setHeader("Accept-Charset", combine(accept));
   }
   
   public String getAcceptEncoding() {
@@ -277,7 +277,15 @@ public class RequestOptions {
   }
   
   public void setAcceptEncoding(String... accept) {
-    setHeader("Accept-Encoding", accept);
+    setHeader("Accept-Encoding", combine(accept));
+  }
+  
+  public void setSlug(String slug) {
+    setHeader("Slug", slug);
+  }
+  
+  public String getSlug() {
+    return getHeader("Slug");
   }
   
   public boolean getOnlyIfCached() {

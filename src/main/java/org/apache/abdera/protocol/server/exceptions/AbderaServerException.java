@@ -38,7 +38,7 @@ import javax.activation.URLDataSource;
 
 import org.apache.abdera.model.Base;
 import org.apache.abdera.protocol.server.ResponseContext;
-import org.apache.abdera.protocol.server.impl.AbstractResponseContext;
+import org.apache.abdera.protocol.server.util.AbstractResponseContext;
 import org.apache.abdera.util.AbderaDataSource;
 import org.apache.axiom.attachments.ByteArrayDataSource;
 

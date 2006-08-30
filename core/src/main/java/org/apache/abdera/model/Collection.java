@@ -47,20 +47,26 @@ import javax.activation.MimeTypeParseException;
 public interface Collection 
   extends ExtensibleElement {
 
-  /**
-   * APP Draft-08: The app:collection element MUST contain a "title" 
-   * attribute, whose value gives a human-readable name for the collection.  
-   * This attribute is Language-Sensitive.
-   */
   String getTitle();
 
-  /**
-   * APP Draft-08: The app:collection element MUST contain a "title" 
-   * attribute, whose value gives a human-readable name for the collection.  
-   * This attribute is Language-Sensitive.
-   */
-  void setTitle(String title);
+  Text setTitle(String title);
 
+  Text setTitleAsHtml(String title);
+  
+  Text setTitleAsXHtml(String title);
+  
+  Text getTitleElement();
+  
+  List<Text> getTitleElements();
+  
+  Text addTitle(String title);
+  
+  Text addTitleAsHtml(String title);
+  
+  Text addTitleAsXhtml(String title);
+  
+  void addTitle(Text title);
+  
   /**
    * APP Draft-08: The app:collection element MUST contain a "href" 
    * attribute, whose value gives the IRI of the collection.

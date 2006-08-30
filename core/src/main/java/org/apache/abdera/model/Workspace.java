@@ -43,19 +43,25 @@ import java.util.List;
 public interface Workspace 
   extends ExtensibleElement {
 
-  /**
-   * APP Draft-08: The app:workspace element MUST contain a "title" 
-   * attribute, which gives a human-readable name for the workspace.  
-   * This attribute is Language-Sensitive.
-   */
   String getTitle();
+
+  Text setTitle(String title);
+
+  Text setTitleAsHtml(String title);
   
-  /**
-   * APP Draft-08: The app:workspace element MUST contain a "title" 
-   * attribute, which gives a human-readable name for the workspace.  
-   * This attribute is Language-Sensitive.
-   */
-  void setTitle(String title);
+  Text setTitleAsXHtml(String title);
+  
+  Text getTitleElement();
+  
+  List<Text> getTitleElements();
+  
+  Text addTitle(String title);
+  
+  Text addTitleAsHtml(String title);
+  
+  Text addTitleAsXhtml(String title);
+  
+  void addTitle(Text title);
   
   /**
    * Returns the full set of collections in this workspace 

@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server.exceptions;
+package org.apache.abdera.protocol.server.exceptions;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -37,8 +37,8 @@ import javax.activation.MimeTypeParseException;
 import javax.activation.URLDataSource;
 
 import org.apache.abdera.model.Base;
-import org.apache.abdera.server.ResponseContext;
-import org.apache.abdera.server.impl.AbstractResponseContext;
+import org.apache.abdera.protocol.server.ResponseContext;
+import org.apache.abdera.protocol.server.impl.AbstractResponseContext;
 import org.apache.abdera.util.AbderaDataSource;
 import org.apache.axiom.attachments.ByteArrayDataSource;
 

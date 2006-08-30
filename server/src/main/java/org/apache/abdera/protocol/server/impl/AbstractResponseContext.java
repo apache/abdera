@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server.impl;
+package org.apache.abdera.protocol.server.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -28,7 +28,7 @@ import java.util.Map;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
-import org.apache.abdera.server.ResponseContext;
+import org.apache.abdera.protocol.server.ResponseContext;
 
 public abstract class AbstractResponseContext 
   implements ResponseContext {

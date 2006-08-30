@@ -15,10 +15,10 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server.cache;
+package org.apache.abdera.protocol.server.cache;
 
-import org.apache.abdera.server.RequestContext;
-import org.apache.abdera.server.ResponseContext;
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.ResponseContext;
 
 /**
  * Provides an interface for a server-side cache, out of which responses can

@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server.servlet;
+package org.apache.abdera.protocol.server.servlet;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,11 +29,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.ServerConstants;
+import org.apache.abdera.protocol.server.target.Target;
+import org.apache.abdera.protocol.server.target.TargetResolver;
 import org.apache.abdera.protocol.util.CacheControlParser;
-import org.apache.abdera.server.RequestContext;
-import org.apache.abdera.server.ServerConstants;
-import org.apache.abdera.server.target.Target;
-import org.apache.abdera.server.target.TargetResolver;
 
 public class ServletRequestContext 
   implements RequestContext, ServerConstants {

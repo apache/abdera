@@ -22,7 +22,5 @@ public interface CacheFactory {
   public static final CacheFactory INSTANCE = null;
   
   Cache newCache();
-
-  Cache newCache(CachePolicy defaultPolicy);
   
 }

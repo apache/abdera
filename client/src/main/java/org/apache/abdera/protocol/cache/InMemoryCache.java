@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.apache.abdera.protocol.client.RequestOptions;
-import org.apache.abdera.protocol.client.Response;
+import org.apache.abdera.protocol.client.ClientResponse;
 
 public abstract class InMemoryCache 
   extends CacheBase {
@@ -35,7 +35,7 @@ public abstract class InMemoryCache
   
   @Override
   protected CachedResponse createCachedResponse(
-    Response response, 
+    ClientResponse response, 
     CacheKey key) 
       throws IOException {
     return new InMemoryCachedResponse(this, key, response);
@@ -60,7 +60,7 @@ public abstract class InMemoryCache
   public CacheKey getCacheKey(
     String uri,
     RequestOptions options,
-    Response response) {
+    ClientResponse response) {
       //TODO: We need a complete solution that takes the Vary header into account
       return new SimpleCacheKey(uri);
   }

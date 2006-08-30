@@ -17,9 +17,6 @@
 */
 package org.apache.abdera.protocol.util;
 
-import org.apache.abdera.protocol.client.RequestOptions;
-import org.apache.abdera.protocol.client.ResponseBase;
-
 public class CacheControlUtil {
 
   public static boolean isIdempotent(String method) {
@@ -32,38 +29,55 @@ public class CacheControlUtil {
     return (val != null) ? Long.parseLong(val) : -1; 
   }
   
+  private static void append(StringBuffer buf, String value) {
+    if (buf.length() > 0) buf.append(", ");
+    buf.append(value);
+  }
+
+  public static String buildCacheControl(AbstractRequest request) {
+    StringBuffer buf = new StringBuffer();
+    if (request.isNoCache()) append(buf,"no-cache");
+    if (request.isNoStore()) append(buf,"no-store");
+    if (request.isNoTransform()) append(buf, "no-transform");
+    if (request.isOnlyIfCached()) append(buf, "only-if-cached");
+    if (request.getMaxAge() != -1) append(buf, "max-age=" + request.getMaxAge());
+    if (request.getMaxStale() != -1) append(buf, "max-stale=" + request.getMaxStale());
+    if (request.getMinFresh() != -1) append(buf, "min-fresh=" + request.getMinFresh());
+    return buf.toString();
+  }
+  
   public static void parseCacheControl(
     String cc, 
-    RequestOptions options) {
+    AbstractRequest request) {
       CacheControlParser parser = new CacheControlParser(cc);
-      options.setNoCache(false);
-      options.setNoStore(false);
-      options.setNoTransform(false);
-      options.setOnlyIfCached(false);
-      options.setMaxAge(-1);
-      options.setMaxStale(-1);
-      options.setMinFresh(-1);
+      request.setNoCache(false);
+      request.setNoStore(false);
+      request.setNoTransform(false);
+      request.setOnlyIfCached(false);
+      request.setMaxAge(-1);
+      request.setMaxStale(-1);
+      request.setMinFresh(-1);
       for (String directive : parser) {
         if (directive.equalsIgnoreCase("no-cache")) {
-          options.setNoCache(true);
+          request.setNoCache(true);
         } else if (directive.equalsIgnoreCase("no-store"))
-          options.setNoStore(true);
+          request.setNoStore(true);
         else if (directive.equalsIgnoreCase("no-transform"))
-          options.setNoTransform(true);
+          request.setNoTransform(true);
         else if (directive.equalsIgnoreCase("only-if-cached"))
-          options.setOnlyIfCached(true);
+          request.setOnlyIfCached(true);
         else if (directive.equalsIgnoreCase("max-age"))
-          options.setMaxAge(value(parser.getValue(directive)));
+          request.setMaxAge(value(parser.getValue(directive)));
         else if (directive.equalsIgnoreCase("max-stale"))
-          options.setMaxStale(value(parser.getValue(directive)));
+          request.setMaxStale(value(parser.getValue(directive)));
         else if (directive.equalsIgnoreCase("min-fresh"))
-          options.setMinFresh(value(parser.getValue(directive)));
+          request.setMinFresh(value(parser.getValue(directive)));
       }
   }
   
   public static void parseCacheControl(
     String cc, 
-    ResponseBase response) {
+    AbstractResponse response) {
       if (cc == null) return;
       CacheControlParser parser = new CacheControlParser(cc);
       response.setNoCache(false);

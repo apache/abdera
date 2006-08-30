@@ -19,10 +19,10 @@ package org.apache.abdera.protocol.cache;
 
 import java.util.Date;
 
-import org.apache.abdera.protocol.client.ResponseBase;
+import org.apache.abdera.protocol.client.AbstractClientResponse;
 
 public abstract class CachedResponseBase 
-  extends ResponseBase 
+  extends AbstractClientResponse 
   implements CachedResponse {
 
   protected CacheKey key = null;

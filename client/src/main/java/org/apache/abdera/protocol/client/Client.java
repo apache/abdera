@@ -110,111 +110,111 @@ public abstract class Client {
     return cache;
   }
   
-  public Response head(
+  public ClientResponse head(
     String uri, 
     RequestOptions options) {
       return execute("HEAD", uri, null, options);
   }
   
-  public Response get(
+  public ClientResponse get(
     String uri, 
     RequestOptions options) {
       return execute("GET", uri, null, options);
   }
   
-  public Response post(
+  public ClientResponse post(
     String uri, 
     RequestEntity entity, 
     RequestOptions options) {
       return execute("POST", uri, entity, options);
   }
 
-  public Response post(
+  public ClientResponse post(
     String uri, 
     InputStream in, 
     RequestOptions options) {
       return execute("POST", uri, new InputStreamRequestEntity(in), options);
   }
 
-  public Response post(
+  public ClientResponse post(
     String uri, 
     Base base, 
     RequestOptions options) {
       return execute("POST", uri, new BaseRequestEntity(base), options);
   }
     
-  public Response put(
+  public ClientResponse put(
     String uri, 
     RequestEntity entity, 
     RequestOptions options) {
       return execute("PUT", uri, entity, options);
   }
 
-  public Response put(
+  public ClientResponse put(
     String uri, 
     InputStream in, 
     RequestOptions options) {
       return execute("PUT", uri, new InputStreamRequestEntity(in), options);
   }
 
-  public Response put(
+  public ClientResponse put(
       String uri, 
       Base base, 
       RequestOptions options) {
     return execute("PUT", uri, new BaseRequestEntity(base), options);
   }
       
-  public Response delete(
+  public ClientResponse delete(
     String uri, 
     RequestOptions options) {
       return execute("DELETE", uri, null, options);
   }
   
-  public Response head(String uri) {
+  public ClientResponse head(String uri) {
     return head(uri, getDefaultRequestOptions());
   }
   
-  public Response get(String uri) {
+  public ClientResponse get(String uri) {
     return get(uri, getDefaultRequestOptions());
   }
     
-  public Response post(
+  public ClientResponse post(
     String uri, 
     RequestEntity entity) {
     return post(uri, entity, getDefaultRequestOptions());
   }
   
-  public Response post(
+  public ClientResponse post(
     String uri, 
     InputStream in) {
       return post(uri, in, getDefaultRequestOptions());
   }
   
-  public Response post(
+  public ClientResponse post(
     String uri, 
     Base base) {
       return post(uri, base, getDefaultRequestOptions());
   }
 
-  public Response put(
+  public ClientResponse put(
     String uri, 
     RequestEntity entity) {
       return put(uri, entity, getDefaultRequestOptions());
   }
   
-  public Response put(
+  public ClientResponse put(
     String uri, 
     InputStream in) {
       return put(uri, in, getDefaultRequestOptions());
   }
   
-  public Response put(
+  public ClientResponse put(
     String uri, 
     Base base) {
       return put(uri, base, getDefaultRequestOptions());
   }
 
-  public Response delete(
+  public ClientResponse delete(
     String uri) {
       return delete(uri, getDefaultRequestOptions());
   }
@@ -228,7 +228,7 @@ public abstract class Client {
    * @param options The options to use for this request
    * @return the server's response
    */
-  public abstract Response execute(
+  public abstract ClientResponse execute(
     String method, 
     String uri, 
     RequestEntity entity, 

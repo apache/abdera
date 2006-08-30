@@ -75,8 +75,8 @@ public class CommonsClient extends Client {
     String method, 
     RequestOptions options) {
       return (CacheControlUtil.isIdempotent(method)) &&
-        !options.getNoCache() &&
-        !options.getNoStore() &&
+        !options.isNoCache() &&
+        !options.isNoStore() &&
         options.getUseLocalCache();
   }
   
@@ -93,7 +93,7 @@ public class CommonsClient extends Client {
   }
   
   @Override
-  public Response execute(
+  public ClientResponse execute(
     String method, 
     String uri, 
     RequestEntity entity,
@@ -127,7 +127,7 @@ public class CommonsClient extends Client {
               MethodHelper.createMethod(
                 method, uri, entity, options);
             client.executeMethod(httpMethod);
-            Response response = new CommonsResponse(httpMethod);
+            ClientResponse response = new CommonsResponse(httpMethod);
             return (options.getUseLocalCache()) ?
               response = cache.update(options, response, cached_response) : 
               response;

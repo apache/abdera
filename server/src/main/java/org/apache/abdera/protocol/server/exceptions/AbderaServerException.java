@@ -305,6 +305,18 @@ public class AbderaServerException
     this.context.setAllow(methods);
   }
   
+  public ResponseType getType() {
+    return context.getType();
+  }
+  
+  public String[] getHeaderNames() {
+    return context.getHeaderNames();
+  }
+
+  public URI getUriHeader(String name) throws URISyntaxException {
+    return context.getUriHeader(name);
+  }
+  
   protected static class ExceptionResponseContext 
     extends AbstractResponseContext {
 

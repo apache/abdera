@@ -21,49 +21,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-import javax.activation.MimeType;
-
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
+import org.apache.abdera.protocol.Response;
 
-public interface Response {
+public interface ClientResponse extends Response {
 
-  public static enum ResponseType {
-    SUCCESS, REDIRECTION, CLIENT_ERROR, SERVER_ERROR, UNKNOWN
-  }
-
-  ResponseType getResponseClass();
-  
   String getMethod();
   
-  int getStatus();
-  
   String getUri();
-  
-  String getStatusText();
-  
-  Date getLastModified();
-  
-  String getEntityTag();
-  
-  MimeType getContentType();
-  
-  Date getServerDate();
-  
-  String getLocation();
-  
-  String getContentLocation();
-  
-  String getHeader(String header);
-  
-  Date getDateHeader(String header);
-  
-  String[] getHeaders(String header);
-  
-  String[] getHeaderNames();
   
   void release();
   
@@ -79,26 +48,6 @@ public interface Response {
   
   <T extends Element>Document<T> getDocument(Parser parser, ParserOptions options) throws ParseException;
   
-  boolean isPrivate();
-  
-  boolean isPublic();
-  
-  boolean isNoCache();
-  
-  boolean isNoStore();
-  
-  boolean isNoTransform();
-  
-  boolean isMustRevalidate();
-  
-  long getMaxAge();
-  
-  long getAge();
-  
-  Date getExpires();
-  
-  String[] getNoCacheHeaders();
-  
-  String[] getPrivateHeaders();
+  Date getServerDate();
   
 }

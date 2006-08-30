@@ -26,7 +26,7 @@ import org.apache.abdera.protocol.cache.CachedResponse;
 import org.apache.abdera.protocol.client.Client;
 import org.apache.abdera.protocol.client.CommonsClient;
 import org.apache.abdera.protocol.client.RequestOptions;
-import org.apache.abdera.protocol.client.Response;
+import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.test.client.JettyTest;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.mortbay.jetty.servlet.ServletHandler;
@@ -265,7 +265,7 @@ public class CacheTest extends JettyTest {
     RequestOptions options = client.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
     options.setHeader("x-reqnum", "1");
-    Response response = client.get(CHECK_MUST_REVALIDATE, options);
+    ClientResponse response = client.get(CHECK_MUST_REVALIDATE, options);
   
     String resp1 = getResponse(response);
     assertEquals(resp1, "1");
@@ -292,7 +292,7 @@ public class CacheTest extends JettyTest {
     RequestOptions options = client.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
     options.setHeader("x-reqnum", "1");
-    Response response = client.get(CHECK_CACHE_INVALIDATE, options);
+    ClientResponse response = client.get(CHECK_CACHE_INVALIDATE, options);
   
     String resp1 = getResponse(response);
     response.release();
@@ -335,7 +335,7 @@ public class CacheTest extends JettyTest {
     RequestOptions options = client.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
     options.setHeader("x-reqnum", "1");
-    Response response = client.get(CHECK_CACHE_INVALIDATE, options);  
+    ClientResponse response = client.get(CHECK_CACHE_INVALIDATE, options);  
     String resp1 = getResponse(response);
     assertEquals(resp1, "1");
     
@@ -371,7 +371,7 @@ public class CacheTest extends JettyTest {
     options.setHeader("Connection", "close");
     options.setHeader("x-reqnum", "1");
     options.setHeader("x-reqtest", String.valueOf(type));
-    Response response = client.get(CHECK_NO_CACHE, options);
+    ClientResponse response = client.get(CHECK_NO_CACHE, options);
   
     String resp1 = getResponse(response);
     assertEquals(resp1, "1");
@@ -391,7 +391,7 @@ public class CacheTest extends JettyTest {
     assertEquals(resp3, "3");
   }
   
-  private static String getResponse(Response response) throws IOException {
+  private static String getResponse(ClientResponse response) throws IOException {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     int m = -1;
     InputStream in = response.getInputStream();

@@ -18,7 +18,7 @@
 package org.apache.abdera.protocol.cache;
 
 import org.apache.abdera.protocol.client.RequestOptions;
-import org.apache.abdera.protocol.client.Response;
+import org.apache.abdera.protocol.client.ClientResponse;
 
 public interface Cache {
 
@@ -50,9 +50,9 @@ public interface Cache {
   void remove(
     CacheKey key);
   
-  Response update(
+  ClientResponse update(
     RequestOptions options, 
-    Response response,
-    Response cached_response);
+    ClientResponse response,
+    ClientResponse cached_response);
   
 }

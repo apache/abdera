@@ -56,6 +56,8 @@ public interface Response extends ProtocolConstants {
   
   public URI getLocation() throws URISyntaxException;
   
+  public String getSlug();
+  
   public Date getDateHeader(String name);
   
   public URI getUriHeader(String name) throws URISyntaxException;

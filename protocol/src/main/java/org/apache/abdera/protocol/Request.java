@@ -45,6 +45,8 @@ public interface Request extends ProtocolConstants {
   
   String getCacheControl();
   
+  String getSlug();
+  
   MimeType getContentType() throws MimeTypeParseException;
   
   Date getDateHeader(String name);

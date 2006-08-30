@@ -237,10 +237,6 @@ public class RequestOptions
     setHeader("Slug", slug);
   }
   
-  public String getSlug() {
-    return getHeader("Slug");
-  }
-  
   public void setCacheControl(String cc) {
     CacheControlUtil.parseCacheControl(cc, this);
   }

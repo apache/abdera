@@ -204,6 +204,10 @@ public class AbderaServerException
   public URI getContentLocation() throws URISyntaxException {
     return context.getContentLocation();
   }
+  
+  public String getSlug() {
+    return context.getSlug();
+  }
 
   public MimeType getContentType() throws MimeTypeParseException {
     return context.getContentType();

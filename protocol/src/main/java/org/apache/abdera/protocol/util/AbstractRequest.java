@@ -54,6 +54,10 @@ public abstract class AbstractRequest implements Request {
   public String getCacheControl() {
     return getHeader("Cache-Control");
   }
+  
+  public String getSlug() {
+    return getHeader("Slug");
+  }
 
   public MimeType getContentType() throws MimeTypeParseException {
     String value = getHeader("Content-Type");

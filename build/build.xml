@@ -41,6 +41,10 @@
   <property name="core.test" value="${core}/src/test/java" />
   <property name="core.work" value="${work}/core" />
   <property name="core.jar" value="${dist}/${ant.project.name}.core.${version}.jar" />
+  <property name="protocol" value="${basedir}/protocol" />
+  <property name="protocol.src" value="${protocol}/src/main/java" />
+  <property name="protocol.work" value="${work}/protocol" />
+  <property name="protocol.jar" value="${dist}/${ant.project.name}.protocol.${version}.jar" />
   <property name="parser" value="${basedir}/parser" />
   <property name="parser.src" value="${parser}/src/main/java" />
   <property name="parser.resources" value="${parser}/src/main/resources" />
@@ -189,6 +193,20 @@ Working directory: ${work}
     </copy>
   </target>
   
+  <target name="compile.protocol" depends="init">
+    <mkdir dir="${protocol.work}" />
+    <javac srcdir="${protocol.src}"
+           destdir="${protocol.work}"
+           classpathref="jar.dependencies" />
+    <mkdir dir="${protocol.work}/META-INF" />
+    <copy todir="${protocol.work}/META-INF">
+      <fileset dir="${basedir}">
+        <include name="LICENSE" />
+        <include name="NOTICE" />
+      </fileset>
+    </copy>
+  </target>
+  
   <target name="compile.parser" depends="init,compile.core">
     <mkdir dir="${parser.work}" />
     <javac srcdir="${parser.src}"
@@ -241,12 +259,12 @@ Working directory: ${work}
     </copy>
   </target>
   
-  <target name="compile.server" depends="init, compile.core">
+  <target name="compile.server" depends="init, compile.core, compile.protocol">
     <mkdir dir="${server.work}" />
     <javac srcdir="${server.src}"
            destdir="${server.work}"
            classpathref="jar.dependencies"
-           classpath="${core.work}" />
+           classpath="${core.work};${protocol.work}" />
     <mkdir dir="${server.work}/META-INF" />
     <copy todir="${server.work}/META-INF">
       <fileset dir="${basedir}">
@@ -271,16 +289,16 @@ Working directory: ${work}
     </copy>
   </target>
 
-  <target name="compile.client" depends="init,compile.core">
+  <target name="compile.client" depends="init,compile.core, compile.protocol">
     <mkdir dir="${client.work}" />
     <javac srcdir="${client.src}"
            destdir="${client.work}"
            classpathref="jar.dependencies"
-           classpath="${core.work}" />
+           classpath="${core.work};${protocol.work}" />
     <javac srcdir="${client.test.java}"
            destdir="${test}"
            classpathref="jar.dependencies"
-           classpath="${core.work};${parser.work};${extensions.work};${client.work}" />
+           classpath="${core.work};${parser.work};${extensions.work};${client.work};${protocol.work}" />
     <mkdir dir="${client.work}/META-INF" />
     <copy todir="${client.work}/META-INF">
       <fileset dir="${basedir}">
@@ -290,12 +308,12 @@ Working directory: ${work}
     </copy>
   </target>
   
-  <target name="build" depends="init,compile.core,compile.parser,compile.server,compile.extensions,compile.client,compile.security"></target>
+  <target name="build" depends="init,compile.core,compile.parser,compile.protocol,compile.server,compile.extensions,compile.client,compile.security"></target>
 
   <target name="docs" depends="init">
     <javadoc packagenames="org.apache.abdera.*"
              excludepackagenames="org.apache.abdera.util,org.apache.abdera.ext.*.impl,org.apache.abdera.parser.**,org.apache.abdera.security.**"
-             sourcepath="${core.src}:${extensions.src}:${security.src}:${server.src}:${parser.src}:${client.src}" 
+             sourcepath="${core.src}:${extensions.src}:${security.src}:${server.src}:${parser.src}:${client.src}:${protocol.src}" 
              destdir="${javadocs}"
              windowtitle="Abdera"
              classpathref="jar.dependencies" />
@@ -325,7 +343,7 @@ Working directory: ${work}
 
     <echo>Running Client Tests...</echo>
     <java classpathref="jar.dependencies"
-          classpath="${core.work}:${parser.work}:${server.work}:${client.work}:${test}"
+          classpath="${core.work}:${parser.work}:${server.work}:${client.work}:${protocol.work}:${test}"
           classname="org.apache.abdera.test.client.TestSuite"
           fork="yes" />
 
@@ -352,6 +370,7 @@ Working directory: ${work}
     <mkdir dir="${dist_lib}" />
     <jar destfile="${core.jar}"   basedir="${core.work}" manifest="${work}/MANIFEST.MF" />
     <jar destfile="${parser.jar}" basedir="${parser.work}" manifest="${work}/MANIFEST.MF" />
+    <jar destfile="${protocol.jar}" basedir="${protocol.work}" manifest="${work}/MANIFEST.MF" />
     <jar destfile="${server.jar}" basedir="${server.work}" manifest="${work}/MANIFEST.MF" />    
     <jar destfile="${extensions.jar}" basedir="${extensions.work}" manifest="${work}/MANIFEST.MF" />
     <jar destfile="${client.jar}" basedir="${client.work}" manifest="${work}/MANIFEST.MF" />
@@ -499,6 +518,7 @@ Working directory: ${work}
     <property name="retro" value="${basedir}/build/tools/retroweaver-1.2.3" />
     <property name="retro_core.jar" value="${dist}/${ant.project.name}.core.${version}.retro.jar" />
     <property name="retro_parser.jar" value="${dist}/${ant.project.name}.parser.${version}.retro.jar" />
+    <property name="retro_protocol.jar" value="${dist}/${ant.project.name}.protocol.${version}.retro.jar" />
     <property name="retro_extensions.jar" value="${dist}/${ant.project.name}.extensions.${version}.retro.jar" />
     <property name="retro_server.jar" value="${dist}/${ant.project.name}.server.${version}.retro.jar" />
     <property name="retro_client.jar" value="${dist}/${ant.project.name}.client.${version}.retro.jar" />
@@ -515,6 +535,9 @@ Working directory: ${work}
     </java>
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${parser.jar}&quot; &quot;${retro_parser.jar}&quot;"/>
+    </java>
+    <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
+      <arg line="-jar &quot;${protocol.jar}&quot; &quot;${retro_protocol.jar}&quot;"/>
     </java>
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${server.jar}&quot; &quot;${retro_server.jar}&quot;" />

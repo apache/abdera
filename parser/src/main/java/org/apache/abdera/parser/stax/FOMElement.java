@@ -114,6 +114,10 @@ public class FOMElement
     return (T)super.getParent();
   }
   
+  protected void setParentDocument(Document parent) {
+    super.setParent((OMContainer)parent);
+  }
+  
   public void setParentElement(Element parent) {
     super.setParent((FOMElement)parent);
   }
@@ -538,7 +542,8 @@ public class FOMElement
     Object obj = null;
     if (src instanceof Content) obj = ((Content)src).getContentType();
     if (src instanceof Text) obj = ((Text)src).getTextType();
-    el = fomfactory.createElement(src.getQName(), null, factory, obj);
+    el = fomfactory.createElement(
+      src.getQName(), (OMContainer) fomfactory.newDocument(), factory, obj);
     
     return el;
   }

@@ -15,12 +15,22 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server.cache;
+package org.apache.abdera.protocol.server.impl;
 
-public interface CacheFactory {
+import java.io.IOException;
+import java.io.OutputStream;
 
-  public static final CacheFactory INSTANCE = null;
+public class EmptyResponseContext extends AbstractResponseContext {
+
+  public EmptyResponseContext(int status) {
+    setStatus(status);
+  }
   
-  Cache newCache();
-  
+  public boolean hasEntity() {
+    return false;
+  }
+
+  public void writeTo(OutputStream out) throws IOException {
+  }
+
 }

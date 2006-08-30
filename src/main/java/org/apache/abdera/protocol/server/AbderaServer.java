@@ -15,10 +15,10 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server;
+package org.apache.abdera.protocol.server;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.server.target.TargetResolver;
+import org.apache.abdera.protocol.server.target.TargetResolver;
 import org.apache.abdera.util.ServiceUtil;
 
 public class AbderaServer implements ServerConstants {

@@ -36,6 +36,7 @@ public interface Constants {
   
   public static final String ATOM_NS              = "http://www.w3.org/2005/Atom";
   public static final String APP_NS               = "http://purl.org/atom/app#";
+  /** @deprecated **/
   public static final String CONTROL_NS           = "http://example.net/appns/";
   public static final String XML_NS               = "http://www.w3.org/XML/1998/namespace";
   public static final String XHTML_NS             = "http://www.w3.org/1999/xhtml";
@@ -82,10 +83,13 @@ public interface Constants {
   public static final String LN_COLLECTION        = "collection";
   public static final String LN_CONTROL           = "control";
   public static final String LN_DRAFT             = "draft";
+  public static final String LN_CATEGORIES        = "categories";
+  public static final String LN_FIXED             = "fixed";
   
   public static final QName DIV                   = new QName(XHTML_NS, LN_DIV, "");
-  public static final QName CONTROL               = new QName(CONTROL_NS, LN_CONTROL, CONTROL_PREFIX);
-  public static final QName DRAFT                 = new QName(CONTROL_NS, LN_DRAFT, CONTROL_PREFIX);
+  public static final QName CONTROL               = new QName(APP_NS, LN_CONTROL, "app");
+  public static final QName DRAFT                 = new QName(APP_NS, LN_DRAFT, "app");
+  public static final QName CATEGORIES            = new QName(APP_NS, LN_CATEGORIES, "app");
   public static final QName FEED                  = new QName(ATOM_NS, LN_FEED, PREFIX);
   public static final QName SERVICE               = new QName(APP_NS, LN_SERVICE, "app");
   public static final QName AUTHOR                = new QName(ATOM_NS, LN_AUTHOR, PREFIX);
@@ -107,6 +111,7 @@ public interface Constants {
   public static final QName ENTRY                 = new QName(ATOM_NS, LN_ENTRY, PREFIX);
   public static final QName TERM                  = new QName(LN_TERM);
   public static final QName SCHEME                = new QName(LN_SCHEME);
+  public static final QName FIXED                 = new QName(LN_FIXED);
   public static final QName LABEL                 = new QName(LN_LABEL);
   public static final QName ATITLE                = new QName(LN_TITLE);
   public static final QName HREF                  = new QName(LN_HREF);

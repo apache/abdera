@@ -31,6 +31,7 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Base;
+import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Content;
@@ -699,6 +700,8 @@ public class FOMFactory
         element = new FOMControl(qname.getLocalPart(), namespace, parent, factory);
       } else if (DIV.equals(qname)) {
         element = new FOMDiv(qname.getLocalPart(), namespace, parent, factory);
+      } else if (CATEGORIES.equals(qname)) {
+        element = new FOMCategories(qname.getLocalPart(), namespace, parent, factory);
       } else if (parent instanceof ExtensibleElement || 
                  parent instanceof Document) {
         element = (OMElement) newExtensionElement(qname, parent);
@@ -769,6 +772,8 @@ public class FOMFactory
       element = (OMElement) newControl(qname, parent, builder);
     } else if (DIV.equals(qname)) {
       element = (OMElement) newDiv(qname, parent, builder);
+    } else if (CATEGORIES.equals(qname)) {
+      element = (OMElement) newCategories(qname, parent, builder);
     } else if (parent instanceof ExtensibleElement || parent instanceof Document) {
       element = (OMElement) newExtensionElement(qname, parent, builder);
     }
@@ -849,5 +854,20 @@ public class FOMFactory
       }
       return null;
   }
-  
+
+  public Categories newCategories() {
+    return newCategories(null);
+  }
+
+  public Categories newCategories(Element parent) {
+    return new FOMCategories((OMContainer)parent, this);
+  }
+
+  public Categories newCategories(
+      QName qname,
+      OMContainer parent, 
+      OMXMLParserWrapper parserWrapper) {
+        return new FOMCategories(qname,parent, this, parserWrapper);
+    }
+
 }

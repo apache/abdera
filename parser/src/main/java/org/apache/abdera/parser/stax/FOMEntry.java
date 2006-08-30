@@ -607,6 +607,47 @@ public class FOMEntry
     return setUpdated((value != null) ? AtomDate.valueOf(value) : null);
   }
 
+  public DateTime getModifiedElement() {
+    return (DateTime)getFirstChildWithName(MODIFIED);
+  }
+
+  public void setModifiedElement(DateTime updated) {
+    if (updated != null)
+      _setChild(MODIFIED, (OMElement)updated);
+    else 
+      _removeChildren(MODIFIED, false);
+  }
+
+  public Date getModified() {
+    DateTime dte = getModifiedElement();
+    return (dte != null) ? dte.getDate() : null;
+  }
+  
+  private DateTime setModified(AtomDate value) {
+    if (value == null) {
+      _removeChildren(MODIFIED, false);
+      return null;
+    }
+    DateTime dte = getModifiedElement();
+    if (dte != null) {
+      dte.setValue(value);
+      return dte;
+    } else {
+      FOMFactory fomfactory = (FOMFactory) factory;
+      DateTime dt = fomfactory.newModified(this);
+      dt.setValue(value);
+      return dt;
+    }
+  }
+  
+  public DateTime setModified(Date value) {
+    return setModified((value != null) ? AtomDate.valueOf(value) : null);
+  }
+  
+  public DateTime setModified(String value) {
+    return setUpdated((value != null) ? AtomDate.valueOf(value) : null);
+  }
+  
   public Control getControl() {
     return (Control)getFirstChildWithName(CONTROL);
   }

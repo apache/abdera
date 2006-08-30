@@ -20,7 +20,6 @@ package org.apache.abdera.protocol.server.util;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.RequestHandler;
 import org.apache.abdera.protocol.server.ResponseContext;
-import org.apache.abdera.protocol.server.ServerConstants;
 import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
 
 public abstract class AbstractRequestHandler 

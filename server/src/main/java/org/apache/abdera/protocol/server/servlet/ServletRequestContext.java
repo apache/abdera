@@ -30,9 +30,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.server.RequestContext;
-import org.apache.abdera.protocol.server.ServerConstants;
 import org.apache.abdera.protocol.server.target.Target;
 import org.apache.abdera.protocol.server.target.TargetResolver;
+import org.apache.abdera.protocol.server.util.ServerConstants;
 import org.apache.abdera.protocol.util.AbstractRequest;
 import org.apache.abdera.protocol.util.CacheControlUtil;
 

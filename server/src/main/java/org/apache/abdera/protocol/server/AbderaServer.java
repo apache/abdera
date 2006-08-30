@@ -19,6 +19,7 @@ package org.apache.abdera.protocol.server;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.server.target.TargetResolver;
+import org.apache.abdera.protocol.server.util.ServerConstants;
 import org.apache.abdera.util.ServiceUtil;
 
 public class AbderaServer implements ServerConstants {

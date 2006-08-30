@@ -20,7 +20,10 @@ package org.apache.abdera.protocol.client;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 import java.util.zip.ZipInputStream;
@@ -29,10 +32,12 @@ import org.apache.abdera.protocol.util.CacheControlUtil;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URIException;
+import org.apache.commons.httpclient.util.DateParseException;
+import org.apache.commons.httpclient.util.DateUtil;
 
 public class CommonsResponse 
-  extends ResponseBase
-  implements Response {
+  extends AbstractClientResponse
+  implements ClientResponse {
 
   private HttpMethod method = null;
     
@@ -71,13 +76,27 @@ public class CommonsResponse
     else return null;
   }
 
-  public String[] getHeaders(String header) {
+  public List<Object> getHeaders(String header) {
     Header[] headers = method.getResponseHeaders(header);
-    String[] values = new String[headers.length];
-    for (int n = 0; n < headers.length; n++) {
-      values[n] = headers[n].getValue();
+    List<Object> values = new ArrayList<Object>();
+    for (Header h : headers) {
+      values.add(h.getValue());
     }
-    return values;
+    return java.util.Collections.unmodifiableList(values);
+  }
+  
+  public Map<String,List<Object>> getHeaders() {
+    Header[] headers = method.getResponseHeaders();
+    Map<String,List<Object>> map = new HashMap<String,List<Object>>();
+    for (Header header : headers) {
+      List<Object> values = map.get(header.getName());
+      if (values == null) {
+        values = new ArrayList<Object>();
+        map.put(header.getName(),values);
+      }
+      values.add(header.getValue());
+    }
+    return java.util.Collections.unmodifiableMap(map);
   }
   
   public String[] getHeaderNames() {
@@ -123,4 +142,15 @@ public class CommonsResponse
     return super.getInputStream();
   }
 
+  public Date getDateHeader(String header) {
+    try {
+      String value = getHeader(header);
+      if (value != null)
+        return DateUtil.parseDate(value);
+      else return null;
+    } catch (DateParseException e) {
+      throw new ClientException(e); // server likely returned a bad date format
+    }
+  }
+  
 }

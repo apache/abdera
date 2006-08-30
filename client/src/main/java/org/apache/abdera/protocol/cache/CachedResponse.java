@@ -17,9 +17,9 @@
 */
 package org.apache.abdera.protocol.cache;
 
-import org.apache.abdera.protocol.client.Response;
+import org.apache.abdera.protocol.client.ClientResponse;
 
-public interface CachedResponse extends Response {
+public interface CachedResponse extends ClientResponse {
 
   CacheKey geKey();
   

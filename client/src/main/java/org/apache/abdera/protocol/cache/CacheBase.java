@@ -18,9 +18,10 @@
 package org.apache.abdera.protocol.cache;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.abdera.protocol.client.RequestOptions;
-import org.apache.abdera.protocol.client.Response;
+import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.protocol.util.CacheControlUtil;
 
 public abstract class CacheBase 
@@ -36,17 +37,19 @@ public abstract class CacheBase
       CacheKey key = getCacheKey(uri, options);
       CachedResponse response = get(key);
       if (response != null && options != null) {
-        String[] pragma = options.getHeaders("Pragma");
-        for (String s: pragma) {
-          if (s.equalsIgnoreCase("no-cache")) {
-            return CacheDisposition.TRANSPARENT;
+        List<String> pragma = options.getHeaders("Pragma");
+        if (pragma != null) {
+          for (String s: pragma) {
+            if (s.equalsIgnoreCase("no-cache")) {
+              return CacheDisposition.TRANSPARENT;
+            }
           }
         }
-        if (options.getNoCache()) 
+        if (options.isNoCache()) 
           return CacheDisposition.TRANSPARENT;
         else if (response.isNoCache())
           return CacheDisposition.STALE;
-        else if (options != null && options.getOnlyIfCached())
+        else if (options != null && options.isOnlyIfCached())
           return CacheDisposition.FRESH;
         else if (response.isMustRevalidate())
           return CacheDisposition.STALE;
@@ -93,12 +96,12 @@ public abstract class CacheBase
     CachedResponse response);
 
   protected abstract CachedResponse createCachedResponse(
-    Response response, CacheKey key) throws IOException;
+    ClientResponse response, CacheKey key) throws IOException;
   
   protected abstract CacheKey getCacheKey(
     String uri, 
     RequestOptions options, 
-    Response response);
+    ClientResponse response);
   
   public CachedResponse getIfFreshEnough(
     String uri, 
@@ -119,7 +122,7 @@ public abstract class CacheBase
   }
 
   private boolean shouldUpdateCache(
-    Response response,
+    ClientResponse response,
     boolean allowedByDefault) {
     // TODO: we should probably include pragma: no-cache headers in here 
       if (allowedByDefault) {
@@ -135,10 +138,10 @@ public abstract class CacheBase
       }
   }
   
-  public Response update(
+  public ClientResponse update(
     RequestOptions options,
-    Response response,
-    Response cached_response) {
+    ClientResponse response,
+    ClientResponse cached_response) {
       int status = response.getStatus();  
       String uri = response.getUri();
       String method = response.getMethod();
@@ -170,9 +173,9 @@ public abstract class CacheBase
       return response;
   }
    
-  private Response update(
+  private ClientResponse update(
     RequestOptions options,
-    Response response) {
+    ClientResponse response) {
       String uri = response.getUri();
       CacheKey key = getCacheKey(uri, options,response);
       try {

@@ -21,13 +21,17 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.abdera.protocol.client.Response;
+import org.apache.abdera.protocol.client.ClientException;
+import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.protocol.util.CacheControlUtil;
 import org.apache.abdera.protocol.util.MethodHelper;
+import org.apache.commons.httpclient.util.DateParseException;
+import org.apache.commons.httpclient.util.DateUtil;
 
 public class InMemoryCachedResponse 
   extends CachedResponseBase
@@ -37,13 +41,13 @@ public class InMemoryCachedResponse
   private int status = 0;
   private String status_text = null;
   private String uri = null;
-  private Map<String,List<String>> headers = null;
+  private Map<String,List<Object>> headers = null;
   private byte[] buf = null;
   
   public InMemoryCachedResponse(
     Cache cache,
     CacheKey key,
-    Response response) 
+    ClientResponse response) 
       throws IOException {
     super(key,cache);
     this.method = response.getMethod();
@@ -74,9 +78,9 @@ public class InMemoryCachedResponse
     this.buf = out.toByteArray();
   }
   
-  private Map<String,List<String>> getHeaders() {
+  public Map<String,List<Object>> getHeaders() {
     if (headers == null)
-      headers = new HashMap<String,List<String>>();
+      headers = new HashMap<String,List<Object>>();
     return headers;
   }
   
@@ -85,19 +89,16 @@ public class InMemoryCachedResponse
   }
   
   public String getHeader(String header) {
-    List<String> values = getHeaders().get(header);
-    return (values != null) ? values.get(0) : null;
+    List<Object> values = getHeaders().get(header);
+    return (values != null) ? (String)values.get(0) : null;
   }
 
   public String[] getHeaderNames() {
     return getHeaders().keySet().toArray(new String[getHeaders().size()]);
   }
 
-  public String[] getHeaders(String header) {
-    List<String> values = getHeaders().get(header);
-    return (values != null) ?
-      values.toArray(new String[values.size()]) :
-      new String[0];
+  public List<Object> getHeaders(String header) {
+    return getHeaders().get(header);
   }
 
   public int getStatus() {
@@ -122,4 +123,14 @@ public class InMemoryCachedResponse
     throw new UnsupportedOperationException();
   }
     
+  public Date getDateHeader(String header) {
+    try {
+      String value = getHeader(header);
+      if (value != null)
+        return DateUtil.parseDate(value);
+      else return null;
+    } catch (DateParseException e) {
+      throw new ClientException(e); // server likely returned a bad date format
+    }
+  }
 }

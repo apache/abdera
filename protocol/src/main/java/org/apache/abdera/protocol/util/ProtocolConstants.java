@@ -15,34 +15,18 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server;
+package org.apache.abdera.protocol.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.List;
+public interface ProtocolConstants {
 
-import org.apache.abdera.protocol.Request;
-import org.apache.abdera.protocol.server.target.Target;
+  public final static int NOCACHE = 1;
+  public final static int NOSTORE = 2;
+  public final static int NOTRANSFORM = 4;
+  public final static int PUBLIC = 8;
+  public final static int PRIVATE = 16;
+  public final static int REVALIDATE = 32;
+  public final static int PROXYREVALIDATE = 64;
+  public final static int ONLYIFCACHED = 128;
 
-public interface RequestContext extends Request {
-  
-  Target getTarget();
-  
-  String getMethod();
-  
-  URI getUri();
-  
-  URI getBaseUri();
-  
-  URI getPathInfo();
-  
-  String getParameter(String name);
-  
-  List<String> getParameters(String name);
-
-  List<String> getParameterNames();
-  
-  InputStream getInputStream() throws IOException;
   
 }

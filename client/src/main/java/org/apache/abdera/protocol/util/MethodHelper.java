@@ -17,13 +17,12 @@
 */
 package org.apache.abdera.protocol.util;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.abdera.protocol.client.RequestOptions;
-import org.apache.abdera.protocol.client.Response;
+import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.methods.DeleteMethod;
@@ -61,13 +60,12 @@ public class MethodHelper {
     }
   }
 
-  public static Map<String,List<String>> getCacheableHeaders(Response response) {
-    Map<String,List<String>> map = new HashMap<String,List<String>>();
+  public static Map<String,List<Object>> getCacheableHeaders(ClientResponse response) {
+    Map<String,List<Object>> map = new HashMap<String,List<Object>>();
     String[] headers = response.getHeaderNames();
     for (String header : headers) {
       if (MethodHelper.isCacheableHeader(header, response)) {
-        String[] values = response.getHeaders(header);
-        List<String> list = Arrays.asList(values);
+        List<Object> list = response.getHeaders(header);
         map.put(header, list);
       }
     }
@@ -75,14 +73,14 @@ public class MethodHelper {
   }
   
   public static boolean isCacheableHeader(
-    String header, Response response) {
+    String header, ClientResponse response) {
       return !isNoCacheOrPrivate(header, response) &&
              !isHopByHop(header);
   }
   
   public static boolean isNoCacheOrPrivate(
     String header, 
-    Response response) {
+    ClientResponse response) {
       String[] no_cache_headers = response.getNoCacheHeaders();
       String[] private_headers = response.getPrivateHeaders();
       return contains(no_cache_headers,header) ||
@@ -144,7 +142,7 @@ public class MethodHelper {
   private static void initHeaders(RequestOptions options, HttpMethod method) {
     String[] headers = options.getHeaderNames();
     for (String header : headers) {
-      String[] values = options.getHeaders(header);
+      List<String> values = options.getHeaders(header);
       for (String value : values) {
         method.addRequestHeader(header, value);
       }

@@ -28,7 +28,7 @@ import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 
-public class BaseResponseContext<T extends Base> 
+public class BaseResponseContext<T extends Base>
   extends AbstractResponseContext {
 
   private T base = null;

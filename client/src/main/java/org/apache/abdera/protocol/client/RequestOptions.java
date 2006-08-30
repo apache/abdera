@@ -26,20 +26,16 @@ import java.util.Set;
 
 import javax.activation.MimeType;
 
+import org.apache.abdera.protocol.Request;
+import org.apache.abdera.protocol.util.AbstractRequest;
 import org.apache.abdera.protocol.util.CacheControlUtil;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
 
-public class RequestOptions {
+public class RequestOptions
+  extends AbstractRequest 
+  implements Request {
 
-  private byte flags = 0;
-  private final static byte NOCACHE = 1;
-  private final static byte NOSTORE = 2;
-  private final static byte NOTRANSFORM = 4;
-  private final static byte ONLYIFCACHED = 8;
-  private long max_age = -1;
-  private long max_stale = -1;
-  private long min_fresh = -1;
   private boolean noLocalCache = false;
   private boolean revalidateAuth = false;
   
@@ -110,16 +106,8 @@ public class RequestOptions {
     setHeader("Content-Type", value.toString());
   }
   
-  public String getContentType() {
-    return getHeader("Content-Type");
-  }
-  
   public void setAuthorization(String auth) {
     setHeader("Authorization", auth);
-  }
-  
-  public String getAuthorization() {
-    return getHeader("Authorization");
   }
   
   public void setHeader(String header, String value) {
@@ -171,11 +159,8 @@ public class RequestOptions {
     return (list != null) ? list.get(0) : null;
   }
   
-  public String[] getHeaders(String header) {
-    List<String> list = getHeaders().get(header);
-    return (list != null) ? 
-      list.toArray(new String[list.size()]) : 
-      new String[0];
+  public List<String> getHeaders(String header) {
+    return getHeaders().get(header);
   }
   
   public Date getDateHeader(String header) {
@@ -188,12 +173,8 @@ public class RequestOptions {
   }
 
   public String[] getHeaderNames() {
-    Set<String> set = getHeaders().keySet();
-    return set.toArray(new String[set.size()]);
-  }
-  
-  public String getIfMatch() {
-    return getHeader("If-Match");
+    Set<String> names = getHeaders().keySet(); 
+    return names.toArray(new String[names.size()]);
   }
   
   public void setIfMatch(String entity_tag) {
@@ -204,10 +185,6 @@ public class RequestOptions {
     setHeader("If-Match", entity_tags);
   }
   
-  public String getIfNoneMatch() {
-    return getHeader("If-None-Match");
-  }
-  
   public void setIfNoneMatch(String entity_tag) {
     setHeader("If-None-Match", entity_tag);
   }
@@ -216,24 +193,12 @@ public class RequestOptions {
     setHeader("If-None-Match", entity_tags);
   }
   
-  public Date getIfModifiedSince() {
-    return getDateHeader("If-Modified-Since");
-  }
-  
   public void setIfModifiedSince(Date date) {
     setDateHeader("If-Modified-Since", date);
   }
   
-  public Date getIfUnmodifiedSince() {
-    return getDateHeader("If-Unmodified-Since");
-  }
-  
   public void setIfUnmodifiedSince(Date date) {
     setDateHeader("If-Unmodified-Since", date);
-  }
-  
-  public String getAccept() {
-    return getHeader("Accept");
   }
   
   public void setAccept(String accept) {
@@ -244,10 +209,6 @@ public class RequestOptions {
     setHeader("Accept", combine(accept));
   }
   
-  public String getAcceptLanguage() {
-    return getHeader("Accept-Language");
-  }
-  
   public void setAcceptLanguage(String accept) {
     setAcceptLanguage(new String[] {accept});
   }
@@ -256,20 +217,12 @@ public class RequestOptions {
     setHeader("Accept-Language", combine(accept));
   }
   
-  public String getAcceptCharset() {
-    return getHeader("Accept-Charset");
-  }
-  
   public void setAcceptCharset(String accept) {
     setAcceptCharset(new String[] {accept});
   }
   
   public void setAcceptCharset(String... accept) {
     setHeader("Accept-Charset", combine(accept));
-  }
-  
-  public String getAcceptEncoding() {
-    return getHeader("Accept-Encoding");
   }
   
   public void setAcceptEncoding(String accept) {
@@ -288,66 +241,6 @@ public class RequestOptions {
     return getHeader("Slug");
   }
   
-  public boolean getOnlyIfCached() {
-    return (flags & ONLYIFCACHED) == ONLYIFCACHED;
-  }
-  
-  public void setOnlyIfCached(boolean condition) {
-    if (condition) flags |= ONLYIFCACHED;
-    else if (getOnlyIfCached()) flags ^= ONLYIFCACHED;
-  }
-  
-  public boolean getNoTransform() {
-    return (flags & NOTRANSFORM) == NOTRANSFORM;
-  }
-  
-  public void setNoTransform(boolean condition) {
-    if (condition) flags |= NOTRANSFORM;
-    else if (getNoTransform()) flags ^= NOTRANSFORM;
-  }
-  
-  public boolean getNoCache() {
-    return (flags & NOCACHE) == NOCACHE;
-  }
-  
-  public void setNoCache(boolean condition) {
-    if (condition) flags |= NOCACHE;
-    else if (getNoCache()) flags ^= NOCACHE;
-  }
-  
-  public boolean getNoStore() {
-    return (flags & NOSTORE) == NOSTORE;
-  }
-  
-  public void setNoStore(boolean condition) {
-    if (condition) flags |= NOSTORE;
-    else if (getNoStore()) flags ^= NOSTORE;
-  }
-  
-  public long getMaxAge() {
-    return max_age;
-  }
-  
-  public void setMaxAge(long condition) {
-    this.max_age = condition;
-  }
-  
-  public long getMaxStale() {
-    return max_stale;
-  }
-  
-  public void setMaxStale(long condition) {
-    this.max_stale = condition;
-  }
-  
-  public long getMinFresh() {
-    return this.min_fresh;
-  }
-  
-  public void setMinFresh(long condition) {
-    this.min_fresh = condition;
-  }
-  
   public void setCacheControl(String cc) {
     CacheControlUtil.parseCacheControl(cc, this);
   }
@@ -357,22 +250,9 @@ public class RequestOptions {
   }
   
   public String getCacheControl() {
-    StringBuffer buf = new StringBuffer();
-    if (getNoCache()) append(buf,"no-cache");
-    if (getNoStore()) append(buf,"no-store");
-    if (getNoTransform()) append(buf, "no-transform");
-    if (getOnlyIfCached()) append(buf, "only-if-cached");
-    if (getMaxAge() != -1) append(buf, "max-age=" + getMaxAge());
-    if (getMaxStale() != -1) append(buf, "max-stale=" + getMaxStale());
-    if (getMinFresh() != -1) append(buf, "min-fresh=" + getMinFresh());
-    return buf.toString();
+    return CacheControlUtil.buildCacheControl(this);
   }
-  
-  private void append(StringBuffer buf, String value) {
-    if (buf.length() > 0) buf.append(", ");
-    buf.append(value);
-  }
-  
+
   public boolean getRevalidateWithAuth() {
     return revalidateAuth;
   }

@@ -45,7 +45,7 @@ import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.protocol.client.Client;
 import org.apache.abdera.protocol.client.CommonsClient;
 import org.apache.abdera.protocol.client.RequestOptions;
-import org.apache.abdera.protocol.client.Response;
+import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.test.client.JettyTest;
 import org.apache.abdera.util.MimeTypeHelper;
 
@@ -336,7 +336,7 @@ public class AppTest extends JettyTest {
     RequestOptions options = client.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
     // do the introspection step
-    Response response = client.get("http://localhost:8080/service",options);
+    ClientResponse response = client.get("http://localhost:8080/service",options);
     assertEquals(response.getStatus(),200);
     Document<Service> service_doc = response.getDocument();
     assertNotNull(service_doc);
@@ -356,7 +356,7 @@ public class AppTest extends JettyTest {
     assertNotNull(response.getLocation());
     assertNotNull(response.getContentLocation());
     
-    String self_uri = response.getLocation();
+    String self_uri = response.getLocation().toString();
     
     // get the collection to see if our entry is there
     response = client.get(col_uri, options);
@@ -409,7 +409,7 @@ public class AppTest extends JettyTest {
     assertNotNull(response.getLocation());
     assertNotNull(response.getContentLocation());
     
-    self_uri = response.getLocation();
+    self_uri = response.getLocation().toString();
 
     // was an entry created?
     options = client.getDefaultRequestOptions();

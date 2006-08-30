@@ -15,22 +15,21 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server.impl;
+package org.apache.abdera.protocol.server;
 
-import java.io.IOException;
-import java.io.OutputStream;
+public interface ServerConstants {
 
-public class EmptyResponseContext extends AbstractResponseContext {
-
-  public EmptyResponseContext(int status) {
-    setStatus(status);
-  }
+  public static final String REQUESTCONTEXT = 
+    "org.apache.abdera.protocol.server.RequestContext";
+ 
+  public static final String HANDLER_FACTORY = 
+    "org.apache.abdera.protocol.server.RequestHandlerFactory";
   
-  public boolean hasEntity() {
-    return false;
-  }
-
-  public void writeTo(OutputStream out) throws IOException {
-  }
-
+  public static final String TARGET_RESOLVER = 
+    "org.apache.abdera.protocol.server.target.TargetResolver";
+  
+  public static final String X_OVERRIDE_HEADER = 
+    "X-HTTP-Method-Override";
+  
+  public static final String[] EMPTY = new String[0];
 }

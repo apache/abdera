@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server;
+package org.apache.abdera.protocol.server;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +23,7 @@ import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.abdera.server.target.Target;
+import org.apache.abdera.protocol.server.target.Target;
 
 public interface RequestContext {
   

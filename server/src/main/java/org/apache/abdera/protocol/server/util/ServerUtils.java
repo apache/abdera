@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server.util;
+package org.apache.abdera.protocol.server.util;
 
 import java.util.Arrays;
 import java.util.Comparator;

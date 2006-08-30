@@ -38,7 +38,7 @@ import javax.activation.URLDataSource;
 
 import org.apache.abdera.model.Base;
 import org.apache.abdera.server.ResponseContext;
-import org.apache.abdera.server.impl.BaseResponseContext;
+import org.apache.abdera.server.impl.AbstractResponseContext;
 import org.apache.abdera.util.AbderaDataSource;
 import org.apache.axiom.attachments.ByteArrayDataSource;
 
@@ -96,6 +96,26 @@ public class AbderaServerException
   
   public AbderaServerException(Code code) {
     this(code.getCode(),null);
+  }
+  
+  public AbderaServerException(Code code, String text, String body) {
+    this(code, text);
+    setDataSource(body);
+  }
+  
+  public AbderaServerException(Code code, String text, URL body) {
+    this(code, text);
+    setDataSource(body);
+  }
+  
+  public <T extends Base>AbderaServerException(Code code, String text, T body) {
+    this(code, text);
+    setDataSource(body);
+  }
+  
+  public AbderaServerException(Code code, String text, DataSource body) {
+    this(code,text);
+    setDataSource(body);
   }
   
   public AbderaServerException(Code code, String text) {
@@ -286,7 +306,7 @@ public class AbderaServerException
   }
   
   protected static class ExceptionResponseContext 
-    extends BaseResponseContext {
+    extends AbstractResponseContext {
 
     private Throwable t = null;
     private long len = -1;

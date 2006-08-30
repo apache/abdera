@@ -20,7 +20,7 @@ package org.apache.abdera.server.util;
 public enum ResourceType {
 
   UNKNOWN, 
-  INTROSPECTION, 
+  SERVICE, 
   COLLECTION, 
   ENTRY, 
   ENTRY_EDIT, 

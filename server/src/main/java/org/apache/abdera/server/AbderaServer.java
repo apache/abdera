@@ -18,12 +18,14 @@
 package org.apache.abdera.server;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.server.target.TargetResolver;
 import org.apache.abdera.util.ServiceUtil;
 
 public class AbderaServer implements ServerConstants {
   
   private Abdera abdera = null;
   private RequestHandlerFactory handlerFactory = null;
+  private TargetResolver targetResolver = null;
   
   public AbderaServer() {
     abdera = new Abdera();
@@ -33,15 +35,29 @@ public class AbderaServer implements ServerConstants {
     this.abdera = abdera;
   }
   
-  public RequestHandlerFactory newRequestHandlerFactory() {
-    return (RequestHandlerFactory) ServiceUtil.newInstance(
-      HANDLER_FACTORY, "", abdera);
+  public Abdera getAbdera() {
+    return abdera;
   }
   
-  public RequestHandlerFactory getRequestHandlerFactory() {
+  public RequestHandlerFactory newRequestHandlerFactory(String _default) {
+    return (RequestHandlerFactory) ServiceUtil.newInstance(
+      HANDLER_FACTORY, (_default != null) ? _default : "", abdera);
+  }
+  
+  public RequestHandlerFactory getRequestHandlerFactory(String _default) {
     if (handlerFactory == null)
-      handlerFactory = newRequestHandlerFactory();
+      handlerFactory = newRequestHandlerFactory(_default);
     return handlerFactory;
   }
   
+  public TargetResolver newTargetResolver(String _default) {
+    return (TargetResolver) ServiceUtil.newInstance(
+      TARGET_RESOLVER, (_default != null) ? _default : "", abdera);
+  }
+  
+  public TargetResolver getTargetResolver(String _default) {
+    if (targetResolver == null)
+      targetResolver = newTargetResolver(_default);
+    return targetResolver;
+  }
 }

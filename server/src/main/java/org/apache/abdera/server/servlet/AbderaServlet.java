@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,7 @@ import org.apache.abdera.server.RequestHandlerFactory;
 import org.apache.abdera.server.ResponseContext;
 import org.apache.abdera.server.ServerConstants;
 import org.apache.abdera.server.exceptions.AbderaServerException;
+import org.apache.abdera.server.target.TargetResolver;
 
 public class AbderaServlet 
   extends HttpServlet 
@@ -61,11 +63,43 @@ public class AbderaServlet
   private RequestContext getRequestContext(HttpServletRequest request) {
     RequestContext context = 
       (RequestContext) request.getAttribute(REQUESTCONTEXT);
+    TargetResolver resolver = getTargetResolver();
     if (context == null) {
-      context = new ServletRequestContext(abdera,request);
+      context = new ServletRequestContext(abdera,resolver,request);
       request.setAttribute(REQUESTCONTEXT, context);
     }
     return context;
+  }
+  
+  
+  private RequestHandlerFactory getRequestHandlerFactory() {
+    ServletContext context = getServletContext();
+    synchronized(context) {
+      RequestHandlerFactory factory = 
+        (RequestHandlerFactory) context.getAttribute(
+        HANDLER_FACTORY);
+      if (factory == null) {
+        String s = getServletConfig().getInitParameter(HANDLER_FACTORY);
+        factory = abderaServer.newRequestHandlerFactory(s);
+        context.setAttribute(HANDLER_FACTORY, factory);
+      }
+      return factory;
+    }
+  }
+  
+  private TargetResolver getTargetResolver() {
+    ServletContext context = getServletContext();
+    synchronized(context) {
+      TargetResolver resolver = 
+        (TargetResolver) context.getAttribute(
+          TARGET_RESOLVER);
+      if (resolver == null) {
+        String s = getServletConfig().getInitParameter(TARGET_RESOLVER);
+        resolver = abderaServer.newTargetResolver(s);
+        context.setAttribute(TARGET_RESOLVER, resolver);
+      }
+      return resolver;
+    }
   }
   
   @Override
@@ -77,14 +111,15 @@ public class AbderaServlet
     ResponseContext responseContext = null;
     RequestHandler handler = null;
     try {
-      RequestHandlerFactory factory = abderaServer.newRequestHandlerFactory();
+      RequestHandlerFactory factory = getRequestHandlerFactory();
       if (factory != null)
-        handler = factory.newRequestHandler(requestContext);
+        handler = factory.newRequestHandler(abderaServer,requestContext);
       if (handler != null) {
         responseContext = handler.invoke(requestContext);
       } else {
         throw new AbderaServerException(
-          AbderaServerException.Code.NOTFOUND);
+          AbderaServerException.Code.NOTFOUND, 
+          "Handler Not Found", "");
       }
     } catch (AbderaServerException exception) {
       responseContext = exception;
@@ -99,10 +134,7 @@ public class AbderaServlet
     ResponseContext context) 
       throws IOException, ServletException {
     if (context != null) {
-      if (context.getStatusText() != null)
-        response.sendError(context.getStatus(), context.getStatusText());
-      else 
-        response.setStatus(context.getStatus());
+      response.setStatus(context.getStatus());
       long cl = context.getContentLength();
       String cc = context.getCacheControl();
       if (cl > -1) response.setHeader("Content-Length", Long.toString(cl));

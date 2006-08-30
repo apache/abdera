@@ -21,8 +21,6 @@ import org.apache.abdera.server.RequestContext;
 import org.apache.abdera.server.RequestHandler;
 import org.apache.abdera.server.ResponseContext;
 import org.apache.abdera.server.ServerConstants;
-import org.apache.abdera.server.cache.Cache;
-import org.apache.abdera.server.cache.CacheEntry;
 import org.apache.abdera.server.exceptions.AbderaServerException;
 import org.apache.abdera.server.util.ResourceType;
 
@@ -42,7 +40,6 @@ public abstract class AbstractRequestHandler
       checkMethod(requestContext);
       checkModified(requestContext);
       checkRequest(requestContext);
-      checkCache(requestContext,response,getCacheKey());
       response = internalInvoke(requestContext, response);
       if (response != null)
         return response;
@@ -61,31 +58,6 @@ public abstract class AbstractRequestHandler
   }
 
   protected abstract ResponseContext createResponseContext();
-  
-  /**
-   * Returns this handlers cache (if any)
-   */
-  protected abstract Cache getCache();
-  
-  /**
-   * Return a cache key for this request
-   */
-  protected abstract String getCacheKey();
-  
-  protected abstract boolean useCache();
-  
-  protected CacheEntry.CacheDisposition checkCache(
-    RequestContext requestContext,
-    ResponseContext responseContext, 
-    String cacheKey) {
-      if (useCache()) {
-        Cache cache = getCache();
-        if (cache != null) {
-          return cache.process(requestContext, responseContext, cacheKey);
-        }
-      } 
-      return CacheEntry.CacheDisposition.TRANSPARENT;
-  }
   
   /**
    * Returns the type of the requested resource

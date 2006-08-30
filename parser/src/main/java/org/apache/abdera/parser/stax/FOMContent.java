@@ -43,7 +43,7 @@ public class FOMContent
   implements Content {
 
   private static final long serialVersionUID = -5499917654824498563L;
-  protected Type type = null;
+  protected Type type = Type.TEXT;
   
   public FOMContent(Content.Type type) {
     super(Constants.CONTENT);

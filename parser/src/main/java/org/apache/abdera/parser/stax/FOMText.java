@@ -38,7 +38,7 @@ public class FOMText
   implements Text {
 
   private static final long serialVersionUID = 5177795905116574120L;
-  protected Type type = null;
+  protected Type type = Type.TEXT;
   
   public FOMText(QName qname, Text.Type type) {
     super(qname);

@@ -180,6 +180,14 @@ public abstract class AbstractResponseContext
     setHeader("Content-Location", uri);
   }
   
+  public void setSlug(String slug) {
+    if (slug == null) {
+      removeHeader("Slug");
+      return;
+    }
+    setHeader("Slug", slug);
+  }
+  
   public void setContentType(String type) {
     if (type == null) {
       removeHeader("Content-Type");

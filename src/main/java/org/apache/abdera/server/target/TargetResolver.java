@@ -15,21 +15,10 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.server;
+package org.apache.abdera.server.target;
 
-public interface ServerConstants {
+public interface TargetResolver {
 
-  public static final String REQUESTCONTEXT = 
-    "org.apache.abdera.server.RequestContext";
- 
-  public static final String HANDLER_FACTORY = 
-    "org.apache.abdera.server.RequestHandlerFactory";
+  Target resolve(String uri);
   
-  public static final String TARGET_RESOLVER = 
-    "org.apache.abdera.server.target.TargetResolver";
-  
-  public static final String X_OVERRIDE_HEADER = 
-    "X-HTTP-Method-Override";
-  
-  public static final String[] EMPTY = new String[0];
 }

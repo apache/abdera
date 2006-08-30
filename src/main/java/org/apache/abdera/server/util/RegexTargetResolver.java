@@ -22,6 +22,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.abdera.server.target.Target;
+import org.apache.abdera.server.target.TargetResolver;
+
 /**
  * <p>Provides a utility class helpful for determining which type of resource
  * the client is requesting.  Each resource type (e.g. service doc, collection,
@@ -32,29 +35,29 @@ import java.util.regex.Pattern;
  * also specifies the Resource Type.</p>
  * 
  * <pre>
- *  Target target = new Target();
- *  target.addPattern(ResourceType.INTROSPECTION, "/atom");
- *  target.addPattern(ResourceType.COLLECTION, "/atom/([^/#?]+)");
- *  target.addPattern(ResourceType.ENTRY, "/atom/([^/#?]+)/([^/#?]+)");
- *  target.addPattern(ResourceType.ENTRY_EDIT, "/atom/([^/#?]+)/([^/#?]+)\\?edit");
- *  target.addPattern(ResourceType.MEDIA,"/atom/([^/#?]+)/([^/#?]+)\\?media");
- *  target.addPattern(ResourceType.MEDIA_EDIT,"/atom/([^/#?]+)/([^/#?]+)\\?edit-media");
+ *  RegexTargetResolver tr = new RegexTargetResolver();
+ *  tr.addPattern(ResourceType.INTROSPECTION, "/atom");
+ *  tr.addPattern(ResourceType.COLLECTION, "/atom/([^/#?]+)");
+ *  tr.addPattern(ResourceType.ENTRY, "/atom/([^/#?]+)/([^/#?]+)");
+ *  tr.addPattern(ResourceType.ENTRY_EDIT, "/atom/([^/#?]+)/([^/#?]+)\\?edit");
+ *  tr.addPattern(ResourceType.MEDIA,"/atom/([^/#?]+)/([^/#?]+)\\?media");
+ *  tr.addPattern(ResourceType.MEDIA_EDIT,"/atom/([^/#?]+)/([^/#?]+)\\?edit-media");
  *  
- *  TargetMatcher tm = target.getTargetMatcher("/atom/foo");
- *  System.out.println(tm.getType());
- *  System.out.println(tm.getToken(1));  // foo
+ *  Target target = tr.resolve("/atom/foo");
+ *  System.out.println(target.getResourceType());
+ *  System.out.println(targer.getValue(1));  // foo
  * </pre>
  *  
  */
-public class Target {
+public class RegexTargetResolver implements TargetResolver {
 
   private Map<ResourceType,Pattern> patterns = null;
   
-  public Target() {
+  public RegexTargetResolver() {
     this.patterns = new HashMap<ResourceType,Pattern>();
   }
   
-  public Target(Map<ResourceType,String> patterns) {
+  public RegexTargetResolver(Map<ResourceType,String> patterns) {
     this.patterns = new HashMap<ResourceType,Pattern>();
     for (ResourceType type : patterns.keySet()) {
       String p = patterns.get(type);
@@ -68,31 +71,31 @@ public class Target {
     this.patterns.put(type, p);
   }
   
-  public TargetMatcher getTargetMatcher(String path_info) {
+  public Target resolve(String path_info) {
     if (patterns == null) return null;
     for (ResourceType type : patterns.keySet()) {
       Pattern pattern = patterns.get(type);
       Matcher matcher = pattern.matcher(path_info);
-      if (matcher.matches()) return new TargetMatcher(type, matcher);
+      if (matcher.matches()) return new RegexTarget(type, matcher);
     }
     return null;
   }
   
-  public static class TargetMatcher {
+  public static class RegexTarget implements Target {
     
     Matcher matcher = null;
     ResourceType type = ResourceType.UNKNOWN;
     
-    TargetMatcher(ResourceType type, Matcher matcher) {
+    RegexTarget(ResourceType type, Matcher matcher) {
       this.type = type;
       this.matcher = matcher;
     }
     
-    public ResourceType getType() {
+    public ResourceType getResourceType() {
       return this.type;
     }
     
-    public String getToken(int token) {
+    public String getValue(int token) {
       try {
         return this.matcher.group(token);
       } catch (IndexOutOfBoundsException e) {
@@ -100,8 +103,8 @@ public class Target {
       }
     }
     
-    public boolean hasToken(int token) {
-      return getToken(token) != null;
+    public boolean hasValue(int token) {
+      return getValue(token) != null;
     }
   }
   

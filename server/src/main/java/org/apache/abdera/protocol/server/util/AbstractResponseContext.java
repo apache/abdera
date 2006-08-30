@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.impl;
+package org.apache.abdera.protocol.server.util;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -20,17 +20,18 @@ package org.apache.abdera.server.impl;
 import org.apache.abdera.server.RequestContext;
 import org.apache.abdera.server.RequestHandler;
 import org.apache.abdera.server.ResponseContext;
+import org.apache.abdera.server.ServerConstants;
 import org.apache.abdera.server.cache.Cache;
 import org.apache.abdera.server.cache.CacheEntry;
 import org.apache.abdera.server.exceptions.AbderaServerException;
 import org.apache.abdera.server.util.ResourceType;
 
-public abstract class BaseRequestHandler 
-  implements RequestHandler {
+public abstract class AbstractRequestHandler 
+  implements RequestHandler, ServerConstants {
 
   protected ResourceType resourceType = ResourceType.UNKNOWN;
   
-  public BaseRequestHandler() {}
+  public AbstractRequestHandler() {}
   
   public ResponseContext invoke(
     RequestContext requestContext)
@@ -42,7 +43,7 @@ public abstract class BaseRequestHandler
       checkModified(requestContext);
       checkRequest(requestContext);
       checkCache(requestContext,response,getCacheKey());
-      internalInvoke(requestContext, response);
+      response = internalInvoke(requestContext, response);
       if (response != null)
         return response;
       else
@@ -51,6 +52,7 @@ public abstract class BaseRequestHandler
     } catch (AbderaServerException ase) {
       throw ase;
     } catch (Throwable t) {
+      t.printStackTrace();
       String message = t.getMessage();
       if (message == null || message.length() == 0)
         message = "Unknown Server Exception";
@@ -136,12 +138,13 @@ public abstract class BaseRequestHandler
    * allowable methods on a particular type of resource
    */
   protected String[] getAllowedMethods(ResourceType type) {
+    if (type == null) return EMPTY;
     switch (type) {
       case COLLECTION:    return new String[] { "GET", "POST", "HEAD", "OPTIONS" };
       case ENTRY:         return new String[] { "GET", "HEAD", "OPTIONS" };
       case ENTRY_EDIT:    return new String[] { "GET", "DELETE", "PUT", "HEAD", "OPTIONS" };
       case MEDIA_EDIT:    return new String[] { "GET", "DELETE", "PUT", "HEAD", "OPTIONS" };
-      case INTROSPECTION: return new String[] { "GET", "HEAD", "OPTIONS" };
+      case SERVICE: return new String[] { "GET", "HEAD", "OPTIONS" };
       default:            return new String[] { "GET", "HEAD", "OPTIONS" };
     }
   }

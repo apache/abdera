@@ -15,14 +15,13 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.impl;
+package org.apache.abdera.protocol.server.util;
 
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.RequestHandler;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.ServerConstants;
 import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
-import org.apache.abdera.protocol.server.util.ResourceType;
 
 public abstract class AbstractRequestHandler 
   implements RequestHandler, ServerConstants {

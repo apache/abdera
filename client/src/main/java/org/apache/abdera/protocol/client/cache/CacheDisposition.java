@@ -15,28 +15,10 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.cache;
+package org.apache.abdera.protocol.client.cache;
 
-public class CacheException extends RuntimeException {
+public enum CacheDisposition {
 
-  private static final long serialVersionUID = -6092683191836155722L;
-
-  public CacheException() {
-    super();
-  }
-
-  public CacheException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public CacheException(String message) {
-    super(message);
-  }
-
-  public CacheException(Throwable cause) {
-    super(cause);
-  }
-
-  
+  STALE, FRESH, TRANSPARENT
   
 }

@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.util;
+package org.apache.abdera.protocol.client.util;
 
 import java.io.IOException;
 import java.net.InetAddress;

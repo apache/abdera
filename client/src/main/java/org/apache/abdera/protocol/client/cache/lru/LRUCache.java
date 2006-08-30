@@ -15,15 +15,15 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.cache.lru;
+package org.apache.abdera.protocol.client.cache.lru;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.abdera.protocol.cache.Cache;
-import org.apache.abdera.protocol.cache.CacheKey;
-import org.apache.abdera.protocol.cache.CachedResponse;
-import org.apache.abdera.protocol.cache.InMemoryCache;
+import org.apache.abdera.protocol.client.cache.Cache;
+import org.apache.abdera.protocol.client.cache.CacheKey;
+import org.apache.abdera.protocol.client.cache.CachedResponse;
+import org.apache.abdera.protocol.client.cache.InMemoryCache;
 
 @SuppressWarnings("serial")
 public class LRUCache

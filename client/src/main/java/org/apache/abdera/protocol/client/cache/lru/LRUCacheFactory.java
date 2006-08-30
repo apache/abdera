@@ -15,28 +15,15 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.cache;
+package org.apache.abdera.protocol.client.cache.lru;
 
-import org.apache.abdera.protocol.client.ClientResponse;
+import org.apache.abdera.protocol.client.cache.Cache;
+import org.apache.abdera.protocol.client.cache.CacheFactory;
 
-public interface CachedResponse extends ClientResponse {
+public class LRUCacheFactory implements CacheFactory {
 
-  CacheKey geKey();
-  
-  Cache getCache();
-  
-  long getCachedTime();
-  
-  long getInitialAge();
-  
-  long getResidentAge();
-
-  long getCurrentAge();
-  
-  long getFreshnessLifetime();
-
-  long getHowStale();
-
-  boolean isFresh();
+  public Cache getCache() {
+    return new LRUCache();
+  }
 
 }

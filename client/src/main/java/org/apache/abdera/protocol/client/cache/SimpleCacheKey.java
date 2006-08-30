@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.cache;
+package org.apache.abdera.protocol.client.cache;
 
 import java.security.MessageDigest;
 import java.util.Arrays;

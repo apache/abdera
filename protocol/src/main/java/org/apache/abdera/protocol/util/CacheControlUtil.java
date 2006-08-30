@@ -49,6 +49,7 @@ public class CacheControlUtil {
   public static void parseCacheControl(
     String cc, 
     AbstractRequest request) {
+      if (cc == null || cc.length() == 0) return;
       CacheControlParser parser = new CacheControlParser(cc);
       request.setNoCache(false);
       request.setNoStore(false);

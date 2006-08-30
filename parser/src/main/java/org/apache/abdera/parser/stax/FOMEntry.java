@@ -612,6 +612,7 @@ public class FOMEntry
   }
 
   public void setModifiedElement(DateTime updated) {
+    declareNamespace(APP_NS, "app");
     if (updated != null)
       _setChild(MODIFIED, (OMElement)updated);
     else 
@@ -624,6 +625,7 @@ public class FOMEntry
   }
   
   private DateTime setModified(AtomDate value) {
+    declareNamespace(APP_NS, "app");
     if (value == null) {
       _removeChildren(MODIFIED, false);
       return null;

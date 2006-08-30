@@ -21,6 +21,7 @@ import javax.activation.MimeType;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Base;
+import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Content;
@@ -441,4 +442,13 @@ public interface Factory {
    */
   void registerExtension(ExtensionFactory extensionFactory);
     
+  /**
+   * Create a new Categories element 
+   */
+  Categories newCategories();
+  
+  /**
+   * Create a new Categories element as a child of the given Element
+   */
+  Categories newCategories(Element parent);
 }

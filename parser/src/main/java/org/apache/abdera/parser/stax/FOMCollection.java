@@ -19,14 +19,18 @@ package org.apache.abdera.parser.stax;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import javax.activation.MimeType;
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.model.Categories;
+import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.axiom.om.OMContainer;
+import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
@@ -149,6 +153,35 @@ public class FOMCollection
 
   public boolean accepts(MimeType mediaType) {
     return accepts(mediaType.toString());
+  }
+
+  public Categories addCategories() {
+    return ((FOMFactory)factory).newCategories(this);
+  }
+  
+  public void addCategories(Categories categories) {
+    addChild((OMElement)categories);
+  }
+
+  public Categories addCategories(
+    List<Category> categories, 
+    boolean fixed, 
+    String scheme) 
+      throws URISyntaxException {
+      Categories cats = ((FOMFactory)factory).newCategories();
+      cats.setFixed(fixed);
+      if (scheme != null) cats.setScheme(scheme);
+      if (categories != null) {
+        for (Category category : categories) {
+          cats.addCategory(category);
+        }
+      }
+      addCategories(cats);
+      return cats;
+  }
+
+  public List<Categories> getCategories() {
+    return _getChildrenAsSet(CATEGORIES);
   }
 
 }

@@ -19,6 +19,7 @@ package org.apache.abdera.model;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
@@ -96,4 +97,13 @@ public interface Collection
    * Returns true if the collection accepts the specified media type
    */
   boolean accepts(MimeType mediaType);
+  
+  List<Categories> getCategories();
+  
+  Categories addCategories();
+  
+  void addCategories(Categories categories);
+  
+  Categories addCategories(List<Category> categories, boolean fixed, String scheme) throws URISyntaxException;
+  
 }

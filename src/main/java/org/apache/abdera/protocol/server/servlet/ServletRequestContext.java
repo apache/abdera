@@ -33,20 +33,16 @@ import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ServerConstants;
 import org.apache.abdera.protocol.server.target.Target;
 import org.apache.abdera.protocol.server.target.TargetResolver;
-import org.apache.abdera.protocol.util.CacheControlParser;
+import org.apache.abdera.protocol.util.AbstractRequest;
+import org.apache.abdera.protocol.util.CacheControlUtil;
 
 public class ServletRequestContext 
+  extends AbstractRequest
   implements RequestContext, ServerConstants {
   
   private Target target = null;
   private Abdera abdera = null;
   private HttpServletRequest servletRequest = null;
-  private long maxage = -1;
-  private long maxstale = -1;
-  private long minfresh = -1;
-  private boolean nocache = false;
-  private boolean nostore = false;
-  private boolean notransform = false;
   private String method = null;
     
   public ServletRequestContext(
@@ -55,7 +51,7 @@ public class ServletRequestContext
     HttpServletRequest request) {
       this.abdera = abdera;
       this.servletRequest = request;
-      get_ccp();
+      CacheControlUtil.parseCacheControl(getCacheControl(), this);
       target = resolver.resolve(getUri().toString());
   }
   
@@ -133,8 +129,9 @@ public class ServletRequestContext
   }
 
   @SuppressWarnings("unchecked")
-  public List<String> getHeaderNames() {
-    return  Collections.list(servletRequest.getHeaderNames());
+  public String[] getHeaderNames() {
+    List<String> list = Collections.list(servletRequest.getHeaderNames());
+    return list.toArray(new String[list.size()]);
   }
     
   public URI getPathInfo() {
@@ -166,99 +163,8 @@ public class ServletRequestContext
     return servletRequest.getInputStream();
   }
 
-  public String getAccept() {
-    return servletRequest.getHeader("Accept");
-  }
-
-  public String getAcceptCharset() {
-    return servletRequest.getHeader("Accept-Charset");
-  }
-
-  public String getAcceptEncoding() {
-    return servletRequest.getHeader("Accept-Encoding");
-  }
-
-  public String getAcceptLanguage() {
-    return servletRequest.getHeader("Accept-Language");
-  }
-
-  public String getAuthorization() {
-    return servletRequest.getHeader("Authorization");
-  }
-
-  public String getCacheControl() {
-    return servletRequest.getHeader("Cache-Control");
-  }
-
-  public String getContentType() {
-    return servletRequest.getHeader("Content-Type");
-  }
-
   public Date getDateHeader(String name) {
     return new Date(servletRequest.getDateHeader(name));
   }
-
-  public String getIfMatch() {
-    return servletRequest.getHeader("If-Match");
-  }
-
-  public Date getIfModifiedSince() {
-    return getDateHeader("If-Modified-Since");
-  }
-
-  public String getIfNoneMatch() {
-    return servletRequest.getHeader("If-None-Match");
-  }
-
-  public Date getIfUnmodifiedSince() {
-    return getDateHeader("If-Unmodified-Since");
-  }
-
-  private void get_ccp() {
-    String cc = getCacheControl();
-    if (cc != null) {
-      CacheControlParser ccparser = new CacheControlParser(cc);
-      for (String directive : ccparser) {
-        directive = directive.toLowerCase();
-        if (directive.equals("max-age")) {
-          maxage = Long.parseLong(ccparser.getValue(directive));
-        } else if (directive.equals("max-stale")) {
-          maxstale = Long.parseLong(ccparser.getValue(directive));
-        } else if (directive.equals("min-fresh")) {
-          minfresh = Long.parseLong(ccparser.getValue(directive));
-        } else if (directive.equals("no-cache")) {
-          nocache = true;
-        } else if (directive.equals("no-store")) {
-          nostore = true;
-        } else if (directive.equals("no-transform")) {
-          notransform = true;
-        }
-      }
-    }
-  }
   
-  public long getMaxAge() {
-    return maxage;
-  }
-
-  public long getMaxStale() {
-    return maxstale;
-  }
-
-  public long getMinFresh() {
-    return minfresh;
-  }
-
-  public boolean getNoCache() {
-    return nocache;
-  }
-
-  public boolean getNoStore() {
-    return nostore;
-  }
-
-  public boolean getNoTransform() {
-    return notransform;
-  }
-
 }

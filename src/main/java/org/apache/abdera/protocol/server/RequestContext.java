@@ -20,104 +20,29 @@ package org.apache.abdera.protocol.server;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.Date;
 import java.util.List;
 
+import org.apache.abdera.protocol.Request;
 import org.apache.abdera.protocol.server.target.Target;
 
-public interface RequestContext {
+public interface RequestContext extends Request {
   
   Target getTarget();
   
-  /**
-   * Returns the method 
-   */
   String getMethod();
   
-  /**
-   * Returns the complete Request URI
-   */
   URI getUri();
   
-  /**
-   * Returns the server base URI
-   */
   URI getBaseUri();
   
-  /**
-   * Returns the relative URI (without scheme, host, or port)
-   */
   URI getPathInfo();
   
-  /**
-   * Returns a request parameter (e.g. query string param)
-   */
   String getParameter(String name);
   
-  /**
-   * Returns a list of request parameter values (e.g. query string params)
-   */
   List<String> getParameters(String name);
 
-  /**
-   * Returns a listing of request parameter names
-   */
   List<String> getParameterNames();
   
-  /**
-   * Returns a request header
-   */
-  String getHeader(String name);
-  
-  /**
-   * Returns a list of request header values
-   */
-  List<String> getHeaders(String name);
-  
-  /**
-   * Returns a list of request header names
-   */
-  List<String> getHeaderNames();
-  
-  /**
-   * Returns the input stream for the request
-   */
   InputStream getInputStream() throws IOException;
-  
-  String getAccept();
-  
-  String getAcceptCharset();
-  
-  String getAcceptEncoding();
-  
-  String getAcceptLanguage();
-  
-  String getAuthorization();
-  
-  String getCacheControl();
-  
-  String getContentType();
-  
-  Date getDateHeader(String name);
-  
-  String getIfMatch();
-  
-  Date getIfModifiedSince();
-  
-  String getIfNoneMatch();
-  
-  Date getIfUnmodifiedSince();
-  
-  long getMaxAge();
-  
-  long getMaxStale();
-  
-  long getMinFresh();
-  
-  boolean getNoCache();
-  
-  boolean getNoStore();
-  
-  boolean getNoTransform();
   
 }

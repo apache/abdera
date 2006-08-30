@@ -107,6 +107,7 @@ public class FOMFeed
     if (el == null) {
       addEntry(entry);
     } else {
+      entry.setParentElement(this);
       el.insertSiblingBefore((OMElement)entry);
     }
   }

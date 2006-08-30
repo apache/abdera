@@ -34,9 +34,9 @@ import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.RequestHandler;
 import org.apache.abdera.protocol.server.RequestHandlerFactory;
 import org.apache.abdera.protocol.server.ResponseContext;
-import org.apache.abdera.protocol.server.ServerConstants;
 import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
 import org.apache.abdera.protocol.server.target.TargetResolver;
+import org.apache.abdera.protocol.server.util.ServerConstants;
 
 public class AbderaServlet 
   extends HttpServlet 

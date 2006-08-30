@@ -15,10 +15,10 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.cache;
+package org.apache.abdera.protocol.client.cache;
 
-public interface CacheFactory {
+public interface CacheKey {
 
-  Cache getCache();
+  boolean isMatch(CacheKey cacheKey);
   
 }

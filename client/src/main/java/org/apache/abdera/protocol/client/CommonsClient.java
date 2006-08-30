@@ -22,11 +22,11 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.cache.Cache;
-import org.apache.abdera.protocol.cache.CacheDisposition;
-import org.apache.abdera.protocol.cache.CachedResponse;
+import org.apache.abdera.protocol.client.cache.Cache;
+import org.apache.abdera.protocol.client.cache.CacheDisposition;
+import org.apache.abdera.protocol.client.cache.CachedResponse;
+import org.apache.abdera.protocol.client.util.MethodHelper;
 import org.apache.abdera.protocol.util.CacheControlUtil;
-import org.apache.abdera.protocol.util.MethodHelper;
 import org.apache.abdera.util.Version;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;

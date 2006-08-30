@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.cache;
+package org.apache.abdera.protocol.client.cache;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.apache.abdera.protocol.client.ClientException;
 import org.apache.abdera.protocol.client.ClientResponse;
+import org.apache.abdera.protocol.client.util.MethodHelper;
 import org.apache.abdera.protocol.util.CacheControlUtil;
-import org.apache.abdera.protocol.util.MethodHelper;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
 

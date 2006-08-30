@@ -22,11 +22,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.abdera.protocol.cache.CachedResponse;
 import org.apache.abdera.protocol.client.Client;
 import org.apache.abdera.protocol.client.CommonsClient;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.ClientResponse;
+import org.apache.abdera.protocol.client.cache.CachedResponse;
 import org.apache.abdera.test.client.JettyTest;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.mortbay.jetty.servlet.ServletHandler;

@@ -15,44 +15,10 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.cache;
+package org.apache.abdera.protocol.client.cache;
 
-import org.apache.abdera.protocol.client.RequestOptions;
-import org.apache.abdera.protocol.client.ClientResponse;
+public interface CacheFactory {
 
-public interface Cache {
-
-  CacheKey getCacheKey(
-    String uri, 
-    RequestOptions options);
-  
-  CacheDisposition getDisposition(
-    String uri, 
-    RequestOptions options);
-  
-  CachedResponse getIfFreshEnough(
-    String uri, 
-    RequestOptions options);
-  
-  CachedResponse get(
-    String uri, 
-    RequestOptions options);
-  
-  CachedResponse get(
-    CacheKey key);
-  
-  void clear();
-  
-  void remove(
-    String uri, 
-    RequestOptions options);
-  
-  void remove(
-    CacheKey key);
-  
-  ClientResponse update(
-    RequestOptions options, 
-    ClientResponse response,
-    ClientResponse cached_response);
+  Cache getCache();
   
 }

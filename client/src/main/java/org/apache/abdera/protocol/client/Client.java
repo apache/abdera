@@ -24,11 +24,11 @@ import javax.net.ssl.TrustManager;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
-import org.apache.abdera.protocol.cache.Cache;
-import org.apache.abdera.protocol.cache.CacheFactory;
-import org.apache.abdera.protocol.cache.lru.LRUCache;
-import org.apache.abdera.protocol.util.BaseRequestEntity;
-import org.apache.abdera.protocol.util.SimpleSSLProtocolSocketFactory;
+import org.apache.abdera.protocol.client.cache.Cache;
+import org.apache.abdera.protocol.client.cache.CacheFactory;
+import org.apache.abdera.protocol.client.cache.lru.LRUCache;
+import org.apache.abdera.protocol.client.util.BaseRequestEntity;
+import org.apache.abdera.protocol.client.util.SimpleSSLProtocolSocketFactory;
 import org.apache.abdera.util.ServiceUtil;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.auth.AuthPolicy;

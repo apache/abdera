@@ -105,6 +105,8 @@ public class FOMContent
       setAttributeValue(TYPE, "html");
     else if (Type.XHTML.equals(type))
       setAttributeValue(TYPE, "xhtml");
+    else if (Type.XML.equals(type))
+      setAttributeValue(TYPE, "application/xml");
     else {
       removeAttribute(TYPE);
     }
@@ -129,8 +131,11 @@ public class FOMContent
         this.getFirstElement().discard();
       if (value instanceof Div && !type.equals(Content.Type.XML)) 
         init(Content.Type.XHTML);
-      else 
-        init(Content.Type.XML);
+      else {
+        if (this.getMimeType() == null) {
+          init(Content.Type.XML);
+        }
+      }
       this.setFirstChild((OMElement)value);
     } else {
       _removeAllChildren();

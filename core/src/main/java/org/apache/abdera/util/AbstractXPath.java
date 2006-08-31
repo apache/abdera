@@ -31,11 +31,12 @@ public abstract class AbstractXPath
   private Map<String,String> namespaces = null;
   
   public Map<String, String> getDefaultNamespaces() {
-    if (namespaces == null) 
+    if (namespaces == null)  {
       namespaces = new HashMap<String,String>();
-    namespaces.put("a", Constants.ATOM_NS);
-    namespaces.put("app", Constants.APP_NS);
-    return namespaces;
+      namespaces.put("a", Constants.ATOM_NS);
+      namespaces.put("app", Constants.APP_NS);
+    }
+    return new HashMap<String,String>(namespaces);
   }
 
   public void setDefaultNamespaces(Map<String, String> namespaces) {

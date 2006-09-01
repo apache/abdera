@@ -109,12 +109,12 @@ public abstract class AbstractRequestHandler
    */
   protected String[] getAllowedMethods(ResourceType type) {
     if (type == null) return EMPTY;
-    switch (type) {
-      case COLLECTION:    return new String[] { "GET", "POST", "HEAD", "OPTIONS" };
-      case ENTRY:         return new String[] { "GET", "HEAD", "OPTIONS" };
-      case ENTRY_EDIT:    return new String[] { "GET", "DELETE", "PUT", "HEAD", "OPTIONS" };
-      case MEDIA_EDIT:    return new String[] { "GET", "DELETE", "PUT", "HEAD", "OPTIONS" };
-      case SERVICE: return new String[] { "GET", "HEAD", "OPTIONS" };
+    switch (type.ordinal()) {
+      case ResourceType.COLLECTION_ORDINAL:    return new String[] { "GET", "POST", "HEAD", "OPTIONS" };
+      case ResourceType.ENTRY_ORDINAL:         return new String[] { "GET", "HEAD", "OPTIONS" };
+      case ResourceType.ENTRY_EDIT_ORDINAL:    return new String[] { "GET", "DELETE", "PUT", "HEAD", "OPTIONS" };
+      case ResourceType.MEDIA_EDIT_ORDINAL:    return new String[] { "GET", "DELETE", "PUT", "HEAD", "OPTIONS" };
+      case ResourceType.SERVICE_ORDINAL:       return new String[] { "GET", "HEAD", "OPTIONS" };
       default:            return new String[] { "GET", "HEAD", "OPTIONS" };
     }
   }

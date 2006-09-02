@@ -76,8 +76,8 @@ public class SimpleRequestHandler
     Target target = requestContext.getTarget();
     String method = requestContext.getMethod();
     if (target != null) {
-      switch(target.getResourceType()) {
-        case SERVICE: {
+      ResourceType type = target.getResourceType();
+      if (type == ResourceType.SERVICE) {
           try {
             if (requestContext.getIfNoneMatch().equals("\"service\"")) 
               throw new AbderaServerException(
@@ -85,8 +85,7 @@ public class SimpleRequestHandler
                 "Not Modified", "");
           } catch (NullPointerException npe) {}
           return getServiceDocument();
-        }
-        case COLLECTION: {
+      } else if (type == ResourceType.COLLECTION) {
           if (method.equals("GET")) {
             if (!target.getValue(1).equals("foo")) 
               throw new AbderaServerException(
@@ -124,8 +123,7 @@ public class SimpleRequestHandler
               throw new AbderaServerException(e);
             }
           }
-        }
-        case ENTRY_EDIT: {
+      } else if (type == ResourceType.ENTRY_EDIT) {
           Entry entry = getEntryFromFeed(requestContext);
           if (entry == null)
             throw new AbderaServerException(
@@ -171,7 +169,6 @@ public class SimpleRequestHandler
             entry.discard();
             return new EmptyResponseContext(204);
           }
-        }
       }
       return null;
     } else {

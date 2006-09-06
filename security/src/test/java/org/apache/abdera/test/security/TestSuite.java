@@ -26,6 +26,7 @@ public class TestSuite extends junit.framework.TestSuite {
   public TestSuite() {
     addTestSuite(DigitalSignatureTest.class);
     addTestSuite(EncryptionTest.class);
+    addTestSuite(DSigThirdPartyVerifyTest.class);
   }
   
 }

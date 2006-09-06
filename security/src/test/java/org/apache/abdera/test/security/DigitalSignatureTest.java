@@ -92,6 +92,11 @@ public class DigitalSignatureTest extends TestCase {
           "http://www.w3.org/2000/09/xmldsig#", 
           "Signature")));
       
+    X509Certificate[] certs = sig.getValidSignatureCertificates(entry, options);
+    assertNotNull(certs);
+    assertEquals(certs.length, 1);
+    assertEquals(certs[0].getSubjectDN().getName(), "CN=James M Snell, OU=WebAhead, O=IBM, L=Hanford, ST=California, C=US");
+    
     // Check the round trip
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     entry.writeTo(out); // do not use the pretty writer, it will break the signature

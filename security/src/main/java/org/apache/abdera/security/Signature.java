@@ -17,22 +17,19 @@
 */
 package org.apache.abdera.security;
 
-import org.apache.abdera.model.Entry;
-import org.apache.abdera.model.Feed;
+import java.security.cert.X509Certificate;
+
+import org.apache.abdera.model.Element;
 
 public interface Signature {
 
-  boolean isSigned(Entry entry) throws SecurityException;
+  <T extends Element>boolean isSigned(T element) throws SecurityException;
   
-  boolean isSigned(Feed feed) throws SecurityException;
+  <T extends Element>T sign(T element, SignatureOptions options) throws SecurityException;
   
-  Entry sign(Entry entry, SignatureOptions options) throws SecurityException;
+  <T extends Element>boolean verify(T element, SignatureOptions options) throws SecurityException;
   
-  Feed sign(Feed feed, SignatureOptions options) throws SecurityException;
-  
-  boolean verify(Entry entry, SignatureOptions options) throws SecurityException;
-  
-  boolean verify(Feed feed, SignatureOptions options) throws SecurityException;
+  <T extends Element>X509Certificate[] getValidSignatureCertificates(T element, SignatureOptions options) throws SecurityException;
   
   SignatureOptions getDefaultSignatureOptions() throws SecurityException;
   

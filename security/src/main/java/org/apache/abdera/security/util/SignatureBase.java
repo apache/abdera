@@ -18,9 +18,8 @@
 package org.apache.abdera.security.util;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.model.Entry;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ExtensibleElement;
-import org.apache.abdera.model.Feed;
 import org.apache.abdera.security.SecurityException;
 import org.apache.abdera.security.Signature;
 
@@ -33,18 +32,15 @@ public abstract class SignatureBase
     super(abdera);
   }
 
-  public boolean isSigned(
-    Entry entry)  throws SecurityException {
+  public <T extends Element>boolean isSigned(
+    T entry)  throws SecurityException {
       return _isSigned(entry);
   }
 
-  public boolean isSigned(
-    Feed feed)  throws SecurityException {
-      return _isSigned(feed);
-  }
-  
-  private boolean _isSigned(ExtensibleElement element) {
-    return element.getExtension(Constants.SIGNATURE) != null;
+  private <T extends Element>boolean _isSigned(T element) {
+    if (element instanceof ExtensibleElement)
+      return ((ExtensibleElement)element).getExtension(Constants.SIGNATURE) != null;
+    else return false;
   }
 
 }

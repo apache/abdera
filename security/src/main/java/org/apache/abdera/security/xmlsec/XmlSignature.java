@@ -22,11 +22,11 @@ import java.net.URISyntaxException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Element;
-import org.apache.abdera.model.Entry;
-import org.apache.abdera.model.Feed;
 import org.apache.abdera.security.SecurityException;
 import org.apache.abdera.security.SignatureOptions;
 import org.apache.abdera.security.util.Constants;
@@ -56,8 +56,9 @@ public class XmlSignature
     super(abdera);
   }
   
-  private Element _sign(
-    Element element, 
+  @SuppressWarnings("unchecked")
+  private <T extends Element>T _sign(
+    T element, 
     SignatureOptions options) 
       throws XMLSecurityException, 
              URISyntaxException {    
@@ -79,29 +80,83 @@ public class XmlSignature
     sig.addKeyInfo(cert);
     sig.addKeyInfo(cert.getPublicKey());
     sig.sign(signingKey);    
-    return (Element)domToFom(dom, options);
+    return (T)domToFom(dom, options);
   }
   
-  public Entry sign(
-    Entry entry, 
+  public <T extends Element>T sign(
+    T entry, 
     SignatureOptions options) 
       throws SecurityException {
     try {
-      return (Entry) _sign(entry, options);
+      return (T) _sign(entry, options);
     } catch (Exception e) {
       throw new SecurityException(e);
     }
   }
-
-  public Feed sign(
-    Feed feed, 
+  
+  private boolean is_valid_signature(
+    XMLSignature sig) 
+      throws XMLSignatureException, 
+             XMLSecurityException, 
+             URISyntaxException {
+    boolean answer = false;
+    KeyInfo ki = sig.getKeyInfo();
+    if (ki != null) {
+      X509Certificate cert = ki.getX509Certificate();
+      if (cert != null) {
+        answer = sig.checkSignatureValue(cert);
+      } else {
+        PublicKey key = ki.getPublicKey();
+        if (key != null) {
+          answer = sig.checkSignatureValue(key);
+        }
+      }
+    }
+    return answer;
+  }
+  
+  private <T extends Element>X509Certificate[] _getcerts(
+    T element, 
     SignatureOptions options)
+      throws XMLSignatureException, 
+             XMLSecurityException, 
+             URISyntaxException {
+    List<X509Certificate> certs = new ArrayList<X509Certificate>();
+    org.w3c.dom.Element dom = fomToDom((Element)element, options);
+    NodeList children = dom.getChildNodes();
+    for (int n = 0; n < children.getLength(); n++) {
+      try {
+        Node node = children.item(n);
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+          org.w3c.dom.Element el = (org.w3c.dom.Element) node;
+          if (Constants.DSIG_NS.equals(el.getNamespaceURI()) &&
+              Constants.LN_SIGNATURE.equals(el.getLocalName())) {
+            URI baseUri = element.getResolvedBaseUri();
+            XMLSignature sig = 
+              new XMLSignature(
+                el, (baseUri != null) ? baseUri.toString() : "");
+            if (is_valid_signature(sig)) {
+              KeyInfo ki = sig.getKeyInfo();
+              if (ki != null) {
+                X509Certificate cert = ki.getX509Certificate();
+                if (cert != null) certs.add(cert);
+              }
+            }
+          }
+        }
+      } catch (Exception e) {}
+    }
+    return certs.toArray(new X509Certificate[certs.size()]);
+  }
+  
+  public <T extends Element>X509Certificate[] getValidSignatureCertificates(
+    T element, 
+    SignatureOptions options) 
       throws SecurityException {
     try {
-      return (Feed) _sign(feed, options);
-    } catch (Exception e) {
-      throw new SecurityException(e);
-    }
+      return _getcerts(element, options);
+    } catch (Exception e) {}
+    return null;
   }
   
   private boolean _verify(
@@ -123,18 +178,7 @@ public class XmlSignature
           XMLSignature sig = 
             new XMLSignature(
               el, (baseUri != null) ? baseUri.toString() : "");
-          KeyInfo ki = sig.getKeyInfo();
-          if (ki != null) {
-            X509Certificate cert = ki.getX509Certificate();
-            if (cert != null) {
-              answer = sig.checkSignatureValue(cert);
-            } else {
-              PublicKey key = ki.getPublicKey();
-              if (key != null) {
-                answer = sig.checkSignatureValue(key);
-              }
-            }
-          }
+          answer = is_valid_signature(sig);
         }
       }
     }
@@ -142,23 +186,12 @@ public class XmlSignature
     return answer;
   }
   
-  public boolean verify(
-    Entry entry, 
+  public <T extends Element>boolean verify(
+    T entry, 
     SignatureOptions options) throws SecurityException {
       if (!isSigned(entry)) return false;
       try {
         return _verify(entry,options);
-      } catch (Exception e) {
-        throw new SecurityException(e);
-      }
-  }
-
-  public boolean verify(
-    Feed feed, 
-    SignatureOptions options) throws SecurityException {
-      if (!isSigned(feed)) return false;
-      try {
-        return _verify(feed,options);
       } catch (Exception e) {
         throw new SecurityException(e);
       }

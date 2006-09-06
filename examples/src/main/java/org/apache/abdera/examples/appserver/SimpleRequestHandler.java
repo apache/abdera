@@ -237,6 +237,7 @@ public class SimpleRequestHandler
     Document<Entry> entry_doc = entry.getDocument();
     BaseResponseContext<Document<Entry>> rc =
       new BaseResponseContext<Document<Entry>>(entry_doc);
+    rc.setContentType("application/atom+xml");
     return rc;
   }
   
@@ -245,12 +246,14 @@ public class SimpleRequestHandler
       new BaseResponseContext<Document<Service>>(getService());
     rc.setEntityTag("\"service\"");
     rc.setLastModified(new Date());
+    rc.setContentType("application/atomserv+xml");
     return rc;
   }
   
   private BaseResponseContext<Document<Feed>> getFeedDocument() {
     BaseResponseContext<Document<Feed>> rc =
       new BaseResponseContext<Document<Feed>>(getFeed());
+    rc.setContentType("application/atom+xml");
     return rc;
   }
   

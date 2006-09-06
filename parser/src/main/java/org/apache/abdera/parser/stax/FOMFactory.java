@@ -402,7 +402,7 @@ public class FOMFactory
   public Element newElement(
     QName qname, 
     Base parent) {
-      return new FOMElement(qname, (OMContainer)parent,this);
+      return new FOMExtensibleElement(qname, (OMContainer)parent,this);
   }
   
   public Element newExtensionElement(QName qname) {
@@ -450,9 +450,9 @@ public class FOMFactory
     }
     if (element == null) {
       if (parserWrapper == null) {
-        element = new FOMElement(qname, parent, this);
+        element = new FOMExtensibleElement(qname, parent, this);
       } else {
-        element = new FOMElement(qname, parent, this, parserWrapper);
+        element = new FOMExtensibleElement(qname, parent, this, parserWrapper);
       }
     }
     return element;
@@ -637,7 +637,7 @@ public class FOMFactory
     QName qname,
     OMContainer parent,
     OMXMLParserWrapper parserWrapper) {
-      return new FOMElement(qname,parent,this,parserWrapper);
+      return new FOMExtensibleElement(qname,parent,this,parserWrapper);
   }
   
   @SuppressWarnings("unchecked")
@@ -773,9 +773,9 @@ public class FOMFactory
     } else if (COLLECTION.equals(qname)) {
       element = (OMElement) newCollection(qname, parent, builder);
     } else if (NAME.equals(qname)) {
-      element = (OMElement) newElement(qname, parent, builder);
+      element = (OMElement) new FOMElement(qname,parent,this,builder);
     } else if (EMAIL.equals(qname)) {
-      element = (OMElement) newElement(qname, parent, builder);
+      element = (OMElement) new FOMElement(qname,parent,this,builder);
     } else if (URI.equals(qname)) {
       element = (OMElement) newURIElement(qname, parent, builder);
     } else if (CONTROL.equals(qname)) {

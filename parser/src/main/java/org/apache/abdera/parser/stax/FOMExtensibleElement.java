@@ -32,9 +32,11 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
-public abstract class FOMExtensibleElement 
+public class FOMExtensibleElement 
   extends FOMElement 
   implements ExtensibleElement {
+
+  private static final long serialVersionUID = -1652430686161947531L;
 
   public FOMExtensibleElement(QName qname) {
     super(qname);

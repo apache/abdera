@@ -461,4 +461,9 @@ public interface Factory {
    * Create a new Categories element as a child of the given Element
    */
   Categories newCategories(Element parent);
+  
+  /**
+   * Generate a new random UUID URI 
+   */
+  String newUuidUri();
 }

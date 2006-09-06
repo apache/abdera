@@ -53,6 +53,7 @@ import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.model.Content.Type;
 import org.apache.abdera.parser.Parser;
+import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.Version;
@@ -882,4 +883,7 @@ public class FOMFactory
         return new FOMCategories(qname,parent, this, parserWrapper);
     }
 
+  public String newUuidUri() {
+    return FOMHelper.generateUuid();
+  }
 }

@@ -22,6 +22,9 @@ import org.apache.abdera.filter.ParseFilter;
 import org.apache.abdera.filter.TextFilter;
 import org.apache.abdera.parser.ParserOptions;
 
+/**
+ * Non thread-safe abstract implementation of ParserOptions
+ */
 public abstract class AbstractParserOptions 
   implements ParserOptions, Cloneable {
 
@@ -30,10 +33,6 @@ public abstract class AbstractParserOptions
   protected ParseFilter parseFilter = null;
   protected TextFilter textFilter = null;
   protected boolean detect = false;
-  protected boolean ignoredtd = false;
-  protected boolean ignorecomments = false;
-  protected boolean ignorepi = false;
-  protected boolean ignorespace = false;
 
   protected abstract void initFactory();
   protected abstract void checkFactory(Factory factory);
@@ -93,30 +92,5 @@ public abstract class AbstractParserOptions
   
   public void setAutodetectCharset(boolean detect) {
     this.detect = detect;
-  }
-  
-  public void setIgnoreDoctype(boolean ignore) {
-    this.ignoredtd = ignore;
-  }
-  public void setIgnoreComments(boolean ignore) {
-    this.ignorecomments = ignore;
-  }
-  public void setIgnoreWhitespace(boolean ignore) {
-    this.ignorespace = ignore;
-  }
-  public void setIgnoreProcessingInstructions(boolean ignore) {
-    this.ignorepi = ignore;
-  }
-  public boolean getIgnoreDoctype() {
-    return this.ignoredtd;
-  }
-  public boolean getIgnoreComments() {
-    return this.ignorecomments;
-  }
-  public boolean getIgnoreWhitespace() {
-    return this.ignorespace;
-  }
-  public boolean getIgnoreProcessingInstructions() {
-    return this.ignorepi;
   }
 }

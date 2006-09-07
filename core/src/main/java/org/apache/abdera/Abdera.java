@@ -26,100 +26,117 @@ import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
 import org.apache.abdera.xpath.XPath;
 
+/**
+ * A top level entry point for Abdera that provides access to various
+ * subcomponents.  Upon creation, this class will attempt to create 
+ * singleton instances of each of the various subcomponents components.
+ * These instances may be retrieved using the appropriate get___ methods.
+ * Alternatively, new instances may be retrieved using the appropriate 
+ * new___ methods. 
+ */
 public final class Abdera {
 
-  private AbderaConfiguration config = null;
-  private Factory factory = null;
-  private Parser parser = null;
-  private XPath xpath = null;
-  private ParserFactory parserFactory = null;
-  private WriterFactory writerFactory = null;
-  private Writer writer = null;
+  private final AbderaConfiguration config;
+  private final Factory factory;
+  private final Parser parser;
+  private final XPath xpath;
+  private final ParserFactory parserFactory;
+  private final WriterFactory writerFactory;
+  private final Writer writer;
   
+  /**
+   * Initialize using the default Abdera Configuration
+   */
   public Abdera() {
-    config = AbderaConfiguration.getDefault();
+    this(AbderaConfiguration.getDefault());
   }
   
+  /**
+   * Initialize using the specified Abdera Configuration
+   */
   public Abdera(AbderaConfiguration config) {
     this.config = config;
+    factory = newFactory();
+    parser = newParser();
+    xpath = newXPath();
+    parserFactory = newParserFactory();
+    writerFactory = newWriterFactory();
+    writer = newWriter();
   }
   
+  /**
+   * Return the Abdera Configuration used to initialize this instance
+   */
   public AbderaConfiguration getConfiguration() {
     return config;
   }
   
-  public synchronized Factory getFactory() {
-    if (factory == null)
-      factory = newFactory();
+  /**
+   * Return the singleton instance of org.apache.abdera.factory.Factory
+   */
+  public Factory getFactory() {
     return factory;
   }
   
-  public static Factory getNewFactory() {
-    return (new Abdera()).newFactory();
-  }
-
-  public synchronized Parser getParser() {
-    if (parser == null)
-      parser = newParser();
+  /**
+   * Return the singleton instance of org.apache.abdera.parser.Parser
+   */
+  public Parser getParser() {
     return parser;
   }
   
-  public static Parser getNewParser() {
-    return (new Abdera()).newParser();
-  }
-  
-  public synchronized XPath getXPath() {
-    if (xpath == null)
-      xpath = newXPath();
+  /**
+   * Return the singleton instance of org.apache.abdera.xpath.XPath
+   */
+  public XPath getXPath() {
     return xpath;
   }
   
-  public static XPath getNewXPath() {
-    return (new Abdera()).newXPath();
-  }
-
-  public synchronized ParserFactory getParserFactory() {
-    if (parserFactory == null)
-      parserFactory = newParserFactory();
+  /**
+   * Return the singleton instance of org.apache.abdera.parser.ParserFactory
+   */
+  public ParserFactory getParserFactory() {
     return parserFactory;
   }
   
-  public static ParserFactory getNewParserFactory() {
-    return (new Abdera()).newParserFactory();
-  }
-
-  public synchronized WriterFactory getWriterFactory() {
-    if (writerFactory == null)
-      writerFactory = newWriterFactory();
+  /**
+   * Return the singleton instance of org.apache.abdera.writer.WriterFactory
+   */
+  public WriterFactory getWriterFactory() {
     return writerFactory;
   }
   
-  public static WriterFactory getNewWriterFactory() {
-    return (new Abdera()).newWriterFactory();
-  }
-
-  public synchronized Writer getWriter() {
-    if (writer == null)
-      writer = newWriter();
+  /**
+   * Return the singleton instance of org.apache.abdera.writer.Writer
+   */
+  public Writer getWriter() {
     return writer;
   }
   
-  public static Writer getNewWriter() {
-    return (new Abdera()).newWriter();
-  }
-
+  /**
+   * Return a new instance of org.apache.abdera.factory.Factory
+   */
   private Factory newFactory() {
     return ServiceUtil.newFactoryInstance(this);
   }
     
+  /**
+   * Return a new instance of org.apache.abdera.parser.Parser
+   */
   private Parser newParser() {
     return ServiceUtil.newParserInstance(this);
   }
     
+  /**
+   * Return a new instance of org.apache.abdera.xpath.XPath
+   */
   private XPath newXPath() {
     return ServiceUtil.newXPathInstance(this);
   }
     
+  /**
+   * Return a new instance of org.apache.abdera.parser.ParserFactory
+   */
   private ParserFactory newParserFactory() {
     return
       (ParserFactory) ServiceUtil.newInstance(
@@ -128,6 +145,9 @@ public final class Abdera {
       this);
   }
     
+  /**
+   * Return a new instance of org.apache.abdera.writer.WriterFactory
+   */
   private WriterFactory newWriterFactory() {
     return
       (WriterFactory) ServiceUtil.newInstance(
@@ -136,6 +156,9 @@ public final class Abdera {
         this);
   }
     
+  /**
+   * Return a new instance of org.apache.abdera.writer.Writer
+   */
   private Writer newWriter() {
     return 
       (Writer) ServiceUtil.newInstance(
@@ -144,4 +167,29 @@ public final class Abdera {
       this);
   }
   
+  // Static convenience methods //
+  
+  public static Factory getNewFactory() {
+    return (new Abdera()).newFactory();
+  }
+
+  public static Parser getNewParser() {
+    return (new Abdera()).newParser();
+  }
+  
+  public static XPath getNewXPath() {
+    return (new Abdera()).newXPath();
+  }
+
+  public static ParserFactory getNewParserFactory() {
+    return (new Abdera()).newParserFactory();
+  }
+  
+  public static WriterFactory getNewWriterFactory() {
+    return (new Abdera()).newWriterFactory();
+  }
+
+  public static Writer getNewWriter() {
+    return (new Abdera()).newWriter();
+  }
 }

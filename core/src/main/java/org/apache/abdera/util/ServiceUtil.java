@@ -50,7 +50,7 @@ public final class ServiceUtil
    * no instance is configured, the default class name will be used.  Returns
    * null if no instance can be created.
    */
-  public static Object newInstance(String id, String _default, Abdera abdera) {
+  public static <T>T newInstance(String id, String _default, Abdera abdera) {
     return locate(id, _default, abdera);
   }
 
@@ -112,11 +112,11 @@ public final class ServiceUtil
     return Thread.currentThread().getContextClassLoader();
   }
   
-  public static Object locate(
+  public static <T>T locate(
     String id, 
     String _default, 
     Abdera abdera) {
-      Object object = locate(id, abdera);
+      T object = locate(id, abdera);
       if (object == null && _default != null) {
         object = locateInstance(getClassLoader(), _default, abdera);
       }
@@ -126,9 +126,10 @@ public final class ServiceUtil
   /**
    * Locate a class instance for the given id
    */
-  public static Object locate(String id, Abdera abdera) {
-    Object service = checkAbderaConfiguration(id, abdera);
-    return ((service != null) ? service : checkMetaInfServices(id, abdera));
+  @SuppressWarnings("unchecked")
+  public static <T>T locate(String id, Abdera abdera) {
+    T service = checkAbderaConfiguration(id, abdera);
+    return ((service != null) ? service : (T)checkMetaInfServices(id, abdera));
   }
   
   @SuppressWarnings("unchecked")
@@ -186,13 +187,14 @@ public final class ServiceUtil
     return null;
   }
   
-  private static Object checkAbderaConfiguration(String id, Abdera abdera) {
+  @SuppressWarnings("unchecked")
+  private static <T>T checkAbderaConfiguration(String id, Abdera abdera) {
     String s = abdera.getConfiguration().getConfigurationOption(id);
-    return (s != null) ? locateInstance(getClassLoader(), id, abdera) : null;
+    return (s != null) ? (T)locateInstance(getClassLoader(), id, abdera) : null;
   }
   
-  private static Object checkMetaInfServices(String id, Abdera abdera) {
-    Object object = null;
+  private static <T>T checkMetaInfServices(String id, Abdera abdera) {
+    T object = null;
     String sid = "META-INF/services/" + id;
     ClassLoader loader = getClassLoader();
     BufferedReader buf = null;

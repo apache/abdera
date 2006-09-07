@@ -42,11 +42,9 @@ public abstract class AbstractXPath
   
   private Map<String, String> initDefaultNamespaces() {
     Map<String,String> namespaces = new HashMap<String,String>();
-    if (namespaces == null)  {
-      namespaces = new HashMap<String,String>();
-      namespaces.put("a", Constants.ATOM_NS);
-      namespaces.put("app", Constants.APP_NS);
-    }
+    namespaces = new HashMap<String,String>();
+    namespaces.put("a", Constants.ATOM_NS);
+    namespaces.put("app", Constants.APP_NS);
     return namespaces;
   }
 

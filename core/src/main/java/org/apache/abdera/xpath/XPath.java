@@ -33,11 +33,11 @@ public interface XPath {
     String path, 
     Base base) throws XPathException;
   
-  <T>T selectSingleNode(
+  Object selectSingleNode(
     String path, 
     Base base) throws XPathException;
   
-  <T>T evaluate(
+  Object evaluate(
     String path, 
     Base base) throws XPathException;
   

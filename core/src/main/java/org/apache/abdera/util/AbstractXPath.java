@@ -72,7 +72,7 @@ public abstract class AbstractXPath
     return isTrue(path, base, getDefaultNamespaces());
   }
 
-  public <T extends Number>T numericValueOf(String path, Base base) throws XPathException {
+  public Number numericValueOf(String path, Base base) throws XPathException {
     return numericValueOf(path, base, getDefaultNamespaces());
   }
 

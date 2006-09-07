@@ -62,26 +62,26 @@ public class FOMXPath extends AbstractXPath {
   }
   
   @SuppressWarnings("unchecked")
-  public <T>T selectSingleNode(
+  public Object selectSingleNode(
     String path, 
     Base base, 
     Map<String,String> namespaces) throws XPathException {
     try {
       XPath xpath = getXPath(path, namespaces);
-      return (T)xpath.selectSingleNode(base);
+      return xpath.selectSingleNode(base);
     } catch (JaxenException e) {
       throw new XPathException(e);
     }
   }
   
   @SuppressWarnings("unchecked")
-  public <T>T evaluate(
+  public Object evaluate(
     String path, 
     Base base, 
     Map<String,String> namespaces) throws XPathException {
     try {
       XPath xpath = getXPath(path, namespaces);
-      return (T)xpath.evaluate(base);
+      return xpath.evaluate(base);
     } catch (JaxenException e) {
       throw new XPathException(e);
     }
@@ -114,14 +114,14 @@ public class FOMXPath extends AbstractXPath {
   }
 
   @SuppressWarnings("unchecked")
-  public <T extends Number>T numericValueOf(
+  public Number numericValueOf(
     String path, 
     Base base, 
     Map<String,String>namespaces) 
       throws XPathException {
     try {
       XPath xpath = getXPath(path, namespaces);
-      return (T)xpath.numberValueOf(base);
+      return xpath.numberValueOf(base);
     } catch (JaxenException e) {
       throw new XPathException(e);
     }

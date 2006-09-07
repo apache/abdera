@@ -50,7 +50,7 @@ public final class ServiceUtil
    * no instance is configured, the default class name will be used.  Returns
    * null if no instance can be created.
    */
-  public static <T>T newInstance(String id, String _default, Abdera abdera) {
+  public static Object newInstance(String id, String _default, Abdera abdera) {
     return locate(id, _default, abdera);
   }
 
@@ -112,11 +112,11 @@ public final class ServiceUtil
     return Thread.currentThread().getContextClassLoader();
   }
   
-  public static <T>T locate(
+  public static Object locate(
     String id, 
     String _default, 
     Abdera abdera) {
-      T object = locate(id, abdera);
+      Object object = locate(id, abdera);
       if (object == null && _default != null) {
         object = locateInstance(getClassLoader(), _default, abdera);
       }
@@ -127,24 +127,24 @@ public final class ServiceUtil
    * Locate a class instance for the given id
    */
   @SuppressWarnings("unchecked")
-  public static <T>T locate(String id, Abdera abdera) {
-    T service = checkAbderaConfiguration(id, abdera);
-    return ((service != null) ? service : (T)checkMetaInfServices(id, abdera));
+  public static Object locate(String id, Abdera abdera) {
+    Object service = checkAbderaConfiguration(id, abdera);
+    return ((service != null) ? service : checkMetaInfServices(id, abdera));
   }
   
   @SuppressWarnings("unchecked")
-  private static <T>T _create(Class _class, Abdera abdera) {
+  private static Object _create(Class _class, Abdera abdera) {
     if (_class == null) return null;
     try {
       if (abdera != null) {
         Constructor c = _class.getConstructor(new Class[] {Abdera.class});
-        return (T) c.newInstance(new Object[] {abdera});
+        return c.newInstance(new Object[] {abdera});
       }
     } catch (Exception e) {
       // Nothing
     }
     try {
-      return (T) _class.newInstance();
+      return _class.newInstance();
     } catch (Exception e) {
       // Nothing
     }
@@ -152,16 +152,16 @@ public final class ServiceUtil
   }
   
   @SuppressWarnings("unchecked")
-  public static <T>T locateInstance(ClassLoader loader, String id, Abdera abdera) {
+  public static Object locateInstance(ClassLoader loader, String id, Abdera abdera) {
     try {
       Class _class = loader.loadClass(id);
-      return (T)_create(_class, abdera);
+      return _create(_class, abdera);
     } catch (Exception e) {
       // Nothing
     }
     try {
       Class _class = ClassLoader.getSystemClassLoader().loadClass(id);
-      return (T)_create(_class, abdera);
+      return _create(_class, abdera);
     } catch (Exception e) {
       // Nothing
     }
@@ -188,13 +188,13 @@ public final class ServiceUtil
   }
   
   @SuppressWarnings("unchecked")
-  private static <T>T checkAbderaConfiguration(String id, Abdera abdera) {
+  private static Object checkAbderaConfiguration(String id, Abdera abdera) {
     String s = abdera.getConfiguration().getConfigurationOption(id);
-    return (s != null) ? (T)locateInstance(getClassLoader(), id, abdera) : null;
+    return (s != null) ? locateInstance(getClassLoader(), id, abdera) : null;
   }
   
-  private static <T>T checkMetaInfServices(String id, Abdera abdera) {
-    T object = null;
+  private static Object checkMetaInfServices(String id, Abdera abdera) {
+    Object object = null;
     String sid = "META-INF/services/" + id;
     ClassLoader loader = getClassLoader();
     BufferedReader buf = null;

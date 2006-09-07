@@ -56,11 +56,11 @@ public abstract class AbstractXPath
     return selectNodes(path, base, getDefaultNamespaces());
   }
 
-  public <T>T selectSingleNode(String path, Base base) throws XPathException {
+  public Object selectSingleNode(String path, Base base) throws XPathException {
     return selectSingleNode(path, base, getDefaultNamespaces());
   }
 
-  public <T>T evaluate(String path, Base base) throws XPathException {
+  public Object evaluate(String path, Base base) throws XPathException {
     return evaluate(path, base, getDefaultNamespaces());
   }
 

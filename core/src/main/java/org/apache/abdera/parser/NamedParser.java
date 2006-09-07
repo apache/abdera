@@ -21,4 +21,14 @@ public interface NamedParser extends Parser {
 
   String getName();
   
+  /**
+   * Return the media type of the format consumed by this parser
+   */
+  String[] getInputFormats();
+  
+  /**
+   * Returns true if the format consumed by this parser matches the specified
+   * media type
+   */
+  boolean parsesFormat(String mediatype);
 }

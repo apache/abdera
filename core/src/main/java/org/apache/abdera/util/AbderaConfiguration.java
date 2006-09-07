@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.util;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -30,66 +31,78 @@ import org.apache.abdera.writer.NamedWriter;
 public final class AbderaConfiguration 
   implements Constants, Cloneable {
   
-  private static AbderaConfiguration instance = null;
-  
   public static synchronized AbderaConfiguration getDefault() {
-    if (instance == null) {
-      try {
-        ResourceBundle bundle = ResourceBundle.getBundle("abdera");
-        instance = new AbderaConfiguration(bundle);
-      } catch (Exception e) {
-        instance = new AbderaConfiguration();
-      }
-    } 
-    return instance;
+    AbderaConfiguration instance = null;
+    try {
+      ResourceBundle bundle = ResourceBundle.getBundle("abdera");
+      instance = new AbderaConfiguration(bundle);
+    } catch (Exception e) {
+      instance = new AbderaConfiguration();
+    }
+    return instance; 
   }
   
   private static ResourceBundle getBundle(
     ClassLoader loader, 
     Locale locale) {
+      ResourceBundle bundle = null;
       try {
-        ResourceBundle bundle = 
+        bundle = 
           ResourceBundle.getBundle(
             "abdera", 
             locale, 
             loader);
-        return bundle;
       } catch (Exception e) {
-        // Nothing
+        // Do nothing
       }
-      return null;
+      return bundle;
   }
   
-  private ResourceBundle bundle = null;
-  private List<ExtensionFactory> factories = null;
-  private Map<String,NamedWriter> writers = null;
-  private Map<String,NamedParser> parsers = null;
-  private String xpath = null;
-  private String parser = null;
-  private String factory = null;
+  private final ResourceBundle bundle;
+  private final String xpath;
+  private final String parser;
+  private final String factory;
+  private final String parserFactory;
+  private final String writerFactory;
+  private final String writer;
+  private final List<ExtensionFactory> factories;
+  private final Map<String,NamedWriter> writers;
+  private final Map<String,NamedParser> parsers;
   
-  public AbderaConfiguration() {}
+  public AbderaConfiguration() {
+    this(null);
+  }
   
   protected AbderaConfiguration(ResourceBundle bundle) {
-    this.bundle = bundle;
-  }  
-  
-  private synchronized ResourceBundle getBundle() {
-    if (bundle == null) {
-      bundle = AbderaConfiguration.getBundle(
+    this.bundle = (bundle != null) ? bundle : 
+      AbderaConfiguration.getBundle(
         ServiceUtil.getClassLoader(), 
         Locale.getDefault());
-    } 
+    xpath = getConfigurationOption(CONFIG_XPATH, DEFAULT_XPATH);
+    parser = getConfigurationOption(CONFIG_PARSER, DEFAULT_PARSER);
+    factory = getConfigurationOption(CONFIG_FACTORY, DEFAULT_FACTORY);
+    parserFactory = getConfigurationOption(CONFIG_PARSERFACTORY, DEFAULT_PARSERFACTORY);
+    writerFactory = getConfigurationOption(CONFIG_WRITERFACTORY, DEFAULT_WRITERFACTORY);
+    writer = getConfigurationOption(CONFIG_WRITER, DEFAULT_WRITER);
+    factories = ServiceUtil.loadExtensionFactories();
+    writers = initNamedWriters();
+    parsers = initNamedParsers();
+  }  
+  
+  private ResourceBundle getBundle() {
     return bundle;
   }
 
   public String getConfigurationOption(String id) {
     String option = System.getProperty(id);
-    try {
-      ResourceBundle bundle = getBundle();
-      if (option == null && bundle != null)
-        option = bundle.getString(id);
-    } catch (Exception e) {}
+    if (option == null) {
+      try {
+        ResourceBundle bundle = getBundle();
+        if (bundle != null) option = bundle.getString(id);
+      } catch (Exception e) {
+        // Do Nothing
+      }
+    }
     return option;
   }
   
@@ -99,64 +112,76 @@ public final class AbderaConfiguration
   }
   
   public String getDefaultXPath() {
-    return (xpath == null) ? 
-      getConfigurationOption(CONFIG_XPATH, DEFAULT_XPATH) : xpath;
+    return xpath;
   }
   
   public String getDefaultParser() {
-    return (parser == null) ? 
-      getConfigurationOption(CONFIG_PARSER, DEFAULT_PARSER) : parser;
+    return parser;
   }
   
   public String getDefaultFactory() {
-    return (factory == null) ? 
-      getConfigurationOption(CONFIG_FACTORY, DEFAULT_FACTORY) : factory;
+    return factory;
   }
   
-  public synchronized void addExtensionFactory(ExtensionFactory factory) {
+  public String getDefaultParserFactory() {
+    return parserFactory; 
+  }
+  
+  public String getDefaultWriterFactory() {
+    return writerFactory;
+  }
+  
+  public String getDefaultWriter() {
+    return writer;
+  }
+  
+  public void addExtensionFactory(ExtensionFactory factory) {
     List<ExtensionFactory> factories = getExtensionFactories();
     if (!factories.contains(factory))
       factories.add(factory);
   }
   
-  public synchronized List<ExtensionFactory> getExtensionFactories() {
-    if (factories == null) factories = ServiceUtil.loadExtensionFactories();
+  public List<ExtensionFactory> getExtensionFactories() {
     return factories;
   }
   
-  public synchronized void addNamedWriter(NamedWriter writer) {
+  public void addNamedWriter(NamedWriter writer) {
     Map<String,NamedWriter> writers = getNamedWriters();
     writers.put(writer.getName(), writer);
   }
   
-  public synchronized Map<String,NamedWriter> getNamedWriters() {
-    if (writers == null) {
-      List<NamedWriter> _writers = 
-        ServiceUtil._loadimpls(
-          "META-INF/services/org.apache.abdera.writer.NamedWriter");
-      writers = new HashMap<String,NamedWriter>();
-      for (NamedWriter writer : _writers) {
-        writers.put(writer.getName().toLowerCase(), writer);
-      }
+  private Map<String,NamedWriter> initNamedWriters() {
+    Map<String,NamedWriter> writers = null;
+    List<NamedWriter> _writers = 
+      ServiceUtil._loadimpls(NAMED_WRITER);
+    writers = Collections.synchronizedMap(new HashMap<String,NamedWriter>());
+    for (NamedWriter writer : _writers) {
+      writers.put(writer.getName().toLowerCase(), writer);
     }
     return writers;
   }
   
-  public synchronized void addNamedParser(NamedParser parser) {
+  public Map<String,NamedWriter> getNamedWriters() {
+    return writers;
+  }
+  
+  public void addNamedParser(NamedParser parser) {
     Map<String,NamedParser> parsers = getNamedParsers();
     parsers.put(parser.getName(), parser);
   }
   
-  public synchronized Map<String,NamedParser> getNamedParsers() {
-    if (parsers == null) {
-      List<NamedParser> _parsers = 
-        ServiceUtil._loadimpls(
-          "META-INF/services/org.apache.abdera.parser.NamedParser");
-      parsers = new HashMap<String,NamedParser>();
-      for (NamedParser parser : _parsers) {
-        parsers.put(parser.getName().toLowerCase(), parser);
-      }
+  private Map<String,NamedParser> initNamedParsers() {
+    Map<String,NamedParser> parsers = null;
+    List<NamedParser> _parsers = 
+      ServiceUtil._loadimpls(NAMED_PARSER);
+    parsers = Collections.synchronizedMap(new HashMap<String,NamedParser>());
+    for (NamedParser parser : _parsers) {
+      parsers.put(parser.getName().toLowerCase(), parser);
     }
+    return parsers;
+  }
+  
+  public Map<String,NamedParser> getNamedParsers() {
     return parsers;
   }
   

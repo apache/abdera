@@ -24,9 +24,17 @@ public interface Constants {
   public static final String CONFIG_PARSER        = "org.apache.abdera.parser.Parser";
   public static final String CONFIG_FACTORY       = "org.apache.abdera.factory.Factory";
   public static final String CONFIG_XPATH         = "org.apache.abdera.xpath.XPath";
+  public static final String CONFIG_PARSERFACTORY = "org.apache.abdera.parser.ParserFactory";
+  public static final String CONFIG_WRITERFACTORY = "org.apache.abdera.writer.WriterFactory";
+  public static final String CONFIG_WRITER        = "org.apache.abdera.writer.Writer";
   public static final String DEFAULT_PARSER       = "org.apache.abdera.parser.stax.FOMParser";
   public static final String DEFAULT_FACTORY      = "org.apache.abdera.parser.stax.FOMFactory";
   public static final String DEFAULT_XPATH        = "org.apache.abdera.parser.stax.FOMXPath";
+  public static final String DEFAULT_PARSERFACTORY= "org.apache.abdera.parser.stax.FOMParserFactory";
+  public static final String DEFAULT_WRITERFACTORY= "org.apache.abdera.parser.stax.FOMWriterFactory";
+  public static final String DEFAULT_WRITER       = "org.apache.abdera.parser.stax.FOMWriter";
+  public static final String NAMED_WRITER         = "META-INF/services/org.apache.abdera.writer.NamedWriter";
+  public static final String NAMED_PARSER         = "META-INF/services/org.apache.abdera.parser.NamedParser";
   public static final String PREFIX               = "";
   public static final String APP_PREFIX           = "";
   public static final String CONTROL_PREFIX       = "";

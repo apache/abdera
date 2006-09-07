@@ -20,6 +20,13 @@ package org.apache.abdera.util;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
+import org.apache.abdera.model.Base;
+import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Element;
+import org.apache.abdera.model.Entry;
+import org.apache.abdera.model.Feed;
+import org.apache.abdera.model.Service;
+
 public class MimeTypeHelper {
 
   public static boolean isMatch(String a, String b) {
@@ -61,4 +68,29 @@ public class MimeTypeHelper {
     }
     return answer;
   }
+  
+  public static <T extends Base>String getMimeType(T base) {
+    String type = null;
+    if (base instanceof Document) {
+      Document doc = (Document)base;
+      MimeType mt = doc.getContentType();
+      type = (mt != null) ? mt.toString() : getMimeType(doc.getRoot());
+    } else if (base instanceof Element) {
+      Element el = (Element)base;
+      if (el.getDocument() != null) {
+        MimeType mt = el.getDocument().getContentType();
+        type = (mt != null) ? mt.toString() : null;
+      }
+      if (type == null) {
+        if (el instanceof Feed || el instanceof Entry)
+          type = Constants.ATOM_MEDIA_TYPE;
+        else if (el instanceof Service)
+          type = Constants.APP_MEDIA_TYPE;
+        else 
+          type = Constants.XML_MEDIA_TYPE;
+      }
+    }    
+    return (type != null) ? type : Constants.XML_MEDIA_TYPE;
+  }
 }
+

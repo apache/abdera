@@ -49,7 +49,7 @@ public interface XPath {
     String path, 
     Base base) throws XPathException; 
   
-  <T extends Number>T numericValueOf(
+  Number numericValueOf(
     String path, 
     Base base) 
       throws XPathException;
@@ -79,7 +79,7 @@ public interface XPath {
     Base base, 
     Map<String,String> namespaces) throws XPathException; 
   
-  <T extends Number>T numericValueOf(
+  Number numericValueOf(
     String path, 
     Base base, 
     Map<String, String> namespaces) 

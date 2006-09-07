@@ -62,7 +62,7 @@ import java.util.TimeZone;
  */
 public final class AtomDate {
 
-  protected Date value = null;
+  private Date value = null;
   
   public AtomDate() {}
   

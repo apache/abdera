@@ -26,11 +26,6 @@ import java.io.OutputStream;
 import javax.activation.DataSource;
 
 import org.apache.abdera.model.Base;
-import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Element;
-import org.apache.abdera.model.Entry;
-import org.apache.abdera.model.Feed;
-import org.apache.abdera.model.Service;
 
 public class AbderaDataSource 
   implements DataSource {
@@ -42,35 +37,7 @@ public class AbderaDataSource
   }
   
   public String getContentType() {
-    String type = null;
-    if (base instanceof Document) {
-      Document doc = (Document) base;
-      if (doc.getContentType() != null) {
-        type = doc.getContentType().toString();
-      } else {
-        if (doc.getRoot() instanceof Feed ||
-            doc.getRoot() instanceof Entry) {
-          type = "application/atom+xml";
-        } else if (doc.getRoot() instanceof Service) {
-          type = "application/atomserv+xml";
-        } else {
-          type = "application/xml";
-        }
-      }
-    } else if (base instanceof Feed || base instanceof Entry) {
-      Document doc = ((Element)base).getDocument();
-      if (doc != null && doc.getContentType() != null)
-        type = doc.getContentType().toString();
-      if (type == null)
-        type = "application/atom+xml";
-    } else if (base instanceof Service) {
-      Document doc = ((Element)base).getDocument();
-      if (doc != null)
-        type = doc.getContentType().toString();
-      if (type == null)
-        type = "application/atomserv+xml";      
-    }
-    return (type != null) ? type : "application/xml";
+    return MimeTypeHelper.getMimeType(base);
   }
 
   public InputStream getInputStream() throws IOException {

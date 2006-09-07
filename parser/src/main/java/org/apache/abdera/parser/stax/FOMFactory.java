@@ -18,6 +18,7 @@
 package org.apache.abdera.parser.stax;
  
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,24 +69,24 @@ public class FOMFactory
   extends OMLinkedListImplFactory 
   implements Factory, Constants, ExtensionFactory, FOMExtensionFactory {
 
-  private Abdera abdera = null;
-  private Map<QName,Class> extensions = null;
-  private List<ExtensionFactory> factories = null;
+  private final Map<QName,Class> extensions;
+  private final List<ExtensionFactory> factories;
   
   public FOMFactory() {
-    this.abdera = new Abdera();
+    this(new Abdera());
   }
   
   public FOMFactory(Abdera abdera) {
-    this.abdera = abdera;
+    List<ExtensionFactory> f= abdera.getConfiguration().getExtensionFactories();
+    this.factories = (f != null) ? 
+      new ArrayList<ExtensionFactory>(f) :
+      new ArrayList<ExtensionFactory>();
+    this.factories.add(this);
+    this.extensions = Collections.synchronizedMap(new HashMap<QName,Class>());
   }
   
   public Parser newParser() {
     return new FOMParser();
-  }
-  
-  private Abdera getAbdera() {
-    return abdera;
   }
   
   @SuppressWarnings("unchecked")
@@ -233,7 +234,7 @@ public class FOMFactory
         new FOMContent(type, (OMContainer)parent,this);
       try {
         if (type.equals(Content.Type.XML))
-          content.setMimeType("application/xml");
+          content.setMimeType(XML_MEDIA_TYPE);
       } catch (MimeTypeParseException e) { /* Can't happen */ }
       return content;
   }
@@ -423,11 +424,6 @@ public class FOMFactory
   }
 
   private List<ExtensionFactory> getExtensionFactories() {
-    if (factories == null) {
-      factories = new ArrayList<ExtensionFactory>(
-        getAbdera().getConfiguration().getExtensionFactories());
-    }
-    factories.add(0, this);
     return factories;
   }
   
@@ -794,7 +790,6 @@ public class FOMFactory
   }
 
   public void registerExtension(QName qname, Class impl) {
-    if (extensions == null) extensions = new HashMap<QName,Class>();
     extensions.put(qname, impl);
   }
   
@@ -804,11 +799,9 @@ public class FOMFactory
 
   public List<String> getNamespaces() {
     List<String> namespaces = new ArrayList<String>();
-    if (extensions != null) {
-      for (QName qname : extensions.keySet()) {
-        if (!namespaces.contains(qname.getNamespaceURI()))
-          namespaces.add(qname.getNamespaceURI());
-      }
+    for (QName qname : extensions.keySet()) {
+      if (!namespaces.contains(qname.getNamespaceURI()))
+        namespaces.add(qname.getNamespaceURI());
     }
     return namespaces;
   }
@@ -822,21 +815,19 @@ public class FOMFactory
     QName qname, 
     Base parent, 
     Factory factory) {
-      if (extensions != null) {
-        Class _class = extensions.get(qname);
-        if (_class != null) {
-          try {
-            return (T)_class.getConstructor(
-              new Class[] {
-                QName.class,
-                OMContainer.class,
-                OMFactory.class}).newInstance(
-                  new Object[] {
-                    qname, 
-                    parent, 
-                    factory});
-          } catch (Exception e) {}
-        }
+      Class _class = extensions.get(qname);
+      if (_class != null) {
+        try {
+          return (T)_class.getConstructor(
+            new Class[] {
+              QName.class,
+              OMContainer.class,
+              OMFactory.class}).newInstance(
+                new Object[] {
+                  qname, 
+                  parent, 
+                  factory});
+        } catch (Exception e) {}
       }
       return null;
   }
@@ -847,23 +838,21 @@ public class FOMFactory
     Base parent, 
     Factory factory, 
     OMXMLParserWrapper parserWrapper) {
-      if (extensions != null) {
-        Class _class = extensions.get(qname);
-        if (_class != null) {
-          try {
-            return (T)_class.getConstructor(
-              new Class[] {
-                QName.class,
-                OMContainer.class,
-                OMFactory.class,
-                OMXMLParserWrapper.class}).newInstance(
-                  new Object[] {
-                    qname, 
-                    parent, 
-                    factory,
-                    parserWrapper});
-          } catch (Exception e) {}
-        }
+      Class _class = extensions.get(qname);
+      if (_class != null) {
+        try {
+          return (T)_class.getConstructor(
+            new Class[] {
+              QName.class,
+              OMContainer.class,
+              OMFactory.class,
+              OMXMLParserWrapper.class}).newInstance(
+                new Object[] {
+                  qname, 
+                  parent, 
+                  factory,
+                  parserWrapper});
+        } catch (Exception e) {}
       }
       return null;
   }

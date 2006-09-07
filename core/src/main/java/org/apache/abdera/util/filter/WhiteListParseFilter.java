@@ -27,9 +27,11 @@ import javax.xml.namespace.QName;
 public class WhiteListParseFilter 
   extends AbstractListParseFilter {
 
-  boolean listAttributesExplicitly = false;
+  private final boolean listAttributesExplicitly;
   
-  public WhiteListParseFilter() {}
+  public WhiteListParseFilter() {
+    this(false);
+  }
   
   /**
    * If listAttributesExplicity == true, attributes MUST be whitelisted 

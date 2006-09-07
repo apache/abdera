@@ -45,7 +45,14 @@ public class SafeContentWhiteListParseFilter
     method, multiple, name, nohref, noshade, nowrap, prompt, readonly, rel, 
     rev, rows, rowspan, rules, scope, selected, shape, size, span, src, 
     start, summary, tabindex, target, title, type, usemap, valign, value, 
-    vspace, width,
+    vspace, width;
+    
+    static String fix(String v) {
+      if (v.equals("char"))  return "CHAR";
+      if (v.equals("for"))   return "FOR";
+      if (v.equals("class")) return "CLASS";
+      return v;
+    }
   };
   
   public boolean acceptable(QName qname) {
@@ -63,12 +70,9 @@ public class SafeContentWhiteListParseFilter
   public boolean acceptable(QName qname, QName attribute) {
     if (qname.getNamespaceURI().equals(Constants.XHTML_NS)) {
       try {
-        String lp = attribute.getLocalPart();
-        lp = lp.replace('-', '_');
-        lp = (lp.equals("char")) ? "CHAR" : lp;
-        lp = (lp.equals("for")) ? "FOR" : lp;
-        lp = (lp.equals("class")) ? "CLASS" : lp;
-        xhtml_attributes.valueOf(lp);
+        xhtml_attributes.valueOf(
+          xhtml_attributes.fix(
+            attribute.getLocalPart()));
         return true;
       } catch (Exception e) {}
       return false;

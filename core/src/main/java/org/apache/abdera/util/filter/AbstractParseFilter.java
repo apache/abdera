@@ -22,42 +22,43 @@ import org.apache.abdera.filter.ParseFilter;
 public abstract class AbstractParseFilter 
   implements ParseFilter {
 
+  private static final byte COMMENTS = 1;
+  private static final byte WHITESPACE = 2;
+  private static final byte PI = 4;
+  
   protected byte flags = 0;
   
+  private void toggle(boolean s, byte flag) {
+    if (s) flags |= flag;
+    else flags &= ~flag;
+  }
+  
+  private boolean check(byte flag) {
+    return (flags & flag) == flag;
+  }
+  
   public void setIgnoreComments(boolean ignore) {
-    if (getIgnoreComments()) {
-      if (!ignore) flags ^= 1;
-    } else {
-      if (ignore) flags |= 1;
-    }
+    toggle(ignore,COMMENTS);
   }
 
   public void setIgnoreWhitespace(boolean ignore) {
-    if (getIgnoreWhitespace()) {
-      if (!ignore) flags ^= 2;
-    } else {
-      if (ignore) flags |= 2;
-    }
+    toggle(ignore,(byte)WHITESPACE);
   }
   
   public void setIgnoreProcessingInstructions(boolean ignore) {
-    if (getIgnoreProcessingInstructions()) {
-      if (!ignore) flags ^= 4;
-    } else {
-      if (ignore) flags |= 4;
-    }
+    toggle(ignore,(byte)PI);
   }
   
   public boolean getIgnoreComments() {
-    return (flags & 1) == 1;
+    return check(COMMENTS);
   }
 
   public boolean getIgnoreProcessingInstructions() {
-    return (flags & 4) == 4;
+    return check(PI);
   }
 
   public boolean getIgnoreWhitespace() {
-    return (flags & 2) == 2;
+    return check(WHITESPACE);
   }
 
   public Object clone() throws CloneNotSupportedException {

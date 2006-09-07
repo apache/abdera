@@ -41,15 +41,29 @@ public class CompoundParseFilter
   implements ParseFilter {
 
   public enum Condition {
-    ACCEPTABLE_TO_ALL, 
-    ACCEPTABLE_TO_ANY, 
+    ACCEPTABLE_TO_ALL,
+    ACCEPTABLE_TO_ANY,
     UNACCEPTABLE_TO_ALL,
-    UNACCEPTABLE_TO_ANY,
+    UNACCEPTABLE_TO_ANY;
+    
+    byte evaluate(boolean b) {
+      if (b) {
+        switch(this) {
+          case ACCEPTABLE_TO_ANY:   return  1;
+          case UNACCEPTABLE_TO_ALL: return -1;
+        }
+      } else {
+        switch(this) {
+          case ACCEPTABLE_TO_ALL:   return -1;
+          case UNACCEPTABLE_TO_ANY: return  1;
+        }
+      }
+      return 0;
+    }
   };
   
-  private Condition condition = Condition.ACCEPTABLE_TO_ANY;
-  private static final ParseFilter[] empty = new ParseFilter[0];
-  protected ParseFilter[] filters = null;
+  protected final Condition condition;
+  protected final ParseFilter[] filters;
   
   public CompoundParseFilter(Condition condition, ParseFilter... filters) {
     this.filters = filters;
@@ -57,29 +71,18 @@ public class CompoundParseFilter
   }
   
   public CompoundParseFilter(ParseFilter... filters) {
-    this.filters = filters;
+    this(Condition.ACCEPTABLE_TO_ANY, filters);
   }
   
   private ParseFilter[] getFilters() {
-    return (filters != null) ? filters : empty;
+    return filters;
   }
-  
+
   public boolean acceptable(QName qname) {
     for (ParseFilter filter : getFilters()) {
-      if (filter.acceptable(qname)) {
-        switch(condition) {
-          case ACCEPTABLE_TO_ANY:
-            return true;
-          case UNACCEPTABLE_TO_ALL:
-            return false;
-        }
-      } else {
-        switch(condition) {
-          case ACCEPTABLE_TO_ALL:
-            return false;
-          case UNACCEPTABLE_TO_ANY:
-            return true;
-        }
+      switch(condition.evaluate(filter.acceptable(qname))) {
+        case  1: return true;
+        case -1: return false;
       }
     }
     return true;
@@ -87,25 +90,14 @@ public class CompoundParseFilter
 
   public boolean acceptable(QName qname, QName attribute) {
     for (ParseFilter filter : getFilters()) {
-      if (filter.acceptable(qname,attribute)) {
-        switch(condition) {
-          case ACCEPTABLE_TO_ANY:
-            return true;
-          case UNACCEPTABLE_TO_ALL:
-            return false;
-        }
-      } else {
-        switch(condition) {
-          case ACCEPTABLE_TO_ALL:
-            return false;
-          case UNACCEPTABLE_TO_ANY:
-            return true;
-        }
+      switch(condition.evaluate(filter.acceptable(qname,attribute))) {
+        case  1: return true;
+        case -1: return false;
       }
     }
     return true;
   }
-
+  
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
   }

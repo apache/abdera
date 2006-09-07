@@ -33,10 +33,10 @@ import org.apache.abdera.parser.ParserOptions;
 public abstract class AbstractParser 
   implements Parser {
 
-  protected Abdera abdera = null;
+  protected final Abdera abdera;
   
   protected AbstractParser() {
-    this.abdera = new Abdera();
+    this(new Abdera());
   }
   
   protected AbstractParser(Abdera abdera) {

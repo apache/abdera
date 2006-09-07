@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -31,6 +32,9 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.parser.Parser;
+import org.apache.abdera.parser.ParserFactory;
+import org.apache.abdera.writer.Writer;
+import org.apache.abdera.writer.WriterFactory;
 import org.apache.abdera.xpath.XPath;
 
 public final class ServiceUtil 
@@ -77,6 +81,27 @@ public final class ServiceUtil
     return (Factory) newInstance(
       CONFIG_FACTORY, 
       abdera.getConfiguration().getDefaultFactory(),
+      abdera);
+  }
+  
+  public static ParserFactory newParserFactoryInstance(Abdera abdera) {
+    return (ParserFactory) newInstance(
+      CONFIG_PARSERFACTORY,
+      abdera.getConfiguration().getDefaultParserFactory(),
+      abdera);
+  }
+  
+  public static WriterFactory newWriterFactoryInstance(Abdera abdera) {
+    return (WriterFactory) newInstance(
+      CONFIG_WRITERFACTORY,
+      abdera.getConfiguration().getDefaultWriterFactory(),
+      abdera) ;
+  }
+  
+  public static Writer newWriterInstance(Abdera abdera) {
+    return (Writer) newInstance(
+      CONFIG_WRITER,
+      abdera.getConfiguration().getDefaultWriter(),
       abdera);
   }
   
@@ -204,7 +229,7 @@ public final class ServiceUtil
   
   @SuppressWarnings("unchecked")
   protected static <T>List<T> _loadimpls(String sid) {
-    List<T> impls = new ArrayList<T>();
+    List<T> impls = Collections.synchronizedList(new ArrayList<T>());
     ClassLoader loader = getClassLoader();
     try {
       Enumeration<URL> e = locateResources(loader,sid);

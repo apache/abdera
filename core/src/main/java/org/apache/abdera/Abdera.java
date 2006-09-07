@@ -138,33 +138,21 @@ public final class Abdera {
    * Return a new instance of org.apache.abdera.parser.ParserFactory
    */
   private ParserFactory newParserFactory() {
-    return
-      (ParserFactory) ServiceUtil.newInstance(
-      "org.apache.abdera.parser.ParserFactory",
-      "org.apache.abdera.parser.stax.FOMParserFactory", 
-      this);
+    return ServiceUtil.newParserFactoryInstance(this);
   }
     
   /**
    * Return a new instance of org.apache.abdera.writer.WriterFactory
    */
   private WriterFactory newWriterFactory() {
-    return
-      (WriterFactory) ServiceUtil.newInstance(
-        "org.apache.abdera.writer.WriterFactory",
-        "org.apache.abdera.parser.stax.FOMWriterFactory", 
-        this);
+    return ServiceUtil.newWriterFactoryInstance(this);
   }
     
   /**
    * Return a new instance of org.apache.abdera.writer.Writer
    */
   private Writer newWriter() {
-    return 
-      (Writer) ServiceUtil.newInstance(
-      "org.apache.abdera.writer.Writer",
-      "org.apache.abdera.parser.stax.FOMWriter", 
-      this);
+    return ServiceUtil.newWriterInstance(this);
   }
   
   // Static convenience methods //

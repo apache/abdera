@@ -39,7 +39,7 @@ public class MimeTypeHelper {
   }
   
   public static boolean isXml(String a) {
-    boolean answer = isMatch("application/xml", a) || isMatch("text/xml", a);
+    boolean answer = isMatch(Constants.XML_MEDIA_TYPE, a) || isMatch("text/xml", a);
     if (!answer) {
       try { 
         MimeType mta = new MimeType(a);

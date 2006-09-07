@@ -29,17 +29,15 @@ public interface XPath {
   
   Map<String,String> getDefaultNamespaces();
   
-  void setDefaultNamespaces(Map<String,String> namespaces);
-  
   List selectNodes(
     String path, 
     Base base) throws XPathException;
   
-  Object selectSingleNode(
+  <T>T selectSingleNode(
     String path, 
     Base base) throws XPathException;
   
-  Object evaluate(
+  <T>T evaluate(
     String path, 
     Base base) throws XPathException;
   
@@ -51,7 +49,7 @@ public interface XPath {
     String path, 
     Base base) throws XPathException; 
   
-  Number numericValueOf(
+  <T extends Number>T numericValueOf(
     String path, 
     Base base) 
       throws XPathException;
@@ -61,12 +59,12 @@ public interface XPath {
     Base base, 
     Map<String,String> namespaces) throws XPathException;
   
-  Object selectSingleNode(
+  <T>T selectSingleNode(
     String path, 
     Base base, 
     Map<String,String> namespaces) throws XPathException;
   
-  Object evaluate(
+  <T>T evaluate(
     String path, 
     Base base, 
     Map<String,String> namespaces) throws XPathException;
@@ -81,7 +79,7 @@ public interface XPath {
     Base base, 
     Map<String,String> namespaces) throws XPathException; 
   
-  Number numericValueOf(
+  <T extends Number>T numericValueOf(
     String path, 
     Base base, 
     Map<String, String> namespaces) 

@@ -28,30 +28,41 @@ import org.apache.abdera.xpath.XPathException;
 public abstract class AbstractXPath 
   implements XPath {
   
-  private Map<String,String> namespaces = null;
+  private final Map<String,String> namespaces;
   
-  public Map<String, String> getDefaultNamespaces() {
+  protected AbstractXPath() {
+    this(null);
+  }
+  
+  protected AbstractXPath(Map<String,String> defaultNamespaces) {
+    namespaces = (defaultNamespaces != null) ? 
+      defaultNamespaces : 
+      initDefaultNamespaces();
+  }
+  
+  private Map<String, String> initDefaultNamespaces() {
+    Map<String,String> namespaces = new HashMap<String,String>();
     if (namespaces == null)  {
       namespaces = new HashMap<String,String>();
       namespaces.put("a", Constants.ATOM_NS);
       namespaces.put("app", Constants.APP_NS);
     }
+    return namespaces;
+  }
+
+  public Map<String,String> getDefaultNamespaces() {
     return new HashMap<String,String>(namespaces);
   }
-
-  public void setDefaultNamespaces(Map<String, String> namespaces) {
-    this.namespaces = namespaces;
-  }
-
+  
   public List selectNodes(String path, Base base) throws XPathException {
     return selectNodes(path, base, getDefaultNamespaces());
   }
 
-  public Object selectSingleNode(String path, Base base) throws XPathException {
+  public <T>T selectSingleNode(String path, Base base) throws XPathException {
     return selectSingleNode(path, base, getDefaultNamespaces());
   }
 
-  public Object evaluate(String path, Base base) throws XPathException {
+  public <T>T evaluate(String path, Base base) throws XPathException {
     return evaluate(path, base, getDefaultNamespaces());
   }
 
@@ -63,7 +74,7 @@ public abstract class AbstractXPath
     return isTrue(path, base, getDefaultNamespaces());
   }
 
-  public Number numericValueOf(String path, Base base) throws XPathException {
+  public <T extends Number>T numericValueOf(String path, Base base) throws XPathException {
     return numericValueOf(path, base, getDefaultNamespaces());
   }
 

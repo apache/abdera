@@ -18,6 +18,7 @@
 package org.apache.abdera.util.filter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,25 +36,22 @@ public abstract class AbstractListParseFilter
   extends AbstractParseFilter
   implements Cloneable, ListParseFilter {
   
-  private List<QName> qnames = null;
-  private Map<QName,List<QName>> attributes = null;
+  private final List<QName> qnames = Collections.synchronizedList(new ArrayList<QName>());
+  private final Map<QName,List<QName>> attributes = Collections.synchronizedMap(new HashMap<QName,List<QName>>());
   
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
   }
   
   public void add(QName qname) {
-    if (qnames == null) qnames = new ArrayList<QName>();
     if (!contains(qname)) qnames.add(qname);
   }
 
   public boolean contains(QName qname) {
-    if (qnames == null) qnames = new ArrayList<QName>();
     return qnames.contains(qname);
   }
 
   public void add(QName parent, QName attribute) {
-    if (attributes == null) attributes = new HashMap<QName,List<QName>>();
     if (attributes.containsKey(parent)) {
       List<QName> attrs = attributes.get(parent);
       if (!attrs.contains(attribute)) attrs.add(attribute);
@@ -65,7 +63,6 @@ public abstract class AbstractListParseFilter
   }
 
   public boolean contains(QName qname, QName attribute) {
-    if (attributes == null) attributes = new HashMap<QName,List<QName>>();
     if (attributes.containsKey(qname)) {
       List<QName> attrs = attributes.get(qname);
       return attrs.contains(attribute);

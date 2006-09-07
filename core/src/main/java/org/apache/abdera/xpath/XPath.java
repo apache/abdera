@@ -59,12 +59,12 @@ public interface XPath {
     Base base, 
     Map<String,String> namespaces) throws XPathException;
   
-  <T>T selectSingleNode(
+  Object selectSingleNode(
     String path, 
     Base base, 
     Map<String,String> namespaces) throws XPathException;
   
-  <T>T evaluate(
+  Object evaluate(
     String path, 
     Base base, 
     Map<String,String> namespaces) throws XPathException;

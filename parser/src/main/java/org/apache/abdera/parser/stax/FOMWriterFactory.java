@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.parser.stax;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.abdera.Abdera;
@@ -27,14 +28,17 @@ import org.apache.abdera.writer.WriterFactory;
 public class FOMWriterFactory 
   implements WriterFactory {
 
-  private Abdera abdera = null;
+  private final Abdera abdera;
+  private final Map<String,NamedWriter> writers;
   
   public FOMWriterFactory() {
-    this.abdera = new Abdera();
+    this(new Abdera());
   }
   
   public FOMWriterFactory(Abdera abdera) {
     this.abdera = abdera;
+    Map<String,NamedWriter>  w = getAbdera().getConfiguration().getNamedWriters();
+    writers = (w != null) ? w : new HashMap<String,NamedWriter>();
   }
   
   protected Abdera getAbdera() {
@@ -47,19 +51,19 @@ public class FOMWriterFactory
 
   public Writer getWriter(String name) {
     return (name != null) ? 
-      loadWriters().get(name.toLowerCase()) : getWriter();
+      getWriters().get(name.toLowerCase()) : getWriter();
   }
 
   public Writer getWriterByMediaType(String mediatype) {
-    Map<String,NamedWriter> writers = loadWriters();
+    Map<String,NamedWriter> writers = getWriters();
     for (NamedWriter writer : writers.values()) {
       if (writer.outputsFormat(mediatype)) return writer;
     }
     return null;
   }
   
-  private Map<String,NamedWriter> loadWriters() {
-    return getAbdera().getConfiguration().getNamedWriters();
+  private Map<String,NamedWriter> getWriters() {
+    return writers;
   }
   
 }

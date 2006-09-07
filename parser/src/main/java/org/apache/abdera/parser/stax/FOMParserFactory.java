@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.parser.stax;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.abdera.Abdera;
@@ -27,14 +28,17 @@ import org.apache.abdera.parser.ParserFactory;
 public class FOMParserFactory 
   implements ParserFactory {
 
-  private Abdera abdera = null;
+  private final Abdera abdera;
+  private final Map<String,NamedParser> parsers; 
   
   public FOMParserFactory() {
-    this.abdera = new Abdera();
+    this(new Abdera());
   }
   
   public FOMParserFactory(Abdera abdera) {
     this.abdera = abdera;
+    Map<String,NamedParser> p = getAbdera().getConfiguration().getNamedParsers();
+    this.parsers = (p != null) ? p : new HashMap<String,NamedParser>();
   }
   
   protected Abdera getAbdera() {
@@ -47,11 +51,11 @@ public class FOMParserFactory
 
   public Parser getParser(String name) {
     return (name != null) ? 
-      loadParsers().get(name.toLowerCase()) : getParser();
+      getParsers().get(name.toLowerCase()) : getParser();
   }
 
-  private Map<String,NamedParser> loadParsers() {
-    return getAbdera().getConfiguration().getNamedParsers();
+  private Map<String,NamedParser> getParsers() {
+    return parsers;
   }
   
 }

@@ -47,9 +47,9 @@ public class FOMBuilder
   extends StAXOMBuilder
   implements Constants {
 
-  private FOMFactory fomfactory = null;
+  private final FOMFactory fomfactory;
+  private final ParserOptions parserOptions;
   private Document fomDocument = null;
-  private ParserOptions parserOptions = null;
   private int depth = 0;
   private int depthInSkipElement = 0;
   private boolean ignoreWhitespace = false;

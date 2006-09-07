@@ -17,15 +17,16 @@
 */
 package org.apache.abdera.util;
 
-import org.apache.abdera.writer.NamedWriter;
+import org.apache.abdera.parser.NamedParser;
 
-public abstract class AbstractNamedWriter 
-  implements NamedWriter {
+public abstract class AbstractNamedParser 
+  extends AbstractParser 
+  implements NamedParser {
 
   protected final String name;
   protected final String[] formats;
   
-  protected AbstractNamedWriter(String name, String... formats ) {
+  protected AbstractNamedParser(String name, String... formats) {
     this.name = name;
     this.formats = formats;
   }
@@ -34,11 +35,11 @@ public abstract class AbstractNamedWriter
     return name;
   }
 
-  public String[] getOutputFormats() {
+  public String[] getInputFormats() {
     return formats;
   }
 
-  public boolean outputsFormat(String mediatype) {
+  public boolean parsesFormat(String mediatype) {
     for (String format : formats) {
       if (MimeTypeHelper.isMatch(format, mediatype))
         return true;

@@ -31,7 +31,16 @@ import org.apache.abdera.protocol.util.ProtocolConstants;
 public interface Response extends ProtocolConstants {
 
   public static enum ResponseType {
-    SUCCESS, REDIRECTION, CLIENT_ERROR, SERVER_ERROR, UNKNOWN
+    SUCCESS, REDIRECTION, CLIENT_ERROR, SERVER_ERROR, UNKNOWN;
+    
+    public static ResponseType select(int status) {
+      if (status >= 200 && status < 300) return SUCCESS;
+      if (status >= 300 && status < 400) return REDIRECTION;
+      if (status >= 400 && status < 500) return CLIENT_ERROR;
+      if (status >= 500 && status < 600) return SERVER_ERROR;
+      return UNKNOWN;
+    }
+    
   }
   
   public ResponseType getType();

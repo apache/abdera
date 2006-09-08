@@ -103,12 +103,7 @@ public abstract class AbstractResponse
   }
 
   public ResponseType getType() {
-    int status = getStatus();
-    if (status >= 200 && status < 300) return ResponseType.SUCCESS;
-    if (status >= 300 && status < 400) return ResponseType.REDIRECTION;
-    if (status >= 400 && status < 500) return ResponseType.CLIENT_ERROR;
-    if (status >= 500 && status < 600) return ResponseType.SERVER_ERROR;
-    return ResponseType.UNKNOWN;
+    return ResponseType.select(getStatus());
   }
 
   public URI getUriHeader(String name) throws URISyntaxException {
@@ -117,31 +112,31 @@ public abstract class AbstractResponse
   }
 
   public boolean isMustRevalidate() {
-    return (flags & REVALIDATE) == REVALIDATE;
+    return check(REVALIDATE);
   }
 
   public boolean isNoCache() {
-    return (flags & NOCACHE) == NOCACHE;
+    return check(NOCACHE);
   }
 
   public boolean isNoStore() {
-    return (flags & NOSTORE) == NOSTORE;
+    return check(NOSTORE);
   }
 
   public boolean isNoTransform() {
-    return (flags & NOTRANSFORM) == NOTRANSFORM;
+    return check(NOTRANSFORM);
   }
 
   public boolean isPrivate() {
-    return (flags & PRIVATE) == PRIVATE;
+    return check(PRIVATE);
   }
 
   public boolean isProxyRevalidate() {
-    return (flags & PROXYREVALIDATE) == PROXYREVALIDATE;
+    return check(PROXYREVALIDATE);
   }
 
   public boolean isPublic() {
-    return (flags & PUBLIC) == PUBLIC;
+    return check(PUBLIC);
   }
 
   public void setMaxAge(long max_age) {
@@ -149,33 +144,27 @@ public abstract class AbstractResponse
   }
   
   public void setMustRevalidate(boolean val) {
-    if (val) flags |= REVALIDATE;
-    else if (isMustRevalidate()) flags ^= REVALIDATE;
+    toggle(val, REVALIDATE);
   }
   
   public void setProxyRevalidate(boolean val) {
-    if (val) flags |= PROXYREVALIDATE;
-    else if (isProxyRevalidate()) flags ^= PROXYREVALIDATE;
+    toggle(val, PROXYREVALIDATE);
   }
   
   public void setNoCache(boolean val) {
-    if (val) flags |= NOCACHE;
-    else if (isNoCache()) flags ^= NOCACHE;
+    toggle(val, NOCACHE);
   }
   
   public void setNoStore(boolean val) {
-    if (val) flags |= NOSTORE;
-    else if (isNoStore()) flags ^= NOSTORE;
+    toggle(val, NOSTORE);
   }
   
   public void setNoTransform(boolean val) {
-    if (val) flags |= NOTRANSFORM;
-    else if (isNoTransform()) flags ^= NOTRANSFORM;
+    toggle(val, NOTRANSFORM);
   }
   
   public void setPublic(boolean val) {
-    if (val) flags |= PUBLIC;
-    else if (isPublic()) flags ^= PUBLIC;
+    toggle(val, PUBLIC);
   }
   
   public void setPrivate(boolean val) {
@@ -191,4 +180,13 @@ public abstract class AbstractResponse
     this.nocache_headers = headers;
   }
 
+  private boolean check(int flag) {
+    return (flags & flag) == flag;
+  }
+  
+  private void toggle(boolean val, int flag) {
+    if (val) flags |= flag;
+    else flags &= ~flag;
+  }
+  
 }

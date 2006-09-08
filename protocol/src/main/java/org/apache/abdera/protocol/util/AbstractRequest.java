@@ -93,19 +93,19 @@ public abstract class AbstractRequest implements Request {
   }
 
   public boolean isNoCache() {
-    return (flags & NOCACHE) == NOCACHE; 
+    return check(NOCACHE); 
   }
 
   public boolean isNoStore() {
-    return (flags & NOSTORE) == NOSTORE;
+    return check(NOSTORE);
   }
 
   public boolean isNoTransform() {
-    return (flags & NOTRANSFORM) == NOTRANSFORM;
+    return check(NOTRANSFORM);
   }
 
   public boolean isOnlyIfCached() {
-    return (flags & ONLYIFCACHED) == ONLYIFCACHED;
+    return check(ONLYIFCACHED);
   }
 
   public void setMaxAge(long max_age) {
@@ -119,24 +119,29 @@ public abstract class AbstractRequest implements Request {
   public void setMinFresh(long min_fresh) {
     this.min_fresh = min_fresh;
   }
+
+  private boolean check(int flag) {
+    return (flags & flag) == flag;
+  }
+  
+  private void toggle(boolean val, int flag) {
+    if (val) flags |= flag;
+    else flags &= ~flag;
+  }
   
   public void setNoCache(boolean val) {
-    if (val) flags |= NOCACHE;
-    else if (isNoCache()) flags ^= NOCACHE;
+    toggle(val, NOCACHE);
   }
   
   public void setNoStore(boolean val) {
-    if (val) flags |= NOSTORE;
-    else if (isNoStore()) flags ^= NOSTORE;
+    toggle(val, NOSTORE);
   }
   
   public void setNoTransform(boolean val) {
-    if (val) flags |= NOTRANSFORM;
-    else if (isNoTransform()) flags ^= NOTRANSFORM;
+    toggle(val, NOTRANSFORM);
   }
   
   public void setOnlyIfCached(boolean val) {
-    if (val) flags |= ONLYIFCACHED;
-    else if (isOnlyIfCached()) flags ^= ONLYIFCACHED;
+    toggle(val, ONLYIFCACHED);
   }
 }

@@ -117,42 +117,66 @@ public final class Abdera {
    * Return a new instance of org.apache.abdera.factory.Factory
    */
   private Factory newFactory() {
-    return ServiceUtil.newFactoryInstance(this);
+    try {
+      return ServiceUtil.newFactoryInstance(this);
+    } catch (NoClassDefFoundError n) {
+      return null;  // Don't die if the component is not available
+    }
   }
     
   /**
    * Return a new instance of org.apache.abdera.parser.Parser
    */
   private Parser newParser() {
-    return ServiceUtil.newParserInstance(this);
+    try {
+      return ServiceUtil.newParserInstance(this);
+    } catch (NoClassDefFoundError n) {
+      return null;  // Don't die if the component is not available
+    }
   }
     
   /**
    * Return a new instance of org.apache.abdera.xpath.XPath
    */
   private XPath newXPath() {
-    return ServiceUtil.newXPathInstance(this);
+    try {
+      return ServiceUtil.newXPathInstance(this);
+    } catch (NoClassDefFoundError n) {
+      return null;  // Don't die if the component is not available
+    }
   }
     
   /**
    * Return a new instance of org.apache.abdera.parser.ParserFactory
    */
   private ParserFactory newParserFactory() {
-    return ServiceUtil.newParserFactoryInstance(this);
+    try {
+      return ServiceUtil.newParserFactoryInstance(this);
+    } catch (NoClassDefFoundError n) {
+      return null;  // Don't die if the component is not available
+    }
   }
     
   /**
    * Return a new instance of org.apache.abdera.writer.WriterFactory
    */
   private WriterFactory newWriterFactory() {
-    return ServiceUtil.newWriterFactoryInstance(this);
+    try {
+      return ServiceUtil.newWriterFactoryInstance(this);
+    } catch (NoClassDefFoundError n) {
+      return null;  // Don't die if the component is not available
+    }
   }
     
   /**
    * Return a new instance of org.apache.abdera.writer.Writer
    */
   private Writer newWriter() {
-    return ServiceUtil.newWriterInstance(this);
+    try {
+      return ServiceUtil.newWriterInstance(this);
+    } catch (NoClassDefFoundError n) {
+      return null;  // Don't die if the component is not available
+    }
   }
   
   // Static convenience methods //

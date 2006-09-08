@@ -24,11 +24,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.InflaterInputStream;
-import java.util.zip.ZipInputStream;
 
-import org.apache.abdera.protocol.util.CacheControlParser;
+import org.apache.abdera.protocol.util.ContentEncodingUtil;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URIException;
@@ -119,25 +116,10 @@ public class CommonsResponse
 
   public InputStream getInputStream() throws IOException {
     if (in == null) {
-      in = method.getResponseBodyAsStream();
       String ce = getHeader("Content-Encoding");
-      if (ce != null) {
-        // multiple encodings may be applied, they're listed in the order
-        // they were applied, so we need to walk the list backwards
-        String[] encodings = CacheControlParser.splitAndTrim(ce, ",", false);
-        for (int n = encodings.length -1; n >= 0; n--) {
-          if ("gzip".equalsIgnoreCase(encodings[n]) ||
-              "x-gzip".equalsIgnoreCase(encodings[n])) {
-            in = new GZIPInputStream(in);
-          } else if ("deflate".equalsIgnoreCase(encodings[n])) {
-            in = new InflaterInputStream(in);
-          } else if ("zip".equalsIgnoreCase(encodings[n])) {
-            in = new ZipInputStream(in);
-          } else {
-            throw new IOException("Unsupported Content-Encoding");
-          }
-        }
-      } 
+      in = method.getResponseBodyAsStream();
+      if (ce != null)
+        in = ContentEncodingUtil.getDecodingInputStream(in, ce);
     }
     return super.getInputStream();
   }

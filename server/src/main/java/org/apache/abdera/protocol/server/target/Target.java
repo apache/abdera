@@ -19,7 +19,7 @@ package org.apache.abdera.protocol.server.target;
 
 import org.apache.abdera.protocol.server.util.ResourceType;
 
-public interface Target {
+public interface Target extends Iterable<String> {
 
   ResourceType getResourceType();
   

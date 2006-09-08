@@ -17,23 +17,17 @@
 */
 package org.apache.abdera.examples.appserver;
 
-import java.io.IOException;
 import java.util.Date;
 
-import javax.activation.MimeTypeParseException;
-
-import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.model.Workspace;
-import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.protocol.server.AbderaServer;
 import org.apache.abdera.protocol.server.RequestContext;
@@ -41,36 +35,19 @@ import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
 import org.apache.abdera.protocol.server.exceptions.AbderaServerException.Code;
 import org.apache.abdera.protocol.server.provider.Provider;
 import org.apache.abdera.protocol.server.target.Target;
-import org.apache.abdera.util.Constants;
-import org.apache.abdera.util.MimeTypeHelper;
+import org.apache.abdera.protocol.server.util.AbstractProvider;
 
 public class SimpleProvider 
+  extends AbstractProvider
   implements Provider {
 
-  private final AbderaServer abderaServer;
   private static Document<Service> service_doc = null;
   private static Document<Feed> feed_doc = null;
   
   public SimpleProvider(AbderaServer abderaServer) {
-    this.abderaServer = abderaServer;
+    super(abderaServer);
   }
   
-  private AbderaServer getAbderaServer() {
-    return abderaServer;
-  }
-  
-  private Abdera getAbdera() {
-    return getAbderaServer().getAbdera();
-  }
-  
-  private Factory getFactory() {
-    return getAbdera().getFactory();
-  }
-  
-  private Parser getParser() {
-    return getAbdera().getParser();
-  }
-
   private synchronized Document<Service> getService() {
     if (service_doc == null) {
       try {
@@ -226,43 +203,4 @@ public class SimpleProvider
     }
   }
   
-  @SuppressWarnings("unchecked")
-  private Document<Entry> getEntryFromRequestContext(
-    RequestContext context) 
-      throws IOException, 
-             MimeTypeParseException {
-    String ctype = context.getContentType().toString();
-    if (ctype != null && ctype.length() != 0 &&
-        (!MimeTypeHelper.isMatch(ctype, "application/atom+xml") &&
-         !MimeTypeHelper.isMatch(ctype, "application/xml"))) {
-      return null;
-    }
-    // might still be an atom entry, let's try it
-    try {
-      Parser parser = getParser();
-      Document doc = parser.parse(context.getInputStream());
-      Element root = doc.getRoot();
-      if (root != null && root.getQName().equals(Constants.ENTRY)) {
-        return doc;
-      }
-    } catch (Exception e) {}
-    return null;
-  }
-  
-  private boolean isValidEntry(Entry entry) {
-    try {
-      if (entry.getId() == null || entry.getId().toString().length() == 0) return false;
-      if (entry.getTitle() == null) return false;
-      if (entry.getAuthor() == null) return false;
-      if (entry.getUpdated() == null) return false;
-      if (entry.getContent() == null) {
-        if (entry.getAlternateLink() == null) return false;
-        if (entry.getSummary() == null) return false;
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return true;
-  }
-
 }

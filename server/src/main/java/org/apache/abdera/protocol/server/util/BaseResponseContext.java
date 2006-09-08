@@ -25,23 +25,22 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.model.Base;
-import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Element;
+import org.apache.abdera.util.MimeTypeHelper;
 
 public class BaseResponseContext<T extends Base>
   extends AbstractResponseContext {
 
-  private T base = null;
-  private boolean chunked = true;
+  private final T base;
+  private final boolean chunked;
   
   public BaseResponseContext(T base) {
-    this.base = base;
-    setStatus(200);
-    setStatusText("OK");
+    this(base, true);
   }
   
   public BaseResponseContext(T base, boolean chunked) {
-    this(base);
+    this.base = base;
+    setStatus(200);
+    setStatusText("OK");
     this.chunked = chunked;
   }
   
@@ -62,14 +61,8 @@ public class BaseResponseContext<T extends Base>
     throws MimeTypeParseException {
       MimeType t = super.getContentType();
       if (t == null) {
-        Document doc = null;
-        if (base instanceof Document) {
-          doc = (Document) base;
-        } else if (base instanceof Element) {
-          Element el = (Element) base;
-          doc = el.getDocument();
-        }
-        t = (doc != null) ? doc.getContentType() : null;
+        String type = MimeTypeHelper.getMimeType(base);
+        if (type != null) t = new MimeType(type);
       }
       return t;
   }

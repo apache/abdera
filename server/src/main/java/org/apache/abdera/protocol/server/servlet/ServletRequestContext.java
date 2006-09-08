@@ -40,10 +40,13 @@ public class ServletRequestContext
   extends AbstractRequest
   implements RequestContext, ServerConstants {
   
-  private Target target = null;
-  private Abdera abdera = null;
-  private HttpServletRequest servletRequest = null;
-  private String method = null;
+  private final Target target;
+  private final Abdera abdera;
+  private final HttpServletRequest servletRequest;
+  private final String method;
+  private final URI uri;
+  private final URI baseUri;
+  private final URI pathInfo;
     
   public ServletRequestContext(
     Abdera abdera,
@@ -52,7 +55,11 @@ public class ServletRequestContext
       this.abdera = abdera;
       this.servletRequest = request;
       CacheControlUtil.parseCacheControl(getCacheControl(), this);
+      uri = initUri();
+      baseUri = initBaseUri();
+      pathInfo = initPathInfo();
       target = resolver.resolve(getUri().toString());
+      method = request.getMethod();
   }
   
   public Target getTarget() {
@@ -60,14 +67,14 @@ public class ServletRequestContext
   }
   
   public String getMethod() {
-    if (method == null) {
-      String o = getHeader(X_OVERRIDE_HEADER);
-      method = (o == null) ? servletRequest.getMethod() : o;
-    }
     return method;
   }
   
   public URI getUri() {
+    return uri;
+  }
+  
+  private URI initUri() {
     URI uri = null;
     try {
       StringBuffer buf = 
@@ -98,6 +105,10 @@ public class ServletRequestContext
   }
   
   public URI getBaseUri() {
+    return baseUri;
+  }
+  
+  private URI initBaseUri() {
     StringBuffer buffer = 
       new StringBuffer(
         (servletRequest.isSecure())?
@@ -135,6 +146,10 @@ public class ServletRequestContext
   }
     
   public URI getPathInfo() {
+    return pathInfo;
+  }
+  
+  private URI initPathInfo() {
     try {
       String pathInfo = servletRequest.getPathInfo();
       if (pathInfo == null)  {

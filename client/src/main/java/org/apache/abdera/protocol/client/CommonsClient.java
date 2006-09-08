@@ -38,37 +38,35 @@ import org.apache.commons.httpclient.params.HttpClientParams;
 
 public class CommonsClient extends Client {
 
-  private HttpClient client = null;
+  private static final String DEFAULT_USER_AGENT = 
+    Version.APP_NAME + "/" + Version.VERSION;
+  
+  private final HttpClient client;
   
   public CommonsClient() {
-    this(Version.APP_NAME + "/" + Version.VERSION);
+    this(DEFAULT_USER_AGENT);
   }
   
   public CommonsClient(Abdera abdera) {
-    this(Version.APP_NAME + "/" + Version.VERSION, abdera);
+    this(DEFAULT_USER_AGENT, abdera);
   }
   
   public CommonsClient(String userAgent) {
-    init(userAgent);
+    this(userAgent, new Abdera());
   }
   
   public CommonsClient(String userAgent,Abdera abdera) {
     super(abdera);
-    init(userAgent);
-  }
-  
-  public void usePreemptiveAuthentication(boolean val) {
-    client.getParams().setAuthenticationPreemptive(val);
-  }
-  
-  @Override
-  public void init(String userAgent) {
     client = new HttpClient();
     client.getParams().setParameter(
       HttpClientParams.USER_AGENT, 
       userAgent);
     client.getParams().setBooleanParameter(
-      HttpClientParams.USE_EXPECT_CONTINUE, true);    
+      HttpClientParams.USE_EXPECT_CONTINUE, true);  
+  }
+  
+  public void usePreemptiveAuthentication(boolean val) {
+    client.getParams().setAuthenticationPreemptive(val);
   }
   
   private boolean useCache(
@@ -127,7 +125,7 @@ public class CommonsClient extends Client {
               MethodHelper.createMethod(
                 method, uri, entity, options);
             client.executeMethod(httpMethod);
-            ClientResponse response = new CommonsResponse(httpMethod);
+            ClientResponse response = new CommonsResponse(abdera,httpMethod);
             return (options.getUseLocalCache()) ?
               response = cache.update(options, response, cached_response) : 
               response;

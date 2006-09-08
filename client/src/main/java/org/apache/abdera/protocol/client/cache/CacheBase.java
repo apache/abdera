@@ -20,6 +20,7 @@ package org.apache.abdera.protocol.client.cache;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.protocol.util.CacheControlUtil;
@@ -27,6 +28,12 @@ import org.apache.abdera.protocol.util.CacheControlUtil;
 public abstract class CacheBase 
   implements Cache {
 
+  protected final Abdera abdera;
+  
+  protected CacheBase(Abdera abdera) {
+    this.abdera = abdera;
+  }
+  
   public CachedResponse get(String uri, RequestOptions options) {
     return get(getCacheKey(uri,options));
   }

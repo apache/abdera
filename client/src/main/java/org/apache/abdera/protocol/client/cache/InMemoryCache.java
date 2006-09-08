@@ -21,14 +21,19 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.ClientResponse;
 
 public abstract class InMemoryCache 
   extends CacheBase {
 
-  protected transient Map<CacheKey,CachedResponse> cache = null;
+  protected transient Map<CacheKey,CachedResponse> cache;
 
+  protected InMemoryCache(Abdera abdera) {
+    super(abdera);
+  }
+  
   protected void setMap(Map<CacheKey,CachedResponse> map) {
     cache = Collections.synchronizedMap(map);
   }
@@ -38,7 +43,7 @@ public abstract class InMemoryCache
     ClientResponse response, 
     CacheKey key) 
       throws IOException {
-    return new InMemoryCachedResponse(this, key, response);
+    return new InMemoryCachedResponse(abdera, this, key, response);
   }
 
   public void clear() {

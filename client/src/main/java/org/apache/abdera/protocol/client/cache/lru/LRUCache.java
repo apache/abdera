@@ -20,6 +20,7 @@ package org.apache.abdera.protocol.client.cache.lru;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.client.cache.Cache;
 import org.apache.abdera.protocol.client.cache.CacheKey;
 import org.apache.abdera.protocol.client.cache.CachedResponse;
@@ -32,11 +33,12 @@ public class LRUCache
 
   private final static int DEFAULT_SIZE = 10;
   
-  public LRUCache() {
-    this(DEFAULT_SIZE);
+  public LRUCache(Abdera abdera) {
+    this(abdera,DEFAULT_SIZE);
   }
   
-  public LRUCache(final int size) {
+  public LRUCache(Abdera abdera, final int size) {
+    super(abdera);
     setMap(
       new LinkedHashMap<CacheKey,CachedResponse>(size,0.75f,true) {
         @Override

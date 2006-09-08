@@ -29,7 +29,7 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 public class DataSourceRequestEntity 
   implements RequestEntity {
 
-  private DataSource dataSource = null;
+  private final DataSource dataSource;
   
   public DataSourceRequestEntity(DataHandler dataHandler) {
     this(dataHandler.getDataSource());

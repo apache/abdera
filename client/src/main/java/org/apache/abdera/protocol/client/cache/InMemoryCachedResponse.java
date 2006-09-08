@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.client.ClientException;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.protocol.client.util.MethodHelper;
@@ -45,11 +46,12 @@ public class InMemoryCachedResponse
   private byte[] buf = null;
   
   public InMemoryCachedResponse(
+    Abdera abdera,
     Cache cache,
     CacheKey key,
     ClientResponse response) 
       throws IOException {
-    super(key,cache);
+    super(abdera, key,cache);
     this.method = response.getMethod();
     this.status = response.getStatus();
     this.status_text = response.getStatusText();

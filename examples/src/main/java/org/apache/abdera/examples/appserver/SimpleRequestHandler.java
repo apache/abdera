@@ -46,6 +46,21 @@ import org.apache.abdera.protocol.server.util.ResourceType;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 
+/**
+ * <p>RequestHandlers are the components that actually do the work in the APP
+ * server.  That is, the RequestHandler is responsible for interfacing with
+ * the back end data storage and translating the APP GET, POST, PUT, DELETE
+ * operations into operations on the data store, and for parsing the Atom 
+ * posts into something the datastore can understand.</p>
+ * 
+ * <p>The AbstractRequestHandler helper class makes things a bit easier by
+ * providing hooks for checking whether or not the requested resource has
+ * been modified (to support If-Modified-Since), checking to see if the resource
+ * exists (to support 404 or 410 responses), validating the request (to support
+ * 400 Bad Request responses), etc.</p>
+ * 
+ * <p>RequestHandler implementations SHOULD be thread safe</p>
+ */
 public class SimpleRequestHandler 
   extends AbstractRequestHandler {
 

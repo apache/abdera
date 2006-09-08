@@ -33,7 +33,7 @@ import org.apache.xml.serialize.XMLSerializer;
 
 public abstract class SecurityBase {
   
-  protected Abdera abdera = null;
+  protected final Abdera abdera;
   
   protected SecurityBase(Abdera abdera) {
     this.abdera = abdera;

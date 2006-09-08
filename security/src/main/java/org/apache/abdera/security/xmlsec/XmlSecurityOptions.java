@@ -26,7 +26,7 @@ public abstract class XmlSecurityOptions
   implements SecurityOptions {
 
   protected Parser parser = null;
-  protected Abdera abdera = null;
+  protected final Abdera abdera;
   
   protected XmlSecurityOptions(Abdera abdera) {
     this.abdera = abdera;

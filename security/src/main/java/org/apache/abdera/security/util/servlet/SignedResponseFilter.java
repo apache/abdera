@@ -171,10 +171,14 @@ public class SignedResponseFilter
     Reader rdr = wrapper.getReader();
     InputStream in = wrapper.getInputStream();
     Parser parser = abdera.getParser();
-    if (rdr != null)
-      return parser.parse(rdr);
-    if (in != null)
-      return parser.parse(in);
+    try {
+      if (rdr != null) {
+        return parser.parse(rdr);
+      }
+      if (in != null) {
+        return parser.parse(in);
+      }
+    } catch (Exception e) {}
     return null;
   }
   
@@ -187,7 +191,7 @@ public class SignedResponseFilter
     BufferingResponseWrapper(HttpServletResponse response) {
       super(response);
     }
-
+    
     @Override
     public PrintWriter getWriter() throws IOException {
       if (outStream != null) throw new IllegalStateException();
@@ -232,6 +236,18 @@ public class SignedResponseFilter
     
     public void write(byte[] b, int off, int len) throws IOException {
       out.write(b, off, len);
+    }
+
+    @Override
+    public void close() throws IOException {
+      out.close();
+      super.close();
+    }
+
+    @Override
+    public void flush() throws IOException {
+      out.flush();
+      super.flush();
     }
     
   }

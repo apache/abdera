@@ -174,8 +174,7 @@ public class MethodHelper {
     RequestOptions options = new RequestOptions();
     options.setAcceptEncoding(
       "gzip;q=1.0", 
-      "deflate;q=1.0", 
-      "zip;q=0.5");
+      "deflate;q=1.0");
     options.setAccept(
       "application/atom+xml",
       "application/atomserv+xml",

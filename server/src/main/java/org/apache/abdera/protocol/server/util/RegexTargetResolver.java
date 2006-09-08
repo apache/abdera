@@ -18,6 +18,7 @@
 package org.apache.abdera.protocol.server.util;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -104,6 +105,10 @@ public class RegexTargetResolver implements TargetResolver {
     
     public boolean hasValue(int token) {
       return getValue(token) != null;
+    }
+
+    public Iterator<String> iterator() {
+      return new TargetIterator(this);
     }
   }
   

@@ -31,6 +31,7 @@ import org.apache.abdera.util.Version;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.RequestEntity;
@@ -57,7 +58,9 @@ public class CommonsClient extends Client {
   
   public CommonsClient(String userAgent,Abdera abdera) {
     super(abdera);
-    client = new HttpClient();
+    MultiThreadedHttpConnectionManager connManager = 
+      new MultiThreadedHttpConnectionManager();
+    client = new HttpClient(connManager);
     client.getParams().setParameter(
       HttpClientParams.USER_AGENT, 
       userAgent);

@@ -84,7 +84,7 @@ public class CacheControlParser implements Iterable<CacheControlParser.Directive
     return s;
   }
     
-  private static String[] splitAndTrim(String value, String delim, boolean unquote) {
+  public static String[] splitAndTrim(String value, String delim, boolean unquote) {
     String[] headers = (unquote) ? unquote(value).split(delim) : value.split(delim);
     for (int n = 0; n < headers.length; n++) {
       headers[n] = headers[n].trim();

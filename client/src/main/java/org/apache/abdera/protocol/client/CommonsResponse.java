@@ -28,7 +28,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 import java.util.zip.ZipInputStream;
 
-import org.apache.abdera.protocol.util.CacheControlUtil;
+import org.apache.abdera.protocol.util.CacheControlParser;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URIException;
@@ -124,7 +124,7 @@ public class CommonsResponse
       if (ce != null) {
         // multiple encodings may be applied, they're listed in the order
         // they were applied, so we need to walk the list backwards
-        String[] encodings = CacheControlUtil.splitAndTrim(ce, ",", false);
+        String[] encodings = CacheControlParser.splitAndTrim(ce, ",", false);
         for (int n = encodings.length -1; n >= 0; n--) {
           if ("gzip".equalsIgnoreCase(encodings[n]) ||
               "x-gzip".equalsIgnoreCase(encodings[n])) {

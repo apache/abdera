@@ -154,6 +154,7 @@
     <module>dependencies/json</module>
     <module>core</module>
     <module>parser</module>
+    <module>protocol</module>
     <module>security</module>
     <module>server</module>
     <module>client</module>

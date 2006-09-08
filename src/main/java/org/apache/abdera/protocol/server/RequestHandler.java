@@ -19,10 +19,19 @@ package org.apache.abdera.protocol.server;
 
 import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
 
+/**
+ * RequestHandlers SHOULD be thread safe and stateless
+ */
 public interface RequestHandler {
 
   ResponseContext invoke(
     RequestContext requestContext) 
       throws AbderaServerException;
+  
+  /**
+   * RequestHandlers that do have reason to store request specific state MUST
+   * clean that internal state when the clean method is invoked.
+   */
+  void clean();
   
 }

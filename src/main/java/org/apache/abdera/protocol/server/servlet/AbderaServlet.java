@@ -110,10 +110,11 @@ public class AbderaServlet
     RequestContext requestContext = getRequestContext(request);
     ResponseContext responseContext = null;
     RequestHandler handler = null;
+    RequestHandlerFactory factory = null;
     try {
-      RequestHandlerFactory factory = getRequestHandlerFactory();
+      factory = getRequestHandlerFactory();
       if (factory != null)
-        handler = factory.newRequestHandler(abderaServer,requestContext);
+        handler = factory.newRequestHandler(abderaServer);
       if (handler != null) {
         responseContext = handler.invoke(requestContext);
       } else {
@@ -121,10 +122,13 @@ public class AbderaServlet
           AbderaServerException.Code.NOTFOUND, 
           "Handler Not Found", "");
       }
-    } catch (AbderaServerException exception) {
+    } catch (AbderaServerException exception) {  
       responseContext = exception;
     } catch (Throwable t) {
       responseContext = new AbderaServerException(t);
+    } finally {
+      if (factory != null && handler != null)
+        factory.releaseRequestHandler(handler);
     }
     doOutput(response, responseContext); 
   }
@@ -152,8 +156,7 @@ public class AbderaServlet
               response.setHeader(entry.getKey(), value.toString());
           }
         }
-      }
-      
+      }  
       if (context.hasEntity())
         context.writeTo(response.getOutputStream());
     } else {

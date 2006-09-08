@@ -15,21 +15,40 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.examples.appserver;
+package org.apache.abdera.protocol.server.util;
+
+import java.util.Stack;
 
 import org.apache.abdera.protocol.server.AbderaServer;
 import org.apache.abdera.protocol.server.RequestHandler;
 import org.apache.abdera.protocol.server.RequestHandlerFactory;
-import org.apache.abdera.protocol.server.util.AbstractRequestHandlerFactory;
+import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
 
-public class SimpleRequestHandlerFactory
-  extends AbstractRequestHandlerFactory
+public abstract class AbstractRequestHandlerFactory 
   implements RequestHandlerFactory {
 
-  @Override
-  protected RequestHandler newRequestHandlerInstance(
+  private static Stack<RequestHandler> requestHandlerPool = new Stack<RequestHandler>();
+  
+  public RequestHandler newRequestHandler(
+    AbderaServer abderaServer) 
+      throws AbderaServerException {
+    RequestHandler rh = getRequestHandler(abderaServer);
+    return rh;
+  }
+  
+  private synchronized RequestHandler getRequestHandler(
     AbderaServer abderaServer) {
-      return new SimpleRequestHandler(abderaServer);
+      if (!requestHandlerPool.empty()) 
+        return requestHandlerPool.pop();
+      return newRequestHandlerInstance(abderaServer);
   }
 
+  public synchronized void releaseRequestHandler(RequestHandler handler) {
+    handler.clean(); // tell the handler to clean any internal state
+    requestHandlerPool.push(handler);
+  }
+  
+  protected abstract RequestHandler newRequestHandlerInstance( 
+    AbderaServer abderaServer);
+  
 }

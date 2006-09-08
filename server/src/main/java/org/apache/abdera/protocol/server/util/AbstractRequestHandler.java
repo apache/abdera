@@ -27,6 +27,10 @@ public abstract class AbstractRequestHandler
   
   public AbstractRequestHandler() {}
   
+  public void clean() {
+    // by default, there is nothing to clean
+  }
+  
   public ResponseContext invoke(
     RequestContext requestContext)
       throws AbderaServerException {
@@ -129,6 +133,5 @@ public abstract class AbstractRequestHandler
         getResourceType(requestContext)));
     throw notallowed;
   }
-  
   
 }

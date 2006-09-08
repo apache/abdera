@@ -22,8 +22,9 @@ import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
 public interface RequestHandlerFactory {
   
   RequestHandler newRequestHandler(
-    AbderaServer abderaServer,
-    RequestContext requestContext) 
+    AbderaServer abderaServer) 
       throws AbderaServerException;
+  
+  void releaseRequestHandler(RequestHandler handler);
   
 }

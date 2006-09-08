@@ -21,11 +21,24 @@ import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.RequestHandler;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
+import org.apache.abdera.protocol.server.provider.Provider;
 
 public abstract class AbstractRequestHandler 
   implements RequestHandler, ServerConstants {
   
-  public AbstractRequestHandler() {}
+  protected final Provider provider;
+  
+  protected AbstractRequestHandler() {
+    this(null);
+  }
+  
+  protected AbstractRequestHandler(Provider provider) {
+    this.provider = provider;
+  }
+  
+  protected Provider getProvider() {
+    return provider;
+  }
   
   public void clean() {
     // by default, there is nothing to clean

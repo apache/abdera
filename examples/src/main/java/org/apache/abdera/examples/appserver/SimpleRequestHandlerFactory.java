@@ -20,16 +20,26 @@ package org.apache.abdera.examples.appserver;
 import org.apache.abdera.protocol.server.AbderaServer;
 import org.apache.abdera.protocol.server.RequestHandler;
 import org.apache.abdera.protocol.server.RequestHandlerFactory;
+import org.apache.abdera.protocol.server.provider.Provider;
 import org.apache.abdera.protocol.server.util.AbstractRequestHandlerFactory;
 
 public class SimpleRequestHandlerFactory
   extends AbstractRequestHandlerFactory
   implements RequestHandlerFactory {
 
+  private Provider provider = null;
+
+  private synchronized Provider getProvider(AbderaServer server) {
+    if (provider == null) {
+      provider = new SimpleProvider(server);
+    }
+    return provider;
+  }
+  
   @Override
   protected RequestHandler newRequestHandlerInstance(
     AbderaServer abderaServer) {
-      return new SimpleRequestHandler(abderaServer);
+      return new SimpleRequestHandler(abderaServer, getProvider(abderaServer));
   }
 
 }

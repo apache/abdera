@@ -37,12 +37,12 @@ import org.apache.abdera.protocol.server.target.TargetResolver;
  * 
  * <pre>
  *  RegexTargetResolver tr = new RegexTargetResolver();
- *  tr.addPattern(ResourceType.INTROSPECTION, "/atom");
- *  tr.addPattern(ResourceType.COLLECTION, "/atom/([^/#?]+)");
- *  tr.addPattern(ResourceType.ENTRY, "/atom/([^/#?]+)/([^/#?]+)");
- *  tr.addPattern(ResourceType.ENTRY_EDIT, "/atom/([^/#?]+)/([^/#?]+)\\?edit");
- *  tr.addPattern(ResourceType.MEDIA,"/atom/([^/#?]+)/([^/#?]+)\\?media");
- *  tr.addPattern(ResourceType.MEDIA_EDIT,"/atom/([^/#?]+)/([^/#?]+)\\?edit-media");
+ *  tr.setPattern(ResourceType.INTROSPECTION, "/atom");
+ *  tr.setPattern(ResourceType.COLLECTION, "/atom/([^/#?]+)");
+ *  tr.setPattern(ResourceType.ENTRY, "/atom/([^/#?]+)/([^/#?]+)");
+ *  tr.setPattern(ResourceType.ENTRY_EDIT, "/atom/([^/#?]+)/([^/#?]+)\\?edit");
+ *  tr.setPattern(ResourceType.MEDIA,"/atom/([^/#?]+)/([^/#?]+)\\?media");
+ *  tr.setPattern(ResourceType.MEDIA_EDIT,"/atom/([^/#?]+)/([^/#?]+)\\?edit-media");
  *  
  *  Target target = tr.resolve("/atom/foo");
  *  System.out.println(target.getResourceType());

@@ -58,21 +58,16 @@ public class CacheControlUtil {
       request.setMaxAge(-1);
       request.setMaxStale(-1);
       request.setMinFresh(-1);
-      for (String directive : parser) {
-        if (directive.equalsIgnoreCase("no-cache")) {
-          request.setNoCache(true);
-        } else if (directive.equalsIgnoreCase("no-store"))
-          request.setNoStore(true);
-        else if (directive.equalsIgnoreCase("no-transform"))
-          request.setNoTransform(true);
-        else if (directive.equalsIgnoreCase("only-if-cached"))
-          request.setOnlyIfCached(true);
-        else if (directive.equalsIgnoreCase("max-age"))
-          request.setMaxAge(value(parser.getValue(directive)));
-        else if (directive.equalsIgnoreCase("max-stale"))
-          request.setMaxStale(value(parser.getValue(directive)));
-        else if (directive.equalsIgnoreCase("min-fresh"))
-          request.setMinFresh(value(parser.getValue(directive)));
+      for (CacheControlParser.Directive directive : parser) {
+        switch(directive) {
+          case NOCACHE:      request.setNoCache(true); break;
+          case NOSTORE:      request.setNoStore(true); break;
+          case NOTRANSFORM:  request.setNoTransform(true); break;
+          case ONLYIFCACHED: request.setOnlyIfCached(true); break;
+          case MAXAGE:       request.setMaxAge(value(parser.getValue(directive))); break;
+          case MAXSTALE:     request.setMaxStale(value(parser.getValue(directive))); break;
+          case MINFRESH:     request.setMinFresh(value(parser.getValue(directive))); break;
+        }
       }
   }
   
@@ -88,46 +83,29 @@ public class CacheControlUtil {
       response.setPrivate(false);
       response.setPublic(false);
       response.setMaxAge(-1);
-      for (String directive : parser) {
-        if (directive.equalsIgnoreCase("no-cache")) {
-          response.setNoCache(true);
-          String value = parser.getValue(directive);
-          if (value != null) {
-            String[] headers = splitAndTrim(value, ",", true);
-            response.setNoCacheHeaders(headers);
-          }
-        } else if (directive.equalsIgnoreCase("no-store"))
-          response.setNoStore(true);
-        else if (directive.equalsIgnoreCase("no-transform"))
-          response.setNoTransform(true);
-        else if (directive.equalsIgnoreCase("must-revalidate"))
-          response.setMustRevalidate(true);
-        else if (directive.equalsIgnoreCase("public"))
-          response.setPublic(true);
-        else if (directive.equalsIgnoreCase("private")) {
-          response.setPrivate(true);
-          String value = parser.getValue(directive);
-          if (value != null) {
-            String[] headers = splitAndTrim(value, ",", true);
-            response.setPrivateHeaders(headers);
-          }
-        } else if (directive.equalsIgnoreCase("max-age"))
-          response.setMaxAge(value(parser.getValue(directive)));
+      for (CacheControlParser.Directive directive : parser) {
+        switch(directive) {
+          case NOCACHE:
+            response.setNoCache(true);
+            response.setNoCacheHeaders(parser.getValues(directive));
+            break;
+          case NOSTORE:
+            response.setNoStore(true); break;
+          case NOTRANSFORM:
+            response.setNoTransform(true); break;
+          case MUSTREVALIDATE:
+            response.setMustRevalidate(true); break;
+          case PUBLIC:
+            response.setPublic(true); break;
+          case PRIVATE:
+            response.setPrivate(true);
+            response.setPrivateHeaders(parser.getValues(directive));
+            break;
+          case MAXAGE:
+            response.setMaxAge(value(parser.getValue(directive)));
+            break;
+        }
       }
   }
-  
-  private static String unquote(String s) {
-    if (s == null || s.length() == 0) return s;
-    if (s.startsWith("\"")) s = s.substring(1);
-    if (s.endsWith("\"")) s = s.substring(0, s.length() - 1);
-    return s;
-  }
-  
-  public static String[] splitAndTrim(String value, String delim, boolean unquote) {
-    String[] headers = (unquote) ? unquote(value).split(delim) : value.split(delim);
-    for (int n = 0; n < headers.length; n++) {
-      headers[n] = headers[n].trim();
-    }
-    return headers;
-  }
+
 }

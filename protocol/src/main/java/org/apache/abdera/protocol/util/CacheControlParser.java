@@ -17,74 +17,79 @@
 */
 package org.apache.abdera.protocol.util;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CacheControlParser implements Iterable<String> {
-
-  public static final HashSet<String> cacheRequestDirectives = 
-    new HashSet<String>(
-      Arrays.asList(
-        new String[] { 
-          "no-cache", 
-          "no-store", 
-          "max-age", 
-          "max-stale", 
-          "min-fresh", 
-          "no-transform", 
-          "only-if-cached" }));
-
-  public static final HashSet<String> cacheResponseDirectives = 
-    new HashSet<String>(
-      Arrays.asList(
-        new String[] { 
-          "public", 
-          "private", 
-          "no-cache", 
-          "no-store", 
-          "no-transform", 
-          "must-revalidate", 
-          "proxy-revalidate",
-          "max-age", 
-          "s-maxage" }));
-
+public class CacheControlParser implements Iterable<CacheControlParser.Directive> {
+  
+  public enum Directive {
+    MAXAGE, MAXSTALE, MINFRESH, NOCACHE, NOSTORE, NOTRANSFORM, ONLYIFCACHED,
+    MUSTREVALIDATE, PRIVATE, PROXYREVALIDATE, PUBLIC, SMAXAGE, UNKNOWN;
+    
+    public static Directive select(String d) {
+      try {
+        d = d.toUpperCase().replace("-", "");
+        return Directive.valueOf(d);
+      } catch (Exception e) {}
+      return UNKNOWN;
+    }
+    
+  }
+  
   private static final String REGEX = 
     "\\s*([\\w\\-]+)\\s*(=)?\\s*(\\d+|\\\"([^\"\\\\]*(\\\\.[^\"\\\\]*)*)+\\\")?\\s*";
 
   private static final Pattern pattern = Pattern.compile(REGEX);
 
-  private HashMap<String, String> values = new HashMap<String, String>();
+  private HashMap<Directive, String> values = new HashMap<Directive, String>();
 
   public CacheControlParser(String value) {
     Matcher matcher = pattern.matcher(value);
     while (matcher.find()) {
-      String directive = matcher.group(1);
-      if (isDirective(directive)) {
+      String d = matcher.group(1);
+      Directive directive = Directive.select(d);
+      if (directive != Directive.UNKNOWN) {
         values.put(directive, matcher.group(3));
       }
     }
   }
 
-  private boolean isDirective(String directive) {
-    return cacheRequestDirectives.contains(directive) || 
-           cacheResponseDirectives.contains(directive);
-  }
-
-  public Map<String,String> getValues() {
+  public Map<Directive,String> getValues() {
     return values;
   }
 
-  public String getValue(String directive) {
+  public String getValue(Directive directive) {
     return values.get(directive);
   }
   
-  public Iterator<String> iterator() {
+  public Iterator<Directive> iterator() {
     return values.keySet().iterator();
   }
   
+  public String[] getValues(Directive directive) {
+    String value = getValue(directive);
+    if (value != null) {
+      return splitAndTrim(value, ",", true);
+    }
+    return null;
+  }
+  
+  private static String unquote(String s) {
+    if (s == null || s.length() == 0) return s;
+    if (s.startsWith("\"")) s = s.substring(1);
+    if (s.endsWith("\"")) s = s.substring(0, s.length() - 1);
+    return s;
+  }
+    
+  private static String[] splitAndTrim(String value, String delim, boolean unquote) {
+    String[] headers = (unquote) ? unquote(value).split(delim) : value.split(delim);
+    for (int n = 0; n < headers.length; n++) {
+      headers[n] = headers[n].trim();
+    }
+    return headers;
+  }
+
 }

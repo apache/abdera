@@ -27,20 +27,20 @@ public final class ResourceType
              Serializable {
 
   private static final long serialVersionUID = -4325229702865059923L;
-  public static final int UNKNOWN_ORDINAL = 0;
-  public static final int SERVICE_ORDINAL = 1;
+  public static final int UNKNOWN_ORDINAL    = 0;
+  public static final int SERVICE_ORDINAL    = 1;
   public static final int COLLECTION_ORDINAL = 2;
-  public static final int ENTRY_ORDINAL = 3;
+  public static final int ENTRY_ORDINAL      = 3;
   public static final int ENTRY_EDIT_ORDINAL = 4;
-  public static final int MEDIA_ORDINAL = 5;
+  public static final int MEDIA_ORDINAL      = 5;
   public static final int MEDIA_EDIT_ORDINAL = 6;
   
-  public static final ResourceType UNKNOWN = new ResourceType("UNKNOWN", UNKNOWN_ORDINAL); 
-  public static final ResourceType SERVICE = new ResourceType("SERVICE", SERVICE_ORDINAL);
+  public static final ResourceType UNKNOWN    = new ResourceType("UNKNOWN", UNKNOWN_ORDINAL); 
+  public static final ResourceType SERVICE    = new ResourceType("SERVICE", SERVICE_ORDINAL);
   public static final ResourceType COLLECTION = new ResourceType("COLLECTION", COLLECTION_ORDINAL); 
-  public static final ResourceType ENTRY = new ResourceType("ENTRY", ENTRY_ORDINAL);
+  public static final ResourceType ENTRY      = new ResourceType("ENTRY", ENTRY_ORDINAL);
   public static final ResourceType ENTRY_EDIT = new ResourceType("ENTRY_EDIT", ENTRY_EDIT_ORDINAL);
-  public static final ResourceType MEDIA = new ResourceType("MEDIA", MEDIA_ORDINAL);
+  public static final ResourceType MEDIA      = new ResourceType("MEDIA", MEDIA_ORDINAL);
   public static final ResourceType MEDIA_EDIT = new ResourceType("MEDIA_EDIT", MEDIA_EDIT_ORDINAL);
   
   private static List<ResourceType> values;
@@ -58,7 +58,7 @@ public final class ResourceType
     values.add(type);
   }
   
-  public static synchronized ResourceType[] values() {
+  public static ResourceType[] values() {
     List<ResourceType> values = get_values();
     return values.toArray(new ResourceType[values.size()]);
   }
@@ -70,8 +70,8 @@ public final class ResourceType
     return null;
   }
   
-  private int i;
-  private String name;
+  private final int i;
+  private final String name;
   
   public ResourceType(String name, int ordinal) {
     this.i = ordinal;

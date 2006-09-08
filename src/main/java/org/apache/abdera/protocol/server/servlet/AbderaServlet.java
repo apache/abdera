@@ -44,16 +44,16 @@ public class AbderaServlet
 
   private static final long serialVersionUID = -4273782501412352619L;
 
-  private Abdera abdera = null;
-  private AbderaServer abderaServer = null;
+  private final Abdera abdera;
+  private final AbderaServer abderaServer;
+  
+  public AbderaServlet() {
+    this.abdera = new Abdera();
+    this.abderaServer = new AbderaServer(abdera);
+  }
   
   @Override
-  public void init() throws ServletException {
-    synchronized(this) {
-      abdera = new Abdera();
-      abderaServer = new AbderaServer(abdera);
-    }
-  }
+  public void init() throws ServletException {}
 
   /**
    * The RequestContext will either be set on the HttpServletRequest by 
@@ -138,7 +138,7 @@ public class AbderaServlet
       long cl = context.getContentLength();
       String cc = context.getCacheControl();
       if (cl > -1) response.setHeader("Content-Length", Long.toString(cl));
-      if (cc != null) response.setHeader("Cache-Control",cc);      
+      if (cc != null) response.setHeader("Cache-Control",cc);
       Map<String, List<Object>> headers = context.getHeaders();
       if (headers != null) {
         for (Map.Entry<String, List<Object>> entry : headers.entrySet()) {

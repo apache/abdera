@@ -28,6 +28,12 @@ public interface ServerConstants {
   public static final String TARGET_RESOLVER = 
     "org.apache.abdera.protocol.server.target.TargetResolver";
   
+  public static final String SUBJECT_RESOLVER = 
+    "org.apache.abdera.protocol.server.auth.SubjectResolver";
+  
+  public static final String DEFAULT_SUBJECT_RESOLVER = 
+    "org.apache.abdera.protocol.server.util.SimpleSubjectResolver";
+  
   public static final String X_OVERRIDE_HEADER = 
     "X-HTTP-Method-Override";
   

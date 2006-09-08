@@ -23,20 +23,22 @@ import org.apache.abdera.util.ServiceUtil;
 
 public class AbderaSecurity {
 
-  private Abdera abdera = null;
-  private Encryption encryption = null;
-  private Signature signature = null;
+  private final Abdera abdera;
+  private final Encryption encryption;
+  private final Signature signature;
   
   public AbderaSecurity() {
-    abdera = new Abdera();
+    this(new Abdera());
   }
   
   public AbderaSecurity(Abdera abdera) {
     this.abdera = abdera;
+    this.encryption = newEncryption();
+    this.signature = newSignature();
   }
   
   public AbderaSecurity(AbderaConfiguration config) {
-    this.abdera = new Abdera(config);
+    this(new Abdera(config));
   }
   
   private Abdera getAbdera() {
@@ -52,8 +54,6 @@ public class AbderaSecurity {
   }
   
   public Encryption getEncryption() {
-    if (encryption == null)
-      encryption = newEncryption();
     return encryption;
   }
   
@@ -66,8 +66,6 @@ public class AbderaSecurity {
   }
   
   public Signature getSignature() {
-    if (signature == null)
-      signature = newSignature();
     return signature;
   }
   

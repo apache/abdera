@@ -92,8 +92,8 @@ public class SignedResponseFilter
   
   private static final String keystoreType = "JKS";
   
-  private Abdera abdera = null;
-  private AbderaSecurity security = null;
+  private final Abdera abdera;
+  private final AbderaSecurity security;
   private String keystoreFile = null;
   private String keystorePass = null;
   private String privateKeyAlias = null;
@@ -102,6 +102,11 @@ public class SignedResponseFilter
   private PrivateKey signingKey = null;
   private X509Certificate cert = null;
 
+  public SignedResponseFilter() {
+    this.abdera = new Abdera();
+    this.security = new AbderaSecurity(abdera);
+  }
+  
   public void init(
     FilterConfig config) 
       throws ServletException {
@@ -110,8 +115,6 @@ public class SignedResponseFilter
     privateKeyAlias = config.getInitParameter(KEY);
     privateKeyPass = config.getInitParameter(KEYPASS);
     certificateAlias = config.getInitParameter(CERT);
-    abdera = new Abdera();
-    security = new AbderaSecurity(abdera);
     
     try {
       KeyStore ks = KeyStore.getInstance(keystoreType);    

@@ -15,38 +15,16 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server;
+package org.apache.abdera.protocol.server.auth;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.List;
+import java.security.Principal;
 
 import javax.security.auth.Subject;
 
-import org.apache.abdera.protocol.Request;
-import org.apache.abdera.protocol.server.target.Target;
+public interface SubjectResolver {
 
-public interface RequestContext extends Request {
+  Subject resolve(Principal principal);
   
-  Target getTarget();
-  
-  Subject getSubject();
-  
-  String getMethod();
-  
-  URI getUri();
-  
-  URI getBaseUri();
-  
-  URI getPathInfo();
-  
-  String getParameter(String name);
-  
-  List<String> getParameters(String name);
-
-  List<String> getParameterNames();
-  
-  InputStream getInputStream() throws IOException;
+  Subject resolve(String userid);
   
 }

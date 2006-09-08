@@ -26,10 +26,12 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.auth.SubjectResolver;
 import org.apache.abdera.protocol.server.target.Target;
 import org.apache.abdera.protocol.server.target.TargetResolver;
 import org.apache.abdera.protocol.server.util.ServerConstants;
@@ -42,6 +44,7 @@ public class ServletRequestContext
   
   private final Target target;
   private final Abdera abdera;
+  private final Subject subject;
   private final HttpServletRequest servletRequest;
   private final String method;
   private final URI uri;
@@ -51,6 +54,7 @@ public class ServletRequestContext
   public ServletRequestContext(
     Abdera abdera,
     TargetResolver resolver,
+    SubjectResolver subjectResolver,
     HttpServletRequest request) {
       this.abdera = abdera;
       this.servletRequest = request;
@@ -60,6 +64,12 @@ public class ServletRequestContext
       pathInfo = initPathInfo();
       target = resolver.resolve(getUri().toString());
       method = request.getMethod();
+      subject = (subjectResolver != null) ?
+        subjectResolver.resolve(request.getUserPrincipal()) : null;
+  }
+  
+  public Subject getSubject() {
+    return subject;
   }
   
   public Target getTarget() {

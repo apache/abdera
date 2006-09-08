@@ -34,6 +34,7 @@ import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.RequestHandler;
 import org.apache.abdera.protocol.server.RequestHandlerFactory;
 import org.apache.abdera.protocol.server.ResponseContext;
+import org.apache.abdera.protocol.server.auth.SubjectResolver;
 import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
 import org.apache.abdera.protocol.server.target.TargetResolver;
 import org.apache.abdera.protocol.server.util.ServerConstants;
@@ -63,9 +64,12 @@ public class AbderaServlet
   private RequestContext getRequestContext(HttpServletRequest request) {
     RequestContext context = 
       (RequestContext) request.getAttribute(REQUESTCONTEXT);
-    TargetResolver resolver = getTargetResolver();
     if (context == null) {
-      context = new ServletRequestContext(abdera,resolver,request);
+      context = new ServletRequestContext(
+        abdera,
+        getTargetResolver(),
+        getSubjectResolver(),
+        request);
       request.setAttribute(REQUESTCONTEXT, context);
     }
     return context;
@@ -97,6 +101,21 @@ public class AbderaServlet
         String s = getServletConfig().getInitParameter(TARGET_RESOLVER);
         resolver = abderaServer.newTargetResolver(s);
         context.setAttribute(TARGET_RESOLVER, resolver);
+      }
+      return resolver;
+    }
+  }
+  
+  private SubjectResolver getSubjectResolver() {
+    ServletContext context = getServletContext();
+    synchronized(context) {
+      SubjectResolver resolver = 
+        (SubjectResolver) context.getAttribute(
+          SUBJECT_RESOLVER);
+      if (resolver  == null) {
+        String s = getServletConfig().getInitParameter(SUBJECT_RESOLVER);
+        resolver = abderaServer.newSubjectResolver(s);
+        context.setAttribute(SUBJECT_RESOLVER, resolver);
       }
       return resolver;
     }

@@ -24,9 +24,9 @@ public class SimpleTargetResolver
   extends RegexTargetResolver {
 
   public SimpleTargetResolver() {
-    addPattern(ResourceType.SERVICE, "/appserver/atom(\\?[^#]*)?");
-    addPattern(ResourceType.COLLECTION, "/appserver/atom/([^/#?]+)(\\?[^#]*)?");
-    addPattern(ResourceType.ENTRY_EDIT, "/appserver/atom/([^/#?]+)/([^/#?]+)(\\?[^#]*)?");
+    setPattern(ResourceType.SERVICE, "/appserver/atom(\\?[^#]*)?");
+    setPattern(ResourceType.COLLECTION, "/appserver/atom/([^/#?]+)(\\?[^#]*)?");
+    setPattern(ResourceType.ENTRY_EDIT, "/appserver/atom/([^/#?]+)/([^/#?]+)(\\?[^#]*)?");
   }
   
 }

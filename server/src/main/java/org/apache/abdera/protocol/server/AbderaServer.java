@@ -18,6 +18,7 @@
 package org.apache.abdera.protocol.server;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.protocol.server.auth.SubjectResolver;
 import org.apache.abdera.protocol.server.target.TargetResolver;
 import org.apache.abdera.protocol.server.util.ServerConstants;
 import org.apache.abdera.util.ServiceUtil;
@@ -27,32 +28,38 @@ public class AbderaServer implements ServerConstants {
   private final Abdera abdera;
   private final RequestHandlerFactory handlerFactory;
   private final TargetResolver targetResolver;
+  private final SubjectResolver subjectResolver;
   private final String defaultHandlerFactory;
   private final String defaultTargetResolver;
+  private final String defaultSubjectResolver;
   
   public AbderaServer() {
-    this(new Abdera(),"","");
+    this(new Abdera(),"","",DEFAULT_SUBJECT_RESOLVER);
   }
   
   public AbderaServer(
     String defaultTargetResolver, 
-    String defaultHandlerFactory) {
-      this(new Abdera(), defaultTargetResolver, defaultHandlerFactory);
+    String defaultHandlerFactory,
+    String defaultSubjectResolver) {
+      this(new Abdera(), defaultTargetResolver, defaultHandlerFactory, defaultSubjectResolver);
   }
   
   public AbderaServer(Abdera abdera) {
-    this(abdera,"","");
+    this(abdera,"","",DEFAULT_SUBJECT_RESOLVER);
   }
   
   public AbderaServer(
     Abdera abdera, 
     String defaultTargetResolver, 
-    String defaultHandlerFactory) {
+    String defaultHandlerFactory,
+    String defaultSubjectResolver) {
       this.abdera = abdera;
       this.handlerFactory = newRequestHandlerFactory(defaultHandlerFactory);
       this.targetResolver = newTargetResolver(defaultTargetResolver);
+      this.subjectResolver = newSubjectResolver(defaultSubjectResolver);
       this.defaultHandlerFactory = defaultHandlerFactory;
       this.defaultTargetResolver = defaultTargetResolver;
+      this.defaultSubjectResolver = defaultSubjectResolver;
   }
   
   public Abdera getAbdera() {
@@ -68,7 +75,7 @@ public class AbderaServer implements ServerConstants {
       HANDLER_FACTORY, (_default != null) ? _default : "", abdera);
   }
   
-  public RequestHandlerFactory getRequestHandlerFactory(String _default) {
+  public RequestHandlerFactory getRequestHandlerFactory() {
     return handlerFactory;
   }
   
@@ -81,7 +88,20 @@ public class AbderaServer implements ServerConstants {
       TARGET_RESOLVER, (_default != null) ? _default : "", abdera);
   }
   
-  public TargetResolver getTargetResolver(String _default) {
+  public TargetResolver getTargetResolver() {
     return targetResolver;
+  }
+  
+  public SubjectResolver newSubjectResolver() {
+    return newSubjectResolver(defaultSubjectResolver);
+  }
+  
+  public SubjectResolver newSubjectResolver(String _default) {
+    return (SubjectResolver) ServiceUtil.newInstance(
+        SUBJECT_RESOLVER, (_default != null) ? _default : DEFAULT_SUBJECT_RESOLVER, abdera);
+  }
+  
+  public SubjectResolver getSubjectResolver() {
+    return subjectResolver;
   }
 }

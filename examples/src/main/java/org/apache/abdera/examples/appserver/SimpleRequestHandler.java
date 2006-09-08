@@ -49,7 +49,7 @@ import org.apache.abdera.util.MimeTypeHelper;
 public class SimpleRequestHandler 
   extends AbstractRequestHandler {
 
-  private AbderaServer abderaServer = null;
+  private final AbderaServer abderaServer;
   
   public SimpleRequestHandler(AbderaServer abderaServer) {
     this.abderaServer = abderaServer;

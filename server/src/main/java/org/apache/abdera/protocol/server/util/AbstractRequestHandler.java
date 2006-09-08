@@ -24,8 +24,6 @@ import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
 
 public abstract class AbstractRequestHandler 
   implements RequestHandler, ServerConstants {
-
-  protected ResourceType resourceType = ResourceType.UNKNOWN;
   
   public AbstractRequestHandler() {}
   

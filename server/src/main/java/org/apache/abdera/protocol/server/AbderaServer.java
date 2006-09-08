@@ -24,20 +24,43 @@ import org.apache.abdera.util.ServiceUtil;
 
 public class AbderaServer implements ServerConstants {
   
-  private Abdera abdera = null;
-  private RequestHandlerFactory handlerFactory = null;
-  private TargetResolver targetResolver = null;
+  private final Abdera abdera;
+  private final RequestHandlerFactory handlerFactory;
+  private final TargetResolver targetResolver;
+  private final String defaultHandlerFactory;
+  private final String defaultTargetResolver;
   
   public AbderaServer() {
-    abdera = new Abdera();
+    this(new Abdera(),"","");
+  }
+  
+  public AbderaServer(
+    String defaultTargetResolver, 
+    String defaultHandlerFactory) {
+      this(new Abdera(), defaultTargetResolver, defaultHandlerFactory);
   }
   
   public AbderaServer(Abdera abdera) {
-    this.abdera = abdera;
+    this(abdera,"","");
+  }
+  
+  public AbderaServer(
+    Abdera abdera, 
+    String defaultTargetResolver, 
+    String defaultHandlerFactory) {
+      this.abdera = abdera;
+      this.handlerFactory = newRequestHandlerFactory(defaultHandlerFactory);
+      this.targetResolver = newTargetResolver(defaultTargetResolver);
+      this.defaultHandlerFactory = defaultHandlerFactory;
+      this.defaultTargetResolver = defaultTargetResolver;
   }
   
   public Abdera getAbdera() {
     return abdera;
+  }
+  
+  public RequestHandlerFactory newRequestHandlerFactory() {
+    return newRequestHandlerFactory(defaultHandlerFactory);
   }
   
   public RequestHandlerFactory newRequestHandlerFactory(String _default) {
@@ -46,9 +69,11 @@ public class AbderaServer implements ServerConstants {
   }
   
   public RequestHandlerFactory getRequestHandlerFactory(String _default) {
-    if (handlerFactory == null)
-      handlerFactory = newRequestHandlerFactory(_default);
     return handlerFactory;
+  }
+  
+  public TargetResolver newTargetResolver() {
+    return newTargetResolver(defaultTargetResolver);
   }
   
   public TargetResolver newTargetResolver(String _default) {
@@ -57,8 +82,6 @@ public class AbderaServer implements ServerConstants {
   }
   
   public TargetResolver getTargetResolver(String _default) {
-    if (targetResolver == null)
-      targetResolver = newTargetResolver(_default);
     return targetResolver;
   }
 }

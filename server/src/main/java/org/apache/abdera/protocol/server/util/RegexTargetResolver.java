@@ -51,7 +51,7 @@ import org.apache.abdera.protocol.server.target.TargetResolver;
  */
 public class RegexTargetResolver implements TargetResolver {
 
-  private Map<ResourceType,Pattern> patterns = null;
+  private final Map<ResourceType,Pattern> patterns;
   
   public RegexTargetResolver() {
     this.patterns = new HashMap<ResourceType,Pattern>();
@@ -66,13 +66,12 @@ public class RegexTargetResolver implements TargetResolver {
     }
   }
   
-  public void addPattern(ResourceType type, String pattern) {
+  public synchronized void setPattern(ResourceType type, String pattern) {
     Pattern p = Pattern.compile(pattern);
     this.patterns.put(type, p);
   }
   
   public Target resolve(String path_info) {
-    if (patterns == null) return null;
     for (ResourceType type : patterns.keySet()) {
       Pattern pattern = patterns.get(type);
       Matcher matcher = pattern.matcher(path_info);
@@ -83,8 +82,8 @@ public class RegexTargetResolver implements TargetResolver {
   
   public static class RegexTarget implements Target {
     
-    Matcher matcher = null;
-    ResourceType type = ResourceType.UNKNOWN;
+    final Matcher matcher;
+    final ResourceType type;
     
     RegexTarget(ResourceType type, Matcher matcher) {
       this.type = type;

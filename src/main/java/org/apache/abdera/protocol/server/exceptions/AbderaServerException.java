@@ -47,7 +47,7 @@ public class AbderaServerException
   implements ResponseContext {
 
   private static final long serialVersionUID = -4477406225965489951L;
-  protected ExceptionResponseContext context = null;
+  protected final ExceptionResponseContext context;
   protected DataSource ds = null;
   
   public static enum Code {

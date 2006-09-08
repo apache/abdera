@@ -43,6 +43,24 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-parser</artifactId>
+      <version>0.2.0-incubating-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-client</artifactId>
+      <version>0.2.0-incubating-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-protocol</artifactId>
+      <version>0.2.0-incubating-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>xml-security</groupId>
       <artifactId>xmlsec</artifactId>
     </dependency>

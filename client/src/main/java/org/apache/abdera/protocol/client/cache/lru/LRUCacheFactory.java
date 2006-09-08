@@ -17,13 +17,14 @@
 */
 package org.apache.abdera.protocol.client.cache.lru;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.client.cache.Cache;
 import org.apache.abdera.protocol.client.cache.CacheFactory;
 
 public class LRUCacheFactory implements CacheFactory {
 
-  public Cache getCache() {
-    return new LRUCache();
+  public Cache getCache(Abdera abdera) {
+    return new LRUCache(abdera);
   }
 
 }

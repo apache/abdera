@@ -17,8 +17,10 @@
 */
 package org.apache.abdera.protocol.client.cache;
 
+import org.apache.abdera.Abdera;
+
 public interface CacheFactory {
 
-  Cache getCache();
+  Cache getCache(Abdera abdera);
   
 }

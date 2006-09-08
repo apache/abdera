@@ -34,17 +34,19 @@ public abstract class AbstractClientResponse
   extends AbstractResponse
   implements ClientResponse {
 
+  protected final Abdera abdera;
+  protected final Parser parser;
+  protected final Date now = new Date();
+  
   protected InputStream in = null;
-  protected Date response_date = null;
-  protected Date now = new Date(); 
-  protected Abdera abdera = null;
-  protected Parser parser = null;
+  protected Date response_date = null; 
+  
+  protected AbstractClientResponse(Abdera abdera) {
+    this.abdera = abdera;
+    this.parser = abdera.getParser();
+  }
   
   protected synchronized Parser getParser() {
-    if (parser == null) {
-      if (abdera == null) abdera = new Abdera();
-      parser = abdera.getParser();
-    }
     return parser;
   }
   

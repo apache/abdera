@@ -39,39 +39,45 @@ public class RequestOptions
   private boolean noLocalCache = false;
   private boolean revalidateAuth = false;
   
-  private Map<String,List<String>> headers = null;  
+  private final Map<String,List<String>> headers;  
   
-  public RequestOptions() {}
+  public RequestOptions() {
+    headers = new HashMap<String,List<String>>();
+  }
 
   public RequestOptions(Date ifModifiedSince) {
+    this();
     setIfModifiedSince(ifModifiedSince);
   }
   
   public RequestOptions(String ifNoneMatch) {
+    this();
     setIfNoneMatch(ifNoneMatch);
   }
   
   public RequestOptions(String... ifNoneMatch) {
+    this();
     setIfNoneMatch(ifNoneMatch);
   }
   
   public RequestOptions(Date ifModifiedSince, String ifNoneMatch) {
+    this();
     setIfModifiedSince(ifModifiedSince);
     setIfNoneMatch(ifNoneMatch);
   }
   
   public RequestOptions(Date ifModifiedSince, String... ifNoneMatch) {
+    this();
     setIfModifiedSince(ifModifiedSince);
     setIfNoneMatch(ifNoneMatch);
   }
   
   public RequestOptions(boolean no_cache) {
+    this();
     setNoCache(no_cache);
   }
   
   private Map<String,List<String>> getHeaders() {
-    if (headers == null)
-      headers = new HashMap<String,List<String>>();
     return headers;
   }
 

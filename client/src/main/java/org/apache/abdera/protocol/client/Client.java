@@ -43,16 +43,16 @@ import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
  */
 public abstract class Client {
 
-  protected Abdera abdera = null;
-  protected Cache cache = null;
-  protected CacheFactory cacheFactory = null;
+  protected final Abdera abdera;
+  protected final Cache cache;
 
   public Client() {
-    this.abdera = new Abdera();
+    this(new Abdera());
   }
   
   protected Client(Abdera abdera) {
     this.abdera = abdera;
+    this.cache = initCache(initCacheFactory());
   }
   
   /**
@@ -87,27 +87,23 @@ public abstract class Client {
    */
   public abstract void usePreemptiveAuthentication(boolean val);
   
-  public abstract void init(String userAgent);
-  
-  private CacheFactory getCacheFactory() {
-    if (cacheFactory == null) {
-      cacheFactory = (CacheFactory)ServiceUtil.newInstance(
+  private CacheFactory initCacheFactory() {
+    CacheFactory cacheFactory = 
+      (CacheFactory)ServiceUtil.newInstance(
         "org.apache.abdera.protocol.cache.CacheFactory",
         "org.apache.abdera.protocol.cache.lru.LRUCacheFactory", 
         abdera);
-    }
     return cacheFactory;
   }
   
   public Cache getCache() {
-    if (cache == null) {
-      CacheFactory factory = getCacheFactory();
-      if (factory != null)
-        cache = factory.getCache();
-      if (cache == null) 
-        cache = new LRUCache();
-    }
     return cache;
+  }
+  
+  public Cache initCache(CacheFactory factory) {
+    Cache cache = null;
+    if (factory != null) cache = factory.getCache(abdera);
+    return (cache != null) ? cache : new LRUCache(abdera);
   }
   
   public ClientResponse head(

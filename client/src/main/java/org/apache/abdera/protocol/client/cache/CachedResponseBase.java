@@ -19,18 +19,19 @@ package org.apache.abdera.protocol.client.cache;
 
 import java.util.Date;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.client.AbstractClientResponse;
 
 public abstract class CachedResponseBase 
   extends AbstractClientResponse 
   implements CachedResponse {
 
-  protected CacheKey key = null;
-  protected Cache cache = null;
+  protected final CacheKey key;
+  protected final Cache cache;
   protected long initial_age = -1;
   
-  protected CachedResponseBase(CacheKey key, Cache cache) {
-    super();
+  protected CachedResponseBase(Abdera abdera, CacheKey key, Cache cache) {
+    super(abdera);
     this.key = key;
     this.cache = cache;
   }
@@ -46,7 +47,6 @@ public abstract class CachedResponseBase
   public void release() {
     if (cache != null) {
       cache.remove(key); 
-      this.cache= null;
     }
   }
   

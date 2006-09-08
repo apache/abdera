@@ -22,11 +22,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.abdera.model.Base;
-import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Element;
-import org.apache.abdera.model.Entry;
-import org.apache.abdera.model.Feed;
-import org.apache.abdera.model.Service;
+import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.commons.httpclient.methods.RequestEntity;
 
 /**
@@ -35,7 +31,7 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 public class BaseRequestEntity 
   implements RequestEntity {
 
-  private Base base = null;
+  private final Base base;
   private byte[] buf = null;
   private boolean use_chunked = true;
   
@@ -85,35 +81,7 @@ public class BaseRequestEntity
   }
 
   public String getContentType() {
-    String type = null;
-    if (base instanceof Document) {
-      Document doc = (Document) base;
-      if (doc.getContentType() != null) {
-        type = doc.getContentType().toString();
-      } else {
-        if (doc.getRoot() instanceof Feed ||
-            doc.getRoot() instanceof Entry) {
-          type = "application/atom+xml";
-        } else if (doc.getRoot() instanceof Service) {
-          type = "application/atomserv+xml";
-        } else {
-          type = "application/xml";
-        }
-      }
-    } else if (base instanceof Feed || base instanceof Entry) {
-      Document doc = ((Element)base).getDocument();
-      if (doc != null && doc.getContentType() != null)
-        type = doc.getContentType().toString();
-      if (type == null)
-        type = "application/atom+xml";
-    } else if (base instanceof Service) {
-      Document doc = ((Element)base).getDocument();
-      if (doc != null)
-        type = doc.getContentType().toString();
-      if (type == null)
-        type = "application/atomserv+xml";      
-    }
-    return (type != null) ? type : "application/xml";
+    return MimeTypeHelper.getMimeType(base);
   }
   
 }

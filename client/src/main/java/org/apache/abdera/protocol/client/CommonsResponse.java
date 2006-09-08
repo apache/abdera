@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.util.ContentEncodingUtil;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
@@ -36,9 +37,10 @@ public class CommonsResponse
   extends AbstractClientResponse
   implements ClientResponse {
 
-  private HttpMethod method = null;
+  private final HttpMethod method;
     
-  protected CommonsResponse(HttpMethod method) {
+  protected CommonsResponse(Abdera abdera, HttpMethod method) {
+    super(abdera);
     if (method.isRequestSent()) 
       this.method = method;
     else throw new IllegalStateException();

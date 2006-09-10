@@ -127,7 +127,6 @@ Working directory: ${work}
       <not>
         <and>
           <available file="${dependencies}/${geronimo.activation.jar}" />
-          <available file="${dependencies}/${geronimo.javamail.jar}" />
           <available file="${dependencies}/${geronimo.servlet.jar}" />          
           <available file="${dependencies}/${axiom.api.jar}" />
           <available file="${dependencies}/${axiom.impl.jar}" />
@@ -453,9 +452,6 @@ Working directory: ${work}
     <parallel>
       <get src="${geronimo.activation.dir}/${geronimo.activation.jar}"
            dest="${dependencies}/${geronimo.activation.jar}"
-           usetimestamp="true" />
-      <get src="${geronimo.javamail.dir}/${geronimo.javamail.jar}"
-           dest="${dependencies}/${geronimo.javamail.jar}"
            usetimestamp="true" />
       <get src="${geronimo.servlet.dir}/${geronimo.servlet.jar}"
            dest="${dependencies}/${geronimo.servlet.jar}"

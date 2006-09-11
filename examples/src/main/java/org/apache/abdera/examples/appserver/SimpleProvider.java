@@ -30,11 +30,11 @@ import org.apache.abdera.model.Source;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.protocol.server.AbderaServer;
+import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
 import org.apache.abdera.protocol.server.exceptions.AbderaServerException.Code;
-import org.apache.abdera.protocol.server.provider.Provider;
-import org.apache.abdera.protocol.server.target.Target;
 import org.apache.abdera.protocol.server.util.AbstractProvider;
 
 public class SimpleProvider 
@@ -44,8 +44,8 @@ public class SimpleProvider
   private static Document<Service> service_doc = null;
   private static Document<Feed> feed_doc = null;
   
-  public SimpleProvider(AbderaServer abderaServer) {
-    super(abderaServer);
+  public SimpleProvider(AbderaServer abderaServer, SimpleProviderManager factory) {
+    super(abderaServer, factory);
   }
   
   private synchronized Document<Service> getService() {

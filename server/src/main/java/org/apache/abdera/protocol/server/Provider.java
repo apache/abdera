@@ -17,14 +17,32 @@
 */
 package org.apache.abdera.protocol.server;
 
+import org.apache.abdera.model.Entry;
+import org.apache.abdera.model.Feed;
+import org.apache.abdera.model.Service;
+import org.apache.abdera.model.Source;
 import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
 
-public interface RequestHandlerFactory {
+public interface Provider {
+
+  void checkModified(RequestContext context) throws AbderaServerException;
+
+  void checkExists(RequestContext context) throws AbderaServerException;
+
+  Service getService(RequestContext context) throws AbderaServerException;
   
-  RequestHandler newRequestHandler(
-    AbderaServer abderaServer) 
-      throws AbderaServerException;
+  Feed getFeed(RequestContext context) throws AbderaServerException;
   
-  void releaseRequestHandler(RequestHandler handler);
+  Entry getEntry(RequestContext context) throws AbderaServerException;
+  
+  Entry addEntry(RequestContext context) throws AbderaServerException;
+  
+  Entry updateEntry(RequestContext context) throws AbderaServerException;
+  
+  void deleteEntry(RequestContext context) throws AbderaServerException;
+  
+  Source getFeedForEntry(Entry entry) throws AbderaServerException;  
+  
+  ProviderManager getProviderManager();
   
 }

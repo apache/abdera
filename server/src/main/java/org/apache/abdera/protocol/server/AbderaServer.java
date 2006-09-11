@@ -18,65 +18,86 @@
 package org.apache.abdera.protocol.server;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.server.auth.SubjectResolver;
-import org.apache.abdera.protocol.server.target.TargetResolver;
 import org.apache.abdera.protocol.server.util.ServerConstants;
 import org.apache.abdera.util.ServiceUtil;
 
 public class AbderaServer implements ServerConstants {
   
   private final Abdera abdera;
-  private final RequestHandlerFactory handlerFactory;
+  private final RequestHandlerManager handlerManager;
   private final TargetResolver targetResolver;
   private final SubjectResolver subjectResolver;
-  private final String defaultHandlerFactory;
+  private final ProviderManager providerManager;
+  private final String defaultHandlerManager;
+  private final String defaultProviderManager;
   private final String defaultTargetResolver;
   private final String defaultSubjectResolver;
   
   public AbderaServer() {
-    this(new Abdera(),"","",DEFAULT_SUBJECT_RESOLVER);
+    this(new Abdera());
   }
   
   public AbderaServer(
     String defaultTargetResolver, 
-    String defaultHandlerFactory,
-    String defaultSubjectResolver) {
-      this(new Abdera(), defaultTargetResolver, defaultHandlerFactory, defaultSubjectResolver);
+    String defaultHandlerManager,
+    String defaultSubjectResolver,
+    String defaultProviderManager) {
+      this(new Abdera(), 
+           defaultTargetResolver, 
+           defaultHandlerManager, 
+           defaultSubjectResolver,
+           defaultProviderManager);
   }
   
   public AbderaServer(Abdera abdera) {
-    this(abdera,"","",DEFAULT_SUBJECT_RESOLVER);
+    this(abdera,"","",DEFAULT_SUBJECT_RESOLVER, "");
   }
   
   public AbderaServer(
     Abdera abdera, 
     String defaultTargetResolver, 
-    String defaultHandlerFactory,
-    String defaultSubjectResolver) {
+    String defaultHandlerManager,
+    String defaultSubjectResolver,
+    String defaultProviderFactory) {
       this.abdera = abdera;
-      this.handlerFactory = newRequestHandlerFactory(defaultHandlerFactory);
+      this.handlerManager = newRequestHandlerManager(defaultHandlerManager);
       this.targetResolver = newTargetResolver(defaultTargetResolver);
       this.subjectResolver = newSubjectResolver(defaultSubjectResolver);
-      this.defaultHandlerFactory = defaultHandlerFactory;
+      this.providerManager = newProviderManager(defaultProviderFactory);
+      this.defaultHandlerManager = defaultHandlerManager;
       this.defaultTargetResolver = defaultTargetResolver;
       this.defaultSubjectResolver = defaultSubjectResolver;
+      this.defaultProviderManager = defaultProviderFactory;
   }
   
   public Abdera getAbdera() {
     return abdera;
   }
   
-  public RequestHandlerFactory newRequestHandlerFactory() {
-    return newRequestHandlerFactory(defaultHandlerFactory);
+  public ProviderManager newProviderManager() {
+    return newProviderManager(defaultProviderManager);
   }
   
-  public RequestHandlerFactory newRequestHandlerFactory(String _default) {
-    return (RequestHandlerFactory) ServiceUtil.newInstance(
-      HANDLER_FACTORY, (_default != null) ? _default : "", abdera);
+  public ProviderManager newProviderManager(String _default) {
+    return (ProviderManager) ServiceUtil.newInstance(
+      PROVIDER_MANAGER, (_default != null) ? _default : "", abdera);
+  }
+
+  public ProviderManager getProviderManager() {
+    return providerManager;
   }
   
-  public RequestHandlerFactory getRequestHandlerFactory() {
-    return handlerFactory;
+  public RequestHandlerManager newRequestHandlerManager() {
+    return newRequestHandlerManager(defaultHandlerManager);
+  }
+  
+  public RequestHandlerManager newRequestHandlerManager(String _default) {
+    return (RequestHandlerManager) ServiceUtil.newInstance(
+      HANDLER_MANAGER, (_default != null) ? _default : "", abdera);
+  }
+  
+  public RequestHandlerManager getRequestHandlerManager() {
+    return handlerManager;
   }
   
   public TargetResolver newTargetResolver() {

@@ -15,10 +15,22 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.target;
+package org.apache.abdera.examples.appserver;
 
-public interface TargetResolver {
+import org.apache.abdera.protocol.server.AbderaServer;
+import org.apache.abdera.protocol.server.RequestHandler;
+import org.apache.abdera.protocol.server.RequestHandlerManager;
+import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
+import org.apache.abdera.protocol.server.util.AbstractRequestHandlerManager;
 
-  Target resolve(String uri);
-  
+public class SimpleRequestHandlerManager
+  extends AbstractRequestHandlerManager
+  implements RequestHandlerManager {
+
+  @Override
+  protected RequestHandler newRequestHandlerInstance(
+    AbderaServer abderaServer) throws AbderaServerException {
+      return new SimpleRequestHandler(abderaServer, this);
+  }
+
 }

@@ -15,31 +15,26 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.examples.appserver;
+package org.apache.abdera.protocol.server.util;
 
 import org.apache.abdera.protocol.server.AbderaServer;
-import org.apache.abdera.protocol.server.RequestHandler;
-import org.apache.abdera.protocol.server.RequestHandlerFactory;
-import org.apache.abdera.protocol.server.provider.Provider;
-import org.apache.abdera.protocol.server.util.AbstractRequestHandlerFactory;
+import org.apache.abdera.protocol.server.Provider;
+import org.apache.abdera.protocol.server.ProviderManager;
+import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
 
-public class SimpleRequestHandlerFactory
-  extends AbstractRequestHandlerFactory
-  implements RequestHandlerFactory {
+public abstract class AbstractSimpleProviderManager 
+  implements ProviderManager {
 
-  private Provider provider = null;
-
-  private synchronized Provider getProvider(AbderaServer server) {
-    if (provider == null) {
-      provider = new SimpleProvider(server);
-    }
-    return provider;
-  }
+  protected abstract Provider getProvider(
+    AbderaServer server) 
+      throws AbderaServerException;
   
-  @Override
-  protected RequestHandler newRequestHandlerInstance(
-    AbderaServer abderaServer) {
-      return new SimpleRequestHandler(abderaServer, getProvider(abderaServer));
+  public Provider newProvider(
+    AbderaServer server) 
+      throws AbderaServerException {
+    return getProvider(server);
   }
+
+  public void releaseProvider(Provider provider) {}
 
 }

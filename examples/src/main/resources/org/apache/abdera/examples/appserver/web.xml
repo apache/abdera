@@ -12,7 +12,7 @@
       <param-value>org.apache.abdera.examples.appserver.SimpleRequestHandlerFactory</param-value>
     </init-param>
     <init-param>
-      <param-name>org.apache.abdera.protocol.server.target.TargetResolver</param-name>
+      <param-name>org.apache.abdera.protocol.server.TargetResolver</param-name>
       <param-value>org.apache.abdera.examples.appserver.SimpleTargetResolver</param-value>
     </init-param>
   </servlet>

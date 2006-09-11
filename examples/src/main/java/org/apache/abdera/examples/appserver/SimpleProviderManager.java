@@ -15,42 +15,26 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server;
+package org.apache.abdera.examples.appserver;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.List;
+import org.apache.abdera.protocol.server.AbderaServer;
+import org.apache.abdera.protocol.server.Provider;
+import org.apache.abdera.protocol.server.ProviderManager;
+import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
+import org.apache.abdera.protocol.server.util.AbstractSimpleProviderManager;
 
-import javax.security.auth.Subject;
+public class SimpleProviderManager 
+  extends AbstractSimpleProviderManager
+  implements ProviderManager {
 
-import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.Request;
+  private Provider provider = null;
+  
+  protected synchronized Provider getProvider(
+    AbderaServer abderaServer) throws AbderaServerException {
+      if (provider == null)  {
+        provider = new SimpleProvider(abderaServer, this);
+      }
+      return provider;
+  }
 
-public interface RequestContext extends Request {
-  
-  Abdera getAbdera();
-  
-  AbderaServer getServer();
-  
-  Target getTarget();
-  
-  Subject getSubject();
-  
-  String getMethod();
-  
-  URI getUri();
-  
-  URI getBaseUri();
-  
-  URI getPathInfo();
-  
-  String getParameter(String name);
-  
-  List<String> getParameters(String name);
-
-  List<String> getParameterNames();
-  
-  InputStream getInputStream() throws IOException;
-  
 }

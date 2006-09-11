@@ -24,11 +24,11 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.protocol.server.AbderaServer;
+import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
+import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
-import org.apache.abdera.protocol.server.provider.Provider;
-import org.apache.abdera.protocol.server.target.Target;
 import org.apache.abdera.protocol.server.util.AbstractRequestHandler;
 import org.apache.abdera.protocol.server.util.BaseResponseContext;
 import org.apache.abdera.protocol.server.util.EmptyResponseContext;
@@ -52,27 +52,17 @@ import org.apache.abdera.protocol.server.util.ResourceType;
 public class SimpleRequestHandler 
   extends AbstractRequestHandler {
   
-  public SimpleRequestHandler(AbderaServer abderaServer, Provider provider) {
-    super(provider);
-  }
-  
-  @Override
-  protected ResourceType getResourceType(RequestContext requestContext) {
-    Target target = requestContext.getTarget();
-    return (target != null && target.getResourceType() != null) ? 
-      target.getResourceType() : ResourceType.UNKNOWN;
-  }
-
-  @Override
-  protected ResponseContext createResponseContext() {
-    return null;
+  public SimpleRequestHandler(
+    AbderaServer abderaServer, 
+    SimpleRequestHandlerManager factory) {
+      super(factory);
   }
   
   @SuppressWarnings("unchecked")
   @Override
   protected ResponseContext internalInvoke(
     RequestContext requestContext,
-    ResponseContext responseContext) 
+    Provider provider) 
       throws AbderaServerException {
     Target target = requestContext.getTarget();
     String method = requestContext.getMethod();
@@ -85,17 +75,17 @@ public class SimpleRequestHandler
                 AbderaServerException.Code.NOTMODIFIED, 
                 "Not Modified", "");
           } catch (NullPointerException npe) {}
-          return getServiceDocument(requestContext);
+          return getServiceDocument(requestContext, provider);
       } else if (type == ResourceType.COLLECTION) {
           if (method.equals("GET")) {
             if (!target.getValue(1).equals("foo")) 
               throw new AbderaServerException(
                 AbderaServerException.Code.NOTFOUND, 
                 "Not Found", "");
-            return getFeedDocument(requestContext);
+            return getFeedDocument(requestContext, provider);
           } else if (method.equals("POST")) {
             try {
-              Entry entry = getProvider().addEntry(requestContext);
+              Entry entry = provider.addEntry(requestContext);
               if (entry != null) {
                 BaseResponseContext rc = getEntryDocument(entry);
                 rc.setStatus(201);
@@ -116,11 +106,11 @@ public class SimpleRequestHandler
           }
       } else if (type == ResourceType.ENTRY_EDIT) {
           if (method.equals("GET")) {
-            Entry e = getProvider().getEntry(requestContext);
+            Entry e = provider.getEntry(requestContext);
             return new BaseResponseContext(e.getDocument());
           } else if (method.equals("PUT")) {
             try {
-              Entry entry = getProvider().updateEntry(requestContext);
+              Entry entry = provider.updateEntry(requestContext);
               if (entry == null) 
                 throw new AbderaServerException(
                   AbderaServerException.Code.UNSUPPORTEDMEDIATYPE, 
@@ -132,7 +122,7 @@ public class SimpleRequestHandler
               throw new AbderaServerException(e);
             }
           } else if (method.equals("DELETE")) {
-            getProvider().deleteEntry(requestContext);
+            provider.deleteEntry(requestContext);
             return new EmptyResponseContext(204);
           }
       }
@@ -155,10 +145,11 @@ public class SimpleRequestHandler
   }
   
   private BaseResponseContext<Document<Service>> getServiceDocument(
-    RequestContext context) 
+    RequestContext context, 
+    Provider provider) 
       throws AbderaServerException {
     Document<Service> service_doc = 
-      getProvider().getService(context).getDocument();
+      provider.getService(context).getDocument();
     BaseResponseContext<Document<Service>> rc = 
       new BaseResponseContext<Document<Service>>(service_doc);
     rc.setEntityTag("\"service\"");
@@ -168,10 +159,10 @@ public class SimpleRequestHandler
   }
   
   private BaseResponseContext<Document<Feed>> getFeedDocument(
-    RequestContext context) 
+    RequestContext context, Provider provider) 
       throws AbderaServerException {
     Document<Feed> feed_doc = 
-      getProvider().getFeed(context).getDocument();
+      provider.getFeed(context).getDocument();
     BaseResponseContext<Document<Feed>> rc =
       new BaseResponseContext<Document<Feed>>(feed_doc);
     rc.setContentType("application/atom+xml");

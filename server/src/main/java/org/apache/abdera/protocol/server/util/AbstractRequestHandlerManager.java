@@ -17,17 +17,14 @@
 */
 package org.apache.abdera.protocol.server.util;
 
-import java.util.Stack;
-
 import org.apache.abdera.protocol.server.AbderaServer;
 import org.apache.abdera.protocol.server.RequestHandler;
-import org.apache.abdera.protocol.server.RequestHandlerFactory;
+import org.apache.abdera.protocol.server.RequestHandlerManager;
 import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
 
-public abstract class AbstractRequestHandlerFactory 
-  implements RequestHandlerFactory {
-
-  private static Stack<RequestHandler> requestHandlerPool = new Stack<RequestHandler>();
+public abstract class AbstractRequestHandlerManager 
+  extends PoolManager<RequestHandler>
+  implements RequestHandlerManager {
   
   public RequestHandler newRequestHandler(
     AbderaServer abderaServer) 
@@ -37,18 +34,20 @@ public abstract class AbstractRequestHandlerFactory
   }
   
   private synchronized RequestHandler getRequestHandler(
-    AbderaServer abderaServer) {
-      if (!requestHandlerPool.empty()) 
-        return requestHandlerPool.pop();
-      return newRequestHandlerInstance(abderaServer);
+    AbderaServer abderaServer) throws AbderaServerException {
+      return getInstance(abderaServer);
   }
 
-  public synchronized void releaseRequestHandler(RequestHandler handler) {
-    handler.clean(); // tell the handler to clean any internal state
-    requestHandlerPool.push(handler);
+  public synchronized void releaseRequestHandler(
+    RequestHandler handler) {
+      release(handler);
   }
   
   protected abstract RequestHandler newRequestHandlerInstance( 
-    AbderaServer abderaServer);
+    AbderaServer abderaServer) throws AbderaServerException;
   
+  protected RequestHandler internalNewInstance( 
+    AbderaServer abderaServer) throws AbderaServerException {
+      return newRequestHandlerInstance(abderaServer);
+  }
 }

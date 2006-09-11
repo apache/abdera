@@ -46,6 +46,18 @@
     </dependency>   
     <dependency>
       <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-protocol</artifactId>
+      <version>0.2.0-incubating-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>  
+    <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-client</artifactId>
+      <version>0.2.0-incubating-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>  
+    <dependency>
+      <groupId>org.apache.abdera</groupId>
       <artifactId>json</artifactId>
       <version>1.0</version>
       <scope>compile</scope>

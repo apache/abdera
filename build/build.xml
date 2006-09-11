@@ -233,16 +233,16 @@ Working directory: ${work}
     </copy>
   </target>
   
-  <target name="compile.extensions" depends="init, compile.core, compile.parser, compile.dependencies">
+  <target name="compile.extensions" depends="init, compile.core, compile.parser, compile.dependencies, compile.client">
     <mkdir dir="${extensions.work}" />
     <javac srcdir="${extensions.src}"
            destdir="${extensions.work}"
            classpathref="jar.dependencies"
-           classpath="${core.work};${parser.work}" />
+           classpath="${core.work};${parser.work};${client.work};${protocol.work}" />
     <javac srcdir="${extensions.test.java}"
            destdir="${test}"
            classpathref="jar.dependencies"
-           classpath="${core.work};${parser.work};${extensions.work}" />
+           classpath="${core.work};${parser.work};${extensions.work};${client.work};${protocol.work}" />
     <mkdir dir="${extensions.work}/META-INF" />
     <copy todir="${extensions.work}/META-INF">
       <fileset dir="${basedir}">

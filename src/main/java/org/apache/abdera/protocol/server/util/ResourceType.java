@@ -48,14 +48,36 @@ public final class ResourceType
   private static synchronized List<ResourceType> get_values() {
     if (values == null) {
       values = Collections.synchronizedList(
-          new ArrayList<ResourceType>());
+        new ArrayList<ResourceType>());
     }
     return values;
   }
   
   private static synchronized void add(ResourceType type) {
     List<ResourceType> values = get_values();
+    if (type.ordinal() < values().length || 
+        contains(type) || 
+        contains(type.name())) 
+          throw new IllegalArgumentException();
     values.add(type);
+  }
+  
+  public static boolean contains(ResourceType type) {
+    for (ResourceType rt : values()) {
+      if (rt.equals(type)) return true;
+    }
+    return false;
+  }
+  
+  public static boolean contains(String name) {
+    for (ResourceType rt : values()) {
+      if (rt.name.equals(name)) return true;
+    }
+    return false;
+  }
+  
+  public static int nextOrdinal() {
+    return values.size();
   }
   
   public static ResourceType[] values() {
@@ -70,12 +92,21 @@ public final class ResourceType
     return null;
   }
   
+  public static ResourceType valueOf(int ordinal) {
+    return values()[ordinal];
+  }
+  
   private final int i;
   private final String name;
   
+  public ResourceType(String name) {
+    this(name, nextOrdinal());
+  }
+  
   public ResourceType(String name, int ordinal) {
+    if (name == null) throw new IllegalArgumentException("Name cannot be null");
     this.i = ordinal;
-    this.name = name.intern();
+    this.name = name.intern().toUpperCase();
     ResourceType.add(this);
   }
   

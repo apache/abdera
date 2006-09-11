@@ -166,4 +166,21 @@ public class CommonsClient extends Client {
       AuthPolicy.AUTH_SCHEME_PRIORITY, 
       authPrefs);
   }
+  
+  /**
+   * <p>Per http://jakarta.apache.org/commons/httpclient/performance.html</p>
+   * <blockquote>
+   *   Generally it is recommended to have a single instance of HttpClient 
+   *   per communication component or even per application. However, if the 
+   *   application makes use of HttpClient only very infrequently, and keeping 
+   *   an idle instance of HttpClient in memory is not warranted, it is highly 
+   *   recommended to explicitly  shut down the multithreaded connection manager 
+   *   prior to disposing the HttpClient instance. This will ensure proper 
+   *   closure of all HTTP connections in the connection pool.
+   * </blockquote>
+   */
+  public void teardown() {
+    ((MultiThreadedHttpConnectionManager)
+      client.getHttpConnectionManager()).shutdown();
+  }
 }

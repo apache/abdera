@@ -274,4 +274,10 @@ public abstract class Client {
           "https", 
           (ProtocolSocketFactory)factory, port));
   }
+  
+  /**
+   * Explicitly tear down the Client instance
+   */
+  public void teardown() {}
+  
 }

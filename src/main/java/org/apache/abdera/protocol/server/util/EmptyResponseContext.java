@@ -20,7 +20,8 @@ package org.apache.abdera.protocol.server.util;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class EmptyResponseContext extends AbstractResponseContext {
+public final class EmptyResponseContext 
+  extends AbstractResponseContext {
 
   public EmptyResponseContext(int status) {
     setStatus(status);
@@ -30,7 +31,7 @@ public class EmptyResponseContext extends AbstractResponseContext {
     return false;
   }
 
-  public void writeTo(OutputStream out) throws IOException {
-  }
+  public void writeTo(OutputStream out) 
+    throws IOException {}
 
 }

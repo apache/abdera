@@ -19,7 +19,7 @@ package org.apache.abdera.protocol.server.util;
 
 import java.util.Iterator;
 
-import org.apache.abdera.protocol.server.target.Target;
+import org.apache.abdera.protocol.server.Target;
 
 public final class TargetIterator 
   implements Iterator<String> {

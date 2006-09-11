@@ -17,40 +17,8 @@
 */
 package org.apache.abdera.protocol.server;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.List;
+public interface TargetResolver {
 
-import javax.security.auth.Subject;
-
-import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.Request;
-
-public interface RequestContext extends Request {
-  
-  Abdera getAbdera();
-  
-  AbderaServer getServer();
-  
-  Target getTarget();
-  
-  Subject getSubject();
-  
-  String getMethod();
-  
-  URI getUri();
-  
-  URI getBaseUri();
-  
-  URI getPathInfo();
-  
-  String getParameter(String name);
-  
-  List<String> getParameters(String name);
-
-  List<String> getParameterNames();
-  
-  InputStream getInputStream() throws IOException;
+  Target resolve(String uri);
   
 }

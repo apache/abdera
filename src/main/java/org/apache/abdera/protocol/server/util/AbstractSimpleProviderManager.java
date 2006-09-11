@@ -15,10 +15,26 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.target;
+package org.apache.abdera.protocol.server.util;
 
-public interface TargetResolver {
+import org.apache.abdera.protocol.server.AbderaServer;
+import org.apache.abdera.protocol.server.Provider;
+import org.apache.abdera.protocol.server.ProviderManager;
+import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
 
-  Target resolve(String uri);
+public abstract class AbstractSimpleProviderManager 
+  implements ProviderManager {
+
+  protected abstract Provider getProvider(
+    AbderaServer server) 
+      throws AbderaServerException;
   
+  public Provider newProvider(
+    AbderaServer server) 
+      throws AbderaServerException {
+    return getProvider(server);
+  }
+
+  public void releaseProvider(Provider provider) {}
+
 }

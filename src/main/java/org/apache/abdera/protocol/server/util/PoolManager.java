@@ -15,42 +15,30 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server;
+package org.apache.abdera.protocol.server.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.List;
+import java.util.Stack;
 
-import javax.security.auth.Subject;
+import org.apache.abdera.protocol.server.AbderaServer;
+import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
 
-import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.Request;
+public abstract class PoolManager<T> {
 
-public interface RequestContext extends Request {
+  private final Stack<T> pool = new Stack<T>();
   
-  Abdera getAbdera();
-  
-  AbderaServer getServer();
-  
-  Target getTarget();
-  
-  Subject getSubject();
-  
-  String getMethod();
-  
-  URI getUri();
-  
-  URI getBaseUri();
-  
-  URI getPathInfo();
-  
-  String getParameter(String name);
-  
-  List<String> getParameters(String name);
+  protected synchronized T getInstance(
+    AbderaServer abderaServer) throws AbderaServerException {
+      if (!pool.empty()) 
+        return pool.pop();
+      return internalNewInstance(abderaServer);
+  }
 
-  List<String> getParameterNames();
+  protected synchronized void release(T t) {
+    if (t == null || pool.contains(t)) return;
+    pool.push(t);
+  }
   
-  InputStream getInputStream() throws IOException;
-  
+  protected abstract T internalNewInstance( 
+    AbderaServer abderaServer) throws AbderaServerException;
+ 
 }

@@ -17,17 +17,20 @@
 */
 package org.apache.abdera.protocol.server.util;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.abdera.protocol.server.target.Target;
-import org.apache.abdera.protocol.server.target.TargetResolver;
+import org.apache.abdera.protocol.server.Target;
+import org.apache.abdera.protocol.server.TargetResolver;
 
 /**
  * <p>Provides a utility class helpful for determining which type of resource
@@ -68,6 +71,32 @@ public class RegexTargetResolver implements TargetResolver {
       Pattern pattern = Pattern.compile(p);
       this.patterns.put(type, pattern);
     }
+  }
+  
+  public RegexTargetResolver(Properties properties) {
+    this.patterns = new HashMap<ResourceType,Pattern>();
+    loadPatterns(properties);
+  }
+  
+  public synchronized void loadPatterns(Properties properties) {
+    this.patterns.clear();
+    for (Object key : properties.keySet()) {
+      String skey = (String) key;
+      String value = properties.getProperty(skey);
+      ResourceType type = ResourceType.getOrCreate(skey);
+      Pattern pattern = Pattern.compile(value);
+      this.patterns.put(type, pattern);
+    }
+  }
+  
+  public synchronized void loadPatterns(InputStream in) throws IOException {
+    Properties properties = new Properties();
+    properties.load(in);
+    loadPatterns(properties);
+  }
+  
+  public synchronized void loadPatterns(String file) throws IOException {
+    loadPatterns(new FileInputStream(file));
   }
   
   public synchronized void setPattern(ResourceType type, String pattern) {

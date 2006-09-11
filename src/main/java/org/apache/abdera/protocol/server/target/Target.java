@@ -17,14 +17,26 @@
 */
 package org.apache.abdera.protocol.server.target;
 
+import java.io.Serializable;
+
 import org.apache.abdera.protocol.server.util.ResourceType;
 
-public interface Target extends Iterable<String> {
+public interface Target 
+  extends Iterable<String>, 
+          Serializable {
 
   ResourceType getResourceType();
   
+  /**
+   * Requests a target token value.  index=0 should always return the complete
+   * identifier of the target.
+   */
   String getValue(int index);
   
+  /**
+   * Determines whether or not the Target specifies the specified token value.
+   * MUST return true if index=0
+   */
   boolean hasValue(int index);
   
 }

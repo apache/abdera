@@ -236,9 +236,9 @@ public abstract class Client {
    * @param name
    * @param scheme
    */
-  public static void registerScheme(
+  public static <T extends AuthScheme>void registerScheme(
     String name, 
-    Class<AuthScheme> scheme) {
+    Class<T> scheme) {
       AuthPolicy.registerAuthScheme(name, scheme);
   }
   

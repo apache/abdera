@@ -30,10 +30,11 @@ import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.protocol.server.AbderaServer;
 import org.apache.abdera.protocol.server.RequestContext;
-import org.apache.abdera.protocol.server.auth.SubjectResolver;
-import org.apache.abdera.protocol.server.target.Target;
-import org.apache.abdera.protocol.server.target.TargetResolver;
+import org.apache.abdera.protocol.server.SubjectResolver;
+import org.apache.abdera.protocol.server.Target;
+import org.apache.abdera.protocol.server.TargetResolver;
 import org.apache.abdera.protocol.server.util.ServerConstants;
 import org.apache.abdera.protocol.util.AbstractRequest;
 import org.apache.abdera.protocol.util.CacheControlUtil;
@@ -43,7 +44,7 @@ public class ServletRequestContext
   implements RequestContext, ServerConstants {
   
   private final Target target;
-  private final Abdera abdera;
+  private final AbderaServer abderaServer;
   private final Subject subject;
   private final HttpServletRequest servletRequest;
   private final String method;
@@ -52,20 +53,29 @@ public class ServletRequestContext
   private final URI pathInfo;
     
   public ServletRequestContext(
-    Abdera abdera,
-    TargetResolver resolver,
-    SubjectResolver subjectResolver,
+    AbderaServer abdera,
     HttpServletRequest request) {
-      this.abdera = abdera;
+      this.abderaServer = abdera;
       this.servletRequest = request;
+      this.uri = initUri();
+      this.baseUri = initBaseUri();
+      this.pathInfo = initPathInfo();
+      this.method = request.getMethod();
       CacheControlUtil.parseCacheControl(getCacheControl(), this);
-      uri = initUri();
-      baseUri = initBaseUri();
-      pathInfo = initPathInfo();
-      target = resolver.resolve(getUri().toString());
-      method = request.getMethod();
-      subject = (subjectResolver != null) ?
+      TargetResolver targetResolver = abdera.getTargetResolver();
+      this.target = (targetResolver != null) ?
+        abdera.getTargetResolver().resolve(getUri().toString()) : null;
+      SubjectResolver subjectResolver = abdera.getSubjectResolver();
+      this.subject = (subjectResolver != null) ?
         subjectResolver.resolve(request.getUserPrincipal()) : null;
+  }
+  
+  public AbderaServer getServer() {
+    return abderaServer;
+  }
+  
+  public Abdera getAbdera() {
+    return getServer().getAbdera();
   }
   
   public Subject getSubject() {
@@ -99,7 +109,7 @@ public class ServletRequestContext
   }
   
   private String getHost() {
-    String host = abdera.getConfiguration().getConfigurationOption(
+    String host = getAbdera().getConfiguration().getConfigurationOption(
       "org.apache.abdera.protocol.server.Host");
     return (host != null) ? 
       host : 
@@ -107,7 +117,7 @@ public class ServletRequestContext
   }
   
   private int getPort() {
-    String port = abdera.getConfiguration().getConfigurationOption(
+    String port = getAbdera().getConfiguration().getConfigurationOption(
       "org.apache.abdera.protocol.server.Port");
     return (port != null) ? 
       Integer.parseInt(port) : 

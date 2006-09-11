@@ -17,40 +17,28 @@
 */
 package org.apache.abdera.protocol.server;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.List;
+import java.io.Serializable;
 
-import javax.security.auth.Subject;
+import org.apache.abdera.protocol.server.util.ResourceType;
 
-import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.Request;
+public interface Target 
+  extends Iterable<String>, 
+          Serializable,
+          Cloneable {
 
-public interface RequestContext extends Request {
+  ResourceType getResourceType();
   
-  Abdera getAbdera();
+  /**
+   * Requests a target token value.  index=0 should always return the complete
+   * identifier of the target.
+   */
+  String getValue(int index);
   
-  AbderaServer getServer();
+  /**
+   * Determines whether or not the Target specifies the specified token value.
+   * MUST return true if index=0
+   */
+  boolean hasValue(int index);
   
-  Target getTarget();
-  
-  Subject getSubject();
-  
-  String getMethod();
-  
-  URI getUri();
-  
-  URI getBaseUri();
-  
-  URI getPathInfo();
-  
-  String getParameter(String name);
-  
-  List<String> getParameters(String name);
-
-  List<String> getParameterNames();
-  
-  InputStream getInputStream() throws IOException;
-  
+  Object clone() throws CloneNotSupportedException;
 }

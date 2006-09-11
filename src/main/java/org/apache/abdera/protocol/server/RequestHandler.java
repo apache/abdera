@@ -28,10 +28,6 @@ public interface RequestHandler {
     RequestContext requestContext) 
       throws AbderaServerException;
   
-  /**
-   * RequestHandlers that do have reason to store request specific state MUST
-   * clean that internal state when the clean method is invoked.
-   */
-  void clean();
+  RequestHandlerManager getRequestHandlerManager();
   
 }

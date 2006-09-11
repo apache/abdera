@@ -28,8 +28,9 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.protocol.server.AbderaServer;
+import org.apache.abdera.protocol.server.Provider;
+import org.apache.abdera.protocol.server.ProviderManager;
 import org.apache.abdera.protocol.server.RequestContext;
-import org.apache.abdera.protocol.server.provider.Provider;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 
@@ -37,9 +38,15 @@ public abstract class AbstractProvider
   implements Provider {
 
   private final AbderaServer abderaServer;
+  private final ProviderManager providerManager;
   
-  protected AbstractProvider(AbderaServer abderaServer) {
+  protected AbstractProvider(AbderaServer abderaServer, ProviderManager manager) {
     this.abderaServer = abderaServer;
+    this.providerManager = manager;
+  }
+  
+  public ProviderManager getProviderManager() {
+    return providerManager;
   }
   
   protected AbderaServer getAbderaServer() {
@@ -99,5 +106,6 @@ public abstract class AbstractProvider
     }
     return true;
   }
-  
+
 }
+

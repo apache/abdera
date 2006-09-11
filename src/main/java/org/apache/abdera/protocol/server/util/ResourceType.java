@@ -92,6 +92,11 @@ public final class ResourceType
     return null;
   }
   
+  public static ResourceType getOrCreate(String string) {
+    ResourceType type = valueOf(string);
+    return (type != null) ? type : new ResourceType(string);
+  }
+  
   public static ResourceType valueOf(int ordinal) {
     return values()[ordinal];
   }
@@ -148,4 +153,5 @@ public final class ResourceType
   public String toString() {
     return name();
   }
+
 }

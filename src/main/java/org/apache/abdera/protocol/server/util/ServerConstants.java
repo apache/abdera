@@ -22,14 +22,17 @@ public interface ServerConstants {
   public static final String REQUESTCONTEXT = 
     "org.apache.abdera.protocol.server.RequestContext";
  
-  public static final String HANDLER_FACTORY = 
-    "org.apache.abdera.protocol.server.RequestHandlerFactory";
+  public static final String HANDLER_MANAGER = 
+    "org.apache.abdera.protocol.server.RequestHandlerManager";
+  
+  public static final String PROVIDER_MANAGER = 
+    "org.apache.abdera.protocol.server.ProviderManager";
   
   public static final String TARGET_RESOLVER = 
-    "org.apache.abdera.protocol.server.target.TargetResolver";
+    "org.apache.abdera.protocol.server.TargetResolver";
   
   public static final String SUBJECT_RESOLVER = 
-    "org.apache.abdera.protocol.server.auth.SubjectResolver";
+    "org.apache.abdera.protocol.server.SubjectResolver";
   
   public static final String DEFAULT_SUBJECT_RESOLVER = 
     "org.apache.abdera.protocol.server.util.SimpleSubjectResolver";

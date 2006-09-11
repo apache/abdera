@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,11 +33,9 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.server.AbderaServer;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.RequestHandler;
-import org.apache.abdera.protocol.server.RequestHandlerFactory;
+import org.apache.abdera.protocol.server.RequestHandlerManager;
 import org.apache.abdera.protocol.server.ResponseContext;
-import org.apache.abdera.protocol.server.auth.SubjectResolver;
 import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
-import org.apache.abdera.protocol.server.target.TargetResolver;
 import org.apache.abdera.protocol.server.util.ServerConstants;
 
 public class AbderaServlet 
@@ -45,16 +44,28 @@ public class AbderaServlet
 
   private static final long serialVersionUID = -4273782501412352619L;
 
-  private final Abdera abdera;
-  private final AbderaServer abderaServer;
-  
-  public AbderaServlet() {
-    this.abdera = new Abdera();
-    this.abderaServer = new AbderaServer(abdera);
-  }
+  private Abdera abdera;
+  private AbderaServer abderaServer;
   
   @Override
-  public void init() throws ServletException {}
+  public void init() throws ServletException {
+    ServletContext context = getServletContext();
+    if (context.getAttribute("abdera") == null) {
+      synchronized(context) {
+        ServletConfig config = getServletConfig();
+        this.abdera = new Abdera();
+        this.abderaServer = 
+          new AbderaServer(
+            abdera, 
+            config.getInitParameter(TARGET_RESOLVER), 
+            config.getInitParameter(HANDLER_MANAGER), 
+            config.getInitParameter(SUBJECT_RESOLVER), 
+            config.getInitParameter(PROVIDER_MANAGER));
+        context.setAttribute("abdera", abdera);
+        context.setAttribute("server", abderaServer);
+      }
+    }
+  }
 
   /**
    * The RequestContext will either be set on the HttpServletRequest by 
@@ -62,63 +73,11 @@ public class AbderaServlet
    * to be created and set on the request 
    */
   private RequestContext getRequestContext(HttpServletRequest request) {
-    RequestContext context = 
-      (RequestContext) request.getAttribute(REQUESTCONTEXT);
-    if (context == null) {
-      context = new ServletRequestContext(
-        abdera,
-        getTargetResolver(),
-        getSubjectResolver(),
-        request);
-      request.setAttribute(REQUESTCONTEXT, context);
-    }
-    return context;
+    return new ServletRequestContext(abderaServer,request);
   }
   
-  
-  private RequestHandlerFactory getRequestHandlerFactory() {
-    ServletContext context = getServletContext();
-    synchronized(context) {
-      RequestHandlerFactory factory = 
-        (RequestHandlerFactory) context.getAttribute(
-        HANDLER_FACTORY);
-      if (factory == null) {
-        String s = getServletConfig().getInitParameter(HANDLER_FACTORY);
-        factory = abderaServer.newRequestHandlerFactory(s);
-        context.setAttribute(HANDLER_FACTORY, factory);
-      }
-      return factory;
-    }
-  }
-  
-  private TargetResolver getTargetResolver() {
-    ServletContext context = getServletContext();
-    synchronized(context) {
-      TargetResolver resolver = 
-        (TargetResolver) context.getAttribute(
-          TARGET_RESOLVER);
-      if (resolver == null) {
-        String s = getServletConfig().getInitParameter(TARGET_RESOLVER);
-        resolver = abderaServer.newTargetResolver(s);
-        context.setAttribute(TARGET_RESOLVER, resolver);
-      }
-      return resolver;
-    }
-  }
-  
-  private SubjectResolver getSubjectResolver() {
-    ServletContext context = getServletContext();
-    synchronized(context) {
-      SubjectResolver resolver = 
-        (SubjectResolver) context.getAttribute(
-          SUBJECT_RESOLVER);
-      if (resolver  == null) {
-        String s = getServletConfig().getInitParameter(SUBJECT_RESOLVER);
-        resolver = abderaServer.newSubjectResolver(s);
-        context.setAttribute(SUBJECT_RESOLVER, resolver);
-      }
-      return resolver;
-    }
+  private RequestHandlerManager getRequestHandlerManager() {
+    return abderaServer.getRequestHandlerManager();
   }
   
   @Override
@@ -129,25 +88,21 @@ public class AbderaServlet
     RequestContext requestContext = getRequestContext(request);
     ResponseContext responseContext = null;
     RequestHandler handler = null;
-    RequestHandlerFactory factory = null;
+    RequestHandlerManager manager = null;
     try {
-      factory = getRequestHandlerFactory();
-      if (factory != null)
-        handler = factory.newRequestHandler(abderaServer);
-      if (handler != null) {
-        responseContext = handler.invoke(requestContext);
-      } else {
-        throw new AbderaServerException(
-          AbderaServerException.Code.NOTFOUND, 
-          "Handler Not Found", "");
-      }
+      manager = getRequestHandlerManager();
+      handler = (manager != null) ? 
+        manager.newRequestHandler(abderaServer) : null;
+      responseContext = (handler != null) ? 
+        handler.invoke(requestContext) :
+        new AbderaServerException(AbderaServerException.Code.NOTFOUND);
     } catch (AbderaServerException exception) {  
       responseContext = exception;
     } catch (Throwable t) {
       responseContext = new AbderaServerException(t);
     } finally {
-      if (factory != null && handler != null)
-        factory.releaseRequestHandler(handler);
+      if (manager != null)
+        manager.releaseRequestHandler(handler);
     }
     doOutput(response, responseContext); 
   }

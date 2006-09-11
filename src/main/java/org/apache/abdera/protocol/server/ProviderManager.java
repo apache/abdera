@@ -15,16 +15,14 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.auth;
+package org.apache.abdera.protocol.server;
 
-import java.security.Principal;
+import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
 
-import javax.security.auth.Subject;
+public interface ProviderManager {
 
-public interface SubjectResolver {
-
-  Subject resolve(Principal principal);
+  Provider newProvider(AbderaServer server) throws AbderaServerException;
   
-  Subject resolve(String userid);
+  void releaseProvider(Provider provider);
   
 }

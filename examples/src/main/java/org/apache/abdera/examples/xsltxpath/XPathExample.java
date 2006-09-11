@@ -39,7 +39,7 @@ public class XPathExample {
     
     System.out.println(xpath.evaluate("count(/a:feed)", feed));         // 1.0
     System.out.println(xpath.numericValueOf("count(/a:feed)", feed));   // 1.0
-    System.out.println(xpath.isTrue("/a:feed/a:entry", feed));          // true (the feed has an entry)
+    System.out.println(xpath.booleanValueOf("/a:feed/a:entry", feed));          // true (the feed has an entry)
     System.out.println(xpath.valueOf("/a:feed/a:entry/a:title", feed)); // Atom-Powered Robots Run Amok
     System.out.println(xpath.selectNodes("/a:feed/a:entry", feed));     // every entry
     System.out.println(xpath.selectSingleNode("/a:feed", feed));

@@ -68,8 +68,8 @@ public abstract class AbstractXPath
     return valueOf(path, base, getDefaultNamespaces());
   }
 
-  public boolean isTrue(String path, Base base) throws XPathException {
-    return isTrue(path, base, getDefaultNamespaces());
+  public boolean booleanValueOf(String path, Base base) throws XPathException {
+    return booleanValueOf(path, base, getDefaultNamespaces());
   }
 
   public Number numericValueOf(String path, Base base) throws XPathException {

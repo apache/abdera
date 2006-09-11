@@ -45,7 +45,7 @@ public interface XPath {
     String path, 
     Base base) throws XPathException;
   
-  boolean isTrue(
+  boolean booleanValueOf(
     String path, 
     Base base) throws XPathException; 
   
@@ -74,7 +74,7 @@ public interface XPath {
     Base base, 
     Map<String,String> namespaces) throws XPathException;
   
-  boolean isTrue(
+  boolean booleanValueOf(
     String path, 
     Base base, 
     Map<String,String> namespaces) throws XPathException; 

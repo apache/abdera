@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.model;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -29,7 +28,7 @@ import javax.xml.namespace.QName;
  * Root interface for all elements in the Feed Object Model
  */
 public interface Element 
-  extends Base, Serializable {
+  extends Base {
   
   <T extends Base>T getParentElement();
   

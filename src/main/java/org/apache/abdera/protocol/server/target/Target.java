@@ -23,7 +23,8 @@ import org.apache.abdera.protocol.server.util.ResourceType;
 
 public interface Target 
   extends Iterable<String>, 
-          Serializable {
+          Serializable,
+          Cloneable {
 
   ResourceType getResourceType();
   
@@ -39,4 +40,5 @@ public interface Target
    */
   boolean hasValue(int index);
   
+  Object clone() throws CloneNotSupportedException;
 }

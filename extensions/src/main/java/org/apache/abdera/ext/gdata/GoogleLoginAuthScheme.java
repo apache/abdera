@@ -76,16 +76,21 @@ public class GoogleLoginAuthScheme
     Credentials credentials, 
     HttpMethod method) 
       throws AuthenticationException {
-    
-    if (!(credentials instanceof UsernamePasswordCredentials)) {
+    String auth = null;
+    if (credentials instanceof UsernamePasswordCredentials) {
+      UsernamePasswordCredentials usercreds = 
+        (UsernamePasswordCredentials) credentials;
+      String id = usercreds.getUserName();
+      String pwd = usercreds.getPassword();
+      auth = getAuth(id, pwd);
+    } else if (credentials instanceof GoogleLoginAuthCredentials) {
+      GoogleLoginAuthCredentials gcreds =
+        (GoogleLoginAuthCredentials) credentials;
+      auth = gcreds.getAuth();
+    } else {
       throw new AuthenticationException(
-        "Cannot use credentials for GoogleLogin authentication");
+      "Cannot use credentials for GoogleLogin authentication");
     }
-    UsernamePasswordCredentials usercreds = 
-      (UsernamePasswordCredentials) credentials;
-    String id = usercreds.getUserName();
-    String pwd = usercreds.getPassword();
-    String auth = getAuth(id, pwd);
     StringBuffer buf = new StringBuffer("GoogleLogin ");
     buf.append(auth);
     return buf.toString();
@@ -115,7 +120,12 @@ public class GoogleLoginAuthScheme
     return false;
   }
   
-  private String getAuth(String id, String pwd) {
+  
+  protected String getAuth(String id, String pwd) {
+    return getAuth(id, pwd, service);
+  }
+  
+  protected String getAuth(String id, String pwd, String service) {
     try {
       Client client = new CommonsClient();
       Formatter f = new Formatter();
@@ -142,4 +152,10 @@ public class GoogleLoginAuthScheme
     return null;
   }
 
+  public static String getGoogleLogin(String id, String pwd, String service) {
+    String auth = (new GoogleLoginAuthScheme()).getAuth(id, pwd, service);
+    StringBuffer buf = new StringBuffer("GoogleLogin ");
+    buf.append(auth);
+    return buf.toString();
+  }
 }

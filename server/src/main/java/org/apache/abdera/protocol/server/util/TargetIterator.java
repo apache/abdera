@@ -32,7 +32,7 @@ public final class TargetIterator
   }
   
   public boolean hasNext() {
-    return (target.getValue(counter + 1) != null);
+    return target.hasValue(counter + 1);
   }
 
   public String next() {

@@ -40,9 +40,8 @@ public abstract class AbstractXPath
       initDefaultNamespaces();
   }
   
-  private Map<String, String> initDefaultNamespaces() {
+  protected Map<String, String> initDefaultNamespaces() {
     Map<String,String> namespaces = new HashMap<String,String>();
-    namespaces = new HashMap<String,String>();
     namespaces.put("a", Constants.ATOM_NS);
     namespaces.put("app", Constants.APP_NS);
     return namespaces;

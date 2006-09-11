@@ -17,6 +17,9 @@
 */
 package org.apache.abdera.protocol.server.util;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -83,8 +86,9 @@ public class RegexTargetResolver implements TargetResolver {
   
   public static class RegexTarget implements Target {
     
-    final Matcher matcher;
-    final ResourceType type;
+    private static final long serialVersionUID = 165211244926064449L;
+    transient Matcher matcher;
+    private ResourceType type;
     
     RegexTarget(ResourceType type, Matcher matcher) {
       this.type = type;
@@ -109,6 +113,24 @@ public class RegexTargetResolver implements TargetResolver {
 
     public Iterator<String> iterator() {
       return new TargetIterator(this);
+    }
+    
+    private void writeObject(ObjectOutputStream out) 
+      throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(matcher.pattern().pattern());
+        out.writeObject(matcher.group(0));
+    }
+
+    private void readObject(ObjectInputStream in) 
+      throws IOException, 
+             ClassNotFoundException {
+       in.defaultReadObject();
+       String p = (String) in.readObject();
+       String v = (String) in.readObject();
+       Pattern pattern = Pattern.compile(p);
+       matcher = pattern.matcher(v);
+       matcher.matches();
     }
   }
   

@@ -291,7 +291,7 @@ public class FOMTest extends TestCase   {
     Feed feed = doc.getRoot();
     XPath xpath = getXPath();
     assertEquals(xpath.evaluate("count(/a:feed)", feed), 1.0d);
-    assertTrue(xpath.isTrue("/a:feed/a:entry", feed));
+    assertTrue(xpath.booleanValueOf("/a:feed/a:entry", feed));
     assertEquals(xpath.numericValueOf("count(/a:feed)", feed), 1.0d);
     assertEquals(xpath.valueOf("/a:feed/a:entry/a:title", feed), "Atom-Powered Robots Run Amok");
     assertEquals(xpath.selectNodes("/a:feed/a:entry", feed).size(), 1);

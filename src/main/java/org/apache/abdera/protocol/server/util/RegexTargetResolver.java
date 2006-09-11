@@ -173,7 +173,27 @@ public class RegexTargetResolver implements TargetResolver {
       return true;
     }
     
-    
+    public String toString() {
+      String m = matcher.group(0);
+      String p = matcher.pattern().pattern();
+      StringBuffer buf = new StringBuffer();
+      buf.append("RegexTarget[");
+      buf.append(p);
+      buf.append(" ==> ");
+      buf.append(m);
+      buf.append("] = ");
+      buf.append(type.toString());
+      buf.append("\n");
+      int n = -1;
+      while(hasValue(++n)) {
+        buf.append("    ");
+        buf.append(n);
+        buf.append(" = ");
+        buf.append(getValue(n));
+        buf.append("\n");
+      }
+      return buf.toString();
+    }
   }
   
 }

@@ -110,7 +110,7 @@ public class DSigThirdPartyVerifyTest extends TestCase {
     
     XPath xpath = abdera.getXPath();
     assertTrue(
-      xpath.isTrue(
+      xpath.booleanValueOf(
         "/Result/SignatureVerifies[text()='true']", 
         result));
 

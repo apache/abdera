@@ -100,7 +100,7 @@ public class FOMXPath extends AbstractXPath {
     }
   }
   
-  public boolean isTrue(
+  public boolean booleanValueOf(
     String path, 
     Base base, 
     Map<String,String> namespaces) 

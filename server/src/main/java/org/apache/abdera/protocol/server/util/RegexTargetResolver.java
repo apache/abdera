@@ -132,6 +132,48 @@ public class RegexTargetResolver implements TargetResolver {
        matcher = pattern.matcher(v);
        matcher.matches();
     }
+
+    @Override
+    public int hashCode() {
+      final int PRIME = 31;
+      int result = 1;
+      String m = matcher.group(0);
+      String p = matcher.pattern().pattern();
+      result = PRIME * result + ((m == null) ? 0 : m.hashCode());
+      result = PRIME * result + ((p == null) ? 0 : p.hashCode());
+      result = PRIME * result + ((type == null) ? 0 : type.hashCode());
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj) return true;
+      if (obj == null) return false;
+      if (getClass() != obj.getClass()) return false;
+      final RegexTarget other = (RegexTarget) obj;
+      String m = matcher.group(0);
+      String p = matcher.pattern().pattern();
+      String m2 = other.matcher.group(0);
+      String p2 = other.matcher.pattern().pattern();
+      if (m == null) {
+        if (m2 != null)
+          return false;
+      } else if (!m.equals(m2))
+        return false;
+      if (p == null) {
+        if (p2 != null)
+          return false;
+      } else if (!p.equals(p2))
+        return false;
+      if (type == null) {
+        if (other.type != null)
+          return false;
+      } else if (!type.equals(other.type))
+        return false;
+      return true;
+    }
+    
+    
   }
   
 }

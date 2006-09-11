@@ -194,6 +194,10 @@ public class RegexTargetResolver implements TargetResolver {
       }
       return buf.toString();
     }
+    
+    public Object clone() throws CloneNotSupportedException {
+      return super.clone();
+    }
   }
   
 }

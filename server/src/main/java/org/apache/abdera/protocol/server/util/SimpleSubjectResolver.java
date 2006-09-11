@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.protocol.server.util;
 
+import java.io.Serializable;
 import java.security.Principal;
 
 import javax.security.auth.Subject;
@@ -39,7 +40,10 @@ public class SimpleSubjectResolver
     return resolve(new SimplePrincipal(userid));
   }
 
-  static class SimplePrincipal implements Principal {
+  static class SimplePrincipal 
+    implements Principal, 
+               Serializable {
+    private static final long serialVersionUID = 7161420960293729670L;
     final String name;
     SimplePrincipal(String name) {
       this.name = name;
@@ -72,7 +76,10 @@ public class SimpleSubjectResolver
     
   }
   
-  public static final class AnonymousPrincipal implements Principal {
+  public static final class AnonymousPrincipal 
+    implements Principal, 
+               Serializable {
+    private static final long serialVersionUID = -5050930075733261944L;
     final String name = "Anonymous";
     public String getName() {
       return name;

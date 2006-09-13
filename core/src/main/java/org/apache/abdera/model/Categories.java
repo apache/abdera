@@ -96,5 +96,9 @@ public interface Categories
 
   Category addCategory(String scheme, String term, String label) throws URISyntaxException;
     
+  boolean contains(String term) throws URISyntaxException;
+  
+  boolean contains(String term, String scheme) throws URISyntaxException;
+  
 }
 

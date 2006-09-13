@@ -18,6 +18,7 @@
 package org.apache.abdera.protocol.util;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
@@ -56,7 +57,7 @@ public abstract class AbstractRequest implements Request {
   }
   
   public String getSlug() {
-    return getHeader("Slug");
+    return EncodingUtil.decode(getHeader("Slug"));
   }
 
   public MimeType getContentType() throws MimeTypeParseException {
@@ -143,5 +144,18 @@ public abstract class AbstractRequest implements Request {
   
   public void setOnlyIfCached(boolean val) {
     toggle(val, ONLYIFCACHED);
+  }
+
+  public String getDecodedHeader(String header) {
+    return EncodingUtil.decode(getHeader(header));
+  }
+  
+  public List<String> getDecodedHeaders(String header) {
+    List<String> headers = getHeaders(header);
+    String[] vals = new String[headers.size()];
+    for (int n = 0; n < headers.size(); n++) {
+      vals[n] = EncodingUtil.decode(headers.get(n));
+    }
+    return java.util.Arrays.asList(vals);
   }
 }

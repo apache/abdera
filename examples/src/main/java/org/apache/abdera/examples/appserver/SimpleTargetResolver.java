@@ -26,7 +26,7 @@ public class SimpleTargetResolver
   public SimpleTargetResolver() {
     setPattern("/appserver/atom(\\?[^#]*)?", TargetType.TYPE_SERVICE);
     setPattern("/appserver/atom/feed(\\?[^#]*)?", TargetType.TYPE_COLLECTION);
-    setPattern("/appserver/atom/feed/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY_EDIT);
+    setPattern("/appserver/atom/feed/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY);
   }
   
 }

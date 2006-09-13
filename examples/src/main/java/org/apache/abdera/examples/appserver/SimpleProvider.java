@@ -61,6 +61,7 @@ public class SimpleProvider
     try {
       Collection collection = workspace.addCollection("Simple", "atom/feed");
       collection.setAccept("entry");
+      collection.addCategories().setFixed(false);
     } catch (Exception e) {}
     return service.getDocument();
   }
@@ -124,7 +125,7 @@ public class SimpleProvider
       TargetType type = request.getTarget().getType();
       if (type == TargetType.TYPE_SERVICE) return getService(request, false);
       if (type == TargetType.TYPE_COLLECTION) return getFeed(request, false);
-      if (type == TargetType.TYPE_ENTRY_EDIT) return getEntry(request, false, true);
+      if (type == TargetType.TYPE_ENTRY) return getEntry(request, false);
       return null;
   }
 
@@ -184,8 +185,7 @@ public class SimpleProvider
 
   public ResponseContext getEntry(
     RequestContext request, 
-    boolean full,
-    boolean editable) {
+    boolean full) {
       Entry entry = (Entry) getEntry(request);
       if (entry != null) {
         Feed feed = entry.getParentElement();
@@ -277,7 +277,7 @@ public class SimpleProvider
   }
   
   private String getEntryID(RequestContext request) {
-    if (request.getTarget().getType() != TargetType.TYPE_ENTRY_EDIT) 
+    if (request.getTarget().getType() != TargetType.TYPE_ENTRY) 
       return null;
     String path = request.getUri().toString();
     String[] segments = path.split("/");
@@ -301,8 +301,7 @@ public class SimpleProvider
   
   public ResponseContext getMedia(
     RequestContext request, 
-    boolean full,
-    boolean editable) {
+    boolean full) {
       throw new UnsupportedOperationException();
   }
   
@@ -327,4 +326,9 @@ public class SimpleProvider
     }
     return true;
   }
+
+  public ResponseContext getCategories(RequestContext request, boolean full) {
+    return null;
+  }
+
 }

@@ -19,7 +19,6 @@ package org.apache.abdera.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -156,20 +155,20 @@ public class MimeTypeHelper {
    */
   public static String[] condense(String... types) {
     if (types.length <= 1) return types;
-    List<String> list = new ArrayList<String>(Arrays.asList(types));
     List<String> res = new ArrayList<String>();
-    Collections.sort(list, getComparator());
-    for (String t:list) {
-      if (!contains(t,res) && !res.contains(t)) res.add(t); 
+    Arrays.sort(types, getComparator());
+    for (String t:types) {
+      if (!contains(t,res, true)) res.add(t); 
     }
     for (int n = 0; n < res.size(); n++) {
-      String t = res.get(n).intern();
-      if (contains(t, res)) res.remove(t);
+      String t = res.get(n);
+      if (contains(t, res,false)) res.remove(t);
     }
     return res.toArray(new String[res.size()]);
   }
   
-  private static boolean contains(String t1, List<String> t) {
+  private static boolean contains(String t1, List<String> t, boolean self) {
+    if (self && t.contains(t1)) return true;
     for (String t2 : t) {
       int c = compare(t1,t2);
       if (c == 1) return true;

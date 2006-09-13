@@ -790,4 +790,20 @@ public class FOMEntry
     Link link = getEditMediaLink(type, hreflang);
     return (link != null) ? link.getResolvedHref() : null;
   }
+  
+  public void setDraft(boolean draft) {
+    Control control = getControl();
+    if (control == null && draft) {
+      control = ((FOMFactory)factory).newControl(this);
+    }
+    if (control != null) control.setDraft(draft);
+  }
+  
+  /**
+   * Returns true if this entry is a draft
+   */
+  public boolean isDraft() {
+    Control control = getControl();
+    return (control != null) ? control.isDraft() : false;
+  }
 }

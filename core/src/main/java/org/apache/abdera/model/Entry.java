@@ -571,6 +571,16 @@ public interface Entry
   void setControl(Control control);
   
   /**
+   * Sets whether or not this entry is a draft
+   */
+  void setDraft(boolean draft);
+  
+  /**
+   * Returns true if this entry is a draft
+   */
+  boolean isDraft();
+  
+  /**
    * Returns the first link with the specified rel attribute value
    */
   Link getLink(String rel);

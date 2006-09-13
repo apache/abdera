@@ -15,19 +15,16 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server;
+package org.apache.abdera.protocol.server.servlet;
 
-import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
+import org.apache.abdera.protocol.util.PoolManager;
 
-/**
- * RequestHandlers SHOULD be thread safe and stateless
- */
-public interface RequestHandler {
+public abstract class AbstractRequestHandlerManager 
+  extends PoolManager<RequestHandler>
+  implements RequestHandlerManager {
 
-  ResponseContext invoke(
-    RequestContext requestContext) 
-      throws AbderaServerException;
-  
-  RequestHandlerManager getRequestHandlerManager();
-  
+  public RequestHandler getRequestHandler() {
+    return getInstance();
+  }
+
 }

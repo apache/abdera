@@ -15,26 +15,32 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.util;
+package org.apache.abdera.protocol.server;
 
-import org.apache.abdera.protocol.server.AbderaServer;
-import org.apache.abdera.protocol.server.Provider;
-import org.apache.abdera.protocol.server.ProviderManager;
-import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
+import java.util.Map;
 
-public abstract class AbstractSimpleProviderManager 
-  implements ProviderManager {
+import org.apache.abdera.Abdera;
+import org.apache.abdera.protocol.server.auth.SubjectResolver;
+import org.apache.abdera.protocol.server.provider.ProviderManager;
+import org.apache.abdera.protocol.server.provider.TargetResolver;
+import org.apache.abdera.protocol.server.servlet.RequestHandlerManager;
 
-  protected abstract Provider getProvider(
-    AbderaServer server) 
-      throws AbderaServerException;
+public interface ServiceContext {
+
+  Abdera getAbdera();
   
-  public Provider newProvider(
-    AbderaServer server) 
-      throws AbderaServerException {
-    return getProvider(server);
-  }
-
-  public void releaseProvider(Provider provider) {}
-
+  void init(Abdera abdera, Map<String,String> config);
+  
+  RequestHandlerManager getRequestHandlerManager();
+  
+  ProviderManager getProviderManager();
+  
+  SubjectResolver getSubjectResolver();
+  
+  TargetResolver getTargetResolver();
+  
+  String getProperty(String name);
+  
+  String[] getPropertyNames();
+  
 }

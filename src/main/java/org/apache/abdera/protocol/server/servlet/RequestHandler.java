@@ -15,10 +15,20 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server;
+package org.apache.abdera.protocol.server.servlet;
 
-public interface TargetResolver {
+import java.io.IOException;
 
-  Target resolve(String uri);
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.abdera.protocol.server.ServiceContext;
+
+public interface RequestHandler {
+
+  void process(
+    ServiceContext context, 
+    HttpServletRequest request, 
+    HttpServletResponse response) throws IOException;
   
 }

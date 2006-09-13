@@ -15,23 +15,10 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.util;
+package org.apache.abdera.protocol.server.provider;
 
-import java.io.IOException;
-import java.io.OutputStream;
+public interface TargetResolver {
 
-public final class EmptyResponseContext 
-  extends AbstractResponseContext {
-
-  public EmptyResponseContext(int status) {
-    setStatus(status);
-  }
+  Target resolve(RequestContext context);
   
-  public boolean hasEntity() {
-    return false;
-  }
-
-  public void writeTo(OutputStream out) 
-    throws IOException {}
-
 }

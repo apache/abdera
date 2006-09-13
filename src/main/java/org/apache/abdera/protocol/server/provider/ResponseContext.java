@@ -15,16 +15,18 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server;
+package org.apache.abdera.protocol.server.provider;
 
-import java.security.Principal;
+import java.io.IOException;
+import java.io.OutputStream;
 
-import javax.security.auth.Subject;
+import org.apache.abdera.protocol.Response;
 
-public interface SubjectResolver {
+public interface ResponseContext 
+  extends Response {
 
-  Subject resolve(Principal principal);
+  public boolean hasEntity();
   
-  Subject resolve(String userid);
+  public void writeTo(OutputStream out) throws IOException;
   
 }

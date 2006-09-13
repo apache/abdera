@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.util;
+package org.apache.abdera.protocol.server.provider;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.abdera.protocol.server.ResponseContext;
+import org.apache.abdera.protocol.EntityTag;
+import org.apache.abdera.protocol.server.provider.ResponseContext;
 import org.apache.abdera.protocol.util.AbstractResponse;
 
 public abstract class AbstractResponseContext
@@ -196,12 +197,12 @@ public abstract class AbstractResponseContext
     setHeader("Content-Type", type);
   }
 
-  public void setEntityTag(String etag) {
+  public void setEntityTag(EntityTag etag) {
     if (etag == null) {
       removeHeader("ETag");
       return;
     }
-    setHeader("ETag", etag);
+    setHeader("ETag", etag.toString());
   }
 
   public void setExpires(Date date) {

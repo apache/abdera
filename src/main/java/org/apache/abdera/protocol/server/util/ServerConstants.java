@@ -19,26 +19,19 @@ package org.apache.abdera.protocol.server.util;
 
 public interface ServerConstants {
 
-  public static final String REQUESTCONTEXT = 
-    "org.apache.abdera.protocol.server.RequestContext";
- 
-  public static final String HANDLER_MANAGER = 
-    "org.apache.abdera.protocol.server.RequestHandlerManager";
+
+  public static final String REQUEST_HANDLER_MANAGER = 
+    "org.apache.abdera.protocol.server.servlet.RequestHandlerManager";
   
-  public static final String PROVIDER_MANAGER = 
-    "org.apache.abdera.protocol.server.ProviderManager";
-  
-  public static final String TARGET_RESOLVER = 
-    "org.apache.abdera.protocol.server.TargetResolver";
+  public static final String PROVIDER_MANAGER =
+    "org.apache.abdera.protocol.server.provider.ProviderManager";
   
   public static final String SUBJECT_RESOLVER = 
-    "org.apache.abdera.protocol.server.SubjectResolver";
+    "org.apache.abdera.protocol.server.auth.SubjectResolver";
   
-  public static final String DEFAULT_SUBJECT_RESOLVER = 
-    "org.apache.abdera.protocol.server.util.SimpleSubjectResolver";
+  public static final String TARGET_RESOLVER = 
+    "org.apache.abdera.protocol.server.provider.TargetResolver";
   
-  public static final String X_OVERRIDE_HEADER = 
-    "X-HTTP-Method-Override";
-  
-  public static final String[] EMPTY = new String[0];
+  public static final String SERVICE_CONTEXT =
+    "org.apache.abdera.protocol.server.ServiceContext";
 }

@@ -15,30 +15,16 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server;
+package org.apache.abdera.protocol.server.provider;
 
-import java.io.Serializable;
+public interface Target {
 
-import org.apache.abdera.protocol.server.util.ResourceType;
-
-public interface Target 
-  extends Iterable<String>, 
-          Serializable,
-          Cloneable {
-
-  ResourceType getResourceType();
+  TargetType getType();
   
-  /**
-   * Requests a target token value.  index=0 should always return the complete
-   * identifier of the target.
-   */
-  String getValue(int index);
+  String getIdentity();
   
-  /**
-   * Determines whether or not the Target specifies the specified token value.
-   * MUST return true if index=0
-   */
-  boolean hasValue(int index);
+  String getParameter(String name);
   
-  Object clone() throws CloneNotSupportedException;
+  String[] getParameterNames();
+  
 }

@@ -27,6 +27,7 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
@@ -137,6 +138,10 @@ public class FOMCollection
       setAttributeValue(HREF, (new URI(href).toString()));
     else 
       removeAttribute(HREF);
+  }
+  
+  public Element getAcceptElement() {
+    return getFirstChild(ACCEPT);
   }
   
   public String[] getAccept(){

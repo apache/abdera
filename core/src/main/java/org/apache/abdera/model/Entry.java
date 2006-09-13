@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.activation.DataHandler;
+import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 /**
@@ -239,6 +240,12 @@ public interface Entry
    * Returns the content type
    */
   Content.Type getContentType();
+  
+  /**
+   * Returns the media type of the content type or null if type equals 'text',
+   * 'html' or 'xhtml'
+   */
+  MimeType getContentMimeType();
   
   /**
    * Lists the complete set of contributors for this entry

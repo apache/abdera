@@ -18,7 +18,6 @@
 package org.apache.abdera.protocol.client.cache;
 
 import java.security.MessageDigest;
-import java.util.Arrays;
 
 /**
  * Simple cache key based on an md5 hash of the URI.
@@ -55,7 +54,12 @@ public class SimpleCacheKey implements CacheKey {
   
   @Override
   public int hashCode() {
-    return 31 + Arrays.hashCode(key);
+    if (key == null) return 0;
+    int result = 1;
+    for (byte element : key) {
+      result = 31 * result + element;
+    }
+    return result;
   }
 
 }

@@ -26,6 +26,7 @@ import java.util.Map;
 import org.apache.abdera.protocol.EntityTag;
 import org.apache.abdera.protocol.server.provider.ResponseContext;
 import org.apache.abdera.protocol.util.AbstractResponse;
+import org.apache.abdera.protocol.util.EncodingUtil;
 
 public abstract class AbstractResponseContext
   extends AbstractResponse
@@ -43,6 +44,19 @@ public abstract class AbstractResponseContext
     headers.remove(name);
   }
   
+  public void setEncodedHeader(String name, String charset, String value) {
+    setHeader(name, EncodingUtil.encode(value, charset));
+  }
+  
+  public void setEncodedHeader(String name, String charset, String... vals) {
+    Map<String,List<Object>> headers = getHeaders();
+    List<Object> values = new ArrayList<Object>();
+    for (String value : vals) {
+      values.add(EncodingUtil.encode(value, charset));
+    }
+    headers.put(name, values);
+  }
+  
   public void setHeader(String name, Object value) {
     Map<String,List<Object>> headers = getHeaders();
     List<Object> values = new ArrayList<Object>();
@@ -57,6 +71,22 @@ public abstract class AbstractResponseContext
       values.add(value);
     }
     headers.put(name, values);
+  }
+  
+  public void addEncodedHeader(String name, String charset, String value) {
+    addHeader(name, EncodingUtil.encode(value, charset));
+  }
+  
+  public void addEncodedHeaders(String name, String charset, String... vals) {
+    Map<String,List<Object>> headers = getHeaders();
+    List<Object> values = new ArrayList<Object>();
+    if (values == null) {
+      values = new ArrayList<Object>();
+      headers.put(name,values);
+    }
+    for (String value : vals) {
+      values.add(EncodingUtil.encode(value, charset));
+    }
   }
   
   public void addHeader(String name, Object value) {
@@ -179,6 +209,10 @@ public abstract class AbstractResponseContext
       return;
     }
     setHeader("Content-Location", uri);
+  }
+  
+  public void setSlug(String slug, String charset) {
+    setSlug(EncodingUtil.encode(slug, charset));
   }
   
   public void setSlug(String slug) {

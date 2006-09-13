@@ -758,4 +758,36 @@ public class FOMEntry
     Content content = getContentElement();
     return (content != null) ? content.getMimeType() : null;
   }
+
+  public Link getAlternateLink(
+    String type, 
+    String hreflang) 
+      throws MimeTypeParseException {
+    return selectLink(getLinks(Link.REL_ALTERNATE), type, hreflang);
+  }
+
+  public java.net.URI getAlternateLinkResolvedHref(
+    String type, 
+    String hreflang) 
+      throws URISyntaxException, 
+             MimeTypeParseException {
+    Link link = getAlternateLink(type, hreflang);
+    return (link != null) ? link.getResolvedHref() : null;
+  }
+
+  public Link getEditMediaLink(
+    String type, 
+    String hreflang) 
+      throws MimeTypeParseException {
+    return selectLink(getLinks(Link.REL_EDIT_MEDIA), type, hreflang);
+  }
+
+  public java.net.URI getEditMediaLinkResolvedHref(
+    String type, 
+    String hreflang) 
+      throws URISyntaxException, 
+             MimeTypeParseException {
+    Link link = getEditMediaLink(type, hreflang);
+    return (link != null) ? link.getResolvedHref() : null;
+  }
 }

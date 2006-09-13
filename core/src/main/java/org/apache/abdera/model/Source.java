@@ -468,9 +468,12 @@ public interface Source
    */
   Link getAlternateLink();
   
+  Link getAlternateLink(String type, String hreflang) throws MimeTypeParseException;
+  
   URI getLinkResolvedHref(String rel) throws URISyntaxException;
   URI getSelfLinkResolvedHref() throws URISyntaxException;
   URI getAlternateLinkResolvedHref() throws URISyntaxException;
+  URI getAlternateLinkResolvedHref(String type, String hreflang) throws URISyntaxException, MimeTypeParseException;
   
   Collection getCollection();
   

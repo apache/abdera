@@ -29,6 +29,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -39,11 +41,13 @@ import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.parser.stax.util.FOMList;
 import org.apache.abdera.util.Constants;
+import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.URIHelper;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMComment;
@@ -586,4 +590,23 @@ public class FOMElement
     return locale;
   }
 
+  protected Link selectLink(
+    List<Link> links, 
+    String type, 
+    String hreflang) 
+      throws MimeTypeParseException {
+    for (Link link : links) {
+      MimeType mt = link.getMimeType();
+      boolean typematch =  
+        MimeTypeHelper.isMatch(
+          (mt != null) ? mt.toString() : null, type);
+      boolean langmatch = 
+        "*".equals(hreflang) ||
+        ((hreflang != null) ? 
+          hreflang.equals(link.getHrefLang()) : 
+          link.getHrefLang() == null);
+      if (typematch && langmatch) return link;
+    }
+    return null;
+  }
 }

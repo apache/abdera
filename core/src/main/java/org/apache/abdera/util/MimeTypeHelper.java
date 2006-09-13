@@ -17,6 +17,12 @@
 */
 package org.apache.abdera.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
@@ -134,5 +140,69 @@ public class MimeTypeHelper {
     }    
     return (type != null) ? type : Constants.XML_MEDIA_TYPE;
   }
+  
+  /**
+   * This will take an array of media types and will condense them based
+   * on wildcards, etc.  For instance, 
+   * 
+   *   condense("image/png", "image/jpg", "image/*")
+   * 
+   * condenses to [image/*]
+   * 
+   *   condense("application/atom", "application/*", "image/png", "image/*")
+   *   
+   * condenses to [application/*, image/*]
+   * 
+   */
+  public static String[] condense(String... types) {
+    if (types.length <= 1) return types;
+    List<String> list = new ArrayList<String>(Arrays.asList(types));
+    List<String> res = new ArrayList<String>();
+    Collections.sort(list, getComparator());
+    for (String t:list) {
+      if (!contains(t,res) && !res.contains(t)) res.add(t); 
+    }
+    for (int n = 0; n < res.size(); n++) {
+      String t = res.get(n).intern();
+      if (contains(t, res)) res.remove(t);
+    }
+    return res.toArray(new String[res.size()]);
+  }
+  
+  private static boolean contains(String t1, List<String> t) {
+    for (String t2 : t) {
+      int c = compare(t1,t2);
+      if (c == 1) return true;
+    }
+    return false;
+  }
+  
+  public static Comparator<String> getComparator() {
+    return new Comparator<String>() {
+      public int compare(String o1, String o2) {
+        return MimeTypeHelper.compare(o1,o2);
+      }
+    };
+  }
+  
+  public static int compare(MimeType mt1, MimeType mt2) {
+    String st1 = mt1.getSubType();
+    String st2 = mt2.getSubType();
+    if (MimeTypeHelper.isMatch(mt1, mt2)) {
+      if (st1.equals("*")) return -1;
+      if (st2.equals("*")) return 1;
+    }
+    return 0;
+  }
+  
+  public static int compare(String t1, String t2) {
+    try {
+      MimeType mt1 = new MimeType(t1);
+      MimeType mt2 = new MimeType(t2);
+      return compare(mt1,mt2);
+    } catch (Exception e) {}
+    return 0;
+  }
+
 }
 

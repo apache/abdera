@@ -15,23 +15,16 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.util;
+package org.apache.abdera.protocol.server.provider;
 
-public interface ServerConstants {
+public interface Target {
 
-
-  public static final String REQUEST_HANDLER_MANAGER = 
-    "org.apache.abdera.protocol.server.servlet.RequestHandlerManager";
+  TargetType getType();
   
-  public static final String PROVIDER_MANAGER =
-    "org.apache.abdera.protocol.server.provider.ProviderManager";
+  String getIdentity();
   
-  public static final String SUBJECT_RESOLVER = 
-    "org.apache.abdera.protocol.server.auth.SubjectResolver";
+  String getParameter(String name);
   
-  public static final String TARGET_RESOLVER = 
-    "org.apache.abdera.protocol.server.provider.TargetResolver";
+  String[] getParameterNames();
   
-  public static final String SERVICE_CONTEXT =
-    "org.apache.abdera.protocol.server.ServiceContext";
 }

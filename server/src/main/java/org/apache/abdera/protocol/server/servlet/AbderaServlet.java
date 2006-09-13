@@ -18,66 +18,30 @@
 package org.apache.abdera.protocol.server.servlet;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.server.AbderaServer;
-import org.apache.abdera.protocol.server.RequestContext;
-import org.apache.abdera.protocol.server.RequestHandler;
-import org.apache.abdera.protocol.server.RequestHandlerManager;
-import org.apache.abdera.protocol.server.ResponseContext;
-import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
-import org.apache.abdera.protocol.server.util.ServerConstants;
+import org.apache.abdera.protocol.server.ServiceContext;
+import org.apache.abdera.protocol.server.ServiceManager;
+import org.apache.abdera.protocol.server.servlet.RequestHandler;
+import org.apache.abdera.protocol.server.servlet.RequestHandlerManager;
 
 public class AbderaServlet 
-  extends HttpServlet 
-  implements ServerConstants {
+  extends HttpServlet {
 
-  private static final long serialVersionUID = -4273782501412352619L;
-
-  private Abdera abdera;
-  private AbderaServer abderaServer;
+  private static final long serialVersionUID = 2393643907128535158L;
   
-  @Override
+  protected ServiceManager serviceManager;
+  
   public void init() throws ServletException {
-    ServletContext context = getServletContext();
-    if (context.getAttribute("abdera") == null) {
-      synchronized(context) {
-        ServletConfig config = getServletConfig();
-        this.abdera = new Abdera();
-        this.abderaServer = 
-          new AbderaServer(
-            abdera, 
-            config.getInitParameter(TARGET_RESOLVER), 
-            config.getInitParameter(HANDLER_MANAGER), 
-            config.getInitParameter(SUBJECT_RESOLVER), 
-            config.getInitParameter(PROVIDER_MANAGER));
-        context.setAttribute("abdera", abdera);
-        context.setAttribute("server", abderaServer);
-      }
-    }
-  }
-
-  /**
-   * The RequestContext will either be set on the HttpServletRequest by 
-   * some filter or servlet earlier in the invocation chain or will need
-   * to be created and set on the request 
-   */
-  private RequestContext getRequestContext(HttpServletRequest request) {
-    return new ServletRequestContext(abderaServer,request);
-  }
-  
-  private RequestHandlerManager getRequestHandlerManager() {
-    return abderaServer.getRequestHandlerManager();
+    serviceManager = ServiceManager.getInstance();
   }
   
   @Override
@@ -85,57 +49,29 @@ public class AbderaServlet
     HttpServletRequest request, 
     HttpServletResponse response) 
       throws ServletException, IOException {
-    RequestContext requestContext = getRequestContext(request);
-    ResponseContext responseContext = null;
-    RequestHandler handler = null;
-    RequestHandlerManager manager = null;
+    ServiceContext context = 
+      serviceManager.newServiceContext(
+        getProperties(getServletConfig()));
+    RequestHandlerManager manager = context.getRequestHandlerManager();
+    RequestHandler handler = manager.getRequestHandler();
     try {
-      manager = getRequestHandlerManager();
-      handler = (manager != null) ? 
-        manager.newRequestHandler(abderaServer) : null;
-      responseContext = (handler != null) ? 
-        handler.invoke(requestContext) :
-        new AbderaServerException(AbderaServerException.Code.NOTFOUND);
-    } catch (AbderaServerException exception) {  
-      responseContext = exception;
+      handler.process(context, request, response);
     } catch (Throwable t) {
-      responseContext = new AbderaServerException(t);
+      response.sendError(500);
     } finally {
-      if (manager != null)
-        manager.releaseRequestHandler(handler);
+      manager.release(handler);
     }
-    doOutput(response, responseContext); 
   }
-
-  private void doOutput(
-    HttpServletResponse response, 
-    ResponseContext context) 
-      throws IOException, ServletException {
-    if (context != null) {
-      response.setStatus(context.getStatus());
-      long cl = context.getContentLength();
-      String cc = context.getCacheControl();
-      if (cl > -1) response.setHeader("Content-Length", Long.toString(cl));
-      if (cc != null) response.setHeader("Cache-Control",cc);
-      Map<String, List<Object>> headers = context.getHeaders();
-      if (headers != null) {
-        for (Map.Entry<String, List<Object>> entry : headers.entrySet()) {
-          List<Object> values = entry.getValue();
-          if (values == null) 
-            continue;          
-          for (Object value : values) {
-            if (value instanceof Date)
-              response.setDateHeader(entry.getKey(), ((Date)value).getTime());
-            else
-              response.setHeader(entry.getKey(), value.toString());
-          }
-        }
-      }  
-      if (context.hasEntity())
-        context.writeTo(response.getOutputStream());
-    } else {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+  
+  private Map<String,String> getProperties(ServletConfig config) {
+    Map<String,String> properties = new HashMap<String,String>();
+    Enumeration e = config.getInitParameterNames();
+    while(e.hasMoreElements()) {
+      String key = (String) e.nextElement();
+      String val = config.getInitParameter(key);
+      properties.put(key, val);
     }
+    return properties;
   }
   
 }

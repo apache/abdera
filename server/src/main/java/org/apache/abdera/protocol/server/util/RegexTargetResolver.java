@@ -17,20 +17,16 @@
 */
 package org.apache.abdera.protocol.server.util;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.abdera.protocol.server.Target;
-import org.apache.abdera.protocol.server.TargetResolver;
+import org.apache.abdera.protocol.server.provider.AbstractTarget;
+import org.apache.abdera.protocol.server.provider.RequestContext;
+import org.apache.abdera.protocol.server.provider.Target;
+import org.apache.abdera.protocol.server.provider.TargetResolver;
+import org.apache.abdera.protocol.server.provider.TargetType;
 
 /**
  * <p>Provides a utility class helpful for determining which type of resource
@@ -42,132 +38,85 @@ import org.apache.abdera.protocol.server.TargetResolver;
  * also specifies the Resource Type.</p>
  * 
  * <pre>
+ *  RequestContext request = ...
  *  RegexTargetResolver tr = new RegexTargetResolver();
- *  tr.setPattern(ResourceType.INTROSPECTION, "/atom");
- *  tr.setPattern(ResourceType.COLLECTION, "/atom/([^/#?]+)");
- *  tr.setPattern(ResourceType.ENTRY, "/atom/([^/#?]+)/([^/#?]+)");
- *  tr.setPattern(ResourceType.ENTRY_EDIT, "/atom/([^/#?]+)/([^/#?]+)\\?edit");
- *  tr.setPattern(ResourceType.MEDIA,"/atom/([^/#?]+)/([^/#?]+)\\?media");
- *  tr.setPattern(ResourceType.MEDIA_EDIT,"/atom/([^/#?]+)/([^/#?]+)\\?edit-media");
+ *  tr.setPattern("/atom",ResourceType.INTROSPECTION);
+ *  tr.setPattern("/atom/([^/#?]+)",ResourceType.COLLECTION);
+ *  tr.setPattern("/atom/([^/#?]+)/([^/#?]+)",ResourceType.ENTRY);
+ *  tr.setPattern("/atom/([^/#?]+)/([^/#?]+)\\?edit",ResourceType.ENTRY_EDIT);
+ *  tr.setPattern("/atom/([^/#?]+)/([^/#?]+)\\?media",ResourceType.MEDIA);
+ *  tr.setPattern("/atom/([^/#?]+)/([^/#?]+)\\?edit-media",ResourceType.MEDIA_EDIT);
  *  
- *  Target target = tr.resolve("/atom/foo");
- *  System.out.println(target.getResourceType());
- *  System.out.println(targer.getValue(1));  // foo
+ *  Target target = tr.resolve(request);
+ *  System.out.println(target.getType());
+ *  System.out.println(targer.getParameter("foo"));
  * </pre>
  *  
  */
-public class RegexTargetResolver implements TargetResolver {
+public class RegexTargetResolver 
+  implements TargetResolver {
 
-  private final Map<ResourceType,Pattern> patterns;
+  private final Map<Pattern, TargetType> patterns;
   
   public RegexTargetResolver() {
-    this.patterns = new HashMap<ResourceType,Pattern>();
+    this.patterns = new HashMap<Pattern, TargetType>();
   }
   
-  public RegexTargetResolver(Map<ResourceType,String> patterns) {
-    this.patterns = new HashMap<ResourceType,Pattern>();
-    for (ResourceType type : patterns.keySet()) {
-      String p = patterns.get(type);
+  public RegexTargetResolver(Map<String, TargetType> patterns) {
+    this.patterns = new HashMap<Pattern, TargetType>();
+    for (String p : patterns.keySet()) {
+      TargetType type = patterns.get(p);
       Pattern pattern = Pattern.compile(p);
-      this.patterns.put(type, pattern);
+      this.patterns.put(pattern,type);
     }
   }
   
-  public RegexTargetResolver(Properties properties) {
-    this.patterns = new HashMap<ResourceType,Pattern>();
-    loadPatterns(properties);
-  }
-  
-  public synchronized void loadPatterns(Properties properties) {
-    this.patterns.clear();
-    for (Object key : properties.keySet()) {
-      String skey = (String) key;
-      String value = properties.getProperty(skey);
-      ResourceType type = ResourceType.getOrCreate(skey);
-      Pattern pattern = Pattern.compile(value);
-      this.patterns.put(type, pattern);
-    }
-  }
-  
-  public synchronized void loadPatterns(InputStream in) throws IOException {
-    Properties properties = new Properties();
-    properties.load(in);
-    loadPatterns(properties);
-  }
-  
-  public synchronized void loadPatterns(String file) throws IOException {
-    loadPatterns(new FileInputStream(file));
-  }
-  
-  public synchronized void setPattern(ResourceType type, String pattern) {
+  public synchronized void setPattern(String pattern, TargetType type) {
     Pattern p = Pattern.compile(pattern);
-    this.patterns.put(type, p);
+    this.patterns.put(p,type);
   }
   
-  public Target resolve(String path_info) {
-    for (ResourceType type : patterns.keySet()) {
-      Pattern pattern = patterns.get(type);
-      Matcher matcher = pattern.matcher(path_info);
-      if (matcher.matches()) return new RegexTarget(type, matcher);
+  public Target resolve(RequestContext request) {
+    String uri = request.getUri().toString();
+    for (Pattern pattern : patterns.keySet()) {
+      Matcher matcher = pattern.matcher(uri);
+      if (matcher.matches()) {
+        TargetType type = patterns.get(pattern);
+        return getTarget(type, request, matcher);
+      }
     }
     return null;
   }
   
-  public static class RegexTarget implements Target {
+  protected Target getTarget(
+    TargetType type, 
+    RequestContext request, 
+    Matcher matcher) {
+      return new RegexTarget(type, request, matcher);
+  }
+  
+  public static class RegexTarget
+    extends AbstractTarget
+    implements Target {
     
     private static final long serialVersionUID = 165211244926064449L;
     transient Matcher matcher;
-    private ResourceType type;
     
-    RegexTarget(ResourceType type, Matcher matcher) {
-      this.type = type;
-      this.matcher = matcher;
-    }
-    
-    public ResourceType getResourceType() {
-      return this.type;
+    RegexTarget(
+      TargetType type, 
+      RequestContext context, 
+      Matcher matcher) {
+        super(type, context);
+        this.matcher = matcher;
     }
     
-    public String getValue(int token) {
-      try {
-        return this.matcher.group(token);
-      } catch (IndexOutOfBoundsException e) {
-        return null;
-      }
-    }
-    
-    public boolean hasValue(int token) {
-      return getValue(token) != null;
-    }
-
-    public Iterator<String> iterator() {
-      return new TargetIterator(this);
-    }
-    
-    private void writeObject(ObjectOutputStream out) 
-      throws IOException {
-        out.defaultWriteObject();
-        out.writeObject(matcher.pattern().pattern());
-        out.writeObject(matcher.group(0));
-    }
-
-    private void readObject(ObjectInputStream in) 
-      throws IOException, 
-             ClassNotFoundException {
-       in.defaultReadObject();
-       String p = (String) in.readObject();
-       String v = (String) in.readObject();
-       Pattern pattern = Pattern.compile(p);
-       matcher = pattern.matcher(v);
-       matcher.matches();
-    }
-
     @Override
     public int hashCode() {
       final int PRIME = 31;
       int result = 1;
       String m = matcher.group(0);
       String p = matcher.pattern().pattern();
+      result = PRIME * result + super.hashCode();
       result = PRIME * result + ((m == null) ? 0 : m.hashCode());
       result = PRIME * result + ((p == null) ? 0 : p.hashCode());
       result = PRIME * result + ((type == null) ? 0 : type.hashCode());
@@ -184,6 +133,7 @@ public class RegexTargetResolver implements TargetResolver {
       String p = matcher.pattern().pattern();
       String m2 = other.matcher.group(0);
       String p2 = other.matcher.pattern().pattern();
+      if (!super.equals(obj)) return false;
       if (m == null) {
         if (m2 != null)
           return false;
@@ -213,20 +163,17 @@ public class RegexTargetResolver implements TargetResolver {
       buf.append("] = ");
       buf.append(type.toString());
       buf.append("\n");
-      int n = -1;
-      while(hasValue(++n)) {
+      String[] params = getParameterNames();
+      for (String param : params) {
         buf.append("    ");
-        buf.append(n);
+        buf.append(param);
         buf.append(" = ");
-        buf.append(getValue(n));
+        buf.append(getParameter(param));
         buf.append("\n");
       }
       return buf.toString();
     }
     
-    public Object clone() throws CloneNotSupportedException {
-      return super.clone();
-    }
   }
   
 }

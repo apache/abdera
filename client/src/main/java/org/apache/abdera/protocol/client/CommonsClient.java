@@ -119,7 +119,7 @@ public class CommonsClient extends Client {
             // revalidate the cached entry
             if (cached_response != null) {
               options.setIfModifiedSince(cached_response.getLastModified());
-              options.setIfNoneMatch(cached_response.getEntityTag());
+              options.setIfNoneMatch(cached_response.getEntityTag().toString());
             } else {
               disp = CacheDisposition.TRANSPARENT;
             }

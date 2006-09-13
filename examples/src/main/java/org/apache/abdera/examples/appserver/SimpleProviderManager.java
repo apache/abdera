@@ -17,24 +17,20 @@
 */
 package org.apache.abdera.examples.appserver;
 
-import org.apache.abdera.protocol.server.AbderaServer;
-import org.apache.abdera.protocol.server.Provider;
-import org.apache.abdera.protocol.server.ProviderManager;
-import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
-import org.apache.abdera.protocol.server.util.AbstractSimpleProviderManager;
+import org.apache.abdera.protocol.server.provider.Provider;
+import org.apache.abdera.protocol.server.provider.ProviderManager;
 
 public class SimpleProviderManager 
-  extends AbstractSimpleProviderManager
   implements ProviderManager {
 
-  private Provider provider = null;
-  
-  protected synchronized Provider getProvider(
-    AbderaServer abderaServer) throws AbderaServerException {
-      if (provider == null)  {
-        provider = new SimpleProvider(abderaServer, this);
-      }
-      return provider;
+  private static Provider provider = null; 
+
+  public synchronized Provider getProvider() {
+    if (provider == null)
+      provider = new SimpleProvider();
+    return provider;
   }
+
+  public void release(Provider provider) {}
 
 }

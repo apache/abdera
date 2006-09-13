@@ -28,6 +28,7 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Category;
+import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.DateTime;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Generator;
@@ -562,4 +563,14 @@ public class FOMSource
     return (text != null) ? text.getTextType() : null;
   }
 
+  public Collection getCollection() {
+    return getFirstChild(COLLECTION);
+  }
+  
+  public void setCollection(Collection collection) {
+    if (collection != null) 
+      _setChild(COLLECTION, (OMElement)collection);
+    else 
+      _removeChildren(COLLECTION, false);
+  }
 }

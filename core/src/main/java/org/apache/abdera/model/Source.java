@@ -471,4 +471,9 @@ public interface Source
   URI getLinkResolvedHref(String rel) throws URISyntaxException;
   URI getSelfLinkResolvedHref() throws URISyntaxException;
   URI getAlternateLinkResolvedHref() throws URISyntaxException;
+  
+  Collection getCollection();
+  
+  void setCollection(Collection collection);
+  
 }

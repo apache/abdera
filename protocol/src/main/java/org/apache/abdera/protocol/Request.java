@@ -29,7 +29,11 @@ public interface Request extends ProtocolConstants {
 
   String getHeader(String name);
   
+  String getDecodedHeader(String name);
+  
   List<String> getHeaders(String name);
+  
+  List<String> getDecodedHeaders(String name);
   
   String[] getHeaderNames();
   

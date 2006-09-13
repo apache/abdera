@@ -29,6 +29,7 @@ import javax.activation.MimeType;
 import org.apache.abdera.protocol.Request;
 import org.apache.abdera.protocol.util.AbstractRequest;
 import org.apache.abdera.protocol.util.CacheControlUtil;
+import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
 
@@ -116,6 +117,22 @@ public class RequestOptions
     setHeader("Authorization", auth);
   }
   
+  public void setEncodedHeader(String header, String charset, String value) {
+    setHeader(header, EncodingUtil.encode(value,charset));
+  }
+  
+  public void setEncodedHeader(String header, String charset, String... values) {
+    if (values != null && values.length > 0) {
+      for (int n = 0; n < values.length; n++) {
+        values[n] = EncodingUtil.encode(values[n], charset);
+      }
+      List<String> list = Arrays.asList(new String[] {combine(values)});
+      getHeaders().put(header, list);
+    } else {
+      removeHeaders(header);
+    }
+  }
+  
   public void setHeader(String header, String value) {
     if (value != null)
       setHeader(header, new String[] {value});
@@ -136,6 +153,25 @@ public class RequestOptions
     if (value != null) 
       setHeader(header, DateUtil.formatDate(value));
     removeHeaders(header);
+  }
+  
+  public void addEncodedHeader(String header, String charset, String value) {
+    addHeader(header, EncodingUtil.encode(value, charset));
+  }
+  
+  public void addEncodedHeader(String header, String charset, String... values) {
+    if (values == null || values.length == 0) return;
+    for (int n = 0; n < values.length; n++) {
+      values[n] = EncodingUtil.encode(values[n], charset);
+    }
+    List<String> list = getHeaders().get(header);
+    String value = combine(values);
+    if (list != null) {
+      if (!list.contains(value)) 
+        list.add(value);
+    } else {
+      setHeader(header, new String[] {value});
+    }
   }
   
   public void addHeader(String header, String value) {
@@ -241,6 +277,10 @@ public class RequestOptions
   
   public void setSlug(String slug) {
     setHeader("Slug", slug);
+  }
+  
+  public void setSlug(String slug, String charset) {
+    setEncodedHeader("Slug", charset, slug);
   }
   
   public void setCacheControl(String cc) {

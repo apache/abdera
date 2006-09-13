@@ -183,6 +183,15 @@ public class FOMCollection
   }
 
   public Categories addCategories(
+    String href) 
+      throws URISyntaxException {
+    Categories cats = ((FOMFactory)factory).newCategories();
+    cats.setHref(href);
+    addCategories(cats);
+    return cats;
+  }
+  
+  public Categories addCategories(
     List<Category> categories, 
     boolean fixed, 
     String scheme) 

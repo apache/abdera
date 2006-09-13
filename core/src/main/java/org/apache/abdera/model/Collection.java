@@ -60,6 +60,8 @@ public interface Collection
   
   void setHref(String href) throws URISyntaxException;
 
+  Element getAcceptElement();
+  
   String[] getAccept() ;
 
   void setAccept(String... mediaRanges);

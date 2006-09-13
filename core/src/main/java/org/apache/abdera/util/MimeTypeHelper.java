@@ -30,6 +30,16 @@ import org.apache.abdera.model.Service;
 
 public class MimeTypeHelper {
    
+  private static final MimeType WILDCARD = createWildcard();
+  
+  private static MimeType createWildcard() {
+    try {
+      return new MimeType("*/*");
+    } catch (Exception e) {
+      return null; // Won't happen
+    }
+  }
+  
   public static boolean isMatch(String a, String b) {
     if ((a == null || a.length() == 0) && 
         (b == null || b.length() == 0)) 
@@ -45,7 +55,6 @@ public class MimeTypeHelper {
   
   public static boolean isMatch(MimeType a, MimeType b) {
     try {
-      final MimeType WILDCARD = new MimeType("*/*");
       if (a == null || b == null) return true;
       if (a.match(b)) return true;
       if (a.equals(WILDCARD)) return true;

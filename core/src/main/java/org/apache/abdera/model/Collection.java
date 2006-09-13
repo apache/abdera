@@ -22,13 +22,10 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 /**
  * <p>Represents an collection element in an Atom Publishing Protocol 
  * introspection document.</p>
- * 
- * <p>Per APP Draft-08:</p>
  * 
  * <pre>
  *  The "app:collection" describes an Atom Protocol collection.  One
@@ -37,9 +34,9 @@ import javax.activation.MimeTypeParseException;
  *  appCollection =
  *     element app:collection {
  *        appCommonAttributes,
- *        attribute title { text },
  *        attribute href { text },
- *        ( appAccept
+ *        ( atomTitle
+ *          &amp; appAccept
  *          &amp; extensionElement* )
  *     }
  * </pre>
@@ -57,46 +54,25 @@ public interface Collection
   
   Text getTitleElement();
 
-  /**
-   * APP Draft-08: The app:collection element MUST contain a "href" 
-   * attribute, whose value gives the IRI of the collection.
-   */
   URI getHref() throws URISyntaxException;
 
   URI getResolvedHref() throws URISyntaxException;
   
-  /**
-   * APP Draft-08: The app:collection element MUST contain a "href" 
-   * attribute, whose value gives the IRI of the collection.
-   * @throws URISyntaxException 
-   */
   void setHref(String href) throws URISyntaxException;
 
-  /**
-   * PaceMediaEntries5 (proposed change to APP Draft-08)
-   */
   String[] getAccept() ;
 
-  /**
-   * PaceMediaEntries5 (proposed change to APP Draft-08)
-   */
   void setAccept(String... mediaRanges);
   
-  /**
-   * Returns true if the collection accepts the specified media type
-   * @throws MimeTypeParseException 
-   * @throws javax.activation.MimeTypeParseException 
-   */
   boolean accepts(String mediaType);
   
-  /**
-   * Returns true if the collection accepts the specified media type
-   */
   boolean accepts(MimeType mediaType);
   
   List<Categories> getCategories();
   
   Categories addCategories();
+  
+  Categories addCategories(String href) throws URISyntaxException;
   
   void addCategories(Categories categories);
   

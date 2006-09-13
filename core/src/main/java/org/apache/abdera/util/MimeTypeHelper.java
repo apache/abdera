@@ -38,6 +38,14 @@ public class MimeTypeHelper {
     return answer;
   }
   
+  public static boolean isApp(String a) {
+    return isMatch(Constants.APP_MEDIA_TYPE, a);
+  }
+  
+  public static boolean isAtom(String a) {
+    return isMatch(Constants.ATOM_MEDIA_TYPE, a);
+  }
+  
   public static boolean isXml(String a) {
     boolean answer = isMatch(Constants.XML_MEDIA_TYPE, a) || isMatch("text/xml", a);
     if (!answer) {

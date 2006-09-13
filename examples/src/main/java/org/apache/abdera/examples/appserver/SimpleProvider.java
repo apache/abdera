@@ -156,6 +156,7 @@ public class SimpleProvider
           BaseResponseContext rc = new BaseResponseContext(entry);
           URI baseUri = resolveBase(request);
           rc.setLocation(baseUri.resolve(entry.getEditLinkResolvedHref()).toString());
+          rc.setContentLocation(rc.getLocation().toString());
           rc.setEntityTag(calculateEntityTag(entry));
           rc.setStatus(201);
           return rc;

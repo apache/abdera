@@ -17,16 +17,16 @@
 */
 package org.apache.abdera.examples.appserver;
 
+import org.apache.abdera.protocol.server.provider.TargetType;
 import org.apache.abdera.protocol.server.util.RegexTargetResolver;
-import org.apache.abdera.protocol.server.util.ResourceType;
 
 public class SimpleTargetResolver 
   extends RegexTargetResolver {
 
   public SimpleTargetResolver() {
-    setPattern(ResourceType.SERVICE, "/appserver/atom(\\?[^#]*)?");
-    setPattern(ResourceType.COLLECTION, "/appserver/atom/([^/#?]+)(\\?[^#]*)?");
-    setPattern(ResourceType.ENTRY_EDIT, "/appserver/atom/([^/#?]+)/([^/#?]+)(\\?[^#]*)?");
+    setPattern("/appserver/atom(\\?[^#]*)?", TargetType.TYPE_SERVICE);
+    setPattern("/appserver/atom/feed(\\?[^#]*)?", TargetType.TYPE_COLLECTION);
+    setPattern("/appserver/atom/feed/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY_EDIT);
   }
   
 }

@@ -15,23 +15,23 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.util;
+package org.apache.abdera.protocol.util;
 
-public interface ServerConstants {
+import java.util.Stack;
 
+public abstract class PoolManager<T> {
 
-  public static final String REQUEST_HANDLER_MANAGER = 
-    "org.apache.abdera.protocol.server.servlet.RequestHandlerManager";
+  private final Stack<T> pool = new Stack<T>();
   
-  public static final String PROVIDER_MANAGER =
-    "org.apache.abdera.protocol.server.provider.ProviderManager";
+  protected synchronized T getInstance() {
+    return (!pool.empty()) ? pool.pop() : internalNewInstance();
+  }
+
+  public synchronized void release(T t) {
+    if (t == null || pool.contains(t)) return;
+    pool.push(t);
+  }
   
-  public static final String SUBJECT_RESOLVER = 
-    "org.apache.abdera.protocol.server.auth.SubjectResolver";
-  
-  public static final String TARGET_RESOLVER = 
-    "org.apache.abdera.protocol.server.provider.TargetResolver";
-  
-  public static final String SERVICE_CONTEXT =
-    "org.apache.abdera.protocol.server.ServiceContext";
+  protected abstract T internalNewInstance();
+ 
 }

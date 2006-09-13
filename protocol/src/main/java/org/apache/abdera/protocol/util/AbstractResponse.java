@@ -24,6 +24,7 @@ import java.util.Date;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
+import org.apache.abdera.protocol.EntityTag;
 import org.apache.abdera.protocol.Response;
 
 public abstract class AbstractResponse 
@@ -70,8 +71,9 @@ public abstract class AbstractResponse
     return (value != null) ? new MimeType(value) : null;
   }
 
-  public String getEntityTag() {
-    return getHeader("ETag");
+  public EntityTag getEntityTag() {
+    String etag = getHeader("ETag");
+    return (etag != null) ? EntityTag.parse(getHeader("ETag")) : null;
   }
 
   public Date getExpires() {

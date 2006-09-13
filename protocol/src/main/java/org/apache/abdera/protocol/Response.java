@@ -28,7 +28,8 @@ import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.protocol.util.ProtocolConstants;
 
-public interface Response extends ProtocolConstants {
+public interface Response
+  extends ResponseInfo, ProtocolConstants {
 
   public static enum ResponseType {
     SUCCESS, REDIRECTION, CLIENT_ERROR, SERVER_ERROR, UNKNOWN;
@@ -50,8 +51,6 @@ public interface Response extends ProtocolConstants {
   public String getStatusText();
   
   public Date getLastModified();
-  
-  public String getEntityTag();
   
   public String getContentLanguage();
   

@@ -53,16 +53,6 @@ public interface Workspace
   
   Text getTitleElement();
   
-  List<Text> getTitleElements();
-  
-  Text addTitle(String title);
-  
-  Text addTitleAsHtml(String title);
-  
-  Text addTitleAsXhtml(String title);
-  
-  void addTitle(Text title);
-  
   /**
    * Returns the full set of collections in this workspace 
    */

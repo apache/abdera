@@ -35,7 +35,6 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
-import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
 public class FOMCollection 
@@ -123,38 +122,6 @@ public class FOMCollection
   
   public Text getTitleElement() {
     return getFirstChild(TITLE);
-  }
-  
-  public List<Text> getTitleElements() {
-    return _getChildrenAsSet(TITLE);
-  }
-  
-  public Text addTitle(String title) {
-    FOMFactory fomfactory = (FOMFactory) factory;
-    Text text = fomfactory.newTitle(Text.Type.TEXT);
-    text.setValue(title);
-    this.addTitle(text);
-    return text;
-  }
-  
-  public Text addTitleAsHtml(String title) {
-    FOMFactory fomfactory = (FOMFactory) factory;
-    Text text = fomfactory.newTitle(Text.Type.HTML);
-    text.setValue(title);
-    this.addTitle(text);
-    return text;
-  }
-  
-  public Text addTitleAsXhtml(String title) {
-    FOMFactory fomfactory = (FOMFactory) factory;
-    Text text = fomfactory.newTitle(Text.Type.XHTML);
-    text.setValue(title);
-    this.addTitle(text);
-    return text;
-  }
-  
-  public void addTitle(Text title) {
-    addChild((OMNode) title);
   }
   
   public URI getHref() throws URISyntaxException {

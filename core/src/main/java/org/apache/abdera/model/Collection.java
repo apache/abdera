@@ -56,17 +56,7 @@ public interface Collection
   Text setTitleAsXHtml(String title);
   
   Text getTitleElement();
-  
-  List<Text> getTitleElements();
-  
-  Text addTitle(String title);
-  
-  Text addTitleAsHtml(String title);
-  
-  Text addTitleAsXhtml(String title);
-  
-  void addTitle(Text title);
-  
+
   /**
    * APP Draft-08: The app:collection element MUST contain a "href" 
    * attribute, whose value gives the IRI of the collection.

@@ -743,4 +743,8 @@ public class FOMEntry
     return (text != null) ? text.getTextType() : null;
   }
 
+  public MimeType getContentMimeType() {
+    Content content = getContentElement();
+    return (content != null) ? content.getMimeType() : null;
+  }
 }

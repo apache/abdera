@@ -21,6 +21,7 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.model.Base;
+import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
@@ -94,6 +95,8 @@ public class MimeTypeHelper {
           type = Constants.ATOM_MEDIA_TYPE;
         else if (el instanceof Service)
           type = Constants.APP_MEDIA_TYPE;
+        else if (el instanceof Categories)
+          type = Constants.CAT_MEDIA_TYPE;
         else 
           type = Constants.XML_MEDIA_TYPE;
       }

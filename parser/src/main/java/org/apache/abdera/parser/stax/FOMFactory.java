@@ -858,10 +858,11 @@ public class FOMFactory
   }
 
   public Categories newCategories() {
-    return newCategories(null);
+    Document<Categories> doc = newDocument();
+    return newCategories(doc);
   }
 
-  public Categories newCategories(Element parent) {
+  public Categories newCategories(Base parent) {
     return new FOMCategories((OMContainer)parent, this);
   }
 

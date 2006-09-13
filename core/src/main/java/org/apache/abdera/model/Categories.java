@@ -65,7 +65,7 @@ public interface Categories
   void setScheme(String scheme) throws URISyntaxException;
 
   /**
-   * Lists the complete set of categories listed for the entry
+   * Lists the complete set of categories
    */
   List<Category> getCategories();
   
@@ -76,19 +76,24 @@ public interface Categories
   List<Category> getCategories(String scheme) throws URISyntaxException;
   
   /**
-   * Adds an individual category to the entry
-   */
-  void addCategory(Category category);
-
-  /**
-   * Adds a category to the feed
-   */
-  Category addCategory(String term);
-
-  /**
-   * Adds a category to the feed
+   * Returns a copy of the complete set of categories with the scheme attribute set
+   * as specified in 7.2.1. (child categories that do not have a scheme
+   * attribute inherit the scheme attribute of the parent)
    * @throws URISyntaxException 
    */
+  List<Category> getCategoriesWithScheme() throws URISyntaxException;
+
+  /**
+   * Returns a copy of the complete set of categories with the scheme 
+   * attribute set as specified in 7.2.1. (child categories that do not have a 
+   * scheme attribute inherit the scheme attribute of the parent)
+   */
+  List<Category> getCategoriesWithScheme(String scheme) throws URISyntaxException;
+  
+  void addCategory(Category category);
+
+  Category addCategory(String term);
+
   Category addCategory(String scheme, String term, String label) throws URISyntaxException;
     
 }

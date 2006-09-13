@@ -29,14 +29,36 @@ import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Service;
 
 public class MimeTypeHelper {
-
+   
   public static boolean isMatch(String a, String b) {
+    if ((a == null || a.length() == 0) && 
+        (b == null || b.length() == 0)) 
+          return true;
     boolean answer = false;
     try {
       MimeType mta = new MimeType(a);
-      answer = mta.match(b);
+      MimeType mtb = new MimeType(b);
+      return isMatch(mta,mtb);
     } catch (Exception e) {}
     return answer;
+  }
+  
+  public static boolean isMatch(MimeType a, MimeType b) {
+    try {
+      final MimeType WILDCARD = new MimeType("*/*");
+      if (a == null || b == null) return true;
+      if (a.match(b)) return true;
+      if (a.equals(WILDCARD)) return true;
+      if (a.getPrimaryType().equals("*")) {
+        MimeType c = new MimeType(b.getPrimaryType(), a.getSubType());
+        return c.match(b);
+      }
+      if (b.getPrimaryType().equals("*")) {
+        MimeType c = new MimeType(a.getPrimaryType(), b.getSubType());
+        return c.match(a);
+      }
+    } catch (Exception e) {}
+    return false;
   }
   
   public static boolean isApp(String a) {

@@ -573,4 +573,21 @@ public class FOMSource
     else 
       _removeChildren(COLLECTION, false);
   }
+  
+  public Link getAlternateLink(
+    String type, 
+    String hreflang) 
+      throws MimeTypeParseException {
+    return selectLink(getLinks(Link.REL_ALTERNATE), type, hreflang);
+  }
+
+  public java.net.URI getAlternateLinkResolvedHref(
+    String type, 
+    String hreflang) 
+      throws URISyntaxException, 
+             MimeTypeParseException {
+    Link link = getAlternateLink(type, hreflang);
+    return (link != null) ? link.getResolvedHref() : null;
+  }
+
 }

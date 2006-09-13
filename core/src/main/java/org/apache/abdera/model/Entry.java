@@ -581,6 +581,12 @@ public interface Entry
   Link getAlternateLink();
   
   /**
+   * Returns the first alternate link matching the specified type and hreflang
+   * @throws MimeTypeParseException 
+   */
+  Link getAlternateLink(String type, String hreflang) throws MimeTypeParseException;
+  
+  /**
    * Returns this entries first enclosure link
    */
   Link getEnclosureLink();
@@ -596,14 +602,22 @@ public interface Entry
   Link getEditMediaLink();
   
   /**
+   * Returns the first edit-media link matching the specified type and hreflang
+   * @throws MimeTypeParseException 
+   */
+  Link getEditMediaLink(String type, String hreflang) throws MimeTypeParseException;
+  
+  /**
    * Returns this entries first self link
    */
   Link getSelfLink();
  
   URI getLinkResolvedHref(String rel) throws URISyntaxException;
   URI getAlternateLinkResolvedHref() throws URISyntaxException;
+  URI getAlternateLinkResolvedHref(String type, String hreflang) throws URISyntaxException, MimeTypeParseException;
   URI getEnclosureLinkResolvedHref() throws URISyntaxException;
   URI getEditLinkResolvedHref() throws URISyntaxException;
   URI getEditMediaLinkResolvedHref() throws URISyntaxException;
+  URI getEditMediaLinkResolvedHref(String type, String hreflang) throws URISyntaxException, MimeTypeParseException;
   URI getSelfLinkResolvedHref() throws URISyntaxException;
 }

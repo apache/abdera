@@ -150,7 +150,7 @@ public class FOMCollection
     for (int n = 0; n < list.length; n++) {
       list[n] = list[n].trim();
     }
-    return list;
+    return MimeTypeHelper.condense(list);
   }
 
   public void setAccept(String... mediaRanges) {
@@ -170,6 +170,8 @@ public class FOMCollection
   public boolean accepts(String mediaType) {
     String[] accept = getAccept();
     for (String a : accept) {
+      if (mediaType.equalsIgnoreCase("entry") && 
+          a.equalsIgnoreCase("entry")) return true;
       if (MimeTypeHelper.isMatch(a, mediaType)) return true;
     }
     return false;

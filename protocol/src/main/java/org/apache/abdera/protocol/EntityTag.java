@@ -27,8 +27,10 @@ public class EntityTag {
 
   public static EntityTag parse(String entity_tag) {
     if (entity_tag == null || entity_tag.length() == 0) 
-      throw new IllegalArgumentException();    
+      throw new IllegalArgumentException("Invalid Entity Tag");;    
     boolean weak = entity_tag.startsWith("W/");
+    if (!weak && !entity_tag.startsWith("\"")) 
+      throw new IllegalArgumentException("Invalid Entity Tag");
     String tag = entity_tag.substring((weak)?3:1, entity_tag.length() - 1);
     return new EntityTag(tag, weak);
   }

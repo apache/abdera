@@ -41,16 +41,13 @@ public class DefaultRequestHandler
           return provider.getFeed(request, true);
         }
         if (type == TargetType.TYPE_ENTRY) {
-          return provider.getEntry(request, true, false);
-        }
-        if (type == TargetType.TYPE_ENTRY_EDIT) {
-          return provider.getEntry(request, true, true);
+          return provider.getEntry(request, true);
         }
         if (type == TargetType.TYPE_MEDIA) {
-          return provider.getMedia(request, true, false);
+          return provider.getMedia(request, true);
         }
-        if (type == TargetType.TYPE_MEDIA_EDIT) {
-          return provider.getMedia(request, true, true);
+        if (type == TargetType.TYPE_CATEGORIES) {
+          return provider.getCategories(request, true);
         }
       }
       else if (method == "HEAD") {
@@ -61,42 +58,39 @@ public class DefaultRequestHandler
           return provider.getFeed(request, false);
         }
         if (type == TargetType.TYPE_ENTRY) {
-          return provider.getEntry(request, false, false);
-        }
-        if (type == TargetType.TYPE_ENTRY_EDIT) {
-          return provider.getEntry(request, false, true);
+          return provider.getEntry(request, false);
         }
         if (type == TargetType.TYPE_MEDIA) {
-          return provider.getMedia(request, false, false);
+          return provider.getMedia(request, false);
         }
-        if (type == TargetType.TYPE_MEDIA_EDIT) {
-          return provider.getMedia(request, false, true);
+        if (type == TargetType.TYPE_CATEGORIES) {
+          return provider.getCategories(request, false);
         }
       }
       else if (method == "POST") {
         if (type == TargetType.TYPE_COLLECTION) {
           return provider.createEntry(request);
         }
-        if (type == TargetType.TYPE_ENTRY_EDIT) {
+        if (type == TargetType.TYPE_ENTRY) {
           return provider.entryPost(request);
         }
-        if (type == TargetType.TYPE_MEDIA_EDIT) {
+        if (type == TargetType.TYPE_MEDIA) {
           return provider.mediaPost(request);
         }
       }
       else if (method == "PUT") {
-        if (type == TargetType.TYPE_ENTRY_EDIT) {
+        if (type == TargetType.TYPE_ENTRY) {
           return provider.updateEntry(request);
         }
-        if (type == TargetType.TYPE_MEDIA_EDIT) {
+        if (type == TargetType.TYPE_MEDIA) {
           return provider.updateMedia(request);
         }
       }
       else if (method == "DELETE") {
-        if (type == TargetType.TYPE_ENTRY_EDIT) {
+        if (type == TargetType.TYPE_ENTRY) {
           return provider.deleteEntry(request);
         }
-        if (type == TargetType.TYPE_MEDIA_EDIT) {
+        if (type == TargetType.TYPE_MEDIA) {
           return provider.deleteMedia(request);
         }
       } 
@@ -111,10 +105,9 @@ public class DefaultRequestHandler
   protected String[] getAllowedMethods(TargetType type) {
     if (type == null)                       return new String[0];
     if (type == TargetType.TYPE_COLLECTION) return new String[] { "GET", "POST", "HEAD", "OPTIONS" };
-    if (type == TargetType.TYPE_ENTRY)      return new String[] { "GET", "HEAD", "OPTIONS" };
-    if (type == TargetType.TYPE_MEDIA)      return new String[] { "GET", "HEAD", "OPTIONS" };
-    if (type == TargetType.TYPE_ENTRY_EDIT) return new String[] { "GET", "DELETE", "PUT", "POST", "HEAD", "OPTIONS" };
-    if (type == TargetType.TYPE_MEDIA_EDIT) return new String[] { "GET", "DELETE", "PUT", "POST", "HEAD", "OPTIONS" };
+    if (type == TargetType.TYPE_CATEGORIES) return new String[] { "GET", "HEAD", "OPTIONS" };
+    if (type == TargetType.TYPE_ENTRY)      return new String[] { "GET", "DELETE", "PUT", "POST", "HEAD", "OPTIONS" };
+    if (type == TargetType.TYPE_MEDIA)      return new String[] { "GET", "DELETE", "PUT", "POST", "HEAD", "OPTIONS" };
     if (type == TargetType.TYPE_SERVICE)    return new String[] { "GET", "HEAD", "OPTIONS" };
     return new String[] { "GET", "HEAD", "OPTIONS" };
   }

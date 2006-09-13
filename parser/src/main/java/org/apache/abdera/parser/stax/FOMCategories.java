@@ -184,6 +184,31 @@ public class FOMCategories
     else 
       removeAttribute(HREF);
   }
+
+  public boolean contains(
+    String term) 
+      throws URISyntaxException {
+    return contains(term,null);
+  }
+
+  public boolean contains(
+    String term, 
+    String scheme) 
+      throws URISyntaxException {
+    List<Category> categories = getCategories();
+    URI catscheme = getScheme();
+    URI uri = (scheme != null) ? 
+      new URI(scheme) : catscheme;
+    for (Category category : categories) {
+      String t = category.getTerm();
+      URI s = (category.getScheme() != null) ? 
+        category.getScheme() : catscheme;
+      if (t.equals(term) && 
+          ((uri!=null)? uri.equals(s) : s == null))
+            return true;
+    }
+    return false;
+  }
   
 
 

@@ -28,6 +28,7 @@ import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.AtomDate;
+import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Control;
@@ -138,6 +139,16 @@ public class FOMEntry
   }
 
   public void addCategory(Category category) {
+    if (category.getParentElement() instanceof Categories) {
+      Categories cats = category.getParentElement();
+      category = (Category) category.clone();
+      try {
+        if (category.getScheme() == null && cats.getScheme() != null) 
+          category.setScheme(cats.getScheme().toString());
+      } catch (Exception e) {
+        // Do nothing, shouldn't happen
+      }
+    }
     addChild((OMElement)category);
   }
 

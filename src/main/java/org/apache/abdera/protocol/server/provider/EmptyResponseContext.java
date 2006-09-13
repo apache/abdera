@@ -15,30 +15,23 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.util;
+package org.apache.abdera.protocol.server.provider;
 
-import java.util.Stack;
+import java.io.IOException;
+import java.io.OutputStream;
 
-import org.apache.abdera.protocol.server.AbderaServer;
-import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
+public final class EmptyResponseContext 
+  extends AbstractResponseContext {
 
-public abstract class PoolManager<T> {
-
-  private final Stack<T> pool = new Stack<T>();
-  
-  protected synchronized T getInstance(
-    AbderaServer abderaServer) throws AbderaServerException {
-      if (!pool.empty()) 
-        return pool.pop();
-      return internalNewInstance(abderaServer);
-  }
-
-  protected synchronized void release(T t) {
-    if (t == null || pool.contains(t)) return;
-    pool.push(t);
+  public EmptyResponseContext(int status) {
+    setStatus(status);
   }
   
-  protected abstract T internalNewInstance( 
-    AbderaServer abderaServer) throws AbderaServerException;
- 
+  public boolean hasEntity() {
+    return false;
+  }
+
+  public void writeTo(OutputStream out) 
+    throws IOException {}
+
 }

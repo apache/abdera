@@ -15,16 +15,16 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server;
+package org.apache.abdera.protocol.server.provider;
 
-import org.apache.abdera.protocol.server.exceptions.AbderaServerException;
+import org.apache.abdera.protocol.util.PoolManager;
 
-public interface RequestHandlerManager {
-  
-  RequestHandler newRequestHandler(
-    AbderaServer abderaServer) 
-      throws AbderaServerException;
-  
-  void releaseRequestHandler(RequestHandler handler);
-  
+public abstract class AbstractProviderManager
+  extends PoolManager<Provider>
+  implements ProviderManager {
+
+  public Provider getProvider() {
+    return getInstance();
+  }
+
 }

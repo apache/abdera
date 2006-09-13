@@ -22,7 +22,7 @@ import java.security.Principal;
 
 import javax.security.auth.Subject;
 
-import org.apache.abdera.protocol.server.SubjectResolver;
+import org.apache.abdera.protocol.server.auth.SubjectResolver;
 
 public class SimpleSubjectResolver 
   implements SubjectResolver {

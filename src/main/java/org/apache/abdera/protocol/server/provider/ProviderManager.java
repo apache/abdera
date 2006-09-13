@@ -15,32 +15,12 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.util;
+package org.apache.abdera.protocol.server.provider;
 
-import java.util.Iterator;
+public interface ProviderManager {
 
-import org.apache.abdera.protocol.server.Target;
-
-public final class TargetIterator 
-  implements Iterator<String> {
-
-  private final Target target;
-  private int counter = -1;
+  Provider getProvider();
   
-  public TargetIterator(Target target) {
-    this.target = target;
-  }
+  void release(Provider provider);
   
-  public boolean hasNext() {
-    return target.hasValue(counter + 1);
-  }
-
-  public String next() {
-    return (hasNext()) ? target.getValue(++counter) : null;
-  }
-
-  public void remove() {
-    throw new UnsupportedOperationException();
-  }
-
 }

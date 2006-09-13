@@ -15,17 +15,14 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server;
+package org.apache.abdera.protocol.server.servlet;
 
-import java.io.IOException;
-import java.io.OutputStream;
+public class DefaultRequestHandlerManager 
+  extends AbstractRequestHandlerManager {
 
-import org.apache.abdera.protocol.Response;
+  @Override
+  protected RequestHandler internalNewInstance() {
+    return new DefaultRequestHandler();
+  }
 
-public interface ResponseContext extends Response {
-
-  public boolean hasEntity();
-  
-  public void writeTo(OutputStream out) throws IOException;
-    
 }

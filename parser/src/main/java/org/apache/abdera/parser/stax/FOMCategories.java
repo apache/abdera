@@ -19,6 +19,7 @@ package org.apache.abdera.parser.stax;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -121,6 +122,28 @@ public class FOMCategories
 
   public List<Category> getCategories(String scheme) throws URISyntaxException {
     return FOMHelper.getCategories(this, scheme);
+  }
+  
+  private List<Category> copyCategoriesWithScheme(
+    List<Category> cats) 
+      throws URISyntaxException {
+    List<Category> newcats = new ArrayList<Category>();
+    URI scheme = getScheme();
+    for (Category cat : cats) {
+      Category newcat = (Category) cat.clone();
+      if (newcat.getScheme() == null && scheme != null) 
+        newcat.setScheme(scheme.toString());
+      newcats.add(newcat);
+    }
+    return newcats;
+  }
+  
+  public List<Category> getCategoriesWithScheme() throws URISyntaxException {
+    return copyCategoriesWithScheme(getCategories());
+  }
+  
+  public List<Category> getCategoriesWithScheme(String scheme) throws URISyntaxException {
+    return copyCategoriesWithScheme(getCategories(scheme));
   }
 
   public java.net.URI getScheme() throws URISyntaxException {

@@ -37,9 +37,11 @@ public interface Provider {
   
   ResponseContext getFeed(RequestContext request, boolean full);
   
-  ResponseContext getEntry(RequestContext request, boolean full, boolean editable);
+  ResponseContext getEntry(RequestContext request, boolean full);
   
-  ResponseContext getMedia(RequestContext request, boolean full, boolean editable);
+  ResponseContext getMedia(RequestContext request, boolean full);
+  
+  ResponseContext getCategories(RequestContext request, boolean full);
   
   ResponseContext entryPost(RequestContext request);
   

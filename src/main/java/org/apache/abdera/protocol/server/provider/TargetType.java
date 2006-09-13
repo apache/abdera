@@ -24,16 +24,14 @@ public final class TargetType {
   public static final String COLLECTION = "COLLECTION";
   public static final String ENTRY = "ENTRY";
   public static final String MEDIA = "MEDIA";
-  public static final String ENTRY_EDIT = "ENTRY_EDIT";
-  public static final String MEDIA_EDIT = "MEDIA_EDIT";
+  public static final String CATEGORIES = "CATEGORIES";
   
   public static final TargetType TYPE_UNKNOWN = new TargetType(UNKNOWN);
   public static final TargetType TYPE_SERVICE = new TargetType(SERVICE);
   public static final TargetType TYPE_COLLECTION = new TargetType(COLLECTION);
   public static final TargetType TYPE_ENTRY = new TargetType(ENTRY);
   public static final TargetType TYPE_MEDIA = new TargetType(MEDIA);
-  public static final TargetType TYPE_ENTRY_EDIT = new TargetType(ENTRY_EDIT);
-  public static final TargetType TYPE_MEDIA_EDIT = new TargetType(MEDIA_EDIT);
+  public static final TargetType TYPE_CATEGORIES = new TargetType(CATEGORIES);
   
   public static TargetType get(String name) {
     if (name == null) return null;
@@ -42,8 +40,7 @@ public final class TargetType {
     if (name == COLLECTION) return TYPE_COLLECTION;
     if (name == ENTRY) return TYPE_ENTRY;
     if (name == MEDIA) return TYPE_MEDIA;
-    if (name == ENTRY_EDIT) return TYPE_ENTRY_EDIT;
-    if (name == MEDIA_EDIT) return TYPE_MEDIA_EDIT;
+    if (name == CATEGORIES) return TYPE_CATEGORIES;
     return null;
   }
   

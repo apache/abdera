@@ -108,8 +108,14 @@ public class EntityTag {
   }
   
   public EntityTag(String tag, boolean weak) {
+    checkTag(tag);
     this.tag = tag;
     this.weak = weak;
+  }
+  
+  private void checkTag(String tag) {
+    if (tag.contains("\"")) 
+      throw new IllegalArgumentException("Invalid Entity Tag");
   }
   
   public String getTag() {

@@ -139,7 +139,8 @@ public class FOMEntry
   }
 
   public void addCategory(Category category) {
-    if (category.getParentElement() instanceof Categories) {
+    Element el = category.getParentElement();
+    if (el != null && el instanceof Categories) {
       Categories cats = category.getParentElement();
       category = (Category) category.clone();
       try {

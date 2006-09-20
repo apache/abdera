@@ -84,8 +84,10 @@ public class FOMXPath extends AbstractXPath {
     return getXPath(path, null);
   }
   
-  private static FunctionContext getFunctionContext(Map<QName,Function> functions) {
-    SimpleFunctionContext context = new SimpleFunctionContext();
+  private static FunctionContext getFunctionContext(
+    Map<QName,Function> functions,
+    SimpleFunctionContext context) {
+    if (context == null) context = new SimpleFunctionContext();
     for (QName qname : functions.keySet()) {
       Function function = functions.get(qname);
       context.registerFunction(
@@ -96,8 +98,10 @@ public class FOMXPath extends AbstractXPath {
     return context;
   }
   
-  private static VariableContext getVariableContext(Map<QName,Object> variables) {
-    SimpleVariableContext context = new SimpleVariableContext();
+  private static VariableContext getVariableContext(
+    Map<QName,Object> variables,
+    SimpleVariableContext context) {
+    if (context == null) context = new SimpleVariableContext();
     for (QName qname : variables.keySet()) {
       Object value = variables.get(qname);
       context.setVariableValue(
@@ -121,10 +125,17 @@ public class FOMXPath extends AbstractXPath {
         contextpath.addNamespace(entry.getKey(), entry.getValue());
       }
     }
-    if (functions != null)
-      contextpath.setFunctionContext(getFunctionContext(functions));
+    if (functions != null) {
+      contextpath.setFunctionContext(
+        getFunctionContext(
+          functions,
+          (SimpleFunctionContext)contextpath.getFunctionContext()));
+    }
     if (variables != null)
-      contextpath.setVariableContext(getVariableContext(variables));
+      contextpath.setVariableContext(
+        getVariableContext(
+          variables,
+          (SimpleVariableContext)contextpath.getVariableContext()));
     return contextpath;    
   }
   

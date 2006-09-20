@@ -31,6 +31,7 @@ import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.DateTime;
 import org.apache.abdera.model.Div;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Generator;
 import org.apache.abdera.model.IRI;
 import org.apache.abdera.model.Link;
@@ -135,7 +136,8 @@ public class FOMSource
   }
   
   public void addCategory(Category category) {
-    if (category.getParentElement() instanceof Categories) {
+    Element el = category.getParentElement();
+    if (el != null && el instanceof Categories) {
       Categories cats = category.getParentElement();
       category = (Category) category.clone();
       try {

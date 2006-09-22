@@ -49,6 +49,7 @@
           <configuration>
             <excludes>
               <exclude>**/*TestSuite*</exclude>
+              <exclude>**/*$Test*</exclude>
             </excludes>
           </configuration>
         </plugin>

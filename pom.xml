@@ -77,6 +77,36 @@
     <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/</url>
   </scm>
   
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>				
+          <links>
+            <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
+          </links>
+          <aggregate>true</aggregate>
+          <excludePackageNames>org.apache.abdera.util,org.apache.abdera.ext.*.impl,org.apache.abdera.parser.**,org.apache.abdera.security.**</excludePackageNames>
+        </configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <configuration>
+          <aggregate>true</aggregate>
+        </configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+  
   <build>
     <plugins>
       <plugin>

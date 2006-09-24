@@ -25,8 +25,13 @@
   <artifactId>json</artifactId>
   <packaging>jar</packaging>
   <name>JSON (From Abdera)</name>
-  <url>http://incubator.apache.org/projects/abdera.html</url>
   <version>1.0</version>
   <description>Abdera-Hosted JSON with Apache License.</description>
   <inceptionYear>2006</inceptionYear>
+  <url>http://incubator.apache.org/abdera</url>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/dependencies/json/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/dependencies/json/</developerConnection>
+    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/dependencies/json/</url>
+  </scm>
 </project>

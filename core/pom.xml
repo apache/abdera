@@ -31,6 +31,12 @@
   <version>0.2.0-incubating-SNAPSHOT</version>
   <description>Atom Specification Implementation Core</description>
   <inceptionYear>2006</inceptionYear>
+  <url>http://incubator.apache.org/abdera</url>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/core/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/core/</developerConnection>
+    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/core/</url>
+  </scm>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

@@ -28,7 +28,54 @@
   <version>0.2.0-incubating-SNAPSHOT</version>  
   <description>Atom Specification Implementation</description>
   <inceptionYear>2006</inceptionYear>
-  <url>http://incubator.apache.org/projects/abdera.html</url>
+  <url>http://incubator.apache.org/abdera</url>
+  
+  <organization>
+    <name>Apache Software Foundation</name>
+    <url>http://www.apache.org/</url>
+  </organization>
+  
+  <issueManagement>
+    <system>JIRA</system>
+    <url>https://issues.apache.org/jira/browse/ABDERA</url>
+  </issueManagement>
+  
+  <mailingLists>
+    <mailingList>
+     <name>Abdera Developer List</name>
+     <subscribe>abdera-dev-subscribe@incubator.apache.org</subscribe>
+     <unsubscribe>abdera-dev-unsubscribe@incubator.apache.org</unsubscribe>
+     <post>abdera-dev@incubator.apache.org</post>
+     <archive>http://mail-archives.apache.org/mod_mbox/incubator-abdera-dev/</archive>
+   </mailingList>
+   <mailingList>
+     <name>Abdera User List</name>
+     <subscribe>abdera-user-subscribe@incubator.apache.org</subscribe>
+     <unsubscribe>abdera-user-unsubscribe@incubator.apache.org</unsubscribe>
+     <post>abdera-user@incubator.apache.org</post>
+     <archive>http://mail-archives.apache.org/mod_mbox/incubator-abdera-user/</archive>
+   </mailingList>
+   <mailingList>
+     <name>Abdera Source Control List</name>
+     <subscribe>abdera-commits-subscribe@incubator.apache.org</subscribe>
+     <unsubscribe>abdera-commits-unsubscribe@incubator.apache.org</unsubscribe>
+     <archive>http://mail-archives.apache.org/mod_mbox/incubator-abdera-commits/</archive>
+   </mailingList>
+  </mailingLists>
+  
+  <licenses>
+    <license>
+      <name>Apache License 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/</developerConnection>
+    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/</url>
+  </scm>
   
   <build>
     <plugins>

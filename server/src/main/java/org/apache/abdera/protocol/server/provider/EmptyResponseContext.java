@@ -20,6 +20,8 @@ package org.apache.abdera.protocol.server.provider;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.abdera.writer.Writer;
+
 public final class EmptyResponseContext 
   extends AbstractResponseContext {
 
@@ -33,5 +35,11 @@ public final class EmptyResponseContext
 
   public void writeTo(OutputStream out) 
     throws IOException {}
+
+  public void writeTo(OutputStream out, Writer writer) throws IOException {}
+
+  public void writeTo(java.io.Writer javaWriter, Writer abderaWriter) throws IOException {}
+
+  public void writeTo(java.io.Writer javaWriter) throws IOException {}
 
 }

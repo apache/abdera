@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.abdera.protocol.Response;
+import org.apache.abdera.writer.Writer;
 
 public interface ResponseContext 
   extends Response {
@@ -29,4 +30,11 @@ public interface ResponseContext
   
   public void writeTo(OutputStream out) throws IOException;
   
+  public void writeTo(java.io.Writer javaWriter) throws IOException;
+  
+  public void writeTo(OutputStream out, Writer writer) throws IOException;
+  
+  public void writeTo(java.io.Writer javaWriter, Writer abderaWriter) throws IOException;
+  
+  public void setWriter(Writer writer);
 }

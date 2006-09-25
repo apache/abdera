@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.protocol.server.provider;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,6 +29,7 @@ import org.apache.abdera.protocol.EntityTag;
 import org.apache.abdera.protocol.server.provider.ResponseContext;
 import org.apache.abdera.protocol.util.AbstractResponse;
 import org.apache.abdera.protocol.util.EncodingUtil;
+import org.apache.abdera.writer.Writer;
 
 public abstract class AbstractResponseContext
   extends AbstractResponse
@@ -36,6 +39,7 @@ public abstract class AbstractResponseContext
   
   protected int status = 0;
   protected String status_text = null;
+  protected Writer writer = null;
   
   protected Map<String,List<Object>> headers = null;
 
@@ -291,4 +295,9 @@ public abstract class AbstractResponseContext
     }
     setAllow(buf.toString());
   }
+  
+  public void setWriter(Writer writer) {
+    this.writer = writer;
+  }
+  
 }

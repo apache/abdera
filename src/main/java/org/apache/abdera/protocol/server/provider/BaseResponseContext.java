@@ -26,6 +26,7 @@ import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.model.Base;
 import org.apache.abdera.util.MimeTypeHelper;
+import org.apache.abdera.writer.Writer;
 
 public class BaseResponseContext<T extends Base>
   extends AbstractResponseContext {
@@ -52,8 +53,18 @@ public class BaseResponseContext<T extends Base>
     return (base != null);
   }
 
+  public void writeTo(java.io.Writer javaWriter) throws IOException {
+    if (hasEntity()) {
+      if (writer == null) base.writeTo(javaWriter);
+      else writeTo(javaWriter,writer);
+    }
+  }
+  
   public void writeTo(OutputStream out) throws IOException {
-    if (hasEntity()) base.writeTo(out);
+    if (hasEntity()) {
+      if (writer == null) base.writeTo(out);
+      else writeTo(out,writer);
+    }
   }
 
   @Override
@@ -80,4 +91,19 @@ public class BaseResponseContext<T extends Base>
     }
     return len;
   }
+  
+  public void writeTo(
+    OutputStream out, 
+    Writer writer) 
+      throws IOException {
+    writer.writeTo(base, out);
+  }
+    
+  public void writeTo(
+    java.io.Writer javaWriter, 
+    Writer abderaWriter) 
+      throws IOException {
+    abderaWriter.writeTo(base, javaWriter);
+  }
+    
 }

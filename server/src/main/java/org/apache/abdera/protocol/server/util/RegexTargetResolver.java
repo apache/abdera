@@ -100,9 +100,9 @@ public class RegexTargetResolver
     implements Target {
     
     private static final long serialVersionUID = 165211244926064449L;
-    transient Matcher matcher;
+    protected transient Matcher matcher;
     
-    RegexTarget(
+    protected RegexTarget(
       TargetType type, 
       RequestContext context, 
       Matcher matcher) {

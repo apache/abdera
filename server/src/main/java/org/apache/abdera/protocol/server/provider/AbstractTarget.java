@@ -39,7 +39,8 @@ public abstract class AbstractTarget
   }
 
   public String[] getParameterNames() {
-    return context.getParameterNames();
+    String[] pn = context.getParameterNames();
+    return (pn != null) ? pn : new String[0];
   }
 
   public TargetType getType() {

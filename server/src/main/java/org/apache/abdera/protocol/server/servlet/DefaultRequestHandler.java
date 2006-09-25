@@ -17,6 +17,9 @@
 */
 package org.apache.abdera.protocol.server.servlet;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.abdera.protocol.server.provider.AbstractResponseContext;
 import org.apache.abdera.protocol.server.provider.EmptyResponseContext;
 import org.apache.abdera.protocol.server.provider.Provider;
@@ -28,78 +31,153 @@ public class DefaultRequestHandler
   extends AbstractRequestHandler
   implements RequestHandler {
 
+  public static interface TypeHandler {
+    ResponseContext process(Provider provider, RequestContext request);
+  }
+  
+  private static class TypeMethod {
+    private TargetType type;
+    private String method;
+    public int hashCode() {
+      final int PRIME = 31;
+      int result = 1;
+      result = PRIME * result + ((method == null) ? 0 : method.hashCode());
+      result = PRIME * result + ((type == null) ? 0 : type.hashCode());
+      return result;
+    }
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      final TypeMethod other = (TypeMethod) obj;
+      if (method == null) {
+        if (other.method != null)
+          return false;
+      } else if (!method.equals(other.method))
+        return false;
+      if (type == null) {
+        if (other.type != null)
+          return false;
+      } else if (!type.equals(other.type))
+        return false;
+      return true;
+    }
+  }
+  
+  private final Map<TargetType,TypeHandler> typehandlers = new HashMap<TargetType,TypeHandler>();
+  private final Map<TypeMethod,TypeHandler> typemethodhandlers = new HashMap<TypeMethod,TypeHandler>();
+  
+  private TypeMethod getTypeMethod(TargetType type, String method) {
+    TypeMethod tm = new TypeMethod();
+    tm.type = type;
+    tm.method = method;
+    return tm;
+  }
+  
+  protected synchronized void setTypeMethodHandler(TargetType type, String method, TypeHandler handler) {
+    typemethodhandlers.put(getTypeMethod(type,method), handler);
+  }
+  
+  protected synchronized void setTypeHandler(TargetType type, TypeHandler handler) {
+    typehandlers.put(type,handler);
+  }
+  
+  private TypeHandler getHandler(TargetType type) {
+    return typehandlers.get(type);
+  }
+  
+  private TypeHandler getMethodHandler(TargetType type, String method) {
+    return typemethodhandlers.get(getTypeMethod(type, method));
+  }
+  
   protected ResponseContext process(
     Provider provider, 
     RequestContext request) {
-      String method = request.getMethod().intern();
-      TargetType type = request.getTarget().getType();
-      if (method == "GET") {
-        if (type == TargetType.TYPE_SERVICE) {
-          return provider.getService(request, true);
+      
+      TargetType type = request.getTarget().getType();    
+      TypeHandler handler = getHandler(type);
+      if (handler == null) {
+        String method = request.getMethod().intern();
+        
+        handler = getMethodHandler(type,method);
+        
+        if (handler == null) {
+          if (method == "GET") {
+            if (type == TargetType.TYPE_SERVICE) {
+              return provider.getService(request, true);
+            }
+            if (type == TargetType.TYPE_COLLECTION) {
+              return provider.getFeed(request, true);
+            }
+            if (type == TargetType.TYPE_ENTRY) {
+              return provider.getEntry(request, true);
+            }
+            if (type == TargetType.TYPE_MEDIA) {
+              return provider.getMedia(request, true);
+            }
+            if (type == TargetType.TYPE_CATEGORIES) {
+              return provider.getCategories(request, true);
+            }
+          }
+          else if (method == "HEAD") {
+            if (type == TargetType.TYPE_SERVICE) {
+              return provider.getService(request, false);
+            }
+            if (type == TargetType.TYPE_COLLECTION) {
+              return provider.getFeed(request, false);
+            }
+            if (type == TargetType.TYPE_ENTRY) {
+              return provider.getEntry(request, false);
+            }
+            if (type == TargetType.TYPE_MEDIA) {
+              return provider.getMedia(request, false);
+            }
+            if (type == TargetType.TYPE_CATEGORIES) {
+              return provider.getCategories(request, false);
+            }
+          }
+          else if (method == "POST") {
+            if (type == TargetType.TYPE_COLLECTION) {
+              return provider.createEntry(request);
+            }
+            if (type == TargetType.TYPE_ENTRY) {
+              return provider.entryPost(request);
+            }
+            if (type == TargetType.TYPE_MEDIA) {
+              return provider.mediaPost(request);
+            }
+          }
+          else if (method == "PUT") {
+            if (type == TargetType.TYPE_ENTRY) {
+              return provider.updateEntry(request);
+            }
+            if (type == TargetType.TYPE_MEDIA) {
+              return provider.updateMedia(request);
+            }
+          }
+          else if (method == "DELETE") {
+            if (type == TargetType.TYPE_ENTRY) {
+              return provider.deleteEntry(request);
+            }
+            if (type == TargetType.TYPE_MEDIA) {
+              return provider.deleteMedia(request);
+            }
+          } 
+          else if (method == "OPTIONS") {
+            AbstractResponseContext rc = new EmptyResponseContext(200);
+            rc.addHeader("Allow", combine(getAllowedMethods(type)));
+            return rc;
+          }
+        } else {
+          return handler.process(provider, request);
         }
-        if (type == TargetType.TYPE_COLLECTION) {
-          return provider.getFeed(request, true);
-        }
-        if (type == TargetType.TYPE_ENTRY) {
-          return provider.getEntry(request, true);
-        }
-        if (type == TargetType.TYPE_MEDIA) {
-          return provider.getMedia(request, true);
-        }
-        if (type == TargetType.TYPE_CATEGORIES) {
-          return provider.getCategories(request, true);
-        }
+        return null;
+      } else {
+        return handler.process(provider, request);
       }
-      else if (method == "HEAD") {
-        if (type == TargetType.TYPE_SERVICE) {
-          return provider.getService(request, false);
-        }
-        if (type == TargetType.TYPE_COLLECTION) {
-          return provider.getFeed(request, false);
-        }
-        if (type == TargetType.TYPE_ENTRY) {
-          return provider.getEntry(request, false);
-        }
-        if (type == TargetType.TYPE_MEDIA) {
-          return provider.getMedia(request, false);
-        }
-        if (type == TargetType.TYPE_CATEGORIES) {
-          return provider.getCategories(request, false);
-        }
-      }
-      else if (method == "POST") {
-        if (type == TargetType.TYPE_COLLECTION) {
-          return provider.createEntry(request);
-        }
-        if (type == TargetType.TYPE_ENTRY) {
-          return provider.entryPost(request);
-        }
-        if (type == TargetType.TYPE_MEDIA) {
-          return provider.mediaPost(request);
-        }
-      }
-      else if (method == "PUT") {
-        if (type == TargetType.TYPE_ENTRY) {
-          return provider.updateEntry(request);
-        }
-        if (type == TargetType.TYPE_MEDIA) {
-          return provider.updateMedia(request);
-        }
-      }
-      else if (method == "DELETE") {
-        if (type == TargetType.TYPE_ENTRY) {
-          return provider.deleteEntry(request);
-        }
-        if (type == TargetType.TYPE_MEDIA) {
-          return provider.deleteMedia(request);
-        }
-      } 
-      else if (method == "OPTIONS") {
-        AbstractResponseContext rc = new EmptyResponseContext(200);
-        rc.addHeader("Allow", combine(getAllowedMethods(type)));
-        return rc;
-      }
-      return null;
   }
   
   protected String[] getAllowedMethods(TargetType type) {

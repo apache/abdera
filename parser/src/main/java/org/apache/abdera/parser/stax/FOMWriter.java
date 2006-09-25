@@ -24,9 +24,11 @@ import java.io.Writer;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
+import org.apache.abdera.util.Constants;
+import org.apache.abdera.util.MimeTypeHelper;
 
 public class FOMWriter 
-  implements org.apache.abdera.writer.Writer {
+  implements org.apache.abdera.writer.NamedWriter {
 
   public FOMWriter() {}
   
@@ -52,6 +54,26 @@ public class FOMWriter
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     writeTo(base, out);
     return out.toString();
+  }
+
+  public String getName() {
+    return "default";
+  }
+
+  public String[] getOutputFormats() {
+    return new String[] {
+      Constants.ATOM_MEDIA_TYPE,
+      Constants.APP_MEDIA_TYPE,
+      Constants.CAT_MEDIA_TYPE,
+      Constants.XML_MEDIA_TYPE
+    };
+  }
+
+  public boolean outputsFormat(String mediatype) {
+    return MimeTypeHelper.isMatch(mediatype, Constants.ATOM_MEDIA_TYPE) ||
+           MimeTypeHelper.isMatch(mediatype, Constants.APP_MEDIA_TYPE) ||
+           MimeTypeHelper.isMatch(mediatype, Constants.CAT_MEDIA_TYPE) ||
+           MimeTypeHelper.isMatch(mediatype, Constants.XML_MEDIA_TYPE);
   }
 
 }

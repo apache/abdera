@@ -151,7 +151,7 @@ public class ReadWriteByteChannel
   }
   
   public void close() throws IOException {
-    if (flipOnClose) flip();
+    if (flipOnClose && !flipped) flip();
   }
   
   public boolean isOpen() {

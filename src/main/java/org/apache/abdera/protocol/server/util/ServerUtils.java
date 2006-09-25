@@ -110,4 +110,10 @@ public class ServerUtils {
       return null;
   }
   
+  public static NamedWriter getNamedWriter(Abdera abdera, String mediatype) {
+    WriterFactory factory = abdera.getWriterFactory();
+    if (factory == null) return null;
+    NamedWriter writer = (NamedWriter) factory.getWriterByMediaType(mediatype);
+    return writer;
+  }
 }

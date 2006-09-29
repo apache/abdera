@@ -33,7 +33,7 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
-import org.apache.abdera.model.IRI;
+import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Service;
@@ -205,47 +205,47 @@ public interface Factory {
   /**
    * Create a new id element.
    */
-  IRI newID();
+  IRIElement newID();
 
   /**
    * Create a new id element as a child of the given Element.
    */
-  IRI newID(Element parent);
+  IRIElement newID(Element parent);
 
   /**
    * Create a new icon element.
    */
-  IRI newIcon();
+  IRIElement newIcon();
 
   /**
    * Create a new icon element as a child of the given Element.
    */
-  IRI newIcon(Element parent);
+  IRIElement newIcon(Element parent);
 
   /**
    * Create a new logo element.
    */
-  IRI newLogo();
+  IRIElement newLogo();
 
   /**
    * Create a new logo element as a child of the given Element.
    */
-  IRI newLogo(Element parent);
+  IRIElement newLogo(Element parent);
 
   /**
    * Create a new uri element.
    */
-  IRI newUri();
+  IRIElement newUri();
 
   /**
    * Create a new uri element as a child of the given Element.
    */
-  IRI newUri(Element parent);
+  IRIElement newUri(Element parent);
 
   /**
    * Create a new IRI element with the given QName as a child of the given Element.
    */
-  IRI newIRIElement(QName qname, Element parent);
+  IRIElement newIRIElement(QName qname, Element parent);
 
   /**
    * Create a new Link element.

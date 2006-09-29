@@ -23,7 +23,7 @@ import java.net.URISyntaxException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Element;
-import org.apache.abdera.model.IRI;
+import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.model.Person;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
@@ -147,21 +147,21 @@ public class FOMPerson
     return (email != null) ? email.getText() : null;
   }
 
-  public IRI getUriElement() {
-    return (IRI)getFirstChildWithName(URI);
+  public IRIElement getUriElement() {
+    return (IRIElement)getFirstChildWithName(URI);
   }
 
-  public void setUriElement(IRI uri) {
+  public void setUriElement(IRIElement uri) {
     if (uri != null) 
       _setChild(URI, (OMElement)uri);
     else 
       _removeChildren(URI, false);
   }
 
-  public IRI setUri(String uri) throws URISyntaxException {
+  public IRIElement setUri(String uri) throws URISyntaxException {
     if (uri != null) {
       FOMFactory fomfactory = (FOMFactory) factory;
-      IRI el = fomfactory.newUri(null);
+      IRIElement el = fomfactory.newUri(null);
       el.setValue(uri);
       _setChild(URI, (OMElement)el);
       return el;
@@ -172,7 +172,7 @@ public class FOMPerson
   }
   
   public URI getUri() throws URISyntaxException {
-    IRI iri = getUriElement();
+    IRIElement iri = getUriElement();
     return (iri != null) ? iri.getValue() : null;
   }
 }

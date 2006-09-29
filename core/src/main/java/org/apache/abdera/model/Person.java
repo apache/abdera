@@ -107,7 +107,7 @@ public interface Person
    * NOT contain more than one.  The content of atom:uri in a Person
    * construct MUST be an IRI reference [RFC3987].
    */
-  IRI getUriElement();
+  IRIElement getUriElement();
   
   /**
    * The "atom:uri" element's content conveys an IRI associated with the
@@ -115,7 +115,7 @@ public interface Person
    * NOT contain more than one.  The content of atom:uri in a Person
    * construct MUST be an IRI reference [RFC3987].
    */
-  void setUriElement(IRI uri);
+  void setUriElement(IRIElement uri);
   
   /**
    * The "atom:uri" element's content conveys an IRI associated with the
@@ -124,7 +124,7 @@ public interface Person
    * construct MUST be an IRI reference [RFC3987].
    * @throws URISyntaxException 
    */
-  IRI setUri(String uri) throws URISyntaxException;
+  IRIElement setUri(String uri) throws URISyntaxException;
   
   /**
    * The "atom:uri" element's content conveys an IRI associated with the

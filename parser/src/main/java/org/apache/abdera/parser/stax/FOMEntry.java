@@ -37,7 +37,7 @@ import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
-import org.apache.abdera.model.IRI;
+import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Source;
@@ -310,11 +310,11 @@ public class FOMEntry
     return person;
   }
   
-  public IRI getIdElement() {
-    return (IRI)getFirstChildWithName(ID);
+  public IRIElement getIdElement() {
+    return (IRIElement)getFirstChildWithName(ID);
   }
 
-  public void setIdElement(IRI id) {
+  public void setIdElement(IRIElement id) {
     if (id != null)
       _setChild(ID, (OMElement)id);
     else
@@ -322,27 +322,27 @@ public class FOMEntry
   }
 
   public URI getId() throws URISyntaxException {
-    IRI id = getIdElement();
+    IRIElement id = getIdElement();
     return (id != null) ? id.getValue() : null;
   }
   
-  public IRI setId(String value) throws URISyntaxException {
+  public IRIElement setId(String value) throws URISyntaxException {
     return setId(value, false);
   }
   
-  public IRI setId(String value, boolean normalize) throws URISyntaxException {
+  public IRIElement setId(String value, boolean normalize) throws URISyntaxException {
     if (value == null) {
       _removeChildren(ID, false);
       return null;
     }
-    IRI id = getIdElement();
+    IRIElement id = getIdElement();
     if (id != null) {
       if (normalize) id.setNormalizedValue(value);
       else id.setValue(value);
       return id;
     } else {
       FOMFactory fomfactory = (FOMFactory) factory;
-      IRI iri = fomfactory.newID(this);
+      IRIElement iri = fomfactory.newID(this);
       iri.setValue((normalize) ? URIHelper.normalize(value) : value);
       return iri;
     }

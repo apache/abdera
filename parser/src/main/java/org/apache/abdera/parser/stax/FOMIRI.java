@@ -22,7 +22,7 @@ import java.net.URISyntaxException;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.model.IRI;
+import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.util.URIHelper;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
@@ -32,7 +32,7 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 
 public class FOMIRI 
   extends FOMElement 
-  implements IRI {
+  implements IRIElement {
 
   private static final long serialVersionUID = -8434722753544181200L;
 

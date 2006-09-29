@@ -20,7 +20,6 @@ package org.apache.abdera.test.server;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.net.URI;
 import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,6 +32,7 @@ import org.apache.abdera.protocol.server.provider.Target;
 import org.apache.abdera.protocol.server.provider.TargetType;
 import org.apache.abdera.protocol.server.util.RegexTargetResolver;
 import org.apache.abdera.protocol.server.util.SimpleSubjectResolver;
+import org.apache.abdera.util.iri.IRI;
 
 import junit.framework.TestCase;
 
@@ -101,8 +101,8 @@ public class UtilityTest extends TestCase {
       super(
         ServiceManager.getInstance().newServiceContext(new HashMap<String,String>()), 
         "POST", 
-        new URI(request), 
-        new URI(base));
+        new IRI(request), 
+        new IRI(base));
       
       subject = context.getSubjectResolver().resolve(
         (Principal) getProperty(Property.PRINCIPAL));

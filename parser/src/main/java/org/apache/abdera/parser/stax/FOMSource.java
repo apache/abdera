@@ -33,7 +33,7 @@ import org.apache.abdera.model.DateTime;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Generator;
-import org.apache.abdera.model.IRI;
+import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Source;
@@ -190,11 +190,11 @@ public class FOMSource
     return person;
   }
   
-  public IRI getIdElement() {
-    return (IRI)getFirstChildWithName(ID);
+  public IRIElement getIdElement() {
+    return (IRIElement)getFirstChildWithName(ID);
   }
 
-  public void setIdElement(IRI id) {
+  public void setIdElement(IRIElement id) {
     if (id != null)
       _setChild(ID, (OMElement)id);
     else 
@@ -202,27 +202,27 @@ public class FOMSource
   }
 
   public URI getId() throws URISyntaxException {
-    IRI id = getIdElement();
+    IRIElement id = getIdElement();
     return (id != null) ? id.getValue() : null;
   }
   
-  public IRI setId(String value) throws URISyntaxException {
+  public IRIElement setId(String value) throws URISyntaxException {
     return setId(value, false);
   }
     
-  public IRI setId(String value, boolean normalize) throws URISyntaxException {
+  public IRIElement setId(String value, boolean normalize) throws URISyntaxException {
     if (value == null) {
       _removeChildren(ID, false);
       return null;
     }
-    IRI id = getIdElement();
+    IRIElement id = getIdElement();
     if (id != null) {
       if (normalize) id.setNormalizedValue(value);
       else id.setValue(value);
       return id;
     } else {
       FOMFactory fomfactory = (FOMFactory) factory;
-      IRI iri = fomfactory.newID(this);
+      IRIElement iri = fomfactory.newID(this);
       iri.setValue((normalize) ? URIHelper.normalize(value) : value);
       return iri;
     }
@@ -464,59 +464,59 @@ public class FOMSource
     return generator;    
   }
   
-  public IRI getIconElement() {
-    return (IRI)getFirstChildWithName(ICON);
+  public IRIElement getIconElement() {
+    return (IRIElement)getFirstChildWithName(ICON);
   }
 
-  public void setIconElement(IRI iri) {
+  public void setIconElement(IRIElement iri) {
     if (iri != null)
       _setChild(ICON, (OMElement) iri);
     else 
       _removeChildren(ICON, false);
   }
 
-  public IRI setIcon(String value) throws URISyntaxException {
+  public IRIElement setIcon(String value) throws URISyntaxException {
     if (value == null) {
       _removeChildren(ICON, false);
       return null;
     }
     FOMFactory fomfactory = (FOMFactory) factory;
-    IRI iri = fomfactory.newIcon(this);
+    IRIElement iri = fomfactory.newIcon(this);
     iri.setValue(value);
     return iri;
   }
   
   public URI getIcon() throws URISyntaxException {
-    IRI iri = getIconElement();
+    IRIElement iri = getIconElement();
     URI uri = (iri != null) ? iri.getResolvedValue() : null;
     return (URIHelper.isJavascriptUri(uri) ||
         URIHelper.isMailtoUri(uri)) ? null : uri;
   }
 
-  public IRI getLogoElement() {
-    return (IRI)getFirstChildWithName(LOGO);
+  public IRIElement getLogoElement() {
+    return (IRIElement)getFirstChildWithName(LOGO);
   }
 
-  public void setLogoElement(IRI iri) {
+  public void setLogoElement(IRIElement iri) {
     if (iri != null)
       _setChild(LOGO, (OMElement)iri);
     else 
       _removeChildren(LOGO, false);
   }
 
-  public IRI setLogo(String value) throws URISyntaxException {
+  public IRIElement setLogo(String value) throws URISyntaxException {
     if (value == null) {
       _removeChildren(LOGO, false);
       return null;
     }
     FOMFactory fomfactory = (FOMFactory) factory;
-    IRI iri = fomfactory.newLogo(this);
+    IRIElement iri = fomfactory.newLogo(this);
     iri.setValue(value);
     return iri;
   }
   
   public URI getLogo() throws URISyntaxException {
-    IRI iri = getLogoElement();
+    IRIElement iri = getLogoElement();
     URI uri = (iri != null) ? iri.getResolvedValue() : null;
     return (URIHelper.isJavascriptUri(uri) ||
         URIHelper.isMailtoUri(uri)) ? null : uri;

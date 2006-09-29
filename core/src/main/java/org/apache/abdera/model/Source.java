@@ -170,7 +170,7 @@ public interface Source
    *  of one (horizontal) to one (vertical) and SHOULD be suitable for 
    *  presentation at a small size.
    */
-  IRI getIconElement();
+  IRIElement getIconElement();
   
   /** 
    * RFC4287: The "atom:icon" element's content is an IRI reference 
@@ -179,7 +179,7 @@ public interface Source
    *  of one (horizontal) to one (vertical) and SHOULD be suitable for 
    *  presentation at a small size.
    */
-  void setIconElement(IRI iri);
+  void setIconElement(IRIElement iri);
   
   /** 
    * RFC4287: The "atom:icon" element's content is an IRI reference 
@@ -189,7 +189,7 @@ public interface Source
    *  presentation at a small size.
    * @throws URISyntaxException 
    */
-  IRI setIcon(String iri) throws URISyntaxException;
+  IRIElement setIcon(String iri) throws URISyntaxException;
 
   /** 
    * RFC4287: The "atom:icon" element's content is an IRI reference 
@@ -205,13 +205,13 @@ public interface Source
    * RFC4287: The "atom:id" element conveys a permanent, universally unique
    * identifier for an entry or feed.
    */
-  IRI getIdElement();
+  IRIElement getIdElement();
   
   /**
    * RFC4287: The "atom:id" element conveys a permanent, universally unique
    * identifier for an entry or feed.
    */
-  void setIdElement(IRI id);
+  void setIdElement(IRIElement id);
   
   /**
    * Returns the universally unique identifier for this feed
@@ -223,13 +223,13 @@ public interface Source
    * Sets the universally unique identifier for this feed
    * @throws URISyntaxException 
    */
-  IRI setId(String id) throws URISyntaxException;
+  IRIElement setId(String id) throws URISyntaxException;
   
   /**
    * Sets the universally unique identifier for this feed
    * @throws URISyntaxException 
    */
-  IRI setId(String id, boolean normalize) throws URISyntaxException;
+  IRIElement setId(String id, boolean normalize) throws URISyntaxException;
    
   /**
    * Lists the complete set of links for this entry
@@ -257,14 +257,14 @@ public interface Source
    * that identifies an image that provides visual identification for a feed.
    * The image SHOULD have an aspect ratio of 2 (horizontal) to 1 (vertical).
    */
-  IRI getLogoElement();
+  IRIElement getLogoElement();
   
   /**
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
    * that identifies an image that provides visual identification for a feed.
    * The image SHOULD have an aspect ratio of 2 (horizontal) to 1 (vertical).
    */
-  void setLogoElement(IRI iri);
+  void setLogoElement(IRIElement iri);
   
   /**
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
@@ -272,7 +272,7 @@ public interface Source
    * The image SHOULD have an aspect ratio of 2 (horizontal) to 1 (vertical).
    * @throws URISyntaxException 
    */
-  IRI setLogo(String iri) throws URISyntaxException;
+  IRIElement setLogo(String iri) throws URISyntaxException;
 
   /**
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 

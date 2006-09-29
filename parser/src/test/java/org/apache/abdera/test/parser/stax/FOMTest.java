@@ -49,7 +49,7 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
-import org.apache.abdera.model.IRI;
+import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Service;
@@ -458,7 +458,7 @@ public class FOMTest extends TestCase   {
     text.setValue("a");
     assertEquals(text.getValue(), "a");
     assertEquals(text.getTextType(), Text.Type.HTML);
-    IRI iri = factory.newIcon();
+    IRIElement iri = factory.newIcon();
     assertNotNull(iri);
     iri = factory.newIcon();
     iri.setValue("http://example.org/foo");

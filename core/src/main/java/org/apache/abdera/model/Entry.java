@@ -271,12 +271,12 @@ public interface Entry
   /**
    * Returns the universally unique identifier for this entry
    */
-  IRI getIdElement();
+  IRIElement getIdElement();
   
   /**
    * Sets the universally unique identifier for this entry
    */
-  void setIdElement(IRI id);
+  void setIdElement(IRIElement id);
   
   /**
    * Returns the universally unique identifier for this entry
@@ -288,13 +288,13 @@ public interface Entry
    * Sets the universally unique identifier for this entry
    * @throws URISyntaxException 
    */
-  IRI setId(String id) throws URISyntaxException;
+  IRIElement setId(String id) throws URISyntaxException;
   
   /**
    * Sets the universally unique identifier for this entry
    * @throws URISyntaxException 
    */
-  IRI setId(String id, boolean normalize) throws URISyntaxException;
+  IRIElement setId(String id, boolean normalize) throws URISyntaxException;
   
   /**
    * Lists the complete set of links for this entry

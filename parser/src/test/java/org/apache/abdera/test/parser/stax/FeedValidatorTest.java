@@ -39,7 +39,7 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
-import org.apache.abdera.model.IRI;
+import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Source;
@@ -108,7 +108,7 @@ public class FeedValidatorTest
     assertEquals(person.getName(), "John Doe");
     assertNull(person.getEmail());
     assertNull(person.getUri());
-    IRI id = feed.getIdElement();
+    IRIElement id = feed.getIdElement();
     assertNotNull(id);
     assertEquals(id.getValue(), new URI("urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6"));
     List<Entry> entries = feed.getEntries();
@@ -169,7 +169,7 @@ public class FeedValidatorTest
     assertNotNull(feed.getUpdatedElement().getValue());
     assertNotNull(feed.getUpdatedElement().getValue().getDate());
     assertNotNull(feed.getIdElement());
-    assertTrue(feed.getIdElement() instanceof IRI);
+    assertTrue(feed.getIdElement() instanceof IRIElement);
     assertEquals(feed.getIdElement().getValue(), new URI("tag:example.org,2003:3"));
     List<Link> links = feed.getLinks(Link.REL_ALTERNATE);
     assertEquals(links.size(), 1);
@@ -557,7 +557,7 @@ public class FeedValidatorTest
     List<Entry> entries = feed.getEntries();
     assertNotNull(entries);
     for (Entry entry : entries) {
-      IRI id = entry.getIdElement();
+      IRIElement id = entry.getIdElement();
       assertNotNull(id);
       try {
         id.getValue();

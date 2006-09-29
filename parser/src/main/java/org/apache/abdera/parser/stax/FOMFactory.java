@@ -45,7 +45,7 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.ExtensibleElement;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
-import org.apache.abdera.model.IRI;
+import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Service;
@@ -300,30 +300,30 @@ public class FOMFactory
     return new FOMGenerator((OMContainer)parent,this);
   }
 
-  public IRI newID(
+  public IRIElement newID(
     QName qname,
     OMContainer parent, 
     OMXMLParserWrapper parserWrapper) {
       return new FOMIRI(qname,parent,this,parserWrapper);
   }
   
-  public IRI newID() {
+  public IRIElement newID() {
     return newID(null);
   }
   
-  public IRI newID(
+  public IRIElement newID(
     Element parent) {
       return new FOMIRI(Constants.ID, (OMContainer)parent, this);
   }
 
-  public IRI newURIElement(
+  public IRIElement newURIElement(
     QName qname,
     OMContainer parent,
     OMXMLParserWrapper parserWrapper) {
       return new FOMIRI(qname,parent,this,parserWrapper);
   }
   
-  public IRI newIRIElement(
+  public IRIElement newIRIElement(
     QName qname, 
     Element parent) {
       return new FOMIRI(qname, (OMContainer)parent, this);
@@ -494,27 +494,27 @@ public class FOMFactory
     return newDateTime(Constants.MODIFIED, parent);
   }
 
-  public IRI newIcon() {
+  public IRIElement newIcon() {
     return newIcon(null);
   }
   
-  public IRI newIcon(Element parent) {
+  public IRIElement newIcon(Element parent) {
     return newIRIElement(Constants.ICON, parent);
   }
 
-  public IRI newLogo() {
+  public IRIElement newLogo() {
     return newLogo(null);
   }
   
-  public IRI newLogo(Element parent) {
+  public IRIElement newLogo(Element parent) {
     return newIRIElement(Constants.LOGO, parent);
   }
 
-  public IRI newUri() {
+  public IRIElement newUri() {
     return newUri(null);
   }
   
-  public IRI newUri(Element parent) {
+  public IRIElement newUri(Element parent) {
     return newIRIElement(Constants.URI, parent);
   }
 

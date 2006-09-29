@@ -25,7 +25,7 @@ import java.net.URISyntaxException;
  * entry elements whose content value must be a valid IRI/URI reference.  
  * These include the elements atom:icon, atom:logo, and atom:id.</p>
  */
-public interface IRI 
+public interface IRIElement 
   extends  Element {
   
   /**

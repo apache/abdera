@@ -38,6 +38,7 @@
   <property name="javadocs" value="${docs}/api" />
   <property name="core" value="${basedir}/core" />
   <property name="core.src" value="${core}/src/main/java" />
+  <property name="core.resources" value="${core}/src/main/resources" />
   <property name="core.test" value="${core}/src/test/java" />
   <property name="core.work" value="${work}/core" />
   <property name="core.jar" value="${dist}/${ant.project.name}.core.${version}.jar" />
@@ -184,6 +185,9 @@ Working directory: ${work}
            classpathref="jar.dependencies"
            classpath="${core.work}"/>
     <mkdir dir="${core.work}/META-INF" />
+    <copy todir="${core.work}">
+      <fileset dir="${core.resources}" includes="**/*" />
+    </copy>
     <copy todir="${core.work}/META-INF">
       <fileset dir="${basedir}">
         <include name="LICENSE" />
@@ -196,7 +200,8 @@ Working directory: ${work}
     <mkdir dir="${protocol.work}" />
     <javac srcdir="${protocol.src}"
            destdir="${protocol.work}"
-           classpathref="jar.dependencies" />
+           classpathref="jar.dependencies"
+           classpath="${core.work}"/>
     <mkdir dir="${protocol.work}/META-INF" />
     <copy todir="${protocol.work}/META-INF">
       <fileset dir="${basedir}">

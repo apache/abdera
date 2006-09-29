@@ -19,7 +19,7 @@ package org.apache.abdera.util.iri;
 
 import java.io.IOException;
 
-class IRISyntaxException extends IOException {
+public class IRISyntaxException extends IOException {
   private static final long serialVersionUID = 5177739661976965423L;
 
   IRISyntaxException(String message) {

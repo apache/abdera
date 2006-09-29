@@ -176,4 +176,11 @@ public class ReadWriteByteChannel
   private void notflipped() {
     throw new IllegalStateException("The buffer has not yet been flipped");
   }
+  
+  public void transferTo(WritableByteChannel channel) throws IOException {
+    if (!flipped) notflipped();
+    ByteBuffer buf = ByteBuffer.wrap(buffer);
+    while(buf.hasRemaining()) channel.write(buf);
+    buf.clear();
+  }
 }

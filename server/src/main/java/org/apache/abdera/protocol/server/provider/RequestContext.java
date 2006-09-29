@@ -20,7 +20,6 @@ package org.apache.abdera.protocol.server.provider;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.net.URI;
 import java.util.List;
 
 import javax.security.auth.Subject;
@@ -32,6 +31,7 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.protocol.Request;
 import org.apache.abdera.protocol.server.ServiceContext;
+import org.apache.abdera.util.iri.IRI;
 
 public interface RequestContext 
   extends Request {
@@ -50,11 +50,11 @@ public interface RequestContext
   
   String getMethod();
   
-  URI getUri();
+  IRI getUri();
   
-  URI getResolvedUri();
+  IRI getResolvedUri();
   
-  URI getBaseUri();
+  IRI getBaseUri();
   
   Object getProperty(Property property);
   

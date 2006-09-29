@@ -17,14 +17,13 @@
 */
 package org.apache.abdera.parser.stax;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.model.Person;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -54,7 +53,7 @@ public class FOMPerson
     String name, 
     String email, 
     String uri) 
-      throws URISyntaxException {
+      throws IRISyntaxException {
     this(qname);
     setName(name);
     setEmail(email);
@@ -158,7 +157,7 @@ public class FOMPerson
       _removeChildren(URI, false);
   }
 
-  public IRIElement setUri(String uri) throws URISyntaxException {
+  public IRIElement setUri(String uri) throws IRISyntaxException {
     if (uri != null) {
       FOMFactory fomfactory = (FOMFactory) factory;
       IRIElement el = fomfactory.newUri(null);
@@ -171,7 +170,7 @@ public class FOMPerson
     }
   }
   
-  public URI getUri() throws URISyntaxException {
+  public IRI getUri() throws IRISyntaxException {
     IRIElement iri = getUriElement();
     return (iri != null) ? iri.getValue() : null;
   }

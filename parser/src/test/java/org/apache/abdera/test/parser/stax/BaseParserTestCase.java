@@ -23,9 +23,9 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.Parser;
+import org.apache.abdera.util.iri.IRI;
 
 import java.io.InputStream;
-import java.net.URI;
 
 public abstract class BaseParserTestCase extends TestCase {
 
@@ -35,16 +35,16 @@ public abstract class BaseParserTestCase extends TestCase {
     return abdera.getParser();
   }
   
-  protected static <T extends Element>Document<T> parse(URI uri) {
+  protected static <T extends Element>Document<T> parse(IRI uri) {
     try {
       String uriStr = uri.toString();
       String path = uriStr.substring(uriStr.indexOf("//") + 1);
       InputStream stream = BaseParserTestCase.class.getResourceAsStream(path);
-      return getParser().parse(stream, uri);
+      return getParser().parse(stream, uri.toString());
     } catch (Exception e) {
       // when getting it local fails, fall back to getting it from the server
       try {
-        return getParser().parse(uri.toURL().openStream(), uri);
+        return getParser().parse(uri.toURL().openStream(), uri.toString());
       } catch (Exception ex) {}
     }
     return null;

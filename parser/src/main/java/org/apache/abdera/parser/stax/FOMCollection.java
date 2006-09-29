@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.parser.stax;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.activation.MimeType;
@@ -31,6 +29,8 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -52,7 +52,7 @@ public class FOMCollection
     String title, 
     String href, 
     String[] accepts) 
-      throws URISyntaxException {
+      throws IRISyntaxException {
     this();
     setTitle(title);
     setHref(href);
@@ -125,17 +125,17 @@ public class FOMCollection
     return getFirstChild(TITLE);
   }
   
-  public URI getHref() throws URISyntaxException {
+  public IRI getHref() throws IRISyntaxException {
     return _getUriValue(getAttributeValue(HREF));
   }
 
-  public URI getResolvedHref() throws URISyntaxException {
+  public IRI getResolvedHref() throws IRISyntaxException {
     return _resolve(getResolvedBaseUri(), getHref());
   }
   
-  public void setHref(String href) throws URISyntaxException {
+  public void setHref(String href) throws IRISyntaxException {
     if (href != null)
-      setAttributeValue(HREF, (new URI(href).toString()));
+      setAttributeValue(HREF, (new IRI(href).toString()));
     else 
       removeAttribute(HREF);
   }
@@ -191,7 +191,7 @@ public class FOMCollection
 
   public Categories addCategories(
     String href) 
-      throws URISyntaxException {
+      throws IRISyntaxException {
     Categories cats = ((FOMFactory)factory).newCategories();
     cats.setHref(href);
     addCategories(cats);
@@ -202,7 +202,7 @@ public class FOMCollection
     List<Category> categories, 
     boolean fixed, 
     String scheme) 
-      throws URISyntaxException {
+      throws IRISyntaxException {
       Categories cats = ((FOMFactory)factory).newCategories();
       cats.setFixed(fixed);
       if (scheme != null) cats.setScheme(scheme);

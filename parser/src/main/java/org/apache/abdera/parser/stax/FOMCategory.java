@@ -17,13 +17,12 @@
 */
 package org.apache.abdera.parser.stax;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Category;
 import org.apache.abdera.util.Constants;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -50,7 +49,7 @@ public class FOMCategory
     String term, 
     String scheme, 
     String label) 
-      throws URISyntaxException {
+      throws IRISyntaxException {
     this();
     setTerm(term);
     setScheme(scheme);
@@ -105,14 +104,14 @@ public class FOMCategory
       removeAttribute(TERM);
   }
 
-  public URI getScheme() throws URISyntaxException {
+  public IRI getScheme() throws IRISyntaxException {
     String value = getAttributeValue(SCHEME);
-    return (value != null) ? new URI(value) : null;
+    return (value != null) ? new IRI(value) : null;
   }
 
-  public void setScheme(String scheme) throws URISyntaxException {
+  public void setScheme(String scheme) throws IRISyntaxException {
     if (scheme != null)
-      setAttributeValue(SCHEME, new URI(scheme).toString());
+      setAttributeValue(SCHEME, new IRI(scheme).toString());
     else 
       removeAttribute(SCHEME);
   }

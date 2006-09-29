@@ -33,7 +33,7 @@ import org.apache.abdera.ext.opensearch.StartIndex;
 import java.io.InputStream;
 
 public class OpenSearchTest extends TestCase {
-  public void testBasics()
+  public void testBasics() throws Exception
   {
     Parser parser = Abdera.getNewParser();
     

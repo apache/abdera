@@ -17,8 +17,9 @@
 */
 package org.apache.abdera.model;
 
-import java.net.URISyntaxException;
 import java.util.List;
+
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 /**
  * <p>An Atom Publishing Protocol Introspection Document workspace element.</p>
@@ -74,6 +75,6 @@ public interface Workspace
   Collection addCollection(
     String title, 
     String href) 
-      throws URISyntaxException;
+      throws IRISyntaxException;
   
 }

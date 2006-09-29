@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.parser.stax;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -31,6 +29,8 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.util.Constants;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -172,12 +172,12 @@ public class FOMFeed
     }
   };
 
-  public Entry getEntry(String id) throws URISyntaxException {
+  public Entry getEntry(String id) throws IRISyntaxException {
     if (id == null) return null;
     List<Entry> l = getEntries();
     for (Entry e : l) {
-      URI eid = e.getId();
-      if (eid != null && eid.equals(new URI(id))) return e;
+      IRI eid = e.getId();
+      if (eid != null && eid.equals(new IRI(id))) return e;
     }
     return null;
   }

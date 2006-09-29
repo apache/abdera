@@ -34,7 +34,7 @@ public class ParserTest extends TestCase {
     return abdera.getParser();
   }
   
-  public static void testParse() {
+  public static void testParse() throws Exception {
     
     Document<Feed> feedDoc = getParser().parse(ParserTest.class.getResourceAsStream("/simpleFeed.xml"));
     assertTrue(feedDoc.getRoot() instanceof Feed);

@@ -33,7 +33,7 @@ public class IRI
              Cloneable {
 
   private static final long serialVersionUID = -4530530782760282284L;
-  private Scheme _scheme;
+  Scheme _scheme;
   private String scheme;
   private String authority;
   private String userinfo;
@@ -42,7 +42,7 @@ public class IRI
   private String path;
   private String query;
   private String fragment;
-  private boolean doubleslash;
+  boolean doubleslash;
 
   private String a_host;
   private String a_fragment;
@@ -58,7 +58,7 @@ public class IRI
   private String d_query;
   private String d_fragment;
   
-  public IRI(java.net.URL url) throws IRISyntaxException, IOException {
+  public IRI(java.net.URL url) throws IRISyntaxException {
     this(Escaping.encode(
         Escaping.decode(url.toString()), 
         Constants.IUNRESERVED, 
@@ -66,7 +66,7 @@ public class IRI
         Constants.PCTENC));
   }
   
-  public IRI(java.net.URI uri) throws IRISyntaxException, IOException {
+  public IRI(java.net.URI uri) throws IRISyntaxException {
     this(Escaping.encode(
       Escaping.decode(uri.toString()), 
       Constants.IUNRESERVED, 
@@ -75,7 +75,7 @@ public class IRI
       Constants.GENDELIMS));
   }
   
-  public IRI(String iri) throws IRISyntaxException, IOException {
+  public IRI(String iri) throws IRISyntaxException {
     Builder b = new Builder();
     parse(iri, b);
     init(
@@ -301,9 +301,7 @@ public class IRI
   
   public String getSchemeSpecificPart() {
     return buildSchemeSpecificPart(
-      userinfo, 
-      host, 
-      port, 
+      authority, 
       path, 
       query, 
       fragment);
@@ -331,9 +329,7 @@ public class IRI
   
   public String getRawSchemeSpecificPart() {
     return buildSchemeSpecificPart(
-      userinfo, 
-      host, 
-      port, 
+      authority,
       path, 
       query, 
       fragment);
@@ -343,7 +339,7 @@ public class IRI
     return userinfo;
   }
   
-  private void buildAuthority(
+  void buildAuthority(
     StringBuffer buf, 
     String aui, 
     String ah, 
@@ -392,24 +388,20 @@ public class IRI
   
   public String getASCIISchemeSpecificPart() {
     return buildSchemeSpecificPart(
-      getASCIIUserInfo(), 
-      getASCIIHost(), 
-      getPort(), 
+      getASCIIAuthority(), 
       getASCIIPath(), 
       getASCIIQuery(), 
       getASCIIFragment());
   }
   
   private String buildSchemeSpecificPart(
-    String userinfo,
-    String host,
-    int port,
+    String authority,
     String path,
     String query,
     String fragment) {
       StringBuffer buf = new StringBuffer();
       if (doubleslash) buf.append("//");
-      buildAuthority(buf, userinfo, host, port);
+      if (authority != null) buf.append(authority);
       if (path != null && path.length() != 0) {
         buf.append(path);
       }
@@ -526,7 +518,9 @@ public class IRI
       userinfo = b.getUserInfo();
       host = b.getHost();
       port = b.getPort();
-      path = c.isPathAbsolute() ? normalize(c.getPath()) : resolve(b.getPath(),c.getPath());
+      path = c.isPathAbsolute() ? 
+          normalize(c.getPath()) : 
+          resolve(b.getPath(),c.getPath());
     } else {
       authority = c.getAuthority();
       userinfo = c.getUserInfo();
@@ -543,21 +537,25 @@ public class IRI
   
   public static IRI normalize(IRI iri) {
     if (iri.isOpaque() || iri.getPath() == null) return iri;
-    return new IRI(
-      iri._scheme,
-      iri.getScheme(),
-      iri.getAuthority(),
-      iri.getUserInfo(),
-      iri.getHost(),
-      iri.getPort(),
-      normalize(iri.getPath()),
-      iri.getQuery(),
-      iri.getFragment(),
-      iri.doubleslash
-    );
+    IRI normalized = null;
+    if (iri._scheme != null) normalized = iri._scheme.normalize(iri);
+    return (normalized != null) ? 
+      normalized : 
+      new IRI(
+        iri._scheme,
+        iri.getScheme(),
+        iri.getAuthority(),
+        iri.getUserInfo(),
+        iri.getHost(),
+        iri.getPort(),
+        normalize(iri.getPath()),
+        iri.getQuery(),
+        iri.getFragment(),
+        iri.doubleslash
+      );
   }
 
-  private static String normalize(String path) {
+  static String normalize(String path) {
     if (path == null) return "/";
     String[] segments = path.split("/");
     if (segments.length < 2) return path;
@@ -581,13 +579,16 @@ public class IRI
         buf.append(segments[n]);
       }
     }
-    if (path.charAt(path.length()-1) == '/') buf.append('/');
+    if (path.endsWith("/") || path.endsWith("/.")) 
+      buf.append('/');
     return buf.toString();
   }
   
   private static String resolve(String bpath, String cpath) {
     if (bpath == null && cpath == null) return null;
-    if (bpath == null && cpath != null) return cpath;
+    if (bpath == null && cpath != null) {
+      return (!cpath.startsWith("/")) ? "/" + cpath : cpath;
+    }
     if (bpath != null && cpath == null) return bpath;
     StringBuffer buf = new StringBuffer("");
     int n = bpath.lastIndexOf('/');
@@ -600,7 +601,7 @@ public class IRI
     return resolve(this,iri);
   }
   
-  public IRI resolve(String iri) throws IRISyntaxException, IOException {
+  public IRI resolve(String iri) throws IRISyntaxException {
     return resolve(this,IRI.create(iri));
   }
   
@@ -645,14 +646,18 @@ public class IRI
   
   ////////// parse implementation
   
-  private static void parse(String uri, Builder builder) throws IRISyntaxException, IOException {
+  private static void parse(String uri, Builder builder) throws IRISyntaxException {
     SchemeRegistry reg = SchemeRegistry.getInstance();
     builder.chars = uri.toCharArray();
     CodepointIterator ci = CodepointIterator.forCharArray(builder.chars);
-    Parser.parse(ci, builder, reg);
+    try {
+      Parser.parse(ci, builder, reg);
+    } catch (IOException e) {
+      throw new IRISyntaxException(e);
+    }
   }
   
-  public static IRI create(String iri) throws IRISyntaxException, IOException {
+  public static IRI create(String iri) throws IRISyntaxException {
     return new IRI(iri);
   }
   
@@ -735,8 +740,9 @@ public class IRI
       if (ci.peek() == ':')
         builder.scheme(e,ci.position()-e);
       Scheme _scheme = null;
-      if (builder.scheme != null && builder.scheme.length() != 0)
-        _scheme = reg.getScheme(builder.scheme);      
+      if (builder.scheme != null && builder.scheme.length() != 0) {
+        _scheme = reg.getScheme(builder.scheme);
+      } else { ci.position(e); }
       if (_scheme != null) {
         // allow for scheme specific parsing. if the resolved scheme
         // does parse the result, skip the rest, otherwise, do the 
@@ -745,7 +751,6 @@ public class IRI
         if (_scheme.parse(ci, builder)) return;
       }
       // default parsing. works for most common schemes
-      else ci.position(e);
       scan(ci, Constants.COLON,1);
       e = ci.position();
       if (ci.peek() == '/' && 

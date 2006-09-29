@@ -17,13 +17,12 @@
 */
 package org.apache.abdera.parser.stax;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.util.URIHelper;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -40,7 +39,7 @@ public class FOMIRI
     super(qname);
   }
   
-  public FOMIRI(QName qname, String value) throws URISyntaxException {
+  public FOMIRI(QName qname, String value) throws IRISyntaxException {
     this(qname);
     setValue(value);
   }
@@ -71,23 +70,23 @@ public class FOMIRI
     super(qname, parent, factory, builder);
   }
   
-  public URI getValue() throws URISyntaxException {
+  public IRI getValue() throws IRISyntaxException {
     return _getUriValue(getText());
   }
 
-  public void setValue(String iri) throws URISyntaxException {
+  public void setValue(String iri) throws IRISyntaxException {
     if (iri != null)
-      setText((new URI(iri)).toString());
+      setText((new IRI(iri)).toString());
     else
       _removeAllChildren();
 
   }
   
-  public java.net.URI getResolvedValue() throws URISyntaxException {
+  public IRI getResolvedValue() throws IRISyntaxException {
     return _resolve(getResolvedBaseUri(), getValue());
   }
 
-  public void setNormalizedValue(String uri) throws URISyntaxException {
+  public void setNormalizedValue(String uri) throws IRISyntaxException {
     if (uri != null)
       setValue(URIHelper.normalize(uri));
     else 

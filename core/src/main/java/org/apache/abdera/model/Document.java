@@ -18,12 +18,13 @@
 package org.apache.abdera.model;
 
 import java.io.Serializable;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Date;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
+
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 /**
  * <p>The top level artifact of the Feed Object Model.  The Parser component
@@ -50,14 +51,14 @@ public interface Document<T extends Element>
    * Returns the Base URI of the document.  All relative URI's contained in the
    * document will be resolved according to this base.
    */
-  URI getBaseUri();
+  IRI getBaseUri();
   
   /**
    * Sets the Base URI of the document.  All relative URI's contained in the 
    * document will be resolved according to this base.
    * @throws URISyntaxException 
    */
-  void setBaseUri(String base) throws URISyntaxException;
+  void setBaseUri(String base) throws IRISyntaxException;
   
   /**
    * Returns the content type of this document

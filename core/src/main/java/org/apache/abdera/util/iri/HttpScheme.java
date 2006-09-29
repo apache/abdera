@@ -58,5 +58,33 @@ class HttpScheme extends AbstractScheme {
         equal(iri1.getFragment(),iri2.getFragment());
     
   }
+
+  @Override
+  public IRI normalize(IRI iri) {
+    StringBuffer buf = new StringBuffer();
+    int port = (iri.getPort() == getDefaultPort()) ? -1 : iri.getPort();
+    String host = iri.getHost();
+    if (host != null) host = host.toLowerCase();
+    String ui = iri.getUserInfo();
+    iri.buildAuthority(
+      buf, 
+      ui, 
+      host, 
+      port);
+    String authority = buf.toString();
+    return new IRI(
+        iri._scheme,
+        iri.getScheme(),
+        authority,
+        ui,
+        host,
+        port,
+        IRI.normalize(iri.getPath()),
+        iri.getQuery(),
+        iri.getFragment(),
+        iri.doubleslash
+      );
+  }
+  
   
 }

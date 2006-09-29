@@ -17,12 +17,13 @@
 */
 package org.apache.abdera.model;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 
 import javax.activation.MimeTypeParseException;
+
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 /**
  * <p>Per RFC4287:</p>
@@ -89,9 +90,9 @@ public interface Source
 
   /**
    * Adds an author
-   * @throws URISyntaxException 
+   * @throws IRISyntaxException 
    */
-  Person addAuthor(String name, String email, String uri) throws URISyntaxException;
+  Person addAuthor(String name, String email, String IRI) throws IRISyntaxException;
   
   /**
    * Lists the complete set of categories listed for the entry
@@ -100,9 +101,9 @@ public interface Source
   
   /**
    * Lists the complete set of categories using the specified scheme
-   * @throws URISyntaxException 
+   * @throws IRISyntaxException 
    */
-  List<Category> getCategories(String scheme) throws URISyntaxException;
+  List<Category> getCategories(String scheme) throws IRISyntaxException;
   
   /**
    * Adds an individual category to the entry
@@ -116,9 +117,9 @@ public interface Source
 
   /**
    * Adds a category to the feed
-   * @throws URISyntaxException 
+   * @throws IRISyntaxException 
    */
-  Category addCategory(String scheme, String term, String label) throws URISyntaxException;
+  Category addCategory(String scheme, String term, String label) throws IRISyntaxException;
   
   /**
    * Lists the complete set of contributors for this entry
@@ -137,9 +138,9 @@ public interface Source
 
   /**
    * Adds a contributor
-   * @throws URISyntaxException 
+   * @throws IRISyntaxException 
    */
-  Person addContributor(String name, String email, String uri) throws URISyntaxException;
+  Person addContributor(String name, String email, String IRI) throws IRISyntaxException;
   
   /**
    * RFC4287: The "atom:generator" element's content identifies the 
@@ -158,10 +159,10 @@ public interface Source
    * agent used to generate a feed, for debugging and other purposes.
    */
   Generator setGenerator(
-    String uri, 
+    String IRI, 
     String version, 
     String value) 
-      throws URISyntaxException;
+      throws IRISyntaxException;
   
   /** 
    * RFC4287: The "atom:icon" element's content is an IRI reference 
@@ -187,9 +188,9 @@ public interface Source
    *  identification for a feed... The image SHOULD have an aspect ratio 
    *  of one (horizontal) to one (vertical) and SHOULD be suitable for 
    *  presentation at a small size.
-   * @throws URISyntaxException 
+   * @throws IRISyntaxException 
    */
-  IRIElement setIcon(String iri) throws URISyntaxException;
+  IRIElement setIcon(String iri) throws IRISyntaxException;
 
   /** 
    * RFC4287: The "atom:icon" element's content is an IRI reference 
@@ -197,9 +198,9 @@ public interface Source
    *  identification for a feed... The image SHOULD have an aspect ratio 
    *  of one (horizontal) to one (vertical) and SHOULD be suitable for 
    *  presentation at a small size.
-   * @throws URISyntaxException 
+   * @throws IRISyntaxException 
    */
-  URI getIcon() throws URISyntaxException;
+  IRI getIcon() throws IRISyntaxException;
   
   /**
    * RFC4287: The "atom:id" element conveys a permanent, universally unique
@@ -215,21 +216,21 @@ public interface Source
   
   /**
    * Returns the universally unique identifier for this feed
-   * @throws URISyntaxException 
+   * @throws IRISyntaxException 
    */
-  URI getId() throws URISyntaxException;
+  IRI getId() throws IRISyntaxException;
 
   /**
    * Sets the universally unique identifier for this feed
-   * @throws URISyntaxException 
+   * @throws IRISyntaxException 
    */
-  IRIElement setId(String id) throws URISyntaxException;
+  IRIElement setId(String id) throws IRISyntaxException;
   
   /**
    * Sets the universally unique identifier for this feed
-   * @throws URISyntaxException 
+   * @throws IRISyntaxException 
    */
-  IRIElement setId(String id, boolean normalize) throws URISyntaxException;
+  IRIElement setId(String id, boolean normalize) throws IRISyntaxException;
    
   /**
    * Lists the complete set of links for this entry
@@ -246,11 +247,11 @@ public interface Source
    */
   void addLink(Link link);
   
-  Link addLink(String href) throws URISyntaxException;
+  Link addLink(String href) throws IRISyntaxException;
   
-  Link addLink(String href, String rel) throws URISyntaxException;
+  Link addLink(String href, String rel) throws IRISyntaxException;
   
-  Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws URISyntaxException, MimeTypeParseException;
+  Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws IRISyntaxException, MimeTypeParseException;
    
   /**
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
@@ -270,17 +271,17 @@ public interface Source
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
    * that identifies an image that provides visual identification for a feed.
    * The image SHOULD have an aspect ratio of 2 (horizontal) to 1 (vertical).
-   * @throws URISyntaxException 
+   * @throws IRISyntaxException 
    */
-  IRIElement setLogo(String iri) throws URISyntaxException;
+  IRIElement setLogo(String iri) throws IRISyntaxException;
 
   /**
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
    * that identifies an image that provides visual identification for a feed.
    * The image SHOULD have an aspect ratio of 2 (horizontal) to 1 (vertical).
-   * @throws URISyntaxException 
+   * @throws IRISyntaxException 
    */
-  URI getLogo() throws URISyntaxException;
+  IRI getLogo() throws IRISyntaxException;
   
   /**
    * <p>The rights element is typically used to convey a human readable 
@@ -470,10 +471,10 @@ public interface Source
   
   Link getAlternateLink(String type, String hreflang) throws MimeTypeParseException;
   
-  URI getLinkResolvedHref(String rel) throws URISyntaxException;
-  URI getSelfLinkResolvedHref() throws URISyntaxException;
-  URI getAlternateLinkResolvedHref() throws URISyntaxException;
-  URI getAlternateLinkResolvedHref(String type, String hreflang) throws URISyntaxException, MimeTypeParseException;
+  IRI getLinkResolvedHref(String rel) throws IRISyntaxException;
+  IRI getSelfLinkResolvedHref() throws IRISyntaxException;
+  IRI getAlternateLinkResolvedHref() throws IRISyntaxException;
+  IRI getAlternateLinkResolvedHref(String type, String hreflang) throws IRISyntaxException, MimeTypeParseException;
   
   Collection getCollection();
   

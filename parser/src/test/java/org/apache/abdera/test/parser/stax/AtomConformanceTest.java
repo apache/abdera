@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.test.parser.stax;
 
-import java.net.URI;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -29,13 +28,14 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Text;
+import org.apache.abdera.util.iri.IRI;
 import org.apache.axiom.om.OMElement;
 
 public class AtomConformanceTest extends BaseParserTestCase {
   
-  private static Document<Feed> get(URI uri) {
+  private static Document<Feed> get(IRI uri) {
     try {
-      return getParser().parse(uri.toURL().openStream(), uri);
+      return getParser().parse(uri.toURL().openStream(), uri.toString());
     } catch (Exception e) {}
     return null;
   }
@@ -45,7 +45,7 @@ public class AtomConformanceTest extends BaseParserTestCase {
    * extended content types allowed by Atom
    */
   public static void testContentTypes() throws Exception {
-    URI uri = new URI("http://www.snellspace.com/public/contentsummary.xml");
+    IRI uri = new IRI("http://www.snellspace.com/public/contentsummary.xml");
     Document<Feed> doc = parse(uri);
     Feed feed = doc.getRoot();
     int n = 1;
@@ -106,7 +106,7 @@ public class AtomConformanceTest extends BaseParserTestCase {
     };
     int n = 1;
     for (String test : tests) {
-      URI uri = new URI(test);
+      IRI uri = new IRI(test);
       Document<Feed> doc = get(uri);
       assertNotNull(doc);
       Feed feed = doc.getRoot();
@@ -115,7 +115,7 @@ public class AtomConformanceTest extends BaseParserTestCase {
         case 1:
           assertNotNull(entry.getTitleElement());
           assertEquals(entry.getIdElement().getValue(), 
-              new URI("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a"));
+              new IRI("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a"));
           Content content = entry.getContentElement();
           assertNotNull(content);
           assertEquals(content.getContentType(), Content.Type.XHTML);
@@ -128,7 +128,7 @@ public class AtomConformanceTest extends BaseParserTestCase {
         case 2:
           assertNotNull(entry.getTitleElement());
           assertEquals(entry.getIdElement().getValue(), 
-              new URI("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a"));
+              new IRI("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a"));
           content = entry.getContentElement();
           assertNotNull(content);
           assertEquals(content.getContentType(), Content.Type.XHTML);
@@ -141,7 +141,7 @@ public class AtomConformanceTest extends BaseParserTestCase {
         case 3:
           assertNotNull(entry.getTitleElement());
           assertEquals(entry.getIdElement().getValue(), 
-              new URI("http://hsivonen.iki.fi/test/unknown-namespace.atom/entry"));
+              new IRI("http://hsivonen.iki.fi/test/unknown-namespace.atom/entry"));
           content = entry.getContentElement();
           assertNotNull(content);
           assertEquals(content.getContentType(), Content.Type.XHTML);
@@ -154,7 +154,7 @@ public class AtomConformanceTest extends BaseParserTestCase {
         case 4:
           assertNotNull(entry.getTitleElement());
           assertEquals(entry.getIdElement().getValue(), 
-              new URI("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a"));
+              new IRI("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a"));
           content = entry.getContentElement();
           assertNotNull(content);
           assertEquals(content.getContentType(), Content.Type.XHTML);
@@ -174,13 +174,13 @@ public class AtomConformanceTest extends BaseParserTestCase {
    */
   public static void testXmlBase() throws Exception {
     //http://tbray.org/ongoing/ongoing.atom
-    URI uri = new URI("http://www.tbray.org/ongoing/ongoing.atom");
+    IRI uri = new IRI("http://www.tbray.org/ongoing/ongoing.atom");
     Document<Feed> doc = get(uri);
     assertNotNull(doc);
     Feed feed = doc.getRoot();
-    assertEquals(feed.getBaseUri(), new URI("http://www.tbray.org/ongoing/ongoing.atom"));
-    assertEquals(feed.getLogoElement().getResolvedValue(), new URI("http://www.tbray.org/ongoing/rsslogo.jpg"));
-    assertEquals(feed.getIconElement().getResolvedValue(),new URI("http://www.tbray.org/favicon.ico"));    
+    assertEquals(feed.getBaseUri(), new IRI("http://www.tbray.org/ongoing/ongoing.atom"));
+    assertEquals(feed.getLogoElement().getResolvedValue(), new IRI("http://www.tbray.org/ongoing/rsslogo.jpg"));
+    assertEquals(feed.getIconElement().getResolvedValue(),new IRI("http://www.tbray.org/favicon.ico"));    
   }
   
   /**
@@ -188,8 +188,8 @@ public class AtomConformanceTest extends BaseParserTestCase {
    */
   public static void testXmlBase2() throws Exception {
     //http://plasmasturm.org/attic/atom-tests/xmlbase.atom
-    URI uri = new URI("http://plasmasturm.org/attic/atom-tests/xmlbase.atom");
-    URI result = new URI("http://example.org/tests/base/result.html");
+    IRI uri = new IRI("http://plasmasturm.org/attic/atom-tests/xmlbase.atom");
+    IRI result = new IRI("http://example.org/tests/base/result.html");
     Document<Feed> doc = get(uri);
     assertNotNull(doc);
     Feed feed = doc.getRoot();
@@ -251,7 +251,7 @@ public class AtomConformanceTest extends BaseParserTestCase {
       "text-ncr.atom",
       "xhtml-entity.atom",
       "xhtml-ncr.atom"};
-    URI baseUri = new URI("http://atomtests.philringnalda.com/tests/item/title/");
+    IRI baseUri = new IRI("http://atomtests.philringnalda.com/tests/item/title/");
     int n = 1;
     for (String test : tests) {
       Document<Feed> doc = get(baseUri.resolve(test));
@@ -314,7 +314,7 @@ public class AtomConformanceTest extends BaseParserTestCase {
    */
   public static void testOrder() throws Exception {
     //http://www.snellspace.com/public/ordertest.xml
-    URI uri = new URI("http://www.snellspace.com/public/ordertest.xml");
+    IRI uri = new IRI("http://www.snellspace.com/public/ordertest.xml");
     Document<Feed> doc = parse(uri);
     assertNotNull(doc);
     Feed feed = doc.getRoot();
@@ -323,14 +323,14 @@ public class AtomConformanceTest extends BaseParserTestCase {
     for (Entry entry : entries ) {
       switch(n) {
         case 1:
-          assertEquals(entry.getIdElement().getValue(), new URI("tag:example.org,2006:atom/conformance/element_order/1"));
+          assertEquals(entry.getIdElement().getValue(), new IRI("tag:example.org,2006:atom/conformance/element_order/1"));
           assertEquals(entry.getTitleType(), Text.Type.TEXT);
           assertEquals(entry.getSummaryType(), Text.Type.TEXT);
           assertNotNull(entry.getUpdatedElement().getValue());
           assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
           break;
         case 2:
-          assertEquals(entry.getIdElement().getValue(), new URI("tag:example.org,2006:atom/conformance/element_order/2"));
+          assertEquals(entry.getIdElement().getValue(), new IRI("tag:example.org,2006:atom/conformance/element_order/2"));
           assertEquals(entry.getTitleType(), Text.Type.TEXT);
           assertEquals(entry.getSummaryType(), Text.Type.TEXT);
           assertNotNull(entry.getUpdatedElement().getValue());
@@ -340,16 +340,16 @@ public class AtomConformanceTest extends BaseParserTestCase {
           assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),2);
           assertEquals(
             entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-            new URI("http://www.snellspace.com/public/alternate"));
+            new IRI("http://www.snellspace.com/public/alternate"));
           assertEquals(
               entry.getLinks(Link.REL_ALTERNATE).get(1).getHref(), 
-              new URI("http://www.snellspace.com/public/alternate2"));
+              new IRI("http://www.snellspace.com/public/alternate2"));
           break;
         case 4:
           assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
           assertEquals(
               entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/alternate"));
+              new IRI("http://www.snellspace.com/public/alternate"));
           break;
         case 5:
           Text title = entry.getTitleElement();
@@ -359,7 +359,7 @@ public class AtomConformanceTest extends BaseParserTestCase {
           assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
           assertEquals(
               entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/alternate"));          
+              new IRI("http://www.snellspace.com/public/alternate"));          
           break;
         case 6:
           title = entry.getTitleElement();
@@ -369,7 +369,7 @@ public class AtomConformanceTest extends BaseParserTestCase {
           assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
           assertEquals(
               entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/alternate"));
+              new IRI("http://www.snellspace.com/public/alternate"));
           break;
         case 7:
           title = entry.getTitleElement();
@@ -379,7 +379,7 @@ public class AtomConformanceTest extends BaseParserTestCase {
           assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
           assertEquals(
               entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/alternate"));          
+              new IRI("http://www.snellspace.com/public/alternate"));          
           break;
         case 8:
           title = entry.getTitleElement();
@@ -388,7 +388,7 @@ public class AtomConformanceTest extends BaseParserTestCase {
           assertEquals(value, "Atom elements in an extension element");
           assertEquals(
             entry.getIdElement().getValue(), 
-            new URI("tag:example.org,2006:atom/conformance/element_order/8"));
+            new IRI("tag:example.org,2006:atom/conformance/element_order/8"));
           break;
         case 9:
           title = entry.getTitleElement();
@@ -397,7 +397,7 @@ public class AtomConformanceTest extends BaseParserTestCase {
           assertEquals(value, "Atom elements in an extension element");
           assertEquals(
             entry.getIdElement().getValue(), 
-            new URI("tag:example.org,2006:atom/conformance/element_order/9"));
+            new IRI("tag:example.org,2006:atom/conformance/element_order/9"));
           break;
       }
       n++;
@@ -409,7 +409,7 @@ public class AtomConformanceTest extends BaseParserTestCase {
    */
   public static void testLink() throws Exception {
     //http://www.snellspace.com/public/linktests.xml
-    URI uri = new URI("http://www.snellspace.com/public/linktests.xml");
+    IRI uri = new IRI("http://www.snellspace.com/public/linktests.xml");
     Document<Feed> doc = parse(uri);
     assertNotNull(doc);
     Feed feed = doc.getRoot();
@@ -421,16 +421,16 @@ public class AtomConformanceTest extends BaseParserTestCase {
           assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
           assertEquals(
             entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-            new URI("http://www.snellspace.com/public/linktests/alternate"));
+            new IRI("http://www.snellspace.com/public/linktests/alternate"));
           break;
         case 2:
           assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),4);
           assertEquals(
               entry.getLinks(Link.REL_ALTERNATE).get(1).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/alternate"));          
+              new IRI("http://www.snellspace.com/public/linktests/alternate"));          
           assertEquals(
               entry.getLinks(Link.REL_ALTERNATE).get(2).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/alternate2"));
+              new IRI("http://www.snellspace.com/public/linktests/alternate2"));
           break;
         case 3:
           assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
@@ -440,19 +440,19 @@ public class AtomConformanceTest extends BaseParserTestCase {
           assertEquals(entry.getLinks(Link.REL_VIA).size(),1);    
           assertEquals(
               entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/alternate"));
+              new IRI("http://www.snellspace.com/public/linktests/alternate"));
           assertEquals(
               entry.getLinks(Link.REL_ENCLOSURE).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/enclosure"));
+              new IRI("http://www.snellspace.com/public/linktests/enclosure"));
           assertEquals(
               entry.getLinks(Link.REL_RELATED).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/related"));
+              new IRI("http://www.snellspace.com/public/linktests/related"));
           assertEquals(
               entry.getLinks(Link.REL_SELF).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/self"));
+              new IRI("http://www.snellspace.com/public/linktests/self"));
           assertEquals(
               entry.getLinks(Link.REL_VIA).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/via"));
+              new IRI("http://www.snellspace.com/public/linktests/via"));
           break;
         case 4:
           assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),2);
@@ -462,42 +462,42 @@ public class AtomConformanceTest extends BaseParserTestCase {
           assertEquals(entry.getLinks(Link.REL_VIA).size(),1);          
           assertEquals(
               entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/alternate"));
+              new IRI("http://www.snellspace.com/public/linktests/alternate"));
           assertEquals(
               entry.getLinks(Link.REL_ALTERNATE).get(1).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/alternate2"));
+              new IRI("http://www.snellspace.com/public/linktests/alternate2"));
           assertEquals(
               entry.getLinks(Link.REL_ENCLOSURE).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/enclosure"));
+              new IRI("http://www.snellspace.com/public/linktests/enclosure"));
           assertEquals(
               entry.getLinks(Link.REL_RELATED).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/related"));
+              new IRI("http://www.snellspace.com/public/linktests/related"));
           assertEquals(
               entry.getLinks(Link.REL_SELF).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/self"));
+              new IRI("http://www.snellspace.com/public/linktests/self"));
           assertEquals(
               entry.getLinks(Link.REL_VIA).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/via"));
+              new IRI("http://www.snellspace.com/public/linktests/via"));
           break;
         case 5:
           assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
           assertEquals(entry.getLinks(Link.REL_LICENSE).size(),1);  
           assertEquals(
               entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/alternate"));
+              new IRI("http://www.snellspace.com/public/linktests/alternate"));
           assertEquals(
               entry.getLinks(Link.REL_LICENSE).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/license"));
+              new IRI("http://www.snellspace.com/public/linktests/license"));
           break;
         case 6:
           assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
           assertEquals(entry.getLinks("http://example.org").size(),1);
           assertEquals(
               entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/alternate"));
+              new IRI("http://www.snellspace.com/public/linktests/alternate"));
           assertEquals(
               entry.getLinks("http://example.org").get(0).getHref(), 
-              new URI("http://www.snellspace.com/public/linktests/example"));
+              new IRI("http://www.snellspace.com/public/linktests/example"));
           break;
       }
       n++;

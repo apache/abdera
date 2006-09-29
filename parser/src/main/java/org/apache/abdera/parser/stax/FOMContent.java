@@ -17,9 +17,6 @@
 */
 package org.apache.abdera.parser.stax;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import javax.activation.DataHandler;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
@@ -30,6 +27,8 @@ import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.util.Constants;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.attachments.DataHandlerUtils;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
@@ -160,17 +159,17 @@ public class FOMContent
       removeAttribute(TYPE);
   }
 
-  public URI getSrc() throws URISyntaxException {
+  public IRI getSrc() throws IRISyntaxException {
     return _getUriValue(getAttributeValue(SRC));
   }
 
-  public URI getResolvedSrc() throws URISyntaxException {
+  public IRI getResolvedSrc() throws IRISyntaxException {
     return _resolve(getResolvedBaseUri(), getSrc());
   }
   
-  public void setSrc(String src) throws URISyntaxException {
+  public void setSrc(String src) throws IRISyntaxException {
     if (src != null)
-      setAttributeValue(SRC, (new URI(src)).toString());
+      setAttributeValue(SRC, (new IRI(src)).toString());
     else 
       removeAttribute(SRC);
 
@@ -239,20 +238,22 @@ public class FOMContent
         _removeAllChildren();
         super.setText(value);
       } else if (Type.XHTML.equals(type)) {
-        URI baseUri = null;
+        IRI baseUri = null;
+        Element element = null;
+        value = "<div xmlns=\"" + XHTML_NS + "\">" + value + "</div>";
         try {
           baseUri = getResolvedBaseUri();
+          element = _parse(value, baseUri);
         } catch (Exception e) {}
-        value = "<div xmlns=\"" + XHTML_NS + "\">" + value + "</div>";
-        Element element = _parse(value, baseUri);
         if (element != null && element instanceof Div)
           setValueElement((Div)element);
       } else if (Type.XML.equals(type)) {
-        URI baseUri = null;
+        IRI baseUri = null;
+        Element element = null;
         try {
           baseUri = getResolvedBaseUri();
+          element = _parse(value, baseUri);
         } catch (Exception e) {}
-        Element element = _parse(value, baseUri);
         if (element != null)
           setValueElement(element);
         try {
@@ -282,11 +283,12 @@ public class FOMContent
 
   public void setWrappedValue(String wrappedValue) {
     if (Type.XHTML.equals(type)) {
-      URI baseUri = null;
+      IRI baseUri = null;
+      Element element = null;
       try {
         baseUri = getResolvedBaseUri();
+        element = _parse(wrappedValue, baseUri);
       } catch (Exception e) {}
-      Element element = _parse(wrappedValue, baseUri);
       if (element != null && element instanceof Div)
         setValueElement((Div)element);
     } else {
@@ -295,8 +297,8 @@ public class FOMContent
   }
 
   @Override
-  public URI getBaseUri()
-    throws URISyntaxException {
+  public IRI getBaseUri()
+    throws IRISyntaxException {
       if (Type.XHTML.equals(type)) {
         Element el = getValueElement();
         if (el != null) {
@@ -313,8 +315,8 @@ public class FOMContent
   }
 
   @Override
-  public URI getResolvedBaseUri()
-    throws URISyntaxException {
+  public IRI getResolvedBaseUri()
+    throws IRISyntaxException {
       if (Type.XHTML.equals(type)) {
         Element el = getValueElement();
         if (el != null) {

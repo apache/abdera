@@ -17,13 +17,12 @@
 */
 package org.apache.abdera.ext.thread;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.model.Element;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 /**
  * Provides an interface for the Atom Threading Extension in-reply-to
@@ -37,42 +36,42 @@ public interface InReplyTo
    * Returns the persistent and universally unique identifier of the 
    * resource the entry is a response to.
    */
-  URI getRef() throws URISyntaxException;
+  IRI getRef() throws IRISyntaxException;
   
   /**
    * Sets the persistent and universally unique identifier of the 
    * resource that this entry is a response to
    */
-  void setRef(URI ref);
+  void setRef(IRI ref);
 
   /**
    * Sets the persistent and universally unique identifier of the 
    * resource that this entry is a response to
    */
-  void setRef(String ref) throws URISyntaxException;
+  void setRef(String ref) throws IRISyntaxException;
   
   /**
    * Returns the resolved value of the href attribute
    */
-  URI getResolvedHref() throws URISyntaxException;
+  IRI getResolvedHref() throws IRISyntaxException;
   
   /**
    * Returns a dereferenceable URI indicating where a representation of the 
    * resource being responded to may be retrieved
    */
-  URI getHref() throws URISyntaxException;
+  IRI getHref() throws IRISyntaxException;
   
   /**
    * Sets a dereferenceable URI indicating where a representation of the 
    * resource being responded to may be retrieved
    */
-  void setHref(URI ref);
+  void setHref(IRI ref);
   
   /**
    * Sets a dereferenceable URI indicating where a representation of the 
    * resource being responded to may be retrieved
    */
-  void setHref(String ref) throws URISyntaxException;
+  void setHref(String ref) throws IRISyntaxException;
   
   /**
    * Returns the media type of the resource referenced by the href attribute
@@ -93,21 +92,21 @@ public interface InReplyTo
    * Returns a dereferenceable URI of an Atom Feed or Entry Document resolved
    * against the in-scope Base URI
    */
-  URI getResolvedSource() throws URISyntaxException;
+  IRI getResolvedSource() throws IRISyntaxException;
   
   /**
    * Returns a dereferenceable URI of an Atom Feed or Entry Document
    */
-  URI getSource() throws URISyntaxException;
+  IRI getSource() throws IRISyntaxException;
   
   /**
    * Sets a dereferenceable URI of an Atom Feed or Entry Document
    */
-  void setSource(URI source);
+  void setSource(IRI source);
   
   /**
    * Sets a dereferenceable URI of an Atom Feed or Entry Document
    */
-  void setSource(String source) throws URISyntaxException;
+  void setSource(String source) throws IRISyntaxException;
   
 }

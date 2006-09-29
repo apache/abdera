@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.parser.stax;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +25,8 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.parser.stax.util.FOMHelper;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -106,7 +106,7 @@ public class FOMCategories
     String scheme, 
     String term, 
     String label)
-      throws URISyntaxException {
+      throws IRISyntaxException {
     FOMFactory factory = (FOMFactory) this.factory;
     Category category = factory.newCategory(this);
     category.setTerm(term);
@@ -120,15 +120,15 @@ public class FOMCategories
     return _getChildrenAsSet(CATEGORY);
   }
 
-  public List<Category> getCategories(String scheme) throws URISyntaxException {
+  public List<Category> getCategories(String scheme) throws IRISyntaxException {
     return FOMHelper.getCategories(this, scheme);
   }
   
   private List<Category> copyCategoriesWithScheme(
     List<Category> cats) 
-      throws URISyntaxException {
+      throws IRISyntaxException {
     List<Category> newcats = new ArrayList<Category>();
-    URI scheme = getScheme();
+    IRI scheme = getScheme();
     for (Category cat : cats) {
       Category newcat = (Category) cat.clone();
       if (newcat.getScheme() == null && scheme != null) 
@@ -138,17 +138,17 @@ public class FOMCategories
     return newcats;
   }
   
-  public List<Category> getCategoriesWithScheme() throws URISyntaxException {
+  public List<Category> getCategoriesWithScheme() throws IRISyntaxException {
     return copyCategoriesWithScheme(getCategories());
   }
   
-  public List<Category> getCategoriesWithScheme(String scheme) throws URISyntaxException {
+  public List<Category> getCategoriesWithScheme(String scheme) throws IRISyntaxException {
     return copyCategoriesWithScheme(getCategories(scheme));
   }
 
-  public java.net.URI getScheme() throws URISyntaxException {
+  public IRI getScheme() throws IRISyntaxException {
     String value = getAttributeValue(SCHEME);
-    return (value != null) ? new URI(value) : null;
+    return (value != null) ? new IRI(value) : null;
   }
 
   public boolean isFixed() {
@@ -163,45 +163,45 @@ public class FOMCategories
       removeAttribute(FIXED);
   }
 
-  public void setScheme(String scheme) throws URISyntaxException {
+  public void setScheme(String scheme) throws IRISyntaxException {
     if (scheme != null)
-      setAttributeValue(SCHEME, new URI(scheme).toString());
+      setAttributeValue(SCHEME, new IRI(scheme).toString());
     else 
       removeAttribute(SCHEME);
   }
   
-  public URI getHref() throws URISyntaxException {
+  public IRI getHref() throws IRISyntaxException {
     return _getUriValue(getAttributeValue(HREF));
   }
 
-  public URI getResolvedHref() throws URISyntaxException {
+  public IRI getResolvedHref() throws IRISyntaxException {
     return _resolve(getResolvedBaseUri(), getHref());
   }
   
-  public void setHref(String href) throws URISyntaxException {
+  public void setHref(String href) throws IRISyntaxException {
     if (href != null)
-      setAttributeValue(HREF, (new URI(href)).toString());
+      setAttributeValue(HREF, (new IRI(href)).toString());
     else 
       removeAttribute(HREF);
   }
 
   public boolean contains(
     String term) 
-      throws URISyntaxException {
+      throws IRISyntaxException {
     return contains(term,null);
   }
 
   public boolean contains(
     String term, 
     String scheme) 
-      throws URISyntaxException {
+      throws IRISyntaxException {
     List<Category> categories = getCategories();
-    URI catscheme = getScheme();
-    URI uri = (scheme != null) ? 
-      new URI(scheme) : catscheme;
+    IRI catscheme = getScheme();
+    IRI uri = (scheme != null) ? 
+      new IRI(scheme) : catscheme;
     for (Category category : categories) {
       String t = category.getTerm();
-      URI s = (category.getScheme() != null) ? 
+      IRI s = (category.getScheme() != null) ? 
         category.getScheme() : catscheme;
       if (t.equals(term) && 
           ((uri!=null)? uri.equals(s) : s == null))

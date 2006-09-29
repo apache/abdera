@@ -19,7 +19,6 @@ package org.apache.abdera.parser.stax;
 
 import java.io.InputStream;
 import java.io.Reader;
-import java.net.URI;
 
 import javax.xml.stream.XMLStreamReader;
 
@@ -32,6 +31,7 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.parser.stax.util.FOMSniffingInputStream;
 import org.apache.abdera.util.AbstractParser;
+import org.apache.abdera.util.iri.IRI;
 import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.util.StAXUtils;
 
@@ -68,7 +68,7 @@ public class FOMParser
   
   private <T extends Element>Document<T> getDocument(
     FOMBuilder builder, 
-    URI base) {
+    IRI base) {
       Document<T> document = builder.getFomDocument();
       try {
         document.setBaseUri(base.toString());
@@ -85,7 +85,7 @@ public class FOMParser
   
   public <T extends Element>Document<T> parse(
     InputStream in, 
-    URI base, 
+    String base, 
     ParserOptions options)
       throws ParseException {
     Document<T> document = null;
@@ -106,7 +106,7 @@ public class FOMParser
       if (options != null && charset != null) options.setCharset(charset);
       FOMFactory factory = getFomFactory(options);
       FOMBuilder builder = new FOMBuilder(factory, xmlreader, options);
-      document = getDocument(builder, base);
+      document = getDocument(builder, (base != null) ? new IRI(base) : null);
       setCharset(options, xmlreader.getCharacterEncodingScheme(), document);
     } catch (Exception e) {
       if (!(e instanceof ParseException))
@@ -118,7 +118,7 @@ public class FOMParser
 
   public <T extends Element> Document<T> parse(
     Reader in, 
-    URI base, 
+    String base, 
     ParserOptions options) 
       throws ParseException {
     Document<T> document = null;
@@ -128,7 +128,7 @@ public class FOMParser
       FOMFactory factory = getFomFactory(options);
       XMLStreamReader xmlreader = StAXUtils.createXMLStreamReader(in);
       FOMBuilder builder = new FOMBuilder(factory, xmlreader, options);
-      document = getDocument(builder, base);
+      document = getDocument(builder, new IRI(base));
       setCharset(options, xmlreader.getCharacterEncodingScheme(), document);
     } catch (Exception e) {
       if (!(e instanceof ParseException))

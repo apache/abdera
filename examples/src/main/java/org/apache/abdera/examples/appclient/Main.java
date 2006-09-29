@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.examples.appclient;
 
-import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +29,7 @@ import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.protocol.client.Client;
 import org.apache.abdera.protocol.client.CommonsClient;
+import org.apache.abdera.util.iri.IRI;
 
 
 public class Main {
@@ -70,12 +70,12 @@ public class Main {
     // In some implementations (such as Google's GData API, the entry URI is 
     // distinct from it's edit URI.  To be safe, we should assume it may be 
     // different
-    URI entryUri = doc.getBaseUri();
+    IRI entryUri = doc.getBaseUri();
     report("The Created Entry", doc.getRoot().toString());
     
     // Grab the Edit URI from the entry.  The entry MAY have more than one 
     // edit link.  We need to make sure we grab the right one.
-    URI editUri = getEditUri(doc.getRoot());
+    IRI editUri = getEditUri(doc.getRoot());
     
     // If there is an Edit Link, we can edit the entry
     if (editUri != null) {
@@ -108,8 +108,8 @@ public class Main {
     }
   }
 
-  private static URI getEditUri(Entry entry) throws Exception {
-    URI editUri = null;
+  private static IRI getEditUri(Entry entry) throws Exception {
+    IRI editUri = null;
     List<Link> editLinks = entry.getLinks("edit");
     for (Link link : editLinks) {
       // if there is more than one edit link, we should not automatically

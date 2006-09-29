@@ -20,8 +20,6 @@ package org.apache.abdera.parser.stax;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -32,6 +30,8 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.om.OMComment;
 import org.apache.axiom.om.OMDocType;
 import org.apache.axiom.om.OMDocument;
@@ -51,7 +51,7 @@ public class FOMDocument<T extends Element>
   implements Document<T> {
 
   private static final long serialVersionUID = -3255339511063344662L;
-  protected URI base = null;
+  protected IRI base = null;
   protected MimeType contentType = null;
   protected Date lastModified = null;
 
@@ -97,12 +97,12 @@ public class FOMDocument<T extends Element>
     this.setOMDocumentElement((OMElement) root);
   }
 
-  public URI getBaseUri() {
+  public IRI getBaseUri() {
     return base;
   }
 
-  public void setBaseUri(String base) throws URISyntaxException {
-    this.base = new URI(base);
+  public void setBaseUri(String base) throws IRISyntaxException {
+    this.base = new IRI(base);
   }
 
   public void writeTo(OutputStream out) throws IOException {

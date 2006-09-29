@@ -17,9 +17,10 @@
 */
 package org.apache.abdera.model;
 
-import java.net.URISyntaxException;
 import java.util.Comparator;
 import java.util.List;
+
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 /**
  * <p>Represents an Atom Feed Element</p>
@@ -143,6 +144,6 @@ public interface Feed
    * Retrieves the first entry in the feed with the given atom:id value
    * @throws URISyntaxException 
    */
-  Entry getEntry(String id) throws URISyntaxException;
+  Entry getEntry(String id) throws IRISyntaxException;
   
 }

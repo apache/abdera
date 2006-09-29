@@ -17,9 +17,10 @@
 */
 package org.apache.abdera.util;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.regex.Pattern;
+
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 public class URIHelper {
 
@@ -30,12 +31,12 @@ public class URIHelper {
     Pattern.compile(
       "\\s*m\\s*a\\s*i\\s*l\\s*t\\s*o\\s*:.*");
   
-  public static boolean isJavascriptUri(URI uri) {
+  public static boolean isJavascriptUri(IRI uri) {
     if (uri == null) return false;
     return javascript.matcher(uri.toString()).matches();
   }
   
-  public static boolean isMailtoUri(URI uri) {
+  public static boolean isMailtoUri(IRI uri) {
     if (uri == null) return false;
     return mailto.matcher(uri.toString()).matches();
   }
@@ -43,32 +44,14 @@ public class URIHelper {
   /**
    * Normalize a URI as specified by RFC4287 Section 4.2.6
    */
-  public static URI normalize(
-    URI uri) 
-      throws URISyntaxException {
+  public static IRI normalize(
+    IRI uri) 
+      throws IRISyntaxException {
     if (uri == null) return null;
-    // the normalization built into the URI class only gets us part of the way
-    uri = uri.normalize();
-    String scheme = uri.getScheme().toLowerCase();
-    String host = 
-      (uri.getHost() != null) ? 
-        uri.getHost().toLowerCase() : "";
-    int port = -1;
-    if ("http".equalsIgnoreCase(scheme) && uri.getPort() != 80) 
-      port = uri.getPort();
-    else if ("https".equalsIgnoreCase(scheme) && uri.getPort() != 443) 
-      port = uri.getPort();
-    uri = new URI(
-      scheme, 
-      uri.getUserInfo(), 
-      host, port, 
-      uri.getPath(), 
-      uri.getQuery(), 
-      uri.getFragment());
-    return uri;
+    return uri.normalize();
   }
   
-  public static String normalize(String uri) throws URISyntaxException {
-    return normalize(new URI(uri)).toString();
+  public static String normalize(String uri) throws IRISyntaxException {
+    return normalize(new IRI(uri)).toASCIIString();
   }
 }

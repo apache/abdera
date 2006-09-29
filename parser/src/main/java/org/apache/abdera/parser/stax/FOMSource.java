@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.parser.stax;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +39,8 @@ import org.apache.abdera.model.Text;
 import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -118,7 +118,7 @@ public class FOMSource
     return person;
   }
 
-  public Person addAuthor(String name, String email, String uri) throws URISyntaxException {
+  public Person addAuthor(String name, String email, String uri) throws IRISyntaxException {
     FOMFactory fomfactory = (FOMFactory) this.factory;
     Person person = fomfactory.newAuthor(this);
     person.setName(name);
@@ -131,7 +131,7 @@ public class FOMSource
     return _getChildrenAsSet(CATEGORY);
   }
 
-  public List<Category> getCategories(String scheme) throws URISyntaxException {
+  public List<Category> getCategories(String scheme) throws IRISyntaxException {
     return FOMHelper.getCategories(this, scheme);
   }
   
@@ -157,7 +157,7 @@ public class FOMSource
     return category;
   }
 
-  public Category addCategory(String scheme, String term, String label) throws URISyntaxException {
+  public Category addCategory(String scheme, String term, String label) throws IRISyntaxException {
     FOMFactory factory = (FOMFactory) this.factory;
     Category category = factory.newCategory(this);
     category.setTerm(term);
@@ -181,7 +181,7 @@ public class FOMSource
     return person;
   }
 
-  public Person addContributor(String name, String email, String uri) throws URISyntaxException {
+  public Person addContributor(String name, String email, String uri) throws IRISyntaxException {
     FOMFactory fomfactory = (FOMFactory) this.factory;
     Person person = fomfactory.newContributor(this);
     person.setName(name);
@@ -201,16 +201,16 @@ public class FOMSource
       _removeChildren(ID, false);
   }
 
-  public URI getId() throws URISyntaxException {
+  public IRI getId() throws IRISyntaxException {
     IRIElement id = getIdElement();
     return (id != null) ? id.getValue() : null;
   }
   
-  public IRIElement setId(String value) throws URISyntaxException {
+  public IRIElement setId(String value) throws IRISyntaxException {
     return setId(value, false);
   }
     
-  public IRIElement setId(String value, boolean normalize) throws URISyntaxException {
+  public IRIElement setId(String value, boolean normalize) throws IRISyntaxException {
     if (value == null) {
       _removeChildren(ID, false);
       return null;
@@ -240,11 +240,11 @@ public class FOMSource
     addChild((OMElement)link);
   }
 
-  public Link addLink(String href) throws URISyntaxException {
+  public Link addLink(String href) throws IRISyntaxException {
     return addLink(href, null);
   }
   
-  public Link addLink(String href, String rel) throws URISyntaxException {
+  public Link addLink(String href, String rel) throws IRISyntaxException {
     FOMFactory fomfactory = (FOMFactory) factory;
     Link link = fomfactory.newLink(this);
     link.setHref(href);
@@ -252,7 +252,7 @@ public class FOMSource
     return link;    
   }
   
-  public Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws URISyntaxException, MimeTypeParseException {
+  public Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws IRISyntaxException, MimeTypeParseException {
     FOMFactory fomfactory = (FOMFactory) factory;
     Link link = fomfactory.newLink(this);
     link.setHref(href);
@@ -455,7 +455,7 @@ public class FOMSource
     String uri, 
     String version, 
     String value) 
-      throws URISyntaxException {
+      throws IRISyntaxException {
     FOMFactory fomfactory = (FOMFactory) factory;
     Generator generator = fomfactory.newGenerator(this);
     if (uri != null) generator.setUri(uri);
@@ -475,7 +475,7 @@ public class FOMSource
       _removeChildren(ICON, false);
   }
 
-  public IRIElement setIcon(String value) throws URISyntaxException {
+  public IRIElement setIcon(String value) throws IRISyntaxException {
     if (value == null) {
       _removeChildren(ICON, false);
       return null;
@@ -486,9 +486,9 @@ public class FOMSource
     return iri;
   }
   
-  public URI getIcon() throws URISyntaxException {
+  public IRI getIcon() throws IRISyntaxException {
     IRIElement iri = getIconElement();
-    URI uri = (iri != null) ? iri.getResolvedValue() : null;
+    IRI uri = (iri != null) ? iri.getResolvedValue() : null;
     return (URIHelper.isJavascriptUri(uri) ||
         URIHelper.isMailtoUri(uri)) ? null : uri;
   }
@@ -504,7 +504,7 @@ public class FOMSource
       _removeChildren(LOGO, false);
   }
 
-  public IRIElement setLogo(String value) throws URISyntaxException {
+  public IRIElement setLogo(String value) throws IRISyntaxException {
     if (value == null) {
       _removeChildren(LOGO, false);
       return null;
@@ -515,9 +515,9 @@ public class FOMSource
     return iri;
   }
   
-  public URI getLogo() throws URISyntaxException {
+  public IRI getLogo() throws IRISyntaxException {
     IRIElement iri = getLogoElement();
-    URI uri = (iri != null) ? iri.getResolvedValue() : null;
+    IRI uri = (iri != null) ? iri.getResolvedValue() : null;
     return (URIHelper.isJavascriptUri(uri) ||
         URIHelper.isMailtoUri(uri)) ? null : uri;
   }
@@ -537,15 +537,15 @@ public class FOMSource
     return getLink(Link.REL_ALTERNATE);
   }
 
-  public URI getLinkResolvedHref(String rel) throws URISyntaxException {
+  public IRI getLinkResolvedHref(String rel) throws IRISyntaxException {
     Link link = getLink(rel);
     return (link != null) ? link.getResolvedHref() : null;
   }
-  public URI getSelfLinkResolvedHref() throws URISyntaxException {
+  public IRI getSelfLinkResolvedHref() throws IRISyntaxException {
     Link link = getSelfLink();
     return (link != null) ? link.getResolvedHref() : null;
   }
-  public URI getAlternateLinkResolvedHref() throws URISyntaxException {
+  public IRI getAlternateLinkResolvedHref() throws IRISyntaxException {
     Link link = getAlternateLink();
     return (link != null) ? link.getResolvedHref() : null;
   }
@@ -583,10 +583,10 @@ public class FOMSource
     return selectLink(getLinks(Link.REL_ALTERNATE), type, hreflang);
   }
 
-  public java.net.URI getAlternateLinkResolvedHref(
+  public IRI getAlternateLinkResolvedHref(
     String type, 
     String hreflang) 
-      throws URISyntaxException, 
+      throws IRISyntaxException, 
              MimeTypeParseException {
     Link link = getAlternateLink(type, hreflang);
     return (link != null) ? link.getResolvedHref() : null;

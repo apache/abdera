@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.examples.appserver;
 
-import java.net.URI;
 import java.security.MessageDigest;
 import java.util.Date;
 
@@ -45,6 +44,7 @@ import org.apache.abdera.protocol.server.provider.RequestContext;
 import org.apache.abdera.protocol.server.provider.ResponseContext;
 import org.apache.abdera.protocol.server.provider.TargetType;
 import org.apache.abdera.util.MimeTypeHelper;
+import org.apache.abdera.util.iri.IRI;
 import org.apache.axiom.om.util.Base64;
 
 public class SimpleProvider 
@@ -154,7 +154,7 @@ public class SimpleProvider
           feed.insertEntry(entry);
           feed.setUpdated(new Date());
           BaseResponseContext rc = new BaseResponseContext(entry);
-          URI baseUri = resolveBase(request);
+          IRI baseUri = resolveBase(request);
           rc.setLocation(baseUri.resolve(entry.getEditLinkResolvedHref()).toString());
           rc.setContentLocation(rc.getLocation().toString());
           rc.setEntityTag(calculateEntityTag(entry));
@@ -172,7 +172,7 @@ public class SimpleProvider
       }
   }
   
-  private URI resolveBase(RequestContext request) {
+  private IRI resolveBase(RequestContext request) {
     return request.getBaseUri().resolve(request.getUri());
   }
   

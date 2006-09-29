@@ -63,7 +63,7 @@ public class TextFilterExample {
     // Parse!
     URL url = TextFilterExample.class.getResource("/simple.xml");
     InputStream in = url.openStream();
-    Document<Feed> doc = parser.parse(in, url.toURI(), options);
+    Document<Feed> doc = parser.parse(in, url.toString(), options);
     Feed feed = doc.getRoot();
     System.out.println(feed.getAuthor().getName());          // Jane Doe
     System.out.println(feed.getEntries().get(0).getTitle()); // Atom-Powered Robots Run Crazy

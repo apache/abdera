@@ -18,6 +18,12 @@
 package org.apache.abdera.test.core;
 
 import org.apache.abdera.test.core.CoreTest;
+import org.apache.abdera.test.iri.TestIDNA;
+import org.apache.abdera.test.iri.TestIRI;
+import org.apache.abdera.test.iri.TestLang;
+import org.apache.abdera.test.iri.TestNFKC;
+import org.apache.abdera.test.iri.TestNameprep;
+import org.apache.abdera.test.iri.TestPunycode;
 
 public class TestSuite extends junit.framework.TestSuite {
   public static void main(String[] args) {
@@ -26,5 +32,11 @@ public class TestSuite extends junit.framework.TestSuite {
 
   public TestSuite() {
     addTestSuite(CoreTest.class);
+    addTestSuite(TestIDNA.class);
+    addTestSuite(TestIRI.class);
+    addTestSuite(TestLang.class);
+    addTestSuite(TestNameprep.class);
+    addTestSuite(TestNFKC.class);
+    addTestSuite(TestPunycode.class);
   }
 }

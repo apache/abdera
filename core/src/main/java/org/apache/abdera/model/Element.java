@@ -17,12 +17,14 @@
 */
 package org.apache.abdera.model;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 import javax.xml.namespace.QName;
+
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 /**
  * Root interface for all elements in the Feed Object Model
@@ -67,24 +69,28 @@ public interface Element
   /**
    * Returns the value of this element's <code>xml:base</code> attribute or
    * null if <code>xml:base</code> is undefined.
+   * @throws IOException 
+   * @throws IRISyntaxException 
    */
-  URI getBaseUri() throws URISyntaxException;
+  IRI getBaseUri() throws IRISyntaxException;
   
   /**
    * Returns the current in-scope, fully qualified Base URI for this element.
+   * @throws IOException 
    */
-  URI getResolvedBaseUri() throws URISyntaxException;
+  IRI getResolvedBaseUri() throws IRISyntaxException;
   
   /**
    * Sets the value of this element's <code>xml:base</code> attribute.
    */
-  void setBaseUri(URI base);
+  void setBaseUri(IRI base);
   
   /**
    * Sets the value of this element's <code>xml:base</code> attribute.
+   * @throws IOException 
    * @throws URISyntaxException 
    */
-  void setBaseUri(String base) throws URISyntaxException;
+  void setBaseUri(String base) throws IRISyntaxException;
   
   /**
    * Returns the document to which this element belongs

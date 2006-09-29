@@ -17,15 +17,14 @@
 */
 package org.apache.abdera.parser.stax;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.util.Constants;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -136,12 +135,13 @@ public class FOMText
       } else if (Type.HTML.equals(type)) {
         super.setText(value);
       } else if (Type.XHTML.equals(type)) {
-        URI baseUri = null;
+        IRI baseUri = null;
+        value = "<div xmlns=\"" + XHTML_NS + "\">" + value + "</div>";
+        Element element = null;
         try {
           baseUri = getResolvedBaseUri();
+          element = _parse(value, baseUri);
         } catch (Exception e) {}
-        value = "<div xmlns=\"" + XHTML_NS + "\">" + value + "</div>";
-        Element element = _parse(value, baseUri);
         if (element != null && element instanceof Div)
           setValueElement((Div)element);
       }
@@ -159,11 +159,13 @@ public class FOMText
 
   public void setWrappedValue(String wrappedValue) {
     if (Type.XHTML.equals(type)) {
-      URI baseUri = null;
+      IRI baseUri = null;
+      Element element = null;
       try {
         baseUri = getResolvedBaseUri();
+        element = _parse(wrappedValue, baseUri);
       } catch (Exception e) {}
-      Element element = _parse(wrappedValue, baseUri);
+      
       if (element != null && element instanceof Div)
         setValueElement((Div)element);
     } else {
@@ -172,8 +174,8 @@ public class FOMText
   }
 
   @Override
-  public URI getBaseUri()
-    throws URISyntaxException {
+  public IRI getBaseUri()
+    throws IRISyntaxException {
       if (Type.XHTML.equals(type)) {
         Element el = getValueElement();
         if (el != null) {
@@ -190,8 +192,8 @@ public class FOMText
   }
 
   @Override
-  public URI getResolvedBaseUri()
-    throws URISyntaxException {
+  public IRI getResolvedBaseUri()
+    throws IRISyntaxException {
       if (Type.XHTML.equals(type)) {
         Element el = getValueElement();
         if (el != null) {

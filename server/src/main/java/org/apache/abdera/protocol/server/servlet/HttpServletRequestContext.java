@@ -20,8 +20,6 @@ package org.apache.abdera.protocol.server.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.Principal;
 import java.util.Date;
 import java.util.Enumeration;
@@ -36,6 +34,8 @@ import org.apache.abdera.protocol.server.auth.SubjectResolver;
 import org.apache.abdera.protocol.server.provider.AbstractRequestContext;
 import org.apache.abdera.protocol.server.provider.RequestContext;
 import org.apache.abdera.protocol.server.provider.TargetResolver;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 public class HttpServletRequestContext 
   extends AbstractRequestContext
@@ -181,7 +181,7 @@ public class HttpServletRequestContext
           request.getLocalPort();
     }
     
-    private static URI initBaseUri(
+    private static IRI initBaseUri(
       ServiceContext context, 
       HttpServletRequest request) {
         StringBuffer buffer = 
@@ -199,14 +199,14 @@ public class HttpServletRequestContext
         // So that .resolve() works appropriately.
         buffer.append("/");
         try {
-          return new URI(buffer.toString());
-        } catch (URISyntaxException e) {
+          return new IRI(buffer.toString());
+        } catch (IRISyntaxException e) {
           throw new RuntimeException(e);
         }
     }
     
-    private static URI initRequestUri(HttpServletRequest request) {
-      URI uri = null;
+    private static IRI initRequestUri(HttpServletRequest request) {
+      IRI uri = null;
       try {
         StringBuffer buf = 
           new StringBuffer(
@@ -214,8 +214,8 @@ public class HttpServletRequestContext
         String qs = request.getQueryString();
         if (qs != null && qs.length() != 0)
           buf.append("?" + request.getQueryString());
-        uri = new URI(buf.toString());
-      } catch (URISyntaxException e) {}
+        uri = new IRI(buf.toString());
+      } catch (IRISyntaxException e) {}
       return uri;
     }
 }

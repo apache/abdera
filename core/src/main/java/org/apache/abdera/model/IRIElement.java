@@ -17,8 +17,8 @@
 */
 package org.apache.abdera.model;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 /**
  * <p>The IRI interface provides a common base for a set of feed and 
@@ -31,20 +31,20 @@ public interface IRIElement
   /**
    * Returns the value of the element as a java.net.URI 
    */
-  URI getValue() throws URISyntaxException;
+  IRI getValue() throws IRISyntaxException;
   
   /**
    * Sets the value of the element
-   * @throws URISyntaxException 
+   * @throws IRISyntaxException 
    */
-  void setValue(String iri) throws URISyntaxException;
+  void setValue(String iri) throws IRISyntaxException;
   
-  void setNormalizedValue(String id) throws URISyntaxException;
+  void setNormalizedValue(String id) throws IRISyntaxException;
   
   /**
    * Returns the value of the element resolved against the current
    * in-scope Base URI
    */
-  URI getResolvedValue() throws URISyntaxException;
+  IRI getResolvedValue() throws IRISyntaxException;
   
 }

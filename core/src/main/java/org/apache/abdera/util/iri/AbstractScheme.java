@@ -53,4 +53,7 @@ public abstract class AbstractScheme
       return false;
   }
 
+  public IRI normalize(IRI iri) {
+    return null;
+  }
 }

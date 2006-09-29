@@ -29,4 +29,7 @@ public interface Scheme {
   boolean equivalent(IRI iri1, IRI iri2);
   
   boolean parse(CodepointIterator reader, Builder builder);
+  
+  IRI normalize(IRI iri); 
+  
 }

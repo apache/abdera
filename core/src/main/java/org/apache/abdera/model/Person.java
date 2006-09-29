@@ -17,8 +17,8 @@
 */
 package org.apache.abdera.model;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 /**
  * <p>An Atom Person Construct</p>
@@ -124,7 +124,7 @@ public interface Person
    * construct MUST be an IRI reference [RFC3987].
    * @throws URISyntaxException 
    */
-  IRIElement setUri(String uri) throws URISyntaxException;
+  IRIElement setUri(String uri) throws IRISyntaxException;
   
   /**
    * The "atom:uri" element's content conveys an IRI associated with the
@@ -133,5 +133,5 @@ public interface Person
    * construct MUST be an IRI reference [RFC3987].
    * @throws URISyntaxException 
    */
-  URI getUri() throws URISyntaxException;
+  IRI getUri() throws IRISyntaxException;
 }

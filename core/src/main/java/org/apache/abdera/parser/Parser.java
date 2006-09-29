@@ -19,11 +19,11 @@ package org.apache.abdera.parser;
 
 import java.io.InputStream;
 import java.io.Reader;
-import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 /**
  * The Parser is the interface through which developers parse feed documents. 
@@ -32,55 +32,33 @@ public interface Parser {
   
   <T extends Element>Document<T> parse(
     InputStream in) 
-      throws ParseException;
-  
-  <T extends Element>Document<T> parse(
-    InputStream in, 
-    URI base) 
-      throws ParseException;
-  
-  <T extends Element>Document<T> parse(
-    InputStream in, 
-    URI base, 
-    ParserOptions options) 
-      throws ParseException;
+      throws ParseException, IRISyntaxException;
   
   <T extends Element>Document<T> parse(
     InputStream in, 
     String base) 
-      throws ParseException, URISyntaxException;
+      throws ParseException, IRISyntaxException;
   
   <T extends Element>Document<T> parse(
     InputStream in, 
     String base, 
     ParserOptions options) 
-      throws ParseException, URISyntaxException;
+      throws ParseException, IRISyntaxException;
 
   <T extends Element>Document<T> parse(
       Reader in) 
-        throws ParseException;
+        throws ParseException, URISyntaxException, IRISyntaxException;
     
   <T extends Element>Document<T> parse(
     Reader in, 
-    URI base) 
-      throws ParseException;
-  
-  <T extends Element>Document<T> parse(
-    Reader in, 
-    URI base, 
-    ParserOptions options) 
-      throws ParseException;
-  
-  <T extends Element>Document<T> parse(
-    Reader in, 
     String base) 
-      throws ParseException, URISyntaxException;
+      throws ParseException, IRISyntaxException, URISyntaxException;
   
   <T extends Element>Document<T> parse(
     Reader in, 
     String base, 
     ParserOptions options) 
-      throws ParseException, URISyntaxException;
+      throws ParseException, IRISyntaxException;
   
   ParserOptions getDefaultParserOptions();
   

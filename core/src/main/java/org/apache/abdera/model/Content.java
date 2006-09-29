@@ -17,14 +17,13 @@
 */
 package org.apache.abdera.model;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import javax.activation.DataHandler;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.util.MimeTypeHelper;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 /**
  * <p>Represents an atom:content element.</p>
@@ -164,12 +163,12 @@ public interface Content extends Element {
    * provided and MUST be a MIME media type, rather than "text", "html", 
    * or "xhtml".</p>
    */
-  URI getSrc() throws URISyntaxException;
+  IRI getSrc() throws IRISyntaxException;
   
   /**
    * Returns the fully qualified URI form of the content src attribute.
    */
-  URI getResolvedSrc() throws URISyntaxException;
+  IRI getResolvedSrc() throws IRISyntaxException;
 
   /**
    * <p>RFC4287: atom:content MAY have a "src" attribute, whose value MUST 
@@ -183,7 +182,7 @@ public interface Content extends Element {
    * or "xhtml".</p>
    * @throws URISyntaxException 
    */
-  void setSrc(String src) throws URISyntaxException;
+  void setSrc(String src) throws IRISyntaxException;
   
   /**
    * Attempts to Base64 decode the string value of the content element.

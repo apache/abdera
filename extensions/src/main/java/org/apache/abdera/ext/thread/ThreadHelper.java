@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.ext.thread;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +31,8 @@ import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Source;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 public final class ThreadHelper {
 
@@ -138,7 +138,7 @@ public final class ThreadHelper {
     return irt;
   }
 
-  public static InReplyTo addInReplyTo(Entry entry, URI ref) {
+  public static InReplyTo addInReplyTo(Entry entry, IRI ref) {
     try {
       if (entry.getId() != null && entry.getId().equals(ref)) return null;
     } catch (Exception e) {}
@@ -147,15 +147,15 @@ public final class ThreadHelper {
     return irt;
   }
 
-  public static InReplyTo addInReplyTo(Entry entry, String ref) throws URISyntaxException {
-    return addInReplyTo(entry, new URI(ref));
+  public static InReplyTo addInReplyTo(Entry entry, String ref) throws IRISyntaxException {
+    return addInReplyTo(entry, new IRI(ref));
   }
 
   public static InReplyTo addInReplyTo(
     Entry entry,
-    URI ref, 
-    URI source, 
-    URI href, 
+    IRI ref, 
+    IRI source, 
+    IRI href, 
     MimeType type) {
       InReplyTo irt = addInReplyTo(entry, ref);
       if (irt != null) {
@@ -172,7 +172,7 @@ public final class ThreadHelper {
     String source, 
     String href, 
     String type) 
-      throws URISyntaxException, 
+      throws IRISyntaxException, 
              MimeTypeParseException {
     InReplyTo irt = addInReplyTo(entry, ref);
     if (irt != null) {

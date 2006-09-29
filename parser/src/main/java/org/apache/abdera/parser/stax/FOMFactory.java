@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.net.URISyntaxException;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
@@ -58,6 +57,7 @@ import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.Version;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
@@ -287,7 +287,7 @@ public class FOMFactory
       generator.setText(Version.APP_NAME);
       try {
         generator.setUri(Version.URI);
-      } catch (URISyntaxException e) { /* Can't happen */ }
+      } catch (IRISyntaxException e) { /* Can't happen */ }
       return generator;
   }
   

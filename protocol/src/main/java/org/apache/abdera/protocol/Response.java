@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.protocol;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +25,8 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.protocol.util.ProtocolConstants;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 public interface Response
   extends ResponseInfo, ProtocolConstants {
@@ -54,7 +54,7 @@ public interface Response
   
   public String getContentLanguage();
   
-  public URI getContentLocation() throws URISyntaxException;
+  public IRI getContentLocation() throws IRISyntaxException;
   
   public long getContentLength();
   
@@ -62,13 +62,13 @@ public interface Response
   
   public String getAllow();
   
-  public URI getLocation() throws URISyntaxException;
+  public IRI getLocation() throws IRISyntaxException;
   
   public String getSlug();
   
   public Date getDateHeader(String name);
   
-  public URI getUriHeader(String name) throws URISyntaxException;
+  public IRI getUriHeader(String name) throws IRISyntaxException;
   
   public String getHeader(String name);
   

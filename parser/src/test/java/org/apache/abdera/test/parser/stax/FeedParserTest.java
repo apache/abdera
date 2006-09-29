@@ -20,7 +20,6 @@ package org.apache.abdera.test.parser.stax;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.net.URI;
 
 import javax.activation.DataHandler;
 
@@ -29,13 +28,14 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Person;
+import org.apache.abdera.util.iri.IRI;
 
 public class FeedParserTest extends BaseParserTestCase {
 
-  static URI baseURI;
+  static IRI baseURI;
 
   protected void setUp() throws Exception {
-    baseURI = new URI("http://www.feedparser.org/tests/wellformed/atom10/");
+    baseURI = new IRI("http://www.feedparser.org/tests/wellformed/atom10/");
   }
 
   public void testAtom10Namespace() throws Exception {

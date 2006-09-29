@@ -18,7 +18,6 @@
 package org.apache.abdera.protocol.server.provider;
 
 import java.io.IOException;
-import java.net.URI;
 
 import javax.security.auth.Subject;
 
@@ -30,6 +29,8 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.util.AbstractRequest;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 public abstract class AbstractRequestContext 
   extends AbstractRequest
@@ -39,14 +40,14 @@ public abstract class AbstractRequestContext
   protected Subject subject;
   protected Target target;
   protected final String method;
-  protected final URI requestUri;
-  protected final URI baseUri;
+  protected final IRI requestUri;
+  protected final IRI baseUri;
   
   protected AbstractRequestContext(
     ServiceContext context,
     String method, 
-    URI requestUri,
-    URI baseUri) {
+    IRI requestUri,
+    IRI baseUri) {
       this.context = context;
       this.method = method;
       this.baseUri = baseUri;
@@ -84,16 +85,20 @@ public abstract class AbstractRequestContext
     ParserOptions options) 
       throws ParseException, 
              IOException {
+    try {
       return parser.parse(
         getInputStream(), 
-        (URI)null, options);
+        null, options);
+    } catch (IRISyntaxException e) {
+      throw new ParseException(e); // won't never happen
+    }
   }
   
-  public URI getBaseUri() {
+  public IRI getBaseUri() {
     return baseUri;
   }
 
-  public URI getResolvedUri() {
+  public IRI getResolvedUri() {
     return baseUri.resolve(getUri());
   }
   
@@ -101,7 +106,7 @@ public abstract class AbstractRequestContext
     return method;
   }
 
-  public URI getUri() {
+  public IRI getUri() {
     return requestUri;
   }
   

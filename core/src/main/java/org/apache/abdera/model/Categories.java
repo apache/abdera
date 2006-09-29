@@ -17,30 +17,35 @@
 */
 package org.apache.abdera.model;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.io.IOException;
 import java.util.List;
+
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 public interface Categories 
   extends ExtensibleElement {
 
   /**
    * Returns the value of the href attribute
+   * @throws IOException 
    * @throws URISyntaxException 
    */
-  URI getHref() throws URISyntaxException;
+  IRI getHref() throws IRISyntaxException;
   
   /**
    * Returns the fully resolved href
+   * @throws IOException 
    * @throws URISyntaxException 
    */
-  URI getResolvedHref() throws URISyntaxException;
+  IRI getResolvedHref() throws IRISyntaxException;
   
   /**
    * Sets the value of the href attribute
+   * @throws IOException 
    * @throws URISyntaxException 
    */
-  void setHref(String href) throws URISyntaxException;
+  void setHref(String href) throws IRISyntaxException;
   
   /**
    * Specifies whether or not this is a fixed listing of categories
@@ -54,15 +59,18 @@ public interface Categories
   
   /**
    * Returns the common scheme for this listing of categories
+   * @throws IOException 
+   * @throws IRISyntaxException 
    * @throws URISyntaxException 
    */
-  URI getScheme() throws URISyntaxException;
+  IRI getScheme() throws IRISyntaxException;
   
   /**
    * Sets the common scheme for this listing of categories
+   * @throws IOException 
    * @throws URISyntaxException 
    */
-  void setScheme(String scheme) throws URISyntaxException;
+  void setScheme(String scheme) throws IRISyntaxException;
 
   /**
    * Lists the complete set of categories
@@ -73,32 +81,34 @@ public interface Categories
    * Lists the complete set of categories using the specified scheme
    * @throws URISyntaxException 
    */
-  List<Category> getCategories(String scheme) throws URISyntaxException;
+  List<Category> getCategories(String scheme) throws IRISyntaxException;
   
   /**
    * Returns a copy of the complete set of categories with the scheme attribute set
    * as specified in 7.2.1. (child categories that do not have a scheme
    * attribute inherit the scheme attribute of the parent)
+   * @throws IOException 
    * @throws URISyntaxException 
    */
-  List<Category> getCategoriesWithScheme() throws URISyntaxException;
+  List<Category> getCategoriesWithScheme() throws IRISyntaxException;
 
   /**
    * Returns a copy of the complete set of categories with the scheme 
    * attribute set as specified in 7.2.1. (child categories that do not have a 
    * scheme attribute inherit the scheme attribute of the parent)
+   * @throws IRISyntaxException 
    */
-  List<Category> getCategoriesWithScheme(String scheme) throws URISyntaxException;
+  List<Category> getCategoriesWithScheme(String scheme) throws IRISyntaxException;
   
   void addCategory(Category category);
 
   Category addCategory(String term);
 
-  Category addCategory(String scheme, String term, String label) throws URISyntaxException;
+  Category addCategory(String scheme, String term, String label) throws IRISyntaxException;
     
-  boolean contains(String term) throws URISyntaxException;
+  boolean contains(String term) throws IRISyntaxException;
   
-  boolean contains(String term, String scheme) throws URISyntaxException;
+  boolean contains(String term, String scheme) throws IRISyntaxException;
   
 }
 

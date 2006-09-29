@@ -21,8 +21,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -43,12 +41,15 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Text;
+import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.parser.stax.util.FOMList;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.URIHelper;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMComment;
 import org.apache.axiom.om.OMContainer;
@@ -188,8 +189,8 @@ public class FOMElement
     setAttributeValue(LANG,language);
   }
 
-  public URI getBaseUri() throws URISyntaxException {
-    URI uri = _getUriValue(getAttributeValue(BASE));
+  public IRI getBaseUri() throws IRISyntaxException {
+    IRI uri = _getUriValue(getAttributeValue(BASE));
     if (URIHelper.isJavascriptUri(uri) || 
         URIHelper.isMailtoUri(uri)) { uri = null; }
     if (uri == null) {
@@ -202,9 +203,9 @@ public class FOMElement
     return uri;
   }
 
-  public URI getResolvedBaseUri() throws URISyntaxException {
-    URI baseUri = null;
-    URI uri = _getUriValue(getAttributeValue(BASE));
+  public IRI getResolvedBaseUri() throws IRISyntaxException {
+    IRI baseUri = null;
+    IRI uri = _getUriValue(getAttributeValue(BASE));
     if (URIHelper.isJavascriptUri(uri) || 
         URIHelper.isMailtoUri(uri)) { uri = null; }
     if (parent instanceof Element) 
@@ -219,12 +220,12 @@ public class FOMElement
     return uri;    
   }
   
-  public void setBaseUri(URI base) {
+  public void setBaseUri(IRI base) {
     setAttributeValue(BASE,_getStringValue(base));
   }
   
-  public void setBaseUri(String base) throws URISyntaxException {
-    setBaseUri((base != null) ? new URI(base) : null);
+  public void setBaseUri(String base) throws IRISyntaxException {
+    setBaseUri((base != null) ? new IRI(base) : null);
   }
   
   public String getAttributeValue(QName qname) {
@@ -275,15 +276,15 @@ public class FOMElement
     }
   }
   
-  protected URI _getUriValue(String v) throws URISyntaxException {
-    return (v != null) ? new URI(v) : null;
+  protected IRI _getUriValue(String v) throws IRISyntaxException {
+    return (v != null) ? new IRI(v) : null;
   }
   
-  protected String _getStringValue(URI uri) {
+  protected String _getStringValue(IRI uri) {
     return (uri != null) ? uri.toString() : null;
   }
   
-  protected URI _resolve(URI base, URI value) {
+  protected IRI _resolve(IRI base, IRI value) throws IRISyntaxException {
     if (value == null) return null;
     if ("".equals(value.toString()) || 
         "#".equals(value.toString()) ||
@@ -291,7 +292,7 @@ public class FOMElement
         "./".equals(value.toString())) return base;
     if (base == null) return value;
     if ("".equals(base.getPath())) base = base.resolve("/");
-    URI resolved = (base != null) ? base.resolve(value) : value;
+    IRI resolved = (base != null) ? base.resolve(value) : value;
     return resolved;
   }
 
@@ -382,7 +383,7 @@ public class FOMElement
     return text;
   }
 
-  protected Text setHtmlText(QName qname, String value, URI baseUri) {
+  protected Text setHtmlText(QName qname, String value, IRI baseUri) {
     if (value == null) {
       setTextElement(qname, null, false);
       return null;
@@ -395,7 +396,7 @@ public class FOMElement
     return text;
   }
   
-  protected Text setXhtmlText(QName qname, String value, URI baseUri) {
+  protected Text setXhtmlText(QName qname, String value, IRI baseUri) {
     if (value == null) {
       setTextElement(qname, null, false);
       return null;
@@ -408,7 +409,7 @@ public class FOMElement
     return text;
   }
 
-  protected Text setXhtmlText(QName qname, Div value, URI baseUri) {
+  protected Text setXhtmlText(QName qname, Div value, IRI baseUri) {
     if (value == null) {
       setTextElement(qname, null, false);
       return null;
@@ -450,7 +451,7 @@ public class FOMElement
   }
   
   
-  protected Element _parse(String value, URI baseUri) {
+  protected Element _parse(String value, IRI baseUri) throws ParseException, IRISyntaxException {
     if (value == null) return null;
     FOMFactory fomfactory = (FOMFactory) factory;
     Parser parser = fomfactory.newParser();
@@ -458,7 +459,7 @@ public class FOMElement
     ParserOptions options = parser.getDefaultParserOptions();
     options.setCharset(getXMLStreamReader().getCharacterEncodingScheme());
     options.setFactory(fomfactory);
-    Document doc = parser.parse(bais, baseUri, options);
+    Document doc = parser.parse(bais, baseUri.toString(), options);
     return doc.getRoot();
   }
 

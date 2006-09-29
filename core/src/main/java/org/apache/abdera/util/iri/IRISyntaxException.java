@@ -17,12 +17,15 @@
 */
 package org.apache.abdera.util.iri;
 
-import java.io.IOException;
-
-public class IRISyntaxException extends IOException {
+public class IRISyntaxException extends Exception {
   private static final long serialVersionUID = 5177739661976965423L;
 
   IRISyntaxException(String message) {
     super(message);
   }
+  
+  IRISyntaxException(Throwable cause) {
+    super(cause);
+  }
+  
 }

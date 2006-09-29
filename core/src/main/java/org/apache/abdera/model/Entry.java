@@ -17,14 +17,15 @@
 */
 package org.apache.abdera.model;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 
 import javax.activation.DataHandler;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
+
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 /**
  * <p>Represents an Atom Entry element.</p>
@@ -128,7 +129,7 @@ public interface Entry
    * Adds an author
    * @throws URISyntaxException 
    */
-  Person addAuthor(String name, String email, String uri) throws URISyntaxException;
+  Person addAuthor(String name, String email, String uri) throws IRISyntaxException;
   
   /**
    * Lists the complete set of categories listed for the entry
@@ -139,7 +140,7 @@ public interface Entry
    * Lists the complete set of categories using the specified scheme
    * @throws URISyntaxException 
    */
-  List<Category> getCategories(String scheme) throws URISyntaxException;
+  List<Category> getCategories(String scheme) throws IRISyntaxException;
 
   /**
    * Adds an individual category to the entry
@@ -155,7 +156,7 @@ public interface Entry
    * Adds a category to the entry
    * @throws URISyntaxException 
    */
-  Category addCategory(String scheme, String term, String label) throws URISyntaxException;
+  Category addCategory(String scheme, String term, String label) throws IRISyntaxException;
   
   /**
    * Returns the content for this entry
@@ -223,7 +224,7 @@ public interface Entry
    * @throws MimeTypeParseException if the mime type is invalid.
    * @throws URISyntaxException if the URI is invalid.
    */
-  Content setContent(URI uri, String mediatype) throws MimeTypeParseException, URISyntaxException;
+  Content setContent(IRI uri, String mediatype) throws MimeTypeParseException, IRISyntaxException;
   
   /**
    * Returns the text of the content element
@@ -234,7 +235,7 @@ public interface Entry
    * Returns the content/@src attribute, if any
    * @throws URISyntaxException 
    */
-  URI getContentSrc() throws URISyntaxException;
+  IRI getContentSrc() throws IRISyntaxException;
   
   /**
    * Returns the content type
@@ -266,7 +267,7 @@ public interface Entry
    * Adds an author
    * @throws URISyntaxException 
    */
-  Person addContributor(String name, String email, String uri) throws URISyntaxException;
+  Person addContributor(String name, String email, String uri) throws IRISyntaxException;
   
   /**
    * Returns the universally unique identifier for this entry
@@ -282,19 +283,19 @@ public interface Entry
    * Returns the universally unique identifier for this entry
    * @throws URISyntaxException 
    */
-  URI getId() throws URISyntaxException;
+  IRI getId() throws IRISyntaxException;
 
   /**
    * Sets the universally unique identifier for this entry
    * @throws URISyntaxException 
    */
-  IRIElement setId(String id) throws URISyntaxException;
+  IRIElement setId(String id) throws IRISyntaxException;
   
   /**
    * Sets the universally unique identifier for this entry
    * @throws URISyntaxException 
    */
-  IRIElement setId(String id, boolean normalize) throws URISyntaxException;
+  IRIElement setId(String id, boolean normalize) throws IRISyntaxException;
   
   /**
    * Lists the complete set of links for this entry
@@ -311,11 +312,11 @@ public interface Entry
    */
   void addLink(Link link);
   
-  Link addLink(String href) throws URISyntaxException;
+  Link addLink(String href) throws IRISyntaxException;
   
-  Link addLink(String href, String rel) throws URISyntaxException;
+  Link addLink(String href, String rel) throws IRISyntaxException;
   
-  Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws URISyntaxException, MimeTypeParseException;
+  Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws IRISyntaxException, MimeTypeParseException;
   
   /**
    * RFC4287: The "atom:published" element is a Date construct indicating an
@@ -622,12 +623,12 @@ public interface Entry
    */
   Link getSelfLink();
  
-  URI getLinkResolvedHref(String rel) throws URISyntaxException;
-  URI getAlternateLinkResolvedHref() throws URISyntaxException;
-  URI getAlternateLinkResolvedHref(String type, String hreflang) throws URISyntaxException, MimeTypeParseException;
-  URI getEnclosureLinkResolvedHref() throws URISyntaxException;
-  URI getEditLinkResolvedHref() throws URISyntaxException;
-  URI getEditMediaLinkResolvedHref() throws URISyntaxException;
-  URI getEditMediaLinkResolvedHref(String type, String hreflang) throws URISyntaxException, MimeTypeParseException;
-  URI getSelfLinkResolvedHref() throws URISyntaxException;
+  IRI getLinkResolvedHref(String rel) throws IRISyntaxException;
+  IRI getAlternateLinkResolvedHref() throws IRISyntaxException;
+  IRI getAlternateLinkResolvedHref(String type, String hreflang) throws IRISyntaxException, MimeTypeParseException;
+  IRI getEnclosureLinkResolvedHref() throws IRISyntaxException;
+  IRI getEditLinkResolvedHref() throws IRISyntaxException;
+  IRI getEditMediaLinkResolvedHref() throws IRISyntaxException;
+  IRI getEditMediaLinkResolvedHref(String type, String hreflang) throws IRISyntaxException, MimeTypeParseException;
+  IRI getSelfLinkResolvedHref() throws IRISyntaxException;
 }

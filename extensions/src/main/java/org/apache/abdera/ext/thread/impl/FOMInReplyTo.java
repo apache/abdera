@@ -17,9 +17,6 @@
 */
 package org.apache.abdera.ext.thread.impl;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
@@ -27,6 +24,8 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.ext.thread.InReplyTo;
 import org.apache.abdera.ext.thread.ThreadConstants;
 import org.apache.abdera.parser.stax.FOMElement;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -44,12 +43,12 @@ public class FOMInReplyTo
     super(ThreadConstants.IN_REPLY_TO);
   }
   
-  public FOMInReplyTo(URI ref) {
+  public FOMInReplyTo(IRI ref) {
     this();
     setRef(ref);
   }
   
-  public FOMInReplyTo(String ref) throws URISyntaxException {
+  public FOMInReplyTo(String ref) throws IRISyntaxException {
     this();
     setRef(ref);
   }
@@ -86,32 +85,32 @@ public class FOMInReplyTo
     super(qname, parent, factory, builder);
   }
 
-  public URI getRef() throws URISyntaxException {
+  public IRI getRef() throws IRISyntaxException {
     return _getUriValue(getAttributeValue(ThreadConstants.THRREF));
   }
 
-  public void setRef(URI ref) {
+  public void setRef(IRI ref) {
     this.setAttributeValue(ThreadConstants.THRREF, ref.toString());
   }
   
-  public void setRef(String ref) throws URISyntaxException {
-    setRef(new URI(ref));
+  public void setRef(String ref) throws IRISyntaxException {
+    setRef(new IRI(ref));
   }
 
-  public URI getResolvedHref() throws URISyntaxException {
+  public IRI getResolvedHref() throws IRISyntaxException {
     return _resolve(getResolvedBaseUri(), getHref());
   }
   
-  public URI getHref() throws URISyntaxException {
+  public IRI getHref() throws IRISyntaxException {
     return _getUriValue(getAttributeValue(HREF));
   }
 
-  public void setHref(URI ref) {
+  public void setHref(IRI ref) {
     this.setAttributeValue(HREF, ref.toString());
   }
 
-  public void setHref(String ref) throws URISyntaxException {
-    setHref(new URI(ref));
+  public void setHref(String ref) throws IRISyntaxException {
+    setHref(new IRI(ref));
   }
   
   public MimeType getMimeType() throws MimeTypeParseException {
@@ -131,20 +130,20 @@ public class FOMInReplyTo
     setMimeType(new MimeType(mimeType));
   }
   
-  public URI getResolvedSource() throws URISyntaxException {
+  public IRI getResolvedSource() throws IRISyntaxException {
     return _resolve(getResolvedBaseUri(), getSource());
   }
   
-  public URI getSource() throws URISyntaxException {
+  public IRI getSource() throws IRISyntaxException {
     return _getUriValue(getAttributeValue(ThreadConstants.THRSOURCE));
   }
 
-  public void setSource(URI source) {
+  public void setSource(IRI source) {
     this.setAttributeValue(ThreadConstants.THRSOURCE, source.toString());
   }
   
-  public void setSource(String source) throws URISyntaxException {
-    setSource(new URI(source));
+  public void setSource(String source) throws IRISyntaxException {
+    setSource(new IRI(source));
   }
 
 }

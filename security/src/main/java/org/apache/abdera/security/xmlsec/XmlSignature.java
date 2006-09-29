@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.security.xmlsec;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
@@ -31,6 +29,8 @@ import org.apache.abdera.security.SecurityException;
 import org.apache.abdera.security.SignatureOptions;
 import org.apache.abdera.security.util.Constants;
 import org.apache.abdera.security.util.SignatureBase;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.KeyInfo;
 import org.apache.xml.security.signature.XMLSignature;
@@ -61,13 +61,13 @@ public class XmlSignature
     T element, 
     SignatureOptions options) 
       throws XMLSecurityException, 
-             URISyntaxException {    
+             IRISyntaxException {    
     element.setBaseUri(element.getResolvedBaseUri());
     org.w3c.dom.Element dom = fomToDom((Element)element.clone(), options);
     org.w3c.dom.Document domdoc = dom.getOwnerDocument();
     PrivateKey signingKey = options.getSigningKey();
     X509Certificate cert = options.getCertificate();
-    URI baseUri = element.getResolvedBaseUri();
+    IRI baseUri = element.getResolvedBaseUri();
     XMLSignature sig = new XMLSignature(
       domdoc, 
       (baseUri != null) ? baseUri.toString() : "", 
@@ -98,7 +98,7 @@ public class XmlSignature
     XMLSignature sig) 
       throws XMLSignatureException, 
              XMLSecurityException, 
-             URISyntaxException {
+             IRISyntaxException {
     boolean answer = false;
     KeyInfo ki = sig.getKeyInfo();
     if (ki != null) {
@@ -120,7 +120,7 @@ public class XmlSignature
     SignatureOptions options)
       throws XMLSignatureException, 
              XMLSecurityException, 
-             URISyntaxException {
+             IRISyntaxException {
     List<X509Certificate> certs = new ArrayList<X509Certificate>();
     org.w3c.dom.Element dom = fomToDom((Element)element, options);
     NodeList children = dom.getChildNodes();
@@ -131,7 +131,7 @@ public class XmlSignature
           org.w3c.dom.Element el = (org.w3c.dom.Element) node;
           if (Constants.DSIG_NS.equals(el.getNamespaceURI()) &&
               Constants.LN_SIGNATURE.equals(el.getLocalName())) {
-            URI baseUri = element.getResolvedBaseUri();
+            IRI baseUri = element.getResolvedBaseUri();
             XMLSignature sig = 
               new XMLSignature(
                 el, (baseUri != null) ? baseUri.toString() : "");
@@ -164,7 +164,7 @@ public class XmlSignature
     SignatureOptions options) 
       throws XMLSignatureException, 
              XMLSecurityException, 
-             URISyntaxException {
+             IRISyntaxException {
     boolean answer = false;
     org.w3c.dom.Element dom = fomToDom((Element)element, options);
     NodeList children = dom.getChildNodes();
@@ -174,7 +174,7 @@ public class XmlSignature
         org.w3c.dom.Element el = (org.w3c.dom.Element) node;
         if (Constants.DSIG_NS.equals(el.getNamespaceURI()) &&
             Constants.LN_SIGNATURE.equals(el.getLocalName())) {
-          URI baseUri = element.getResolvedBaseUri();
+          IRI baseUri = element.getResolvedBaseUri();
           XMLSignature sig = 
             new XMLSignature(
               el, (baseUri != null) ? baseUri.toString() : "");

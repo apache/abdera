@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.parser.stax;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -26,6 +25,7 @@ import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.util.Constants;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -138,7 +138,7 @@ public class FOMWorkspace
     addChild((OMElement)collection);
   }
 
-  public Collection addCollection(String title, String href) throws URISyntaxException {
+  public Collection addCollection(String title, String href) throws IRISyntaxException {
     FOMFactory fomfactory = (FOMFactory) factory;
     Collection collection = fomfactory.newCollection(this);
     collection.setTitle(title);

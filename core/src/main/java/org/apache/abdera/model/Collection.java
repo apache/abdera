@@ -17,11 +17,12 @@
 */
 package org.apache.abdera.model;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.activation.MimeType;
+
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 /**
  * <p>Represents an collection element in an Atom Publishing Protocol 
@@ -54,11 +55,11 @@ public interface Collection
   
   Text getTitleElement();
 
-  URI getHref() throws URISyntaxException;
+  IRI getHref() throws IRISyntaxException;
 
-  URI getResolvedHref() throws URISyntaxException;
+  IRI getResolvedHref() throws IRISyntaxException;
   
-  void setHref(String href) throws URISyntaxException;
+  void setHref(String href) throws IRISyntaxException;
 
   Element getAcceptElement();
   
@@ -74,10 +75,10 @@ public interface Collection
   
   Categories addCategories();
   
-  Categories addCategories(String href) throws URISyntaxException;
+  Categories addCategories(String href) throws IRISyntaxException;
   
   void addCategories(Categories categories);
   
-  Categories addCategories(List<Category> categories, boolean fixed, String scheme) throws URISyntaxException;
+  Categories addCategories(List<Category> categories, boolean fixed, String scheme) throws IRISyntaxException;
   
 }

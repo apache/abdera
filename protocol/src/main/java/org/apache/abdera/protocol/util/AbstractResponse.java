@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.protocol.util;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Date;
 
 import javax.activation.MimeType;
@@ -26,6 +24,8 @@ import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.protocol.EntityTag;
 import org.apache.abdera.protocol.Response;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 public abstract class AbstractResponse 
   implements Response {
@@ -58,7 +58,7 @@ public abstract class AbstractResponse
     return (value != null) ? Long.parseLong(value) : -1;
   }
 
-  public URI getContentLocation() throws URISyntaxException {
+  public IRI getContentLocation() throws IRISyntaxException {
     return getUriHeader("Content-Location");
   }
   
@@ -84,7 +84,7 @@ public abstract class AbstractResponse
     return getDateHeader("Last-Modified");
   }
 
-  public URI getLocation() throws URISyntaxException {
+  public IRI getLocation() throws IRISyntaxException {
     return getUriHeader("Location");
   }
 
@@ -108,9 +108,9 @@ public abstract class AbstractResponse
     return ResponseType.select(getStatus());
   }
 
-  public URI getUriHeader(String name) throws URISyntaxException {
+  public IRI getUriHeader(String name) throws IRISyntaxException {
     String value = getHeader(name);
-    return (value != null) ? new URI(value) : null;
+    return (value != null) ? new IRI(value) : null;
   }
 
   public boolean isMustRevalidate() {

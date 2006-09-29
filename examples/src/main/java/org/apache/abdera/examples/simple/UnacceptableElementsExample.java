@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.examples.simple;
 
-import java.net.URI;
-
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.Abdera;
@@ -61,7 +59,7 @@ public class UnacceptableElementsExample {
     options.setParseFilter(exceptionFilter);
     Document<Feed> doc = parser.parse(
       UnacceptableElementsExample.class.getResourceAsStream("/xmlcontent.xml"), 
-      (URI)null, options);
+      null, options);
     
     // this will throw a FOMException
     doc.writeTo(System.out);

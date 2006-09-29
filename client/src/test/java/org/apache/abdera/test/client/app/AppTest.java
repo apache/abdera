@@ -21,7 +21,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +47,7 @@ import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.test.client.JettyTest;
 import org.apache.abdera.util.MimeTypeHelper;
+import org.apache.abdera.util.iri.IRI;
 
 /**
  * Test to make sure that we can operate as a simple APP client
@@ -219,7 +219,7 @@ public class AppTest extends JettyTest {
             entry.addLink(entry.getId().toString(), "edit");
             entry.addLink(AppTest.INSTANCE.getBase() + "/collections/media/" + n, "edit-media").setMimeType("text/plain");
             entry.addLink(entry.getId().toString(), "self");
-            entry.setContent(new URI(AppTest.INSTANCE.getBase() + "/collections/media/" + n), "text/plain");
+            entry.setContent(new IRI(AppTest.INSTANCE.getBase() + "/collections/media/" + n), "text/plain");
             feed.getRoot().insertEntry(entry);
             this.media.put(entry.getId().toString(), media);
             response.setStatus(HttpServletResponse.SC_CREATED);

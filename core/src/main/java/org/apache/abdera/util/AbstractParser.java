@@ -19,8 +19,6 @@ package org.apache.abdera.util;
 
 import java.io.InputStream;
 import java.io.Reader;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
@@ -29,6 +27,7 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 public abstract class AbstractParser 
   implements Parser {
@@ -53,23 +52,16 @@ public abstract class AbstractParser
   
   public <T extends Element>Document<T> parse(
     InputStream in) 
-      throws ParseException {
-    return parse(in, (URI)null, getDefaultParserOptions());
-  }
-
-  public <T extends Element>Document<T> parse(
-    InputStream in, 
-    URI base) 
-      throws ParseException {
-    return parse(in, base, getDefaultParserOptions());
+      throws ParseException, IRISyntaxException {
+    return parse(in, null, getDefaultParserOptions());
   }
 
   public <T extends Element>Document<T> parse(
     InputStream in, 
     String base) 
       throws ParseException, 
-             URISyntaxException {
-    return parse(in, new URI(base), getDefaultParserOptions());
+             IRISyntaxException {
+    return parse(in, base, getDefaultParserOptions());
   }
   
   public <T extends Element>Document<T> parse(
@@ -77,40 +69,24 @@ public abstract class AbstractParser
     String base, 
     ParserOptions options) 
       throws ParseException, 
-             URISyntaxException {
-    return parse(in, (base != null) ? new URI(base) : null, options);
+             IRISyntaxException {
+    return parse(in, (base != null) ? base : null, options);
   }
   
   public <T extends Element>Document<T> parse(
     Reader in) 
-      throws ParseException {
-    return parse(in, (URI)null, getDefaultParserOptions());
-  }
-
-  public <T extends Element>Document<T> parse(
-    Reader in, 
-    URI base) 
-      throws ParseException {
-    return parse(in, base, getDefaultParserOptions());
+      throws ParseException, IRISyntaxException {
+    return parse(in, null, getDefaultParserOptions());
   }
 
   public <T extends Element>Document<T> parse(
     Reader in, 
     String base) 
       throws ParseException, 
-             URISyntaxException {
-    return parse(in, new URI(base), getDefaultParserOptions());
+             IRISyntaxException {
+    return parse(in, base, getDefaultParserOptions());
   }
-  
-  public <T extends Element>Document<T> parse(
-    Reader in, 
-    String base, 
-    ParserOptions options) 
-      throws ParseException, 
-             URISyntaxException {
-    return parse(in, new URI(base), options);
-  }
-  
+
   public abstract ParserOptions getDefaultParserOptions();
   
 }

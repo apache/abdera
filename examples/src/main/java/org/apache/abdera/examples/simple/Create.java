@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.examples.simple;
 
-import java.net.URI;
 import java.util.Date;
 
 import org.apache.abdera.Abdera;
@@ -25,6 +24,7 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Text;
+import org.apache.abdera.util.iri.IRI;
 
 
 public class Create {
@@ -73,7 +73,7 @@ public class Create {
     entry4.setId("urn:uuid:1225c695-cfb8-4ebb-aaaa-cafebabecafe");
     entry4.setUpdated(new Date());
     entry4.setSummary("An entry with out-of-line content");
-    entry4.setContent(new URI("http://example.org/0xcafebabe"), "text/html");
+    entry4.setContent(new IRI("http://example.org/0xcafebabe"), "text/html");
     feed.getDocument().writeTo(System.out);
   }
 

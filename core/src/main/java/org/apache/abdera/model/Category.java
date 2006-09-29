@@ -17,8 +17,10 @@
 */
 package org.apache.abdera.model;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.io.IOException;
+
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 /**
  * <p>Provides categorization informaton for a feed or entry</p>
@@ -61,8 +63,10 @@ public interface Category
    * RFC4287: The "scheme" attribute is an IRI that identifies a 
    * categorization scheme.  Category elements MAY have a "scheme" 
    * attribute.
+   * @throws IOException 
+   * @throws IRISyntaxException 
    */
-  URI getScheme() throws URISyntaxException;
+  IRI getScheme() throws IRISyntaxException;
 
   /**
    * RFC4287: The "scheme" attribute is an IRI that identifies a 
@@ -70,7 +74,7 @@ public interface Category
    * attribute.
    * @throws URISyntaxException 
    */
-  void setScheme(String scheme) throws URISyntaxException;
+  void setScheme(String scheme) throws IRISyntaxException;
  
   /**
    * RFC4287: The "label" attribute provides a human-readable label 

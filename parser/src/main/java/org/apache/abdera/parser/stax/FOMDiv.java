@@ -18,7 +18,6 @@
 package org.apache.abdera.parser.stax;
 
 import java.io.ByteArrayOutputStream;
-import java.net.URI;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -27,6 +26,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.abdera.model.Div;
 import org.apache.abdera.util.Constants;
+import org.apache.abdera.util.iri.IRI;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -121,12 +121,13 @@ public class FOMDiv
   public void setValue(String value) {
     _removeAllChildren();
     if (value != null) {
-      URI baseUri = null;
+      IRI baseUri = null;
+      value = "<div xmlns=\"" + XHTML_NS + "\">" + value + "</div>";
+      OMElement element = null;
       try {
         baseUri = getResolvedBaseUri();
+        element = (OMElement) _parse(value, baseUri);
       } catch (Exception e) {}
-      value = "<div xmlns=\"" + XHTML_NS + "\">" + value + "</div>";
-      OMElement element = (OMElement) _parse(value, baseUri);
       for (Iterator i = element.getChildren(); i.hasNext();) {
         this.addChild((OMNode)i.next());
       }

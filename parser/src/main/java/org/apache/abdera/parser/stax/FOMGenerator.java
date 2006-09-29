@@ -17,13 +17,12 @@
 */
 package org.apache.abdera.parser.stax;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Generator;
 import org.apache.abdera.util.Constants;
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -44,7 +43,7 @@ public class FOMGenerator
     String value, 
     String version, 
     String uri) 
-      throws URISyntaxException {
+      throws IRISyntaxException {
     this();
     setText(value);
     setVersion(version);
@@ -90,18 +89,18 @@ public class FOMGenerator
     super(GENERATOR, parent, factory, builder);
   }
   
-  public URI getUri() throws URISyntaxException {
+  public IRI getUri() throws IRISyntaxException {
     String value = getAttributeValue(AURI);
-    return (value != null) ? new URI(value) : null;
+    return (value != null) ? new IRI(value) : null;
 }
 
-  public URI getResolvedUri() throws URISyntaxException {
+  public IRI getResolvedUri() throws IRISyntaxException {
     return _resolve(getResolvedBaseUri(), getUri());
   }
 
-  public void setUri(String uri) throws URISyntaxException {
+  public void setUri(String uri) throws IRISyntaxException {
     if (uri != null)
-      setAttributeValue(AURI, (new URI(uri)).toString());
+      setAttributeValue(AURI, (new IRI(uri)).toString());
     else 
       removeAttribute(AURI);
   }

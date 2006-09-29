@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.parser.stax.util;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +24,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.util.iri.IRI;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMNode;
@@ -39,7 +39,7 @@ public class ResolveFunction implements Function {
   public static final QName QNAME = new QName("http://incubator.apache.org/abdera", "resolve");
   
   public Object call(Context context, List args) throws FunctionCallException {
-    List<URI> results = new ArrayList<URI>();
+    List<IRI> results = new ArrayList<IRI>();
     if (args.isEmpty()) return null;
     Navigator navigator = context.getNavigator();
     for(Object obj : args) {
@@ -47,8 +47,8 @@ public class ResolveFunction implements Function {
         for (Object o : (List)obj) {
           try {
             String value = StringFunction.evaluate(o, navigator);
-            URI resolved = null;
-            URI baseUri = null;
+            IRI resolved = null;
+            IRI baseUri = null;
             if (o instanceof OMNode) {
               OMNode node = (OMNode) o;
               OMContainer el = node.getParent();

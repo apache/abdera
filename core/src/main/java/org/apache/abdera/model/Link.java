@@ -17,11 +17,11 @@
 */
 package org.apache.abdera.model;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
+
+import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.util.iri.IRISyntaxException;
 
 /**
  * <p>Represents an Atom Link element.</p>
@@ -88,21 +88,21 @@ public interface Link
    * elements MUST have an href attribute, whose value MUST be a IRI 
    * reference [RFC3987].
    */
-  URI getHref() throws URISyntaxException;
+  IRI getHref() throws IRISyntaxException;
   
   /**
    * Returns the value of the link's href attribute resolved against the 
-   * in-scope Base URI
+   * in-scope Base IRI
    */
-  URI getResolvedHref() throws URISyntaxException;
+  IRI getResolvedHref() throws IRISyntaxException;
   
   /**
    * RFC4287: The "href" attribute contains the link's IRI. atom:link 
    * elements MUST have an href attribute, whose value MUST be a IRI 
    * reference [RFC3987].
-   * @throws URISyntaxException 
+   * @throws IRISyntaxException 
    */
-  void setHref(String href) throws URISyntaxException;
+  void setHref(String href) throws IRISyntaxException;
   
   /**
    * <p>RFC4287: atom:link elements MAY have a "rel" attribute that indicates the link
@@ -201,8 +201,8 @@ public interface Link
   /**
    * RFC4287: The "length" attribute indicates an advisory length of the linked
    * content in octets; it is a hint about the content length of the
-   * representation returned when the IRI in the href attribute is mapped
-   * to a URI and dereferenced.  Note that the length attribute does not
+   * representation returned when the URI in the href attribute is mapped
+   * to a IRI and dereferenced.  Note that the length attribute does not
    * override the actual content length of the representation as reported
    * by the underlying protocol.  Link elements MAY have a length
    * attribute.

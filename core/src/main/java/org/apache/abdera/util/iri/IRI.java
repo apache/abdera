@@ -19,6 +19,7 @@ package org.apache.abdera.util.iri;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.BitSet;
@@ -73,6 +74,15 @@ public class IRI
       Constants.RESERVED, 
       Constants.PCTENC,
       Constants.GENDELIMS));
+  }
+  
+  public IRI(java.net.URI uri, String enc) throws IRISyntaxException, UnsupportedEncodingException {
+    this(Escaping.encode(
+        Escaping.decode(uri.toString(),enc), enc,
+        Constants.IUNRESERVED, 
+        Constants.RESERVED, 
+        Constants.PCTENC,
+        Constants.GENDELIMS));
   }
   
   public IRI(String iri) throws IRISyntaxException {

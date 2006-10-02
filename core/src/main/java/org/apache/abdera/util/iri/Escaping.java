@@ -81,7 +81,7 @@ public final class Escaping {
   
   public static String decode(String e, String enc) 
     throws UnsupportedEncodingException {
-      DecodingReader r = new DecodingReader(e.getBytes(),enc);
+      DecodingReader r = new DecodingReader(e.getBytes(enc),enc);
       char[] buf = new char[e.length()];
       try {
         int l = r.read(buf);
@@ -91,19 +91,16 @@ public final class Escaping {
   }
   
   public static String decode(String e) {
-    if (e == null) return null;
-    DecodingReader r = new DecodingReader(e.getBytes());
-    char[] buf = new char[e.length()];
     try {
-      int l = r.read(buf);
-      e = new String(buf,0,l);
-    } catch (Exception ex) {}
-    return e;
+      return decode(e,"utf-8");
+    } catch (Exception ex) {
+      return e;
+    }
   }
   
   public static class DecodingInputStream 
     extends ByteArrayInputStream {
-  
+
     DecodingInputStream(byte[] buf) {
       super(buf);
     }

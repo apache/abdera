@@ -25,7 +25,7 @@ public abstract class TestBase extends TestCase {
     try {
       byte[] b = new byte[chars.length];
       for (int n = 0; n < chars.length; n++) b[n] = (byte)chars[n];
-      return new String(b);
+      return new String(b,"utf-8");
     } catch (Exception e ) {
       e.printStackTrace();
     }

@@ -3014,7 +3014,7 @@ public class FeedValidatorTest
      assertNotNull(doc);
      Entry entry = doc.getRoot().getEntries().get(0);
      Link link = entry.getAlternateLink();
-     assertEquals(link.getTitle(),"This is a £test.");
+     assertEquals(link.getTitle(),"This is a \u00A3\u0093test.\u0094");
    }
    
    public static void testSection4275LinkTitleWithHtml() throws Exception {

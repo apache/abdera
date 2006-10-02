@@ -44,6 +44,10 @@ public class RewindableInputStream
     this.scale = capacity;
   }
 
+  public int position() {
+    return position;
+  }
+  
   private void grow(int capacity)  {
     if (buffer == null) {
       buffer = new byte[capacity];
@@ -95,7 +99,8 @@ public class RewindableInputStream
     int r = super.read(b, off, len);
     if (r != -1) {
       if (position + r >= buffer.length) grow(Math.max(position+r,scale));
-      System.arraycopy(b, off, buffer, position++, r);
+      System.arraycopy(b, off, buffer, position, r);
+      position = position + r;
     }
     return r;
   }

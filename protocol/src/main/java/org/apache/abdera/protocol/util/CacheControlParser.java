@@ -31,7 +31,7 @@ public class CacheControlParser implements Iterable<CacheControlParser.Directive
     
     public static Directive select(String d) {
       try {
-        d = d.toUpperCase().replace("-", "");
+        d = d.toUpperCase().replaceAll("-", "");
         return Directive.valueOf(d);
       } catch (Exception e) {}
       return UNKNOWN;

@@ -26,6 +26,10 @@ public final class CharUtils {
 
   private CharUtils() {}
  
+  public static boolean isValidCodepoint(int d) {
+    return d >= 0x000000 && d <= 0x10ffff;
+  }
+  
   public static int scanNot(CodepointIterator ci, BitSet set) throws InvalidCharacterException {
     RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,set,true,true);
     while (rci.hasNext()) rci.next();

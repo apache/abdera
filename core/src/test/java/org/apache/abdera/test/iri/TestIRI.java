@@ -29,7 +29,7 @@ public class TestIRI extends TestCase {
 
   public static void testSimple() throws Exception {
     IRI iri = new IRI("http://validator.w3.org/check?uri=http%3A%2F%2Fr\u00E9sum\u00E9.example.org");
-    assertEquals(iri.toString(),"http://validator.w3.org/check?uri=http%3A%2F%2Frésumé.example.org");
+    assertEquals(iri.toString(),"http://validator.w3.org/check?uri=http%3A%2F%2Fr\u00E9sum\u00E9.example.org");
     assertEquals(iri.toURI().toString(),"http://validator.w3.org/check?uri=http://r%C3%A9sum%C3%A9.example.org");   
   }
 
@@ -52,8 +52,8 @@ public class TestIRI extends TestCase {
   
   public static void testURItoIRI2() throws Exception {
     URI uri = new URI("http://www.example.org/D%FCrst");
-    IRI iri = new IRI(uri);
-    assertEquals(iri.toString(),"http://www.example.org/D%FCrst");
+    IRI iri = new IRI(uri, "windows-1252");
+    assertEquals(iri.toString(),"http://www.example.org/D\u00FCrst");
   }
 
   public static void testURItoIRI3() throws Exception {
@@ -117,11 +117,6 @@ public class TestIRI extends TestCase {
     assertTrue(iri1.equivalent(iri2));
   }
   
-  public static void testMixedEncodings() throws Exception {
-    IRI iri = new IRI("http://www.example.org/r%E9sum%E9.xml#r%C3%A9sum%C3%A9");
-    assertEquals(iri.normalize().toString(),"http://www.example.org/r%E9sum%E9.xml#r\u00E9sum\u00E9");
-  }
-  
   public static void testRelative() throws Exception{
     IRI base = new IRI("http://example.org/foo/");
     
@@ -136,7 +131,4 @@ public class TestIRI extends TestCase {
     assertEquals(base.resolve(".").toString(),"http://example.org/foo/");
   }
 
-  
-  
-  
 }

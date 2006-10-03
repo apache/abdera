@@ -237,4 +237,81 @@ public final class CharUtils {
       String.valueOf((char)c);
   }
   
+  
+
+  private static final char LRE = 0x202A; 
+  private static final char RLE = 0x202B; 
+  private static final char LRO = 0x202D; 
+  private static final char RLO = 0x202E; 
+  private static final char LRM = 0x200E; 
+  private static final char RLM = 0x200F;
+  private static final char PDF = 0x202C;
+  
+  /**
+   * Removes leading and trailing bidi controls from the string
+   */
+  public static String stripBidi(String s) {
+    if (s == null || s.length() <= 1) return s;
+    if (charIsBidiControl(s.charAt(0)))
+      s = s.substring(1);
+    if (charIsBidiControl(s.charAt(s.length()-1)))
+      s = s.substring(0,s.length()-1);
+    return s;
+  }
+  
+  /**
+   * Returns true if the character is a bidi control 
+   */
+  public static boolean charIsBidiControl(char c) {
+    return c == 0x202A ||
+    c == LRE ||
+    c == RLE ||
+    c == LRO ||
+    c == RLO ||
+    c == RLM ||
+    c == LRM || 
+    c == PDF;
+  }
+  
+  /**
+   * Wrap the string with Bidi Right-to-Left embed
+   */
+  public static String bidiRLE(String s) {
+    return RLE + s + PDF;
+  }
+  
+  /**
+   * Wrap the string with Bidi Right-to-Left override 
+   */
+  public static String bidiRLO(String s) {
+    return RLO + s + PDF;
+  }
+  
+  /**
+   * Wrap the string with Bidi Left-to-Right embed
+   */
+  public static String bidiLRE(String s) {
+    return LRE + s + PDF;
+  }
+  
+  /**
+   * Wrap the string with Bidi Left-to-Right override
+   */
+  public static String bidiLRO(String s) {
+    return LRO + s + PDF;
+  }
+  
+  /**
+   * Wrap the string with Bidi RML marks
+   */
+  public static String bidiRLM(String s) {
+    return RLM + s + RLM;
+  }
+  
+  /**
+   * Wrap the string with Bidi LRM marks
+   */
+  public static String bidiLRM(String s) {
+    return LRM + s + RLM;
+  }
 }

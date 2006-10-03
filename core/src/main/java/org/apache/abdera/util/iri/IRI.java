@@ -69,7 +69,7 @@ public class IRI
   
   public IRI(String iri) throws IRISyntaxException {
     Builder b = new Builder();
-    parse(iri, b);
+    parse(CharUtils.stripBidi(iri), b);
     init(
       b.schemeobj,
       b.scheme,
@@ -83,7 +83,7 @@ public class IRI
   }
   
   public IRI(String iri, Normalizer.Form nf) throws IRISyntaxException, IOException {
-    this(Normalizer.normalize(iri,nf).toString());
+    this(Normalizer.normalize(CharUtils.stripBidi(iri),nf).toString());
   }
   
   public IRI(
@@ -637,12 +637,7 @@ public class IRI
   }
   
   public String toBIDIString() {
-    StringBuffer buf = new StringBuffer(toString());
-    if (buf.length() > 0) {
-      if (buf.charAt(0) != '\u202A') buf.insert(0,'\u202A');
-      if (buf.charAt(buf.length()-1) != '\u202C') buf.append('\u202C');
-    }
-    return buf.toString();
+    return CharUtils.bidiLRE(toString());
   }
   
   public java.net.URI toURI() 

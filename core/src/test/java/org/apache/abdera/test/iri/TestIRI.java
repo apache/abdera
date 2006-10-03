@@ -132,4 +132,74 @@ public class TestIRI extends TestCase {
     assertEquals(base.resolve(".").toString(),"http://example.org/foo/");
   }
 
+  /**
+   * Try a variety of URI schemes.  If any problematic schemes pop up, 
+   * we should add a test for 'em here
+   */
+  public static void testSchemes() throws Exception {
+    
+    IRI iri = new IRI("http://a:b@c.org:80/d/e?f#g");
+    assertEquals(iri.getScheme(), "http");
+    assertEquals(iri.getUserInfo(), "a:b");
+    assertEquals(iri.getHost(),"c.org");
+    assertEquals(iri.getPort(),80);
+    assertEquals(iri.getPath(),"/d/e");
+    assertEquals(iri.getQuery(), "f");
+    assertEquals(iri.getFragment(),"g");
+    
+    iri = new IRI("https://a:b@c.org:80/d/e?f#g");
+    assertEquals(iri.getScheme(), "https");
+    assertEquals(iri.getUserInfo(), "a:b");
+    assertEquals(iri.getHost(),"c.org");
+    assertEquals(iri.getPort(),80);
+    assertEquals(iri.getPath(),"/d/e");
+    assertEquals(iri.getQuery(), "f");
+    assertEquals(iri.getFragment(),"g");
+    
+    iri = new IRI("ftp://a:b@c.org:80/d/e?f#g");
+    assertEquals(iri.getScheme(), "ftp");
+    assertEquals(iri.getUserInfo(), "a:b");
+    assertEquals(iri.getHost(),"c.org");
+    assertEquals(iri.getPort(),80);
+    assertEquals(iri.getPath(),"/d/e");
+    assertEquals(iri.getQuery(), "f");
+    assertEquals(iri.getFragment(),"g");
+    
+    iri = new IRI("mailto:joe@example.org?subject=foo");
+    assertEquals(iri.getScheme(), "mailto");
+    assertEquals(iri.getUserInfo(), null);
+    assertEquals(iri.getHost(),null);
+    assertEquals(iri.getPort(),-1);
+    assertEquals(iri.getPath(),"joe@example.org");
+    assertEquals(iri.getQuery(), "subject=foo");
+    assertEquals(iri.getFragment(),null);
+    
+    iri = new IRI("tag:example.org,2006:foo");
+    assertEquals(iri.getScheme(), "tag");
+    assertEquals(iri.getUserInfo(), null);
+    assertEquals(iri.getHost(),null);
+    assertEquals(iri.getPort(),-1);
+    assertEquals(iri.getPath(),"example.org,2006:foo");
+    assertEquals(iri.getQuery(), null);
+    assertEquals(iri.getFragment(),null);
+    
+    iri = new IRI("urn:lsid:ibm.com:example:82437234964354895798234d");
+    assertEquals(iri.getScheme(), "urn");
+    assertEquals(iri.getUserInfo(), null);
+    assertEquals(iri.getHost(),null);
+    assertEquals(iri.getPort(),-1);
+    assertEquals(iri.getPath(),"lsid:ibm.com:example:82437234964354895798234d");
+    assertEquals(iri.getQuery(), null);
+    assertEquals(iri.getFragment(),null);
+    
+    iri = new IRI("data:image/gif;base64,R0lGODdhMAAwAPAAAAAAAP");
+    assertEquals(iri.getScheme(), "data");
+    assertEquals(iri.getUserInfo(), null);
+    assertEquals(iri.getHost(),null);
+    assertEquals(iri.getPort(),-1);
+    assertEquals(iri.getPath(),"image/gif;base64,R0lGODdhMAAwAPAAAAAAAP");
+    assertEquals(iri.getQuery(), null);
+    assertEquals(iri.getFragment(),null);
+    
+  }
 }

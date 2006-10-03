@@ -194,7 +194,7 @@ public class IRI
 
     a_host = IDNA.toASCII(d_host);
     a_fragment = Escaping.encode(getFragment(),Constants.FRAGMENT);
-    a_path = normalize(Escaping.encode(getPath(), Constants.PATH));
+    a_path = normalize(_scheme,Escaping.encode(getPath(), Constants.PATH));
     a_query = Escaping.encode(getQuery(),Constants.QUERY);
     a_userinfo = Escaping.encode(getUserInfo(),Constants.USERINFO);
     a_authority = buildASCIIAuthority();
@@ -368,12 +368,16 @@ public class IRI
   }
   
   private String buildASCIIAuthority() {
-    StringBuffer buf = new StringBuffer();
-    String aui = getASCIIUserInfo();
-    String ah = getASCIIHost();
-    int port = getPort();
-    buildAuthority(buf,aui,ah,port);
-    return buf.toString();
+    if (_scheme instanceof HttpScheme) {
+      StringBuffer buf = new StringBuffer();
+      String aui = getASCIIUserInfo();
+      String ah = getASCIIHost();
+      int port = getPort();
+      buildAuthority(buf,aui,ah,port);
+      return buf.toString();
+    } else {
+      return Escaping.encode(getAuthority(), Constants.USERINFO, Constants.REGNAME);
+    }
   }
   
   public String getASCIIAuthority() {
@@ -444,8 +448,8 @@ public class IRI
         (b.scheme != null && c.scheme == null) ||
         (b.scheme != null && c.scheme != null && 
           !b.scheme.equalsIgnoreCase(c.scheme))) return c;
-    String bpath = normalize(b.getPath());
-    String cpath = normalize(c.getPath());
+    String bpath = normalize(b._scheme,b.getPath());
+    String cpath = normalize(c._scheme,c.getPath());
     bpath = (bpath != null) ? bpath : "/";
     cpath = (cpath != null) ? cpath : "/";
     if (!bpath.equals(cpath)) {
@@ -455,7 +459,7 @@ public class IRI
     IRI iri = new IRI(
       null,
       null,null,null,null,-1,
-      normalize(cpath.substring(bpath.length())), 
+      normalize(b._scheme,cpath.substring(bpath.length())), 
       c.getQuery(), 
       c.getFragment(), 
       false);
@@ -504,7 +508,7 @@ public class IRI
           b.getUserInfo(),
           b.getHost(),
           b.getPort(),
-          normalize(b.getPath()),
+          normalize(b._scheme,b.getPath()),
           b.getQuery(),
           cfragment,
           b.doubleslash
@@ -529,14 +533,14 @@ public class IRI
       host = b.getHost();
       port = b.getPort();
       path = c.isPathAbsolute() ? 
-          normalize(c.getPath()) : 
+          normalize(b._scheme,c.getPath()) : 
           resolve(b.getPath(),c.getPath());
     } else {
       authority = c.getAuthority();
       userinfo = c.getUserInfo();
       host = c.getHost();
       port = c.getPort();
-      path = normalize(c.getPath());
+      path = normalize(b._scheme,c.getPath());
     }
     return new IRI(_scheme,scheme,authority,userinfo,host,port,path,query,fragment,ds);
   }
@@ -558,14 +562,15 @@ public class IRI
         iri.getUserInfo(),
         iri.getHost(),
         iri.getPort(),
-        normalize(iri.getPath()),
+        normalize(iri._scheme,iri.getPath()),
         iri.getQuery(),
         iri.getFragment(),
         iri.doubleslash
       );
   }
 
-  static String normalize(String path) {
+  static String normalize(Scheme scheme, String path) {
+    if (scheme != null && !(scheme instanceof HttpScheme)) return path;
     if (path == null) return "/";
     String[] segments = path.split("/");
     if (segments.length < 2) return path;
@@ -604,7 +609,7 @@ public class IRI
     int n = bpath.lastIndexOf('/');
     if (n > -1) buf.append(bpath.substring(0,n+1));
     if (cpath.length() != 0) buf.append(cpath);
-    return normalize(buf.toString());
+    return normalize(new HttpScheme(),buf.toString());
   }
   
   public IRI resolve(IRI iri) {

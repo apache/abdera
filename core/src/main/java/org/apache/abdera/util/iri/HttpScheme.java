@@ -79,12 +79,11 @@ class HttpScheme extends AbstractScheme {
         ui,
         host,
         port,
-        IRI.normalize(iri.getPath()),
+        IRI.normalize(this,iri.getPath()),
         iri.getQuery(),
         iri.getFragment(),
         iri.doubleslash
       );
   }
-  
   
 }

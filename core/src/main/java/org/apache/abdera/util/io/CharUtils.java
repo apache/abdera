@@ -86,6 +86,7 @@ public final class CharUtils {
   }
   
   public static void verify(String s, BitSet set) throws InvalidCharacterException {
+    if (s == null) return;
     CodepointIterator ci = CodepointIterator.forCharSequence(s);
     RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,set,false);
     while (rci.hasNext()) rci.next();

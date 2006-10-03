@@ -17,17 +17,10 @@
 */
 package org.apache.abdera.util.iri;
 
-/**
- * Interface implemented by custom IRI scheme parsers
- */
-public interface Scheme {
+public class DefaultScheme extends AbstractScheme {
 
-  String getName();
-  
-  boolean equivalent(IRI iri1, IRI iri2);
-  
-  IRI normalize(IRI iri); 
-  
-  String normalizePath(String path);
-  
+  public DefaultScheme(String name) {
+    super(name);
+  }
+
 }

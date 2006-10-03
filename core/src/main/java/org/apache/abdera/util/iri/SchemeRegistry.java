@@ -69,7 +69,9 @@ public final class SchemeRegistry {
   }
   
   public Scheme getScheme(String scheme) {
-    return schemes.get(scheme.toLowerCase());
+    if (scheme == null) return null;
+    Scheme s = schemes.get(scheme.toLowerCase());
+    return (s != null) ? s : new DefaultScheme(scheme);
   }
   
 }

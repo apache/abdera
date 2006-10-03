@@ -81,19 +81,20 @@ public class TestIRI extends TestCase {
     assertFalse(iri3.equals(iri1)); // false
     assertFalse(iri3.equals(iri2)); // false
     
-    assertTrue(iri1.normalize().equals(iri2.normalize()));  //true
-    assertFalse(iri1.normalize().equals(iri3.normalize()));  //false
-    assertTrue(iri2.normalize().equals(iri1.normalize()));  //true
-    assertFalse(iri2.normalize().equals(iri3.normalize()));  //false
-    assertFalse(iri3.normalize().equals(iri1.normalize()));  //false
-    assertFalse(iri3.normalize().equals(iri2.normalize()));  //false
     
-    assertTrue(iri1.equivalent(iri2)); // true
-    assertTrue(iri1.equivalent(iri3)); // true
-    assertTrue(iri2.equivalent(iri1)); // true
-    assertTrue(iri2.equivalent(iri3)); // true
-    assertTrue(iri3.equivalent(iri1)); // true
-    assertTrue(iri3.equivalent(iri2)); // true
+    assertTrue(iri1.normalize().equals(iri2.normalize()));
+    assertTrue(iri1.normalize().equals(iri3.normalize()));
+    assertTrue(iri2.normalize().equals(iri1.normalize()));
+    assertTrue(iri2.normalize().equals(iri3.normalize()));
+    assertTrue(iri3.normalize().equals(iri1.normalize()));
+    assertTrue(iri3.normalize().equals(iri2.normalize()));
+    
+    assertTrue(iri1.equivalent(iri2));
+    assertTrue(iri1.equivalent(iri3));
+    assertTrue(iri2.equivalent(iri1));
+    assertTrue(iri2.equivalent(iri3));
+    assertTrue(iri3.equivalent(iri1));
+    assertTrue(iri3.equivalent(iri2));
   }
   
   

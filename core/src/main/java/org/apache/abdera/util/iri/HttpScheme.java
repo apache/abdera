@@ -46,7 +46,8 @@ class HttpScheme extends AbstractScheme {
       return true;
     if (!iri1.getScheme().equals(iri2.getScheme()))
       return false;
-    
+    iri1 = iri1.normalize();
+    iri2 = iri2.normalize();
     int port1 = (iri1.getPort() != -1) ? iri1.getPort() : getDefaultPort();
     int port2 = (iri2.getPort() != -1) ? iri2.getPort() : getDefaultPort();
     return
@@ -81,9 +82,13 @@ class HttpScheme extends AbstractScheme {
         port,
         IRI.normalize(this,iri.getPath()),
         iri.getQuery(),
-        iri.getFragment(),
-        iri.doubleslash
+        iri.getFragment()
       );
+  }
+  
+  // use the path normalization coded into the IRI class 
+  public String normalizePath(String path) {
+    return null;
   }
   
 }

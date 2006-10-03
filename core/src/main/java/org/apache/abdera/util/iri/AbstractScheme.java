@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.util.iri;
 
-import org.apache.abdera.util.io.CodepointIterator;
-
 /**
  * Base implementation for IRI scheme providers
  */
@@ -45,15 +43,16 @@ public abstract class AbstractScheme
   }
   
   /**
-   * Default to use default parsing
+   * Default return unmodified
    */
-  public boolean parse(
-    CodepointIterator reader, 
-    Builder builder) {
-      return false;
-  }
-
   public IRI normalize(IRI iri) {
-    return null;
+    return iri;
+  }
+  
+  /**
+   * Default return unmodified
+   */
+  public String normalizePath(String path) {
+    return path;
   }
 }

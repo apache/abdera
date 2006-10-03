@@ -1,20 +1,3 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  The ASF licenses this file to You
- * under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.  For additional information regarding
- * copyright in this work, please see the NOTICE file in the top level
- * directory of this distribution.
- */
 package org.apache.abdera.util.iri;
 
 import java.io.IOException;
@@ -22,17 +5,17 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.util.BitSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.abdera.util.io.CharUtils;
-import org.apache.abdera.util.io.CodepointIterator;
+import org.apache.abdera.util.io.InvalidCharacterException;
 import org.apache.abdera.util.unicode.Normalizer;
-
 
 public class IRI 
   implements Serializable, 
              Cloneable {
-
+  
   private static final long serialVersionUID = -4530530782760282284L;
   Scheme _scheme;
   private String scheme;
@@ -43,7 +26,6 @@ public class IRI
   private String path;
   private String query;
   private String fragment;
-  boolean doubleslash;
 
   private String a_host;
   private String a_fragment;
@@ -97,8 +79,7 @@ public class IRI
       b.port,
       b.path,
       b.query,
-      b.fragment,
-      b.doubleslash);
+      b.fragment);
   }
   
   public IRI(String iri, Normalizer.Form nf) throws IRISyntaxException, IOException {
@@ -118,9 +99,8 @@ public class IRI
       StringBuffer buf = new StringBuffer();
       buildAuthority(buf,userinfo, host, port);
       String authority = (buf.length()!=0)?buf.toString():null;
-      boolean doubleslash = (authority != null);
       init(_scheme,scheme,authority,userinfo,
-        host,port,path,query,fragment,doubleslash);
+        host,port,path,query,fragment);
   }
   
   public IRI(
@@ -128,16 +108,15 @@ public class IRI
     String authority,
     String path,
     String query,
-    String fragment) {
-      Builder builder = new Builder();
-      if (authority != null)
-        splitAuthority(authority, builder);
-      SchemeRegistry reg = SchemeRegistry.getInstance();
-      Scheme _scheme = reg.getScheme(scheme);
-      boolean doubleslash = (authority != null);
-      init(_scheme,scheme,authority,builder.userinfo,
-        builder.host,builder.port,path,query,
-        fragment,doubleslash);
+    String fragment) 
+      throws IRISyntaxException {
+    Builder builder = new Builder();
+    Parser.parseAuthority(authority, builder);
+    SchemeRegistry reg = SchemeRegistry.getInstance();
+    Scheme _scheme = reg.getScheme(scheme);
+    init(_scheme,scheme,authority,builder.userinfo,
+      builder.host,builder.port,path,query,
+      fragment);
   }
   
   public IRI(
@@ -157,10 +136,9 @@ public class IRI
     int port,
     String path,
     String query,
-    String fragment,
-    boolean doubleslash) {
+    String fragment) {
       init(_scheme,scheme,authority,userinfo,
-         host,port,path,query,fragment,doubleslash);
+         host,port,path,query,fragment);
   }
   
   private void init(
@@ -172,8 +150,7 @@ public class IRI
       int port,
       String path,
       String query,
-      String fragment,
-      boolean doubleslash) {
+      String fragment) {
     this._scheme = _scheme;
     this.scheme = scheme;
     this.authority = authority;
@@ -183,18 +160,17 @@ public class IRI
     this.path = (path != null) ? path : "";
     this.query = query;
     this.fragment = fragment;
-    this.doubleslash = doubleslash;
     
     d_authority = Escaping.decode(authority);
     d_userinfo = Escaping.decode(userinfo);
     d_path = Escaping.decode(path);
     d_query = Escaping.decode(query);
     d_fragment = Escaping.decode(fragment);
-    d_host = Escaping.decode(host);
+    d_host = IDNA.toUnicode(Escaping.decode(host));
 
     a_host = IDNA.toASCII(d_host);
     a_fragment = Escaping.encode(getFragment(),Constants.FRAGMENT);
-    a_path = normalize(_scheme,Escaping.encode(getPath(), Constants.PATH));
+    a_path = Escaping.encode(getPath(), Constants.PATH);
     a_query = Escaping.encode(getQuery(),Constants.QUERY);
     a_userinfo = Escaping.encode(getUserInfo(),Constants.USERINFO);
     a_authority = buildASCIIAuthority();
@@ -376,7 +352,11 @@ public class IRI
       buildAuthority(buf,aui,ah,port);
       return buf.toString();
     } else {
-      return Escaping.encode(getAuthority(), Constants.USERINFO, Constants.REGNAME);
+      return Escaping.encode(
+        getAuthority(), 
+        Constants.USERINFO, 
+        Constants.REGNAME, 
+        Constants.GENDELIMS);
     }
   }
   
@@ -414,8 +394,10 @@ public class IRI
     String query,
     String fragment) {
       StringBuffer buf = new StringBuffer();
-      if (doubleslash) buf.append("//");
-      if (authority != null) buf.append(authority);
+      if (authority != null) {
+        buf.append("//");
+        buf.append(authority);
+      }
       if (path != null && path.length() != 0) {
         buf.append(path);
       }
@@ -461,8 +443,7 @@ public class IRI
       null,null,null,null,-1,
       normalize(b._scheme,cpath.substring(bpath.length())), 
       c.getQuery(), 
-      c.getFragment(), 
-      false);
+      c.getFragment());
     return iri;
   }
   
@@ -484,7 +465,11 @@ public class IRI
            query == null;
   }
   
-  public static IRI resolve(IRI b, String c) throws IRISyntaxException, IOException {
+  public static IRI resolve(
+    IRI b, 
+    String c) 
+      throws IRISyntaxException, 
+             IOException {
     return resolve(b, IRI.create(c));
   }
   
@@ -510,8 +495,7 @@ public class IRI
           b.getPort(),
           normalize(b._scheme,b.getPath()),
           b.getQuery(),
-          cfragment,
-          b.doubleslash
+          cfragment
         );
       }
     }
@@ -519,7 +503,6 @@ public class IRI
     
     Scheme _scheme = b._scheme;
     String scheme = b.scheme;
-    boolean ds = b.doubleslash;
     String query = c.getQuery();
     String fragment = c.getFragment();
     String userinfo = null;
@@ -542,7 +525,16 @@ public class IRI
       port = c.getPort();
       path = normalize(b._scheme,c.getPath());
     }
-    return new IRI(_scheme,scheme,authority,userinfo,host,port,path,query,fragment,ds);
+    return new IRI(
+      _scheme,
+      scheme,
+      authority,
+      userinfo,
+      host,
+      port,
+      path,
+      query,
+      fragment);
   }
   
   public IRI normalize() {
@@ -564,14 +556,16 @@ public class IRI
         iri.getPort(),
         normalize(iri._scheme,iri.getPath()),
         iri.getQuery(),
-        iri.getFragment(),
-        iri.doubleslash
+        iri.getFragment()
       );
   }
 
   static String normalize(Scheme scheme, String path) {
-    if (scheme != null && !(scheme instanceof HttpScheme)) return path;
-    if (path == null) return "/";
+    if (scheme != null) {
+      String n = scheme.normalizePath(path);
+      if (n != null) return n;
+    }
+    if (path == null || path.length() == 0) return "/";
     String[] segments = path.split("/");
     if (segments.length < 2) return path;
     StringBuffer buf = new StringBuffer("/");
@@ -651,61 +645,46 @@ public class IRI
     return buf.toString();
   }
   
-  public java.net.URI toURI() throws URISyntaxException {
-    return new java.net.URI(toASCIIString());
+  public java.net.URI toURI() 
+    throws URISyntaxException {
+      return new java.net.URI(toASCIIString());
   }
   
-  public java.net.URL toURL() throws MalformedURLException, URISyntaxException {
+  public java.net.URL toURL() 
+    throws MalformedURLException, 
+           URISyntaxException {
     return toURI().toURL();
   }
   
   ////////// parse implementation
   
-  private static void parse(String uri, Builder builder) throws IRISyntaxException {
-    SchemeRegistry reg = SchemeRegistry.getInstance();
-    builder.chars = uri.toCharArray();
-    CodepointIterator ci = CodepointIterator.forCharArray(builder.chars);
+  private static void parse(
+    String uri,
+    Builder builder) 
+      throws IRISyntaxException {
     try {
-      Parser.parse(ci, builder, reg);
+      Parser.parse(uri, builder, SchemeRegistry.getInstance());
     } catch (IOException e) {
       throw new IRISyntaxException(e);
     }
   }
   
-  public static IRI create(String iri) throws IRISyntaxException {
+  public static IRI create(
+    String iri) 
+      throws IRISyntaxException {
     return new IRI(iri);
   }
   
-  public static IRI create(String iri, Normalizer.Form nf) throws IRISyntaxException, IOException {
+  public static IRI create(
+    String iri, 
+    Normalizer.Form nf) 
+      throws IRISyntaxException, 
+             IOException {
     return new IRI(iri,nf);
   }
   
-  static void splitAuthority(String authority, Builder builder) {
-    if (authority != null) {
-      int n = authority.indexOf('@');
-      if (n > -1) builder.userinfo = authority.substring(0,n);
-      int a = authority.indexOf('[',n);
-      if (a > -1) {
-        int m = authority.indexOf(']',a);
-        if (m > -1) a = m;
-        a = authority.indexOf(':',a);
-      } else
-      a = authority.indexOf(':',n);
-      if (a > -1) {
-        builder.host = authority.substring(n+1,a);
-        String p = authority.substring(a+1);
-        if (p.length() > 0) {
-          try {
-            builder.port = Integer.parseInt(p);
-          } catch (Exception e) {}
-        }
-      } else builder.host = authority.substring(n+1);
-    }
-  }
-  
-  static class Builder implements org.apache.abdera.util.iri.Builder {
+  static class Builder {
     private Scheme schemeobj;
-    private char[] chars;
     private String scheme;
     private String authority;
     private String userinfo;
@@ -714,104 +693,69 @@ public class IRI
     private String path;
     private String query;
     private String fragment;
-    private boolean doubleslash;
-    
-    private void setScheme(Scheme scheme) {
-      this.schemeobj = scheme;
-    }
-    
-    public void scheme(int s, int l) {
-      scheme = (l > 0) ? new String(chars,s,l).toLowerCase() : null;
-    }
-    public void authority(int s, int l) {
-      authority = (l > 0) ? new String(chars,s,l) : null;
-      splitAuthority(authority, this);
-    }
-    public void path(int s, int l) {
-      path = (l > 0) ? new String(chars,s,l) : null;
-    }
-    public void query(int s, int l) {
-      query = (l > 0) ? new String(chars,s,l) : null;
-    }
-    public void fragment(int s, int l) {
-      fragment = (l > 0) ? new String(chars,s,l) : null;
-    }
     
     public IRI getAtomURI() {
       return new IRI(
         schemeobj,
         scheme,authority,userinfo,
-        host,port,path,query,fragment, 
-        doubleslash);
+        host,port,path,query,fragment);
     }
   }
   
   static class Parser {
-    static void parse(CodepointIterator ci, Builder builder, SchemeRegistry reg) 
+    
+    static final Pattern p = 
+      Pattern.compile(
+        "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?");
+    
+    static final Pattern a =
+      Pattern.compile("^((.*)?@)?(\\[.*\\])?([^:]*)?(:(\\d*))?");
+    
+    static void parseAuthority(String authority, Builder builder) throws IRISyntaxException {
+      if (authority != null) {
+        Matcher auth = a.matcher(authority);
+        if (auth.find()) {
+          if (auth.group(2) != null) builder.userinfo = auth.group(2);
+          if (auth.group(3) != null) builder.host = auth.group(3);
+          else builder.host = auth.group(4);
+          if (auth.group(6) != null) builder.port = Integer.parseInt(auth.group(6));
+        }
+        try {
+          CharUtils.verify(builder.userinfo, Constants.IUSERINFO);
+          CharUtils.verify(builder.host, Constants.IREGNAME);
+        } catch (InvalidCharacterException e) {
+          throw new IRISyntaxException(e);
+        }
+      }
+    }
+    
+    static void parse(String iri, Builder builder, SchemeRegistry reg) 
       throws IRISyntaxException, 
              IOException {
-      int e = ci.position();
-      scan(ci,Constants.SCHEME,-1);
-      if (ci.peek() == ':')
-        builder.scheme(e,ci.position()-e);
-      Scheme _scheme = null;
-      if (builder.scheme != null && builder.scheme.length() != 0) {
-        _scheme = reg.getScheme(builder.scheme);
-      } else { ci.position(e); }
-      if (_scheme != null) {
-        // allow for scheme specific parsing. if the resolved scheme
-        // does parse the result, skip the rest, otherwise, do the 
-        // default parsing
-        builder.setScheme(_scheme);
-        if (_scheme.parse(ci, builder)) return;
+      Matcher irim = p.matcher(iri);
+      if (irim.find()) {
+        
+        builder.scheme = irim.group(2);
+        builder.schemeobj = reg.getScheme(builder.scheme);
+        builder.authority = irim.group(4);
+        builder.path = irim.group(5);
+        builder.query = irim.group(7);
+        builder.fragment = irim.group(9);
+        
+        parseAuthority(builder.authority, builder);
+        
+        try {
+          CharUtils.verify(builder.scheme, Constants.SCHEME);
+          CharUtils.verify(builder.path, Constants.IPATH);
+          CharUtils.verify(builder.query, Constants.IQUERY);
+          CharUtils.verify(builder.fragment, Constants.IFRAGMENT);
+        } catch (InvalidCharacterException e) {
+          throw new IRISyntaxException(e);
+        }
+      } else {
+        throw new IRISyntaxException("Invalid Syntax");
       }
-      // default parsing. works for most common schemes
-      scan(ci, Constants.COLON,1);
-      e = ci.position();
-      if (ci.peek() == '/' && 
-          ci.peek(ci.position() + 1) == '/') {
-        scan(ci,Constants.SLASH,2);
-        builder.doubleslash = true;
-      }
-      e = ci.position();
-      int f = find(ci,Constants.SEPS);
-      if(f != 0) {
-        scan(ci,Constants.ISERVER,-1);
-      if (ci.peek() == -1 || CharUtils.isSet(ci.peek(), Constants.SEPS)) {        
-        builder.authority(e,ci.position()-e);
-      }
-      else ci.position(e);
-      e = ci.position();
-      }
-      scan(ci,Constants.IPATH,-1);
-      builder.path(e,ci.position()-e);
-      scan(ci,Constants.QUERYMARK,-1);
-      e = ci.position();
-      scan(ci,Constants.IQUERY,-1);
-      builder.query(e,ci.position()-e);
-      scan(ci,Constants.HASH,-1);
-      e = ci.position();
-      scan(ci,Constants.IFRAGMENT,-1);
-      builder.fragment(e,ci.position()-e);
     }
   }
   
-  private static int find(CodepointIterator ci, BitSet set) throws IOException {
-    int n = ci.position();
-    int c = -1;
-    while((c = ci.peek(n++)) != -1 && set.get(c)) { n++; } 
-    return n-1;
-  }
-  
-  private static int scan(CodepointIterator ci, BitSet set, int count) throws IOException, IRISyntaxException {
-    while (ci.hasNext() && ci.peek() != -1 && set.get(ci.peek())){ 
-      int p = ci.next();
-      if (!set.get(p)) {
-        if (!CharUtils.isSet(p, Constants.RESERVED, Constants.IUNRESERVED, Constants.HASH)) 
-          throw new IRISyntaxException("Invalid Character (0x" + Integer.toHexString(p) + ") In URI");
-        return -1;
-      }
-    }
-    return -1;
-  }
 }

@@ -108,7 +108,10 @@ public class Constants {
   
   public final static BitSet IREGNAME   = new ChainableBitSet().set2(IUNRESERVED)
                                             .set2(ESCAPED)
-                                            .set2("$,;:@&=+");
+                                            .set2("!$&'()*+,;=");
+  public final static BitSet REGNAME    = new ChainableBitSet().set2(UNRESERVED)
+                                            .set2(ESCAPED)
+                                            .set2("!$&'()*+,;=");
   
   public final static BitSet IUSERINFO  = new ChainableBitSet().set2(IUNRESERVED)
                                             .set2(ESCAPED)

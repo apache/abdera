@@ -136,7 +136,7 @@ public abstract class Client {
     String uri, 
     Base base, 
     RequestOptions options) {
-      return execute("POST", uri, new BaseRequestEntity(base), options);
+      return execute("POST", uri, new BaseRequestEntity(base, options.isUseChunked()), options);
   }
     
   public ClientResponse put(
@@ -157,7 +157,7 @@ public abstract class Client {
       String uri, 
       Base base, 
       RequestOptions options) {
-    return execute("PUT", uri, new BaseRequestEntity(base), options);
+    return execute("PUT", uri, new BaseRequestEntity(base, options.isUseChunked()), options);
   }
       
   public ClientResponse delete(

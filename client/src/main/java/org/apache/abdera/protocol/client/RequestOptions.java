@@ -39,6 +39,7 @@ public class RequestOptions
 
   private boolean noLocalCache = false;
   private boolean revalidateAuth = false;
+  private boolean useChunked = true;
   
   private final Map<String,List<String>> headers;  
   
@@ -301,5 +302,19 @@ public class RequestOptions
   
   public void setRevalidateWithAuth(boolean revalidateAuth) {
     this.revalidateAuth= revalidateAuth;
+  }
+  
+  /**
+   * Should the request use chunked encoding?
+   */
+  public boolean isUseChunked() {
+    return useChunked;
+  }
+  
+  /**
+   * Set whether the request should use chunked encoding.
+   */
+  public void setUseChunked(boolean useChunked) {
+    this.useChunked = useChunked;
   }
 }

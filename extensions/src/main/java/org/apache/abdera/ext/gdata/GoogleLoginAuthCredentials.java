@@ -45,17 +45,23 @@ public final class GoogleLoginAuthCredentials
   implements Credentials {
 
   private final String auth;
+  private final String service;
   
   public GoogleLoginAuthCredentials(String auth) {
     this.auth = auth;
+    this.service = null;
   }
   
   public GoogleLoginAuthCredentials(String id, String pwd, String service) {
     this.auth = (new GoogleLoginAuthScheme()).getAuth(id, pwd, service);
+    this.service = service;
   }
   
   public String getAuth() {
     return auth;
   }
   
+  public String getService() {
+    return service;
+  }
 }

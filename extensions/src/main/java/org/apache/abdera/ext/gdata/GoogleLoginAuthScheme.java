@@ -66,8 +66,6 @@ public class GoogleLoginAuthScheme
     String challenge) 
       throws MalformedChallengeException {
     super.processChallenge(challenge);
-    if (getParameter("service") == null) 
-      throw new MalformedChallengeException("Missing service in challenge");
     service = getParameter("service");
   }
   
@@ -86,6 +84,7 @@ public class GoogleLoginAuthScheme
     } else if (credentials instanceof GoogleLoginAuthCredentials) {
       GoogleLoginAuthCredentials gcreds =
         (GoogleLoginAuthCredentials) credentials;
+      service = gcreds.getService();
       auth = gcreds.getAuth();
     } else {
       throw new AuthenticationException(
@@ -133,7 +132,7 @@ public class GoogleLoginAuthScheme
         "Email=%s&Passwd=%s&service=%s&source=%s",
         URLEncoder.encode(id, "utf-8"),
         URLEncoder.encode(pwd, "utf-8"),
-        URLEncoder.encode(service, "utf-8"),
+        (service != null) ? URLEncoder.encode(service, "utf-8") : "",
         URLEncoder.encode(Version.APP_NAME, "utf-8"));
       StringRequestEntity stringreq = new StringRequestEntity(f.toString());
       String uri = "https://www.google.com/accounts/ClientLogin";

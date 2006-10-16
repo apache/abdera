@@ -42,6 +42,7 @@ public abstract class AbstractRequestContext
   protected final String method;
   protected final IRI requestUri;
   protected final IRI baseUri;
+  protected Document document;
   
   protected AbstractRequestContext(
     ServiceContext context,
@@ -54,44 +55,60 @@ public abstract class AbstractRequestContext
       this.requestUri = requestUri;
   }
     
-  public <T extends Element>Document<T> getDocument()
+  @SuppressWarnings("unchecked")
+  public synchronized <T extends Element>Document<T> getDocument()
     throws ParseException, 
            IOException {
-    Abdera abdera = context.getAbdera();
-    Parser parser = abdera.getParser();
-    ParserOptions options = parser.getDefaultParserOptions();
-    return getDocument(parser, options);
+    if (document == null) {
+      Abdera abdera = context.getAbdera();
+      Parser parser = abdera.getParser();
+      ParserOptions options = parser.getDefaultParserOptions();
+      document = getDocument(parser, options);
+    } 
+    return document;
   }
   
-  public <T extends Element>Document<T> getDocument(
+  @SuppressWarnings("unchecked")
+  public synchronized <T extends Element>Document<T> getDocument(
     Parser parser)
       throws ParseException, 
              IOException {
+    if (document == null) {
       ParserOptions options = parser.getDefaultParserOptions();
-      return getDocument(parser, options);
+      document = getDocument(parser, options);
+    }
+    return document;
   }
   
-  public <T extends Element>Document<T> getDocument(
+  @SuppressWarnings("unchecked")
+  public synchronized <T extends Element>Document<T> getDocument(
     ParserOptions options)
      throws ParseException, 
             IOException  {
+    if (document == null) {
       Abdera abdera = context.getAbdera();
       Parser parser = abdera.getParser();
-      return getDocument(parser, options);
+      document = getDocument(parser, options);
+    }
+    return document;
   }
   
-  public <T extends Element>Document<T> getDocument(
+  @SuppressWarnings("unchecked")
+  public synchronized <T extends Element>Document<T> getDocument(
     Parser parser, 
     ParserOptions options) 
       throws ParseException, 
              IOException {
-    try {
-      return parser.parse(
-        getInputStream(), 
-        null, options);
-    } catch (IRISyntaxException e) {
-      throw new ParseException(e); // won't never happen
-    }
+    if (document == null) {
+      try {
+        return parser.parse(
+          getInputStream(), 
+          null, options);
+      } catch (IRISyntaxException e) {
+        throw new ParseException(e); // won't never happen
+      }
+    } 
+    return document;
   }
   
   public IRI getBaseUri() {

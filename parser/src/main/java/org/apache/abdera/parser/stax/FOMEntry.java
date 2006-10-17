@@ -619,46 +619,46 @@ public class FOMEntry
     return setUpdated((value != null) ? AtomDate.valueOf(value) : null);
   }
 
-  public DateTime getModifiedElement() {
-    return (DateTime)getFirstChildWithName(MODIFIED);
+  public DateTime getEditedElement() {
+    return (DateTime)getFirstChildWithName(EDITED);
   }
 
-  public void setModifiedElement(DateTime updated) {
+  public void setEditedElement(DateTime updated) {
     declareNamespace(APP_NS, "app");
     if (updated != null)
-      _setChild(MODIFIED, (OMElement)updated);
+      _setChild(EDITED, (OMElement)updated);
     else 
-      _removeChildren(MODIFIED, false);
+      _removeChildren(EDITED, false);
   }
 
-  public Date getModified() {
-    DateTime dte = getModifiedElement();
+  public Date getEdited() {
+    DateTime dte = getEditedElement();
     return (dte != null) ? dte.getDate() : null;
   }
   
   private DateTime setModified(AtomDate value) {
     declareNamespace(APP_NS, "app");
     if (value == null) {
-      _removeChildren(MODIFIED, false);
+      _removeChildren(EDITED, false);
       return null;
     }
-    DateTime dte = getModifiedElement();
+    DateTime dte = getEditedElement();
     if (dte != null) {
       dte.setValue(value);
       return dte;
     } else {
       FOMFactory fomfactory = (FOMFactory) factory;
-      DateTime dt = fomfactory.newModified(this);
+      DateTime dt = fomfactory.newEdited(this);
       dt.setValue(value);
       return dt;
     }
   }
   
-  public DateTime setModified(Date value) {
+  public DateTime setEdited(Date value) {
     return setModified((value != null) ? AtomDate.valueOf(value) : null);
   }
   
-  public DateTime setModified(String value) {
+  public DateTime setEdited(String value) {
     return setUpdated((value != null) ? AtomDate.valueOf(value) : null);
   }
   

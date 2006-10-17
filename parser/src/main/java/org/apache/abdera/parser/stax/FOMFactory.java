@@ -486,12 +486,12 @@ public class FOMFactory
     return newDateTime(Constants.UPDATED, parent);
   }
 
-  public DateTime newModified() {
-    return newModified(null);
+  public DateTime newEdited() {
+    return newEdited(null);
   }
   
-  public DateTime newModified(Element parent) {
-    return newDateTime(Constants.MODIFIED, parent);
+  public DateTime newEdited(Element parent) {
+    return newDateTime(Constants.EDITED, parent);
   }
 
   public IRIElement newIcon() {
@@ -707,7 +707,7 @@ public class FOMFactory
         element = new FOMDiv(qname.getLocalPart(), namespace, parent, factory);
       } else if (CATEGORIES.equals(qname)) {
         element = new FOMCategories(qname.getLocalPart(), namespace, parent, factory);
-      } else if (MODIFIED.equals(qname)) {
+      } else if (EDITED.equals(qname)) {
         element = new FOMDateTime(qname.getLocalPart(), namespace, parent, factory);
       } else if (parent instanceof ExtensibleElement || 
                  parent instanceof Document) {
@@ -781,7 +781,7 @@ public class FOMFactory
       element = (OMElement) newDiv(qname, parent, builder);
     } else if (CATEGORIES.equals(qname)) {
       element = (OMElement) newCategories(qname, parent, builder);
-    } else if (MODIFIED.equals(qname)) {
+    } else if (EDITED.equals(qname)) {
       element = (OMElement) newDateTimeElement(qname, parent, builder);
     } else if (parent instanceof ExtensibleElement || parent instanceof Document) {
       element = (OMElement) newExtensionElement(qname, parent, builder);

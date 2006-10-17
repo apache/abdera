@@ -74,7 +74,7 @@ public interface Constants {
   public static final String LN_SUMMARY           = "summary";
   public static final String LN_TITLE             = "title";
   public static final String LN_UPDATED           = "updated";
-  public static final String LN_MODIFIED          = "modified";
+  public static final String LN_EDITED          = "edited";
   public static final String LN_TERM              = "term";
   public static final String LN_SCHEME            = "scheme";
   public static final String LN_LABEL             = "label";
@@ -121,7 +121,7 @@ public interface Constants {
   public static final QName TITLE                 = new QName(ATOM_NS, LN_TITLE, PREFIX);
   public static final QName PREFIXED_TITLE        = new QName(ATOM_NS, LN_TITLE, "atom");
   public static final QName UPDATED               = new QName(ATOM_NS, LN_UPDATED, PREFIX);
-  public static final QName MODIFIED              = new QName(APP_NS, LN_MODIFIED, "app");
+  public static final QName EDITED                = new QName(APP_NS, LN_EDITED, "app");
   public static final QName ENTRY                 = new QName(ATOM_NS, LN_ENTRY, PREFIX);
   public static final QName TERM                  = new QName(LN_TERM);
   public static final QName SCHEME                = new QName(LN_SCHEME);

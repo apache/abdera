@@ -273,45 +273,54 @@ public final class CharUtils {
     c == PDF;
   }
   
+  private static String wrap(String s, char c1, char c2) {
+    StringBuffer buf = new StringBuffer(s);
+    if (buf.length() > 1) {
+      if (buf.charAt(0) != c1) buf.insert(0, c1);
+      if (buf.charAt(buf.length()-1) != c2) buf.append(c2);
+    }
+    return buf.toString();
+  }
+  
   /**
    * Wrap the string with Bidi Right-to-Left embed
    */
   public static String bidiRLE(String s) {
-    return RLE + s + PDF;
+    return wrap(s,RLE,PDF);
   }
   
   /**
    * Wrap the string with Bidi Right-to-Left override 
    */
   public static String bidiRLO(String s) {
-    return RLO + s + PDF;
+    return wrap(s,RLO,PDF);
   }
   
   /**
    * Wrap the string with Bidi Left-to-Right embed
    */
   public static String bidiLRE(String s) {
-    return LRE + s + PDF;
+    return wrap(s,LRE,PDF);
   }
   
   /**
    * Wrap the string with Bidi Left-to-Right override
    */
   public static String bidiLRO(String s) {
-    return LRO + s + PDF;
+    return wrap(s,LRO,PDF);
   }
   
   /**
    * Wrap the string with Bidi RML marks
    */
   public static String bidiRLM(String s) {
-    return RLM + s + RLM;
+    return wrap(s,RLM,RLM);
   }
   
   /**
    * Wrap the string with Bidi LRM marks
    */
   public static String bidiLRM(String s) {
-    return LRM + s + RLM;
+    return wrap(s,LRM,LRM);
   }
 }

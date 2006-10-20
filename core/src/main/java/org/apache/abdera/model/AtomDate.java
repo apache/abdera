@@ -59,6 +59,7 @@ import java.util.TimeZone;
  *  timestamp to several entries that were published during the course of
  *  a single day.
  *  </pre>
+ *  
  */
 public final class AtomDate {
 
@@ -66,60 +67,110 @@ public final class AtomDate {
   
   public AtomDate() {}
   
+  /**
+   * Create an AtomDate using the serialized string format (e.g. 2003-12-13T18:30:02Z).
+   * @param value The serialized date/time value
+   */
   public AtomDate(String value) { 
     this(parse(value));
   }
   
+  /**
+   * Create an AtomDate using a java.util.Date
+   * @param value The java.util.Date value
+   */
   public AtomDate(Date value) {
     this.value = value;
   }
   
+  /**
+   * Create an AtomDate using a java.util.Calendar.
+   * @param value The java.util.Calendar value
+   */
   public AtomDate(Calendar value) {
     this(value.getTime());
   }
   
+  /**
+   * Create an AtomDate using the number of milliseconds since January 1, 1970, 00:00:00 GMT
+   * @param value The number of milliseconds since January 1, 1970, 00:00:00 GMT
+   */
   public AtomDate(long value) {
     this(new Date(value));
   }
   
+  /**
+   * Return the serialized string form of the Atom date
+   * @return the serialized string form of the date as specified by RFC4287
+   */
   public String getValue() {
     return format(value);
   }
   
+  /**
+   * Sets the value of the Atom date using the serialized string form
+   * @param value The serialized string form of the date 
+   */
   public void setValue(String value) {
     this.value = parse(value);
   }
 
+  /**
+   * Sets the value of the Atom date using java.util.Date
+   * @param date A java.util.Date
+   */
   public void setValue(Date date) {
     this.value = date;
   }
 
+  /**
+   * Sets the value of the Atom date using java.util.Calendar
+   * @param calendar a java.util.Calendar
+   */
   public void setValue(Calendar calendar) {
     this.value = calendar.getTime();
   }
   
+  /**
+   * Sets the value of the Atom date using the number of milliseconds since January 1, 1970, 00:00:00 GMT
+   * @param timestamp The number of milliseconds since January 1, 1970, 00:00:00 GMT
+   */
   public void setValue(long timestamp) {
     this.value = new Date(timestamp);
   }
   
+  /**
+   * Returns the value of this Atom Date
+   * @return A java.util.Date representing this Atom Date
+   */
   public Date getDate() {
     return value;
   }
   
+  /**
+   * Returns the value of this Atom Date as a java.util.Calendar
+   * @return A java.util.Calendar representing this Atom Date
+   */
   public Calendar getCalendar() {
     Calendar cal = Calendar.getInstance();
     cal.setTime(value);
     return cal;
   }
   
+  /**
+   * Returns the value of this Atom Date as the number of milliseconds since January 1, 1970, 00:00:00 GMT
+   * @return The number of milliseconds since January 1, 1970, 00:00:00 GMT
+   */
   public long getTime() {
     return value.getTime();
   }
   
+  @Override
   public String toString() {
     return getValue();
   }
   
+  @Override
   public boolean equals(Object obj) {
     boolean answer = false;
     if (obj instanceof Date) {
@@ -138,24 +189,34 @@ public final class AtomDate {
     return answer;
   }
   
+  /**
+   * The masks used to validate and parse the input to this Atom date.
+   * These are a lot more forgiving than what the Atom spec allows.  
+   * The forms that are invalid according to the spec are indicated.
+   */
   private static final String[] masks = {
     "yyyy-MM-dd'T'HH:mm:ss.SSSz",
     "yyyy-MM-dd't'HH:mm:ss.SSSz",                         // invalid
     "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
     "yyyy-MM-dd't'HH:mm:ss.SSS'z'",                       // invalid
     "yyyy-MM-dd'T'HH:mm:ssz",
-    "yyyy-MM-dd't'HH:mm:ssz",                            // invalid
+    "yyyy-MM-dd't'HH:mm:ssz",                             // invalid
     "yyyy-MM-dd'T'HH:mm:ss'Z'",
-    "yyyy-MM-dd't'HH:mm:ss'z'",                          // invalid
-    "yyyy-MM-dd'T'HH:mmz",                               // invalid
-    "yyyy-MM-dd't'HH:mmz",                               // invalid
-    "yyyy-MM-dd'T'HH:mm'Z'",                             // invalid
-    "yyyy-MM-dd't'HH:mm'z'",                             // invalid
+    "yyyy-MM-dd't'HH:mm:ss'z'",                           // invalid
+    "yyyy-MM-dd'T'HH:mmz",                                // invalid
+    "yyyy-MM-dd't'HH:mmz",                                // invalid
+    "yyyy-MM-dd'T'HH:mm'Z'",                              // invalid
+    "yyyy-MM-dd't'HH:mm'z'",                              // invalid
     "yyyy-MM-dd",
     "yyyy-MM",
     "yyyy"
   };
    
+  /**
+   * Parse the serialized string form into a java.util.Date
+   * @param date The serialized string form of the date
+   * @return The created java.util.Date
+   */
   public static Date parse(String date) {
     Date d = null;
     SimpleDateFormat sdf = new SimpleDateFormat();
@@ -173,6 +234,11 @@ public final class AtomDate {
     return d;
   }
   
+  /**
+   * Create the serialized string form from a java.util.Date
+   * @param Date A java.util.Date
+   * @return The serialized string form of the date
+   */
   public static String format (Date d) {
     StringBuffer iso8601 = new StringBuffer();
     SimpleDateFormat sdf = new SimpleDateFormat(masks[2]);
@@ -181,18 +247,38 @@ public final class AtomDate {
     return iso8601.toString();
   }
 
+  /**
+   * Create a new Atom Date instance from the serialized string form
+   * @param value The serialized string form of the date
+   * @return The created AtomDate 
+   */
   public static AtomDate valueOf(String value) {
     return new AtomDate(value);
   }
   
+  /**
+   * Create a new Atom Date instance from a java.util.Date
+   * @param value a java.util.Date
+   * @return The created AtomDate
+   */
   public static AtomDate valueOf(Date value) {
     return new AtomDate(value);
   }
   
+  /**
+   * Create a new Atom Date instance from a java.util.Calendar
+   * @param value A java.util.Calendar
+   * @return The created AtomDate
+   */
   public static AtomDate valueOf(Calendar value) {
     return new AtomDate(value);
   }
   
+  /**
+   * Create a new Atom Date instance using the number of milliseconds since January 1, 1970, 00:00:00 GMT
+   * @param value The number of milliseconds since January 1, 1970, 00:00:00 GMT
+   * @return The created AtomDate
+   */
   public static AtomDate valueOf(long value) {
     return new AtomDate(value);
   }

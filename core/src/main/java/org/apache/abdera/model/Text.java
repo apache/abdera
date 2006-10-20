@@ -57,9 +57,17 @@ package org.apache.abdera.model;
 public interface Text 
   extends Element {
 
+  /**
+   * Text Constructs can be either Text, HTML or XHTML
+   */
   public static enum Type { 
-    TEXT, HTML, XHTML;
+    /** Plain Text      **/ TEXT, 
+    /** Escaped HTML    **/ HTML, 
+    /** Welformed XHTML **/ XHTML;
     
+    /**
+     * Return the text type
+     */
     public static Type typeFromString(String val) {
       Type type = TEXT;
       if (val != null) {
@@ -78,20 +86,52 @@ public interface Text
 
   };
   
+  /**
+   * Return the Text.Type
+   * @return The Text.Type
+   */
   Type getTextType();
   
+  /**
+   * Set the Text.Type
+   * @param type The Text.Type
+   */
   void setTextType(Type type);
   
+  /**
+   * Return the text value element
+   * @return A xhtml:div
+   */
   Div getValueElement();
   
+  /**
+   * Set the text value element
+   * @param value The xhtml:div
+   */
   void setValueElement(Div value);
   
+  /**
+   * Return the text value
+   * @return The text value
+   */
   String getValue();
   
+  /**
+   * Set the text value
+   * @param value The text value
+   */
   void setValue(String value);
   
+  /**
+   * Return the wrapped value
+   * @return The text value wrapped in a xhtml:div
+   */
   String getWrappedValue();
   
+  /**
+   * Set the wrapped value
+   * @param The text value wrapped in a xhtml:div
+   */
   void setWrappedValue(String wrappedValue);
   
 }

@@ -44,33 +44,64 @@ import org.apache.abdera.util.iri.IRISyntaxException;
 public interface Workspace 
   extends ExtensibleElement {
 
+  /**
+   * Return the workspace title
+   * @return The atom:title value
+   */
   String getTitle();
 
+  /**
+   * Set the workspace title
+   * @param title The atom:title value
+   * @return The newly created atom:title
+   */
   Text setTitle(String title);
 
+  /**
+   * Set the workspace title as escaped HTML
+   * @param title The atom:title value
+   * @return The newly created atom:title
+   */
   Text setTitleAsHtml(String title);
   
+  /**
+   * Set the workspace title as XHTML
+   * @param title The atom:title value
+   * @return the newly created atom:title
+   */
   Text setTitleAsXHtml(String title);
   
+  /**
+   * Return the atom:title
+   * @return The atom:title element
+   */
   Text getTitleElement();
   
   /**
    * Returns the full set of collections in this workspace 
+   * @return A listing of app:collection elements
    */
   List<Collection> getCollections();
   
   /**
    * Returns the named collection
+   * @param title A collection title
+   * @return A matching app:collection
    */
   Collection getCollection(String title);
   
   /**
    * Adds an individual collection to this workspace
+   * @param collection The collection to add
    */
   void addCollection(Collection collection);
 
   /**
    * Adds an individual collection to this workspace
+   * @param title The collection title
+   * @param hreg The collection HREF
+   * @return The newly created app:collection
+   * @throws IRISyntaxException if the href is malformed
    */
   Collection addCollection(
     String title, 

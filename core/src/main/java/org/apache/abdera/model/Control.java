@@ -65,6 +65,8 @@ public interface Control
    * value of "no" means that the entry MAY be made publicly visible.  
    * If the "pub:draft" element is missing then the value MUST be 
    * understood to be "no".  The pub:draft element MAY be ignored.</p>
+   * 
+   * @return True if this is a draft
    */
   boolean isDraft();
 
@@ -76,6 +78,8 @@ public interface Control
    * value of "no" means that the entry MAY be made publicly visible.  
    * If the "pub:draft" element is missing then the value MUST be 
    * understood to be "no".  The pub:draft element MAY be ignored.</p>
+   * 
+   * @param draft true if app:draft should be set to "yes"
    */
   void setDraft(boolean draft);
   

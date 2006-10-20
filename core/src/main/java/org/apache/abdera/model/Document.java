@@ -39,65 +39,79 @@ public interface Document<T extends Element>
   
   /**
    * Returns the root element of the document (equivalent to DOM's getDocumentElement)
+   * @return The root element of the document
    */
   T getRoot();
   
   /**
    * Sets the root element of the document
+   * @param root Set the root element of the document
    */
   void setRoot(T root);
   
   /**
    * Returns the Base URI of the document.  All relative URI's contained in the
    * document will be resolved according to this base.
+   * @return The Base IRI
    */
   IRI getBaseUri();
   
   /**
    * Sets the Base URI of the document.  All relative URI's contained in the 
    * document will be resolved according to this base.
-   * @throws URISyntaxException 
+   * @param base The Base URI
+   * @throws IRISyntaxException if the IRI is malformed 
    */
   void setBaseUri(String base) throws IRISyntaxException;
   
   /**
    * Returns the content type of this document
+   * @return The content type of this document
    */
   MimeType getContentType();
   
   /**
    * Sets the content type for this document
-   * @throws MimeTypeParseException 
+   * @param contentType The content type of document
+   * @throws MimeTypeParseException if the content type is malformed
    */
   void setContentType(String contentType) throws MimeTypeParseException;
   
   /**
    * Returns the last modified date for this document
+   * @return The last-modified date
    */
   Date getLastModified();
   
   /**
    * Sets the last modified date for this document
+   * @param lastModified the last-modified date
    */
   void setLastModified(Date lastModified);
   
   /**
    * Gets the charset used for this document
+   * @return The character encoding used for this document
    */
   String getCharset();
   
   /**
    * Sets the charset used for this document
+   * @param The character encoding to use
    */
   void setCharset(String charset);
   
   /**
    * Add a processing instruction to the document
+   * @param target The processing instruction target
+   * @param value The processing instruction value
    */
   void addProcessingInstruction(String target, String value);
   
   /**
    * Add a xml-stylesheet processing instruction to the document
+   * @param href The href of the stylesheet
+   * @param media The media target for this stylesheet or null if none
    */
   void addStylesheet(String href, String media);
   

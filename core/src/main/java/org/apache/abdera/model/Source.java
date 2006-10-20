@@ -70,93 +70,127 @@ public interface Source
   extends ExtensibleElement {
   /**
    * Returns the first author listed for the entry
+   * @return This feed's author
    */
   Person getAuthor();
   
   /**
-   * Returns the complete set of authors listed for the entry 
+   * Returns the complete set of authors listed for the entry
+   * @return This feeds list of authors 
    */
   List<Person> getAuthors();
   
   /**
    * Adds an individual author to the entry
+   * @param an atom:author element
    */
   void addAuthor(Person person);
   
   /**
    * Adds an author
+   * @param name The author name
+   * @return The newly created atom:author element
    */
   Person addAuthor(String name);
 
   /**
    * Adds an author
-   * @throws IRISyntaxException 
+   * @param name The author name
+   * @param email The author email
+   * @param iri The author iri
+   * @return The newly created atom:author element
+   * @throws IRISyntaxException  if the iri is malformed
    */
   Person addAuthor(String name, String email, String IRI) throws IRISyntaxException;
   
   /**
    * Lists the complete set of categories listed for the entry
+   * @return A listing of app:category elements
    */
   List<Category> getCategories();
   
   /**
    * Lists the complete set of categories using the specified scheme
-   * @throws IRISyntaxException 
+   * @param scheme A Scheme IRI
+   * @return The listing of app:category elements 
+   * @throws IRISyntaxException if the scheme is malformed
    */
   List<Category> getCategories(String scheme) throws IRISyntaxException;
   
   /**
    * Adds an individual category to the entry
+   * @param category A atom:category element
    */
   void addCategory(Category category);
 
   /**
    * Adds a category to the feed
+   * @param term A category term
+   * @return The newly created atom:category element
    */
   Category addCategory(String term);
 
   /**
    * Adds a category to the feed
-   * @throws IRISyntaxException 
+   * @param scheme A category scheme
+   * @param term A category term
+   * @param label The human readable label
+   * @return the newly created atom:category element
+   * @throws IRISyntaxException if the scheme is malformed
    */
   Category addCategory(String scheme, String term, String label) throws IRISyntaxException;
   
   /**
    * Lists the complete set of contributors for this entry
+   * @return A listing of atom:contributor elements
    */
   List<Person> getContributors();
   
   /**
    * Adds an individual contributor to this entry
+   * @param person a atom:contributor element
    */
   void addContributor(Person person);
   
   /**
-   * Adds an author
+   * Adds a contributor
+   * @param name The name of a contributor
+   * @return The newly created atom:contributor element
    */
   Person addContributor(String name);
 
   /**
    * Adds a contributor
-   * @throws IRISyntaxException 
+   * @param name The contributor name
+   * @param email The contributor email
+   * @param iri The contributor uri
+   * @return The atom:contributor element
+   * @throws IRISyntaxException if the iri is malformed
    */
   Person addContributor(String name, String email, String IRI) throws IRISyntaxException;
   
   /**
    * RFC4287: The "atom:generator" element's content identifies the 
    * agent used to generate a feed, for debugging and other purposes.
+   * @return The atom:generator
    */
   Generator getGenerator();
 
   /**
    * RFC4287: The "atom:generator" element's content identifies the 
    * agent used to generate a feed, for debugging and other purposes.
+   * @param generator A atom:generator element
    */
   void setGenerator(Generator generator);
 
   /**
    * RFC4287: The "atom:generator" element's content identifies the 
    * agent used to generate a feed, for debugging and other purposes.
+   * @param iri The iri attribute
+   * @param version The version attribute
+   * @param value The value attribute
+   * @return A newly created atom:generator element
+   * @throws IRISyntaxException if the iri is malformed
    */
   Generator setGenerator(
     String IRI, 
@@ -170,6 +204,7 @@ public interface Source
    *  identification for a feed... The image SHOULD have an aspect ratio 
    *  of one (horizontal) to one (vertical) and SHOULD be suitable for 
    *  presentation at a small size.
+   *  @return the atom:icon element
    */
   IRIElement getIconElement();
   
@@ -179,6 +214,7 @@ public interface Source
    *  identification for a feed... The image SHOULD have an aspect ratio 
    *  of one (horizontal) to one (vertical) and SHOULD be suitable for 
    *  presentation at a small size.
+   *  @param The atom:icon element
    */
   void setIconElement(IRIElement iri);
   
@@ -188,7 +224,8 @@ public interface Source
    *  identification for a feed... The image SHOULD have an aspect ratio 
    *  of one (horizontal) to one (vertical) and SHOULD be suitable for 
    *  presentation at a small size.
-   * @throws IRISyntaxException 
+   * @param iri The atom:icon IRI value
+   * @throws IRISyntaxException if the iri is malformed
    */
   IRIElement setIcon(String iri) throws IRISyntaxException;
 
@@ -198,65 +235,102 @@ public interface Source
    *  identification for a feed... The image SHOULD have an aspect ratio 
    *  of one (horizontal) to one (vertical) and SHOULD be suitable for 
    *  presentation at a small size.
-   * @throws IRISyntaxException 
+   * @return The atom:icon value
+   * @throws IRISyntaxException if the atom:icon value is malformed
    */
   IRI getIcon() throws IRISyntaxException;
   
   /**
    * RFC4287: The "atom:id" element conveys a permanent, universally unique
    * identifier for an entry or feed.
+   * @return The atom:id element
    */
   IRIElement getIdElement();
   
   /**
    * RFC4287: The "atom:id" element conveys a permanent, universally unique
    * identifier for an entry or feed.
+   * @param A atom:id element
    */
   void setIdElement(IRIElement id);
   
   /**
    * Returns the universally unique identifier for this feed
-   * @throws IRISyntaxException 
+   * @return The atom:id value
+   * @throws IRISyntaxException if the atom:id is malformed
    */
   IRI getId() throws IRISyntaxException;
 
   /**
    * Sets the universally unique identifier for this feed
-   * @throws IRISyntaxException 
+   * @param id The atom:id value
+   * @return The newly created atom:id element
+   * @throws IRISyntaxException  if the id is malformed
    */
   IRIElement setId(String id) throws IRISyntaxException;
   
   /**
    * Sets the universally unique identifier for this feed
-   * @throws IRISyntaxException 
+   * @param id The atom:id value
+   * @param normalize True if the atom:id value should be normalized
+   * @return The newly created atom:id element
+   * @throws IRISyntaxException if the id is malformed
    */
   IRIElement setId(String id, boolean normalize) throws IRISyntaxException;
    
   /**
    * Lists the complete set of links for this entry
+   * @return returns a listing of atom:link elements
    */
   List<Link> getLinks();
   
   /**
    * Lists the complete set of links using the specified rel attribute value
+   * @param rel A link relation 
+   * @return A listing of atom:link elements
    */
   List<Link> getLinks(String rel);
   
   /**
    * Adds an individual link to the entry
+   * @param A atom:link element
    */
   void addLink(Link link);
   
+  /**
+   * Adds an individual link element
+   * @param href The href IRI of the link
+   * @return The newly created atom:link
+   * @throws IRISyntaxException if the href is malformed
+   */
   Link addLink(String href) throws IRISyntaxException;
   
+  /**
+   * Adds an individual link element
+   * @param href The href IRI of the link
+   * @param rel The link rel attribute
+   * @return The newly created atom:link
+   * @throws IRISyntaxException if the href is malformed
+   */
   Link addLink(String href, String rel) throws IRISyntaxException;
   
+  /**
+   * Adds an individual link element
+   * @param href The href IRI of the link
+   * @param rel The link rel attribute
+   * @param type The link type attribute
+   * @param hreflang The link hreflang attribute
+   * @param length The length attribute
+   * @return The newly created atom:link
+   * @throws IRISyntaxException if the href is malformed
+   */
   Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws IRISyntaxException, MimeTypeParseException;
    
   /**
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
    * that identifies an image that provides visual identification for a feed.
    * The image SHOULD have an aspect ratio of 2 (horizontal) to 1 (vertical).
+   * @return the atom:logo element
    */
   IRIElement getLogoElement();
   
@@ -264,6 +338,7 @@ public interface Source
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
    * that identifies an image that provides visual identification for a feed.
    * The image SHOULD have an aspect ratio of 2 (horizontal) to 1 (vertical).
+   * @param iri The atom:logo element
    */
   void setLogoElement(IRIElement iri);
   
@@ -271,7 +346,9 @@ public interface Source
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
    * that identifies an image that provides visual identification for a feed.
    * The image SHOULD have an aspect ratio of 2 (horizontal) to 1 (vertical).
-   * @throws IRISyntaxException 
+   * @param The atom:logo value
+   * @return The newly created atom:logo element
+   * @throws IRISyntaxException if the iri is malformed
    */
   IRIElement setLogo(String iri) throws IRISyntaxException;
 
@@ -279,7 +356,8 @@ public interface Source
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
    * that identifies an image that provides visual identification for a feed.
    * The image SHOULD have an aspect ratio of 2 (horizontal) to 1 (vertical).
-   * @throws IRISyntaxException 
+   * @return The atom:logo element value
+   * @throws IRISyntaxException  if the atom:logo value is malformed
    */
   IRI getLogo() throws IRISyntaxException;
   
@@ -289,6 +367,7 @@ public interface Source
    * 
    * <p>RFC4287: The "atom:rights" element is a Text construct that conveys 
    * information about rights held in and over an entry or feed.</p>
+   * @return The atom:rights element
    */
   Text getRightsElement();
 
@@ -298,135 +377,190 @@ public interface Source
    * 
    * <p>RFC4287: The "atom:rights" element is a Text construct that conveys 
    * information about rights held in and over an entry or feed.</p>
+   * 
+   * @param text The atom:rights element
    */
   void setRightsElement(Text text);
   
   /**
    * Sets the value of the rights as @type="text"
+   * 
+   * @param value The atom:rights text value
+   * @return The newly created atom:rights element
    */
   Text setRights(String value);
   
   /**
    * Sets the value of the rights as @type="html"
+   * 
+   * @param value The atom:rights text value
+   * @return The newly created atom:rights element
    */
   Text setRightsAsHtml(String value);
 
   /**
    * Sets the value of the rights as @type="xhtml"
+   * 
+   * @param value The atom:rights text value
+   * @return The newly created atom:rights element
    */
   Text setRightsAsXhtml(String value);
   
   /**
    * Sets the value of the rights
+   * 
+   * @param value The atom:rights text value
+   * @param type The atom:rights text type
+   * @return The newly created atom:rights element
    */
   Text setRights(String value, Text.Type type);
   
   /**
    * Sets the value of the rights as @type="xhtml"
+   * 
+   * @param value The XHTML div element
+   * @return The newly created atom:rights element
    */
   Text setRights(Div value);
   
   /**
    * Returns the text of atom:rights
+   * 
+   * @return The value of the atom:rights element
    */
   String getRights();
   
   /**
    * Returns the type of atom:rights
+   * 
+   * @return The Text.Type of the atom:rights element
    */
   Text.Type getRightsType();
   
   /**
    * RFC4287: The "atom:subtitle" element is a Text construct that 
    * conveys a human-readable description or subtitle for a feed.
+   * 
+   * @return The atom:subtitle element
    */
   Text getSubtitleElement();
 
   /**
    * RFC4287: The "atom:subtitle" element is a Text construct that 
    * conveys a human-readable description or subtitle for a feed.
+   * 
+   * @param text A atom:subtitle element
    */  
   void setSubtitleElement(Text text);
   
   /**
    * Sets the value of the subtitle as @type="text"
+   * 
+   * @param value the value of the atom:subtitle element
+   * @return The atom:subtitle element
    */
   Text setSubtitle(String value);
 
   /**
    * Sets the value of the subtitle as @type="html"
+   * @param value The value of the atom:subtitle element
+   * @return The newly created atom:subtitle element
    */
   Text setSubtitleAsHtml(String value);
 
   /**
    * Sets the value of the subtitle as @type="xhtml"
+   * @param value The value of the atom:subtitle element
+   * @return The newly created atom:subtitle element
    */
   Text setSubtitleAsXhtml(String value);
   
   /**
    * Sets the value of the subtitle
+   * @param value The value of the atom:subtitle element
+   * @param value The atom:subtitle Text.Type
+   * @return The newly created atom:subtitle element
    */
   Text setSubtitle(String value, Text.Type type);
   
   /**
    * Sets the value of the subtitle as @type="xhtml"
+   * @param value The atom:subtitle element
+   * @return The newly created atom:subtitle element 
    */
   Text setSubtitle(Div value);
   
   /**
    * Returns the text value of atom:subtitle
+   * @return The atom:subtitle text value
    */
   String getSubtitle();
   
   /**
    * Returns the atom:subtitle type
+   * @return The atom:subtitle Text.Type
    */
   Text.Type getSubtitleType();
 
   /**
    * RFC4287: The "atom:title" element is a Text construct that conveys a 
    * human-readable title for an entry or feed.
+   * @return The atom:title element
    */
   Text getTitleElement();
   
   /**
    * RFC4287: The "atom:title" element is a Text construct that conveys a 
    * human-readable title for an entry or feed.
+   * @param text The atom:title element
    */
   void setTitleElement(Text text);
   
   /**
    * Sets the value of the title as @type="text"
+   * @param value The atom:title value
+   * @return The newly created atom:title element
    */
   Text setTitle(String value);
 
   /**
    * Sets the value of the title as @type="html"
+   * @param value The atom:title value
+   * @return The newly created atom:title element
    */
   Text setTitleAsHtml(String value);
   
   /**
    * Sets the value of the title as @type="xhtml"
+   * @param value The atom:title value
+   * @return The newly created atom:title element
    */
   Text setTitleAsXhtml(String value);
   
   /**
    * Sets the value of the title
+   * @param value The atom:title value
+   * @param type The atom:title Text.Type
+   * @return The newly created atom:title element
    */
   Text setTitle(String value, Text.Type type);
   
   /**
    * Sets the value of the title as @type="xhtml"
+   * @param value The XHTML div
+   * @return The newly created atom:title element 
    */
   Text setTitle(Div value);
   
   /**
    * Returns the text of atom:title
+   * @return The text value of the atom:title element
    */
   String getTitle();
 
   /**
    * Returns the type of atom:title
+   * @return The atom:title Text.Type value
    */
   Text.Type getTitleType();
   
@@ -435,6 +569,7 @@ public interface Source
    * the most recent instant in time when an entry or feed was modified 
    * in a way the publisher considers significant.  Therefore, not all
    * modifications necessarily result in a changed atom:updated value.
+   * @return the atom:updated element
    */
   DateTime getUpdatedElement();
   
@@ -443,41 +578,99 @@ public interface Source
    * the most recent instant in time when an entry or feed was modified 
    * in a way the publisher considers significant.  Therefore, not all
    * modifications necessarily result in a changed atom:updated value.
+   * @param dateTime A atom:updated element
    */
   void setUpdatedElement(DateTime dateTime);
   
+  /**
+   * Return the atom:updated value
+   * @return The serialized string form value of atom:updated
+   */
   String getUpdatedString();
   
+  /**
+   * Return the atom:updated value
+   * @return The atom:updated as a java.util.Date
+   */
   Date getUpdated();
   
+  /**
+   * Set the atom:updated value
+   * @param value The java.util.Date
+   * @param The newly created atom:updated element
+   */
   DateTime setUpdated(Date value);
   
+  /**
+   * Set the atom:updated value
+   * @param value The serialized string date
+   * @param The newly created atom:updated element
+   */
   DateTime setUpdated(String value);
   
   /**
    * Returns the first link with the specified rel attribute value
+   * @param rel A link relation
+   * @return The newly created atom:link element
    */
   Link getLink(String rel);
   
   /**
    * Returns the first link using the rel attribute value "self"
+   * @return An atom:link
    */
   Link getSelfLink();
   
   /**
    * Returns this entries first alternate link
+   * @return An atom:link
    */
   Link getAlternateLink();
   
+  /**
+   * @param type A media type
+   * @param hreflang A target language
+   * @return A matching atom:link
+   * @throws MimeTypeParseException if the type if malformed
+   */
   Link getAlternateLink(String type, String hreflang) throws MimeTypeParseException;
   
+  /**
+   * @param rel A link relation
+   * @return An atom:link
+   */
   IRI getLinkResolvedHref(String rel) throws IRISyntaxException;
+  
+  /**
+   * @return An atom:link
+   */
   IRI getSelfLinkResolvedHref() throws IRISyntaxException;
+  
+  /**
+   * @return An atom:link
+   */
   IRI getAlternateLinkResolvedHref() throws IRISyntaxException;
+  
+  /**
+   * @param type A media type
+   * @param hreflang A target language
+   * @return A matching atom:link
+   * @throws MimeTypeParseException if the type if malformed
+   */
   IRI getAlternateLinkResolvedHref(String type, String hreflang) throws IRISyntaxException, MimeTypeParseException;
   
+  /**
+   * Return an app:collection element associatd with this atom:source.  The 
+   * Atom Publishing Protocol allows an app:collection to be contained by 
+   * atom:feed to specify the collection to which the feed is associated.
+   * @return An app:collection element
+   */
   Collection getCollection();
   
+  /**
+   * Set the app:collection element
+   * @param collection An app:collection element
+   */
   void setCollection(Collection collection);
   
 }

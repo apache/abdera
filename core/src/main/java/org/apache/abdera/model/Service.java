@@ -44,26 +44,35 @@ public interface Service
 
   /**
    * Return the complete set of workspaces
+   * @return A listing of app:workspaces elements
    */
   List<Workspace> getWorkspaces();
   
   /**
    * Return the named workspace
+   * @param title The workspace title
+   * @return A matching app:workspace
    */
   Workspace getWorkspace(String title);
   
   /**
    * Add an individual workspace
+   * @param workspace a app:workspace element
    */
   void addWorkspace(Workspace workspace);
 
   /**
    * Add an individual workspace
+   * @param title The workspace title
+   * @return The newly created app:workspace
    */
   Workspace addWorkspace(String title);
   
   /**
    * Returns the named collection
+   * @param workspace The workspace title
+   * @param collection The collection title
+   * @return A matching app:collection element
    */
   Collection getCollection(String workspace, String collection);
   

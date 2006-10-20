@@ -45,40 +45,131 @@ import org.apache.abdera.util.iri.IRISyntaxException;
 public interface Collection 
   extends ExtensibleElement {
 
+  /**
+   * The text value of the collections atom:title element
+   * @return The atom:title value
+   */
   String getTitle();
 
+  /**
+   * Set the value of the collections atom:title element using type="text"
+   * @param title The value of the atom:title
+   * @return The newly created title element
+   */
   Text setTitle(String title);
 
+  /**
+   * Set the value of the collections atom:title element using type="html".
+   * Special characters in the value will be automatically escaped (e.g. &
+   * will become &amp;
+   * @param title The value of the atom:title
+   * @return The newly created title element
+   */
   Text setTitleAsHtml(String title);
   
+  /**
+   * Set the value of the collections atom:title element using type="xhtml".
+   * The title text will be wrapped in a xhtml:div and parsed to ensure that
+   * it is welformed XML.  A ParseException (RuntimeException) could be thrown
+   * @param title The value of the atom:title
+   * @return The newly created title element
+   */
   Text setTitleAsXHtml(String title);
   
+  /**
+   * Return the title element
+   * @returns The title element
+   */
   Text getTitleElement();
 
+  /**
+   * Return the value of the app:collection elements href attribute
+   * @return The href attribute IRI value
+   * @throws IRISyntaxException if the value of the href attribute is malformed
+   */
   IRI getHref() throws IRISyntaxException;
 
+  /**
+   * Return the href attribute resolved against the in-scope Base URI
+   * @return The href attribute IRI value
+   * @throws IRISyntaxException if the value of the href attribute is malformed
+   */
   IRI getResolvedHref() throws IRISyntaxException;
   
+  /**
+   * Set the value of the href attribute
+   * @param href The value of href attribute
+   * @throws IRISyntaxException if the href attribute is malformed 
+   */
   void setHref(String href) throws IRISyntaxException;
 
+  /**
+   * Returns the app:accept element
+   * @return The app:accept element
+   */
   Element getAcceptElement();
   
+  /**
+   * Returns the listing of media-ranges allowed for this collection
+   * @return An array listing the media-ranges allowed for this collection
+   */
   String[] getAccept() ;
 
+  /**
+   * Set the listing of media-ranges allowed for this collection.  The special
+   * value "entry" is used to indicate Atom Entry Documents.
+   * @param mediaRanges a listing of media-ranges 
+   */
   void setAccept(String... mediaRanges);
   
+  /**
+   * Returns true if the collection accepts the given media-type
+   * @param mediaType The media-type to check
+   * @return True if the media-type is acceptable
+   */
   boolean accepts(String mediaType);
   
+  /**
+   * Returns true if the collection accepts the given media-type
+   * @param mediatype The media-type to check
+   * @return True if the media-type is acceptable
+   */
   boolean accepts(MimeType mediaType);
   
+  /**
+   * Returns the app:categories element
+   * @return The app:categories element
+   */
   List<Categories> getCategories();
   
+  /**
+   * Add an app:categories element
+   * @return The newly created app:categories element
+   */
   Categories addCategories();
-  
+
+  /**
+   * Add an app:categories element that links to an external Category Document
+   * @param href The IRI of the external Category Document
+   * @return The newly created app:categories element
+   * @throws IRISyntaxException if the href value is malformed
+   */
   Categories addCategories(String href) throws IRISyntaxException;
   
+  /**
+   * Add the app:categories element to the collection
+   * @param categories The app:categories element 
+   */
   void addCategories(Categories categories);
   
+  /**
+   * Add a listing of categories to the collection
+   * @param categories The listing of categories to add
+   * @param fixed True if the listing of categories should be fixed
+   * @param scheme The default IRI scheme for the categories listing
+   * @return The newly created app:categories element
+   * @throws IRISyntaxException if the scheme value if malformed
+   */
   Categories addCategories(List<Category> categories, boolean fixed, String scheme) throws IRISyntaxException;
   
 }

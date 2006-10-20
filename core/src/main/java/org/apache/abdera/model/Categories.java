@@ -17,78 +17,90 @@
 */
 package org.apache.abdera.model;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.abdera.util.iri.IRI;
 import org.apache.abdera.util.iri.IRISyntaxException;
 
+/**
+ * The Atom Publishing Protocol introduces the notion of a "Category Document"
+ * and the app:categories element.  These are used to provide a listing of
+ * atom:category elements that may be used with the members of an Atom
+ * Publishing Protocol collection.
+ */
 public interface Categories 
   extends ExtensibleElement {
 
   /**
-   * Returns the value of the href attribute
-   * @throws IOException 
-   * @throws URISyntaxException 
+   * The app:categories element can have an href attribute whose value MUST 
+   * point to an APP Category Document.
+   * @return The href attribute value
+   * @throws IRISyntaxException if the IRI in the underlying attribute value is malformed
    */
   IRI getHref() throws IRISyntaxException;
   
   /**
-   * Returns the fully resolved href
-   * @throws IOException 
-   * @throws URISyntaxException 
+   * Returns the value of the href attribute resolved against the in-scope Base URI
+   * @return The fully resolved href attribute value
+   * @throws URISyntaxException if the IRI in the underlying attribute value is malformed
    */
   IRI getResolvedHref() throws IRISyntaxException;
   
   /**
-   * Sets the value of the href attribute
-   * @throws IOException 
-   * @throws URISyntaxException 
+   * Sets the value of the href attribute.
+   * @throws URISyntaxException if the IRI specified is malformed
    */
   void setHref(String href) throws IRISyntaxException;
   
   /**
-   * Specifies whether or not this is a fixed listing of categories
+   * If an app:categories element is marked as fixed, then the set of atom:category
+   * elements is considered to be a closed set.  That is, Atom Publishing Protocol
+   * clients SHOULD only use the atom:category elements listed.  The default
+   * is false (fixed="no")
+   * @return True if the categories listing is fixed
    */
   boolean isFixed();
   
   /**
-   * Sets whether or not this is a fixed listing of categories
+   * Sets whether or not this is a fixed listing of categories.  If set to 
+   * false, the fixed attribute will be removed from the app:categories element.
+   * @param fixed True if the app:categories listing is fixed
    */
   void setFixed(boolean fixed);
   
   /**
-   * Returns the common scheme for this listing of categories
-   * @throws IOException 
-   * @throws IRISyntaxException 
-   * @throws URISyntaxException 
+   * The app:categories element may specify a default scheme attribute for listed
+   * atom:category elements that do not have their own scheme attribute. 
+   * @return The scheme IRI
+   * @throws IRISyntaxException if the IRI in the scheme attribute is malformed
    */
   IRI getScheme() throws IRISyntaxException;
   
   /**
-   * Sets the common scheme for this listing of categories
-   * @throws IOException 
-   * @throws URISyntaxException 
+   * Sets the default scheme for this listing of categories 
+   * @param scheme The default scheme used for this listing of categories
+   * @throws IRISyntaxException if the IRI provided is malformed
    */
   void setScheme(String scheme) throws IRISyntaxException;
 
   /**
    * Lists the complete set of categories
+   * @return This app:categories listing of atom:category elements
    */
   List<Category> getCategories();
   
   /**
-   * Lists the complete set of categories using the specified scheme
-   * @throws URISyntaxException 
+   * Lists the complete set of categories that use the specified scheme
+   * @param scheme The IRI of an atom:category scheme
+   * @return A listing of atom:category elements that use the specified scheme
+   * @throws IRISyntaxException if the scheme provided is malformed 
    */
   List<Category> getCategories(String scheme) throws IRISyntaxException;
   
   /**
    * Returns a copy of the complete set of categories with the scheme attribute set
-   * as specified in 7.2.1. (child categories that do not have a scheme
-   * attribute inherit the scheme attribute of the parent)
-   * @throws IOException 
-   * @throws URISyntaxException 
+   * @return A listing of atom:category elements using the default scheme specified by the app:categories scheme attribute
+   * @throws IRISyntaxException if the values of the scheme attributes are malformed  
    */
   List<Category> getCategoriesWithScheme() throws IRISyntaxException;
 
@@ -96,18 +108,52 @@ public interface Categories
    * Returns a copy of the complete set of categories with the scheme 
    * attribute set as specified in 7.2.1. (child categories that do not have a 
    * scheme attribute inherit the scheme attribute of the parent)
-   * @throws IRISyntaxException 
+   * @param scheme A scheme IRI
+   * @return A listing of atom:category elements
+   * @throws IRISyntaxException  if the scheme provided is malformed
    */
   List<Category> getCategoriesWithScheme(String scheme) throws IRISyntaxException;
   
+  /**
+   * Add an atom:category to the listing
+   * @param category The atom:category to add to the listing
+   */
   void addCategory(Category category);
 
+  /**
+   * Create and add an atom:category to the listing
+   * @param term The string term
+   * @return The newly created atom:category 
+   */
   Category addCategory(String term);
 
+  /**
+   * Create an add an atom:category to the listing
+   * @param scheme The scheme IRI for the newly created category
+   * @param term The string term
+   * @param label The human readable label for the category
+   * @return The newly created atom:category
+   * @throws IRISyntaxException if the scheme provided is malformed
+   */
   Category addCategory(String scheme, String term, String label) throws IRISyntaxException;
     
+  /**
+   * Returns true if this app:categories listing contains a category with the 
+   * specified term
+   * @param term The term to look for
+   * @return True if the term is found
+   * @throws IRISyntaxException if the Scheme IRI of any of the scheme attributes is malformed
+   */
   boolean contains(String term) throws IRISyntaxException;
   
+  /**
+   * Returns true if this app:categories listing contains a category with the 
+   * specified term and scheme
+   * @param term The term to look for
+   * @param scheme The IRI scheme 
+   * @return True if the term and scheme are found
+   * @throws IRISyntaxException if the Scheme IRI of any of the scheme attributes is malformed
+   */
   boolean contains(String term, String scheme) throws IRISyntaxException;
   
 }

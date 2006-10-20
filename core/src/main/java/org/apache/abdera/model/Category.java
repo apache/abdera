@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.model;
 
-import java.io.IOException;
-
 import org.apache.abdera.util.iri.IRI;
 import org.apache.abdera.util.iri.IRISyntaxException;
 
@@ -49,6 +47,7 @@ public interface Category
    * RFC4287: The "term" attribute is a string that identifies the 
    * category to which the entry or feed belongs.  Category elements 
    * MUST have a "term" attribute.
+   * @return The string value of the term attribute
    */
   String getTerm();
 
@@ -56,6 +55,7 @@ public interface Category
    * RFC4287: The "term" attribute is a string that identifies the 
    * category to which the entry or feed belongs.  Category elements 
    * MUST have a "term" attribute.
+   * @param term The string value of the term attribute
    */
   void setTerm(String term);
   
@@ -63,8 +63,8 @@ public interface Category
    * RFC4287: The "scheme" attribute is an IRI that identifies a 
    * categorization scheme.  Category elements MAY have a "scheme" 
    * attribute.
-   * @throws IOException 
-   * @throws IRISyntaxException 
+   * @return The IRI value of the scheme attribute
+   * @throws IRISyntaxException if the scheme IRI is malformed
    */
   IRI getScheme() throws IRISyntaxException;
 
@@ -72,7 +72,8 @@ public interface Category
    * RFC4287: The "scheme" attribute is an IRI that identifies a 
    * categorization scheme.  Category elements MAY have a "scheme" 
    * attribute.
-   * @throws URISyntaxException 
+   * @param scheme The IRI of the scheme
+   * @throws URISyntaxException if the scheme provided is malformed
    */
   void setScheme(String scheme) throws IRISyntaxException;
  
@@ -83,6 +84,7 @@ public interface Category
    * "&amp;lt;" represent their corresponding characters ("&amp;" and 
    * "&lt;", respectively), not markup.  Category elements MAY have a 
    * "label" attribute.
+   * @return The value of the human-readable label
    */
   String getLabel();
 
@@ -93,6 +95,7 @@ public interface Category
    * "&amp;lt;" represent their corresponding characters ("&amp;" and 
    * "&lt;", respectively), not markup.  Category elements MAY have a 
    * "label" attribute.
+   * @param label The value of the human-readable label
    */
   void setLabel(String label);
   

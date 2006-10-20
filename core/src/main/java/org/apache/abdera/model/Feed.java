@@ -101,31 +101,37 @@ public interface Feed
 
   /**
    * Returns the complete set of entries contained in this feed
+   * @return A listing of atom:entry elements
    */
   List<Entry> getEntries();
   
   /**
    * Adds a new Entry to the <i>end</i> of the Feeds collection of entries
+   * @param entry Add an entry 
    */
   void addEntry(Entry entry);
 
   /**
    * Adds a new Entry to the <i>end</i> of the Feeds collection of entries
+   * @return A newly created atom:entry
    */
   Entry addEntry();
   
   /**
    * Adds a new Entry to the <i>start</i> of the Feeds collection of entries
+   * @param An atom:entry to insert
    */
   void insertEntry(Entry entry);
 
   /**
    * Adds a new Entry to the <i>start</i> of the Feeds collection of entries
+   * @return A newly created atom:entry
    */
   Entry insertEntry();
   
   /**
    * Creates a Source element from this Feed
+   * @return Returns a copy of this atom:feed as a atom:source element
    */
   Source getAsSource();
   
@@ -137,12 +143,15 @@ public interface Feed
   
   /**
    * Sorts entries using the given comparator
+   * @param comparator Sort the entries using the comparator
    */
   void sortEntries(Comparator<Entry> comparator);
   
   /**
    * Retrieves the first entry in the feed with the given atom:id value
-   * @throws URISyntaxException 
+   * @param id The id to retrieve
+   * @return The matching atom:entry
+   * @throws IRISyntaxException if the id is malformed
    */
   Entry getEntry(String id) throws IRISyntaxException;
   

@@ -51,13 +51,15 @@ public interface Generator
    *  MUST be an IRI reference [RFC3987].  When dereferenced, the resulting
    *  URI (mapped from an IRI, if necessary) SHOULD produce a
    *  representation that is relevant to that agent.
-   * @throws URISyntaxException 
+   * @throws IRISyntaxException if the uri is malformed 
    */
   IRI getUri() throws IRISyntaxException;
   
   /**
    * Returns the fully qualified form of the generator element's uri attribute
    * (resolved against the in-scope Base URI)
+   * @return the resolved uri value
+   * @throws IRISyntaxException if the uri is malformed
    */
   IRI getResolvedUri() throws IRISyntaxException;
   
@@ -66,19 +68,22 @@ public interface Generator
    *  MUST be an IRI reference [RFC3987].  When dereferenced, the resulting
    *  URI (mapped from an IRI, if necessary) SHOULD produce a
    *  representation that is relevant to that agent.
-   * @throws URISyntaxException 
+   * @param uri The URI attribute value
+   * @throws IRISyntaxException if the uri is malformed
    */
   void setUri(String uri) throws IRISyntaxException;
   
   /**
    * The atom:generator element MAY have a "version" attribute that
    * indicates the version of the generating agent.
+   * @return The version attribute value
    */
   String getVersion();
 
   /**
    * The atom:generator element MAY have a "version" attribute that
    * indicates the version of the generating agent.
+   * @param version The version attribute
    */
   void setVersion(String version);
   

@@ -45,6 +45,7 @@ public interface Person
    * The "atom:name" element's content conveys a human-readable name for
    * the person.  The content of atom:name is Language-Sensitive.  Person
    * constructs MUST contain exactly one "atom:name" element.
+   * @return The atom:name element
    */
   Element getNameElement();
   
@@ -52,6 +53,7 @@ public interface Person
    * The "atom:name" element's content conveys a human-readable name for
    * the person.  The content of atom:name is Language-Sensitive.  Person
    * constructs MUST contain exactly one "atom:name" element.
+   * @param element The atom:name element
    */
   void setNameElement(Element element);
   
@@ -59,6 +61,8 @@ public interface Person
    * The "atom:name" element's content conveys a human-readable name for
    * the person.  The content of atom:name is Language-Sensitive.  Person
    * constructs MUST contain exactly one "atom:name" element.
+   * @param name The person name
+   * @return The newly created atom:name element
    */
   Element setName(String name);
   
@@ -66,6 +70,7 @@ public interface Person
    * The "atom:name" element's content conveys a human-readable name for
    * the person.  The content of atom:name is Language-Sensitive.  Person
    * constructs MUST contain exactly one "atom:name" element.
+   * @return The name value
    */
   String getName();
   
@@ -74,6 +79,7 @@ public interface Person
    * associated with the person.  Person constructs MAY contain an
    * atom:email element, but MUST NOT contain more than one.  Its content
    * MUST conform to the "addr-spec" production in [RFC2822].
+   * @return the atom:email element
    */
   Element getEmailElement();
   
@@ -82,6 +88,7 @@ public interface Person
    * associated with the person.  Person constructs MAY contain an
    * atom:email element, but MUST NOT contain more than one.  Its content
    * MUST conform to the "addr-spec" production in [RFC2822].
+   * @param element The atom:email element
    */
   void setEmailElement(Element element);
   
@@ -90,6 +97,8 @@ public interface Person
    * associated with the person.  Person constructs MAY contain an
    * atom:email element, but MUST NOT contain more than one.  Its content
    * MUST conform to the "addr-spec" production in [RFC2822].
+   * @param email The person email
+   * @return the newly created atom:email element
    */
   Element setEmail(String email);
   
@@ -98,6 +107,7 @@ public interface Person
    * associated with the person.  Person constructs MAY contain an
    * atom:email element, but MUST NOT contain more than one.  Its content
    * MUST conform to the "addr-spec" production in [RFC2822].
+   * @return the person's emali
    */
   String getEmail();  
   
@@ -106,6 +116,7 @@ public interface Person
    * person.  Person constructs MAY contain an atom:uri element, but MUST
    * NOT contain more than one.  The content of atom:uri in a Person
    * construct MUST be an IRI reference [RFC3987].
+   * @return the atom:uri element
    */
   IRIElement getUriElement();
   
@@ -114,6 +125,7 @@ public interface Person
    * person.  Person constructs MAY contain an atom:uri element, but MUST
    * NOT contain more than one.  The content of atom:uri in a Person
    * construct MUST be an IRI reference [RFC3987].
+   * @param uri The atom:uri element
    */
   void setUriElement(IRIElement uri);
   
@@ -122,7 +134,8 @@ public interface Person
    * person.  Person constructs MAY contain an atom:uri element, but MUST
    * NOT contain more than one.  The content of atom:uri in a Person
    * construct MUST be an IRI reference [RFC3987].
-   * @throws URISyntaxException 
+   * @param uri The atom:uri value
+   * @throws IRISyntaxException if the uri is malformed
    */
   IRIElement setUri(String uri) throws IRISyntaxException;
   
@@ -131,7 +144,8 @@ public interface Person
    * person.  Person constructs MAY contain an atom:uri element, but MUST
    * NOT contain more than one.  The content of atom:uri in a Person
    * construct MUST be an IRI reference [RFC3987].
-   * @throws URISyntaxException 
+   * @return The atom:uri value
+   * @throws IRISyntaxException if the uri is invalid 
    */
   IRI getUri() throws IRISyntaxException;
 }

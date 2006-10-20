@@ -87,12 +87,16 @@ public interface Link
    * RFC4287: The "href" attribute contains the link's IRI. atom:link 
    * elements MUST have an href attribute, whose value MUST be a IRI 
    * reference [RFC3987].
+   * @return The href IRI value
+   * @throws IRISyntaxException if the href is malformed
    */
   IRI getHref() throws IRISyntaxException;
   
   /**
    * Returns the value of the link's href attribute resolved against the 
    * in-scope Base IRI
+   * @return The href IRI value
+   * @throws IRISyntaxException if the href is malformed
    */
   IRI getResolvedHref() throws IRISyntaxException;
   
@@ -100,7 +104,8 @@ public interface Link
    * RFC4287: The "href" attribute contains the link's IRI. atom:link 
    * elements MUST have an href attribute, whose value MUST be a IRI 
    * reference [RFC3987].
-   * @throws IRISyntaxException 
+   * @param href The href IRI
+   * @throws IRISyntaxException if the href is malformed
    */
   void setHref(String href) throws IRISyntaxException;
   
@@ -118,6 +123,7 @@ public interface Link
    * string "http://www.iana.org/assignments/relation/".  The value of
    * "rel" describes the meaning of the link, but does not impose any
    * behavioral requirements on Atom Processors.</p>
+   * @return The rel attribute value
    */
   String getRel();
   
@@ -135,6 +141,7 @@ public interface Link
    * string "http://www.iana.org/assignments/relation/".  The value of
    * "rel" describes the meaning of the link, but does not impose any
    * behavioral requirements on Atom Processors.</p>
+   * @param rel The rel attribute value
    */
   void setRel(String rel);
   
@@ -146,7 +153,8 @@ public interface Link
    * actual media type returned with the representation.  Link elements
    * MAY have a type attribute, whose value MUST conform to the syntax of
    * a MIME media type [MIMEREG].
-   * @throws MimeTypeParseException 
+   * @return The value of the type attribute
+   * @throws MimeTypeParseException if the type is malformed
    */
   MimeType getMimeType() throws MimeTypeParseException;
 
@@ -158,7 +166,8 @@ public interface Link
    * actual media type returned with the representation.  Link elements
    * MAY have a type attribute, whose value MUST conform to the syntax of
    * a MIME media type [MIMEREG].
-   * @throws MimeTypeParseException 
+   * @param type The link type
+   * @throws MimeTypeParseException if the type is malformed
    */
   void setMimeType(String type) throws MimeTypeParseException;
   
@@ -168,6 +177,7 @@ public interface Link
    * the rel="alternate", it implies a translated version of the entry.
    * Link elements MAY have an hreflang attribute, whose value MUST be a
    * language tag [RFC3066].
+   * @return The hreflang value
    */
   String getHrefLang();
   
@@ -177,6 +187,7 @@ public interface Link
    * the rel="alternate", it implies a translated version of the entry.
    * Link elements MAY have an hreflang attribute, whose value MUST be a
    * language tag [RFC3066].
+   * @param lang The hreflang value
    */
   void setHrefLang(String lang);
   
@@ -186,6 +197,7 @@ public interface Link
    * Entities such as "&amp;amp;" and "&amp;lt;" represent their corresponding
    * characters ("&amp;" and "&lt;", respectively), not markup.  Link elements
    * MAY have a title attribute.
+   * @return The title attribute
    */
   String getTitle();
   
@@ -195,6 +207,7 @@ public interface Link
    * Entities such as "&amp;amp;" and "&amp;lt;" represent their corresponding
    * characters ("&amp;" and "&lt;", respectively), not markup.  Link elements
    * MAY have a title attribute.
+   * @param title The title attribute
    */
   void setTitle(String title);
   
@@ -206,6 +219,7 @@ public interface Link
    * override the actual content length of the representation as reported
    * by the underlying protocol.  Link elements MAY have a length
    * attribute.
+   * @return The length attribute value
    */
   long getLength();
   
@@ -217,6 +231,7 @@ public interface Link
    * override the actual content length of the representation as reported
    * by the underlying protocol.  Link elements MAY have a length
    * attribute.
+   * @param length The length attribute value
    */
   void setLength(long length);
   

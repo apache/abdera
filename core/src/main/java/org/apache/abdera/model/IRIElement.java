@@ -29,21 +29,29 @@ public interface IRIElement
   extends  Element {
   
   /**
-   * Returns the value of the element as a java.net.URI 
+   * Returns the value of the element as a java.net.URI
+   * @return The IRI value of this element 
    */
   IRI getValue() throws IRISyntaxException;
   
   /**
    * Sets the value of the element
-   * @throws IRISyntaxException 
+   * @param iri The iri value
+   * @throws IRISyntaxException  if the value is malformed
    */
   void setValue(String iri) throws IRISyntaxException;
   
-  void setNormalizedValue(String id) throws IRISyntaxException;
+  /**
+   * Set the value of this element using the normalization as specified in RFC4287
+   * @param id A non-normalized IRI
+   * @throws IRISyntaxException if the iri is malformed
+   */
+  void setNormalizedValue(String iri) throws IRISyntaxException;
   
   /**
    * Returns the value of the element resolved against the current
    * in-scope Base URI
+   * @return The resolved IRI value
    */
   IRI getResolvedValue() throws IRISyntaxException;
   

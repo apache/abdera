@@ -99,9 +99,19 @@ import org.apache.abdera.util.iri.IRISyntaxException;
  */
 public interface Content extends Element {
 
+  /**
+   * Used to identify the type of content
+   */
   public enum Type { 
-    TEXT, HTML, XHTML, XML, MEDIA;
+    /** Plain text            **/ TEXT, 
+    /** Escaped HTML          **/ HTML, 
+    /** Welformed XHTML       **/ XHTML, 
+    /** Welformed XML         **/ XML, 
+    /** Base64-encoded Binary **/ MEDIA;
     
+    /**
+     * Return an appropriate Type given the specified @type attribute value
+     */
     public static Type typeFromString(String val) {
       Type type = TEXT;
       if (val != null) {
@@ -121,12 +131,31 @@ public interface Content extends Element {
     } 
   }
   
+  /**
+   * Returns the Content Type
+   * @return The Content Type
+   */
   Type getContentType();
   
+  /**
+   * Set the Content Type
+   * @param type The Content Type
+   */
   void setContentType(Type type);
   
+  /**
+   * Return the value element or null if type="text", type="html" or type is 
+   * some non-XML media type
+   * @return The first child element of the atom:content element or null
+   */
   <T extends Element> T getValueElement();
   
+  /**
+   * Set the value element of the content.  If the value is a Div, the type
+   * attribute will be set to type="xhtml", otherwise, the attribute will be 
+   * set to type="application/xml"
+   * @param value The element to set
+   */
   <T extends Element>void setValueElement(T value);
 
   /**
@@ -137,7 +166,7 @@ public interface Content extends Element {
    * the src attribute is provided, Atom Processors MUST behave as though
    * the type attribute were present with a value of "text".
    * 
-   * @return null if type = text, html or xhtml
+   * @return null if type = text, html or xhtml, otherwise a media type 
    */
   MimeType getMimeType();
 
@@ -148,7 +177,8 @@ public interface Content extends Element {
    * be a composite type.  If neither the type attribute nor
    * the src attribute is provided, Atom Processors MUST behave as though
    * the type attribute were present with a value of "text".
-   * @throws MimeTypeParseException 
+   * @param type The media type 
+   * @throws MimeTypeParseException if the media type is malformed 
    */
   void setMimeType(String type) throws MimeTypeParseException;
 
@@ -162,11 +192,16 @@ public interface Content extends Element {
    * <p>If the "src" attribute is present, the "type" attribute SHOULD be
    * provided and MUST be a MIME media type, rather than "text", "html", 
    * or "xhtml".</p>
+   * 
+   * @return The IRI value of the src attribute or null if none
+   * @throws IRISyntaxException if the src attribute value is malformed
    */
   IRI getSrc() throws IRISyntaxException;
   
   /**
    * Returns the fully qualified URI form of the content src attribute.
+   * @return The IRI value of the src attribute resolved against the in-scope Base URI
+   * @throws IRISyntaxException if the src attribute value is malformed
    */
   IRI getResolvedSrc() throws IRISyntaxException;
 
@@ -180,12 +215,14 @@ public interface Content extends Element {
    * <p>If the "src" attribute is present, the "type" attribute SHOULD be
    * provided and MUST be a MIME media type, rather than "text", "html", 
    * or "xhtml".</p>
-   * @throws URISyntaxException 
+   * @param src The IRI to use as the src attribute value for the content
+   * @throws IRISyntaxException if the src value is malformed
    */
   void setSrc(String src) throws IRISyntaxException;
   
   /**
    * Attempts to Base64 decode the string value of the content element.
+   * @return A DataHandler or null
    * @throws UnsupportedOperationException if type = text, html, xhtml, or any application/*+xml, or text/* type 
    */
   DataHandler getDataHandler();
@@ -193,15 +230,33 @@ public interface Content extends Element {
   /**
    * Sets the string value of the content element by Base64 encoding the
    * specifed byte array.
+   * @param dataHandler The DataHandler for the binary content requiring Base64 encoding 
    * @throws UnsupportedOperationException if type = text, html, xhtml, or any application/*+xml, or text/* type
    */
   void setDataHandler(DataHandler dataHandler);
   
+  /**
+   * Returns the string value of this atom:content element
+   * @return The string value 
+   */
   String getValue();
   
+  /**
+   * Set the string value of the atom:content element
+   * @param value The string value
+   */
   void setValue(String value);
   
+  /**
+   * Return the string value of the atom:content element with the enclosing 
+   * div tag if type="xhtml"
+   * @return The div wrapped value
+   */
   String getWrappedValue();
   
+  /**
+   * Set the string value of the atom:content with the enclosing div tag
+   * @param wrappedValue The string value with the wrapping div tag
+   */
   void setWrappedValue(String wrappedValue);
 }

@@ -25,35 +25,49 @@ public interface Div
 
   /**
    * Returns the array of class attribute values on the div
+   * @return A listing of class attribute values
    */
   String[] getXhtmlClass();
   
   /**
    * Returns the value of the div element's id attribute
+   * @return The value of the id attribute
    */
   String getId();
   
   /**
    * Returns the value of the div element's title attribute
+   * @return The value of the title attribute
    */
   String getTitle();
   
   /** 
    * Sets the value of the div element's id attribute
+   * @param The value of the id attribute
    */
   void setId(String id);
   
   /**
    * Set the value of the div element's title attribute
+   * @param The value of the title attribute
    */
   void setTitle(String title);
   
   /**
    * Sets the array of class attribute values on the div
+   * @param A listing of class attribute values
    */
   void setXhtmlClass(String[] classes);
   
+  /**
+   * Returns the value of the div element
+   * @return The value of the div element
+   */
   String getValue();
   
+  /**
+   * Set the value of the div element
+   * @param value The text value
+   */
   void setValue(String value);
 }

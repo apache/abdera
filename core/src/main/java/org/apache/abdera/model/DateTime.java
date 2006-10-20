@@ -29,53 +29,63 @@ public interface DateTime
   
   /**
    * Returns the content value of the element as an AtomDate object 
+   * @return The Atom Date value of this element
    */
   AtomDate getValue();
   
   /**
    * Returns the content value of the element as a java.util.Date object
+   * @return The java.util.Date value of this element
    */
   Date getDate();
 
   /**
    * Returns the content value of the element as a java.util.Calendar object
+   * @return The java.util.Calendar value of this element
    */
   Calendar getCalendar();
   
   /**
    * Returns the content value of the element as a long (equivalent to 
    * calling DateTimeElement().getDate().getTime()
+   * @return The number of milliseconds since January 1, 1970, 00:00:00 GMT
    */
   long getTime();
   
   /**
    * Returns the content value of the element as a string conforming to 
    * RFC-3339
+   * @return The serialized string form of this element
    */
   String getString();
   
   /**
    * Sets the content value of the element
+   * @param dateTime the Atom Date value
    */
   void setValue(AtomDate dateTime);
   
   /**
    * Sets the content value of the element
+   * @param date The java.util.Date value
    */
   void setDate(Date date);
   
   /**
    * Sets the content value of the element
+   * @param date The java.util.Calendar value
    */
   void setCalendar(Calendar date);
   
   /**
    * Sets the content value of the element
+   * @param date the number of milliseconds since January 1, 1970, 00:00:00 GMT
    */
   void setTime(long date);
   
   /**
    * Sets the content value of the element
+   * @param The serialized string value
    */
   void setString(String date);
 }

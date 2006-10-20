@@ -18,6 +18,10 @@
 package org.apache.abdera;
 
 import org.apache.abdera.factory.Factory;
+import org.apache.abdera.model.Categories;
+import org.apache.abdera.model.Entry;
+import org.apache.abdera.model.Feed;
+import org.apache.abdera.model.Service;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserFactory;
 import org.apache.abdera.util.AbderaConfiguration;
@@ -31,7 +35,7 @@ import org.apache.abdera.xpath.XPath;
  * subcomponents.  Upon creation, this class will attempt to create 
  * singleton instances of each of the various subcomponents components.
  * These instances may be retrieved using the appropriate get___ methods.
- * Alternatively, new instances may be retrieved using the appropriate 
+ * Alternatively, new instances may be created using the appropriate 
  * new___ methods. 
  */
 public final class Abdera {
@@ -53,6 +57,7 @@ public final class Abdera {
   
   /**
    * Initialize using the specified Abdera Configuration
+   * @param config The Abdera Configuration to use
    */
   public Abdera(AbderaConfiguration config) {
     this.config = config;
@@ -62,6 +67,39 @@ public final class Abdera {
     parserFactory = newParserFactory();
     writerFactory = newWriterFactory();
     writer = newWriter();
+  }
+  
+  /**
+   * Create a new Feed instance.  This is a convenience shortcut for
+   * <code>abdera.getFactory().newFeed()</code>
+   * @return A newly created feed element
+   */
+  public Feed newFeed() {
+    return getFactory().newFeed();
+  }
+  
+  /**
+   * Create a new Entry instance.  This is a convenience shortcut for
+   * <code>abdera.getFactory().newEntry()</code>
+   */
+  public Entry newEntry() {
+    return getFactory().newEntry();
+  }
+  
+  /**
+   * Create a new Service instance.  This is a convenience shortcut for
+   * <code>abdera.getFactory().newService()</code>
+   */
+  public Service newService() {
+    return getFactory().newService();
+  }
+  
+  /**
+   * Create a new Categories instance.  This is a convenience shortcut
+   * for <code>abdera.getFactory().newCategories()</code>
+   */
+  public Categories newCategories() {
+    return getFactory().newCategories();
   }
   
   /**
@@ -181,26 +219,44 @@ public final class Abdera {
   
   // Static convenience methods //
   
+  /**
+   * Return a new Factory instance using a non-shared Abdera object
+   */
   public static Factory getNewFactory() {
     return (new Abdera()).newFactory();
   }
 
+  /**
+   * Return a new Parser instance using a non-shared Abdera object
+   */
   public static Parser getNewParser() {
     return (new Abdera()).newParser();
   }
   
+  /**
+   * Return a new XPath instance using a non-shared Abdera object
+   */
   public static XPath getNewXPath() {
     return (new Abdera()).newXPath();
   }
 
+  /**
+   * Return a new ParserFactory instance using a non-shared Abdera object
+   */
   public static ParserFactory getNewParserFactory() {
     return (new Abdera()).newParserFactory();
   }
   
+  /**
+   * Return a new WriterFactory instance using a non-shared Abdera object
+   */
   public static WriterFactory getNewWriterFactory() {
     return (new Abdera()).newWriterFactory();
   }
 
+  /**
+   * Return a new instance of the default Writer using a non-shared Abdera object 
+   */
   public static Writer getNewWriter() {
     return (new Abdera()).newWriter();
   }

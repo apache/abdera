@@ -19,6 +19,7 @@ package org.apache.abdera.ext.history;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.util.iri.IRI;
@@ -42,7 +43,10 @@ public class FeedHistoryHelper {
     if (complete) {
       if (!isComplete(feed)) feed.addExtension(COMPLETE);
     } else {
-      if (isComplete(feed)) feed.getExtension(COMPLETE).discard(); 
+      if (isComplete(feed)) {
+        Element ext = feed.getExtension(COMPLETE);
+        ext.discard(); 
+      }
     }
   }
   
@@ -50,7 +54,10 @@ public class FeedHistoryHelper {
     if (archive) {
       if (!isArchive(feed)) feed.addExtension(ARCHIVE);
     } else {
-      if (isArchive(feed)) feed.getExtension(ARCHIVE).discard(); 
+      if (isArchive(feed)) {
+        Element ext = feed.getExtension(ARCHIVE);
+        ext.discard();
+      }
     }
   }
 

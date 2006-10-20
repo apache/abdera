@@ -25,7 +25,7 @@ import org.apache.abdera.filter.TextFilter;
 /**
  * Parser options are used to modify the behavior of the parser. 
  */
-public interface ParserOptions {
+public interface ParserOptions extends Cloneable {
 
   /**
    * Return a duplicate of this options object.

@@ -117,7 +117,7 @@ public class CommonsClient extends Client {
               return cached_response;
           case STALE:                                                            // CACHE HIT: STALE
             // revalidate the cached entry
-            if (cached_response != null) {
+            if (cached_response != null && cached_response.getEntityTag() != null) {
               options.setIfModifiedSince(cached_response.getLastModified());
               options.setIfNoneMatch(cached_response.getEntityTag().toString());
             } else {

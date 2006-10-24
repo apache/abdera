@@ -448,9 +448,14 @@ Working directory: ${work}
   </target>
 
   <target name="downloadsecurity" if="do.download.security">
+    <parallel>
     <get src="${xmlsecurity.dir}/${xmlsecurity.jar}"
          dest="${dependencies}/${xmlsecurity.jar}"
          usetimestamp="true" />
+    <get src="#{bouncycastle.dir}/${bouncycastle.jar}"
+         dest="${dependencies}/${bouncycastle.jar}"
+         usetimestamp="true" />
+    </parallel>
   </target>
   <target name="download" if="do.download">
     <echo>Downloading project dependencies.  This may take a moment</echo>
@@ -558,6 +563,9 @@ Working directory: ${work}
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${security.jar}&quot; &quot;${retro_security.jar}&quot;" />
     </java>
+    <get src="#{bouncycastle.dir}/${bouncycastle.jar.retro}"
+         dest="${dependencies}/${bouncycastle.jar.retro}"
+         usetimestamp="true" ignoreerrors="true"/>
   </target>
   
   <target name="go_retro" if="do.download.retroweaver">

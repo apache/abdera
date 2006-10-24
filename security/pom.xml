@@ -79,5 +79,10 @@
       <artifactId>servlet-api</artifactId>
       <version>2.4</version>
     </dependency>
+    <dependency>
+      <groupId>bouncycastle</groupId>
+      <artifactId>bcprov-jdk15</artifactId>
+      <version>124</version>
+    </dependency>
   </dependencies>
 </project>

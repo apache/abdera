@@ -29,6 +29,9 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.util.iri.IRISyntaxException;
 
+/**
+ * Abstract base implementation of Abdera Parser.
+ */
 public abstract class AbstractParser 
   implements Parser {
 

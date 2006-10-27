@@ -22,6 +22,9 @@ import java.util.regex.Pattern;
 import org.apache.abdera.util.iri.IRI;
 import org.apache.abdera.util.iri.IRISyntaxException;
 
+/**
+ * Utility methods for working with URI's / IRI's
+ */
 public class URIHelper {
 
   private static final Pattern javascript = 

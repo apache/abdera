@@ -28,9 +28,16 @@ import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.parser.NamedParser;
 import org.apache.abdera.writer.NamedWriter;
 
+/**
+ * Provides the basic configuration for the Abdera default implementation.
+ */
 public final class AbderaConfiguration 
   implements Constants, Cloneable {
   
+  /**
+   * Returns the default configuration. Every call to this method returns
+   * a new AbderaConfiguration instance using abdera.properties
+   */
   public static synchronized AbderaConfiguration getDefault() {
     AbderaConfiguration instance = null;
     try {
@@ -93,6 +100,10 @@ public final class AbderaConfiguration
     return bundle;
   }
 
+  /**
+   * Retrieve the value of the specified configuration option
+   * @returns The configuration option value or null
+   */
   public String getConfigurationOption(String id) {
     String option = System.getProperty(id);
     if (option == null) {
@@ -106,50 +117,86 @@ public final class AbderaConfiguration
     return option;
   }
   
+  /**
+   * Retrieve the value of the specified configuration option or _default
+   * if the value is null
+   * @returns The configuration option value of _default
+   */
   public String getConfigurationOption(String id, String _default) {
     String value = getConfigurationOption(id);
     return (value != null) ? value : _default;
   }
   
+  /**
+   * Returns the Java classname of the default Abdera XPath implementation
+   */
   public String getDefaultXPath() {
     return xpath;
   }
   
+  /**
+   * Returns the Java classname of the default Abdera Parser implementation
+   */
   public String getDefaultParser() {
     return parser;
   }
   
+  /**
+   * Returns the Java classname of the default Abdera Factory implementation
+   */
   public String getDefaultFactory() {
     return factory;
   }
   
+  /**
+   * Returns the Java classname of the default ParserFactory implementation
+   */
   public String getDefaultParserFactory() {
     return parserFactory; 
   }
   
+  /**
+   * Returns the Java classname of the default WriterFactory implementation
+   */
   public String getDefaultWriterFactory() {
     return writerFactory;
   }
   
+  /**
+   * Returns the Java classname of the default Writer implementation
+   */
   public String getDefaultWriter() {
     return writer;
   }
   
+  /**
+   * Registers an ExtensionFactory implementation.
+   */
   public void addExtensionFactory(ExtensionFactory factory) {
     List<ExtensionFactory> factories = getExtensionFactories();
     if (!factories.contains(factory))
       factories.add(factory);
   }
   
+  /**
+   * Returns the listing of registered ExtensionFactory implementations
+   */
   public List<ExtensionFactory> getExtensionFactories() {
     return factories;
   }
   
+  /**
+   * Registers a NamedWriter implementation
+   */
   public void addNamedWriter(NamedWriter writer) {
     Map<String,NamedWriter> writers = getNamedWriters();
     writers.put(writer.getName(), writer);
   }
   
+  /**
+   * Registers NamedWriter implementations using 
+   * the /META-INF/services/org.apache.abdera.writer.NamedWriter file
+   */
   private Map<String,NamedWriter> initNamedWriters() {
     Map<String,NamedWriter> writers = null;
     List<NamedWriter> _writers = 
@@ -161,15 +208,25 @@ public final class AbderaConfiguration
     return writers;
   }
   
+  /**
+   * Returns the collection of NamedWriters
+   */
   public Map<String,NamedWriter> getNamedWriters() {
     return writers;
   }
   
+  /**
+   * Registers a NamedParser implementation
+   */
   public void addNamedParser(NamedParser parser) {
     Map<String,NamedParser> parsers = getNamedParsers();
     parsers.put(parser.getName(), parser);
   }
   
+  /**
+   * Registers NamedParser implementations using 
+   * the /META-INF/services/org.apache.abdera.writer.NamedParser file 
+   */
   private Map<String,NamedParser> initNamedParsers() {
     Map<String,NamedParser> parsers = null;
     List<NamedParser> _parsers = 
@@ -181,6 +238,9 @@ public final class AbderaConfiguration
     return parsers;
   }
   
+  /**
+   * Returns the collection of Named Parsers
+   */
   public Map<String,NamedParser> getNamedParsers() {
     return parsers;
   }

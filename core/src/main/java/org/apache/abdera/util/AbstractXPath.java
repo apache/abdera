@@ -25,6 +25,9 @@ import org.apache.abdera.model.Base;
 import org.apache.abdera.xpath.XPath;
 import org.apache.abdera.xpath.XPathException;
 
+/**
+ * Abstract base implementation of XPath
+ */
 public abstract class AbstractXPath 
   implements XPath {
   

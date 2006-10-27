@@ -37,6 +37,9 @@ import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
 import org.apache.abdera.xpath.XPath;
 
+/**
+ * Core utility methods that support Abdera's internal operation
+ */
 public final class ServiceUtil 
   implements Constants {
   

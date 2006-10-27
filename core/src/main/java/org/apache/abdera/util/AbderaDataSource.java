@@ -27,6 +27,9 @@ import javax.activation.DataSource;
 
 import org.apache.abdera.model.Base;
 
+/**
+ * Utility implementation of javax.activation.DataSource that wraps Abdera Base
+ */
 public class AbderaDataSource 
   implements DataSource {
 

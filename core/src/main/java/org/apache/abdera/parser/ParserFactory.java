@@ -17,10 +17,24 @@
 */
 package org.apache.abdera.parser;
 
+/**
+ * The ParserFactory is used a acquire instances of alternative 
+ * parsers registered with Abdera.  
+ * @see org.apache.abdera.parser.NamedParser 
+ */
 public interface ParserFactory {
   
+  /**
+   * Get the default parser.  This is equivalent to calling Abdera.getParser()
+   * @return The default parser implementation
+   */
   Parser getParser();
   
+  /**
+   * Get the named parser
+   * @param name The name of the parser instance to retrieve
+   * @return The Named parser instance
+   */
   Parser getParser(String name); 
   
 }

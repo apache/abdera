@@ -27,9 +27,6 @@ import org.apache.abdera.filter.TextFilter;
  */
 public interface ParserOptions extends Cloneable {
 
-  /**
-   * Return a duplicate of this options object.
-   */
   Object clone() throws CloneNotSupportedException;
 
   /**

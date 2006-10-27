@@ -17,12 +17,19 @@
 */
 package org.apache.abdera.writer;
 
+/**
+ * Named Writers provide a means of extending Abdera's built in serialization.
+ */
 public interface NamedWriter extends Writer {
 
+  /**
+   * Return the name used to acquire an instance of this Writer (case insensitive)
+   */
   String getName();
 
   /**
-   * Return the media type of the format produced by this writer
+   * Return a listing of MIME Media formats this NamedWriter is capable 
+   * of outputting.
    */
   String[] getOutputFormats();
   

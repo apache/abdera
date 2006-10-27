@@ -22,16 +22,28 @@ import java.io.OutputStream;
 
 import org.apache.abdera.model.Base;
 
+/**
+ * Writers are used to serialize Abdera objects
+ */
 public interface Writer {
 
+  /**
+   * Serialized the given Abdera Base to the given outputstream 
+   */
   void writeTo(Base base, 
     OutputStream out) 
       throws IOException;
   
+  /**
+   * Serialized the given Abdera Base to the given writer  
+   */
   void writeTo(
     Base base, 
     java.io.Writer out) 
       throws IOException;
 
+  /**
+   * Return the serialized form of the Abdera Base
+   */
   Object write(Base base) throws IOException;
 }

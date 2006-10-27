@@ -33,6 +33,9 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Service;
 
+/**
+ * Utilities for working with MIME Media Types
+ */
 public class MimeTypeHelper {
    
   private static final MimeType WILDCARD = createWildcard();
@@ -45,6 +48,9 @@ public class MimeTypeHelper {
     }
   }
   
+  /**
+   * Returns true if media type a matches media type b
+   */
   public static boolean isMatch(String a, String b) {
     if ((a == null || a.length() == 0) && 
         (b == null || b.length() == 0)) 
@@ -58,6 +64,9 @@ public class MimeTypeHelper {
     return answer;
   }
   
+  /**
+   * Returns true if media type a matches media type b
+   */
   public static boolean isMatch(MimeType a, MimeType b) {
     try {
       if (a == null || b == null) return true;
@@ -75,14 +84,24 @@ public class MimeTypeHelper {
     return false;
   }
   
+  /**
+   * Returns true if media type a matches application/atomsrv+xml
+   */
   public static boolean isApp(String a) {
     return isMatch(Constants.APP_MEDIA_TYPE, a);
   }
   
+  /**
+   * Returns true if media type a matches application/atom+xml
+   */
   public static boolean isAtom(String a) {
     return isMatch(Constants.ATOM_MEDIA_TYPE, a);
   }
   
+  /**
+   * Returns true if media type a matches application/xml, text/xml or 
+   * application/*+xml 
+   */
   public static boolean isXml(String a) {
     boolean answer = isMatch(Constants.XML_MEDIA_TYPE, a) || isMatch("text/xml", a);
     if (!answer) {
@@ -98,11 +117,17 @@ public class MimeTypeHelper {
     return answer;
   }
   
+  /**
+   * Returns true if media type a matches text/*
+   */
   public static boolean isText(String a) {
     boolean answer = isMatch("text/*", a);
     return answer;
   }
   
+  /**
+   * Returns true if this is a valid media type
+   */
   public static boolean isMimeType(String a) {
     boolean answer = false;
     try {
@@ -114,6 +139,9 @@ public class MimeTypeHelper {
     return answer;
   }
   
+  /**
+   * Returns the appropriate media type for the given Abdera base
+   */
   public static <T extends Base>String getMimeType(T base) {
     String type = null;
     if (base instanceof Document) {
@@ -176,6 +204,11 @@ public class MimeTypeHelper {
     return false;
   }
   
+  /**
+   * Returns a Comparator that can be used to compare and sort MIME media types
+   * according to their level of specificity (e.g. text/* is less specific than
+   * text/plain and would appear first in a sorted list)
+   */
   public static Comparator<String> getComparator() {
     return new Comparator<String>() {
       public int compare(String o1, String o2) {
@@ -184,6 +217,9 @@ public class MimeTypeHelper {
     };
   }
   
+  /**
+   * Compare two media types according to their relative level of specificity
+   */
   public static int compare(MimeType mt1, MimeType mt2) {
     String st1 = mt1.getSubType();
     String st2 = mt2.getSubType();
@@ -194,6 +230,9 @@ public class MimeTypeHelper {
     return 0;
   }
   
+  /**
+   * Compare two media types according to their relative level of specificity
+   */
   public static int compare(String t1, String t2) {
     try {
       MimeType mt1 = new MimeType(t1);

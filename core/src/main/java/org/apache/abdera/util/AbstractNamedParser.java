@@ -19,6 +19,9 @@ package org.apache.abdera.util;
 
 import org.apache.abdera.parser.NamedParser;
 
+/**
+ * Base abstract implementation of NamedParser
+ */
 public abstract class AbstractNamedParser 
   extends AbstractParser 
   implements NamedParser {

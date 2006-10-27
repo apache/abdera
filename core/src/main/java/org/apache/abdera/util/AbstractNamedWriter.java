@@ -19,6 +19,9 @@ package org.apache.abdera.util;
 
 import org.apache.abdera.writer.NamedWriter;
 
+/**
+ * Base abstract implementation of NamedWriter
+ */
 public abstract class AbstractNamedWriter 
   implements NamedWriter {
 

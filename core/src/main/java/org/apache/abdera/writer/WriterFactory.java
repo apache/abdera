@@ -17,11 +17,31 @@
 */
 package org.apache.abdera.writer;
 
+/**
+ * The WriterFactory is used a acquire instances of alternative 
+ * writers registered with Abdera.  
+ * @see org.apache.abdera.writer.WriterParser 
+ */
 public interface WriterFactory {
   
+  /**
+   * Get the default writer. This is equivalent to calling 
+   * abdera.getWriter();
+   * @return The default writer
+   */
   Writer getWriter();
   
+  /**
+   * Get the named writer.
+   * @param name The name of the writer
+   * @returns The specified writer
+   */
   Writer getWriter(String name);
   
+  /**
+   * Return a writer capable of outputting the given MIME media type
+   * @param mediatype A MIME media type
+   * @return A matching writer
+   */
   Writer getWriterByMediaType(String mediatype);
 }

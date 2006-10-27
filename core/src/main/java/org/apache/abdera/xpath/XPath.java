@@ -27,58 +27,103 @@ import org.apache.abdera.model.Base;
  */
 public interface XPath {
   
+  /**
+   * Return the default mapping of Prefixes to XML Namespaces 
+   */
   Map<String,String> getDefaultNamespaces();
   
+  /**
+   * Return a listing of nodes matching the specified Path
+   */
   List selectNodes(
     String path, 
     Base base) throws XPathException;
   
+  /**
+   * Return the first node matching the specified Path
+   */
   Object selectSingleNode(
     String path, 
     Base base) throws XPathException;
   
+  /**
+   * Evaluate the specified XPath and return it's value
+   */
   Object evaluate(
     String path, 
     Base base) throws XPathException;
   
+  /**
+   * Return the text value of the specified Path
+   */
   String valueOf(
     String path, 
     Base base) throws XPathException;
   
+  /**
+   * Return a boolean representation of the specified Path
+   */
   boolean booleanValueOf(
     String path, 
     Base base) throws XPathException; 
   
+  /**
+   * Return a numeric representation of the specified Path
+   */
   Number numericValueOf(
     String path, 
     Base base) 
       throws XPathException;
   
+  /**
+   * Return a listing of nodes matching the specified Path using the
+   * specified Namespaces mapping
+   */
   List selectNodes(
     String path, 
     Base base, 
     Map<String,String> namespaces) throws XPathException;
   
+  /**
+   * Return a the first node matching the specified Path using the
+   * specified Namespaces mapping
+   */
   Object selectSingleNode(
     String path, 
     Base base, 
     Map<String,String> namespaces) throws XPathException;
   
+  /**
+   * Evaluate the specified XPath and return it's value using 
+   * the specified Namespaces mapping
+   */
   Object evaluate(
     String path, 
     Base base, 
     Map<String,String> namespaces) throws XPathException;
   
+  /**
+   * Return the text value of the specified Path using the 
+   * specified Namespaces mapping
+   */
   String valueOf(
     String path, 
     Base base, 
     Map<String,String> namespaces) throws XPathException;
   
+  /**
+   * Return a boolean representation of the specified Path
+   * using the specified Namespaces mapping
+   */
   boolean booleanValueOf(
     String path, 
     Base base, 
     Map<String,String> namespaces) throws XPathException; 
-  
+
+  /**
+   * Return a numeric representation of the specified Path
+   * using the specified Namespaces mapping
+   */
   Number numericValueOf(
     String path, 
     Base base, 

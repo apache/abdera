@@ -204,4 +204,10 @@ public interface Element
    * @param The text value
    */
   void setText(String text);
+  
+  /**
+   * Declare a namespace
+   */
+  void declareNS(String uri, String prefix);
+  
 }

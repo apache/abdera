@@ -612,6 +612,6 @@ public class FOMElement
   }
   
   public void declareNS(String prefix, String uri) {
-    super.declareNamespace(uri, prefix);
+    super.declareNamespace(prefix,uri);
   }
 }

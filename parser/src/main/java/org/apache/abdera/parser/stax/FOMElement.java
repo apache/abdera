@@ -610,4 +610,8 @@ public class FOMElement
     }
     return null;
   }
+  
+  public void declareNS(String prefix, String uri) {
+    super.declareNamespace(uri, prefix);
+  }
 }

@@ -25,10 +25,8 @@ import org.apache.abdera.model.Document;
 
 import org.apache.abdera.parser.Parser;
 
-import org.apache.abdera.ext.opensearch.TotalResults;
+import org.apache.abdera.ext.opensearch.IntegerElement;
 import org.apache.abdera.ext.opensearch.OpenSearchConstants;
-import org.apache.abdera.ext.opensearch.ItemsPerPage;
-import org.apache.abdera.ext.opensearch.StartIndex;
 
 import java.io.InputStream;
 
@@ -40,16 +38,16 @@ public class OpenSearchTest extends TestCase {
     InputStream stream = OpenSearchTest.class.getResourceAsStream("/opensearch.xml");
     Document<Element> doc = parser.parse(stream);
 
-    TotalResults tr = doc.getRoot().getFirstChild(OpenSearchConstants.TOTAL_RESULTS);
+    IntegerElement tr = doc.getRoot().getFirstChild(OpenSearchConstants.TOTAL_RESULTS_V10);
     assertNotNull(tr);
-    assertEquals(tr.getCount(), 47);
+    assertEquals(tr.getValue(), 47);
 
-    ItemsPerPage ipp = doc.getRoot().getFirstChild(OpenSearchConstants.ITEMS_PER_PAGE);
+    IntegerElement ipp = doc.getRoot().getFirstChild(OpenSearchConstants.ITEMS_PER_PAGE_V10);
     assertNotNull(ipp);
-    assertEquals(ipp.getCount(), 1);
+    assertEquals(ipp.getValue(), 1);
 
-    StartIndex si = doc.getRoot().getFirstChild(OpenSearchConstants.START_INDEX);
+    IntegerElement si = doc.getRoot().getFirstChild(OpenSearchConstants.START_INDEX_V10);
     assertNotNull(si);
-    assertEquals(si.getIndex(), 1);
+    assertEquals(si.getValue(), 1);
   }
 }

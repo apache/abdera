@@ -39,11 +39,13 @@ import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
+import org.apache.abdera.parser.stax.util.FOMElementIteratorWrapper;
 import org.apache.abdera.parser.stax.util.FOMList;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
@@ -114,9 +116,16 @@ public class FOMElement
         factory);
   }
   
+  protected Element getWrapped(Element internal) {
+    FOMFactory factory = (FOMFactory) getFactory();
+    return factory.getElementWrapper(internal);
+  }
+  
   @SuppressWarnings("unchecked")
   public <T extends Base>T getParentElement() {
-    return (T)super.getParent();
+    T parent = (T)super.getParent();
+    return (T) ((parent instanceof Element) ? 
+      getWrapped((Element)parent) : parent);
   }
   
   protected void setParentDocument(Document parent) {
@@ -124,6 +133,9 @@ public class FOMElement
   }
   
   public void setParentElement(Element parent) {
+    if (parent instanceof ElementWrapper) {
+      parent = ((ElementWrapper)parent).getInternal();
+    }
     super.setParent((FOMElement)parent);
   }
 
@@ -131,7 +143,7 @@ public class FOMElement
   public <T extends Element>T getPreviousSibling() {
     OMNode el = this.getPreviousOMSibling();
     while (el != null) {
-      if (el instanceof Element) return (T)el;
+      if (el instanceof Element) return (T)getWrapped((Element)el);
       else el = el.getPreviousOMSibling();
     }
     return null;
@@ -141,7 +153,7 @@ public class FOMElement
   public <T extends Element>T getNextSibling() {
     OMNode el = this.getNextOMSibling();
     while (el != null) {
-      if (el instanceof Element) return (T) el;
+      if (el instanceof Element) return (T)getWrapped((Element)el);
       else el = el.getNextOMSibling();
     }
     return null;
@@ -149,7 +161,7 @@ public class FOMElement
   
   @SuppressWarnings("unchecked")
   public <T extends Element>T getFirstChild() {
-    return (T)this.getFirstElement();
+    return (T)getWrapped((Element)this.getFirstElement());
   }
   
   @SuppressWarnings("unchecked")
@@ -158,7 +170,7 @@ public class FOMElement
     while (el != null) {
       OMElement omel = (OMElement) el;
       if (omel.getQName().equals(qname))
-        return (T)omel;
+        return (T)getWrapped((Element)omel);
       el = el.getPreviousSibling();
     }
     return null;
@@ -170,7 +182,7 @@ public class FOMElement
     while (el != null) {
       OMElement omel = (OMElement) el;
       if (omel.getQName().equals(qname))
-        return (T)omel;
+        return (T)getWrapped((Element)omel);
       el = el.getNextSibling();
     }
     return null;
@@ -178,7 +190,7 @@ public class FOMElement
   
   @SuppressWarnings("unchecked")
   public <T extends Element>T getFirstChild(QName qname) {
-    return (T)this.getFirstChildWithName(qname);
+    return (T)getWrapped((Element)this.getFirstChildWithName(qname));
   }
   
   public String getLanguage() {
@@ -261,7 +273,9 @@ public class FOMElement
   
   @SuppressWarnings("unchecked")
   protected <E extends Element>List<E> _getChildrenAsSet(QName qname) {
-    return new FOMList(getChildrenWithName(qname));
+    FOMFactory factory = (FOMFactory) getFactory();
+    return new FOMList(new FOMElementIteratorWrapper(
+      factory,getChildrenWithName(qname)));
   }
   
   protected void _setChild(QName qname, OMElement element) {
@@ -612,6 +626,6 @@ public class FOMElement
   }
   
   public void declareNS(String prefix, String uri) {
-    super.declareNamespace(prefix,uri);
+    super.declareNamespace(uri,prefix);
   }
 }

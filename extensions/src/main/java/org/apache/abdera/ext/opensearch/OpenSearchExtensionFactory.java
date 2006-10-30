@@ -17,67 +17,44 @@
 */
 package org.apache.abdera.ext.opensearch;
 
-import org.apache.abdera.factory.ExtensionFactory;
-import org.apache.abdera.factory.Factory;
-import org.apache.abdera.parser.stax.FOMExtensionFactory;
-import org.apache.abdera.model.Element;
-import org.apache.abdera.model.Base;
-import org.apache.abdera.ext.opensearch.impl.FOMTotalResults;
-import org.apache.abdera.ext.opensearch.impl.FOMItemsPerPage;
-import org.apache.abdera.ext.opensearch.impl.FOMStartIndex;
-
-import org.apache.axiom.om.OMContainer;
-import org.apache.axiom.om.OMFactory;
-import org.apache.axiom.om.OMXMLParserWrapper;
+import java.util.List;
 
 import javax.xml.namespace.QName;
-import java.util.List;
-import java.util.ArrayList;
 
-public class OpenSearchExtensionFactory implements ExtensionFactory, FOMExtensionFactory {
-  public boolean handlesNamespace(String ns)
-  {
-    return OpenSearchConstants.OPENSEARCH_NS.equals(ns);
-  }
+import org.apache.abdera.factory.ExtensionFactory;
+import org.apache.abdera.model.Element;
 
-  public List<String> getNamespaces()
-  {
-    List<String> lst = new ArrayList<String>();
-    lst.add(OpenSearchConstants.OPENSEARCH_NS);
-    return lst;
-  }
+public class OpenSearchExtensionFactory 
+  implements ExtensionFactory {
 
   @SuppressWarnings("unchecked")
-  public <T extends Element> T newExtensionElement(QName qname,
-                                                   Base base,
-                                                   Factory factory)
-  {
-    return (T) newExtensionElement(qname, base, factory, null);
+  public <T extends Element> T getElementWrapper(Element internal) {
+    QName qname = internal.getQName();
+    if (qname.equals(OpenSearchConstants.QUERY) ||
+        qname.equals(OpenSearchConstants.QUERY_V10)) {
+      return (T)new Query(internal);
+    } else if (qname.equals(OpenSearchConstants.ITEMS_PER_PAGE) ||
+               qname.equals(OpenSearchConstants.START_INDEX) ||
+               qname.equals(OpenSearchConstants.TOTAL_RESULTS) ||
+               qname.equals(OpenSearchConstants.ITEMS_PER_PAGE_V10) ||
+               qname.equals(OpenSearchConstants.START_INDEX_V10) ||
+               qname.equals(OpenSearchConstants.TOTAL_RESULTS_V10)) {
+      return (T)new IntegerElement(internal);
+    } else {
+      return (T)internal;
+    }
   }
 
-  @SuppressWarnings("unchecked")
-  public <T extends Element> T newExtensionElement(QName qname,
-                                                   Base base,
-                                                   Factory factory,
-                                                   OMXMLParserWrapper parserWrapper)
-  {
-    OMContainer cbase = (OMContainer) base;
-    OMFactory cfactory = (OMFactory) factory;
-    if (OpenSearchConstants.TOTAL_RESULTS.equals(qname)) {
-      return (parserWrapper != null) ?
-        (T) new FOMTotalResults(qname, cbase, cfactory, parserWrapper) :
-        (T) new FOMTotalResults(qname, cbase, cfactory);
-    }
-    else if (OpenSearchConstants.ITEMS_PER_PAGE.equals(qname)) {
-      return (parserWrapper != null) ?
-        (T) new FOMItemsPerPage(qname, cbase, cfactory, parserWrapper) :
-        (T) new FOMItemsPerPage(qname, cbase, cfactory);
-    }
-    else if (OpenSearchConstants.START_INDEX.equals(qname)) {
-      return (parserWrapper != null) ?
-        (T) new FOMStartIndex(qname, cbase, cfactory, parserWrapper) :
-        (T) new FOMStartIndex(qname, cbase, cfactory);
-    }
-    return null;
+  public List<String> getNamespaces() {
+    return java.util.Arrays.asList(
+      new String[] {
+        OpenSearchConstants.OPENSEARCH_NS, 
+        OpenSearchConstants.OPENSEARCH_V10_NS});
   }
+
+  public boolean handlesNamespace(String namespace) {
+    return OpenSearchConstants.OPENSEARCH_NS.equals(namespace) ||
+           OpenSearchConstants.OPENSEARCH_V10_NS.equals(namespace);
+  }
+
 }

@@ -20,10 +20,13 @@ package org.apache.abdera.ext.opensearch;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.model.ExtensibleElement;
 
-public class Query {
+public class Query 
+  extends ElementWrapper {
 
   public enum Role {
     CORRECTION,
@@ -34,31 +37,27 @@ public class Query {
     SUPERSET;
   }
   
-  private final Element internal;
-  
   public Query(Element internal) {
-    this.internal = internal;
+    super(internal);
+  }
+  
+  public Query(Factory factory) {
+    super(factory, OpenSearchConstants.QUERY);
   }
   
   public Query(Abdera abdera) {
-    internal = abdera.getFactory().newElement(OpenSearchV11Helper.QUERY);
+    this(abdera.getFactory());
   }
   
   public Query(ExtensibleElement parent) {
-    parent.declareNS(OpenSearchV11Helper.OPENSEARCH_NS, OpenSearchV11Helper.OS_PREFIX);
-    internal = parent.addExtension(OpenSearchV11Helper.QUERY);
-  }
-  
-  public void setParent(ExtensibleElement parent) {
-    parent.addExtension(internal);
-  }
-  
-  public void discard() {
-    internal.discard();
+    this(parent.getFactory());
+    parent.declareNS(
+      OpenSearchConstants.OPENSEARCH_NS, 
+      OpenSearchConstants.OS_PREFIX);
   }
   
   public Role getRole() {
-    String role = internal.getAttributeValue("role");
+    String role = getInternal().getAttributeValue("role");
     if (role == null) return null;
     try {
       return Role.valueOf(role.toUpperCase());
@@ -69,154 +68,129 @@ public class Query {
   
   public void setRole(Role role) {
     if (role != null) {
-      internal.setAttributeValue("role", role.name().toLowerCase());
+      getInternal().setAttributeValue("role", role.name().toLowerCase());
     } else {
-      internal.removeAttribute(new QName("role"));
+      getInternal().removeAttribute(new QName("role"));
     }
   }
   
   public String getTitle() {
-    return internal.getAttributeValue("title");
+    return getInternal().getAttributeValue("title");
   }
   
   public void setTitle(String title) {
     if (title != null) {
       if (title.length() > 256) throw new IllegalArgumentException("Title too long (max 256 characters)");
-      internal.setAttributeValue("title", title);
+      getInternal().setAttributeValue("title", title);
     } else {
-      internal.removeAttribute(new QName("title"));
+      getInternal().removeAttribute(new QName("title"));
     }
   }
 
   public int getTotalResults() {
-    String val = internal.getAttributeValue("totalResults");
+    String val = getInternal().getAttributeValue("totalResults");
     return (val != null) ? Integer.parseInt(val) : -1;
   }
   
   public void setTotalResults(int totalResults) {
     if (totalResults > -1) {
-      internal.setAttributeValue("totalResults", String.valueOf(totalResults));
+      getInternal().setAttributeValue("totalResults", String.valueOf(totalResults));
     } else {
-      internal.removeAttribute(new QName("totalResults"));
+      getInternal().removeAttribute(new QName("totalResults"));
     }
   }
   
   public String getSearchTerms() {
-    return internal.getAttributeValue("searchTerms");
+    return getInternal().getAttributeValue("searchTerms");
   }
   
   public void setSearchTerms(String terms) {
     if (terms != null) {
-      internal.setAttributeValue("searchTerms", terms);
+      getInternal().setAttributeValue("searchTerms", terms);
     } else {
-      internal.removeAttribute(new QName("searchTerms"));
+      getInternal().removeAttribute(new QName("searchTerms"));
     }
   }
   
   public int getCount() {
-    String val = internal.getAttributeValue("count");
+    String val = getInternal().getAttributeValue("count");
     return (val != null) ? Integer.parseInt(val) : -1;
   }
   
   public void setCount(int count) {
     if (count > -1) {
-      internal.setAttributeValue("count", String.valueOf(count));
+      getInternal().setAttributeValue("count", String.valueOf(count));
     } else {
-      internal.removeAttribute(new QName("count"));
+      getInternal().removeAttribute(new QName("count"));
     }
   }
   
   public int getStartIndex() {
-    String val = internal.getAttributeValue("startIndex");
+    String val = getInternal().getAttributeValue("startIndex");
     return (val != null) ? Integer.parseInt(val) : -1;
   }
   
   public void setStartIndex(int startIndex) {
     if (startIndex > -1) {
-      internal.setAttributeValue("startIndex", String.valueOf(startIndex));
+      getInternal().setAttributeValue("startIndex", String.valueOf(startIndex));
     } else {
-      internal.removeAttribute(new QName("startIndex"));
+      getInternal().removeAttribute(new QName("startIndex"));
     }
   }
   
   public int getStartPage() {
-    String val = internal.getAttributeValue("startPage");
+    String val = getInternal().getAttributeValue("startPage");
     return (val != null) ? Integer.parseInt(val) : -1;
   }
   
   public void setStartPage(int startPage) {
     if (startPage > -1) {
-      internal.setAttributeValue("startPage", String.valueOf(startPage));
+      getInternal().setAttributeValue("startPage", String.valueOf(startPage));
     } else {
-      internal.removeAttribute(new QName("startPage"));
+      getInternal().removeAttribute(new QName("startPage"));
     }
   }
   
   public String getLanguage() {
-    return internal.getAttributeValue("language");
+    return getInternal().getAttributeValue("language");
   }
   
   public void setLanguage(String language) {
     if (language != null) {
-      internal.setAttributeValue("language", language);
+      getInternal().setAttributeValue("language", language);
     } else {
-      internal.removeAttribute(new QName("language"));
+      getInternal().removeAttribute(new QName("language"));
     }
   }
   
   public String getInputEncoding() {
-    return internal.getAttributeValue("inputEncoding");
+    return getInternal().getAttributeValue("inputEncoding");
   }
   
   public void setInputEncoding(String encoding) {
     if (encoding != null) {
-      internal.setAttributeValue("inputEncoding", encoding);
+      getInternal().setAttributeValue("inputEncoding", encoding);
     } else {
-      internal.removeAttribute(new QName("inputEncoding"));
+      getInternal().removeAttribute(new QName("inputEncoding"));
     }
   }
 
   public String getOutputEncoding() {
-    return internal.getAttributeValue("outputEncoding");
+    return getInternal().getAttributeValue("outputEncoding");
   }
   
   public void setOutputEncoding(String encoding) {
     if (encoding != null) {
-      internal.setAttributeValue("outputEncoding", encoding);
+      getInternal().setAttributeValue("outputEncoding", encoding);
     } else {
-      internal.removeAttribute(new QName("outputEncoding"));
+      getInternal().removeAttribute(new QName("outputEncoding"));
     }
   }
   
-  public String getAttribute(QName qname) {
-    return internal.getAttributeValue(qname);
-  }
-  
-  public void setAttribute(QName qname, String value) {
-    if (value != null) {
-      internal.setAttributeValue(qname, value);
-    } else {
-      internal.removeAttribute(qname);
-    }
-  }
-  
-  @Override
-  public String toString() {
-    return internal.toString();
-  }
-  
-  @Override
-  public boolean equals(Object other) {
-    if (!(other instanceof Query)) return false;
-    Query query = (Query) other;
-    return (internal.equals(query.internal));
-  }
-  
-  @Override
   public int hashCode() {
     final int PRIME = 31;
     int result = super.hashCode();
-    result = PRIME * result + ((internal == null) ? 0 : internal.hashCode());
+    result = PRIME * result + ((getInternal() == null) ? 0 : getInternal().hashCode());
     return result;
   }
 

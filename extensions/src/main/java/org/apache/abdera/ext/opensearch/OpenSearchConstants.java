@@ -22,13 +22,24 @@ import javax.xml.namespace.QName;
 public final class OpenSearchConstants {
   private OpenSearchConstants() {}
 
-  public static final String OPENSEARCH_NS = "http://a9.com/-/spec/opensearchrss/1.0/";
+  public static final String OPENSEARCH_V10_NS = "http://a9.com/-/spec/opensearchrss/1.0/";
+  public static final String OPENSEARCH_NS = "http://a9.com/-/spec/opensearchrss/1.1/";
 
   public static final String TOTAL_RESULTS_LN  = "totalResults";
   public static final String ITEMS_PER_PAGE_LN = "itemsPerPage";
   public static final String START_INDEX_LN    = "startIndex";
+  public static final String QUERY_LN          = "Query";
 
-  public static final QName TOTAL_RESULTS  = new QName(OPENSEARCH_NS, TOTAL_RESULTS_LN);
-  public static final QName ITEMS_PER_PAGE = new QName(OPENSEARCH_NS, ITEMS_PER_PAGE_LN);
-  public static final QName START_INDEX    = new QName(OPENSEARCH_NS, START_INDEX_LN);
+  public static final String OS_PREFIX = "os";
+  
+  public static final QName TOTAL_RESULTS_V10  = new QName(OPENSEARCH_V10_NS, TOTAL_RESULTS_LN);
+  public static final QName ITEMS_PER_PAGE_V10 = new QName(OPENSEARCH_V10_NS, ITEMS_PER_PAGE_LN);
+  public static final QName START_INDEX_V10    = new QName(OPENSEARCH_V10_NS, START_INDEX_LN);
+  public static final QName QUERY_V10          = new QName(OPENSEARCH_V10_NS, QUERY_LN, OS_PREFIX);
+  
+  public static final QName TOTAL_RESULTS  = new QName(OPENSEARCH_NS, TOTAL_RESULTS_LN, OS_PREFIX);
+  public static final QName ITEMS_PER_PAGE = new QName(OPENSEARCH_NS, ITEMS_PER_PAGE_LN, OS_PREFIX);
+  public static final QName START_INDEX    = new QName(OPENSEARCH_NS, START_INDEX_LN, OS_PREFIX);
+  public static final QName QUERY          = new QName(OPENSEARCH_NS, QUERY_LN, OS_PREFIX);
+
 }

@@ -22,7 +22,9 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.model.ExtensibleElement;
+import org.apache.abdera.parser.stax.util.FOMElementIteratorWrapper;
 import org.apache.abdera.parser.stax.util.FOMExtensionIterator;
 import org.apache.abdera.parser.stax.util.FOMList;
 import org.apache.axiom.om.OMContainer;
@@ -80,26 +82,47 @@ public class FOMExtensibleElement
 
   @SuppressWarnings("unchecked")
   public <T extends Element>List<T> getExtensions(QName qname) {
-    return new FOMList<T>(getChildrenWithName(qname));
+    FOMFactory factory = (FOMFactory) this.getFactory();
+    return new FOMList<T>(
+      new FOMElementIteratorWrapper(
+        factory,getChildrenWithName(qname)));
   }
 
   @SuppressWarnings("unchecked")
   public <T extends Element>T getExtension(QName qname) {
-    return (T) this.getFirstChildWithName(qname);
+    FOMFactory factory = (FOMFactory) getFactory();
+    T t = (T) this.getFirstChildWithName(qname);
+    return (T) ((t != null) ? factory.getElementWrapper(t) : null);
   }
   
   public void addExtension(Element extension) {
+    if (extension instanceof ElementWrapper) {
+      ElementWrapper wrapper = (ElementWrapper) extension;
+      extension = wrapper.getInternal();
+    }
+    QName qname = extension.getQName();
+    String prefix = qname.getPrefix();
+    if (prefix != null) {
+      declareNS(prefix, qname.getNamespaceURI());
+    }
     addChild((OMElement)extension);
   }
   
   @SuppressWarnings("unchecked")
   public <T extends Element>T addExtension(QName qname) {
     FOMFactory fomfactory = (FOMFactory) factory;
+    String prefix = qname.getPrefix();
+    if (prefix != null) {
+      declareNS(prefix, qname.getNamespaceURI());
+    }
     return (T)fomfactory.newExtensionElement(qname, this);
   }
   
   @SuppressWarnings("unchecked")
   public <T extends Element>T addExtension(String namespace, String localpart, String prefix) {
+    if (prefix != null) {
+      declareNS(prefix, namespace);
+    }
     return (T)addExtension(new QName(namespace, localpart, prefix));
   }
 
@@ -107,6 +130,10 @@ public class FOMExtensibleElement
     FOMFactory fomfactory = (FOMFactory) factory;
     Element el = fomfactory.newElement(qname, this);
     el.setText(value);
+    String prefix = qname.getPrefix();
+    if (prefix != null) {
+      declareNS(prefix, qname.getNamespaceURI());
+    }
     return el;
   }
   
@@ -115,6 +142,9 @@ public class FOMExtensibleElement
     String localPart, 
     String prefix, 
     String value) {
+      if (prefix != null) {
+        declareNS(prefix, namespace);
+      }
       return addSimpleExtension(
         new QName(
           namespace, 

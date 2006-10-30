@@ -44,11 +44,11 @@ public class ExtensibleElementWrapper
   }
 
   public <T extends Element> T addExtension(QName qname) {
-    return getExtInternal().addExtension(qname);
+    return (T) getExtInternal().addExtension(qname);
   }
 
   public <T extends Element> T addExtension(String namespace, String localPart, String prefix) {
-    return getExtInternal().addExtension(namespace, localPart, prefix);
+    return (T) getExtInternal().addExtension(namespace, localPart, prefix);
   }
 
   public Element addSimpleExtension(QName qname, String value) {
@@ -60,7 +60,7 @@ public class ExtensibleElementWrapper
   }
 
   public <T extends Element> T getExtension(QName qname) {
-    return getExtInternal().getExtension(qname);
+    return (T) getExtInternal().getExtension(qname);
   }
 
   public <T extends Element> T getExtension(Class<T> _class) {

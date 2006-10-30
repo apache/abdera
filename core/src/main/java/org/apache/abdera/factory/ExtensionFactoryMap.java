@@ -44,7 +44,7 @@ public class ExtensionFactoryMap
     T t = (T)wrappers.get(internal);
     if (t == null) {
       for (ExtensionFactory factory : factories) {
-        t = factory.getElementWrapper(internal);
+        t = (T) factory.getElementWrapper(internal);
         if (t != internal) {
           wrappers.put(internal, t);
           return t;

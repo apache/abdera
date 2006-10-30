@@ -17,37 +17,29 @@
 */
 package org.apache.abdera.ext.thread;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.namespace.QName;
-
-import org.apache.abdera.factory.ExtensionFactory;
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.ElementWrapper;
 
-public class ThreadExtensionFactory 
-  implements ExtensionFactory {
+public class TotalImpl 
+  extends ElementWrapper 
+  implements Total {
 
-  public boolean handlesNamespace(String namespace) {
-    return (ThreadConstants.THR_NS.equals(namespace));
+  public TotalImpl(Element internal) {
+    super(internal);
   }
 
-  public List<String> getNamespaces() {
-    List<String> lst = new ArrayList<String>();
-    lst.add(ThreadConstants.THR_NS);
-    return lst;
+  public TotalImpl(Factory factory) {
+    super(factory, ThreadConstants.THRTOTAL);
   }
 
-  @SuppressWarnings("unchecked")
-  public <T extends Element> T getElementWrapper(Element internal) {
-    QName qname = internal.getQName();
-    if (ThreadConstants.IN_REPLY_TO.equals(qname)) 
-      return (T)new InReplyToImpl(internal);
-    else if (ThreadConstants.THRTOTAL.equals(qname))
-      return (T)new TotalImpl(internal);
-    else return (T)internal;
+  public int getValue() {
+    String val = getText();
+    return (val != null) ? Integer.parseInt(val) : -1;
   }
 
-
+  public void setValue(int value) {
+    setText(String.valueOf(value));
+  }
 
 }

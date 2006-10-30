@@ -24,8 +24,6 @@ import java.util.List;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
-import org.apache.abdera.ext.thread.impl.FOMInReplyTo;
-import org.apache.abdera.ext.thread.impl.FOMTotal;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Entry;
@@ -110,11 +108,7 @@ public final class ThreadHelper {
   }
   
   public static InReplyTo addInReplyTo(Entry entry) {
-    Factory factory = entry.getFactory();
-    InReplyTo replyTo = 
-      (InReplyTo) factory.newExtensionElement(
-        ThreadConstants.IN_REPLY_TO, entry);
-    return replyTo;
+    return entry.addExtension(ThreadConstants.IN_REPLY_TO);
   }
 
   public static InReplyTo addInReplyTo(Entry entry, Entry ref) {
@@ -193,12 +187,12 @@ public final class ThreadHelper {
     return list;
   }
 
-  public static InReplyTo newInReplyTo() {
-    return new FOMInReplyTo();
+  public static InReplyTo newInReplyTo(Factory factory) {
+    return new InReplyToImpl(factory);
   }
   
-  public static Total newTotal() {
-    return new FOMTotal();
+  public static Total newTotal(Factory factory) {
+    return new TotalImpl(factory);
   }
   
 }

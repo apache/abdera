@@ -15,12 +15,30 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.ext.opensearch;
+package org.apache.abdera.examples.extension;
 
+import javax.xml.namespace.QName;
+
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.ExtensibleElementWrapper;
 
-public interface TotalResults extends Element {
-  public int getCount();
+public class Bar 
+  extends ExtensibleElementWrapper {
 
-  public void setCount(int count);
+  public Bar(Element internal) {
+    super(internal);
+  }
+
+  public Bar(Factory factory, QName qname) {
+    super(factory, qname);
+  }
+
+  public void setFoo(Foo foo) {
+    addExtension(foo);
+  }
+  
+  public Foo getFoo() {
+    return getExtension(FooExtensionFactory.FOO);
+  }
 }

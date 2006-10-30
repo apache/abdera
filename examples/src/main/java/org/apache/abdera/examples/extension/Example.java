@@ -15,12 +15,28 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.ext.opensearch;
+package org.apache.abdera.examples.extension;
 
-import org.apache.abdera.model.Element;
+import org.apache.abdera.Abdera;
+import org.apache.abdera.model.Entry;
 
-public interface ItemsPerPage extends Element {
-  public int getCount();
+public class Example {
 
-  public void setCount(int count);
+  public static void main(String[] args) throws Exception {
+    
+    Abdera abdera = new Abdera();
+    
+    Entry entry = abdera.getFactory().newEntry();
+    
+    Foo foo = entry.addExtension(FooExtensionFactory.FOO);
+    foo.setFoo("foo");
+    
+    Bar bar = entry.addExtension(FooExtensionFactory.BAR);
+    bar.setFoo((Foo) foo.clone());
+    bar.getFoo().setFoo("bar");
+    
+    System.out.println(entry);
+    
+  }
+  
 }

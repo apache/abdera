@@ -18,10 +18,7 @@
 package org.apache.abdera.parser.stax;
  
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
@@ -29,6 +26,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.ExtensionFactory;
+import org.apache.abdera.factory.ExtensionFactoryMap;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Categories;
@@ -67,22 +65,21 @@ import org.apache.axiom.om.impl.llom.factory.OMLinkedListImplFactory;
 
 public class FOMFactory 
   extends OMLinkedListImplFactory 
-  implements Factory, Constants, ExtensionFactory, FOMExtensionFactory {
+  implements Factory, Constants, ExtensionFactory {
 
-  private final Map<QName,Class> extensions;
-  private final List<ExtensionFactory> factories;
+  private final ExtensionFactoryMap factoriesMap;
   
   public FOMFactory() {
     this(new Abdera());
   }
   
   public FOMFactory(Abdera abdera) {
-    List<ExtensionFactory> f= abdera.getConfiguration().getExtensionFactories();
-    this.factories = (f != null) ? 
-      new ArrayList<ExtensionFactory>(f) :
-      new ArrayList<ExtensionFactory>();
-    this.factories.add(this);
-    this.extensions = Collections.synchronizedMap(new HashMap<QName,Class>());
+    List<ExtensionFactory> f= 
+      abdera.getConfiguration().getExtensionFactories();
+    factoriesMap = new ExtensionFactoryMap(
+      (f != null) ? 
+        new ArrayList<ExtensionFactory>(f) :
+        new ArrayList<ExtensionFactory>());
   }
   
   public Parser newParser() {
@@ -404,11 +401,11 @@ public class FOMFactory
   public Element newElement(
     QName qname, 
     Base parent) {
-      return new FOMExtensibleElement(qname, (OMContainer)parent,this);
+      return newExtensionElement(qname, parent);
   }
   
   public Element newExtensionElement(QName qname) {
-    return newExtensionElement(qname, (Base)null);
+    return newExtensionElement(qname, (OMContainer)null);
   }
   
   public Element newExtensionElement(
@@ -420,11 +417,14 @@ public class FOMFactory
   private Element newExtensionElement(
     QName qname, 
     OMContainer parent) {
-      return newExtensionElement(qname, parent, null);
+      String ns = qname.getNamespaceURI();
+      Element el = newExtensionElement(qname, parent, null);
+      return (ATOM_NS.equals(ns) || APP_NS.equals(ns)) ?
+        el : factoriesMap.getElementWrapper(el);
   }
 
   private List<ExtensionFactory> getExtensionFactories() {
-    return factories;
+    return factoriesMap.getFactories();
   }
   
   @SuppressWarnings("unchecked")
@@ -432,27 +432,11 @@ public class FOMFactory
     QName qname,
     OMContainer parent,
     OMXMLParserWrapper parserWrapper) {
-    Element element = null;
-    List<ExtensionFactory> factories = getExtensionFactories();
-    for (ExtensionFactory factory : factories) {
-      if (factory instanceof FOMExtensionFactory &&
-        factory.handlesNamespace(qname.getNamespaceURI())) {
-        if (parserWrapper != null) {
-          element = ((FOMExtensionFactory)factory).newExtensionElement(
-            qname, (Base)parent, this, parserWrapper);
-        } else {
-          element = factory.newExtensionElement(qname, (Base)parent, this); 
-        }
-      }
-    }
-    if (element == null) {
-      if (parserWrapper == null) {
-        element = new FOMExtensibleElement(qname, parent, this);
-      } else {
-        element = new FOMExtensibleElement(qname, parent, this, parserWrapper);
-      }
-    }
-    return element;
+    Element element = (parserWrapper == null) ?
+      new FOMExtensibleElement(qname, parent, this) :
+      new FOMExtensibleElement(qname, parent, this, parserWrapper);
+    //return factoriesMap.getElementWrapper(element);
+      return element;
   }
   
   public Control newControl() {
@@ -711,7 +695,9 @@ public class FOMFactory
         element = new FOMDateTime(qname.getLocalPart(), namespace, parent, factory);
       } else if (parent instanceof ExtensibleElement || 
                  parent instanceof Document) {
-        element = (OMElement) newExtensionElement(qname, parent);
+        //element = (OMElement) newExtensionElement(qname, parent);
+        element = (OMElement) new FOMExtensibleElement(
+          qname.getLocalPart(), namespace, parent, this);
       }
       return element;
     }
@@ -784,77 +770,14 @@ public class FOMFactory
     } else if (EDITED.equals(qname)) {
       element = (OMElement) newDateTimeElement(qname, parent, builder);
     } else if (parent instanceof ExtensibleElement || parent instanceof Document) {
-      element = (OMElement) newExtensionElement(qname, parent, builder);
+      //element = (OMElement) newExtensionElement(qname, parent, builder);
+      element = (OMElement) new FOMExtensibleElement(qname, parent, this,builder);
     }
     return element;
   }
 
-  public void registerExtension(QName qname, Class impl) {
-    extensions.put(qname, impl);
-  }
-  
   public void registerExtension(ExtensionFactory factory) {
     getExtensionFactories().add(factory);
-  }
-
-  public List<String> getNamespaces() {
-    List<String> namespaces = new ArrayList<String>();
-    for (QName qname : extensions.keySet()) {
-      if (!namespaces.contains(qname.getNamespaceURI()))
-        namespaces.add(qname.getNamespaceURI());
-    }
-    return namespaces;
-  }
-
-  public boolean handlesNamespace(String namespace) {
-    return getNamespaces().contains(namespace);
-  }
-
-  @SuppressWarnings("unchecked")
-  public <T extends Element> T newExtensionElement(
-    QName qname, 
-    Base parent, 
-    Factory factory) {
-      Class _class = extensions.get(qname);
-      if (_class != null) {
-        try {
-          return (T)_class.getConstructor(
-            new Class[] {
-              QName.class,
-              OMContainer.class,
-              OMFactory.class}).newInstance(
-                new Object[] {
-                  qname, 
-                  parent, 
-                  factory});
-        } catch (Exception e) {}
-      }
-      return null;
-  }
-
-  @SuppressWarnings("unchecked")
-  public <T extends Element> T newExtensionElement(
-    QName qname, 
-    Base parent, 
-    Factory factory, 
-    OMXMLParserWrapper parserWrapper) {
-      Class _class = extensions.get(qname);
-      if (_class != null) {
-        try {
-          return (T)_class.getConstructor(
-            new Class[] {
-              QName.class,
-              OMContainer.class,
-              OMFactory.class,
-              OMXMLParserWrapper.class}).newInstance(
-                new Object[] {
-                  qname, 
-                  parent, 
-                  factory,
-                  parserWrapper});
-        } catch (Exception e) {}
-      }
-      return null;
   }
 
   public Categories newCategories() {
@@ -876,4 +799,27 @@ public class FOMFactory
   public String newUuidUri() {
     return FOMHelper.generateUuid();
   }
+
+  public void setElementWrapper(Element internal, Element wrapper) {
+    factoriesMap.setElementWrapper(internal, wrapper);
+  }
+  
+  @SuppressWarnings("unchecked")
+  public <T extends Element> T getElementWrapper(Element internal) {
+    String ns = internal.getQName().getNamespaceURI();
+    return (T) ((ATOM_NS.equals(ns) || 
+                 APP_NS.equals(ns) || 
+                 internal.getQName().equals(DIV)) ?
+      internal :
+      factoriesMap.getElementWrapper(internal));
+  }
+
+  public List<String> getNamespaces() {
+    return factoriesMap.getNamespaces();
+  }
+
+  public boolean handlesNamespace(String namespace) {
+    return factoriesMap.handlesNamespace(namespace);
+  }
+
 }

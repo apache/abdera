@@ -608,13 +608,6 @@ public interface Factory {
   Div newDiv(Base parent);
 
   /**
-   * Registers an extension implementation class for this Factory instance only
-   * @param qname The XML QName of the extension element to register
-   * @param impl The implementation class for the extension element
-   */
-  <T extends Base>void registerExtension(QName qname, Class impl);
-  
-  /**
    * Registers an extension factory for this Factory instance only
    * @param extensionFactory An ExtensionFactory instance 
    */
@@ -641,4 +634,9 @@ public interface Factory {
    * Generate a new random UUID URI 
    */
   String newUuidUri();
+  
+  /**
+   * Set an element wrapper
+   */
+  void setElementWrapper(Element element, Element wrapper);
 }

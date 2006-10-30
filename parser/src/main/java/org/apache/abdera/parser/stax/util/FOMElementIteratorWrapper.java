@@ -15,12 +15,33 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.ext.opensearch;
+package org.apache.abdera.parser.stax.util;
+
+import java.util.Iterator;
 
 import org.apache.abdera.model.Element;
+import org.apache.abdera.parser.stax.FOMFactory;
 
-public interface StartIndex extends Element {
-  public int getIndex();
+public class FOMElementIteratorWrapper implements Iterator {
 
-  public void setIndex(int idx);
+  private final Iterator iterator;
+  private final FOMFactory factory;
+  
+  public FOMElementIteratorWrapper(FOMFactory factory, Iterator iterator) {
+    this.iterator = iterator;
+    this.factory = factory;
+  }
+  
+  public boolean hasNext() {
+    return iterator.hasNext();
+  }
+
+  public Object next() {
+    return factory.getElementWrapper((Element) iterator.next());
+  }
+
+  public void remove() {
+    iterator.remove();
+  }
+
 }

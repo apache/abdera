@@ -17,12 +17,9 @@
 */
 package org.apache.abdera.factory;
 
-import javax.xml.namespace.QName;
-
-import org.apache.abdera.model.Base;
-import org.apache.abdera.model.Element;
-
 import java.util.List;
+
+import org.apache.abdera.model.Element;
 
 /**
  * <p>
@@ -46,12 +43,6 @@ import java.util.List;
  *   the class names of each ExtensionFactory you wish to register.
  * </p>
  * 
- * <p>
- *   Note that at this time, ExtensionFactories are specific to the parser 
- *   implementation used.  That is, if you're using the default StAX-based 
- *   FOMParser and FOMFactory implementation, your ExtensionFactories will 
- *   need to also implement FOMExtensionFactory.
- * </p>
  */
 public interface ExtensionFactory {
 
@@ -61,22 +52,15 @@ public interface ExtensionFactory {
   boolean handlesNamespace(String namespace);
 
   /**
-   * Returns the Namespace URIs handled by this Extension Factory.
+   * Returns the Namespace URIs handled by this Extension Factory
    *
    * @return A List of Namespace URIs Supported by this Extension
    */
   List<String> getNamespaces();
 
   /**
-   * Called by the Factory implementaton to create an instance of the 
-   * extension element.  If parent is not null, the new element will 
-   * be automatically added as a child of the parent.
-   * 
-   * @param qname the QName of the extension element
-   * @param parent the Parent of the extension element
-   * @param factory the Factory
-   * @return ExtensionElement The created ExtensionElement
+   * Retrieve an ElementWrapper for the specified Element or return
+   * the parameter itself if a wrapper could not be retrieved
    */
-  <T extends Element>T newExtensionElement(QName qname, Base parent, Factory factory);
-
+  <T extends  Element>T getElementWrapper(Element internal);
 }

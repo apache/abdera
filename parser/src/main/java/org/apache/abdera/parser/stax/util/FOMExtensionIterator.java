@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.parser.stax.util;
 
+import org.apache.abdera.model.Element;
+import org.apache.abdera.parser.stax.FOMFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.impl.traverse.OMChildrenIterator;
 
@@ -33,6 +35,7 @@ public class FOMExtensionIterator extends OMChildrenIterator {
    */
   private String namespace = null;
   private String extns = null;
+  private FOMFactory factory = null;
 
   /**
    * Field needToMoveForward
@@ -53,6 +56,7 @@ public class FOMExtensionIterator extends OMChildrenIterator {
   public FOMExtensionIterator(OMElement parent) {
     super(parent.getFirstOMChild());
     this.namespace = parent.getQName().getNamespaceURI();
+    this.factory = (FOMFactory) parent.getOMFactory();
   }
   
   public FOMExtensionIterator(OMElement parent, String extns) {
@@ -101,7 +105,7 @@ public class FOMExtensionIterator extends OMChildrenIterator {
       removeCalled = false;
       lastChild = currentChild;
       currentChild = currentChild.getNextOMSibling();
-      return lastChild;
+      return factory.getElementWrapper((Element)lastChild);
   }
 
   private boolean isQNamesMatch(QName elementQName, String namespace) {

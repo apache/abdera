@@ -30,6 +30,7 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.util.iri.IRI;
 import org.apache.abdera.util.iri.IRISyntaxException;
 import org.apache.axiom.om.OMComment;
@@ -90,11 +91,16 @@ public class FOMDocument<T extends Element>
 
   @SuppressWarnings("unchecked")
   public T getRoot() {  
-    return (T)this.getOMDocumentElement();
+    FOMFactory factory = (FOMFactory) getFactory();
+    return factory.getElementWrapper((T)this.getOMDocumentElement());
   }
 
   public void setRoot(T root) {
-    this.setOMDocumentElement((OMElement) root);
+    if (root instanceof OMElement) {
+      this.setOMDocumentElement((OMElement) root);
+    } else if (root instanceof ElementWrapper) {
+      this.setOMDocumentElement((OMElement) ((ElementWrapper)root).getInternal());
+    }
   }
 
   public IRI getBaseUri() {

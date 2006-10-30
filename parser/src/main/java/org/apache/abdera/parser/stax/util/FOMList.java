@@ -46,8 +46,8 @@ public class FOMList<T>
   extends java.util.AbstractCollection<T>
   implements List<T> {
 
-  private Iterator<T> i = null;
-  private List<T> buffer = new ArrayList<T>();
+  private final Iterator<T> i;
+  private final List<T> buffer = new ArrayList<T>();
   
   public FOMList(Iterator<T> i) {
     this.i = i;

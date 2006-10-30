@@ -99,11 +99,11 @@ public abstract class ElementWrapper
   }
 
   public <T extends Element> T getFirstChild() {
-    return internal.getFirstChild();
+    return (T) internal.getFirstChild();
   }
 
   public <T extends Element> T getFirstChild(QName qname) {
-    return internal.getFirstChild(qname);
+    return (T) internal.getFirstChild(qname);
   }
 
   public String getLanguage() {
@@ -115,23 +115,23 @@ public abstract class ElementWrapper
   }
 
   public <T extends Element> T getNextSibling() {
-    return internal.getNextSibling();
+    return (T) internal.getNextSibling();
   }
 
   public <T extends Element> T getNextSibling(QName qname) {
-    return internal.getNextSibling(qname);
+    return (T) internal.getNextSibling(qname);
   }
 
   public <T extends Base> T getParentElement() {
-    return internal.getParentElement();
+    return (T) internal.getParentElement();
   }
 
   public <T extends Element> T getPreviousSibling() {
-    return internal.getPreviousSibling();
+    return (T) internal.getPreviousSibling();
   }
 
   public <T extends Element> T getPreviousSibling(QName qname) {
-    return internal.getPreviousSibling(qname);
+    return (T) internal.getPreviousSibling(qname);
   }
 
   public QName getQName() {

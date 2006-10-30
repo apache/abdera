@@ -92,7 +92,7 @@ public class FOMDocument<T extends Element>
   @SuppressWarnings("unchecked")
   public T getRoot() {  
     FOMFactory factory = (FOMFactory) getFactory();
-    return factory.getElementWrapper((T)this.getOMDocumentElement());
+    return (T) factory.getElementWrapper((T) this.getOMDocumentElement());
   }
 
   public void setRoot(T root) {

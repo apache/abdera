@@ -18,6 +18,7 @@
 package org.apache.abdera.protocol.server.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,13 +31,20 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.server.ServiceManager;
-import org.apache.abdera.protocol.server.servlet.RequestHandler;
-import org.apache.abdera.protocol.server.servlet.RequestHandlerManager;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
+/**
+ * Sample APP servlet.
+ * 
+ * @version $Id$
+ */
 public class AbderaServlet 
   extends HttpServlet {
 
   private static final long serialVersionUID = 2393643907128535158L;
+  
+  private final static Log logger = LogFactory.getLog(AbderaServlet.class);
   
   protected ServiceManager serviceManager;
   
@@ -57,7 +65,12 @@ public class AbderaServlet
     try {
       handler.process(context, request, response);
     } catch (Throwable t) {
-      response.sendError(500);
+      logger.error("Error servicing request", t);
+      response.setContentType("text/plain");
+      PrintWriter out = response.getWriter();
+      out.println(t);
+      t.printStackTrace(out);
+      response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     } finally {
       manager.release(handler);
     }

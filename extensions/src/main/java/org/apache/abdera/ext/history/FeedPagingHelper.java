@@ -26,19 +26,32 @@ import org.apache.abdera.util.iri.IRI;
 import org.apache.abdera.util.iri.IRISyntaxException;
 
 /**
- * Initial support for Mark Nottingham's Feed History draft 
+ * Initial support for Mark Nottingham's Feed Paging and Archiving draft 
  * (http://ietfreport.isoc.org/all-ids/draft-nottingham-atompub-feed-history-07.txt)
  */
-public class FeedHistoryHelper {
+public class FeedPagingHelper {
 
   public static final String FHNS = "http://purl.org/syndication/history/1.0";
   public static final QName COMPLETE = new QName(FHNS, "complete");
   public static final QName ARCHIVE = new QName(FHNS, "archive");
   
+  /**
+   * Returns true if the feed is "complete". According to the Feed Paging
+   * and Archiving specification, in a complete feed, "any entry not actually 
+   * in the feed document SHOULD NOT be considered to be part of that feed."
+   * @param feed The feed to check
+   */
   public static boolean isComplete(Feed feed) {
     return (feed.getExtension(COMPLETE) != null);
   }
   
+  /**
+   * Flag the feed as being complete.  According to the Feed Paging
+   * and Archiving specification, in a complete feed, "any entry not actually 
+   * in the feed document SHOULD NOT be considered to be part of that feed."
+   * @param feed The Feed to mark as complete
+   * @param complete True if the feed is complete
+   */
   public static void setComplete(Feed feed, boolean complete) {
     if (complete) {
       if (!isComplete(feed)) feed.addExtension(COMPLETE);
@@ -50,6 +63,11 @@ public class FeedHistoryHelper {
     }
   }
   
+  /**
+   * Flag the feed as being an archive.
+   * @param feed The Feed to mark as an archive
+   * @param archive True if the feed is an archive
+   */
   public static void setArchive(Feed feed, boolean archive) {
     if (archive) {
       if (!isArchive(feed)) feed.addExtension(ARCHIVE);
@@ -61,10 +79,19 @@ public class FeedHistoryHelper {
     }
   }
 
+  /**
+   * Return true if the feed has been marked as an archive
+   * @param feed The feed to check
+   */
   public static boolean isArchive(Feed feed) {
     return feed.getExtension(ARCHIVE) != null;
   }
   
+  /**
+   * Return true if the feed contains any next, previous, first or last 
+   * paging link relations
+   * @param feed The feed to check
+   */
   public static boolean isPaged(Feed feed) {
     return feed.getLink("next") != null ||
            feed.getLink("previous") != null ||
@@ -72,6 +99,12 @@ public class FeedHistoryHelper {
            feed.getLink("last") != null;
   }
   
+  /**
+   * Adds a next link relation to the feed
+   * @param feed The feed 
+   * @param iri The IRI of the next feed document
+   * @returns The newly created Link
+   */
   public static Link setNext(Feed feed, String iri) throws IRISyntaxException {
     Link link = feed.getLink("next");
     if (link != null) {
@@ -82,6 +115,12 @@ public class FeedHistoryHelper {
     return link;
   }
   
+  /**
+   * Adds a previous link relation to the feed
+   * @param feed The feed 
+   * @param iri The IRI of the previous feed document
+   * @returns The newly created Link
+   */
   public static Link setPrevious(Feed feed, String iri) throws IRISyntaxException {
     Link link = feed.getLink("previous");
     if (link != null) {
@@ -92,6 +131,12 @@ public class FeedHistoryHelper {
     return link;
   }
   
+  /**
+   * Adds a first link relation to the feed
+   * @param feed The feed 
+   * @param iri The IRI of the first feed document
+   * @returns The newly created Link
+   */
   public static Link setFirst(Feed feed, String iri) throws IRISyntaxException {
     Link link = feed.getLink("first");
     if (link != null) {
@@ -102,6 +147,12 @@ public class FeedHistoryHelper {
     return link;
   }
   
+  /**
+   * Adds a last link relation to the feed
+   * @param feed The feed 
+   * @param iri The IRI of the last feed document
+   * @returns The newly created Link
+   */
   public static Link setLast(Feed feed, String iri) throws IRISyntaxException {
     Link link = feed.getLink("last");
     if (link != null) {
@@ -112,6 +163,12 @@ public class FeedHistoryHelper {
     return link;
   }
   
+  /**
+   * Adds a next-archive link relation to the feed
+   * @param feed The feed 
+   * @param iri The IRI of the next archive feed document
+   * @returns The newly created Link
+   */
   public static Link setNextArchive(Feed feed, String iri) throws IRISyntaxException {
     Link link = feed.getLink("next-archive");
     if (link == null) { // try the full IANA URI version
@@ -125,6 +182,12 @@ public class FeedHistoryHelper {
     return link;
   }
   
+  /**
+   * Adds a prev-archive link relation to the feed
+   * @param feed The feed 
+   * @param iri The IRI of the previous archive feed document
+   * @returns The newly created Link
+   */
   public static Link setPreviousArchive(Feed feed, String iri) throws IRISyntaxException {
     Link link = feed.getLink("prev-archive");
     if (link == null) { // try the full IANA URI version
@@ -138,6 +201,12 @@ public class FeedHistoryHelper {
     return link;
   }
   
+  /**
+   * Adds a current link relation to the feed
+   * @param feed The feed 
+   * @param iri The IRI of the current feed document
+   * @returns The newly created Link
+   */
   public static Link setCurrent(Feed feed, String iri) throws IRISyntaxException {
     Link link = feed.getLink("current");
     if (link == null) { // try the full IANA URI version
@@ -151,26 +220,41 @@ public class FeedHistoryHelper {
     return link;
   }
   
+  /**
+   * Returns the IRI of the next link relation
+   */
   public static IRI getNext(Feed feed) throws IRISyntaxException {
     Link link = feed.getLink("next");
     return (link != null) ? link.getResolvedHref() : null;
   }
   
+  /**
+   * Returns the IRI of the previous link relation
+   */
   public static IRI getPrevious(Feed feed) throws IRISyntaxException {
     Link link = feed.getLink("previous");
     return (link != null) ? link.getResolvedHref() : null;
   }
   
+  /**
+   * Returns the IRI of the first link relation
+   */
   public static IRI getFirst(Feed feed) throws IRISyntaxException {
     Link link = feed.getLink("first");
     return (link != null) ? link.getResolvedHref() : null;
   }
   
+  /**
+   * Returns the IRI of the last link relation
+   */
   public static IRI getLast(Feed feed) throws IRISyntaxException {
     Link link = feed.getLink("last");
     return (link != null) ? link.getResolvedHref() : null;
   }
   
+  /**
+   * Returns the IRI of the prev-archive link relation
+   */
   public static IRI getPreviousArchive(Feed feed) throws IRISyntaxException {
     Link link = feed.getLink("prev-archive");
     if (link == null) { // try the full IANA URI version
@@ -179,6 +263,9 @@ public class FeedHistoryHelper {
     return (link != null) ? link.getResolvedHref() : null;
   }
   
+  /**
+   * Returns the IRI of the next-archive link relation
+   */
   public static IRI getNextArchive(Feed feed) throws IRISyntaxException {
     Link link = feed.getLink("next-archive");
     if (link == null) { // try the full IANA URI version
@@ -187,6 +274,9 @@ public class FeedHistoryHelper {
     return (link != null) ? link.getResolvedHref() : null;
   }
   
+  /**
+   * Returns the IRI of the current link relation
+   */
   public static IRI getCurrent(Feed feed) throws IRISyntaxException {
     Link link = feed.getLink("current");
     if (link == null) { // try the full IANA URI version

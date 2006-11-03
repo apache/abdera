@@ -23,7 +23,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.abdera.filter.ParseFilter;
-import org.apache.abdera.filter.TextFilter;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
@@ -139,33 +138,14 @@ public class FOMBuilder
   
   private OMNode applyTextFilter(int type) {
     if (parserOptions != null) { 
-      TextFilter filter = parserOptions.getTextFilter();
       ParseFilter parseFilter = parserOptions.getParseFilter();
       if (parseFilter != null) {
-        if (parser.isWhiteSpace() && parseFilter.getIgnoreWhitespace()) return createOMText("",type);
-      }
-      if (filter != null) {
-        String value = parser.getText();
-        if (!lastNode.isComplete())
-          value = filter.applyFilter(
-            parser.getTextCharacters(), 
-            parser.getTextStart(), 
-            parser.getTextLength(), 
-            (Element)lastNode);
-        return createOMText(value, type);
+        if (parser.isWhiteSpace() && 
+            parseFilter.getIgnoreWhitespace()) 
+              return createOMText("",type);
       }
     }
     return createOMText(type);
-  }
-  
-  private String applyAttributeTextFilter(String value, QName attribute, Element parent) {
-    if (parserOptions != null) { 
-      TextFilter filter = parserOptions.getTextFilter();
-      if (filter != null) {
-        return filter.applyFilter(value, parent, attribute);
-      }
-    }
-    return value;
   }
   
   private int getNextElementToParse() 
@@ -310,9 +290,7 @@ public class FOMBuilder
                 namespace = node.declareNamespace(uri, prefix);
             }
         }
-        String value = applyAttributeTextFilter(
-          parser.getAttributeValue(i), 
-          attr, (Element)node);
+        String value = parser.getAttributeValue(i);
         node.addAttribute(parser.getAttributeLocalName(i),
                 value, namespace);
       }

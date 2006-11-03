@@ -19,8 +19,6 @@ package org.apache.abdera.parser;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.filter.ParseFilter;
-import org.apache.abdera.filter.TextFilter;
-
 
 /**
  * Parser options are used to modify the behavior of the parser. 
@@ -64,18 +62,6 @@ public interface ParserOptions extends Cloneable {
    * will only pay attention to elements whose QName's appear in the filter list.
    */
   void setParseFilter(ParseFilter parseFilter);
-  
-  /**
-   * Returns the TextFilter.  The text filter provides filtering for all
-   * character strings encountered during the parse process.
-   */
-  TextFilter getTextFilter();
-
-  /**
-   * Sets the TextFilter.  The text filter provides filtering for all
-   * character strings encountered during the parse process.
-   */
-  void setTextFilter(TextFilter textFilter);
   
   /**
    * Returns true if the parser should attempt to automatically detect the 

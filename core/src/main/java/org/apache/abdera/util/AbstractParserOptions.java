@@ -19,7 +19,6 @@ package org.apache.abdera.util;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.filter.ParseFilter;
-import org.apache.abdera.filter.TextFilter;
 import org.apache.abdera.parser.ParserOptions;
 
 /**
@@ -31,7 +30,6 @@ public abstract class AbstractParserOptions
   protected Factory factory = null;
   protected String charset = null;
   protected ParseFilter parseFilter = null;
-  protected TextFilter textFilter = null;
   protected boolean detect = false;
 
   protected abstract void initFactory();
@@ -46,9 +44,6 @@ public abstract class AbstractParserOptions
  
     if (parseFilter != null)
       copy.parseFilter = (ParseFilter) parseFilter.clone();
-    
-    if (textFilter != null)
-      copy.textFilter = (TextFilter) textFilter.clone();
     
     return copy;
   }
@@ -76,14 +71,6 @@ public abstract class AbstractParserOptions
   }
   public void setParseFilter(ParseFilter parseFilter) {
     this.parseFilter = parseFilter;
-  }
-  
-  public TextFilter getTextFilter() {
-    return textFilter;
-  }
-  
-  public void setTextFilter(TextFilter textFilter) {
-    this.textFilter = textFilter;
   }
   
   public boolean getAutodetectCharset() {

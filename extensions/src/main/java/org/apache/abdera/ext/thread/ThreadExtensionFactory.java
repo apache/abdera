@@ -42,9 +42,9 @@ public class ThreadExtensionFactory
   public <T extends Element> T getElementWrapper(Element internal) {
     QName qname = internal.getQName();
     if (ThreadConstants.IN_REPLY_TO.equals(qname)) 
-      return (T)new InReplyToImpl(internal);
+      return (T)new InReplyTo(internal);
     else if (ThreadConstants.THRTOTAL.equals(qname))
-      return (T)new TotalImpl(internal);
+      return (T)new Total(internal);
     else return (T)internal;
   }
 

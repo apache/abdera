@@ -17,16 +17,28 @@
 */
 package org.apache.abdera.ext.thread;
 
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.ElementWrapper;
 
-/**
- * Provides an interface for the Atom Threading Extension total
- * element.
- */
-public interface Total extends Element {
+public class Total 
+  extends ElementWrapper {
 
-  int getValue();
-  
-  void setValue(int value);
-  
+  public Total(Element internal) {
+    super(internal);
+  }
+
+  public Total(Factory factory) {
+    super(factory, ThreadConstants.THRTOTAL);
+  }
+
+  public int getValue() {
+    String val = getText();
+    return (val != null) ? Integer.parseInt(val) : -1;
+  }
+
+  public void setValue(int value) {
+    setText(String.valueOf(value));
+  }
+
 }

@@ -20,93 +20,85 @@ package org.apache.abdera.ext.thread;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.util.iri.IRI;
 import org.apache.abdera.util.iri.IRISyntaxException;
 
-/**
- * Provides an interface for the Atom Threading Extension in-reply-to
- * element.  The in-reply-to element allows an entry to be marked as 
- * a response to another resource.
- */
-public interface InReplyTo 
-  extends Element {
-  
-  /**
-   * Returns the persistent and universally unique identifier of the 
-   * resource the entry is a response to.
-   */
-  IRI getRef() throws IRISyntaxException;
-  
-  /**
-   * Sets the persistent and universally unique identifier of the 
-   * resource that this entry is a response to
-   */
-  void setRef(IRI ref);
+public class InReplyTo 
+  extends ElementWrapper {
 
-  /**
-   * Sets the persistent and universally unique identifier of the 
-   * resource that this entry is a response to
-   */
-  void setRef(String ref) throws IRISyntaxException;
-  
-  /**
-   * Returns the resolved value of the href attribute
-   */
-  IRI getResolvedHref() throws IRISyntaxException;
-  
-  /**
-   * Returns a dereferenceable URI indicating where a representation of the 
-   * resource being responded to may be retrieved
-   */
-  IRI getHref() throws IRISyntaxException;
-  
-  /**
-   * Sets a dereferenceable URI indicating where a representation of the 
-   * resource being responded to may be retrieved
-   */
-  void setHref(IRI ref);
-  
-  /**
-   * Sets a dereferenceable URI indicating where a representation of the 
-   * resource being responded to may be retrieved
-   */
-  void setHref(String ref) throws IRISyntaxException;
-  
-  /**
-   * Returns the media type of the resource referenced by the href attribute
-   */
-  MimeType getMimeType() throws MimeTypeParseException;
+  public InReplyTo(Element internal) {
+    super(internal);
+  }
 
-  /**
-   * Sets the media type of the resource referenced by the href attribute
-   */
-  void setMimeType(MimeType mimeType);
-  
-  /**
-   * Sets the media type of the resource referenced by the href attribute
-   */
-  void setMimeType(String mimeType) throws MimeTypeParseException;
-  
-  /**
-   * Returns a dereferenceable URI of an Atom Feed or Entry Document resolved
-   * against the in-scope Base URI
-   */
-  IRI getResolvedSource() throws IRISyntaxException;
-  
-  /**
-   * Returns a dereferenceable URI of an Atom Feed or Entry Document
-   */
-  IRI getSource() throws IRISyntaxException;
-  
-  /**
-   * Sets a dereferenceable URI of an Atom Feed or Entry Document
-   */
-  void setSource(IRI source);
-  
-  /**
-   * Sets a dereferenceable URI of an Atom Feed or Entry Document
-   */
-  void setSource(String source) throws IRISyntaxException;
-  
+  public InReplyTo(Factory factory) {
+    super(factory, ThreadConstants.IN_REPLY_TO);
+  }
+
+  public IRI getHref() throws IRISyntaxException {
+    String href = getAttributeValue("href");
+    return (href != null) ? new IRI(href) : null;
+  }
+
+  public MimeType getMimeType() throws MimeTypeParseException {
+    String type = getAttributeValue("type");
+    return (type != null) ? new MimeType(type) : null;
+  }
+
+  public IRI getRef() throws IRISyntaxException {
+    String ref = getAttributeValue("ref");
+    return (ref != null) ? new IRI(ref) : null;
+  }
+
+  public IRI getResolvedHref() throws IRISyntaxException {
+    IRI href = getHref();
+    IRI base = getBaseUri();
+    return (base == null) ? href : (href != null) ? base.resolve(href) : null; 
+  }
+
+  public IRI getResolvedSource() throws IRISyntaxException {
+    IRI href = getSource();
+    IRI base = getBaseUri();
+    return (base == null) ? href : (href != null) ? base.resolve(href) : null;
+  }
+
+  public IRI getSource() throws IRISyntaxException {
+    String source = getAttributeValue("source");
+    return (source != null) ? new IRI(source) : null;
+  }
+
+  public void setHref(IRI ref) {
+    setAttributeValue("href", ref.toString());
+  }
+
+  public void setHref(String ref) throws IRISyntaxException {
+    setAttributeValue("href", ref);
+  }
+
+  public void setMimeType(MimeType mimeType) {
+    setAttributeValue("type", mimeType.toString());
+  }
+
+  public void setMimeType(String mimeType) throws MimeTypeParseException {
+    setAttributeValue("type", mimeType);
+  }
+
+  public void setRef(IRI ref) {
+    setAttributeValue("ref", ref.toString());
+  }
+
+  public void setRef(String ref) throws IRISyntaxException {
+    setAttributeValue("ref", ref);
+  }
+
+  public void setSource(IRI source) {
+    setAttributeValue("source", source.toString());
+  }
+
+  public void setSource(String source) throws IRISyntaxException {
+    setAttributeValue("source", source);
+  }
+
 }

@@ -18,6 +18,7 @@
 package org.apache.abdera.test.ext;
 
 import org.apache.abdera.test.ext.opensearch.*;
+import org.apache.abdera.test.ext.history.FeedPagingTest;
 
 public class TestSuite extends junit.framework.TestSuite {
   public static void main(String[] args)
@@ -28,5 +29,6 @@ public class TestSuite extends junit.framework.TestSuite {
   public TestSuite()
   {
     addTestSuite(OpenSearchTest.class);
+    addTestSuite(FeedPagingTest.class);
   }
 }

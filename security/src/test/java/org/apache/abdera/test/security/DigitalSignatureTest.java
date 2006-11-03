@@ -83,6 +83,7 @@ public class DigitalSignatureTest extends TestCase {
     SignatureOptions options = sig.getDefaultSignatureOptions();    
     options.setCertificate(cert);
     options.setSigningKey(signingKey);
+    options.addReference("http://example.org");
 
     // Sign the entry
     entry = sig.sign(entry, options);

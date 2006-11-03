@@ -19,14 +19,44 @@ package org.apache.abdera.security;
 
 import org.apache.abdera.model.Document;
 
+/**
+ * Interface used for encrypting/decrypting Abdera documents.  
+ */
 public interface Encryption {
 
-  Document encrypt(Document doc, EncryptionOptions options) throws SecurityException;
+  /**
+   * Encrypt the document using the specified options
+   * @param doc The document to encrypt
+   * @param options The encryption options
+   * @returns The encrypted document
+   * @throws org.apache.abdera.security.SecurityException if the encryption failed
+   */
+  Document encrypt(
+    Document doc, 
+    EncryptionOptions options) 
+      throws SecurityException;
   
-  Document decrypt(Document doc, EncryptionOptions options) throws SecurityException;
+  /**
+   * Decrypt the document using the specified options
+   * @param doc The document to decrypt
+   * @param options The decryption options
+   * @returns The decrypted document
+   * @throws org.apache.abdera.security.SecurityException if the decryption failed
+   */
+  Document decrypt(
+    Document doc, 
+    EncryptionOptions options) 
+      throws SecurityException;
   
+  /**
+   * Returns true if this specified document has been encrypted
+   */
   boolean isEncrypted(Document doc) throws SecurityException;
   
+  /**
+   * Returns the default encryption/decryption options
+   * @see org.apache.abdera.security.EncryptionOptions
+   */
   EncryptionOptions getDefaultEncryptionOptions();
   
 }

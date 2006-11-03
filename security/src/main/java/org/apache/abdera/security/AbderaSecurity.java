@@ -21,6 +21,10 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.util.AbderaConfiguration;
 import org.apache.abdera.util.ServiceUtil;
 
+/**
+ * The AbderaSecurity class provides the entry point for using XML Digital
+ * Signatures and XML Encryption with Abdera.
+ */
 public class AbderaSecurity {
 
   private final Abdera abdera;
@@ -45,6 +49,9 @@ public class AbderaSecurity {
     return abdera;
   }
   
+  /**
+   * Acquire a new XML Encryption provider instance
+   */
   public Encryption newEncryption() {
     return
       (Encryption) ServiceUtil.newInstance(
@@ -53,10 +60,16 @@ public class AbderaSecurity {
           getAbdera());
   }
   
+  /**
+   * Acquire a shared XML Encryption provider instance
+   */
   public Encryption getEncryption() {
     return encryption;
   }
   
+  /**
+   * Acquire a new XML Digital Signature provider instance
+   */
   public Signature newSignature() {
     return
       (Signature) ServiceUtil.newInstance(
@@ -65,6 +78,9 @@ public class AbderaSecurity {
         getAbdera());
   }
   
+  /**
+   * Acquire a shared XML Digital Signature provider instance
+   */
   public Signature getSignature() {
     return signature;
   }

@@ -20,16 +20,34 @@ package org.apache.abdera.security;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
+/**
+ * Provides access to the information necessary to signed an Abdera element
+ */
 public interface SignatureOptions 
   extends SecurityOptions {
 
+  /**
+   * Return the private key with which to sign the element
+   */
   PrivateKey getSigningKey();
   
+  /**
+   * Set the private key with which to sign the element
+   */
   void setSigningKey(PrivateKey privateKey);
   
+  /**
+   * Return the X.509 cert to associated with the signature
+   */
   X509Certificate getCertificate();
   
+  /**
+   * Set the X.509 cert to associate with the signature
+   */
   void setCertificate(X509Certificate cert);
 
+  void addReference(String href);
+  
+  String[] getReferences();
   
 }

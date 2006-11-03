@@ -21,16 +21,35 @@ import java.security.cert.X509Certificate;
 
 import org.apache.abdera.model.Element;
 
+/**
+ * Interface used for digitally signing and verifying Abdera elements
+ */
 public interface Signature {
 
+  /**
+   * Return true if the element has been digitally signed
+   */
   <T extends Element>boolean isSigned(T element) throws SecurityException;
   
+  /**
+   * Adds a digital signature to the specified element
+   */
   <T extends Element>T sign(T element, SignatureOptions options) throws SecurityException;
   
+  /**
+   * Verifies that the digitally signed element is valid
+   */
   <T extends Element>boolean verify(T element, SignatureOptions options) throws SecurityException;
   
+  /**
+   * Returns a listing of X.509 certificates of valid digital signatures in the element
+   */
   <T extends Element>X509Certificate[] getValidSignatureCertificates(T element, SignatureOptions options) throws SecurityException;
   
+  /**
+   * Returns the default signing options
+   * @see org.apache.abdera.security.SignatureOptions
+   */
   SignatureOptions getDefaultSignatureOptions() throws SecurityException;
   
 }

@@ -19,6 +19,9 @@ package org.apache.abdera.security;
 
 import org.apache.abdera.parser.Parser;
 
+/**
+ * Base interface for EncryptionOptions and SignatureOptions
+ */
 public interface SecurityOptions {
 
   Parser getParser();

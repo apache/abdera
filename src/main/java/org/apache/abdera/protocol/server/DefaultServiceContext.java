@@ -26,14 +26,22 @@ import org.apache.abdera.protocol.server.util.RegexTargetResolver;
 import org.apache.abdera.protocol.server.util.ServerConstants;
 import org.apache.abdera.protocol.server.util.SimpleSubjectResolver;
 import org.apache.abdera.util.ServiceUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class DefaultServiceContext 
   extends AbstractServiceContext
   implements ServerConstants {
 
+  private static final Log logger = LogFactory.getLog(DefaultServiceContext.class);
+  
   private Object instance(String id, String _default) {
     String instance = getProperty(id);
-    return ServiceUtil.newInstance( id, (instance!=null)?instance:_default, abdera);
+    Object obj =  ServiceUtil.newInstance( id, (instance!=null)?instance:_default, abdera);
+    if (logger.isDebugEnabled()) {
+      logger.debug("Returning " + obj + " as instance of '" + id + "'.");
+    }
+    return obj;
   }
   
   public synchronized ProviderManager getProviderManager() {

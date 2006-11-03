@@ -34,6 +34,7 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpClientParams;
 
@@ -66,6 +67,8 @@ public class CommonsClient extends Client {
       userAgent);
     client.getParams().setBooleanParameter(
       HttpClientParams.USE_EXPECT_CONTINUE, true);  
+    client.getParams().setCookiePolicy(
+      CookiePolicy.BROWSER_COMPATIBILITY);
   }
   
   public void usePreemptiveAuthentication(boolean val) {

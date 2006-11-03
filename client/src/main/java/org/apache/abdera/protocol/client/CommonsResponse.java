@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.protocol.client.util.AutoReleasingInputStream;
 import org.apache.abdera.protocol.util.ContentEncodingUtil;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
@@ -123,7 +124,7 @@ public class CommonsResponse
       if (ce != null)
         in = ContentEncodingUtil.getDecodingInputStream(in, ce);
     }
-    return super.getInputStream();
+    return new AutoReleasingInputStream(method,in);
   }
 
   public Date getDateHeader(String header) {

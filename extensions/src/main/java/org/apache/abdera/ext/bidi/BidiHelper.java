@@ -25,19 +25,26 @@ import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.io.CharUtils;
 
 /**
- * This is (hopefully) temporary.  Ideally, this would be wrapped into the 
+ * <p>This is (hopefully) temporary.  Ideally, this would be wrapped into the 
  * core model API so that the bidi stuff is handled seamlessly.  There are 
  * still details being worked out on the Atom WG list and it's likely that
- * at least one other impl (mozilla) will do something slightly different.
+ * at least one other impl (mozilla) will do something slightly different.</p>
  * 
- * The behavior implemented here is very simple.  The code looks for a dir
+ * <p>The behavior implemented here is very simple.  The code looks for a dir
  * attribute either in the Atom namespace, the XHTML namespace or the 
- * Atom Bidi namespace (http://www.ietf.org/internet-drafts/draft-snell-atompub-bidi-00.txt).
+ * Atom Bidi namespace (http://www.ietf.org/internet-drafts/draft-snell-atompub-bidi-00.txt).</p>
  * 
- * The getBidi___ elements use the in-scope direction to wrap the text with 
+ * e.g.,
+ * <pre>
+ *   &lt;feed xmlns="http://www.w3.org/2005/Atom" dir="rtl">
+ *     ...
+ *   &lt;/feed>
+ * </pre>
+ * 
+ * <p>The getBidi___ elements use the in-scope direction to wrap the text with 
  * the appropriate Unicode control characters. e.g. if dir="rlo", the text is
  * wrapped with the RLO and PDF controls.  If the text already contains the 
- * control chars, the dir attribute is ignored.
+ * control chars, the dir attribute is ignored.</p>
  * 
  * <pre>
  *    org.apache.abdera.Abdera abdera = new org.apache.abdera.Abdera();
@@ -65,10 +72,47 @@ public final class BidiHelper {
 
   private static final QName XHTML_DIR = new QName(Constants.XHTML_NS,"dir");
   private static final QName ABIDI_DIR = new QName("http://purl.org/atompub/bidi","dir");
+  private static final QName DIR = new QName("dir");
   
   BidiHelper() {}
   
   public enum Direction { UNSPECIFIED, LTR, RTL, LRO, RLO };
+  
+  /**
+   * Set the value of dir attribute
+   */
+  public static <T extends Element>void setDirection(
+    Direction direction, 
+    QName attribute, 
+    T element) {
+      if (direction != Direction.UNSPECIFIED)
+        element.setAttributeValue(
+          attribute, 
+          direction.toString().toLowerCase());
+      else 
+        element.removeAttribute(attribute);
+  }
+  
+  /**
+   * Set the value of dir attribute
+   */
+  public static <T extends Element>void setDirection(
+    Direction direction, 
+    T element) {
+      String dir = element.getAttributeValue("dir");
+      if (dir != null) {
+        setDirection(direction, DIR, element);
+      }
+      dir = element.getAttributeValue(XHTML_DIR);
+      if (dir != null) {
+        setDirection(direction, XHTML_DIR, element);
+      }
+      dir = element.getAttributeValue(ABIDI_DIR);
+      if (dir != null) {
+        setDirection(direction, ABIDI_DIR, element);
+      }
+      setDirection(direction, DIR, element);
+  }
   
   /**
    * Get the in-scope direction for an element.  Currently, this is less
@@ -113,6 +157,13 @@ public final class BidiHelper {
     return direction;
   }
   
+  /**
+   * Return the specified text with appropriate Unicode Control Characters given
+   * the specified Direction.
+   * @param direction The Directionality of the text
+   * @param text The text to wrap within Unicode Control Characters
+   * @return The directionally-wrapped text  
+   */
   public static String getBidiText(Direction direction, String text) {
     switch (direction) {
       case LTR: return CharUtils.bidiLRE(text);
@@ -123,19 +174,42 @@ public final class BidiHelper {
     }
   }
   
+  /**
+   * Return the textual content of a child element using the in-scope directionality
+   * @param element The parent element
+   * @param child The XML QName of the child element
+   * @return The directionally-wrapped text of the child element
+   */
   public static <T extends Element>String getBidiChildText(T element, QName child) {
     Element el = element.getFirstChild(child);
     return (el != null) ? getBidiText(getDirection(el),el.getText()) : null;
   }
   
+  /**
+   * Return the textual content of the specified element
+   * @param element An element containing directionally-sensitive text
+   * @return The directionally-wrapped text of the element
+   */
   public static <T extends Element>String getBidiElementText(T element) {
     return getBidiText(getDirection(element),element.getText());
   }
   
+  /**
+   * Return the text content of the specified attribute using the in-scope directionality
+   * @param element The parent element
+   * @param name the name of the attribute
+   * @return The directionally-wrapped text of the attribute
+   */
   public static <T extends Element>String getBidiAttributeValue(T element, String name) {
     return getBidiText(getDirection(element),element.getAttributeValue(name));
   }
   
+  /**
+   * Return the text content of the specified attribute using the in-scope directionality
+   * @param element The parent element
+   * @param name the name of the attribute
+   * @return The directionally-wrapped text of the attribute
+   */
   public static <T extends Element>String getBidiAttributeValue(T element, QName name) {
     return getBidiText(getDirection(element),element.getAttributeValue(name));
   }

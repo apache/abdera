@@ -54,8 +54,14 @@ public interface ParseFilter extends Cloneable {
    */
   boolean getIgnoreProcessingInstructions();
   
+  /**
+   * Return true if the parser should ignore comments
+   */
   void setIgnoreComments(boolean ignore);
   
+  /**
+   * Return true if the parser should ignore insignificant whitespace
+   */
   void setIgnoreWhitespace(boolean ignore);
   
   void setIgnoreProcessingInstructions(boolean ignore);

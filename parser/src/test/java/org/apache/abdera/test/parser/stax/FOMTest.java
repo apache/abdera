@@ -35,9 +35,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.filter.ListParseFilter;
-import org.apache.abdera.filter.TextFilter;
 import org.apache.abdera.model.AtomDate;
-import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Content;
@@ -64,7 +62,6 @@ import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.util.Version;
 import org.apache.abdera.util.filter.BlackListParseFilter;
-import org.apache.abdera.util.filter.NonOpTextFilter;
 import org.apache.abdera.util.filter.WhiteListParseFilter;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
@@ -238,50 +235,6 @@ public class FOMTest extends TestCase   {
     assertEquals(entry.getSummary(), "Some text.");
     assertEquals(entry.getSummaryType(), Text.Type.TEXT);
 
-  }
-  
-  public void testTextFilter() throws Exception {
-    
-    TextFilter filter = new NonOpTextFilter() {
-      @Override
-      public String applyFilter(char[] c, int start, int len, Element parent) {
-        QName qname = parent.getQName();
-        Base elparent = parent.getParentElement();
-        String text = new String(c,start,len);
-        if (Constants.NAME.equals(qname)) {
-          text = "Jane Doe";
-        } else if (Constants.TITLE.equals(qname) && elparent instanceof Entry) {
-          text = text.replaceAll("Amok", "Crazy");
-        }
-        return text;
-      }
-    };
-    
-    ParserOptions options = getParser().getDefaultParserOptions();
-    options.setTextFilter(filter);
-    
-    URL url = FOMTest.class.getResource("/simple.xml");
-    InputStream in = url.openStream();
-    Document<Feed> doc = getParser().parse(in, url.toString(), options);
-    Feed feed = doc.getRoot();
-    
-    assertEquals(feed.getTitle(),"Example Feed");
-    assertEquals(feed.getTitleType(), Text.Type.TEXT);
-    assertEquals(feed.getAlternateLink().getResolvedHref().toString(), "http://example.org/");
-    assertNotNull(feed.getUpdated());
-    assertEquals(feed.getAuthor().getName(), "Jane Doe");
-    assertEquals(feed.getId().toString(), "urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6");
-    
-    Entry entry = feed.getEntries().get(0);
-
-    assertEquals(entry.getTitle(),"Atom-Powered Robots Run Crazy");
-    assertEquals(entry.getTitleType(), Text.Type.TEXT);
-    assertEquals(entry.getAlternateLink().getResolvedHref().toString(), "http://example.org/2003/12/13/atom03");
-    assertEquals(entry.getId().toString(),"urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a");
-    assertNotNull(entry.getUpdated());
-    assertEquals(entry.getSummary(), "Some text.");
-    assertEquals(entry.getSummaryType(), Text.Type.TEXT);
-    
   }
   
   public void testXPath() throws Exception {

@@ -188,11 +188,11 @@ public final class ThreadHelper {
   }
 
   public static InReplyTo newInReplyTo(Factory factory) {
-    return new InReplyToImpl(factory);
+    return new InReplyTo(factory);
   }
   
   public static Total newTotal(Factory factory) {
-    return new TotalImpl(factory);
+    return new Total(factory);
   }
   
 }

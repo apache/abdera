@@ -77,6 +77,8 @@ public class XmlSignature
     transforms.addTransform(Transforms.TRANSFORM_ENVELOPED_SIGNATURE);
     transforms.addTransform(Transforms.TRANSFORM_C14N_EXCL_OMIT_COMMENTS);
     sig.addDocument("", transforms, org.apache.xml.security.utils.Constants.ALGO_ID_DIGEST_SHA1);
+    String[] refs = options.getReferences();
+    for (String ref : refs) sig.addDocument(ref);
     sig.addKeyInfo(cert);
     sig.addKeyInfo(cert.getPublicKey());
     sig.sign(signingKey);    

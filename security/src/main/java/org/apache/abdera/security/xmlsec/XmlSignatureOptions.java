@@ -19,6 +19,8 @@ package org.apache.abdera.security.xmlsec;
 
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.security.SignatureOptions;
@@ -27,12 +29,14 @@ public class XmlSignatureOptions
   extends XmlSecurityOptions 
   implements SignatureOptions {
 
-  protected XmlSignatureOptions(Abdera abdera) {
-    super(abdera);
-  }
-
   private PrivateKey signingKey = null;
   private X509Certificate cert = null;
+  private List<String> references = null;
+  
+  protected XmlSignatureOptions(Abdera abdera) {
+    super(abdera);
+    references = new ArrayList<String>();
+  }
 
   public PrivateKey getSigningKey() {
     return signingKey;
@@ -48,6 +52,14 @@ public class XmlSignatureOptions
 
   public void setCertificate(X509Certificate cert) {
     this.cert = cert;
+  }
+
+  public void addReference(String href) {
+    if (!references.contains(href)) references.add(href);
+  }
+
+  public String[] getReferences() {
+    return references.toArray(new String[references.size()]);
   }
 
 }

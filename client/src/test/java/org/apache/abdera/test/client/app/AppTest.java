@@ -337,10 +337,10 @@ public class AppTest extends JettyTest {
     options.setHeader("Connection", "close");
     // do the introspection step
     ClientResponse response = client.get("http://localhost:8080/service",options);
-    assertEquals(response.getStatus(),200);
+    assertEquals(200, response.getStatus());
     Document<Service> service_doc = response.getDocument();
     assertNotNull(service_doc);
-    assertEquals(1,service_doc.getRoot().getWorkspaces().size());
+    assertEquals(1, service_doc.getRoot().getWorkspaces().size());
     Workspace workspace = service_doc.getRoot().getWorkspace("Test");
     assertNotNull(workspace);
     for (Collection c: workspace.getCollections()) {
@@ -362,13 +362,13 @@ public class AppTest extends JettyTest {
     response = client.get(col_uri, options);
     assertEquals(200, response.getStatus());
     Document<Feed> feed_doc = response.getDocument();
-    assertEquals(feed_doc.getRoot().getEntries().size(), 1);
+    assertEquals(1, feed_doc.getRoot().getEntries().size());
     
     // get the entry to see if we can get it
     response = client.get(self_uri, options);
     assertEquals(200, response.getStatus());
     Document<Entry> entry_doc = response.getDocument();
-    assertEquals(entry_doc.getRoot().getId().toString(), self_uri); // this isn't always true in real life, but for our tests they are the same
+    assertEquals(self_uri, entry_doc.getRoot().getId().toString()); // this isn't always true in real life, but for our tests they are the same
     
     // get the edit uri from the entry
     String edit_uri = entry_doc.getRoot().getEditLink().getHref().toString();
@@ -386,7 +386,7 @@ public class AppTest extends JettyTest {
     response = client.get(self_uri, options);
     assertEquals(200, response.getStatus());
     entry_doc = response.getDocument();
-    assertEquals(entry_doc.getRoot().getTitle(), "New title");
+    assertEquals("New title", entry_doc.getRoot().getTitle());
     
     // delete the entry
     response = client.delete(edit_uri, options);
@@ -417,7 +417,7 @@ public class AppTest extends JettyTest {
     response = client.get(self_uri, options);
     assertEquals(200, response.getStatus());
     entry_doc = response.getDocument();
-    assertEquals(entry_doc.getRoot().getId().toString(), self_uri); // this isn't always true in real life, but for our tests they are the same
+    assertEquals(self_uri, entry_doc.getRoot().getId().toString()); // this isn't always true in real life, but for our tests they are the same
     
     // get the right links from the entry
     edit_uri = entry_doc.getRoot().getEditLink().getHref().toString();
@@ -440,7 +440,7 @@ public class AppTest extends JettyTest {
     response = client.get(media);
     assertEquals(200, response.getStatus());
     String mediavalue = read(response.getInputStream());
-    assertEquals(mediavalue,"test");
+    assertEquals("test", mediavalue);
     
     // edit the media resource
     options = client.getDefaultRequestOptions();
@@ -453,7 +453,7 @@ public class AppTest extends JettyTest {
     response = client.get(media, options);
     assertEquals(200, response.getStatus());
     mediavalue = read(response.getInputStream());
-    assertEquals(mediavalue,"TEST");
+    assertEquals("TEST", mediavalue);
     
     // delete the entry
     response = client.delete(edit_uri, options);

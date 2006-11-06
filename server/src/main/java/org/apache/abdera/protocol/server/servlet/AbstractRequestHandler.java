@@ -28,6 +28,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.abdera.protocol.EntityTag;
 import org.apache.abdera.protocol.ResponseInfo;
 import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.server.provider.EmptyResponseContext;
@@ -37,11 +38,14 @@ import org.apache.abdera.protocol.server.provider.RequestContext;
 import org.apache.abdera.protocol.server.provider.ResponseContext;
 import org.apache.abdera.protocol.server.provider.Target;
 import org.apache.abdera.protocol.server.provider.TargetType;
-import org.apache.abdera.protocol.EntityTag;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public abstract class AbstractRequestHandler 
   implements RequestHandler {
 
+  private static final Log logger = LogFactory.getLog(AbstractRequestHandler.class);
+  
   public void process(
     ServiceContext context, 
     HttpServletRequest request,
@@ -57,9 +61,11 @@ public abstract class AbstractRequestHandler
         output(response,process(provider, requestContext));
       }
     } catch (Throwable e) {
+      logger.error("Error producing output", e);
       try {
         output(response,new EmptyResponseContext(500));
       } catch (Exception ex) {
+        logger.error("Error outputting error", ex);
         response.sendError(500);
       }
     } finally {

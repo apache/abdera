@@ -17,14 +17,18 @@
 */
 package org.apache.abdera.test.parser.stax;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+
+import junit.framework.TestCase;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.parser.Parser;
-
-import junit.framework.TestCase;
 
 public class ParserTest extends TestCase {
 
@@ -47,6 +51,43 @@ public class ParserTest extends TestCase {
     Document<Service> serviceDoc = getParser().parse(ParserTest.class.getResourceAsStream("/simpleService.xml"));
     assertTrue(serviceDoc.getRoot() instanceof Service);
     assertEquals(serviceDoc.getCharset(), "utf-8");
+    
+  }
+  
+  public static void testParseReader() throws Exception {
+
+    InputStream is = ParserTest.class.getResourceAsStream("/simpleFeed.xml");
+    Document<Feed> feedDoc = getParser().parse(new InputStreamReader(is), 
+        ParserTest.class.getResource("/simpleEntry.xml").toExternalForm());
+    assertTrue(feedDoc.getRoot() instanceof Feed);
+    assertEquals(feedDoc.getCharset(), "utf-8");
+
+    is = ParserTest.class.getResourceAsStream("/simpleEntry.xml");
+    Document<Entry> entryDoc = getParser().parse(new InputStreamReader(is),
+        ParserTest.class.getResource("/simpleEntry.xml").toExternalForm());
+    assertTrue(entryDoc.getRoot() instanceof Entry);
+    assertEquals(entryDoc.getCharset(), "utf-8");
+
+    is = ParserTest.class.getResourceAsStream("/simpleService.xml");
+    Document<Service> serviceDoc = getParser().parse(new InputStreamReader(is),
+        ParserTest.class.getResource("/simpleEntry.xml").toExternalForm());
+    assertTrue(serviceDoc.getRoot() instanceof Service);
+    assertEquals(serviceDoc.getCharset(), "utf-8");
+    
+  }
+  
+  /**
+   * Test for ABDERA-22.
+   * 
+   * @see https://issues.apache.org/jira/browse/ABDERA-22
+   */
+  public static void testParseReaderNoBase() throws Exception {
+
+    InputStream is = ParserTest.class.getResourceAsStream("/simpleEntry.xml");
+    Reader reader = new InputStreamReader(is);
+    Document<Entry> entryDoc = getParser().parse(reader);
+    assertTrue(entryDoc.getRoot() instanceof Entry);
+    assertEquals(entryDoc.getCharset(), "utf-8");
     
   }
   

@@ -128,7 +128,7 @@ public class FOMParser
       FOMFactory factory = getFomFactory(options);
       XMLStreamReader xmlreader = StAXUtils.createXMLStreamReader(in);
       FOMBuilder builder = new FOMBuilder(factory, xmlreader, options);
-      document = getDocument(builder, new IRI(base));
+      document = getDocument(builder, base != null ? new IRI(base) : null);
       setCharset(options, xmlreader.getCharacterEncodingScheme(), document);
     } catch (Exception e) {
       if (!(e instanceof ParseException))

@@ -330,72 +330,124 @@ public class AppTest extends JettyTest {
   }  
   
   public void testAppClient() throws Exception {
-    
     Client client = new CommonsClient();
     Entry entry = getFactory().newEntry();
     RequestOptions options = client.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
+
     // do the introspection step
-    ClientResponse response = client.get("http://localhost:8080/service",options);
-    assertEquals(200, response.getStatus());
-    Document<Service> service_doc = response.getDocument();
-    assertNotNull(service_doc);
-    assertEquals(1, service_doc.getRoot().getWorkspaces().size());
-    Workspace workspace = service_doc.getRoot().getWorkspace("Test");
-    assertNotNull(workspace);
-    for (Collection c: workspace.getCollections()) {
-      assertNotNull(c.getTitle());
-      assertNotNull(c.getHref());
+    ClientResponse response = client.get("http://localhost:8080/service",
+                                         options);
+    String col_uri;
+
+    try {
+      assertEquals(200, response.getStatus());
+
+      Document<Service> service_doc = response.getDocument();
+      assertNotNull(service_doc);
+      assertEquals(1, service_doc.getRoot().getWorkspaces().size());
+
+      Workspace workspace = service_doc.getRoot().getWorkspace("Test");
+      assertNotNull(workspace);
+
+      for (Collection c: workspace.getCollections()) {
+        assertNotNull(c.getTitle());
+        assertNotNull(c.getHref());
+      }
+    
+      col_uri = getBase() + "/collections/entries";
+    } finally {
+      response.release();
     }
-    
-    String col_uri = getBase() + "/collections/entries";
-    
+
     // post a new entry
     response = client.post(col_uri, entry, options);
-    assertEquals(201, response.getStatus());
-    assertNotNull(response.getLocation());
-    assertNotNull(response.getContentLocation());
+
+    String self_uri;
+
+    try {
+      assertEquals(201, response.getStatus());
+      assertNotNull(response.getLocation());
+      assertNotNull(response.getContentLocation());
     
-    String self_uri = response.getLocation().toString();
-    
+      self_uri = response.getLocation().toString();
+    } finally {
+      response.release();
+    }
+ 
     // get the collection to see if our entry is there
     response = client.get(col_uri, options);
-    assertEquals(200, response.getStatus());
-    Document<Feed> feed_doc = response.getDocument();
-    assertEquals(1, feed_doc.getRoot().getEntries().size());
-    
+
+    try {
+      assertEquals(200, response.getStatus());
+      Document<Feed> feed_doc = response.getDocument();
+      assertEquals(1, feed_doc.getRoot().getEntries().size());
+    } finally { 
+      response.release();
+    }
+
     // get the entry to see if we can get it
     response = client.get(self_uri, options);
-    assertEquals(200, response.getStatus());
-    Document<Entry> entry_doc = response.getDocument();
-    assertEquals(self_uri, entry_doc.getRoot().getId().toString()); // this isn't always true in real life, but for our tests they are the same
+
+    String edit_uri;
+
+    try {
+      assertEquals(200, response.getStatus());
+      Document<Entry> entry_doc = response.getDocument();
+
+      // this isn't always true, but for our tests they are the same
+      assertEquals(self_uri, entry_doc.getRoot().getId().toString());
     
-    // get the edit uri from the entry
-    String edit_uri = entry_doc.getRoot().getEditLink().getHref().toString();
+      // get the edit uri from the entry
+      edit_uri = entry_doc.getRoot().getEditLink().getHref().toString();
     
-    // change the entry
-    Document<Entry> doc = response.getDocument();
-    entry = (Entry) doc.getRoot().clone();
-    entry.setTitle("New title");
-    
+      // change the entry
+      Document<Entry> doc = response.getDocument();
+      entry = (Entry) doc.getRoot().clone();
+      entry.setTitle("New title");
+    } finally {  
+      response.release();
+    }
+
     // submit the changed entry back to the server
     response = client.put(edit_uri, entry, options);
-    assertEquals(204, response.getStatus());
+
+    try {
+      assertEquals(204, response.getStatus());
+    } finally {
+      response.release();
+    }
 
     // check to see if the entry was modified properly
     response = client.get(self_uri, options);
-    assertEquals(200, response.getStatus());
-    entry_doc = response.getDocument();
-    assertEquals("New title", entry_doc.getRoot().getTitle());
-    
+
+    try {
+      assertEquals(200, response.getStatus());
+
+      Document<Entry> entry_doc = response.getDocument();
+      assertEquals("New title", entry_doc.getRoot().getTitle());
+    } finally {
+      response.release();
+    }
+
     // delete the entry
     response = client.delete(edit_uri, options);
-    assertEquals(204, response.getStatus());
-    
+
+    try {
+      assertEquals(204, response.getStatus());
+    } finally {
+      response.release();
+    }
+
     // is it gone?
     response = client.get(self_uri, options);
-    assertEquals(404, response.getStatus());
-    
+
+    try {
+      assertEquals(404, response.getStatus());
+    } finally {
+      response.release();
+    }
+
     // YAY! We're a working APP client
     
     // Now let's try to do a media post
@@ -404,71 +456,131 @@ public class AppTest extends JettyTest {
     options = client.getDefaultRequestOptions();
     options.setContentType("text/plain");
     options.setHeader("Connection", "close");
-    response = client.post(col_uri, new ByteArrayInputStream("test".getBytes()), options);
-    assertEquals(201, response.getStatus());
-    assertNotNull(response.getLocation());
-    assertNotNull(response.getContentLocation());
+
+    response = client.post(col_uri,
+                           new ByteArrayInputStream("test".getBytes()),
+                           options);
+
+    try {
+      assertEquals(201, response.getStatus());
+      assertNotNull(response.getLocation());
+      assertNotNull(response.getContentLocation());
     
-    self_uri = response.getLocation().toString();
+      self_uri = response.getLocation().toString();
+    } finally {
+      response.release();
+    }
 
     // was an entry created?
     options = client.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
     response = client.get(self_uri, options);
-    assertEquals(200, response.getStatus());
-    entry_doc = response.getDocument();
-    assertEquals(self_uri, entry_doc.getRoot().getId().toString()); // this isn't always true in real life, but for our tests they are the same
+
+    String edit_media, media;
+
+    try {
+      assertEquals(200, response.getStatus());
+      Document<Entry> entry_doc = response.getDocument();
+
+      // this isn't always true, but for our tests they are the same
+      assertEquals(self_uri, entry_doc.getRoot().getId().toString());
     
-    // get the right links from the entry
-    edit_uri = entry_doc.getRoot().getEditLink().getHref().toString();
-    String edit_media = entry_doc.getRoot().getLink("edit-media").getHref().toString();
-    String media = entry_doc.getRoot().getContentElement().getSrc().toString();
+      // get the right links from the entry
+      edit_uri = entry_doc.getRoot().getEditLink().getHref().toString();
+      edit_media = entry_doc.getRoot()
+                            .getLink("edit-media")
+                            .getHref().toString();
+      media = entry_doc.getRoot().getContentElement().getSrc().toString();
     
-    // edit the entry
-    doc = response.getDocument();
-    entry = (Entry) doc.getRoot().clone();
-    entry.setTitle("New title");
-    
+      // edit the entry
+      Document doc = response.getDocument();
+      entry = (Entry) doc.getRoot().clone();
+      entry.setTitle("New title");
+    } finally {
+      response.release();
+    }
+
     // submit the changes
     options = client.getDefaultRequestOptions();
     options.setContentType("application/atom+xml");
     options.setHeader("Connection", "close");
+
     response = client.put(edit_uri, entry, options);
-    assertEquals(204, response.getStatus());
+
+    try {
+      assertEquals(204, response.getStatus());
+    } finally {
+      response.release();
+    }
 
     // get the media resource
     response = client.get(media);
-    assertEquals(200, response.getStatus());
-    String mediavalue = read(response.getInputStream());
-    assertEquals("test", mediavalue);
-    
+
+    try {
+      assertEquals(200, response.getStatus());
+
+      String mediavalue = read(response.getInputStream());
+      assertEquals("test", mediavalue);
+    } finally {
+      response.release();
+    }
+
     // edit the media resource
     options = client.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
     options.setContentType("text/plain");
-    response = client.put(edit_media, new ByteArrayInputStream("TEST".getBytes()), options);
-    assertEquals(204, response.getStatus());
+
+    response = client.put(edit_media,
+                          new ByteArrayInputStream("TEST".getBytes()),
+                          options);
+
+    try {
+      assertEquals(204, response.getStatus());
+    } finally {
+      response.release();
+    }
 
     // was the resource changed?
     response = client.get(media, options);
-    assertEquals(200, response.getStatus());
-    mediavalue = read(response.getInputStream());
-    assertEquals("TEST", mediavalue);
-    
+
+    try {
+      assertEquals(200, response.getStatus());
+
+      String mediavalue = read(response.getInputStream());
+      assertEquals("TEST", mediavalue);
+    } finally {
+      response.release();
+    }
+
     // delete the entry
     response = client.delete(edit_uri, options);
-    assertEquals(204, response.getStatus());
-    
+
+    try {
+      assertEquals(204, response.getStatus());
+    } finally {
+      response.release();
+    }
+
     // is the entry gone?
     response = client.get(self_uri, options);
-    assertEquals(404, response.getStatus());
+
+    try {
+      assertEquals(404, response.getStatus());
+    } finally {
+      response.release();
+    }
 
     // is the media resource gone?
     options.setNoCache(true); // need to force revalidation to check
+
     response = client.get(media, options);
-    assertEquals(404, response.getStatus());
-    
+
+    try {
+      assertEquals(404, response.getStatus());
+    } finally {
+      response.release();
+    }
+
     // YAY! We can handle media link entries 
-    
   }
 }

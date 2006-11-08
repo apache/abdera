@@ -34,8 +34,8 @@ import org.apache.abdera.util.iri.IRISyntaxException;
  *  appWorkspace =
  *     element app:workspace {
  *        appCommonAttributes,
- *        attribute title { text },
- *        ( appCollection+
+ *        ( atomTitle
+ *          &amp; appCollection*
  *          &amp; extensionElement* )
  *     }
  *

@@ -74,6 +74,7 @@
   <property name="client.work" value="${work}/client" />
   <property name="client.test.java" value="${client}/src/test/java" />
   <property name="client.jar" value="${dist}/${ant.project.name}.client.${version}.jar" />
+  <property name="debug" value="on" />
   
   <property environment="env" />
       
@@ -96,7 +97,9 @@
     <mkdir dir="${dependencies.work}/json" />
 
     <!-- build json -->
-    <javac srcdir="${json.src.java}" destdir="${dependencies.work}/json" />
+    <javac srcdir="${json.src.java}"
+           destdir="${dependencies.work}/json"
+           debug="${debug}" />
 
     <jar destfile="${json.jar}"
          basedir="${dependencies.work}/json"
@@ -179,11 +182,13 @@ Working directory: ${work}
     <mkdir dir="${core.work}" />
     <javac srcdir="${core.src}"
            destdir="${core.work}"
-           classpathref="jar.dependencies"/>
+           classpathref="jar.dependencies"
+           debug="${debug}" />
     <javac srcdir="${core.test}"
            destdir="${test}" 
            classpathref="jar.dependencies"
-           classpath="${core.work}"/>
+           classpath="${core.work}"
+           debug="${debug}" />
     <mkdir dir="${core.work}/META-INF" />
     <copy todir="${core.work}">
       <fileset dir="${core.resources}" includes="**/*" />
@@ -201,7 +206,8 @@ Working directory: ${work}
     <javac srcdir="${protocol.src}"
            destdir="${protocol.work}"
            classpathref="jar.dependencies"
-           classpath="${core.work}"/>
+           classpath="${core.work}"
+           debug="${debug}" />
     <mkdir dir="${protocol.work}/META-INF" />
     <copy todir="${protocol.work}/META-INF">
       <fileset dir="${basedir}">
@@ -216,11 +222,13 @@ Working directory: ${work}
     <javac srcdir="${parser.src}"
            destdir="${parser.work}"
            classpathref="jar.dependencies" 
-           classpath="${core.work}" />
+           classpath="${core.work}"
+           debug="${debug}" />
     <javac srcdir="${parser.test.java}"
            destdir="${test}"
            classpathref="jar.dependencies"
-           classpath="${core.work};${parser.work}" />
+           classpath="${core.work};${parser.work}"
+           debug="${debug}" />
     <mkdir dir="${parser.work}/META-INF" />
     <copy todir="${parser.work}/META-INF">
       <fileset dir="${basedir}">
@@ -243,11 +251,13 @@ Working directory: ${work}
     <javac srcdir="${extensions.src}"
            destdir="${extensions.work}"
            classpathref="jar.dependencies"
-           classpath="${core.work};${parser.work};${client.work};${protocol.work}" />
+           classpath="${core.work};${parser.work};${client.work};${protocol.work}"
+           debug="${debug}" />
     <javac srcdir="${extensions.test.java}"
            destdir="${test}"
            classpathref="jar.dependencies"
-           classpath="${core.work};${parser.work};${extensions.work};${client.work};${protocol.work}" />
+           classpath="${core.work};${parser.work};${extensions.work};${client.work};${protocol.work}"
+           debug="${debug}" />
     <mkdir dir="${extensions.work}/META-INF" />
     <copy todir="${extensions.work}/META-INF">
       <fileset dir="${basedir}">
@@ -268,7 +278,8 @@ Working directory: ${work}
     <javac srcdir="${server.src}"
            destdir="${server.work}"
            classpathref="jar.dependencies"
-           classpath="${core.work};${protocol.work}" />
+           classpath="${core.work};${protocol.work}"
+           debug="${debug}" />
     <mkdir dir="${server.work}/META-INF" />
     <copy todir="${server.work}/META-INF">
       <fileset dir="${basedir}">
@@ -283,7 +294,8 @@ Working directory: ${work}
     <javac srcdir="${security.src}"
            destdir="${security.work}"
            classpathref="jar.dependencies"
-           classpath="${core.work}" />    
+           classpath="${core.work}"
+           debug="${debug}" />
     <mkdir dir="${security.work}/META-INF" />
     <copy todir="${security.work}/META-INF">
       <fileset dir="${basedir}">
@@ -298,11 +310,13 @@ Working directory: ${work}
     <javac srcdir="${client.src}"
            destdir="${client.work}"
            classpathref="jar.dependencies"
-           classpath="${core.work};${protocol.work}" />
+           classpath="${core.work};${protocol.work}"
+           debug="${debug}" />
     <javac srcdir="${client.test.java}"
            destdir="${test}"
            classpathref="jar.dependencies"
-           classpath="${core.work};${parser.work};${extensions.work};${client.work};${protocol.work}" />
+           classpath="${core.work};${parser.work};${extensions.work};${client.work};${protocol.work}"
+           debug="${debug}" />
     <mkdir dir="${client.work}/META-INF" />
     <copy todir="${client.work}/META-INF">
       <fileset dir="${basedir}">

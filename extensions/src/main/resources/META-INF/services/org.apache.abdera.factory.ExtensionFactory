@@ -1,2 +1,3 @@
 org.apache.abdera.ext.thread.ThreadExtensionFactory
 org.apache.abdera.ext.opensearch.OpenSearchExtensionFactory
+org.apache.abdera.ext.media.MediaExtensionFactory

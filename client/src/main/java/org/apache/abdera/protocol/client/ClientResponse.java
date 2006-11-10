@@ -30,24 +30,54 @@ import org.apache.abdera.protocol.Response;
 
 public interface ClientResponse extends Response {
 
+  /**
+   * Return the request method
+   */
   String getMethod();
   
+  /**
+   * Return the request URI.  The request was redirected, this will return the new URI
+   */
   String getUri();
   
+  /**
+   * Release the resources associated with this response
+   */
   void release();
   
+  /**
+   * Returns the inputstream used to read data from this response
+   */
   InputStream getInputStream() throws IOException;
   
   void setInputStream(InputStream in);
-  
+
+  /**
+   * If the response contains an XML document, parse the document
+   */
   <T extends Element>Document<T> getDocument() throws ParseException;
   
+  /**
+   * If the response contains an XML document, parse the document using the 
+   * specified ParserOptions
+   */
   <T extends Element>Document<T> getDocument(ParserOptions options) throws ParseException;
 
+  /**
+   * If the response contains an XML document, parse the document using the
+   * specified Parser
+   */
   <T extends Element>Document<T> getDocument(Parser parser) throws ParseException;
   
+  /**
+   * If the response contains an XML document, parse the document using the
+   * specified Parser and ParserOptions
+   */
   <T extends Element>Document<T> getDocument(Parser parser, ParserOptions options) throws ParseException;
   
+  /**
+   * Return the server-specified date returned in the response
+   */
   Date getServerDate();
   
 }

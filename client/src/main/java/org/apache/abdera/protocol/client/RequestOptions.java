@@ -102,26 +102,44 @@ public class RequestOptions
     return !noLocalCache;
   }
   
+  /**
+   * True if the local client cache should be used
+   */
   public void setUseLocalCache(boolean use_cache) {
     this.noLocalCache = !use_cache;
   }
   
+  /**
+   * Set the value of the HTTP Content-Type header
+   */
   public void setContentType(String value) {
     setHeader("Content-Type", value);
   }
   
+  /**
+   * Set the value of the HTTP Content-Type header
+   */
   public void setContentType(MimeType value) {
     setHeader("Content-Type", value.toString());
   }
   
+  /**
+   * Set the value of the HTTP Authorization header
+   */
   public void setAuthorization(String auth) {
     setHeader("Authorization", auth);
   }
   
+  /**
+   * Set the value of a header using proper encoding of non-ascii characters
+   */
   public void setEncodedHeader(String header, String charset, String value) {
     setHeader(header, EncodingUtil.encode(value,charset));
   }
   
+  /**
+   * Set the values of a header using proper encoding of non-ascii characters
+   */
   public void setEncodedHeader(String header, String charset, String... values) {
     if (values != null && values.length > 0) {
       for (int n = 0; n < values.length; n++) {
@@ -134,6 +152,9 @@ public class RequestOptions
     }
   }
   
+  /**
+   * Set the value of the specified HTTP header
+   */
   public void setHeader(String header, String value) {
     if (value != null)
       setHeader(header, new String[] {value});
@@ -141,6 +162,9 @@ public class RequestOptions
       removeHeaders(header);
   }
 
+  /**
+   * Set the value of the specified HTTP header
+   */
   public void setHeader(String header, String... values) {
     if (values != null && values.length > 0) {
       List<String> list = Arrays.asList(new String[] {combine(values)});
@@ -150,16 +174,27 @@ public class RequestOptions
     }
   }
   
+  /**
+   * Set the date value of the specified HTTP header
+   */
   public void setDateHeader(String header, Date value) {
     if (value != null) 
       setHeader(header, DateUtil.formatDate(value));
     removeHeaders(header);
   }
   
+  /**
+   * Similar to setEncodedHeader, but allows for multiple instances of the
+   * specified header
+   */
   public void addEncodedHeader(String header, String charset, String value) {
     addHeader(header, EncodingUtil.encode(value, charset));
   }
   
+  /**
+   * Similar to setEncodedHeader, but allows for multiple instances of the
+   * specified header
+   */
   public void addEncodedHeader(String header, String charset, String... values) {
     if (values == null || values.length == 0) return;
     for (int n = 0; n < values.length; n++) {
@@ -175,11 +210,17 @@ public class RequestOptions
     }
   }
   
+  /**
+   * Similar to setHeader but allows for multiple instances of the specified header
+   */
   public void addHeader(String header, String value) {
     if (value != null)
       addHeader(header, new String[] {value});
   }
   
+  /**
+   * Similar to setHeader but allows for multiple instances of the specified header
+   */
   public void addHeader(String header, String... values) {
     if (values == null || values.length == 0) return;
     List<String> list = getHeaders().get(header);
@@ -192,20 +233,32 @@ public class RequestOptions
     }
   }
 
+  /**
+   * Similar to setDateHeader but allows for multiple instances of the specified header
+   */
   public void addDateHeader(String header, Date value) {
     if (value == null) return;
     addHeader(header, DateUtil.formatDate(value));
   }
   
+  /**
+   * Returns the text value of the specified header
+   */
   public String getHeader(String header) {
     List<String> list = getHeaders().get(header);
     return (list != null) ? list.get(0) : null;
   }
   
+  /**
+   * Return a listing of text values for the specified header
+   */
   public List<String> getHeaders(String header) {
     return getHeaders().get(header);
   }
   
+  /**
+   * Returns the date value of the specified header
+   */
   public Date getDateHeader(String header) {
     String val = getHeader(header);
     try {
@@ -215,91 +268,157 @@ public class RequestOptions
     }
   }
 
+  /**
+   * Returns a listing of header names
+   */
   public String[] getHeaderNames() {
     Set<String> names = getHeaders().keySet(); 
     return names.toArray(new String[names.size()]);
   }
   
+  /**
+   * Sets the value of the HTTP If-Match header
+   */
   public void setIfMatch(String entity_tag) {
     setHeader("If-Match", entity_tag);
   }
   
+  /**
+   * Sets the value of the HTTP If-Match header
+   */
   public void setIfMatch(String... entity_tags) {
     setHeader("If-Match", entity_tags);
   }
   
+  /**
+   * Sets the value of the HTTP If-None-Match header
+   */
   public void setIfNoneMatch(String entity_tag) {
     setHeader("If-None-Match", entity_tag);
   }
   
+  /**
+   * Sets the value of the HTTP If-None-Match header
+   */
   public void setIfNoneMatch(String... entity_tags) {
     setHeader("If-None-Match", entity_tags);
   }
   
+  /**
+   * Sets the value of the HTTP If-Modified-Since header
+   */
   public void setIfModifiedSince(Date date) {
     setDateHeader("If-Modified-Since", date);
   }
   
+  /**
+   * Sets the value of the HTTP If-Unmodified-Since header
+   */
   public void setIfUnmodifiedSince(Date date) {
     setDateHeader("If-Unmodified-Since", date);
   }
   
+  /**
+   * Sets the value of the HTTP Accept header
+   */
   public void setAccept(String accept) {
     setAccept(new String[] {accept});
   }
   
+  /**
+   * Sets the value of the HTTP Accept header
+   */
   public void setAccept(String... accept) {
     setHeader("Accept", combine(accept));
   }
   
+  /**
+   * Sets the value of the HTTP Accept-Language header
+   */
   public void setAcceptLanguage(String accept) {
     setAcceptLanguage(new String[] {accept});
   }
   
+  /**
+   * Sets the value of the HTTP Accept-Language header
+   */
   public void setAcceptLanguage(String... accept) {
     setHeader("Accept-Language", combine(accept));
   }
   
+  /**
+   * Sets the value of the HTTP Accept-Charset header
+   */
   public void setAcceptCharset(String accept) {
     setAcceptCharset(new String[] {accept});
   }
   
+  /**
+   * Sets the value of the HTTP Accept-Charset header
+   */
   public void setAcceptCharset(String... accept) {
     setHeader("Accept-Charset", combine(accept));
   }
   
+  /**
+   * Sets the value of the HTTP Accept-Encoding header
+   */
   public void setAcceptEncoding(String accept) {
     setAcceptEncoding(new String[] {accept});
   }
   
+  /**
+   * Sets the value of the HTTP Accept-Encoding header
+   */
   public void setAcceptEncoding(String... accept) {
     setHeader("Accept-Encoding", combine(accept));
   }
   
+  /**
+   * Sets the value of the Atom Publishing Protocol Slug header
+   */
   public void setSlug(String slug) {
     setHeader("Slug", slug);
   }
   
+  /**
+   * Sets the value of the Atom Publishing Protocol Slug header
+   */
   public void setSlug(String slug, String charset) {
     setEncodedHeader("Slug", charset, slug);
   }
   
+  /**
+   * Sets the value of the HTTP Cache-Control header
+   */
   public void setCacheControl(String cc) {
     CacheControlUtil.parseCacheControl(cc, this);
   }
   
+  /**
+   * Remove the specified HTTP header
+   */
   public void removeHeaders(String name) {
     getHeaders().remove(name);
   }
-  
+ 
+  /**
+   * Return the value of the Cache-Control header
+   */ 
   public String getCacheControl() {
     return CacheControlUtil.buildCacheControl(this);
   }
 
+  /**
+   * Configure the Client Side cache to revalidate when using Authorization
+   */
   public boolean getRevalidateWithAuth() {
     return revalidateAuth;
   }
   
+  /**
+   * Configure the Client Side cache to revalidate when using Authorization
+   */
   public void setRevalidateWithAuth(boolean revalidateAuth) {
     this.revalidateAuth= revalidateAuth;
   }

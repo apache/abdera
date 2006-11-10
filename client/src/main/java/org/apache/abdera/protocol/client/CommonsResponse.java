@@ -53,22 +53,37 @@ public class CommonsResponse
     return method;
   }
   
+  /**
+   * Return the request method
+   */
   public String getMethod() {
     return method.getName();
   }
   
+  /**
+   * Return the status code of the response
+   */
   public int getStatus() {
     return method.getStatusCode();
   }
   
+  /**
+   * Return the status text of the response
+   */
   public String getStatusText() {
     return method.getStatusText();
   }
   
+  /**
+   * Release the resources associated with this response
+   */
   public void release() {
     method.releaseConnection();
   }
   
+  /**
+   * Return the value of the named HTTP header
+   */
   public String getHeader(String header) {
     Header h = method.getResponseHeader(header);
     if (h != null) 
@@ -76,6 +91,9 @@ public class CommonsResponse
     else return null;
   }
 
+  /**
+   * Return the values of the named HTTP header
+   */
   public List<Object> getHeaders(String header) {
     Header[] headers = method.getResponseHeaders(header);
     List<Object> values = new ArrayList<Object>();
@@ -85,6 +103,9 @@ public class CommonsResponse
     return java.util.Collections.unmodifiableList(values);
   }
   
+  /**
+   * Return all of the HTTP headers
+   */
   public Map<String,List<Object>> getHeaders() {
     Header[] headers = method.getResponseHeaders();
     Map<String,List<Object>> map = new HashMap<String,List<Object>>();
@@ -99,6 +120,9 @@ public class CommonsResponse
     return java.util.Collections.unmodifiableMap(map);
   }
   
+  /**
+   * Return a listing of HTTP header names
+   */
   public String[] getHeaderNames() {
     Header[] headers = method.getResponseHeaders();
     List<String> list = new ArrayList<String>();
@@ -110,6 +134,9 @@ public class CommonsResponse
     return list.toArray(new String[list.size()]);
   }
 
+  /**
+   * Return the request URI
+   */
   public String getUri() {
     try {
       return method.getURI().toString();
@@ -117,6 +144,12 @@ public class CommonsResponse
     return null; // shouldn't happen
   }
 
+  /**
+   * Return the inputstream for reading the content of the response.  The
+   * InputStream returned will automatically decode Content-Encodings and
+   * will automatically release the response when the stream has been 
+   * read fully.
+   */
   public InputStream getInputStream() throws IOException {
     if (in == null) {
       String ce = getHeader("Content-Encoding");
@@ -127,6 +160,9 @@ public class CommonsResponse
     return new AutoReleasingInputStream(method,in);
   }
 
+  /**
+   * Return the named HTTP header as a java.util.Date
+   */
   public Date getDateHeader(String header) {
     try {
       String value = getHeader(header);

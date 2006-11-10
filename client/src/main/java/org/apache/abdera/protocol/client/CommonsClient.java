@@ -38,6 +38,9 @@ import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpClientParams;
 
+/**
+ * The primary Abdera HTTP Client
+ */
 public class CommonsClient extends Client {
 
   private static final String DEFAULT_USER_AGENT = 
@@ -45,18 +48,30 @@ public class CommonsClient extends Client {
   
   private final HttpClient client;
   
+  /**
+   * Initialize the Commons Client using the default Abdera instance and User agent
+   */
   public CommonsClient() {
     this(DEFAULT_USER_AGENT);
   }
   
+  /**
+   * Initialize the Commons Client using the specified Abdera instance and default user agent
+   */
   public CommonsClient(Abdera abdera) {
     this(DEFAULT_USER_AGENT, abdera);
   }
   
+  /**
+   * Initialize the Commons Client using the default Abdera instance and specified user agent
+   */
   public CommonsClient(String userAgent) {
     this(userAgent, new Abdera());
   }
   
+  /**
+   * Initialize the Commons Client using the specified Abdera instance and user agent
+   */
   public CommonsClient(String userAgent,Abdera abdera) {
     super(abdera);
     MultiThreadedHttpConnectionManager connManager = 
@@ -71,6 +86,9 @@ public class CommonsClient extends Client {
       CookiePolicy.BROWSER_COMPATIBILITY);
   }
   
+  /**
+   * Configure the client to use preemptive authentication (HTTP Basic Authentication only)
+   */
   public void usePreemptiveAuthentication(boolean val) {
     client.getParams().setAuthenticationPreemptive(val);
   }

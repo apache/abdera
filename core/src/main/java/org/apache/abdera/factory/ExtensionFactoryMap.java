@@ -45,14 +45,14 @@ public class ExtensionFactoryMap
     if (t == null) {
       for (ExtensionFactory factory : factories) {
         t = (T) factory.getElementWrapper(internal);
-        if (t != internal) {
+        if (t != null && t != internal) {
           wrappers.put(internal, t);
           return t;
         }
       }
       t = (T) internal;
     }
-    return t;
+    return (t != null) ? t : (T)internal;
   }
   
   public void setElementWrapper(Element internal, Element wrapper) {

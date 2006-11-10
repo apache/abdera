@@ -31,9 +31,10 @@ import org.apache.abdera.util.iri.IRISyntaxException;
  */
 public class FeedPagingHelper {
 
+  public static final String FH_PREFIX = "fh";
   public static final String FHNS = "http://purl.org/syndication/history/1.0";
-  public static final QName COMPLETE = new QName(FHNS, "complete");
-  public static final QName ARCHIVE = new QName(FHNS, "archive");
+  public static final QName COMPLETE = new QName(FHNS, "complete", "fh");
+  public static final QName ARCHIVE = new QName(FHNS, "archive", "fh");
   
   /**
    * Returns true if the feed is "complete". According to the Feed Paging

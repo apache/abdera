@@ -44,7 +44,7 @@ public class MediaExtensionFactory implements ExtensionFactory {
     if (qname.equals(MediaConstants.TEXT)) return (T) new MediaText(internal);
     if (qname.equals(MediaConstants.THUMBNAIL)) return (T) new MediaThumbnail(internal);
     if (qname.equals(MediaConstants.TITLE)) return (T) new MediaTitle(internal);
-    return null;
+    return (T)internal;
   }
 
   public List<String> getNamespaces() {

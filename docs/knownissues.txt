@@ -1,0 +1,4 @@
+ * The client-side cache implementation in the Abdera Client does not support
+   the HTTP Vary header
+   
+ * 

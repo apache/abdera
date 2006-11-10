@@ -24,8 +24,12 @@ import org.apache.abdera.util.AbstractParserOptions;
 public class FOMParserOptions
   extends AbstractParserOptions {
 
+  public FOMParserOptions(Factory factory) {
+    this.factory = factory;
+  }
+  
   protected void initFactory() {
-    factory = new FOMFactory();
+    if (factory == null) factory = new FOMFactory();
   }
   
   protected void checkFactory(Factory factory) {

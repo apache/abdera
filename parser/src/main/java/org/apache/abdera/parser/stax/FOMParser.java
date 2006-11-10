@@ -141,7 +141,7 @@ public class FOMParser
   @Override
   public synchronized ParserOptions getDefaultParserOptions() {
     if (options == null)
-      options = new FOMParserOptions();
+      options = new FOMParserOptions(getFactory());
 
     // Make a copy of the options, so that changes to it don't result in
     // changes to the Parser's defaults.  Also, this allows us to remain

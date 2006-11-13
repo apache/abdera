@@ -44,6 +44,7 @@ public class Create {
     feed.addContributor("Bob Jones");
     feed.addCategory("example");
     
+    // Creates an entry and inserts it at the beginning of the list
     Entry entry = feed.insertEntry();
     entry.setTitle("Atom-Powered Robots Run Amok");
     entry.addLink("http://example.org/2003/12/13/atom03");
@@ -51,6 +52,7 @@ public class Create {
     entry.setUpdated(new Date());
     entry.setSummary("Some text.");
     
+    // Creates an entry and inserts it at the beginning of the list
     Entry entry2 = feed.insertEntry();
     entry2.setTitle("re: Atom-Powered Robots Run Amok");
     entry2.addLink("/2003/12/13/atom03/1");
@@ -58,6 +60,7 @@ public class Create {
     entry2.setUpdated(new Date());
     entry2.setSummary("A response");
     
+    // Creates an entry and appends it to the end of the list
     Entry entry3 = feed.addEntry();
     entry3.setTitle("<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Test</p></div>", Text.Type.XHTML);
     entry3.addLink("/2003/12/13/atom03/2");

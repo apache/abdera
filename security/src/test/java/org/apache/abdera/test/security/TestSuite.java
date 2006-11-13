@@ -17,9 +17,15 @@
 */
 package org.apache.abdera.test.security;
 
+import java.security.Provider;
+import java.security.Security;
+
 public class TestSuite extends junit.framework.TestSuite {
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception {
+    
+    Security.addProvider(getProvider(args[0]));
+    
     junit.textui.TestRunner.run(new TestSuite());
   }  
   
@@ -29,4 +35,7 @@ public class TestSuite extends junit.framework.TestSuite {
     addTestSuite(DSigThirdPartyVerifyTest.class);
   }
   
+  private static Provider getProvider(String provider) throws Exception {
+    return (Provider) Class.forName(provider).newInstance();
+  }
 }

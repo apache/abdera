@@ -68,6 +68,8 @@
   <property name="security" value="${basedir}/security" />
   <property name="security.src" value="${security}/src/main/java" />
   <property name="security.work" value="${work}/security" />
+  <property name="security.test.java" value="${security}/src/test/java" />
+  <property name="security.test.resources" value="${security}/src/test/resources" />
   <property name="security.jar" value="${dist}/${ant.project.name}.security.${version}.jar" />
   <property name="client" value="${basedir}/client" />
   <property name="client.src" value="${client}/src/main/java" />
@@ -157,6 +159,7 @@ Working directory: ${work}
         <not>
           <and>
             <available file="${dependencies}/${xmlsecurity.jar}" />
+            <available file="${dependencies}/${bouncycastle.jar}" />
           </and>
         </not>
       </and>
@@ -296,6 +299,11 @@ Working directory: ${work}
            classpathref="jar.dependencies"
            classpath="${core.work}"
            debug="${debug}" />
+    <javac srcdir="${security.test.java}"
+           destdir="${test}"
+           classpathref="jar.dependencies"
+           classpath="${core.work};${parser.work};${security.work};${protocol.work}:${client.work}"
+           debug="${debug}" />
     <mkdir dir="${security.work}/META-INF" />
     <copy todir="${security.work}/META-INF">
       <fileset dir="${basedir}">
@@ -369,6 +377,17 @@ Working directory: ${work}
     <java classpathref="jar.dependencies"
           classpath="${core.work}:${parser.work}:${server.work}:${extensions.work}:${test}"
           classname="org.apache.abdera.test.ext.TestSuite"
+          fork="yes" />
+    
+    <antcall target="test.security" />
+    
+  </target>
+  
+  <target name="test.security" if="do.security">
+    <echo>Running Security Tests...</echo>
+    <java classpathref="jar.dependencies"
+          classpath="${core.work}:${parser.work}:${server.work}:${security.work}:${client.work}:${protocol.work}:${test}"
+          classname="org.apache.abdera.test.security.TestSuite"
           fork="yes" />
   </target>
 
@@ -466,7 +485,7 @@ Working directory: ${work}
     <get src="${xmlsecurity.dir}/${xmlsecurity.jar}"
          dest="${dependencies}/${xmlsecurity.jar}"
          usetimestamp="true" />
-    <get src="#{bouncycastle.dir}/${bouncycastle.jar}"
+    <get src="${bouncycastle.dir}/${bouncycastle.jar}"
          dest="${dependencies}/${bouncycastle.jar}"
          usetimestamp="true" />
     </parallel>

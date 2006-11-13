@@ -130,7 +130,7 @@ public interface Text
   
   /**
    * Set the wrapped value
-   * @param The text value wrapped in a xhtml:div
+   * @param wrappedValue The text value wrapped in a xhtml:div
    */
   void setWrappedValue(String wrappedValue);
   

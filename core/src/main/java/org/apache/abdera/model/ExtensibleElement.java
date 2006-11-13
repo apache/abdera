@@ -94,7 +94,7 @@ public interface ExtensibleElement
   /**
    * Adds a simple extension (text content only)
    * @param namespace An XML namespace
-   * @param localName A local name
+   * @param localPart A local name
    * @param prefix A namespace prefix
    * @param value The simple text value
    * @return The newly created extension element

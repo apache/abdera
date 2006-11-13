@@ -85,7 +85,7 @@ public interface DateTime
   
   /**
    * Sets the content value of the element
-   * @param The serialized string value
+   * @param date The serialized string value
    */
   void setString(String date);
 }

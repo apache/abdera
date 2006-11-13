@@ -43,7 +43,7 @@ public interface IRIElement
   
   /**
    * Set the value of this element using the normalization as specified in RFC4287
-   * @param id A non-normalized IRI
+   * @param iri A non-normalized IRI
    * @throws IRISyntaxException if the iri is malformed
    */
   void setNormalizedValue(String iri) throws IRISyntaxException;

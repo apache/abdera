@@ -99,7 +99,7 @@ public interface Workspace
   /**
    * Adds an individual collection to this workspace
    * @param title The collection title
-   * @param hreg The collection HREF
+   * @param href The collection HREF
    * @return The newly created app:collection
    * @throws IRISyntaxException if the href is malformed
    */

@@ -28,7 +28,7 @@ public interface Encryption {
    * Encrypt the document using the specified options
    * @param doc The document to encrypt
    * @param options The encryption options
-   * @returns The encrypted document
+   * @return The encrypted document
    * @throws org.apache.abdera.security.SecurityException if the encryption failed
    */
   Document encrypt(
@@ -40,7 +40,7 @@ public interface Encryption {
    * Decrypt the document using the specified options
    * @param doc The document to decrypt
    * @param options The decryption options
-   * @returns The decrypted document
+   * @return The decrypted document
    * @throws org.apache.abdera.security.SecurityException if the decryption failed
    */
   Document decrypt(

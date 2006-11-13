@@ -104,7 +104,7 @@ public class FeedPagingHelper {
    * Adds a next link relation to the feed
    * @param feed The feed 
    * @param iri The IRI of the next feed document
-   * @returns The newly created Link
+   * @return The newly created Link
    */
   public static Link setNext(Feed feed, String iri) throws IRISyntaxException {
     Link link = feed.getLink("next");
@@ -120,7 +120,7 @@ public class FeedPagingHelper {
    * Adds a previous link relation to the feed
    * @param feed The feed 
    * @param iri The IRI of the previous feed document
-   * @returns The newly created Link
+   * @return The newly created Link
    */
   public static Link setPrevious(Feed feed, String iri) throws IRISyntaxException {
     Link link = feed.getLink("previous");
@@ -136,7 +136,7 @@ public class FeedPagingHelper {
    * Adds a first link relation to the feed
    * @param feed The feed 
    * @param iri The IRI of the first feed document
-   * @returns The newly created Link
+   * @return The newly created Link
    */
   public static Link setFirst(Feed feed, String iri) throws IRISyntaxException {
     Link link = feed.getLink("first");
@@ -152,7 +152,7 @@ public class FeedPagingHelper {
    * Adds a last link relation to the feed
    * @param feed The feed 
    * @param iri The IRI of the last feed document
-   * @returns The newly created Link
+   * @return The newly created Link
    */
   public static Link setLast(Feed feed, String iri) throws IRISyntaxException {
     Link link = feed.getLink("last");
@@ -168,7 +168,7 @@ public class FeedPagingHelper {
    * Adds a next-archive link relation to the feed
    * @param feed The feed 
    * @param iri The IRI of the next archive feed document
-   * @returns The newly created Link
+   * @return The newly created Link
    */
   public static Link setNextArchive(Feed feed, String iri) throws IRISyntaxException {
     Link link = feed.getLink("next-archive");
@@ -187,7 +187,7 @@ public class FeedPagingHelper {
    * Adds a prev-archive link relation to the feed
    * @param feed The feed 
    * @param iri The IRI of the previous archive feed document
-   * @returns The newly created Link
+   * @return The newly created Link
    */
   public static Link setPreviousArchive(Feed feed, String iri) throws IRISyntaxException {
     Link link = feed.getLink("prev-archive");
@@ -206,7 +206,7 @@ public class FeedPagingHelper {
    * Adds a current link relation to the feed
    * @param feed The feed 
    * @param iri The IRI of the current feed document
-   * @returns The newly created Link
+   * @return The newly created Link
    */
   public static Link setCurrent(Feed feed, String iri) throws IRISyntaxException {
     Link link = feed.getLink("current");

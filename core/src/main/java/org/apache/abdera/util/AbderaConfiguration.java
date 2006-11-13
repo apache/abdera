@@ -102,7 +102,7 @@ public final class AbderaConfiguration
 
   /**
    * Retrieve the value of the specified configuration option
-   * @returns The configuration option value or null
+   * @return The configuration option value or null
    */
   public String getConfigurationOption(String id) {
     String option = System.getProperty(id);
@@ -120,7 +120,7 @@ public final class AbderaConfiguration
   /**
    * Retrieve the value of the specified configuration option or _default
    * if the value is null
-   * @returns The configuration option value of _default
+   * @return The configuration option value of _default
    */
   public String getConfigurationOption(String id, String _default) {
     String value = getConfigurationOption(id);

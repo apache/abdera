@@ -183,7 +183,7 @@ public interface Element
 
   /**
    * Sets the value of the named attribute
-   * @param name The XML QName of the attribute
+   * @param qname The XML QName of the attribute
    * @param value The value of the attribute
    */
   void setAttributeValue(QName qname, String value);
@@ -201,7 +201,7 @@ public interface Element
   
   /**
    * Set the Text value of this element
-   * @param The text value
+   * @param text The text value
    */
   void setText(String text);
   

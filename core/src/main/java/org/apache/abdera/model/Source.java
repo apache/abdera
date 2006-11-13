@@ -82,7 +82,7 @@ public interface Source
   
   /**
    * Adds an individual author to the entry
-   * @param an atom:author element
+   * @param person an atom:author element
    */
   void addAuthor(Person person);
   
@@ -101,7 +101,7 @@ public interface Source
    * @return The newly created atom:author element
    * @throws IRISyntaxException  if the iri is malformed
    */
-  Person addAuthor(String name, String email, String IRI) throws IRISyntaxException;
+  Person addAuthor(String name, String email, String iri) throws IRISyntaxException;
   
   /**
    * Lists the complete set of categories listed for the entry
@@ -167,7 +167,7 @@ public interface Source
    * @return The atom:contributor element
    * @throws IRISyntaxException if the iri is malformed
    */
-  Person addContributor(String name, String email, String IRI) throws IRISyntaxException;
+  Person addContributor(String name, String email, String iri) throws IRISyntaxException;
   
   /**
    * RFC4287: The "atom:generator" element's content identifies the 
@@ -193,7 +193,7 @@ public interface Source
    * @throws IRISyntaxException if the iri is malformed
    */
   Generator setGenerator(
-    String IRI, 
+    String iri, 
     String version, 
     String value) 
       throws IRISyntaxException;
@@ -214,7 +214,7 @@ public interface Source
    *  identification for a feed... The image SHOULD have an aspect ratio 
    *  of one (horizontal) to one (vertical) and SHOULD be suitable for 
    *  presentation at a small size.
-   *  @param The atom:icon element
+   *  @param iri The atom:icon element
    */
   void setIconElement(IRIElement iri);
   
@@ -250,7 +250,7 @@ public interface Source
   /**
    * RFC4287: The "atom:id" element conveys a permanent, universally unique
    * identifier for an entry or feed.
-   * @param A atom:id element
+   * @param id A atom:id element
    */
   void setIdElement(IRIElement id);
   
@@ -293,7 +293,7 @@ public interface Source
   
   /**
    * Adds an individual link to the entry
-   * @param A atom:link element
+   * @param link A atom:link element
    */
   void addLink(Link link);
   
@@ -346,7 +346,7 @@ public interface Source
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
    * that identifies an image that provides visual identification for a feed.
    * The image SHOULD have an aspect ratio of 2 (horizontal) to 1 (vertical).
-   * @param The atom:logo value
+   * @param iri The atom:logo value
    * @return The newly created atom:logo element
    * @throws IRISyntaxException if the iri is malformed
    */
@@ -478,7 +478,7 @@ public interface Source
   /**
    * Sets the value of the subtitle
    * @param value The value of the atom:subtitle element
-   * @param value The atom:subtitle Text.Type
+   * @param type The atom:subtitle Text.Type
    * @return The newly created atom:subtitle element
    */
   Text setSubtitle(String value, Text.Type type);
@@ -597,14 +597,14 @@ public interface Source
   /**
    * Set the atom:updated value
    * @param value The java.util.Date
-   * @param The newly created atom:updated element
+   * @return The newly created atom:updated element
    */
   DateTime setUpdated(Date value);
   
   /**
    * Set the atom:updated value
    * @param value The serialized string date
-   * @param The newly created atom:updated element
+   * @return The newly created atom:updated element
    */
   DateTime setUpdated(String value);
   

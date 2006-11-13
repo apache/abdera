@@ -97,7 +97,7 @@ public interface Document<T extends Element>
   
   /**
    * Sets the charset used for this document
-   * @param The character encoding to use
+   * @param charset The character encoding to use
    */
   void setCharset(String charset);
   

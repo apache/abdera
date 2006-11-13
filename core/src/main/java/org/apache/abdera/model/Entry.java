@@ -227,7 +227,7 @@ public interface Entry
   /**
    * Sets the content for this entry
    * @param element The element value
-   * @param mediatype The media type of the element
+   * @param mediaType The media type of the element
    * @throws MimeTypeParseException  if the mediaType is malformed
    */
   Content setContent(Element element, String mediaType) throws MimeTypeParseException;
@@ -786,7 +786,7 @@ public interface Entry
   
   /**
    * Returns this entries first alternate link
-   * @reurn the Alternate link
+   * @return the Alternate link
    */
   Link getAlternateLink();
   

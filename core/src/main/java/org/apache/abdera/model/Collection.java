@@ -78,7 +78,7 @@ public interface Collection
   
   /**
    * Return the title element
-   * @returns The title element
+   * @return The title element
    */
   Text getTitleElement();
 
@@ -131,7 +131,7 @@ public interface Collection
   
   /**
    * Returns true if the collection accepts the given media-type
-   * @param mediatype The media-type to check
+   * @param mediaType The media-type to check
    * @return True if the media-type is acceptable
    */
   boolean accepts(MimeType mediaType);

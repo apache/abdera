@@ -20,7 +20,7 @@ package org.apache.abdera.writer;
 /**
  * The WriterFactory is used a acquire instances of alternative 
  * writers registered with Abdera.  
- * @see org.apache.abdera.writer.WriterParser 
+ * @see org.apache.abdera.writer.Writer
  */
 public interface WriterFactory {
   
@@ -34,7 +34,7 @@ public interface WriterFactory {
   /**
    * Get the named writer.
    * @param name The name of the writer
-   * @returns The specified writer
+   * @return The specified writer
    */
   Writer getWriter(String name);
   

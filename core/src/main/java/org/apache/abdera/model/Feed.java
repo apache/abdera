@@ -119,7 +119,7 @@ public interface Feed
   
   /**
    * Adds a new Entry to the <i>start</i> of the Feeds collection of entries
-   * @param An atom:entry to insert
+   * @param entry An atom:entry to insert
    */
   void insertEntry(Entry entry);
 

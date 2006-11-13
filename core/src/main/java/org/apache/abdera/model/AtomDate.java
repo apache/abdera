@@ -236,7 +236,7 @@ public final class AtomDate {
   
   /**
    * Create the serialized string form from a java.util.Date
-   * @param Date A java.util.Date
+   * @param d A java.util.Date
    * @return The serialized string form of the date
    */
   public static String format (Date d) {

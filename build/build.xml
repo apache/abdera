@@ -428,6 +428,7 @@ Working directory: ${work}
   
   <target name="zip" depends="retro"> 
     <mkdir dir="${work}/dist/${ant.project.name}.${version}"/>
+    <mkdir dir="${work}/dist/${ant.project.name}.${version}/examples" />
     <copy todir="${work}/dist/${ant.project.name}.${version}">
       <fileset dir="${dist}">
         <include name="**/*.jar" />
@@ -444,10 +445,14 @@ Working directory: ${work}
         <include name="README" />
       </fileset>
     </copy>
+    <copy todir="${work}/dist/${ant.project.name}.${version}/examples">
+      <fileset dir="${basedir}/examples" includes="**/*" excludes="**/pom.xml" />
+    </copy>
     <zip destfile="${basedir}/${ant.project.name}.${version}.zip" 
          basedir="${work}/dist/" />
     <delete dir="${work}/dist/${ant.project.name}.${version}" />
     <mkdir dir="${work}/dist/${ant.project.name}.${version}.jdk142"/>
+    <mkdir dir="${work}/dist/${ant.project.name}.${version}.jdk142/examples"/>
     <copy todir="${work}/dist/${ant.project.name}.${version}.jdk142">
       <fileset dir="${dist}">
         <include name="**/*.jar" />
@@ -461,6 +466,9 @@ Working directory: ${work}
         <include name="NOTICE" />
         <include name="README" />
       </fileset>
+    </copy>
+    <copy todir="${work}/dist/${ant.project.name}.${version}.jdk142/examples">
+      <fileset dir="${basedir}/examples" includes="**/*" excludes="**/pom.xml"/>
     </copy>
     <zip destfile="${basedir}/${ant.project.name}.${version}.jdk142.zip" 
          basedir="${work}/dist/" />

@@ -82,8 +82,7 @@ public class DigitalSignatureTest extends TestCase {
     Signature sig = absec.getSignature();
     SignatureOptions options = sig.getDefaultSignatureOptions();    
     options.setCertificate(cert);
-    options.setSigningKey(signingKey);
-    options.addReference("http://example.org");
+    options.setSigningKey(signingKey);  
 
     // Sign the entry
     entry = sig.sign(entry, options);

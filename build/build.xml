@@ -305,6 +305,9 @@ Working directory: ${work}
            classpath="${core.work};${parser.work};${security.work};${protocol.work}:${client.work}"
            debug="${debug}" />
     <mkdir dir="${security.work}/META-INF" />
+    <copy todir="${test}">
+      <fileset dir="${security.test.resources}" includes="**/*" />
+    </copy>
     <copy todir="${security.work}/META-INF">
       <fileset dir="${basedir}">
         <include name="LICENSE" />
@@ -388,7 +391,7 @@ Working directory: ${work}
     <java classpathref="jar.dependencies"
           classpath="${core.work}:${parser.work}:${server.work}:${security.work}:${client.work}:${protocol.work}:${test}"
           classname="org.apache.abdera.test.security.TestSuite"
-          fork="yes" />
+          fork="yes"><arg line="${bouncycastle.provider}"/></java>
   </target>
 
   <target name="clean">

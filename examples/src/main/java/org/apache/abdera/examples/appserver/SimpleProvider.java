@@ -33,7 +33,6 @@ import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
-import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.protocol.EntityTag;
 import org.apache.abdera.protocol.ResponseInfo;
 import org.apache.abdera.protocol.server.provider.AbstractResponseContext;

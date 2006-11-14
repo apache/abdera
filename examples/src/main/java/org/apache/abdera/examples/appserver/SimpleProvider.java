@@ -134,6 +134,7 @@ public class SimpleProvider
   public ResponseContext createEntry(
     RequestContext request) {
       Abdera abdera = request.getServiceContext().getAbdera();
+      Factory factory = abdera.getFactory();
       Parser parser = abdera.getParser();
       try {
         MimeType contentType = request.getContentType();
@@ -148,7 +149,7 @@ public class SimpleProvider
           if (!isValidEntry(entry))
             return new EmptyResponseContext(400);
           entry.setUpdated(new Date());
-          entry.getIdElement().setValue(FOMHelper.generateUuid());
+          entry.getIdElement().setValue(factory.newUuidUri());
           entry.addLink("feed/" + entry.getId().toString(), "edit");
           Feed feed = get_feed_doc(abdera).getRoot();
           feed.insertEntry(entry);
@@ -208,6 +209,7 @@ public class SimpleProvider
     RequestContext request) {
       Abdera abdera = request.getServiceContext().getAbdera();
       Parser parser = abdera.getParser();
+      Factory factory = abdera.getFactory();
       Entry orig_entry = getEntry(request);
       if (orig_entry != null) {
         try {
@@ -224,7 +226,7 @@ public class SimpleProvider
             if (!isValidEntry(entry))
               return new EmptyResponseContext(400);
             entry.setUpdated(new Date());
-            entry.getIdElement().setValue(FOMHelper.generateUuid());
+            entry.getIdElement().setValue(factory.newUuidUri());
             entry.addLink("atom/feed/" + entry.getId().toString(), "edit");
             orig_entry.discard();
             Feed feed = get_feed_doc(abdera).getRoot();

@@ -29,7 +29,6 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.security.AbderaSecurity;
 import org.apache.abdera.security.Encryption;
 import org.apache.abdera.security.EncryptionOptions;
-import org.apache.abdera.test.security.EncryptionTest;
 
 public class Enc {
 
@@ -41,7 +40,7 @@ public class Enc {
       Class.forName("org.bouncycastle.LICENSE");
       Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     } catch (Exception e) {
-      EncryptionTest.fail("The Bouncy Castle JCE Provider is not available");
+      throw new RuntimeException("The Bouncy Castle JCE Provider is not available");
     }
     
     // Generate Encryption Key

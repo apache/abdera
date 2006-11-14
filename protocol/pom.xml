@@ -22,13 +22,13 @@
   <parent>
     <groupId>org.apache.abdera</groupId>
     <artifactId>abdera</artifactId>
-    <version>0.2.0-incubating-SNAPSHOT</version>
+    <version>0.2.0-incubating</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>abdera-protocol</artifactId>
   <packaging>jar</packaging>
   <name>Abdera Protocol Core</name>
-  <version>0.2.0-incubating-SNAPSHOT</version>
+  <version>0.2.0-incubating</version>
   <description>Atom Publishing Protocol Implementation Core</description>
   <inceptionYear>2006</inceptionYear>
   <url>http://incubator.apache.org/abdera</url>
@@ -41,7 +41,7 @@
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-core</artifactId>
-      <version>0.2.0-incubating-SNAPSHOT</version>
+      <version>0.2.0-incubating</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

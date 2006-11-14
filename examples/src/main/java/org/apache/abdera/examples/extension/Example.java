@@ -20,6 +20,9 @@ package org.apache.abdera.examples.extension;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Entry;
 
+/**
+ * Simple example showing the use of static extensions 
+ */
 public class Example {
 
   public static void main(String[] args) throws Exception {

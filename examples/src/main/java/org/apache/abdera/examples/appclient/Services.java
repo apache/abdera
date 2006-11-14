@@ -185,22 +185,22 @@ public class Services {
     entry.setContentAsXhtml("<p>A new calendar event</p>");
     
     // Add the Google Specific extensions
-    entry.addExtension(
+    ((Element)entry.addExtension(
       new QName(
         "http://schemas.google.com/g/2005", 
-        "transparency")).setAttributeValue(
+        "transparency"))).setAttributeValue(
           "value", 
           "http://schemas.google.com/g/2005#event.opaque");
-    entry.addExtension(
+    ((Element)entry.addExtension(
         new QName(
           "http://schemas.google.com/g/2005", 
-          "eventStatus")).setAttributeValue(
+          "eventStatus"))).setAttributeValue(
             "value", 
             "http://schemas.google.com/g/2005#event.confirmed");
-    entry.addExtension(
+    ((Element)entry.addExtension(
         new QName(
           "http://schemas.google.com/g/2005", 
-          "where")).setAttributeValue(
+          "where"))).setAttributeValue(
             "valueString", 
             "Rolling Lawn Courts");
     Element el = entry.addExtension(

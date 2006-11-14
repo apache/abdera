@@ -76,6 +76,9 @@
   <property name="client.work" value="${work}/client" />
   <property name="client.test.java" value="${client}/src/test/java" />
   <property name="client.jar" value="${dist}/${ant.project.name}.client.${version}.jar" />
+  <property name="examples" value="${basedir}/examples" />
+  <property name="examples.work" value="${work}/examples" />
+  <property name="examples.src" value="${examples}/src/main/java" />  
   <property name="debug" value="on" />
   
   <property environment="env" />
@@ -337,7 +340,18 @@ Working directory: ${work}
     </copy>
   </target>
   
-  <target name="build" depends="init,compile.core,compile.parser,compile.protocol,compile.server,compile.extensions,compile.client,compile.security"></target>
+  <target name="compile.examples" depends="init,compile.core,compile.parser,compile.protocol,compile.server,compile.extensions,compile.security">
+    <echo>Make sure the example code compiles...</echo>
+    <mkdir dir="${examples.work}" />
+    <javac srcdir="${examples.src}"
+           destdir="${examples.work}"
+           classpathref="jar.dependencies"
+           classpath="${core.work};${parser.work};${protocol.work};${client.work};${server.work};${extensions.work};${security.work}"
+           debug="${debug}" />
+    <delete dir="${examples.work}" />
+  </target>
+  
+  <target name="build" depends="init,compile.core,compile.parser,compile.protocol,compile.server,compile.extensions,compile.client,compile.security,compile.examples"></target>
 
   <target name="docs" depends="init">
     <javadoc packagenames="org.apache.abdera.*"

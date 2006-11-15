@@ -450,6 +450,10 @@ Working directory: ${work}
         <exclude name="**/legal/retroweaver-LICENSE.txt" />
         <exclude name="**/json/*" />
         <exclude name="**/*.retro.jar" />
+        <exclude name="**/bcprov*.jar" />
+        <exclude name="**/geronimo-servlet*.jar" />
+        <exclude name="**/jetty*.jar" />
+        <exclude name="**/junit*.jar" />
         <exclude name="**/retroweaver-rt-1.2.3.jar" />
       </fileset>
       <fileset dir="${docs}" includes="**/*" />
@@ -473,6 +477,10 @@ Working directory: ${work}
         <include name="**/legal/*" />
         <exclude name="**/json/*" />
         <exclude name="**/*.${version}.jar" />
+        <exclude name="**/bcprov*.jar" />
+        <exclude name="**/geronimo-servlet*.jar" />
+        <exclude name="**/jetty*.jar" />
+        <exclude name="**/junit*.jar" />
       </fileset>
       <fileset dir="${docs}" includes="**/*" />
       <fileset dir="${basedir}">

@@ -416,6 +416,7 @@ Working directory: ${work}
     <delete file="${json.jar}" />
     <delete> 
       <fileset dir="${basedir}" includes="*.zip" />
+      <fileset dir="${basedir}" includes="*.md5" />
     </delete>
   </target>
   
@@ -505,6 +506,7 @@ Working directory: ${work}
         <exclude name="build/work/**/*" />
         <exclude name="**/*.jar" />
         <exclude name="**/*.zip" />
+        <exclude name="**/*.md5" />
         <exclude name="**/.project" />
       </fileset>
     </copy>

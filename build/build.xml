@@ -516,6 +516,7 @@ Working directory: ${work}
         <exclude name="**/*.zip" />
         <exclude name="**/*.md5" />
         <exclude name="**/.project" />
+        <exclude name="**/feedvalidator.org/**/*" />
       </fileset>
     </copy>
     <zip destfile="${basedir}/${ant.project.name}.${version}.src.zip"

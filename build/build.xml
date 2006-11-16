@@ -347,7 +347,9 @@ Working directory: ${work}
            destdir="${examples.work}"
            classpathref="jar.dependencies"
            classpath="${core.work};${parser.work};${protocol.work};${client.work};${server.work};${extensions.work};${security.work}"
-           debug="${debug}" />
+           debug="${debug}">
+      <exclude unless="do.security" name="**/security/*.java" />
+    </javac>
     <delete dir="${examples.work}" />
   </target>
   
@@ -451,11 +453,13 @@ Working directory: ${work}
         <exclude name="**/legal/retroweaver-LICENSE.txt" />
         <exclude name="**/json/*" />
         <exclude name="**/*.retro.jar" />
-        <exclude name="**/bcprov*.jar" />
-        <exclude name="**/geronimo-servlet*.jar" />
-        <exclude name="**/jetty*.jar" />
-        <exclude name="**/junit*.jar" />
+        <exclude name="**/${bouncycastle.jar}" />
+        <exclude name="**/${geronimo.servlet.jar}" />
+        <exclude name="**/${jetty-util.jar}" />
+        <exclude name="**/${jetty.jar}" />
+        <exclude name="**/${junit.jar}" />
         <exclude name="**/retroweaver-rt-1.2.3.jar" />
+        <exclude name="**/${xmlsecurity.jar}" unless="do.security" />
       </fileset>
       <fileset dir="${docs}" includes="**/*" />
       <fileset dir="${basedir}">
@@ -469,6 +473,7 @@ Working directory: ${work}
     </copy>
     <zip destfile="${basedir}/${ant.project.name}.${version}.zip" 
          basedir="${work}/dist/" />
+    <checksum file="${basedir}/${ant.project.name}.${version}.zip" fileext=".md5" />
     <delete dir="${work}/dist/${ant.project.name}.${version}" />
     <mkdir dir="${work}/dist/${ant.project.name}.${version}.jdk142"/>
     <mkdir dir="${work}/dist/${ant.project.name}.${version}.jdk142/examples"/>
@@ -478,10 +483,12 @@ Working directory: ${work}
         <include name="**/legal/*" />
         <exclude name="**/json/*" />
         <exclude name="**/*.${version}.jar" />
-        <exclude name="**/bcprov*.jar" />
-        <exclude name="**/geronimo-servlet*.jar" />
-        <exclude name="**/jetty*.jar" />
-        <exclude name="**/junit*.jar" />
+        <exclude name="**/${bouncycastle.jar}" />
+        <exclude name="**/${geronimo.servlet.jar}" />
+        <exclude name="**/${jetty-util.jar}" />
+        <exclude name="**/${jetty.jar}}" />
+        <exclude name="**/${junit.jar}" />
+        <exclude name="**/${xmlsecurity.jar}" unless="do.security" />
       </fileset>
       <fileset dir="${docs}" includes="**/*" />
       <fileset dir="${basedir}">
@@ -495,6 +502,7 @@ Working directory: ${work}
     </copy>
     <zip destfile="${basedir}/${ant.project.name}.${version}.jdk142.zip" 
          basedir="${work}/dist/" />
+    <checksum file="${basedir}/${ant.project.name}.${version}.jdk142.zip" fileext=".md5" />
     <delete dir="${work}/dist/${ant.project.name}.${version}.jdk142" />
     <mkdir dir="${work}/dist/${ant.project.name}.${version}.src"/>
     <copy todir="${work}/dist/${ant.project.name}.${version}.src">
@@ -512,6 +520,7 @@ Working directory: ${work}
     </copy>
     <zip destfile="${basedir}/${ant.project.name}.${version}.src.zip"
          basedir="${work}/dist/" />
+    <checksum file="${basedir}/${ant.project.name}.${version}.src.zip" fileext=".md5" />
     <delete dir="${work}" />
   </target>
 

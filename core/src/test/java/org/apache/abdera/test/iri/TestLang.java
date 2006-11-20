@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.test.iri;
 
+import java.util.Locale;
 import org.apache.abdera.util.lang.InvalidLangTagSyntax;
 import org.apache.abdera.util.lang.Lang;
 
@@ -27,15 +28,17 @@ public class TestLang extends TestCase {
   public static void testLang() throws Exception {
     
     Lang lang = new Lang("en-US-ca");
-    
+    Locale testLocale = new Locale("en", "US", "ca");
+        
     assertEquals(lang.getPrimary(),"en");
     assertEquals(lang.getSubtag(0),"US");
     assertEquals(lang.getSubtag(1),"ca");
     
-    assertEquals(lang.getLocale().toString(), "en_US_ca");
-    assertEquals(lang.getLocale().getDisplayCountry(), "United States");
-    assertEquals(lang.getLocale().getDisplayLanguage(), "English");
-    
+    assertEquals( testLocale, lang.getLocale() );
+    assertEquals(testLocale.toString(), lang.getLocale().toString());
+    assertEquals(testLocale.getDisplayCountry(), lang.getLocale().getDisplayCountry());
+    assertEquals(testLocale.getDisplayLanguage(), lang.getLocale().getDisplayLanguage());
+    assertEquals( testLocale.getDisplayVariant(), lang.getLocale().getDisplayVariant());
     assertTrue(lang.matches("*"));
     assertTrue(lang.matches("en"));
     assertTrue(lang.matches("EN"));

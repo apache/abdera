@@ -150,6 +150,7 @@ Working directory: ${work}
           <available file="${dependencies}/${wstx.jar}" />
           <available file="${dependencies}/${jetty.jar}" />
           <available file="${dependencies}/${jetty-util.jar}" />
+          <available file="${dependencies}/${json.zip}" />
         </and>
       </not>
     </condition>
@@ -517,6 +518,7 @@ Working directory: ${work}
         <exclude name="**/*.md5" />
         <exclude name="**/.project" />
         <exclude name="**/feedvalidator.org/**/*" />
+        <exclude name="**/json/**/*" />
       </fileset>
     </copy>
     <zip destfile="${basedir}/${ant.project.name}.${version}.src.zip"
@@ -583,7 +585,17 @@ Working directory: ${work}
       <get src="${jetty-util.dir}/${jetty-util.jar}"
            dest="${dependencies}/${jetty-util.jar}"
            usetimestamp="true" />
+      <get src="${json.dir}/${json.zip}"
+           dest="${dependencies}/${json.zip}"
+           usetimestamp="true" />
     </parallel>
+    <mkdir dir="${json.src}/main/java/org/json" />
+    <unzip src="${dependencies}/${json.zip}" 
+           dest="${json.src}" overwrite="true" />
+    <copy todir="${json.src}/main/java/org/json" overwrite="true">
+      <fileset dir="${json.src}/apache/json" />
+    </copy>
+    <delete dir="${json.src}/apache" />
   </target>
   
   <target name="clean-downloads" depends="init">

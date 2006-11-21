@@ -34,4 +34,29 @@
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/dependencies/json/</developerConnection>
     <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/dependencies/json/</url>
   </scm>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <configuration>
+              <tasks>
+                <mkdir dir="${basedir}/target" />
+                <get src="http://json.org/java/apache.zip" dest="${basedir}/target/apache.zip" usetimestamp="true"/>
+                <unzip src="${basedir}/target/apache.zip" dest="${basedir}/target/generated-sources/main/java" />
+                <move file="${basedir}/target/generated-sources/main/java/apache" tofile="${basedir}/target/generated-sources/main/java/json" />
+              </tasks>
+              <sourceRoot>${project.build.directory}/generated-sources/main/java</sourceRoot>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

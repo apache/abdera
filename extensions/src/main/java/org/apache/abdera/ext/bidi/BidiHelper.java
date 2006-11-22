@@ -21,7 +21,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Element;
-import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.io.CharUtils;
 
 /**
@@ -30,11 +29,9 @@ import org.apache.abdera.util.io.CharUtils;
  * still details being worked out on the Atom WG list and it's likely that
  * at least one other impl (mozilla) will do something slightly different.</p>
  * 
- * <p>The behavior implemented here is very simple.  The code looks for a dir
- * attribute either in the Atom namespace, the XHTML namespace or the 
- * Atom Bidi namespace (http://www.ietf.org/internet-drafts/draft-snell-atompub-bidi-00.txt).</p>
+ * <p>Based on http://www.ietf.org/internet-drafts/draft-snell-atompub-bidi-01.txt</p>
  * 
- * e.g.,
+ * <p>Example:</p>
  * <pre>
  *   &lt;feed xmlns="http://www.w3.org/2005/Atom" dir="rtl">
  *     ...
@@ -70,8 +67,6 @@ import org.apache.abdera.util.io.CharUtils;
  */
 public final class BidiHelper {
 
-  private static final QName XHTML_DIR = new QName(Constants.XHTML_NS,"dir");
-  private static final QName ABIDI_DIR = new QName("http://purl.org/atompub/bidi","dir");
   private static final QName DIR = new QName("dir");
   
   BidiHelper() {}
@@ -83,67 +78,23 @@ public final class BidiHelper {
    */
   public static <T extends Element>void setDirection(
     Direction direction, 
-    QName attribute, 
     T element) {
       if (direction != Direction.UNSPECIFIED)
         element.setAttributeValue(
-          attribute, 
+          DIR, 
           direction.toString().toLowerCase());
-      else 
-        element.removeAttribute(attribute);
+      else if (direction == Direction.UNSPECIFIED)
+        element.setAttributeValue(DIR,"");
+      else if (direction == null)
+        element.removeAttribute(DIR);
   }
   
   /**
-   * Set the value of dir attribute
-   */
-  public static <T extends Element>void setDirection(
-    Direction direction, 
-    T element) {
-      String dir = element.getAttributeValue("dir");
-      if (dir != null) {
-        setDirection(direction, DIR, element);
-      }
-      dir = element.getAttributeValue(XHTML_DIR);
-      if (dir != null) {
-        setDirection(direction, XHTML_DIR, element);
-      }
-      dir = element.getAttributeValue(ABIDI_DIR);
-      if (dir != null) {
-        setDirection(direction, ABIDI_DIR, element);
-      }
-      setDirection(direction, DIR, element);
-  }
-  
-  /**
-   * Get the in-scope direction for an element.  Currently, this is less
-   * than ideal because there currently isn't any standard way of expressing
-   * the direction in an Atom feed.  So, let's just support multiple approaches
-   * and hope that we get to the same place in the end. 
+   * Get the in-scope direction for an element.
    */
   public static <T extends Element>Direction getDirection(T element) {
-    // Couple of options since this hasn't yet been nailed down by the WG
     Direction direction = Direction.UNSPECIFIED;
-    // First try looking for a non-prefixed dir attribute
     String dir = element.getAttributeValue("dir");
-    // failing that, try looking for the XHTML dir attribute
-    if (dir == null) dir = element.getAttributeValue(XHTML_DIR);
-    // failing that, try looking for the proposed Atom bidi dir attribute
-    if (dir == null) dir = element.getAttributeValue(ABIDI_DIR);
-    // failing that, try looking for any attribute with the name dir in any 
-    // namespace and values that look appropriate
-    if (dir == null) {
-      for (QName qname : element.getAttributes()) {
-        if (qname.getLocalPart().equalsIgnoreCase("dir")) {
-          String value = element.getAttributeValue(qname);
-          if (value != null && value.length() > 0) {
-            try {
-              direction = Direction.valueOf(value.toUpperCase());
-              if (direction != null) return direction;
-            } catch (Exception e) {}
-          }
-        }
-      }
-    }
     if (dir != null && dir.length() > 0)
       direction = Direction.valueOf(dir.toUpperCase());
     else if (dir == null) {

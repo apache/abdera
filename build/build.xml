@@ -518,7 +518,8 @@ Working directory: ${work}
         <exclude name="**/*.md5" />
         <exclude name="**/.project" />
         <exclude name="**/feedvalidator.org/**/*" />
-        <exclude name="**/json/**/*" />
+        <exclude name="**/json/src/**/*" />
+        <exclude name="**/dependencies/work/json/**/*" />
       </fileset>
     </copy>
     <zip destfile="${basedir}/${ant.project.name}.${version}.src.zip"

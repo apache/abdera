@@ -80,7 +80,6 @@ public class XmlSignature
     String[] refs = options.getReferences();
     for (String ref : refs) sig.addDocument(ref);
     sig.addKeyInfo(cert);
-    sig.addKeyInfo(cert.getPublicKey());
     sig.sign(signingKey);    
     return (T)domToFom(dom, options);
   }

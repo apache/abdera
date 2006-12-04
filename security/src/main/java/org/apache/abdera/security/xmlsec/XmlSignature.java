@@ -71,7 +71,7 @@ public class XmlSignature
     XMLSignature sig = new XMLSignature(
       domdoc, 
       (baseUri != null) ? baseUri.toString() : "", 
-      XMLSignature.ALGO_ID_SIGNATURE_DSA);
+      options.getSigningAlgorithm());
     dom.appendChild(sig.getElement());
     Transforms transforms = new Transforms(domdoc);
     transforms.addTransform(Transforms.TRANSFORM_ENVELOPED_SIGNATURE);

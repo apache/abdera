@@ -26,6 +26,10 @@ import java.security.cert.X509Certificate;
 public interface SignatureOptions 
   extends SecurityOptions {
 
+  String getSigningAlgorithm();
+  
+  void setSigningAlgorithm(String algorithm);
+  
   /**
    * Return the private key with which to sign the element
    */

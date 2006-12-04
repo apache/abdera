@@ -37,6 +37,7 @@ import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
 
 /**
  * An Atom Publishing Protocol client.
@@ -263,6 +264,16 @@ public abstract class Client {
     SimpleSSLProtocolSocketFactory f = 
       new SimpleSSLProtocolSocketFactory();
     registerFactory(f,port);
+  }
+  
+  public static void registerFactory(
+    SecureProtocolSocketFactory factory, 
+    int port) {
+      Protocol.registerProtocol(
+        "https",
+        new Protocol(
+          "https", 
+          (ProtocolSocketFactory)factory, port));
   }
   
   private static void registerFactory(

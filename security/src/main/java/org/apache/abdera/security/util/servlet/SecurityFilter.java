@@ -17,17 +17,24 @@
 */
 package org.apache.abdera.security.util.servlet;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.CharArrayReader;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 
 import javax.servlet.Filter;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
@@ -36,6 +43,7 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.security.AbderaSecurity;
+import org.apache.abdera.util.io.RewindableInputStream;
 
 public abstract class SecurityFilter 
   implements Filter {
@@ -46,6 +54,9 @@ public abstract class SecurityFilter
   protected SecurityFilter() {
     this.abdera = new Abdera();
     this.security = new AbderaSecurity(abdera);
+  }
+  
+  public void init(FilterConfig config) throws ServletException {
   }
   
   public void destroy() {
@@ -65,7 +76,7 @@ public abstract class SecurityFilter
     } catch (Exception e) {}
     return null;
   }
- 
+  
   public static class BufferingResponseWrapper 
     extends HttpServletResponseWrapper {
     
@@ -136,4 +147,60 @@ public abstract class SecurityFilter
     
   }
 
+  public static class BufferedRequestWrapper 
+  extends HttpServletRequestWrapper {
+  
+  private BufferedServletInputStream bin;
+  private RewindableInputStream rin;
+  private BufferedReader rdr;
+  
+  public BufferedRequestWrapper(HttpServletRequest request) {
+    super(request);
+  }
+
+  @Override
+  public ServletInputStream getInputStream() throws IOException {
+    if (rdr != null) throw new IllegalStateException();
+    if (bin == null) {
+      rin = new RewindableInputStream(super.getInputStream());
+      bin = new BufferedServletInputStream(rin);
+    }
+    return bin;
+  }
+
+  @Override
+  public BufferedReader getReader() throws IOException {
+    if (rdr == null) {
+      String charset = this.getCharacterEncoding();
+      rdr = (charset == null) ?
+        new BufferedReader(new InputStreamReader(getInputStream())) :
+        new BufferedReader(new InputStreamReader(getInputStream(),charset));
+    }
+    return rdr;
+  }
+ 
+  public void reset() throws IOException {
+    if (bin != null) rin.rewind();
+    rdr = null;
+  }
+}
+
+public static class BufferedServletInputStream 
+  extends ServletInputStream {
+
+  private InputStream in;
+  
+  public BufferedServletInputStream(InputStream in) {
+    this.in = in;
+    try {
+      in.mark(in.available());
+    } catch (Exception e) {}
+  }
+  
+  @Override
+  public int read() throws IOException {
+    return in.read();
+  }
+  
+}
 }

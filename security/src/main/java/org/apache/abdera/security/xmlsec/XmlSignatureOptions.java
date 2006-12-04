@@ -32,6 +32,15 @@ public class XmlSignatureOptions
   private PrivateKey signingKey = null;
   private X509Certificate cert = null;
   private List<String> references = null;
+  private String algo = "http://www.w3.org/2000/09/xmldsig#dsa-sha1";
+  
+  public String getSigningAlgorithm() {
+    return algo;
+  }
+  
+  public void setSigningAlgorithm(String algorithm) {
+    this.algo = algorithm;
+  }
   
   protected XmlSignatureOptions(Abdera abdera) {
     super(abdera);

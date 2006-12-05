@@ -24,7 +24,7 @@
   <!-- Header -->
   <div id="banner">
     <h1><a href="http://incubator.apache.org/abdera">Apache Abdera</a></h1>
-    <p>Version 0.1-SNAPSHOT (Incubating)</p>
+    <p>Version 0.2 (Incubating)</p>
     <hr/>
   </div>
   <div id="divider"></div>
@@ -49,7 +49,8 @@
     instance by calling <code>Parser.INSTANCE</code>, or they may create an new
     <code>Parser</code> instance.
     
-    <pre>Parser parser = Parser.INSTANCE;
+    <pre>Abdera abdera = new Abdera();
+Parser parser = abdera.getParser();
 // or
 Parser parser = new FOMParser();
 // or
@@ -62,7 +63,7 @@ Parser parser = new MyCustomParser();</pre>
         
     <pre>URI uri = new URI("http://example.org/feed.xml");
 InputStream in = uri.toURL().openStream();
-Document&lt;Feed&gt; doc = Parser.INSTANCE.parse(in, uri);</pre>
+Document&lt;Feed&gt; doc = parser.parse(in, uri.toString());</pre>
 
     <p>The <code>uri</code> parameter on the <code>parse</code> method establishes
     the Base URI for the parsed document and is used as the basis for relative
@@ -71,16 +72,16 @@ Document&lt;Feed&gt; doc = Parser.INSTANCE.parse(in, uri);</pre>
     <h3>Parsing an Atom Entry</h3>
     <pre>URI uri = new URI("http://example.org/entry.xml");
 InputStream in = uri.toURL().openStream();
-Document&lt;Entry&gt; doc = Parser.INSTANCE.parse(in, uri);</pre>
+Document&lt;Entry&gt; doc = parser.parse(in, uri.toString());</pre>
    
     <h3>Configuring the Parser</h3>
     
     <pre>URI uri = new URI("http://example.org/feed.xml");
 InputStream in = uri.toURL().openStream();
-<b>ParserOptions options = Parser.INSTANCE.getDefaultParserOptions();
+<b>ParserOptions options = parser.getDefaultParserOptions();
 options.setCharset('utf-8');
 //.. set other parser options</b>
-Document&lt;Feed&gt; doc = Parser.INSTANCE.parse(in, uri, options);</pre>
+Document&lt;Feed&gt; doc = parser.parse(in, uri.toString(), options);</pre>
     
     <h2>Creating Atom Feed and Entry Documents</h2>
     
@@ -89,7 +90,8 @@ Document&lt;Feed&gt; doc = Parser.INSTANCE.parse(in, uri, options);</pre>
     either use the default configured Factory by calling <code>Factory.INSTANCE</code>,
     or may create their own Factory instance.</t>
     
-    <pre>Factory factory = Factory.INSTANCE;
+    <pre>Abdera abdera = new Abdera();
+Factory factory = abdera.getFactory();
 // or
 Factory factory = new FOMFactory();
 // or
@@ -97,8 +99,8 @@ Factory factory = new MyCustomFactory();</pre>
 
     <h3>Creating Atom Feed Documents</h3>
     
-    <pre>Feed feed = Factory.INSTANCE.newFeed();
-feed.setId("tag:example.org,2005:/myfeed", false);
+    <pre>Feed feed = factory.newFeed();
+feed.setId("tag:example.org,2005:/myfeed");
 feed.setTitle("My Example Feed");
 // .. set other feed properties
 Document&lt;Feed&gt; doc = feed.getDocument();
@@ -107,8 +109,8 @@ doc.writeTo(System.out); // serializes the feed document to System.out
     
     <h3>Creating Atom Entry Documents</h3>
 
-    <pre>Entry entry = Factory.INSTANCE.newEntry();
-entry.setId("tag:example.org,2005:/myentry", false);
+    <pre>Entry entry = factory.newEntry();
+entry.setId("tag:example.org,2005:/myentry");
 entry.setTitle("My Example Entry");
 // .. set other feed properties
 Document&lt;Entry&gt; doc = entry.getDocument();
@@ -123,15 +125,15 @@ doc.writeTo(System.out); // serializes the entry document to System.out
     
     <pre>URI uri = ...
 InputStream inputStream = ...
-Document&lt;Feed&gt; doc = Parser.INSTANCE.parse(inputStream, uri);
+Document&lt;Feed&gt; doc = parser.parse(inputStream, uri.toString());
 Feed feed = doc.getRoot();
-URI id = feed.getId();
+IRI id = feed.getId();
 Text.Type titleType = feed.getTitleType();
 String title = feed.getTitle();
 
 List&lt;Entry&gt; entries = feed.getEntries();
 for (Entry entry : entries) {
-  URI entryId = entry.getId();
+  IRI entryId = entry.getId();
   Text.Type entryTitleType = entry.getTitleType();
   String entryTitle = entry.getTitle();
 }
@@ -144,31 +146,32 @@ for (Entry entry : entries) {
     
     <pre>URI uri = ...
 InputStream inputStream = ...
-Document&lt;Feed&gt; doc = Parser.INSTANCE.parse(inputStream, uri);
+Document&lt;Feed&gt; doc = parser.parse(inputStream, uri.toString());
 
 // Select the id of the document
-String id = XPath.INSTANCE.valueOf("/a:feed/a:id", doc);
+XPath xpath = abdera.getXPath();
+String id = xpath.valueOf("/a:feed/a:id", doc);
 
 // Select all entries from the document
-List entries = XPath.INSTANCE.valueOf("//a:entry", doc);
+List entries = xpath.valueOf("//a:entry", doc);
 for (Iterator i = entries.iterator(); i.hasNext();) {
   Entry entry = (Entry)i.next();
   //...
 }
 
 // Determine if a feed contains a specific extension
-boolean hasFoo = XPath.INSTANCE.isTrue("//x:foo", doc);
+boolean hasFoo = xpath.isTrue("//x:foo", doc);
 
 // The XPath support works on any element in the FOM
-Entry entry = (Entry)XPath.INSTANCE.selectSingleNode("//a:entry", doc);
-String id = XPath.INSTANCE.valueOf("a:id", entry);</pre>
+Entry entry = (Entry)xpath.selectSingleNode("//a:entry", doc);
+String id = xpath.valueOf("a:id", entry);</pre>
     
     <h2>Using Extensions</h2>
     
     <p>The Feed Object Model is designed to fully and dynamically support 
     extensions to the Atom Feed format.</p>
     
-    <pre>Feed feed = Factory.INSTANCE.newFeed();
+    <pre>Feed feed = factory.newFeed();
 // ... set other feed properties
 feed.addSimpleExtension(
   new QName("urn:foo", "myExtension", "a"), 
@@ -206,10 +209,11 @@ link.setAttributeValue(
     
     <h3>Digitally Signing Atom Documents</h3>
     
-    <pre>Feed feed = Factory.INSTANCE.newFeed();
+    <pre>Feed feed = factory.newFeed();
 PrivateKey myPrivateKey = ...
 X509Certificate myX509Cert = ...
-Signature sig = Signature.INSTANCE;
+AbderaSecurity absec = new AbderaSecurity(abdera);
+Signature sig = absec.getSignature();
 SignatureOptions options = sig.getDefaultSignatureOptions();
 options.setSigningKey(myPrivateKey);
 options.setCertificate(myX509Cert);
@@ -218,10 +222,11 @@ feed = sig.sign(feed, options);
 
     <h3>Encrypting Atom Documents</h3>
     
-    <pre>Feed feed = Factory.INSTANCE.newFeed();
+    <pre>Feed feed = factory.newFeed();
 Key kek = ... // Key encryption key
 Key dek = ... // Data encryption key
-Encryption enc = Encryption.INSTANCE;
+AbderaSecurity absec = new AbderaSecurity(abdera);
+Encryption enc = absec.getEncryption();
 EncryptionOptions options = enc.getDefaultEncryptionOptions();
 options.setKeyEncryptionKey(kek);
 options.setDataEncryptionKey(dek);

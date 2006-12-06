@@ -117,6 +117,7 @@ public class FOMElement
   }
   
   protected Element getWrapped(Element internal) {
+    if (internal == null) return null;
     FOMFactory factory = (FOMFactory) getFactory();
     return factory.getElementWrapper(internal);
   }

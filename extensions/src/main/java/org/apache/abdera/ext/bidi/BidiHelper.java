@@ -29,7 +29,7 @@ import org.apache.abdera.util.io.CharUtils;
  * still details being worked out on the Atom WG list and it's likely that
  * at least one other impl (mozilla) will do something slightly different.</p>
  * 
- * <p>Based on http://www.ietf.org/internet-drafts/draft-snell-atompub-bidi-01.txt</p>
+ * <p>Based on http://www.ietf.org/internet-drafts/draft-snell-atompub-bidi-02.txt</p>
  * 
  * <p>Example:</p>
  * <pre>
@@ -39,14 +39,14 @@ import org.apache.abdera.util.io.CharUtils;
  * </pre>
  * 
  * <p>The getBidi___ elements use the in-scope direction to wrap the text with 
- * the appropriate Unicode control characters. e.g. if dir="rlo", the text is
- * wrapped with the RLO and PDF controls.  If the text already contains the 
+ * the appropriate Unicode control characters. e.g. if dir="rtl", the text is
+ * wrapped with the RLE and PDF controls.  If the text already contains the 
  * control chars, the dir attribute is ignored.</p>
  * 
  * <pre>
  *    org.apache.abdera.Abdera abdera = new org.apache.abdera.Abdera();
  *    org.apache.abdera.model.Feed feed = abdera.getFactory().newFeed();
- *    feed.setAttributeValue("dir", "rlo");
+ *    feed.setAttributeValue("dir", "rtl");
  *    feed.setTitle("Testing");
  *    feed.addCategory("foo");
  *    
@@ -56,12 +56,6 @@ import org.apache.abdera.util.io.CharUtils;
  *    System.out.println(
  *      BidiHelper.getBidiAttributeValue(
  *        feed.getCategories().get(0),"term"));
- *    
- *    // Output: 
- *    //
- *    // > gnitseT
- *    // > oof
- *    //
  * </pre>
  * 
  */
@@ -71,7 +65,7 @@ public final class BidiHelper {
   
   BidiHelper() {}
   
-  public enum Direction { UNSPECIFIED, LTR, RTL, LRO, RLO };
+  public enum Direction { UNSPECIFIED, LTR, RTL};
   
   /**
    * Set the value of dir attribute
@@ -119,8 +113,6 @@ public final class BidiHelper {
     switch (direction) {
       case LTR: return CharUtils.bidiLRE(text);
       case RTL: return CharUtils.bidiRLE(text);
-      case LRO: return CharUtils.bidiLRO(text);
-      case RLO: return CharUtils.bidiRLO(text);
       default:  return text;
     }
   }

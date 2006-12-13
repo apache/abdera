@@ -473,7 +473,7 @@ public class FOMElement
     ParserOptions options = parser.getDefaultParserOptions();
     options.setCharset(getXMLStreamReader().getCharacterEncodingScheme());
     options.setFactory(fomfactory);
-    Document doc = parser.parse(bais, baseUri.toString(), options);
+    Document doc = parser.parse(bais, (baseUri != null) ? baseUri.toString() : null, options);
     return doc.getRoot();
   }
 

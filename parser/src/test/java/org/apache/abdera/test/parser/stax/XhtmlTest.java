@@ -20,6 +20,7 @@ package org.apache.abdera.test.parser.stax;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Div;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 
 import junit.framework.TestCase;
@@ -33,7 +34,8 @@ public class XhtmlTest extends TestCase {
     entry.setContentAsXhtml("<p>Test</p>");
     assertNotNull(entry.getContent());
     assertEquals(entry.getContentType(), Content.Type.XHTML);
-    assertTrue(entry.getContentElement().getValueElement() instanceof Div);
+    Element el = entry.getContentElement().getValueElement();
+    assertTrue(el instanceof Div);
     
     entry = abdera.newEntry();
     entry.setContent("<a><b><c/></b></a>", Content.Type.XML);

@@ -17,24 +17,30 @@
 */
 package org.apache.abdera.test.parser.stax;
 
-import org.apache.abdera.test.parser.stax.AtomConformanceTest;
-import org.apache.abdera.test.parser.stax.FeedParserTest;
-import org.apache.abdera.test.parser.stax.FeedValidatorTest;
-import org.apache.abdera.test.parser.stax.FOMTest;
-import org.apache.abdera.test.parser.stax.ParserTest;
+import org.apache.abdera.Abdera;
+import org.apache.abdera.model.Content;
+import org.apache.abdera.model.Div;
+import org.apache.abdera.model.Entry;
 
-public class TestSuite extends junit.framework.TestSuite {
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite());
-  }
+import junit.framework.TestCase;
 
-  public TestSuite() {
-    addTestSuite(AtomConformanceTest.class);
-    addTestSuite(FeedParserTest.class);
-    addTestSuite(FeedValidatorTest.class);
-    addTestSuite(FOMTest.class);
-    addTestSuite(ParserTest.class);
-    addTestSuite(ConcurrencyTest.class);
-    addTestSuite(XhtmlTest.class);
+public class XhtmlTest extends TestCase {
+ 
+  public void testXhtml() throws Exception {
+    
+    Abdera abdera = new Abdera();
+    Entry entry = abdera.newEntry();
+    entry.setContentAsXhtml("<p>Test</p>");
+    assertNotNull(entry.getContent());
+    assertEquals(entry.getContentType(), Content.Type.XHTML);
+    assertTrue(entry.getContentElement().getValueElement() instanceof Div);
+    
+    entry = abdera.newEntry();
+    entry.setContent("<a><b><c/></b></a>", Content.Type.XML);
+    assertNotNull(entry.getContent());
+    assertEquals(entry.getContentType(), Content.Type.XML);
+    assertNotNull(entry.getContentElement().getValueElement());
+    
   }
+  
 }

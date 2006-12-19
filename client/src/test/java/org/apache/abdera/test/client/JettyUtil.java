@@ -46,11 +46,11 @@ public class JettyUtil {
     server.setHandler(handler);
   }
   
-  public static void addServlet(String path, String _class) {
+  public static void addServlet(String _class, String path) {
     try {
       if (server == null) initServer();
     } catch (Exception e) {}
-    handler.addServletWithMapping(path, _class);
+    handler.addServletWithMapping(_class, path);
   }
   
   public static void start() throws Exception {

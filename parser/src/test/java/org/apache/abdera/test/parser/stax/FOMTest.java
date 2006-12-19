@@ -734,4 +734,10 @@ public class FOMTest extends TestCase   {
     assertEquals(entry.getContentType(), Content.Type.HTML);
   }
   
+  public void testSimpleExtension() throws Exception {
+    Abdera abdera = new Abdera();
+    Entry entry = abdera.newEntry();    
+    entry.setDraft(true);  // this will create an app:control element
+    assertNull(entry.getControl().getSimpleExtension(new QName("urn:foo", "foo")));
+  }
 }

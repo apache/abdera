@@ -26,6 +26,7 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.parser.stax.FOMContent;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.iri.IRI;
 import org.apache.abdera.util.iri.IRISyntaxException;
@@ -57,6 +58,7 @@ public class FOMContent
     OMFactory factory)
       throws OMException {
     super(name, namespace, parent, factory);
+    init(type);
   }
   
   public FOMContent(
@@ -337,5 +339,12 @@ public class FOMContent
         return el.getAttributeValue(LANG);
     }
     return super.getLanguage();
+  }
+  
+  @Override
+  public Object clone() {
+    FOMContent content = (FOMContent) super.clone();
+    content.type = this.type;
+    return content;
   }
 }

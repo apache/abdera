@@ -216,4 +216,11 @@ public class FOMText
     return super.getLanguage();
   }
 
+  @Override
+  public Object clone() {
+    FOMText text = (FOMText) super.clone();
+    text.type = type;
+    return text;
+  }
+
 }

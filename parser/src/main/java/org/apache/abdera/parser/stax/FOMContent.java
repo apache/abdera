@@ -57,6 +57,7 @@ public class FOMContent
     OMFactory factory)
       throws OMException {
     super(name, namespace, parent, factory);
+    init(type);
   }
   
   public FOMContent(
@@ -338,4 +339,13 @@ public class FOMContent
     }
     return super.getLanguage();
   }
+
+  @Override
+  public Object clone() {
+    FOMContent content = (FOMContent) super.clone();
+    content.type = this.type;
+    return content;
+  }
+  
+  
 }

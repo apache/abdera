@@ -724,4 +724,13 @@ public class FOMTest extends TestCase   {
     }
   }
   
+  public void testContentClone() throws Exception {
+    String s = "<entry xmlns='http://www.w3.org/2005/Atom'><content type='html'>test</content></entry>";
+    ByteArrayInputStream in = new ByteArrayInputStream(s.getBytes());
+    Abdera abdera = new Abdera();
+    Parser parser = abdera.getParser();
+    Document doc = parser.parse(in);
+    Entry entry = (Entry)(doc.getRoot().clone());
+    assertEquals(entry.getContentType(), Content.Type.HTML);
+  }
 }

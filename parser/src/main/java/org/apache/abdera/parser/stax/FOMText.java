@@ -22,6 +22,7 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Text;
+import org.apache.abdera.parser.stax.FOMText;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.iri.IRI;
 import org.apache.abdera.util.iri.IRISyntaxException;
@@ -216,4 +217,11 @@ public class FOMText
     return super.getLanguage();
   }
 
+
+  @Override
+  public Object clone() {
+    FOMText text = (FOMText) super.clone();
+    text.type = type;
+    return text;
+  }
 }

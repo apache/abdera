@@ -155,7 +155,7 @@ public class FOMExtensibleElement
   
   public String getSimpleExtension(QName qname) {
     Element el  = getExtension(qname);
-    return el.getText();
+    return (el != null) ? el.getText() : null;
   }
   
   public String getSimpleExtension(

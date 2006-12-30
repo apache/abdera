@@ -329,6 +329,13 @@ public class AppTest extends JettyTest {
       );
   }  
   
+  public void testRequestOptions() throws Exception {
+    Client client = new CommonsClient();
+    RequestOptions options = client.getDefaultRequestOptions();
+    options.setIfModifiedSince(new Date());
+    assertNotNull(options.getIfModifiedSince());
+  }
+  
   public void testAppClient() throws Exception {
     Client client = new CommonsClient();
     Entry entry = getFactory().newEntry();

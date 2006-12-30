@@ -180,7 +180,8 @@ public class RequestOptions
   public void setDateHeader(String header, Date value) {
     if (value != null) 
       setHeader(header, DateUtil.formatDate(value));
-    removeHeaders(header);
+    else 
+      removeHeaders(header);
   }
   
   /**

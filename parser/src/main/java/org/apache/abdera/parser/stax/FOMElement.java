@@ -31,7 +31,7 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
+//import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Base;
@@ -93,12 +93,9 @@ public class FOMElement
     OMFactory factory) 
       throws OMException {
     super(
-        qname.getLocalPart(), 
-        factory.createOMNamespace(
-          qname.getNamespaceURI(), 
-          qname.getPrefix()),
-        parent,
-        factory);
+      qname.getLocalPart(), 
+      getOrCreateNamespace(qname,parent,factory),
+      parent,factory);
   }
 
   public FOMElement(
@@ -116,6 +113,21 @@ public class FOMElement
         factory);
   }
     
+  private static OMNamespace getOrCreateNamespace(
+    QName qname, 
+    OMContainer parent, 
+    OMFactory factory) {
+      String namespace = qname.getNamespaceURI();
+      String prefix = qname.getPrefix();
+      if (parent != null && parent instanceof OMElement) {
+        OMNamespace ns = ((OMElement)parent).findNamespace(namespace, prefix);
+        if (ns != null) return ns;
+      }
+      return factory.createOMNamespace(
+        qname.getNamespaceURI(), 
+        qname.getPrefix());
+  }
+  
   protected Element getWrapped(Element internal) {
     if (internal == null) return null;
     FOMFactory factory = (FOMFactory) getFactory();
@@ -589,20 +601,23 @@ public class FOMElement
     return (Factory) this.factory;
   }
 
-  @Override
-  protected void internalSerialize(
-    XMLStreamWriter writer, 
-    boolean bool) throws XMLStreamException {
-    if (this.getNamespace() != null)
-      this.declareNamespace(this.getNamespace());
-    Iterator i = this.getAllAttributes();
-    while (i.hasNext()) {
-      OMAttribute attr = (OMAttribute) i.next();
-      if (attr.getNamespace() != null)
-        this.declareNamespace(attr.getNamespace());
-    }
-    super.internalSerialize(writer, bool);
-  }
+// This appears to no longer be necessary with Axiom 1.2
+//
+//  @Override
+//  protected void internalSerialize(
+//    XMLStreamWriter writer, 
+//    boolean bool) throws XMLStreamException {
+//    if (this.getNamespace() != null) {
+//      this.declareNamespace(this.getNamespace());
+//    }
+//    Iterator i = this.getAllAttributes();
+//    while (i.hasNext()) {
+//      OMAttribute attr = (OMAttribute) i.next();
+//      if (attr.getNamespace() != null)
+//        this.declareNamespace(attr.getNamespace());
+//    }
+//    super.internalSerialize(writer, bool);
+//  }
   
   public void addComment(String value) {
     factory.createOMComment(this, value);

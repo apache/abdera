@@ -291,7 +291,7 @@ public class FOMBuilder
                 value, namespace);
       }
     }
-}
+  }  
   
   @Override
   protected void endElement() {

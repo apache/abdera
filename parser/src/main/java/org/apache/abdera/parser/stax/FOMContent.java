@@ -29,7 +29,7 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.iri.IRI;
 import org.apache.abdera.util.iri.IRISyntaxException;
-import org.apache.axiom.attachments.DataHandlerUtils;
+import org.apache.axiom.attachments.utils.DataHandlerUtils;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;

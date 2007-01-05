@@ -115,7 +115,7 @@ public class FOMElement
         builder,
         factory);
   }
-  
+    
   protected Element getWrapped(Element internal) {
     if (internal == null) return null;
     FOMFactory factory = (FOMFactory) getFactory();
@@ -435,6 +435,22 @@ public class FOMElement
     text.setValueElement(value);
     setTextElement(qname, text, false);
     return text;
+  }
+  
+  public String getText() {
+    StringBuffer buf = new StringBuffer();
+    Iterator i = getChildren();
+    while (i.hasNext()) {
+      OMNode node = (OMNode) i.next();
+      if (node instanceof OMText) {
+        buf.append(((OMText)node).getText());
+      } else {
+        // for now, let's ignore other elements. eventually, we 
+        // should make this work like innerHTML in browsers... stripping
+        // out all markup but leaving all text, even in child nodes
+      }
+    }
+    return buf.toString();
   }
   
   protected String getText(QName qname) {

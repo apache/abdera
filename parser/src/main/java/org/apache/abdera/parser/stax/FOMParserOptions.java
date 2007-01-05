@@ -26,6 +26,7 @@ public class FOMParserOptions
 
   public FOMParserOptions(Factory factory) {
     this.factory = factory;
+    this.detect = true;
   }
   
   protected void initFactory() {

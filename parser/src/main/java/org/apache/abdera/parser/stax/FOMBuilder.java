@@ -63,6 +63,11 @@ public class FOMBuilder
       this.document = (OMDocument) factory.newDocument();
       this.parserOptions = parserOptions;
       this.fomfactory = factory;
+      String enc = parser.getCharacterEncodingScheme();
+      document.setCharsetEncoding(enc != null ? enc : "utf-8");
+      document.setXMLVersion(
+        parser.getVersion() != null ? 
+          parser.getVersion() : "1.0");
       if (parserOptions != null) {
         ParseFilter parseFilter = parserOptions.getParseFilter();
         if (parseFilter != null) {
@@ -245,19 +250,10 @@ public class FOMBuilder
     }
   }
   
-  private void initDocument(String name) {
-    fomDocument = (Document) document;
-    String enc = parser.getCharacterEncodingScheme();
-    getDocument().setCharsetEncoding(enc != null ? enc : "utf-8");
-    getDocument().setXMLVersion(
-      parser.getVersion() != null ? 
-        parser.getVersion() : "1.0");
-  }
-  
   protected OMElement constructNode(OMContainer parent, String name) {
     OMElement element = null;
     if (fomDocument == null) {
-      initDocument(name);
+      fomDocument = (Document) document;
       parent = (OMContainer) fomDocument;
     }
     QName qname = parser.getName();

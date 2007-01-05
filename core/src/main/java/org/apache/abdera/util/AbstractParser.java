@@ -36,6 +36,7 @@ public abstract class AbstractParser
   implements Parser {
 
   protected final Abdera abdera;
+  protected ParserOptions options;
   
   protected AbstractParser() {
     this(new Abdera());
@@ -73,7 +74,7 @@ public abstract class AbstractParser
     ParserOptions options) 
       throws ParseException, 
              IRISyntaxException {
-    return parse(in, (base != null) ? base : null, options);
+    return parse(in, base, options);
   }
   
   public <T extends Element>Document<T> parse(
@@ -90,6 +91,38 @@ public abstract class AbstractParser
     return parse(in, base, getDefaultParserOptions());
   }
 
-  public abstract ParserOptions getDefaultParserOptions();
+  public synchronized ParserOptions getDefaultParserOptions() {
+    if (options == null) options = initDefaultParserOptions();
+
+    // Make a copy of the options, so that changes to it don't result in
+    // changes to the Parser's defaults.  Also, this allows us to remain
+    // thread safe without having to make ParseOptions implementations
+    // synchronized.
+
+    try {
+      return (ParserOptions) options.clone();
+    } catch (CloneNotSupportedException cnse) {
+      // This shouldn't actually happen
+      throw new RuntimeException(cnse);
+    }
+  }
+  
+  protected abstract ParserOptions initDefaultParserOptions();
+
+  public synchronized void setDefaultParserOptions(ParserOptions options) {
+    // Ok, we need to make a defensive copy of the options, since otherwise
+    // the caller still has access to the object, which means our access to
+    // it isn't certain to be thread safe.
+
+    try {
+      this.options = 
+        (options != null) ? 
+          (ParserOptions) options.clone() : 
+          initDefaultParserOptions();
+    } catch (CloneNotSupportedException cnse) {
+      // This shouldn't actually happen
+      throw new RuntimeException(cnse);
+    }
+  }
   
 }

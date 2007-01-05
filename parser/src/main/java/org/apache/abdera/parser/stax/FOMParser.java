@@ -47,13 +47,6 @@ public class FOMParser
     super(abdera);
   }
   
-  /**
-   * The current set of default ParserOptions.
-   *
-   * This field is protected by synchronizing on "this".
-   */
-  protected ParserOptions options = null;
-  
   private FOMFactory getFomFactory(ParserOptions options) {
     FOMFactory factory = 
       (options != null && options.getFactory() != null) ? 
@@ -68,52 +61,51 @@ public class FOMParser
   
   private <T extends Element>Document<T> getDocument(
     FOMBuilder builder, 
-    IRI base) {
-      Document<T> document = builder.getFomDocument();
-      try {
-        document.setBaseUri(base.toString());
-      } catch (Exception e) {}
-      return document;
-  }
-  
-  private void setCharset(ParserOptions options, String charset, Document doc) {
-    if (charset != null) doc.setCharset(charset);
-    if (options.getCharset() != null) {
-      ((OMDocument)doc).setCharsetEncoding(options.getCharset());
-    }    
-  }
-  
-  public <T extends Element>Document<T> parse(
-    InputStream in, 
-    String base, 
-    ParserOptions options)
+    IRI base, 
+    ParserOptions options) 
       throws ParseException {
-    Document<T> document = null;
-    if (in == null)
-      throw new IllegalArgumentException("InputStream must not be null");
+    Document<T> document = builder.getFomDocument();
     try {
-      String charset = (options != null) ? options.getCharset() : null;
-      boolean detect = (options != null) ? options.getAutodetectCharset() : true;
-      if (charset == null && detect) {
-        FOMSniffingInputStream sin = 
-          (in instanceof FOMSniffingInputStream) ? 
-            (FOMSniffingInputStream)in : 
-            new FOMSniffingInputStream(in);
-        charset = sin.getEncoding();
-        in = sin;
-      }
-      XMLStreamReader xmlreader = StAXUtils.createXMLStreamReader(in);
-      if (options != null && charset != null) options.setCharset(charset);
-      FOMFactory factory = getFomFactory(options);
-      FOMBuilder builder = new FOMBuilder(factory, xmlreader, options);
-      document = getDocument(builder, (base != null) ? new IRI(base) : null);
-      setCharset(options, xmlreader.getCharacterEncodingScheme(), document);
+      if (base != null)
+        document.setBaseUri(base.toString());
+      if (options != null && options.getCharset() != null)
+        ((OMDocument)document).setCharsetEncoding(options.getCharset());
     } catch (Exception e) {
       if (!(e instanceof ParseException))
         e = new ParseException(e);
       throw (ParseException)e;
     }
     return document;
+  }
+    
+  public <T extends Element>Document<T> parse(
+    InputStream in, 
+    String base, 
+    ParserOptions options)
+      throws ParseException {
+    if (in == null)
+      throw new IllegalArgumentException("InputStream must not be null");
+    try {
+      if (options == null) options = getDefaultParserOptions();
+      String charset = options.getCharset();
+      if (charset == null && options.getAutodetectCharset()) {
+        FOMSniffingInputStream sin = 
+          (in instanceof FOMSniffingInputStream) ? 
+            (FOMSniffingInputStream)in : 
+            new FOMSniffingInputStream(in);
+        charset = sin.getEncoding();
+        if (charset != null) options.setCharset(charset);
+        in = sin;
+      }
+      XMLStreamReader xmlreader = (charset == null) ? 
+        StAXUtils.createXMLStreamReader(in) : 
+        StAXUtils.createXMLStreamReader(in, charset); 
+      return parse(xmlreader, base, options);
+    } catch (Exception e) {
+      if (!(e instanceof ParseException))
+        e = new ParseException(e);
+      throw (ParseException)e;
+    }
   }
 
   public <T extends Element> Document<T> parse(
@@ -121,52 +113,40 @@ public class FOMParser
     String base, 
     ParserOptions options) 
       throws ParseException {
-    Document<T> document = null;
     if (in == null)
       throw new IllegalArgumentException("Reader must not be null");
     try {
-      FOMFactory factory = getFomFactory(options);
-      XMLStreamReader xmlreader = StAXUtils.createXMLStreamReader(in);
-      FOMBuilder builder = new FOMBuilder(factory, xmlreader, options);
-      document = getDocument(builder, base != null ? new IRI(base) : null);
-      setCharset(options, xmlreader.getCharacterEncodingScheme(), document);
+      if (options == null) options = getDefaultParserOptions();
+      return parse(StAXUtils.createXMLStreamReader(in), base, options);
     } catch (Exception e) {
       if (!(e instanceof ParseException))
         e = new ParseException(e);
       throw (ParseException)e;
     }
-    return document;
   }
   
-  @Override
-  public synchronized ParserOptions getDefaultParserOptions() {
-    if (options == null)
-      options = new FOMParserOptions(getFactory());
-
-    // Make a copy of the options, so that changes to it don't result in
-    // changes to the Parser's defaults.  Also, this allows us to remain
-    // thread safe without having to make ParseOptions implementations
-    // synchronized.
-
+  private <T extends Element> Document<T> parse(
+    XMLStreamReader reader, 
+    String base,
+    ParserOptions options)
+      throws ParseException {
     try {
-      return (ParserOptions) options.clone();
-    } catch (CloneNotSupportedException cnse) {
-      // This shouldn't actually happen
-      throw new RuntimeException(cnse);
+      FOMBuilder builder = 
+        new FOMBuilder(
+          getFomFactory(options), 
+          reader, 
+          options);
+      return getDocument(builder, base != null ? new IRI(base) : null, options);
+    } catch (Exception e) {
+      if (!(e instanceof ParseException))
+        e = new ParseException(e);
+      throw (ParseException)e;
     }
   }
 
-  public synchronized void setDefaultParserOptions(ParserOptions options) {
-    // Ok, we need to make a defensive copy of the options, since otherwise
-    // the caller still has access to the object, which means our access to
-    // it isn't certain to be thread safe.
-
-    try {
-      this.options = (ParserOptions) options.clone();
-    } catch (CloneNotSupportedException cnse) {
-      // This shouldn't actually happen
-      throw new RuntimeException(cnse);
-    }
+  @Override
+  protected ParserOptions initDefaultParserOptions() {
+    return new FOMParserOptions(getFactory());
   }
 
 }

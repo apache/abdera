@@ -57,12 +57,12 @@ public class MimeTypeHelper {
           return true;
     boolean answer = false;
     try {
-      MimeType mta = new MimeType(a);
-      MimeType mtb = new MimeType(b);
+      MimeType mta = new MimeType(a.toLowerCase());
+      MimeType mtb = new MimeType(b.toLowerCase());
       return isMatch(mta,mtb);
     } catch (Exception e) {}
     return answer;
-  }
+  }  
   
   /**
    * Returns true if media type a matches media type b
@@ -96,6 +96,36 @@ public class MimeTypeHelper {
    */
   public static boolean isAtom(String a) {
     return isMatch(Constants.ATOM_MEDIA_TYPE, a);
+  }
+  
+  /**
+   * Returns true if media type a specifically identifies an Atom entry document
+   */
+  public static boolean isEntry(String a) {
+    try {
+      MimeType mta = new MimeType(a.toLowerCase());
+      MimeType mtb = new MimeType(Constants.ATOM_MEDIA_TYPE);
+      if (isMatch(mta,mtb)) {
+        String type = mta.getParameter("type");
+        return (type != null && type.equalsIgnoreCase("entry"));
+      }
+    } catch (Exception e) {}
+    return false;
+  }
+  
+  /**
+   * Returns true if media type a explicitly identifies an Atom feed document
+   */
+  public static boolean isFeed(String a) {
+    try {
+      MimeType mta = new MimeType(a.toLowerCase());
+      MimeType mtb = new MimeType(Constants.ATOM_MEDIA_TYPE);
+      if (isMatch(mta,mtb)) {
+        String type = mta.getParameter("type");
+        return (type != null && type.equalsIgnoreCase("feed"));
+      }
+    } catch (Exception e) {}
+    return false;
   }
   
   /**
@@ -155,8 +185,10 @@ public class MimeTypeHelper {
         type = (mt != null) ? mt.toString() : null;
       }
       if (type == null) {
-        if (el instanceof Feed || el instanceof Entry)
+        if (el instanceof Feed)
           type = Constants.ATOM_MEDIA_TYPE;
+        else if (el instanceof Entry)
+          type = Constants.ATOM_MEDIA_TYPE + ";type=entry";
         else if (el instanceof Service)
           type = Constants.APP_MEDIA_TYPE;
         else if (el instanceof Categories)

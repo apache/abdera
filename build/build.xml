@@ -141,7 +141,7 @@ Working directory: ${work}
           <available file="${dependencies}/${axiom.impl.jar}" />
           <available file="${dependencies}/${jaxen.jar}" />
           <available file="${dependencies}/${log4j.jar}" />
-          <available file="${dependencies}/${stax.jar}" />
+          <!--available file="${dependencies}/${stax.jar}" /-->
           <available file="${dependencies}/${stax.api.jar}" />
           <available file="${dependencies}/${commons.logging.jar}" />
           <available file="${dependencies}/${commons.codec.jar}" />
@@ -559,9 +559,9 @@ Working directory: ${work}
       <get src="${log4j.dir}/${log4j.jar}"
            dest="${dependencies}/${log4j.jar}"
            usetimestamp="true" />
-      <get src="${stax.dir}/${stax.jar}"
+      <!--get src="${stax.dir}/${stax.jar}"
            dest="${dependencies}/${stax.jar}"
-           usetimestamp="true" />
+           usetimestamp="true" /-->
       <get src="${stax.dir}/${stax.api.jar}"
            dest="${dependencies}/${stax.api.jar}"
            usetimestamp="true" />

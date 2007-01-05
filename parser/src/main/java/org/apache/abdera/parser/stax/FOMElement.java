@@ -545,11 +545,12 @@ public class FOMElement
   protected OMElement _copyElement(OMElement src, OMElement dest) {
     for (Iterator i = src.getAllAttributes(); i.hasNext();) {
       OMAttribute attr = (OMAttribute) i.next();
+      dest.addAttribute(attr);
       dest.addAttribute(
-        attr.getLocalName(), 
-        attr.getAttributeValue(), 
-        (attr.getNamespace() != null) ? 
-          dest.declareNamespace(attr.getNamespace()) : null);
+        factory.createOMAttribute(
+          attr.getLocalName(), 
+          attr.getNamespace(), 
+          attr.getAttributeValue()));
     }
     for (Iterator i = src.getChildren(); i.hasNext();) {
       OMNode node = (OMNode) i.next();

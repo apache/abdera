@@ -197,7 +197,7 @@ public interface Entry
 
   /**
    * Sets the content for this entry as @type="html"
-   * @param value The text value of the content. Special characters will be escaped (e.g. & will become &amp;)
+   * @param value The text value of the content. Special characters will be escaped (e.g. &amp; will become &amp;amp;)
    * @return The newly created atom:content
    */
   Content setContentAsHtml(String value);

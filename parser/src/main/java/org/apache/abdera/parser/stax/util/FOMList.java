@@ -109,7 +109,7 @@ public class FOMList<T>
   }
 
   public boolean addAll(int index, Collection c) {
-    return false;
+    throw new UnsupportedOperationException();
   }
   
   public void clear() {

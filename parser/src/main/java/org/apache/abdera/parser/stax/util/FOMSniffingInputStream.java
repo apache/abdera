@@ -63,8 +63,8 @@ public class FOMSniffingInputStream
     return encoding;
   }
   
-  private boolean equals(byte[] a1, int start, int len, byte[] a2) {
-    for (int n = start, i = 0; n < start + (len - start); n++, i++) {  
+  private boolean equals(byte[] a1, int len, byte[] a2) {
+    for (int n = 0, i = 0; n < len; n++, i++) {  
       if (a1[n] != a2[i]) return false;
     }
     return true;
@@ -75,32 +75,32 @@ public class FOMSniffingInputStream
     byte[] bom = new byte[4];
     pin.peek(bom);
     String charset = null;
-    if (equals(bom,0,4,UTF32be)) {
+    if (equals(bom,4,UTF32be)) {
       bomset = true;
       return "utf-32be";
-    } else if (equals(bom,0,4,UTF32le)) {
+    } else if (equals(bom,4,UTF32le)) {
       bomset = true;
       return "utf-32le";
-    } else if ((equals(bom,0,4,INVALID1)) ||
-               (equals(bom,0,4,INVALID2))) {
+    } else if ((equals(bom,4,INVALID1)) ||
+               (equals(bom,4,INVALID2))) {
       bomset = true;
       return null;
-    } else if (equals(bom,0,2,UTF16be)) {
+    } else if (equals(bom,2,UTF16be)) {
       bomset = true;
       return "utf-16be";
-    } else if (equals(bom,0,2,UTF16le)) {
+    } else if (equals(bom,2,UTF16le)) {
       bomset = true;
       return "utf-16le";
-    } else if (equals(bom,0,3,UTF8))  {
+    } else if (equals(bom,3,UTF8))  {
       bomset = true;
       return "utf-8";
-    } else if (equals(bom,0,4,UTF32be2)) {
+    } else if (equals(bom,4,UTF32be2)) {
       charset = "utf-32be";
-    } else if (equals(bom,0,4,UTF32le2)) {
+    } else if (equals(bom,4,UTF32le2)) {
       charset = "utf-32le";
-    } else if (equals(bom,0,4,UTF16be2)) {
+    } else if (equals(bom,4,UTF16be2)) {
       charset = "utf-16be";
-    } else if (equals(bom,0,4,UTF16le2)) {
+    } else if (equals(bom,4,UTF16le2)) {
       charset = "utf-16le";
     }
     bomset = false;

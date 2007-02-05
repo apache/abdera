@@ -485,8 +485,8 @@ public class FOMElement
       OMAttribute attr = (OMAttribute) i.next();
       String namespace = 
         (attr.getNamespace() != null) ? 
-          attr.getNamespace().getName() : "";
-      if (!namespace.equals(getNamespace().getName()) &&
+          attr.getNamespace().getNamespaceURI() : "";
+      if (!namespace.equals(getNamespace().getNamespaceURI()) &&
           !namespace.equals(""))
         list.add(attr.getQName());
     }

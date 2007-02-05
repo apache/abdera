@@ -28,6 +28,8 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.util.iri.IRI;
 import org.apache.abdera.util.iri.IRISyntaxException;
+import org.apache.abdera.util.lang.InvalidLangTagSyntax;
+import org.apache.abdera.util.lang.Lang;
 
 public abstract class ElementWrapper 
   implements Element {
@@ -108,6 +110,10 @@ public abstract class ElementWrapper
 
   public String getLanguage() {
     return internal.getLanguage();
+  }
+  
+  public Lang getLanguageTag() throws InvalidLangTagSyntax {
+    return internal.getLanguageTag();
   }
 
   public Locale getLocale() {

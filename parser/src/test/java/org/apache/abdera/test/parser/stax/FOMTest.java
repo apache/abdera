@@ -63,6 +63,7 @@ import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.util.Version;
 import org.apache.abdera.util.filter.BlackListParseFilter;
 import org.apache.abdera.util.filter.WhiteListParseFilter;
+import org.apache.abdera.util.lang.Lang;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
 import org.apache.abdera.xpath.XPath;
@@ -739,5 +740,17 @@ public class FOMTest extends TestCase   {
     Entry entry = abdera.newEntry();    
     entry.setDraft(true);  // this will create an app:control element
     assertNull(entry.getControl().getSimpleExtension(new QName("urn:foo", "foo")));
+  }
+  
+  public void testLang() throws Exception {
+    Abdera abdera = new Abdera();
+    Entry entry = abdera.newEntry();
+    entry.setLanguage("en-US");
+    assertEquals(entry.getLanguage(),"en-US");
+    Lang lang = entry.getLanguageTag();
+    assertNotNull(lang);
+    assertEquals(lang.getPrimary(),"en");
+    assertEquals(lang.getSubtag(0), "US");
+    assertEquals(lang.getLocale(), java.util.Locale.US);
   }
 }

@@ -52,6 +52,8 @@ import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.util.iri.IRI;
 import org.apache.abdera.util.iri.IRISyntaxException;
+import org.apache.abdera.util.lang.InvalidLangTagSyntax;
+import org.apache.abdera.util.lang.Lang;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMComment;
 import org.apache.axiom.om.OMContainer;
@@ -204,6 +206,11 @@ public class FOMElement
   @SuppressWarnings("unchecked")
   public <T extends Element>T getFirstChild(QName qname) {
     return (T)getWrapped((Element)this.getFirstChildWithName(qname));
+  }
+  
+  public Lang getLanguageTag() throws InvalidLangTagSyntax {
+    String lang = getLanguage();
+    return (lang != null) ? new Lang(lang) : null;
   }
   
   public String getLanguage() {

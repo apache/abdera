@@ -24,6 +24,8 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.util.iri.IRI;
 import org.apache.abdera.util.iri.IRISyntaxException;
+import org.apache.abdera.util.lang.InvalidLangTagSyntax;
+import org.apache.abdera.util.lang.Lang;
 
 /**
  * Root interface for all elements in the Feed Object Model
@@ -94,6 +96,11 @@ public interface Element
    * @return The xml:lang value
    */
   String getLanguage();
+  
+  /**
+   * Returns the value of the xml:lang attribute as a Lang object
+   */
+  Lang getLanguageTag() throws InvalidLangTagSyntax;
   
   /**
    * Returns a Locale object created from the <code>xml:lang</code> attribute

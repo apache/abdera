@@ -38,7 +38,7 @@ public class FOMControl
     super(Constants.CONTROL);
   }
   
-  public FOMControl(
+  protected FOMControl(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -47,14 +47,14 @@ public class FOMControl
     super(name, namespace, parent, factory);
   }
   
-  public FOMControl(
+  protected FOMControl(
     QName qname,
     OMContainer parent,
     OMFactory factory) {
       super(qname, parent, factory);
   }
   
-  public FOMControl(
+  protected FOMControl(
     QName qname,
     OMContainer parent, 
     OMFactory factory,
@@ -62,7 +62,7 @@ public class FOMControl
       super(qname, parent, factory, builder);
   }
   
-  public FOMControl(
+  protected FOMControl(
     OMContainer parent, 
     OMFactory factory, 
     OMXMLParserWrapper builder) 
@@ -70,7 +70,7 @@ public class FOMControl
     super(CONTROL, parent, factory, builder);
   }
 
-  public FOMControl(
+  protected FOMControl(
     OMContainer parent, 
     OMFactory factory) 
       throws OMException {

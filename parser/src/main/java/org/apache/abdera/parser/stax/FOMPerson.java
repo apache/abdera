@@ -60,7 +60,7 @@ public class FOMPerson
     setUri(uri);
   }
   
-  public FOMPerson(
+  protected FOMPerson(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -69,7 +69,7 @@ public class FOMPerson
     super(name, namespace, parent, factory);
   }
   
-  public FOMPerson(
+  protected FOMPerson(
     QName qname, 
     OMContainer parent, 
     OMFactory factory) 
@@ -77,7 +77,7 @@ public class FOMPerson
     super(qname, parent, factory);
   }
 
-  public FOMPerson(
+  protected FOMPerson(
     QName qname, 
     OMContainer parent, 
     OMFactory factory,

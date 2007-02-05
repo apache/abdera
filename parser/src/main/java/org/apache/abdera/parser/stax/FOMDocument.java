@@ -60,31 +60,31 @@ public class FOMDocument<T extends Element>
     super();
   }
 
-  public FOMDocument(
+  protected FOMDocument(
     OMElement documentElement, 
     OMXMLParserWrapper parserWrapper, 
     OMFactory factory) {
       super(documentElement, parserWrapper, factory);
   }
 
-  public FOMDocument(
+  protected FOMDocument(
     OMElement documentElement, 
     OMXMLParserWrapper parserWrapper) {
       super(documentElement, parserWrapper);
   }
 
-  public FOMDocument(
+  protected FOMDocument(
     OMFactory factory) {
       super(factory);
   }
 
-  public FOMDocument(
+  protected FOMDocument(
     OMXMLParserWrapper parserWrapper, 
     OMFactory factory) {
       super(parserWrapper, factory);
   }
 
-  public FOMDocument(
+  protected FOMDocument(
     OMXMLParserWrapper parserWrapper) {
       super(parserWrapper);
   }

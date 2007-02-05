@@ -59,7 +59,7 @@ public class FOMCollection
     setAccept(accepts);
   }
   
-  public FOMCollection(
+  protected FOMCollection(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -68,14 +68,14 @@ public class FOMCollection
     super(name, namespace, parent, factory);
   }
   
-  public FOMCollection(
+  protected FOMCollection(
     QName qname,
     OMContainer parent,
     OMFactory factory) {
       super(qname, parent, factory);
   }
   
-  public FOMCollection(
+  protected FOMCollection(
     QName qname,
     OMContainer parent, 
     OMFactory factory,
@@ -83,13 +83,13 @@ public class FOMCollection
       super(qname, parent, factory, builder);
   }
   
-  public FOMCollection(
+  protected FOMCollection(
     OMContainer parent,
     OMFactory factory) {
       super(COLLECTION, parent, factory);
   }
 
-  public FOMCollection(
+  protected FOMCollection(
     OMContainer parent,
     OMFactory factory,
     OMXMLParserWrapper builder) {

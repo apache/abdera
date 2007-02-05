@@ -50,7 +50,7 @@ public class FOMGenerator
     setUri(uri);
   }
   
-  public FOMGenerator(
+  protected FOMGenerator(
       String name,
       OMNamespace namespace,
       OMContainer parent,
@@ -59,14 +59,14 @@ public class FOMGenerator
       super(name, namespace, parent, factory);
     }
   
-  public FOMGenerator(
+  protected FOMGenerator(
     QName qname,
     OMContainer parent,
     OMFactory factory) {
       super(qname, parent, factory);
   }
   
-  public FOMGenerator(
+  protected FOMGenerator(
     QName qname,
     OMContainer parent, 
     OMFactory factory,
@@ -74,14 +74,14 @@ public class FOMGenerator
       super(qname, parent, factory, builder);
   }
   
-  public FOMGenerator(
+  protected FOMGenerator(
     OMContainer parent, 
     OMFactory factory) 
       throws OMException {
     super(GENERATOR, parent, factory);
   }
 
-  public FOMGenerator(
+  protected FOMGenerator(
     OMContainer parent, 
     OMFactory factory,
     OMXMLParserWrapper builder) 

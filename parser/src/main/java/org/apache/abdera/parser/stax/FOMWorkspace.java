@@ -48,7 +48,7 @@ public class FOMWorkspace
     setTitle(title);
   }
   
-  public FOMWorkspace(
+  protected FOMWorkspace(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -57,7 +57,7 @@ public class FOMWorkspace
     super(name, namespace, parent, factory);
   }
   
-  public FOMWorkspace(
+  protected FOMWorkspace(
     QName qname,
     OMContainer parent, 
     OMFactory factory) 
@@ -65,7 +65,7 @@ public class FOMWorkspace
     super(qname, parent, factory);
   }
 
-  public FOMWorkspace(
+  protected FOMWorkspace(
     QName qname,
     OMContainer parent, 
     OMFactory factory,
@@ -74,14 +74,14 @@ public class FOMWorkspace
     super(qname, parent, factory, builder);
   }
   
-  public FOMWorkspace(
+  protected FOMWorkspace(
     OMContainer parent, 
     OMFactory factory) 
       throws OMException {
     super(WORKSPACE, parent, factory);
   }
 
-  public FOMWorkspace(
+  protected FOMWorkspace(
     OMContainer parent, 
     OMFactory factory,
     OMXMLParserWrapper builder) 

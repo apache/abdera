@@ -45,7 +45,7 @@ public class FOMCategories
     init();
   }
   
-  public FOMCategories(
+  protected FOMCategories(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -55,7 +55,7 @@ public class FOMCategories
     init();
   }
   
-  public FOMCategories(
+  protected FOMCategories(
     QName qname,
     OMContainer parent,
     OMFactory factory) {
@@ -63,7 +63,7 @@ public class FOMCategories
       init();
   }
   
-  public FOMCategories(
+  protected FOMCategories(
     QName qname,
     OMContainer parent, 
     OMFactory factory,
@@ -71,7 +71,7 @@ public class FOMCategories
       super(qname, parent, factory, builder);
   }
   
-  public FOMCategories(
+  protected FOMCategories(
     OMContainer parent, 
     OMFactory factory) 
       throws OMException {
@@ -79,7 +79,7 @@ public class FOMCategories
     init();
   }
 
-  public FOMCategories(
+  protected FOMCategories(
     OMContainer parent, 
     OMFactory factory,
     OMXMLParserWrapper builder) 

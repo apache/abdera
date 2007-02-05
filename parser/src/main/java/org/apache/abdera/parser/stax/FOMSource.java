@@ -58,7 +58,7 @@ public class FOMSource
     super(Constants.SOURCE);
   }
   
-  public FOMSource(
+  protected FOMSource(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -67,14 +67,14 @@ public class FOMSource
     super(name, namespace, parent, factory);
   }
   
-  public FOMSource( 
+  protected FOMSource( 
     OMContainer parent, 
     OMFactory factory) 
       throws OMException {
     super(SOURCE, parent, factory);
   }
 
-  public FOMSource( 
+  protected FOMSource( 
     OMContainer parent, 
     OMFactory factory,
     OMXMLParserWrapper builder) 
@@ -82,7 +82,7 @@ public class FOMSource
     super(SOURCE, parent, factory, builder);
   }
 
-  public FOMSource( 
+  protected FOMSource( 
     QName qname,
     OMContainer parent, 
     OMFactory factory) 
@@ -90,7 +90,7 @@ public class FOMSource
     super(qname, parent, factory);
   }
 
-  public FOMSource(
+  protected FOMSource(
     QName qname,
     OMContainer parent, 
     OMFactory factory,

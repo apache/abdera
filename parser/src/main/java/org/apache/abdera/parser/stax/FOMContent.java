@@ -49,7 +49,7 @@ public class FOMContent
     init(type);
   }
   
-  public FOMContent(
+  protected FOMContent(
     String name,
     OMNamespace namespace,
     Type type,
@@ -60,7 +60,7 @@ public class FOMContent
     init(type);
   }
   
-  public FOMContent(
+  protected FOMContent(
     QName qname,
     Type type,
     OMContainer parent,
@@ -69,7 +69,7 @@ public class FOMContent
       init(type);
   }
   
-  public FOMContent(
+  protected FOMContent(
     QName qname,
     Type type,
     OMContainer parent, 
@@ -79,7 +79,7 @@ public class FOMContent
       init(type);
   }
   
-  public FOMContent(
+  protected FOMContent(
     Type type, 
     OMContainer parent, 
     OMFactory factory)
@@ -88,7 +88,7 @@ public class FOMContent
     init(type);
   }
   
-  public FOMContent(
+  protected FOMContent(
     Type type,
     OMContainer parent,
     OMFactory factory,

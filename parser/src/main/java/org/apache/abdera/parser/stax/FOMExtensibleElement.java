@@ -44,7 +44,7 @@ public class FOMExtensibleElement
     super(qname);
   }
   
-  public FOMExtensibleElement(
+  protected FOMExtensibleElement(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -53,7 +53,7 @@ public class FOMExtensibleElement
     super(name, namespace, parent, factory);
   }
   
-  public FOMExtensibleElement(
+  protected FOMExtensibleElement(
     QName qname, 
     OMContainer parent, 
     OMFactory factory) 
@@ -61,7 +61,7 @@ public class FOMExtensibleElement
     super(qname, parent, factory);
   }
 
-  public FOMExtensibleElement(
+  protected FOMExtensibleElement(
     QName qname, 
     OMContainer parent, 
     OMFactory factory,

@@ -65,7 +65,7 @@ public class FOMDateTime
     setValue(atomDate);
   }
   
-  public FOMDateTime(
+  protected FOMDateTime(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -74,7 +74,7 @@ public class FOMDateTime
     super(name, namespace, parent, factory);
   }
   
-  public FOMDateTime(
+  protected FOMDateTime(
     QName qname, 
     OMContainer parent, 
     OMFactory factory) 
@@ -82,7 +82,7 @@ public class FOMDateTime
     super(qname, parent, factory);
   }
 
-  public FOMDateTime(
+  protected FOMDateTime(
     QName qname, 
     OMContainer parent, 
     OMFactory factory,

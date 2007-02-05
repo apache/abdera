@@ -56,7 +56,7 @@ public class FOMCategory
     setLabel(label);
   }
   
-  public FOMCategory(
+  protected FOMCategory(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -65,14 +65,14 @@ public class FOMCategory
     super(name, namespace, parent, factory);
   }
   
-  public FOMCategory(
+  protected FOMCategory(
     QName qname,
     OMContainer parent,
     OMFactory factory) {
       super(qname, parent, factory);
   }
   
-  public FOMCategory(
+  protected FOMCategory(
     QName qname,
     OMContainer parent, 
     OMFactory factory,
@@ -80,13 +80,13 @@ public class FOMCategory
       super(qname, parent, factory, builder);
   }
   
-  public FOMCategory(
+  protected FOMCategory(
     OMContainer parent, 
     OMFactory factory) {
       super(CATEGORY, parent, factory);
   }
  
-  public FOMCategory(
+  protected FOMCategory(
     OMContainer parent, 
     OMFactory factory,
     OMXMLParserWrapper builder) {

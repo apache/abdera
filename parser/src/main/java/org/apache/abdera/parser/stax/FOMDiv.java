@@ -45,7 +45,7 @@ public class FOMDiv
     super(Constants.DIV);
   }
   
-  public FOMDiv(
+  protected FOMDiv(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -54,7 +54,7 @@ public class FOMDiv
     super(name, namespace, parent, factory);
   }
   
-  public FOMDiv(
+  protected FOMDiv(
     QName qname, 
     OMContainer parent, 
     OMFactory factory)
@@ -62,7 +62,7 @@ public class FOMDiv
     super(qname, parent, factory);
   }
 
-  public FOMDiv(
+  protected FOMDiv(
     QName qname, 
     OMContainer parent, 
     OMFactory factory,

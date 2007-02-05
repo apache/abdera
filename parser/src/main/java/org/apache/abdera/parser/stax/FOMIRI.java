@@ -44,7 +44,7 @@ public class FOMIRI
     setValue(value);
   }
   
-  public FOMIRI(
+  protected FOMIRI(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -53,7 +53,7 @@ public class FOMIRI
     super(name, namespace, parent, factory);
   }
   
-  public FOMIRI(
+  protected FOMIRI(
     QName qname, 
     OMContainer parent, 
     OMFactory factory) 
@@ -61,7 +61,7 @@ public class FOMIRI
     super(qname, parent, factory);
   }
 
-  public FOMIRI(
+  protected FOMIRI(
     QName qname, 
     OMContainer parent, 
     OMFactory factory,

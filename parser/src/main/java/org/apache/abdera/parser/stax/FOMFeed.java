@@ -50,7 +50,7 @@ public class FOMFeed
     super(Constants.FEED, new FOMDocument(), new FOMFactory());
   }
   
-  public FOMFeed(
+  protected FOMFeed(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -59,14 +59,14 @@ public class FOMFeed
     super(name, namespace, parent, factory);
   }
   
-  public FOMFeed(
+  protected FOMFeed(
     QName qname,
     OMContainer parent,
     OMFactory factory) {
       super(qname, parent, factory);
   }
   
-  public FOMFeed(
+  protected FOMFeed(
     QName qname,
     OMContainer parent, 
     OMFactory factory,
@@ -74,14 +74,14 @@ public class FOMFeed
       super(qname, parent, factory, builder);
   }
   
-  public FOMFeed(
+  protected FOMFeed(
     OMContainer parent, 
     OMFactory factory) 
       throws OMException {
     super(FEED, parent, factory);
   }
 
-  public FOMFeed(
+  protected FOMFeed(
     OMContainer parent, 
     OMFactory factory,
     OMXMLParserWrapper builder) 

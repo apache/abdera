@@ -44,7 +44,7 @@ public class FOMText
     init(type);
   }
   
-  public FOMText(
+  protected FOMText(
     Type type,
     String name,
     OMNamespace namespace,
@@ -55,7 +55,7 @@ public class FOMText
     init(type);
   }
   
-  public FOMText(
+  protected FOMText(
     Type type, 
     QName qname, 
     OMContainer parent, 
@@ -65,7 +65,7 @@ public class FOMText
     init(type);
   }
 
-  public FOMText(
+  protected FOMText(
     Type type, 
     QName qname, 
     OMContainer parent, 

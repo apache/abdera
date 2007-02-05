@@ -61,7 +61,7 @@ public class FOMLink
     setRel(rel);
   }
   
-  public FOMLink(
+  protected FOMLink(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -70,14 +70,14 @@ public class FOMLink
     super(name, namespace, parent, factory);
   }
   
-  public FOMLink( 
+  protected FOMLink( 
     OMContainer parent, 
     OMFactory factory)
       throws OMException {
     super(LINK, parent, factory);
   }
  
-  public FOMLink( 
+  protected FOMLink( 
     QName qname,
     OMContainer parent, 
     OMFactory factory)
@@ -85,7 +85,7 @@ public class FOMLink
     super(qname, parent, factory);
   }
    
-  public FOMLink( 
+  protected FOMLink( 
     OMContainer parent, 
     OMFactory factory,
     OMXMLParserWrapper builder)
@@ -93,7 +93,7 @@ public class FOMLink
     super(LINK, parent, factory, builder);
   }
   
-  public FOMLink(
+  protected FOMLink(
     QName qname,
     OMContainer parent, 
     OMFactory factory,

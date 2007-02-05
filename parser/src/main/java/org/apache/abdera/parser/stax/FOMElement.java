@@ -78,7 +78,7 @@ public class FOMElement
     super(qname, null, null);
   }
   
-  public FOMElement(
+  protected FOMElement(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -87,7 +87,7 @@ public class FOMElement
     super(name, namespace, parent, factory);
   }
   
-  public FOMElement(
+  protected FOMElement(
     QName qname, 
     OMContainer parent, 
     OMFactory factory) 
@@ -98,7 +98,7 @@ public class FOMElement
       parent,factory);
   }
 
-  public FOMElement(
+  protected FOMElement(
     QName qname,
     OMContainer parent,
     OMFactory factory,

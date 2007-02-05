@@ -43,7 +43,7 @@ public class FOMService
     declareAtomNs();
   }
   
-  public FOMService(
+  protected FOMService(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -53,7 +53,7 @@ public class FOMService
     declareAtomNs();
   }
   
-  public FOMService(
+  protected FOMService(
     QName qname,
     OMContainer parent,
     OMFactory factory) {
@@ -61,7 +61,7 @@ public class FOMService
       declareAtomNs();
   }
   
-  public FOMService(
+  protected FOMService(
     QName qname,
     OMContainer parent, 
     OMFactory factory,
@@ -70,7 +70,7 @@ public class FOMService
       declareAtomNs();
   }
   
-  public FOMService(
+  protected FOMService(
     OMContainer parent, 
     OMFactory factory) 
       throws OMException {
@@ -78,7 +78,7 @@ public class FOMService
     declareAtomNs();
   }
 
-  public FOMService(
+  protected FOMService(
     OMContainer parent, 
     OMFactory factory,
     OMXMLParserWrapper builder) 

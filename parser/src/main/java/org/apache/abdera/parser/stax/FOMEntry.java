@@ -63,7 +63,7 @@ public class FOMEntry
     super(Constants.ENTRY, new FOMDocument(), new FOMFactory());
   }
   
-  public FOMEntry(
+  protected FOMEntry(
     String name,
     OMNamespace namespace,
     OMContainer parent,
@@ -72,14 +72,14 @@ public class FOMEntry
     super(name, namespace, parent, factory);
   }
   
-  public FOMEntry(
+  protected FOMEntry(
     QName qname,
     OMContainer parent,
     OMFactory factory) {
       super(qname, parent, factory);
   }
   
-  public FOMEntry(
+  protected FOMEntry(
     QName qname,
     OMContainer parent, 
     OMFactory factory,
@@ -87,14 +87,14 @@ public class FOMEntry
       super(qname, parent, factory, builder);
   }
   
-  public FOMEntry(
+  protected FOMEntry(
     OMContainer parent, 
     OMFactory factory) 
       throws OMException {
     super(ENTRY, parent, factory);
   }
 
-  public FOMEntry(
+  protected FOMEntry(
     OMContainer parent, 
     OMFactory factory,
     OMXMLParserWrapper builder) 

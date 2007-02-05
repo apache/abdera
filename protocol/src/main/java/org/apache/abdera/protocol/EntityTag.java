@@ -25,12 +25,14 @@ import java.util.List;
  */
 public class EntityTag {
 
+  private static final String INVALID_ENTITY_TAG = "Invalid Entity Tag";
+
   public static EntityTag parse(String entity_tag) {
     if (entity_tag == null || entity_tag.length() == 0) 
-      throw new IllegalArgumentException("Invalid Entity Tag");;    
+      throw new IllegalArgumentException(INVALID_ENTITY_TAG);    
     boolean weak = entity_tag.startsWith("W/");
     if (!weak && !entity_tag.startsWith("\"")) 
-      throw new IllegalArgumentException("Invalid Entity Tag");
+      throw new IllegalArgumentException(INVALID_ENTITY_TAG);
     String tag = entity_tag.substring((weak)?3:1, entity_tag.length() - 1);
     return new EntityTag(tag, weak);
   }
@@ -117,7 +119,7 @@ public class EntityTag {
   
   private void checkTag(String tag) {
     if (tag.contains("\"")) 
-      throw new IllegalArgumentException("Invalid Entity Tag");
+      throw new IllegalArgumentException(INVALID_ENTITY_TAG);
   }
   
   public String getTag() {
@@ -131,9 +133,9 @@ public class EntityTag {
   public String toString() {
     StringBuffer buf = new StringBuffer();
     if (weak) buf.append("W/");
-    buf.append("\"");
+    buf.append('"');
     buf.append(tag);
-    buf.append("\"");
+    buf.append('"');
     return buf.toString();
   }
   

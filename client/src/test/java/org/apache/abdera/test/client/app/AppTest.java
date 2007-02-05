@@ -41,6 +41,7 @@ import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
+import org.apache.abdera.protocol.EntityTag;
 import org.apache.abdera.protocol.client.Client;
 import org.apache.abdera.protocol.client.CommonsClient;
 import org.apache.abdera.protocol.client.RequestOptions;
@@ -589,5 +590,29 @@ public class AppTest extends JettyTest {
     }
 
     // YAY! We can handle media link entries 
+  }
+  
+  public void testEntityTag() throws Exception {
+    EntityTag tag1 = new EntityTag("tag");
+    EntityTag tag2 = new EntityTag("tag",true); // weak;
+    assertFalse(tag1.isWeak());
+    assertTrue(tag2.isWeak());
+    assertFalse(EntityTag.matches(tag1, tag2));
+    assertTrue(EntityTag.matches(tag1, tag2, true));
+    assertFalse(EntityTag.matchesAny(tag1, new EntityTag[] {tag2}));
+    assertTrue(EntityTag.matchesAny(tag1, new EntityTag[] {tag2}, true));
+    assertEquals(tag1.toString(), "\"tag\"");
+    assertEquals(tag2.toString(), "W/\"tag\"");
+    tag1 = EntityTag.parse("\"tag\"");
+    assertFalse(tag1.isWeak());
+    assertEquals(tag1.getTag(), "tag");
+    tag2 = EntityTag.parse("W/\"tag\"");
+    assertTrue(tag2.isWeak());
+    assertEquals(tag2.getTag(), "tag");    
+    EntityTag[] tags = EntityTag.parseTags("\"tag1\", W/\"tag2\"");
+    assertFalse(tags[0].isWeak());
+    assertEquals(tags[0].getTag(), "tag1");
+    assertTrue(tags[1].isWeak());
+    assertEquals(tags[1].getTag(), "tag2");
   }
 }

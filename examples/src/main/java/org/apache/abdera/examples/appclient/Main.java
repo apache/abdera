@@ -55,7 +55,7 @@ public class Main {
     
     // Create the entry to post to the collection
     Entry entry = factory.newEntry();
-    entry.setId("tag:example.org,2006:foo", false);
+    entry.setId("tag:example.org,2006:foo");
     entry.setTitle("This is the title");
     entry.setUpdated(new Date());
     entry.addAuthor("James");

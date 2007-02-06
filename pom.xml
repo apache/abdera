@@ -181,16 +181,16 @@
       </dependency>
       
       <dependency>
-        <groupId>ws-commons</groupId>
+        <groupId>org.apache.ws.commons.axiom</groupId>
         <artifactId>axiom-api</artifactId>
-        <version>1.0</version>
+        <version>1.2.1</version>
         <scope>compile</scope>
       </dependency>
       
       <dependency>
-        <groupId>ws-commons</groupId>
+        <groupId>org.apache.ws.commons.axiom</groupId>
         <artifactId>axiom-impl</artifactId>
-        <version>1.0</version>
+        <version>1.2.1</version>
         <scope>compile</scope>
       </dependency>
       

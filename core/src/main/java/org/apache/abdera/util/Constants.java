@@ -74,12 +74,11 @@ public interface Constants {
   public static final String LN_SUMMARY           = "summary";
   public static final String LN_TITLE             = "title";
   public static final String LN_UPDATED           = "updated";
-  public static final String LN_EDITED          = "edited";
+  public static final String LN_EDITED            = "edited";
   public static final String LN_TERM              = "term";
   public static final String LN_SCHEME            = "scheme";
   public static final String LN_LABEL             = "label";
   public static final String LN_HREF              = "href";
-  public static final String LN_MEMBERTYPE        = "member-type";
   public static final String LN_LANG              = "lang";
   public static final String LN_BASE              = "base";
   public static final String LN_URI               = "uri";
@@ -129,7 +128,6 @@ public interface Constants {
   public static final QName LABEL                 = new QName(LN_LABEL);
   public static final QName ATITLE                = new QName(LN_TITLE);
   public static final QName HREF                  = new QName(LN_HREF);
-  public static final QName MEMBER_TYPE           = new QName(APP_NS, LN_MEMBERTYPE, APP_PREFIX);
   public static final QName ACCEPT                = new QName(APP_NS, LN_ACCEPT, APP_PREFIX);
   public static final QName LANG                  = new QName(XML_NS, LN_LANG, "xml");
   public static final QName BASE                  = new QName(XML_NS, LN_BASE, "xml");

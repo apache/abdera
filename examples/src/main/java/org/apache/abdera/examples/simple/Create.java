@@ -17,13 +17,17 @@
 */
 package org.apache.abdera.examples.simple;
 
+import java.net.URL;
 import java.util.Date;
+
+import javax.activation.DataHandler;
+import javax.activation.URLDataSource;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
+import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
-import org.apache.abdera.model.Text;
 import org.apache.abdera.util.iri.IRI;
 
 
@@ -62,7 +66,7 @@ public class Create {
     
     // Creates an entry and appends it to the end of the list
     Entry entry3 = feed.addEntry();
-    entry3.setTitle("<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Test</p></div>", Text.Type.XHTML);
+    entry3.setTitleAsXhtml("<p>Test</p>");
     entry3.addLink("/2003/12/13/atom03/2");
     entry3.setId("HTTP://www.Example.org/foo/../bar", true); // normalizes the id to the value http://www.example.org/bar
     entry3.setUpdated(new Date());
@@ -77,6 +81,26 @@ public class Create {
     entry4.setUpdated(new Date());
     entry4.setSummary("An entry with out-of-line content");
     entry4.setContent(new IRI("http://example.org/0xcafebabe"), "text/html");
+    
+    // Base64 binary content
+    Entry entry5 = feed.addEntry();
+    entry5.setTitle("re: Atom-Powered Robots Run Amok");
+    entry5.addLink("/2003/12/13/atom03/4");
+    entry5.setId("urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5c");
+    entry5.setUpdated(new Date());
+    entry5.setSummary("A simple Base64 encoded binary image");
+    URL url = Create.class.getResource("/atom-logo75px.gif");
+    entry5.setContent(new DataHandler(new URLDataSource(url)), "image/gif");
+    
+    // XML content
+    Entry entry6 = feed.addEntry();
+    entry6.setTitle("re: Atom-Powered Robots Run Amok");
+    entry6.addLink("/2003/12/13/atom03/5");
+    entry6.setId("urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5d");
+    entry6.setUpdated(new Date());
+    entry6.setSummary("XML content");
+    entry6.setContent("<a xmlns='urn:foo'><b/></a>", Content.Type.XML);
+    
     feed.getDocument().writeTo(System.out);
   }
 

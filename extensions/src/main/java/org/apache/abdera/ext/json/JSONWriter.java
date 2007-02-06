@@ -284,6 +284,7 @@ public class JSONWriter
         if (link.getHrefLang() != null)
           jslink.put("hreflang", link.getHrefLang());
       }
+      jslinks.put(jslink);
     }
     return jslinks;
   }

@@ -99,15 +99,14 @@ public class AtomConformanceTest extends BaseParserTestCase {
    */
   public static void testXmlNamespace() throws Exception {
     String[] tests = {
-      "http://plasmasturm.org/attic/atom-tests/nondefaultnamespace.atom",
-      "http://plasmasturm.org/attic/atom-tests/nondefaultnamespace-xhtml.atom",
-      "http://hsivonen.iki.fi/test/unknown-namespace.atom",
-      "http://plasmasturm.org/attic/atom-tests/nondefaultnamespace-baseline.atom"
+      "http://www.snellspace.com/public/nondefaultnamespace.xml",
+      "http://www.snellspace.com/public/nondefaultnamespace2.xml",
+      "http://www.snellspace.com/public/nondefaultnamespace3.xml"
     };
     int n = 1;
     for (String test : tests) {
       IRI uri = new IRI(test);
-      Document<Feed> doc = get(uri);
+      Document<Feed> doc = parse(uri);
       assertNotNull(doc);
       Feed feed = doc.getRoot();
       Entry entry = feed.getEntries().get(0);
@@ -115,11 +114,11 @@ public class AtomConformanceTest extends BaseParserTestCase {
         case 1:
           assertNotNull(entry.getTitleElement());
           assertEquals(entry.getIdElement().getValue(), 
-              new IRI("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a"));
-          Content content = entry.getContentElement();
-          assertNotNull(content);
-          assertEquals(content.getContentType(), Content.Type.XHTML);
-          OMElement element = (OMElement)content;
+              new IRI("tag:example.org,2007:bar"));
+          Text summary = entry.getSummaryElement();
+          assertNotNull(summary);
+          assertEquals(summary.getTextType(), Text.Type.XHTML);
+          OMElement element = (OMElement)summary;
           OMElement div = 
             element.getFirstChildWithName(
               new QName("http://www.w3.org/1999/xhtml", "div"));
@@ -128,11 +127,11 @@ public class AtomConformanceTest extends BaseParserTestCase {
         case 2:
           assertNotNull(entry.getTitleElement());
           assertEquals(entry.getIdElement().getValue(), 
-              new IRI("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a"));
-          content = entry.getContentElement();
-          assertNotNull(content);
-          assertEquals(content.getContentType(), Content.Type.XHTML);
-          element = (OMElement)content;
+              new IRI("tag:example.org,2007:bar"));
+          summary = entry.getSummaryElement();
+          assertNotNull(summary);
+          assertEquals(summary.getTextType(), Text.Type.XHTML);
+          element = (OMElement)summary;
           div = 
             element.getFirstChildWithName(
               new QName("http://www.w3.org/1999/xhtml", "div"));
@@ -141,24 +140,11 @@ public class AtomConformanceTest extends BaseParserTestCase {
         case 3:
           assertNotNull(entry.getTitleElement());
           assertEquals(entry.getIdElement().getValue(), 
-              new IRI("http://hsivonen.iki.fi/test/unknown-namespace.atom/entry"));
-          content = entry.getContentElement();
-          assertNotNull(content);
-          assertEquals(content.getContentType(), Content.Type.XHTML);
-          element = (OMElement)content;
-          div = 
-            element.getFirstChildWithName(
-              new QName("http://www.w3.org/1999/xhtml", "div"));
-          assertNotNull(div);
-          break;
-        case 4:
-          assertNotNull(entry.getTitleElement());
-          assertEquals(entry.getIdElement().getValue(), 
-              new IRI("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a"));
-          content = entry.getContentElement();
-          assertNotNull(content);
-          assertEquals(content.getContentType(), Content.Type.XHTML);
-          element = (OMElement)content;
+              new IRI("tag:example.org,2007:bar"));
+          summary = entry.getSummaryElement();
+          assertNotNull(summary);
+          assertEquals(summary.getTextType(), Text.Type.XHTML);
+          element = (OMElement)summary;
           div = 
             element.getFirstChildWithName(
               new QName("http://www.w3.org/1999/xhtml", "div"));
@@ -173,139 +159,18 @@ public class AtomConformanceTest extends BaseParserTestCase {
    * Test to ensure that the parser properly resolves relative URI
    */
   public static void testXmlBase() throws Exception {
-    //http://tbray.org/ongoing/ongoing.atom
-    IRI uri = new IRI("http://www.tbray.org/ongoing/ongoing.atom");
-    Document<Feed> doc = get(uri);
+    IRI uri = new IRI("http://www.snellspace.com/public/xmlbase.xml");
+    Document<Feed> doc = parse(uri);
     assertNotNull(doc);
     Feed feed = doc.getRoot();
-    assertEquals(feed.getBaseUri(), new IRI("http://www.tbray.org/ongoing/ongoing.atom"));
-    assertEquals(feed.getLogoElement().getResolvedValue(), new IRI("http://www.tbray.org/ongoing/rsslogo.jpg"));
-    assertEquals(feed.getIconElement().getResolvedValue(),new IRI("http://www.tbray.org/favicon.ico"));    
+    assertEquals(feed.getBaseUri(), new IRI("http://www.snellspace.com/public/xmlbase.xml"));
+    assertEquals(feed.getLogoElement().getResolvedValue(), new IRI("http://www.snellspace.com/public/atom-logo.png"));
+    assertEquals(feed.getIconElement().getResolvedValue(),new IRI("http://www.snellspace.com/public/atom-icon.png"));
+    
+    Entry entry = feed.getEntries().get(0);
+    assertEquals(entry.getAlternateLinkResolvedHref().toString(), "http://www.snellspace.com/wp");
   }
   
-  /**
-   * Test to ensure that the parser properly resolves relative URI
-   */
-  public static void testXmlBase2() throws Exception {
-    //http://plasmasturm.org/attic/atom-tests/xmlbase.atom
-    IRI uri = new IRI("http://plasmasturm.org/attic/atom-tests/xmlbase.atom");
-    IRI result = new IRI("http://example.org/tests/base/result.html");
-    Document<Feed> doc = get(uri);
-    assertNotNull(doc);
-    Feed feed = doc.getRoot();
-    int n = 1;
-    for (Entry entry : feed.getEntries()) {
-      switch(n) {
-        case 1:
-          assertEquals(entry.getAlternateLink().getResolvedHref(), result);
-          break;
-        case 2:
-          assertEquals(entry.getAlternateLink().getResolvedHref(), result);
-          break;
-        case 3:
-          assertEquals(entry.getAlternateLink().getResolvedHref(), result);
-          break;
-        case 4:
-          assertEquals(entry.getAlternateLink().getResolvedHref(), result);
-          break;
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        case 15:
-        case 16:
-          // content tests... skipping
-          // we defer the proper handling of xml:base in the content to the
-          // application using the parser. 
-          break;
-      }
-      n++;
-    }
-  }
-  
-  public static void testUpdated() throws Exception {
-    //http://intertwingly.net/testcase/updated.atom
-    //Note: This test determines whether or not applications properly
-    //      detect content changes in an atom entry based on the value
-    //      of the atom:updated.  This isn't really relevant at this 
-    //      level.  The responsibility for properly detecting modifications
-    //      belongs to the application.
-  }
-  
-  /**
-   * Test support for markup in Text constructs
-   */
-  public static void testTitle() throws Exception {
-    String[] tests = {
-      "html-cdata.atom",
-      "html-entity.atom",
-      "html-ncr.atom",
-      "text-cdata.atom",
-      "text-entity.atom",
-      "text-ncr.atom",
-      "xhtml-entity.atom",
-      "xhtml-ncr.atom"};
-    IRI baseUri = new IRI("http://atomtests.philringnalda.com/tests/item/title/");
-    int n = 1;
-    for (String test : tests) {
-      Document<Feed> doc = get(baseUri.resolve(test));
-      assertNotNull(doc);
-      Feed feed = doc.getRoot();
-      Entry entry = feed.getEntries().get(0);
-      assertNotNull(entry);
-      Text title = entry.getTitleElement();
-      assertNotNull(title);
-      switch(n) {
-        case 1:
-          // The parser passes escaped HTML back up to the application.
-          // is the applications responsibility to properly display it
-          String value = title.getValue();
-          assertEquals(value, "&lt;title>");
-          break;
-        case 2:
-          // The parser passes escaped HTML back up to the application.
-          // is the applications responsibility to properly display it
-          value = title.getValue();
-          assertEquals(value, "&lt;title>");
-          break;
-        case 3:
-          // The parser passes escaped HTML back up to the application.
-          // is the applications responsibility to properly display it
-          value = title.getValue();
-          assertEquals(value, "&lt;title>");          
-          break;
-        case 4:
-          value = title.getValue();
-          assertEquals(value, "<title>");          
-          break;
-        case 5:
-          value = title.getValue();
-          assertEquals(value, "<title>");
-          break;
-        case 6:
-          value = title.getValue();
-          assertEquals(value, "<title>");
-          break;
-        case 7:
-          Div div = title.getValueElement();
-          assertTrue(div.getValue().equals("&lt;title>") || 
-                     div.getValue().equals("&lt;title&gt;"));
-          break;
-        case 8:
-          div = title.getValueElement();
-          assertTrue(div.getValue().equals("&lt;title>") ||
-                     div.getValue().equals("&lt;title&gt;"));
-          break;
-      }
-      n++;
-    }
-  }
   
   /**
    * This tests the parsers ability to properly ignore the ordering of elements

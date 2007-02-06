@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<a:feed 
+  xmlns:a="http://www.w3.org/2005/Atom" 
+  xmlns:h="http://www.w3.org/1999/xhtml">
+  <a:id>tag:example.org,2007:foo</a:id>
+  <a:title>Test</a:title>
+  <a:updated>2007-02-05T12:12:12T</a:updated>
+  <a:link href="" />
+  <a:author><a:name>James</a:name></a:author>
+  <a:entry>
+    <a:id>tag:example.org,2007:bar</a:id>
+    <a:title>Test</a:title>
+    <a:updated>2007-02-05T12:12:12Z</a:updated>
+    <a:link href="" />
+    <a:summary type="xhtml"><h:div><h:p>foo</h:p></h:div></a:summary>
+  </a:entry>
+</a:feed>

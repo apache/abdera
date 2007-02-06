@@ -22,7 +22,6 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Content;
-import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
@@ -33,13 +32,6 @@ import org.apache.axiom.om.OMElement;
 
 public class AtomConformanceTest extends BaseParserTestCase {
   
-  private static Document<Feed> get(IRI uri) {
-    try {
-      return getParser().parse(uri.toURL().openStream(), uri.toString());
-    } catch (Exception e) {}
-    return null;
-  }
-
   /**
    * Test to make sure that the parser properly detects the various kinds of
    * extended content types allowed by Atom

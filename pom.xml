@@ -25,7 +25,7 @@
   <artifactId>abdera</artifactId>
   <packaging>pom</packaging>
   <name>Apache Abdera</name>  
-  <version>0.3.0-incubating-SNAPSHOT</version>  
+  <version>0.2.2-incubating</version>  
   <description>Atom Specification Implementation</description>
   <inceptionYear>2006</inceptionYear>
   <url>http://incubator.apache.org/abdera</url>

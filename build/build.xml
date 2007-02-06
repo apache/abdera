@@ -28,7 +28,7 @@
    Set the ABDERA_XMLSECURITY=yes environment variable to build the security module
    
 -->
-  <property name="version" value="0.3.0-incubating-SNAPSHOT" />
+  <property name="version" value="0.2.2-incubating" />
   <property name="site" value="../site" />
   <property name="work" value="${basedir}/build/work" />
   <property name="test" value="${basedir}/build/test" />

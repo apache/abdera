@@ -39,3 +39,12 @@ email lists, wiki or IRC channel
 Please help us make Apache Abdera better - we appreciate any feedback
 you may have.
 
+
+Changes
+============================
+0.2.2 - Upgrade dependencies to Axiom 1.2.1
+      - Remove dependency on Stax Reference Implementation
+      - Fix Stax API conformance issues so we can work with more Stax parsers
+      - Fix XHTML/XML Entry content bug
+      - General code cleanups / Hide constructors not intended for general use
+      

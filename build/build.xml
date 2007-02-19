@@ -454,7 +454,8 @@ Working directory: ${work}
         <exclude name="**/legal/retroweaver-LICENSE.txt" />
         <exclude name="**/json/*" />
         <exclude name="**/*.retro.jar" />
-        <exclude name="**/${bouncycastle.jar}" />
+        <exclude name="**/${bouncycastle.jar}" unless="do.security" />
+        <exclude name="**/${bouncycastle.jar.retro}" />
         <exclude name="**/${geronimo.servlet.jar}" />
         <exclude name="**/${jetty-util.jar}" />
         <exclude name="**/${jetty.jar}" />
@@ -485,6 +486,7 @@ Working directory: ${work}
         <exclude name="**/json/*" />
         <exclude name="**/*.${version}.jar" />
         <exclude name="**/${bouncycastle.jar}" />
+        <exclude name="**/${bouncycastle.jar.retro}" unless="do.security" />
         <exclude name="**/${geronimo.servlet.jar}" />
         <exclude name="**/${jetty-util.jar}" />
         <exclude name="**/${jetty.jar}}" />

@@ -35,12 +35,12 @@ public final class TargetType {
   
   public static TargetType get(String name) {
     if (name == null) return null;
-    name = name.toUpperCase().intern();
-    if (name == UNKNOWN) return TYPE_UNKNOWN;
-    if (name == COLLECTION) return TYPE_COLLECTION;
-    if (name == ENTRY) return TYPE_ENTRY;
-    if (name == MEDIA) return TYPE_MEDIA;
-    if (name == CATEGORIES) return TYPE_CATEGORIES;
+    name = name.toUpperCase();
+    if (name.equals(UNKNOWN)) return TYPE_UNKNOWN;
+    if (name.equals(COLLECTION)) return TYPE_COLLECTION;
+    if (name.equals(ENTRY)) return TYPE_ENTRY;
+    if (name.equals(MEDIA)) return TYPE_MEDIA;
+    if (name.equals(CATEGORIES)) return TYPE_CATEGORIES;
     return null;
   }
   

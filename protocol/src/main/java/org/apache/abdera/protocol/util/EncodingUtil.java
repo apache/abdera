@@ -64,7 +64,7 @@ public class EncodingUtil {
   }
   
   public static InputStream getDecodingInputStream(InputStream in, String ce) throws IOException {
-    String[] encodings = CacheControlParser.splitAndTrim(ce, ",", false);
+    String[] encodings = CacheControlUtil.CacheControlParser.splitAndTrim(ce, ",", false);
     for (int n = encodings.length -1; n >= 0; n--) {
       switch(ContentEncoding.valueOf(encodings[n].toUpperCase().replaceAll("-", ""))) {
         case GZIP:

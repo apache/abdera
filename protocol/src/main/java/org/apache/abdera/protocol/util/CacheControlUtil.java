@@ -17,6 +17,12 @@
 */
 package org.apache.abdera.protocol.util;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class CacheControlUtil {
 
   public static boolean isIdempotent(String method) {
@@ -58,7 +64,7 @@ public class CacheControlUtil {
       request.setMaxAge(-1);
       request.setMaxStale(-1);
       request.setMinFresh(-1);
-      for (CacheControlParser.Directive directive : parser) {
+      for (Directive directive : parser) {
         switch(directive) {
           case NOCACHE:      request.setNoCache(true); break;
           case NOSTORE:      request.setNoStore(true); break;
@@ -83,7 +89,7 @@ public class CacheControlUtil {
       response.setPrivate(false);
       response.setPublic(false);
       response.setMaxAge(-1);
-      for (CacheControlParser.Directive directive : parser) {
+      for (Directive directive : parser) {
         switch(directive) {
           case NOCACHE:
             response.setNoCache(true);
@@ -108,4 +114,75 @@ public class CacheControlUtil {
       }
   }
 
+  
+  public enum Directive {
+    MAXAGE, MAXSTALE, MINFRESH, NOCACHE, NOSTORE, NOTRANSFORM, ONLYIFCACHED,
+    MUSTREVALIDATE, PRIVATE, PROXYREVALIDATE, PUBLIC, SMAXAGE, UNKNOWN;
+    
+    public static Directive select(String d) {
+      try {
+        d = d.toUpperCase().replaceAll("-", "");
+        return Directive.valueOf(d);
+      } catch (Exception e) {}
+      return UNKNOWN;
+    }
+  }
+  
+  public static class CacheControlParser 
+    implements Iterable<Directive> {
+        
+    private static final String REGEX = 
+      "\\s*([\\w\\-]+)\\s*(=)?\\s*(\\d+|\\\"([^\"\\\\]*(\\\\.[^\"\\\\]*)*)+\\\")?\\s*";
+
+    private static final Pattern pattern = Pattern.compile(REGEX);
+
+    private HashMap<Directive, String> values = new HashMap<Directive, String>();
+
+    public CacheControlParser(String value) {
+      Matcher matcher = pattern.matcher(value);
+      while (matcher.find()) {
+        String d = matcher.group(1);
+        Directive directive = Directive.select(d);
+        if (directive != Directive.UNKNOWN) {
+          values.put(directive, matcher.group(3));
+        }
+      }
+    }
+
+    public Map<Directive,String> getValues() {
+      return values;
+    }
+
+    public String getValue(Directive directive) {
+      return values.get(directive);
+    }
+    
+    public Iterator<Directive> iterator() {
+      return values.keySet().iterator();
+    }
+    
+    public String[] getValues(Directive directive) {
+      String value = getValue(directive);
+      if (value != null) {
+        return splitAndTrim(value, ",", true);
+      }
+      return null;
+    }
+    
+    private static String unquote(String s) {
+      if (s == null || s.length() == 0) return s;
+      if (s.startsWith("\"")) s = s.substring(1);
+      if (s.endsWith("\"")) s = s.substring(0, s.length() - 1);
+      return s;
+    }
+      
+    public static String[] splitAndTrim(String value, String delim, boolean unquote) {
+      String[] headers = (unquote) ? unquote(value).split(delim) : value.split(delim);
+      for (int n = 0; n < headers.length; n++) {
+        headers[n] = headers[n].trim();
+      }
+      return headers;
+    }
+
+  }
 }

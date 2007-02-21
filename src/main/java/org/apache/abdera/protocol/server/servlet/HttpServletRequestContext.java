@@ -168,62 +168,62 @@ public class HttpServletRequestContext
   }
   
   private static String getHost(
-      ServiceContext context, 
-      HttpServletRequest request) {
-        Abdera abdera = context.getAbdera();
-        String host = abdera.getConfiguration().getConfigurationOption(
-          "org.apache.abdera.protocol.server.Host");
-        return (host != null) ? 
-          host : 
-          request.getServerName();
-    }
-    
-    private static int getPort(
-      ServiceContext context, 
-      HttpServletRequest request) {
+    ServiceContext context, 
+    HttpServletRequest request) {
       Abdera abdera = context.getAbdera();
-        String port = abdera.getConfiguration().getConfigurationOption(
-          "org.apache.abdera.protocol.server.Port");
-        return (port != null) ? 
-          Integer.parseInt(port) : 
-          request.getLocalPort();
-    }
-    
-    private static IRI initBaseUri(
-      ServiceContext context, 
-      HttpServletRequest request) {
-        StringBuffer buffer = 
-          new StringBuffer(
-            (request.isSecure())?
-              "https":"http");
-        buffer.append("://");
-        buffer.append(getHost(context,request));
-        int port = getPort(context,request);
-        if (port != 80) {
-          buffer.append(":");
-          buffer.append(port);
-        }
-        buffer.append(request.getContextPath());
-        // So that .resolve() works appropriately.
-        buffer.append("/");
-        try {
-          return new IRI(buffer.toString());
-        } catch (IRISyntaxException e) {
-          throw new RuntimeException(e);
-        }
-    }
-    
-    private static IRI initRequestUri(HttpServletRequest request) {
-      IRI uri = null;
+      String host = abdera.getConfiguration().getConfigurationOption(
+        "org.apache.abdera.protocol.server.Host");
+      return (host != null) ? 
+        host : 
+        request.getServerName();
+  }
+  
+  private static int getPort(
+    ServiceContext context, 
+    HttpServletRequest request) {
+    Abdera abdera = context.getAbdera();
+      String port = abdera.getConfiguration().getConfigurationOption(
+        "org.apache.abdera.protocol.server.Port");
+      return (port != null) ? 
+        Integer.parseInt(port) : 
+        request.getLocalPort();
+  }
+  
+  private static IRI initBaseUri(
+    ServiceContext context, 
+    HttpServletRequest request) {
+      StringBuffer buffer = 
+        new StringBuffer(
+          (request.isSecure())?
+            "https":"http");
+      buffer.append("://");
+      buffer.append(getHost(context,request));
+      int port = getPort(context,request);
+      if (port != 80) {
+        buffer.append(":");
+        buffer.append(port);
+      }
+      buffer.append(request.getContextPath());
+      // So that .resolve() works appropriately.
+      buffer.append("/");
       try {
-        StringBuffer buf = 
-          new StringBuffer(
-            request.getRequestURI());
-        String qs = request.getQueryString();
-        if (qs != null && qs.length() != 0)
-          buf.append("?" + request.getQueryString());
-        uri = new IRI(buf.toString());
-      } catch (IRISyntaxException e) {}
-      return uri;
-    }
+        return new IRI(buffer.toString());
+      } catch (IRISyntaxException e) {
+        throw new RuntimeException(e);
+      }
+  }
+  
+  private static IRI initRequestUri(HttpServletRequest request) {
+    IRI uri = null;
+    try {
+      StringBuffer buf = 
+        new StringBuffer(
+          request.getRequestURI());
+      String qs = request.getQueryString();
+      if (qs != null && qs.length() != 0)
+        buf.append("?" + request.getQueryString());
+      uri = new IRI(buf.toString());
+    } catch (IRISyntaxException e) {}
+    return uri;
+  }
 }

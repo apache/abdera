@@ -17,12 +17,8 @@
 */
 package org.apache.abdera.protocol.server.provider;
 
-import org.apache.abdera.protocol.ResponseInfo;
-
 public interface Provider {
 
-  ResponseInfo getInfo(RequestContext request);
-  
   ResponseContext createEntry(RequestContext request);
   
   ResponseContext deleteEntry(RequestContext request);
@@ -33,15 +29,15 @@ public interface Provider {
   
   ResponseContext updateMedia(RequestContext request);
   
-  ResponseContext getService(RequestContext request, boolean full);
+  ResponseContext getService(RequestContext request);
   
-  ResponseContext getFeed(RequestContext request, boolean full);
+  ResponseContext getFeed(RequestContext request);
   
-  ResponseContext getEntry(RequestContext request, boolean full);
+  ResponseContext getEntry(RequestContext request);
   
-  ResponseContext getMedia(RequestContext request, boolean full);
+  ResponseContext getMedia(RequestContext request);
   
-  ResponseContext getCategories(RequestContext request, boolean full);
+  ResponseContext getCategories(RequestContext request);
   
   ResponseContext entryPost(RequestContext request);
   

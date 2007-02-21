@@ -22,22 +22,33 @@ import java.util.Stack;
 /**
  * Implements a simple pool manager.
  * 
- * An upper limit to the pool is set at 25 entries.  
+ * By default, an upper limit to the pool is set at 25 entries.  
  * New items can always be created. 
  */
 public abstract class PoolManager<T> {
 
-  private static final int SIZE = 25;
+  private static final int DEFAULT_SIZE = 25;
+  private final Stack<T> pool;
   
-  private final Stack<T> pool = new Stack<T>() {
-    private static final long serialVersionUID = -6647024253014661104L;
-    @Override
-    public T push(T item) {
-      T obj = super.push(item);
-      if (this.size() > SIZE) this.removeElementAt(0);
-      return obj;
-    }
-  };
+  protected PoolManager() {
+    this(DEFAULT_SIZE);
+  }
+  
+  protected PoolManager(int max) {
+    this.pool = initStack(max);
+  }
+  
+  private Stack<T> initStack(final int max) {
+    return new Stack<T>() {
+      private static final long serialVersionUID = -6647024253014661104L;
+      @Override
+      public T push(T item) {
+        T obj = super.push(item);
+        if (this.size() > max) this.removeElementAt(0);
+        return obj;
+      }
+    };
+  }
   
   protected synchronized T getInstance() {
     return (!pool.empty()) ? pool.pop() : internalNewInstance();

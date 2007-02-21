@@ -29,7 +29,7 @@ import org.apache.abdera.util.iri.IRI;
 import org.apache.abdera.util.iri.IRISyntaxException;
 
 public interface Response
-  extends ResponseInfo, ProtocolConstants {
+  extends ProtocolConstants {
 
   public static enum ResponseType {
     SUCCESS, REDIRECTION, CLIENT_ERROR, SERVER_ERROR, UNKNOWN;
@@ -44,6 +44,8 @@ public interface Response
     
   }
   
+  public EntityTag getEntityTag();
+    
   public ResponseType getType();
   
   public int getStatus();

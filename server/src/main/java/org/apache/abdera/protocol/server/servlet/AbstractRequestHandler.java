@@ -28,8 +28,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.abdera.protocol.EntityTag;
-import org.apache.abdera.protocol.ResponseInfo;
 import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.server.provider.EmptyResponseContext;
 import org.apache.abdera.protocol.server.provider.Provider;
@@ -97,12 +95,6 @@ public abstract class AbstractRequestHandler
         getAllowedMethods(target.getType()));
       return false;
     }
-    // Check The Conditions
-    ResponseInfo info = provider.getInfo(request);
-    switch(checkConditions(info, request)) {
-      case 412: preconditionfailed(response); return false;
-      case 304: notmodified(response); return false;
-    }
     return true;
   }
   
@@ -164,44 +156,6 @@ public abstract class AbstractRequestHandler
     ServiceContext context, 
     HttpServletRequest request) {
       return new HttpServletRequestContext(context, request);
-  }
-  
-  protected int checkConditions(
-    ResponseInfo info, 
-    RequestContext request) {
-      EntityTag entity_tag = (info != null) ? info.getEntityTag() : null;
-      Date last_mod = (info != null) ? info.getLastModified() : null;
-      if (entity_tag != null) {
-        String ifmatch = request.getIfMatch();
-        if (ifmatch != null && 
-           (entity_tag == null || 
-            !EntityTag.matches(entity_tag,ifmatch))) {
-          return 412;
-        }
-        String ifnonematch = request.getIfNoneMatch();
-        if (ifnonematch != null && 
-            entity_tag != null && 
-            EntityTag.matches(entity_tag,ifnonematch)) {
-          return 304;
-        }
-      }
-      if (last_mod != null) {
-        Date ifmodsince = request.getIfModifiedSince();
-        if (ifmodsince != null && 
-            last_mod.getTime() <= ifmodsince.getTime()) return 304;
-        Date ifunmodsince = request.getIfUnmodifiedSince();
-        if (ifunmodsince != null && 
-            last_mod.getTime() > ifunmodsince.getTime()) return 412;
-      }
-      return 0;
-  }
-  
-  protected void preconditionfailed(HttpServletResponse response) throws IOException {
-    response.sendError(412, "Failed");
-  }
-  
-  protected void notmodified(HttpServletResponse response) throws IOException {
-    response.sendError(304, "Not Modified");
   }
   
   protected void noprovider(HttpServletResponse response) throws IOException {

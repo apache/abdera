@@ -34,7 +34,6 @@ import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.protocol.EntityTag;
-import org.apache.abdera.protocol.ResponseInfo;
 import org.apache.abdera.protocol.server.provider.AbstractResponseContext;
 import org.apache.abdera.protocol.server.provider.BaseResponseContext;
 import org.apache.abdera.protocol.server.provider.EmptyResponseContext;
@@ -94,41 +93,25 @@ public class SimpleProvider
   }
   
   public ResponseContext getService(
-    RequestContext request, 
-    boolean full) {
+    RequestContext request) {
       Abdera abdera = request.getServiceContext().getAbdera();
       Document<Service> service = get_service_doc(abdera);
       AbstractResponseContext rc; 
-      rc = (full) ? 
-        new BaseResponseContext<Document<Service>>(service) : 
-        new EmptyResponseContext(200);
+      rc = new BaseResponseContext<Document<Service>>(service); 
       rc.setEntityTag(service_etag);
       return rc;
   }
   
   public ResponseContext getFeed(
-    RequestContext request, 
-    boolean full) {
+    RequestContext request) {
       Abdera abdera = request.getServiceContext().getAbdera();
       Document<Feed> feed = get_feed_doc(abdera);
       AbstractResponseContext rc; 
-      rc = (full) ? 
-        new BaseResponseContext<Document<Feed>>(feed) : 
-        new EmptyResponseContext(200);
+      rc = new BaseResponseContext<Document<Feed>>(feed);
       rc.setEntityTag(calculateEntityTag(feed.getRoot()));
       return rc;
   }
 
-  public ResponseInfo getInfo(
-    RequestContext request) {
-      TargetType type = request.getTarget().getType();
-      if (type == TargetType.TYPE_SERVICE) return getService(request, false);
-      if (type == TargetType.TYPE_COLLECTION) return getFeed(request, false);
-      if (type == TargetType.TYPE_ENTRY) return getEntry(request, false);
-      return null;
-  }
-
-  
   @SuppressWarnings("unchecked")
   public ResponseContext createEntry(
     RequestContext request) {
@@ -178,24 +161,21 @@ public class SimpleProvider
   
   public ResponseContext deleteEntry(
     RequestContext request) {
-      Entry entry = getEntry(request);
+      Entry entry = getAbderaEntry(request);
       if (entry != null)
         entry.discard();
       return new EmptyResponseContext(204);
   }
 
   public ResponseContext getEntry(
-    RequestContext request, 
-    boolean full) {
-      Entry entry = (Entry) getEntry(request);
+    RequestContext request) {
+      Entry entry = (Entry) getAbderaEntry(request);
       if (entry != null) {
         Feed feed = entry.getParentElement();
         entry = (Entry) entry.clone();
         entry.setSource(feed.getAsSource());
         Document<Entry> entry_doc = entry.getDocument();
-        AbstractResponseContext rc = (full) ?
-          new BaseResponseContext<Document<Entry>>(entry_doc) :
-          new EmptyResponseContext(200);
+        AbstractResponseContext rc = new BaseResponseContext<Document<Entry>>(entry_doc);
         rc.setEntityTag(calculateEntityTag(entry));
         return rc;
       } else {
@@ -209,7 +189,7 @@ public class SimpleProvider
       Abdera abdera = request.getServiceContext().getAbdera();
       Parser parser = abdera.getParser();
       Factory factory = abdera.getFactory();
-      Entry orig_entry = getEntry(request);
+      Entry orig_entry = getAbderaEntry(request);
       if (orig_entry != null) {
         try {
           MimeType contentType = request.getContentType();
@@ -268,7 +248,7 @@ public class SimpleProvider
     return null;
   }
   
-  private Entry getEntry(RequestContext request) {
+  private Entry getAbderaEntry(RequestContext request) {
     Abdera abdera = request.getServiceContext().getAbdera();
     String entry_id = getEntryID(request);
     Document<Feed> feed = get_feed_doc(abdera);
@@ -302,8 +282,7 @@ public class SimpleProvider
   }
   
   public ResponseContext getMedia(
-    RequestContext request, 
-    boolean full) {
+    RequestContext request) {
       throw new UnsupportedOperationException();
   }
   
@@ -329,7 +308,7 @@ public class SimpleProvider
     return true;
   }
 
-  public ResponseContext getCategories(RequestContext request, boolean full) {
+  public ResponseContext getCategories(RequestContext request) {
     return null;
   }
 

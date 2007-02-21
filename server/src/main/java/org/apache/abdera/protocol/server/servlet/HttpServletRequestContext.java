@@ -91,8 +91,16 @@ public class HttpServletRequestContext
     return request.getInputStream();
   }
   
-  private synchronized HttpSession getSession() {
-    if (session == null) session = request.getSession(true);
+  public HttpServletRequest getRequest() {
+    return request;
+  }
+  
+  public synchronized HttpSession getSession() {
+    return getSession(false);
+  }
+  
+  public synchronized HttpSession getSession(boolean create) {
+    if (session == null) session = request.getSession(create);
     return session;
   }
   

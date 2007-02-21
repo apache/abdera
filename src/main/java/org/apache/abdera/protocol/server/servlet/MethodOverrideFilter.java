@@ -54,7 +54,7 @@ public class MethodOverrideFilter
         response);
     
     HttpServletResponse hresponse = (HttpServletResponse) response;
-    hresponse.addHeader("Vary", "X-HTTP-Method-Override");
+    hresponse.addHeader("Vary", "X-HTTP-Method-Override, X-Method-Override");
   }
 
   public void init(FilterConfig config) throws ServletException {
@@ -81,10 +81,12 @@ public class MethodOverrideFilter
     public String getMethod() {
       String method = super.getMethod();
       String xheader = getHeader("X-HTTP-Method-Override");
+      if (xheader == null) xheader = getHeader("X-Method-Override");
+      if (xheader != null) xheader = xheader.toUpperCase().trim();
       if (method.equals("POST") && 
           xheader != null && 
           METHODS_TO_OVERRIDE.contains(xheader)) {
-        method = xheader.trim();
+        method = xheader;
       }
       return method;
     }

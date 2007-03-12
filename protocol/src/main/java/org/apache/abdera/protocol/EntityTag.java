@@ -17,14 +17,18 @@
 */
 package org.apache.abdera.protocol;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Represents a simple Entity Tag
  */
-public class EntityTag {
+public class EntityTag 
+  implements Cloneable, 
+             Serializable {
 
+  private static final long serialVersionUID = 1559972888659121461L;
   private static final String INVALID_ENTITY_TAG = "Invalid Entity Tag";
 
   public static EntityTag parse(String entity_tag) {
@@ -72,36 +76,23 @@ public class EntityTag {
   public static boolean matchesAny(EntityTag tag1, EntityTag[] tags, boolean weak) {
     if (tags == null) return (tag1 == null) ? true : false;
     for (EntityTag tag : tags) {
-      if (matches(tag1,tag,weak)) return true;
+      if (tag1.equals(tag)) return true;
     }
     return false;
   }
   
   public static boolean matches(EntityTag tag1, EntityTag tag2) {
-    return matches(tag1,tag2,false);
+    return tag1.equals(tag2);
   }
   
-  public static boolean matches(EntityTag tag1, EntityTag tag2, boolean weak) {
-    return tag1.equals(tag2,weak);
-  }
-  
-  public static boolean matches(String tag1, String tag2) { 
-    return matches(tag1,tag2,false);
-  }
-  
-  public static boolean matches(String tag1, String tag2, boolean weak) {
+  public static boolean matches(String tag1, String tag2) {
     EntityTag etag1 = parse(tag1);
     EntityTag etag2 = parse(tag2);
-    return etag1.equals(etag2, weak);
+    return etag1.equals(etag2);
   }
   
   public static boolean matches(EntityTag tag1, String tag2) {
-    return matches(tag1,tag2,false);
-  }
-  
-  public static boolean matches(EntityTag tag1, String tag2, boolean weak) {
-    EntityTag etag2 = parse(tag2);
-    return tag1.equals(etag2, weak);
+    return tag1.equals(tag2);
   }
   
   private final String tag;
@@ -149,14 +140,12 @@ public class EntityTag {
   }
 
   public boolean equals(Object obj) {
-    return equals(obj,false);
-  }
-  
-  private boolean equals(Object obj, boolean weak) {
     if (this == obj)
       return true;
     if (obj == null)
       return false;
+    if (obj instanceof String) 
+      obj = new EntityTag((String)obj);
     if (getClass() != obj.getClass())
       return false;
     final EntityTag other = (EntityTag) obj;
@@ -168,6 +157,12 @@ public class EntityTag {
     if (weak != other.weak)
       return false;
     return true;
+  }
+  
+  @Override
+  protected Object clone() 
+    throws CloneNotSupportedException {
+      return super.clone();
   }
   
 }

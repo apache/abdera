@@ -108,4 +108,5 @@ public interface Response
   
   String getCacheControl();
   
+  String getDecodedHeader(String header);
 }

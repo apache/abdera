@@ -25,10 +25,38 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.InflaterInputStream;
 
+import org.apache.abdera.util.unicode.Normalizer;
 import org.apache.commons.codec.net.QCodec;
 
 public class EncodingUtil {
 
+  /**
+   * Used to sanitize a string.  Optionally performs Unicode Form KD normalization
+   * on a string to break extended characters down, then replaces non alphanumeric
+   * characters with a specified filler replacement.
+   * @param slug The source string
+   * @param filler The replacement string
+   * @param lower True if the result should be lowercase
+   * @param normalize True if the result should be Form KD normalized
+   */
+  public static String sanitize(String slug, String filler, boolean lower, boolean normalize) {
+    if (filler == null) filler = "";
+    if (slug == null) return null;
+    if (normalize) {
+      try {
+        StringBuffer value = Normalizer.normalize(slug, Normalizer.Form.KD);
+        slug = value.toString();
+      } catch (Exception e) {}
+    }
+    slug = slug.replaceAll("[^A-Za-z0-9]",filler);
+    return (lower) ? slug.toLowerCase() : slug;
+  }
+  
+  /**
+   * Used to encode a string as specified by RFC 2047
+   * @param value The string to encode
+   * @param charset The character set to use for the encoding
+   */
   public static String encode(String value, String charset) {
     try {
       return (new QCodec(charset)).encode(value);
@@ -37,6 +65,10 @@ public class EncodingUtil {
     }
   }
   
+  /**
+   * Used to decode a string as specified by RFC 2047
+   * @param value The encoded string
+   */
   public static String decode(String value) {
     try {
       return (new QCodec()).decode(value);
@@ -44,6 +76,7 @@ public class EncodingUtil {
       return value;
     }
   }
+  
   
   public enum ContentEncoding { GZIP, XGZIP, DEFLATE }
   

@@ -40,7 +40,7 @@ public interface Constants {
   public static final String CONTROL_PREFIX       = "";
   
   public static final String ATOM_MEDIA_TYPE      = "application/atom+xml";
-  public static final String APP_MEDIA_TYPE       = "application/atomserv+xml";
+  public static final String APP_MEDIA_TYPE       = "application/atomsvc+xml";
   public static final String XML_MEDIA_TYPE       = "application/xml";
   public static final String CAT_MEDIA_TYPE       = "application/atomcat+xml";
   public static final String MULTIPART_MEDIA_TYPE = "multipart/related";

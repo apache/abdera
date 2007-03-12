@@ -58,6 +58,7 @@ public class EncodingUtil {
    * @param charset The character set to use for the encoding
    */
   public static String encode(String value, String charset) {
+    if (value == null) return null;
     try {
       return (new QCodec(charset)).encode(value);
     } catch (Exception e) {
@@ -70,6 +71,7 @@ public class EncodingUtil {
    * @param value The encoded string
    */
   public static String decode(String value) {
+    if (value == null) return null;
     try {
       return (new QCodec()).decode(value);
     } catch (Exception e) {

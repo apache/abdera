@@ -63,7 +63,7 @@ public abstract class AbstractResponse
   }
   
   public String getSlug() {
-    return getHeader("Slug");
+    return getDecodedHeader("Slug");
   }
 
   public MimeType getContentType() throws MimeTypeParseException {
@@ -189,6 +189,10 @@ public abstract class AbstractResponse
   private void toggle(boolean val, int flag) {
     if (val) flags |= flag;
     else flags &= ~flag;
+  }
+  
+  public String getDecodedHeader(String header) {
+    return EncodingUtil.decode(getHeader(header));
   }
   
 }

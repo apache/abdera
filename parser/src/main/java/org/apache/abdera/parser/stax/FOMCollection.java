@@ -42,6 +42,9 @@ public class FOMCollection
   extends FOMExtensibleElement 
   implements Collection {
 
+  private static final String[] EMPTY = new String[0];
+  private static final String[] ENTRY = new String[] {"entry"};
+  
   private static final long serialVersionUID = -5291734055253987136L;
 
   public FOMCollection() {
@@ -146,13 +149,16 @@ public class FOMCollection
   
   public String[] getAccept(){
     String accept = _getElementValue(ACCEPT);
-    if (accept == null) return new String[0];
-    String[] list = accept.trim().split("\\s*,\\s*");
+    if (accept == null) return ENTRY;
+    else accept = accept.trim();
+    if (accept.length() == 0) return EMPTY;
+    String[] list = accept.split("\\s*,\\s*");
     return MimeTypeHelper.condense(list);
   }
 
   public void setAccept(String... mediaRanges) {
     if (mediaRanges != null) {
+      mediaRanges = MimeTypeHelper.condense(mediaRanges);
       StringBuffer value = new StringBuffer();
       for (String type : mediaRanges) {
         if (value.length() > 0)

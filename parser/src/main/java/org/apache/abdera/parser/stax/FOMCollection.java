@@ -146,10 +146,8 @@ public class FOMCollection
   
   public String[] getAccept(){
     String accept = _getElementValue(ACCEPT);
-    String[] list = accept.split(",");
-    for (int n = 0; n < list.length; n++) {
-      list[n] = list[n].trim();
-    }
+    if (accept == null) return new String[0];
+    String[] list = accept.trim().split("\\s*,\\s*");
     return MimeTypeHelper.condense(list);
   }
 

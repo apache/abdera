@@ -23,10 +23,11 @@ import org.apache.abdera.protocol.server.util.RegexTargetResolver;
 public class SimpleTargetResolver 
   extends RegexTargetResolver {
 
-  public SimpleTargetResolver() {
-    setPattern("/appserver/atom(\\?[^#]*)?", TargetType.TYPE_SERVICE);
-    setPattern("/appserver/atom/feed(\\?[^#]*)?", TargetType.TYPE_COLLECTION);
-    setPattern("/appserver/atom/feed/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY);
+  public SimpleTargetResolver(String contextPath) {
+    super(contextPath);
+    setPattern("/atom(\\?[^#]*)?", TargetType.TYPE_SERVICE);
+    setPattern("/atom/feed(\\?[^#]*)?", TargetType.TYPE_COLLECTION);
+    setPattern("/atom/feed/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY);
   }
   
 }

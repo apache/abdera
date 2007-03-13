@@ -21,4 +21,6 @@ public interface TargetResolver {
 
   Target resolve(RequestContext context);
   
+  void setContextPath(String contextPath);
+  
 }

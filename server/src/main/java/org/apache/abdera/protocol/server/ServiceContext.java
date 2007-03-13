@@ -37,7 +37,7 @@ public interface ServiceContext {
   
   SubjectResolver getSubjectResolver();
   
-  TargetResolver getTargetResolver();
+  TargetResolver getTargetResolver(String contextPath);
   
   String getProperty(String name);
   

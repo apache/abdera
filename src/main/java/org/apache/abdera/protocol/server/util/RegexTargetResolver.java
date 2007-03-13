@@ -57,12 +57,15 @@ public class RegexTargetResolver
   implements TargetResolver {
 
   private final Map<Pattern, TargetType> patterns;
+  private String contextPath;
   
-  public RegexTargetResolver() {
+  public RegexTargetResolver(String contextPath) {
+    this.contextPath = contextPath;
     this.patterns = new HashMap<Pattern, TargetType>();
   }
   
-  public RegexTargetResolver(Map<String, TargetType> patterns) {
+  public RegexTargetResolver(String contextPath, Map<String, TargetType> patterns) {
+    this.contextPath = contextPath;
     this.patterns = new HashMap<Pattern, TargetType>();
     for (String p : patterns.keySet()) {
       TargetType type = patterns.get(p);
@@ -72,7 +75,8 @@ public class RegexTargetResolver
   }
   
   public synchronized void setPattern(String pattern, TargetType type) {
-    Pattern p = Pattern.compile(pattern);
+    String root = getContextPath();
+    Pattern p = Pattern.compile(getContextPath() + pattern);
     this.patterns.put(p,type);
   }
   
@@ -174,6 +178,14 @@ public class RegexTargetResolver
       return buf.toString();
     }
     
+  }
+
+  public void setContextPath(String contextPath) {
+    this.contextPath = contextPath;
+  }
+  
+  protected String getContextPath() {
+    return this.contextPath;
   }
   
 }

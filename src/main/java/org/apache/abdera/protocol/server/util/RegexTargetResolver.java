@@ -75,7 +75,6 @@ public class RegexTargetResolver
   }
   
   public synchronized void setPattern(String pattern, TargetType type) {
-    String root = getContextPath();
     Pattern p = Pattern.compile(getContextPath() + pattern);
     this.patterns.put(p,type);
   }

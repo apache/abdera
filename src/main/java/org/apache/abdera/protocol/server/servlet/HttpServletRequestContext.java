@@ -59,7 +59,9 @@ public class HttpServletRequestContext
       subject = (subjectResolver != null)? 
         subjectResolver.resolve((Principal)getProperty(Property.PRINCIPAL)) : null;
       
-      TargetResolver targetResolver = context.getTargetResolver();
+      TargetResolver targetResolver = 
+        context.getTargetResolver(
+          request.getContextPath());
       target = (targetResolver != null) ? 
         targetResolver.resolve(this) : null;
   }

@@ -54,12 +54,9 @@ public class UtilityTest extends TestCase {
     assertTrue(etag2.isWeak());
     
     assertFalse(EntityTag.matches(etag1, etag2));
-    assertTrue(EntityTag.matches(etag1, etag2, true));
     
     EntityTag[] tags = EntityTag.parseTags("\"foo\", W/\"bar\"");
     assertTrue(EntityTag.matchesAny(etag1, tags));
-    
-    assertTrue(EntityTag.matchesAny("\"bar\"", "\"foo\", W/\"bar\"", true));
     
     assertEquals(etag1.toString(), "\"foo\"");
     assertEquals(etag2.toString(), "W/\"foo\"");
@@ -67,9 +64,9 @@ public class UtilityTest extends TestCase {
   
   public static void testRegexTargetResolver() throws Exception {
     
-    RegexTargetResolver r = new RegexTargetResolver();
-    r.setPattern("/test", TargetType.TYPE_SERVICE);
-    r.setPattern("/test/([^/?#]+)", TargetType.TYPE_COLLECTION);
+    RegexTargetResolver r = new RegexTargetResolver("/test");
+    r.setPattern("", TargetType.TYPE_SERVICE);
+    r.setPattern("/([^/?#]+)", TargetType.TYPE_COLLECTION);
     
     DummyRequestContext drc = null;
     Target target = null;

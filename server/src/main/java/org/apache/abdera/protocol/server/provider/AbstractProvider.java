@@ -32,6 +32,7 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.ExtensibleElement;
+import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.iri.IRI;
 
@@ -45,6 +46,10 @@ public abstract class AbstractProvider
   private static final QName MESSAGE       = new QName(NS, "message", PFX);
   private static final QName TRACE         = new QName(NS, "trace", PFX);
   
+  protected boolean isDebug() {
+    return false;
+  }
+  
   protected Document createErrorDocument(
     Abdera abdera, 
     int code, 
@@ -55,10 +60,12 @@ public abstract class AbstractProvider
         (ExtensibleElement) abdera.getFactory().newElement(ERROR, doc);
       root.addSimpleExtension(CODE, (code != -1) ? String.valueOf(code) : "");
       root.addSimpleExtension(MESSAGE, (message != null) ? message : "");
-      if (e != null) {
-        CharArrayWriter out = new CharArrayWriter();
-        e.printStackTrace(new PrintWriter(out));
-        root.addSimpleExtension(TRACE, out.toString());
+      if (isDebug()) {
+        if (e != null) {
+          CharArrayWriter out = new CharArrayWriter();
+          e.printStackTrace(new PrintWriter(out));
+          root.addSimpleExtension(TRACE, out.toString());
+        }
       }
       return doc;
   }
@@ -213,7 +220,7 @@ public abstract class AbstractProvider
    */
   protected String sanitizeSlug(String slug) {
     if (slug == null) throw new IllegalArgumentException("Slug cannot be null");
-    return slug.replaceAll("[^a-zA-Z0-9]", "_");
+    return EncodingUtil.sanitize(slug,"",true,true);
   }
 
   protected abstract int getDefaultPageSize();

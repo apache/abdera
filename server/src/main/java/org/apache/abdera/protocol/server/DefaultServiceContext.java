@@ -44,6 +44,15 @@ public class DefaultServiceContext
     return obj;
   }
   
+  private Object instance(String id, String _default, Object... args) {
+    String instance = getProperty(id);
+    Object obj =  ServiceUtil.newInstance( id, (instance!=null)?instance:_default, abdera, args);
+    if (logger.isDebugEnabled()) {
+      logger.debug("Returning " + obj + " as instance of '" + id + "'.");
+    }
+    return obj;
+  }
+  
   public synchronized ProviderManager getProviderManager() {
     if (providerManager == null) {
       providerManager = (ProviderManager) instance(
@@ -80,10 +89,11 @@ public class DefaultServiceContext
     return SimpleSubjectResolver.class.getName();
   }
 
-  public TargetResolver getTargetResolver() {
+  public TargetResolver getTargetResolver(String contextPath) {
     if (targetResolver == null) {
       targetResolver = (TargetResolver) instance(
-        TARGET_RESOLVER, getDefaultTargetResolver());
+        TARGET_RESOLVER, getDefaultTargetResolver(), 
+        contextPath);
     }
     return targetResolver;
   }

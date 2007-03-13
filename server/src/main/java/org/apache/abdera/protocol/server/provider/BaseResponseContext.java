@@ -43,6 +43,9 @@ public class BaseResponseContext<T extends Base>
     setStatus(200);
     setStatusText("OK");
     this.chunked = chunked;
+    try {
+      setContentType(getContentType().toString());
+    } catch (Exception e) {}
   }
   
   public T getBase() {

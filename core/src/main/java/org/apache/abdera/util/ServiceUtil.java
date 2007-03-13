@@ -56,6 +56,18 @@ public final class ServiceUtil
   public static Object newInstance(String id, String _default, Abdera abdera) {
     return locate(id, _default, abdera);
   }
+  
+  /**
+   * Returns a new instance of the identified object class.  This will use
+   * the Abdera configuration mechanism to look up the implementation class
+   * for the specified id.  Several places will be checked: the abdera.properties
+   * file, the /META-INF/services directory, and the System properties.  If 
+   * no instance is configured, the default class name will be used.  Returns
+   * null if no instance can be created.
+   */
+  public static Object newInstance(String id, String _default, Abdera abdera, Object... args) {
+    return locate(id, _default, abdera, args);
+  }
 
   /**
    * Utility method for returning an instance of the default Abdera XPath instance
@@ -125,6 +137,18 @@ public final class ServiceUtil
       }
       return object;
   }
+  
+  public static Object locate(
+    String id, 
+    String _default, 
+    Abdera abdera,
+    Object... args) {
+      Object object = locate(id, abdera);
+      if (object == null && _default != null) {
+        object = locateInstance(getClassLoader(), _default, abdera, args);
+      }
+      return object;
+  }
 
   /**
    * Locate a class instance for the given id
@@ -155,6 +179,38 @@ public final class ServiceUtil
   }
   
   @SuppressWarnings("unchecked")
+  private static Object _create(Class _class, Abdera abdera, Object... args) {
+    Class[] types = null;
+    Object[] values = null;
+    if (_class == null) return null;
+    try {
+      if (abdera != null) {
+        types = new Class[args.length + 1];
+        values = new Object[args.length + 1];
+        types[0] = Abdera.class;
+        values[0] = abdera;
+        for (int n = 0; n < args.length; n++) {
+          types[n+1] = args[n].getClass();
+          values[n+1] = args[n];
+        }
+        Constructor c = _class.getConstructor(types);
+        return c.newInstance(values);
+      }
+    } catch (Exception e) {
+      // Nothing
+    }
+    try {
+      types = new Class[args.length];
+      for (int n = 0; n < args.length; n++)
+        types[n] = args[n].getClass();
+      _class.getConstructor(types).newInstance(args);
+    } catch (Exception e) {
+      // Nothing
+    }
+    return null;
+  }
+  
+  @SuppressWarnings("unchecked")
   public static Object locateInstance(ClassLoader loader, String id, Abdera abdera) {
     try {
       Class _class = loader.loadClass(id);
@@ -165,6 +221,23 @@ public final class ServiceUtil
     try {
       Class _class = ClassLoader.getSystemClassLoader().loadClass(id);
       return _create(_class, abdera);
+    } catch (Exception e) {
+      // Nothing
+    }
+    return null;
+  }
+  
+  @SuppressWarnings("unchecked")
+  public static Object locateInstance(ClassLoader loader, String id, Abdera abdera, Object... args) {
+    try {
+      Class _class = loader.loadClass(id);
+      return _create(_class, abdera);
+    } catch (Exception e) {
+      // Nothing
+    }
+    try {
+      Class _class = ClassLoader.getSystemClassLoader().loadClass(id);
+      return _create(_class, abdera, args);
     } catch (Exception e) {
       // Nothing
     }

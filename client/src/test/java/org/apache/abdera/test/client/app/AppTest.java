@@ -598,9 +598,7 @@ public class AppTest extends JettyTest {
     assertFalse(tag1.isWeak());
     assertTrue(tag2.isWeak());
     assertFalse(EntityTag.matches(tag1, tag2));
-    assertTrue(EntityTag.matches(tag1, tag2, true));
     assertFalse(EntityTag.matchesAny(tag1, new EntityTag[] {tag2}));
-    assertTrue(EntityTag.matchesAny(tag1, new EntityTag[] {tag2}, true));
     assertEquals(tag1.toString(), "\"tag\"");
     assertEquals(tag2.toString(), "W/\"tag\"");
     tag1 = EntityTag.parse("\"tag\"");

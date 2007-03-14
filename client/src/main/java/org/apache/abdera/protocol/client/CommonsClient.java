@@ -120,11 +120,12 @@ public class CommonsClient extends Client {
     String uri, 
     RequestEntity entity,
     RequestOptions options) {
+      boolean usecache = useCache(method,options);
       try {
         if (options == null) options = getDefaultRequestOptions();
         Cache cache = getCache();
         CacheDisposition disp = 
-          (useCache(method,options)) ? 
+          (usecache) ? 
             cache.getDisposition(uri, options) : 
             CacheDisposition.TRANSPARENT;
         CachedResponse cached_response = cache.get(uri, options);
@@ -149,6 +150,10 @@ public class CommonsClient extends Client {
               MethodHelper.createMethod(
                 method, uri, entity, options);
             client.executeMethod(httpMethod);
+            if (usecache &&
+                (httpMethod.getStatusCode() == 304 || 
+                 httpMethod.getStatusCode() == 412) &&
+                cached_response != null) return cached_response;
             ClientResponse response = new CommonsResponse(abdera,httpMethod);
             return (options.getUseLocalCache()) ?
               response = cache.update(options, response, cached_response) : 

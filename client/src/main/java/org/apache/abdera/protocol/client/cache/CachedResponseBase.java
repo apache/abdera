@@ -36,7 +36,7 @@ public abstract class CachedResponseBase
     this.cache = cache;
   }
   
-  public CacheKey geKey() {
+  public CacheKey getKey() {
     return key;
   }
 

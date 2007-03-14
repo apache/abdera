@@ -152,7 +152,7 @@ public class FOMCollection
     if (accept == null) return ENTRY;
     else accept = accept.trim();
     if (accept.length() == 0) return EMPTY;
-    String[] list = accept.split("\\s*,\\s*");
+    String[] list = accept.split("\\s*,\\s*(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
     return MimeTypeHelper.condense(list);
   }
 

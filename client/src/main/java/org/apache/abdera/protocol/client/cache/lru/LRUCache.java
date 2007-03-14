@@ -42,9 +42,8 @@ public class LRUCache
     setMap(
       new LinkedHashMap<CacheKey,CachedResponse>(size,0.75f,true) {
         @Override
-        protected boolean removeEldestEntry(Map.Entry<CacheKey,
-                                                      CachedResponse> eldest)
-        {
+        protected boolean removeEldestEntry(
+          Map.Entry<CacheKey,CachedResponse> eldest) {
           return size() > size;
         }
       }

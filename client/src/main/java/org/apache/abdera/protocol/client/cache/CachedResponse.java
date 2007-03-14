@@ -21,7 +21,7 @@ import org.apache.abdera.protocol.client.ClientResponse;
 
 public interface CachedResponse extends ClientResponse {
 
-  CacheKey geKey();
+  CacheKey getKey();
   
   Cache getCache();
   

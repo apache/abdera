@@ -149,6 +149,35 @@
       </plugins>
     </pluginManagement>    
   </build>
+
+  <profiles>
+    <profile>
+      <id>no-online-tests</id>
+      <activation>
+       <property>
+               <name>offline-tests</name>
+               <value>false</value>
+       </property>
+      </activation>
+      <build>
+      <plugins>
+       <plugin>
+               <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+         <excludes>
+            <exclude>**/*TestSuite*</exclude>
+             <exclude>**/*$Test*</exclude>
+             <exclude>**/FeedValidatorTest.java</exclude>
+             <exclude>**/DSigThirdPartyVerifyTest.java</exclude>
+             <exclude>**/AtomConformanceTest.java</exclude>
+        </excludes>
+        </configuration>
+       </plugin>
+      </plugins>
+      </build>
+    </profile>
+  </profiles>
+
   
   <dependencyManagement>
     <dependencies>

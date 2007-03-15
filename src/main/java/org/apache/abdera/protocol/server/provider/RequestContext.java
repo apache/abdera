@@ -31,7 +31,7 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.protocol.Request;
 import org.apache.abdera.protocol.server.ServiceContext;
-import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.g14n.iri.IRI;
 
 public interface RequestContext 
   extends Request {

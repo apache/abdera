@@ -17,8 +17,8 @@
 */
 package org.apache.abdera.model;
 
-import org.apache.abdera.util.iri.IRI;
-import org.apache.abdera.util.iri.IRISyntaxException;
+import org.apache.abdera.g14n.iri.IRI;
+import org.apache.abdera.g14n.iri.IRISyntaxException;
 
 /**
  * <p>The IRI interface provides a common base for a set of feed and 

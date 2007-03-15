@@ -155,22 +155,14 @@ public final class Abdera {
    * Return a new instance of org.apache.abdera.factory.Factory
    */
   private Factory newFactory() {
-    try {
-      return ServiceUtil.newFactoryInstance(this);
-    } catch (NoClassDefFoundError n) {
-      return null;  // Don't die if the component is not available
-    }
+    return ServiceUtil.newFactoryInstance(this);
   }
     
   /**
    * Return a new instance of org.apache.abdera.parser.Parser
    */
   private Parser newParser() {
-    try {
-      return ServiceUtil.newParserInstance(this);
-    } catch (NoClassDefFoundError n) {
-      return null;  // Don't die if the component is not available
-    }
+    return ServiceUtil.newParserInstance(this);
   }
     
   /**

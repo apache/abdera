@@ -43,7 +43,7 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.security.AbderaSecurity;
-import org.apache.abdera.util.io.RewindableInputStream;
+import org.apache.abdera.g14n.io.RewindableInputStream;
 
 public abstract class SecurityFilter 
   implements Filter {

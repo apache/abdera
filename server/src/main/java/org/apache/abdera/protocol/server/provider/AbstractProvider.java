@@ -34,7 +34,7 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.ExtensibleElement;
 import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.util.MimeTypeHelper;
-import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.g14n.iri.IRI;
 
 public abstract class AbstractProvider 
   implements Provider {

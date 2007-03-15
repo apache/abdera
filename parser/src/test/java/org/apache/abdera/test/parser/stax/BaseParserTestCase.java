@@ -23,7 +23,7 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.Parser;
-import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.g14n.iri.IRI;
 
 import java.io.InputStream;
 

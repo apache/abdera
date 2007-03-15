@@ -15,7 +15,7 @@
   copyright in this work, please see the NOTICE file in the top level
   directory of this distribution. -->
 <project name="abdera" default="build" basedir="..">
-<!--
+  <!--
 
   abdera Build
     targets:
@@ -78,45 +78,56 @@
   <property name="client.jar" value="${dist}/${ant.project.name}.client.${version}.jar" />
   <property name="examples" value="${basedir}/examples" />
   <property name="examples.work" value="${work}/examples" />
-  <property name="examples.src" value="${examples}/src/main/java" /> 
+  <property name="examples.src" value="${examples}/src/main/java" />
   <property name="debug" value="on" />
-  
+
   <property environment="env" />
-      
+
   <property name="dependencies" value="${basedir}/dependencies" />
   <property name="dependencies.work" value="${dependencies}/work" />
   <property name="json.src" value="${dependencies}/json/src" />
-  <property name="json.src.java"
-            value="${json.src}/main/java" />
+  <property name="json.src.java" value="${json.src}/main/java" />
   <property name="json.version" value="1.0" />
-
   <property name="json.jar" value="${dependencies}/json-${json.version}.jar" />
 
+  <property name="g14n.src" value="${dependencies}/g14n/src" />
+  <property name="g14n.src.java" value="${g14n.src}/main/java" />
+  <property name="g14n.src.resources" value="${g14n.src}/main/resources" />
+  <property name="g14n.version" value="0.2.2" />
+  <property name="g14n.jar" value="${dependencies}/abdera-g14n-${g14n.version}.jar" />
+
   <property file="${dependencies}/deps.properties" />
-  
+
   <path id="jar.dependencies">
     <fileset dir="${dependencies}" includes="**/*.jar" />
+    <fileset file="${g14n.jar}" />
+    <fileset file="${json.jar}" />
   </path>
- 
+
   <target name="compile.dependencies">
     <mkdir dir="${dependencies.work}/json" />
 
     <!-- build json -->
-    <javac srcdir="${json.src.java}"
-           destdir="${dependencies.work}/json"
-           debug="${debug}" />
+    <javac srcdir="${json.src.java}" destdir="${dependencies.work}/json" debug="${debug}" />
 
-    <jar destfile="${json.jar}"
-         basedir="${dependencies.work}/json"
-         includes="org/json/*.class" />
+    <jar destfile="${json.jar}" basedir="${dependencies.work}/json" includes="org/json/*.class" />
+
+
+    <mkdir dir="${dependencies.work}/g14n" />
+    <javac srcdir="${g14n.src.java}" destdir="${dependencies.work}/g14n" debug="${debug}" />
+    <copy todir="${dependencies.work}/g14n">
+      <fileset dir="${g14n.src.resources}" includes="**/*" />
+    </copy>
+    <jar destfile="${g14n.jar}" basedir="${dependencies.work}/g14n" includes="org/apache/abdera/g14n/**/*" />
+
   </target>
- 
+
   <target name="dependencies">
     <path id="">
       <fileset dir="dependencies" includes="*.jar" />
     </path>
   </target>
-  
+
   <target name="init">
     <echo>
 =====================================================
@@ -136,12 +147,11 @@ Working directory: ${work}
       <not>
         <and>
           <available file="${dependencies}/${geronimo.activation.jar}" />
-          <available file="${dependencies}/${geronimo.servlet.jar}" />          
+          <available file="${dependencies}/${geronimo.servlet.jar}" />
           <available file="${dependencies}/${axiom.api.jar}" />
           <available file="${dependencies}/${axiom.impl.jar}" />
           <available file="${dependencies}/${jaxen.jar}" />
           <available file="${dependencies}/${log4j.jar}" />
-          <!--available file="${dependencies}/${stax.jar}" /-->
           <available file="${dependencies}/${stax.api.jar}" />
           <available file="${dependencies}/${commons.logging.jar}" />
           <available file="${dependencies}/${commons.codec.jar}" />
@@ -155,7 +165,7 @@ Working directory: ${work}
       </not>
     </condition>
     <condition property="do.security">
-      <istrue value="${env.ABDERA_XMLSECURITY}"/>
+      <istrue value="${env.ABDERA_XMLSECURITY}" />
     </condition>
     <condition property="do.download.security">
       <and>
@@ -168,34 +178,27 @@ Working directory: ${work}
         </not>
       </and>
     </condition>
-    
+
     <mkdir dir="${work}" />
     <manifest file="${work}/MANIFEST.MF">
-    <attribute name="Specification-Title" value="Apache Abdera"/>
-    <attribute name="Specification-Version" value="${version}"/>
-    <attribute name="Specification-Vendor" value="The Apache Software Foundation - Incubator"/>
-    <attribute name="Implementation-Title" value="org.apache.abdera"/>
-    <attribute name="Implementation-Version" value="${version}"/> 
-    <attribute name="Implementation-Vendor" value="The Apache Software Foundation - Incubator"/>
+      <attribute name="Specification-Title" value="Apache Abdera" />
+      <attribute name="Specification-Version" value="${version}" />
+      <attribute name="Specification-Vendor" value="The Apache Software Foundation - Incubator" />
+      <attribute name="Implementation-Title" value="org.apache.abdera" />
+      <attribute name="Implementation-Version" value="${version}" />
+      <attribute name="Implementation-Vendor" value="The Apache Software Foundation - Incubator" />
     </manifest>
-    
+
     <echo>Building Security? ${do.security}</echo>
-    
-    <antcall target="download"/>
+
+    <antcall target="download" />
     <antcall target="downloadsecurity" />
   </target>
-  
-  <target name="compile.core" depends="init">
+
+  <target name="compile.core" depends="init,compile.dependencies">
     <mkdir dir="${core.work}" />
-    <javac srcdir="${core.src}"
-           destdir="${core.work}"
-           classpathref="jar.dependencies"
-           debug="${debug}" />
-    <javac srcdir="${core.test}"
-           destdir="${test}" 
-           classpathref="jar.dependencies"
-           classpath="${core.work}"
-           debug="${debug}" />
+    <javac srcdir="${core.src}" destdir="${core.work}" classpathref="jar.dependencies" debug="${debug}" />
+    <javac srcdir="${core.test}" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work}" debug="${debug}" />
     <mkdir dir="${core.work}/META-INF" />
     <copy todir="${core.work}">
       <fileset dir="${core.resources}" includes="**/*" />
@@ -207,14 +210,10 @@ Working directory: ${work}
       </fileset>
     </copy>
   </target>
-  
+
   <target name="compile.protocol" depends="init">
     <mkdir dir="${protocol.work}" />
-    <javac srcdir="${protocol.src}"
-           destdir="${protocol.work}"
-           classpathref="jar.dependencies"
-           classpath="${core.work}"
-           debug="${debug}" />
+    <javac srcdir="${protocol.src}" destdir="${protocol.work}" classpathref="jar.dependencies" classpath="${core.work}" debug="${debug}" />
     <mkdir dir="${protocol.work}/META-INF" />
     <copy todir="${protocol.work}/META-INF">
       <fileset dir="${basedir}">
@@ -223,19 +222,11 @@ Working directory: ${work}
       </fileset>
     </copy>
   </target>
-  
+
   <target name="compile.parser" depends="init,compile.core">
     <mkdir dir="${parser.work}" />
-    <javac srcdir="${parser.src}"
-           destdir="${parser.work}"
-           classpathref="jar.dependencies" 
-           classpath="${core.work}"
-           debug="${debug}" />
-    <javac srcdir="${parser.test.java}"
-           destdir="${test}"
-           classpathref="jar.dependencies"
-           classpath="${core.work};${parser.work}"
-           debug="${debug}" />
+    <javac srcdir="${parser.src}" destdir="${parser.work}" classpathref="jar.dependencies" classpath="${core.work}" debug="${debug}" />
+    <javac srcdir="${parser.test.java}" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${parser.work}" debug="${debug}" />
     <mkdir dir="${parser.work}/META-INF" />
     <copy todir="${parser.work}/META-INF">
       <fileset dir="${basedir}">
@@ -248,23 +239,15 @@ Working directory: ${work}
     </copy>
     <copy todir="${test}">
       <fileset dir="${parser.test.resources}">
-        <include name="**"/>
+        <include name="**" />
       </fileset>
     </copy>
   </target>
-  
+
   <target name="compile.extensions" depends="init, compile.core, compile.parser, compile.dependencies, compile.client">
     <mkdir dir="${extensions.work}" />
-    <javac srcdir="${extensions.src}"
-           destdir="${extensions.work}"
-           classpathref="jar.dependencies"
-           classpath="${core.work};${parser.work};${client.work};${protocol.work}"
-           debug="${debug}" />
-    <javac srcdir="${extensions.test.java}"
-           destdir="${test}"
-           classpathref="jar.dependencies"
-           classpath="${core.work};${parser.work};${extensions.work};${client.work};${protocol.work}"
-           debug="${debug}" />
+    <javac srcdir="${extensions.src}" destdir="${extensions.work}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${client.work};${protocol.work}" debug="${debug}" />
+    <javac srcdir="${extensions.test.java}" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${extensions.work};${client.work};${protocol.work}" debug="${debug}" />
     <mkdir dir="${extensions.work}/META-INF" />
     <copy todir="${extensions.work}/META-INF">
       <fileset dir="${basedir}">
@@ -279,14 +262,10 @@ Working directory: ${work}
       <fileset dir="${extensions.test.resources}" includes="**/*" />
     </copy>
   </target>
-  
+
   <target name="compile.server" depends="init, compile.core, compile.protocol">
     <mkdir dir="${server.work}" />
-    <javac srcdir="${server.src}"
-           destdir="${server.work}"
-           classpathref="jar.dependencies"
-           classpath="${core.work};${protocol.work}"
-           debug="${debug}" />
+    <javac srcdir="${server.src}" destdir="${server.work}" classpathref="jar.dependencies" classpath="${core.work};${protocol.work}" debug="${debug}" />
     <mkdir dir="${server.work}/META-INF" />
     <copy todir="${server.work}/META-INF">
       <fileset dir="${basedir}">
@@ -294,20 +273,12 @@ Working directory: ${work}
         <include name="NOTICE" />
       </fileset>
     </copy>
-  </target>  
-  
+  </target>
+
   <target name="compile.security" depends="init, compile.core" if="do.security">
     <mkdir dir="${security.work}" />
-    <javac srcdir="${security.src}"
-           destdir="${security.work}"
-           classpathref="jar.dependencies"
-           classpath="${core.work}"
-           debug="${debug}" />
-    <javac srcdir="${security.test.java}"
-           destdir="${test}"
-           classpathref="jar.dependencies"
-           classpath="${core.work};${parser.work};${security.work};${protocol.work}:${client.work}"
-           debug="${debug}" />
+    <javac srcdir="${security.src}" destdir="${security.work}" classpathref="jar.dependencies" classpath="${core.work}" debug="${debug}" />
+    <javac srcdir="${security.test.java}" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${security.work};${protocol.work}:${client.work}" debug="${debug}" />
     <mkdir dir="${security.work}/META-INF" />
     <copy todir="${test}">
       <fileset dir="${security.test.resources}" includes="**/*" />
@@ -322,16 +293,8 @@ Working directory: ${work}
 
   <target name="compile.client" depends="init,compile.core, compile.protocol">
     <mkdir dir="${client.work}" />
-    <javac srcdir="${client.src}"
-           destdir="${client.work}"
-           classpathref="jar.dependencies"
-           classpath="${core.work};${protocol.work}"
-           debug="${debug}" />
-    <javac srcdir="${client.test.java}"
-           destdir="${test}"
-           classpathref="jar.dependencies"
-           classpath="${core.work};${parser.work};${extensions.work};${client.work};${protocol.work}"
-           debug="${debug}" />
+    <javac srcdir="${client.src}" destdir="${client.work}" classpathref="jar.dependencies" classpath="${core.work};${protocol.work}" debug="${debug}" />
+    <javac srcdir="${client.test.java}" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${extensions.work};${client.work};${protocol.work}" debug="${debug}" />
     <mkdir dir="${client.work}/META-INF" />
     <copy todir="${client.work}/META-INF">
       <fileset dir="${basedir}">
@@ -340,75 +303,51 @@ Working directory: ${work}
       </fileset>
     </copy>
   </target>
-  
+
   <target name="compile.examples" depends="init,compile.core,compile.parser,compile.protocol,compile.server,compile.extensions,compile.security">
     <echo>Make sure the example code compiles...</echo>
     <mkdir dir="${examples.work}" />
-    <javac srcdir="${examples.src}"
-           destdir="${examples.work}"
-           classpathref="jar.dependencies"
-           classpath="${core.work};${parser.work};${protocol.work};${client.work};${server.work};${extensions.work};${security.work}"
-           debug="${debug}">
+    <javac srcdir="${examples.src}" destdir="${examples.work}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${protocol.work};${client.work};${server.work};${extensions.work};${security.work}" debug="${debug}">
       <exclude unless="do.security" name="**/security/*.java" />
     </javac>
     <delete dir="${examples.work}" />
   </target>
-  
-  <target name="build" depends="init,compile.core,compile.parser,compile.protocol,compile.server,compile.extensions,compile.client,compile.security,compile.examples"></target>
+
+  <target name="build" depends="init,compile.core,compile.parser,compile.protocol,compile.server,compile.extensions,compile.client,compile.security,compile.examples">
+  </target>
 
   <target name="docs" depends="init">
-    <javadoc packagenames="org.apache.abdera.*"
-             excludepackagenames="org.apache.abdera.util,org.apache.abdera.ext.*.impl,org.apache.abdera.parser.**,org.apache.abdera.security.**"
-             sourcepath="${core.src}:${extensions.src}:${security.src}:${server.src}:${parser.src}:${client.src}:${protocol.src}" 
-             destdir="${javadocs}"
-             windowtitle="Abdera"
-             classpathref="jar.dependencies" />
-    <replaceregexp match="Generated by javadoc (.*) on (.*) --"
-                   replace="Generated by javadoc --"
-                   flags="g"
-                   byline="true">
-      <fileset dir="${javadocs}" includes="**/*.html"/>
+    <javadoc packagenames="org.apache.abdera.*" excludepackagenames="org.apache.abdera.util,org.apache.abdera.ext.*.impl,org.apache.abdera.parser.**,org.apache.abdera.security.**" sourcepath="${core.src}:${extensions.src}:${security.src}:${server.src}:${parser.src}:${client.src}:${protocol.src}" destdir="${javadocs}" windowtitle="Abdera" classpathref="jar.dependencies" />
+    <replaceregexp match="Generated by javadoc (.*) on (.*) --" replace="Generated by javadoc --" flags="g" byline="true">
+      <fileset dir="${javadocs}" includes="**/*.html" />
     </replaceregexp>
-    <copy  todir="${docs}">
+    <copy todir="${docs}">
       <fileset dir="${basedir}/docs/" includes="*.html" />
     </copy>
   </target>
-  
+
   <target name="test" depends="build, download_feedvalidator_tests">
     <echo>Running Core Tests...</echo>
-    <java classpathref="jar.dependencies" 
-          classpath="${core.work}:${parser.work}:${server.work}:${test}"
-          classname="org.apache.abdera.test.core.TestSuite"
-          fork="yes" />
+    <java classpathref="jar.dependencies" classpath="${core.work}:${parser.work}:${server.work}:${test}" classname="org.apache.abdera.test.core.TestSuite" fork="yes" />
 
     <echo>Running Stax Parser Tests...</echo>
-    <java classpathref="jar.dependencies" 
-          classpath="${core.work}:${parser.work}:${server.work}:${test}"
-          classname="org.apache.abdera.test.parser.stax.TestSuite"
-          fork="yes" />
+    <java classpathref="jar.dependencies" classpath="${core.work}:${parser.work}:${server.work}:${test}" classname="org.apache.abdera.test.parser.stax.TestSuite" fork="yes" />
 
     <echo>Running Client Tests...</echo>
-    <java classpathref="jar.dependencies"
-          classpath="${core.work}:${parser.work}:${server.work}:${client.work}:${protocol.work}:${test}"
-          classname="org.apache.abdera.test.client.TestSuite"
-          fork="yes" />
+    <java classpathref="jar.dependencies" classpath="${core.work}:${parser.work}:${server.work}:${client.work}:${protocol.work}:${test}" classname="org.apache.abdera.test.client.TestSuite" fork="yes" />
 
     <echo>Running Extension Tests...</echo>
-    <java classpathref="jar.dependencies"
-          classpath="${core.work}:${parser.work}:${server.work}:${extensions.work}:${test}"
-          classname="org.apache.abdera.test.ext.TestSuite"
-          fork="yes" />
-    
+    <java classpathref="jar.dependencies" classpath="${core.work}:${parser.work}:${server.work}:${extensions.work}:${test}" classname="org.apache.abdera.test.ext.TestSuite" fork="yes" />
+
     <antcall target="test.security" />
-    
+
   </target>
-  
+
   <target name="test.security" if="do.security">
     <echo>Running Security Tests...</echo>
-    <java classpathref="jar.dependencies"
-          classpath="${core.work}:${parser.work}:${server.work}:${security.work}:${client.work}:${protocol.work}:${test}"
-          classname="org.apache.abdera.test.security.TestSuite"
-          fork="yes"><arg line="${bouncycastle.provider}"/></java>
+    <java classpathref="jar.dependencies" classpath="${core.work}:${parser.work}:${server.work}:${security.work}:${client.work}:${protocol.work}:${test}" classname="org.apache.abdera.test.security.TestSuite" fork="yes">
+      <arg line="${bouncycastle.provider}" />
+    </java>
   </target>
 
   <target name="clean">
@@ -417,35 +356,36 @@ Working directory: ${work}
     <delete dir="${dist}" />
     <delete dir="${dependencies.work}" />
     <delete file="${json.jar}" />
-    <delete> 
+    <delete file="${g14n.jar}" />
+    <delete>
       <fileset dir="${basedir}" includes="*.zip" />
       <fileset dir="${basedir}" includes="*.md5" />
     </delete>
   </target>
-  
+
   <target name="dist" depends="clean,build,test,docs">
     <mkdir dir="${dist}" />
     <mkdir dir="${dist_lib}" />
-    <jar destfile="${core.jar}"   basedir="${core.work}" manifest="${work}/MANIFEST.MF" />
+    <jar destfile="${core.jar}" basedir="${core.work}" manifest="${work}/MANIFEST.MF" />
     <jar destfile="${parser.jar}" basedir="${parser.work}" manifest="${work}/MANIFEST.MF" />
     <jar destfile="${protocol.jar}" basedir="${protocol.work}" manifest="${work}/MANIFEST.MF" />
-    <jar destfile="${server.jar}" basedir="${server.work}" manifest="${work}/MANIFEST.MF" />    
+    <jar destfile="${server.jar}" basedir="${server.work}" manifest="${work}/MANIFEST.MF" />
     <jar destfile="${extensions.jar}" basedir="${extensions.work}" manifest="${work}/MANIFEST.MF" />
     <jar destfile="${client.jar}" basedir="${client.work}" manifest="${work}/MANIFEST.MF" />
     <antcall target="dist.security" />
     <copy todir="${dist_lib}">
-      <fileset dir="${dependencies}"  />
+      <fileset dir="${dependencies}" />
     </copy>
     <delete dir="${work}" />
     <delete dir="${test}" />
   </target>
-  
+
   <target name="dist.security" if="do.security">
     <jar destfile="${security.jar}" basedir="${security.work}" manifest="${work}/MANIFEST.MF" />
   </target>
-  
-  <target name="zip" depends="retro"> 
-    <mkdir dir="${work}/dist/${ant.project.name}.${version}"/>
+
+  <target name="zip" depends="retro">
+    <mkdir dir="${work}/dist/${ant.project.name}.${version}" />
     <mkdir dir="${work}/dist/${ant.project.name}.${version}/examples" />
     <copy todir="${work}/dist/${ant.project.name}.${version}">
       <fileset dir="${dist}">
@@ -472,12 +412,11 @@ Working directory: ${work}
     <copy todir="${work}/dist/${ant.project.name}.${version}/examples">
       <fileset dir="${basedir}/examples" includes="**/*" excludes="**/pom.xml" />
     </copy>
-    <zip destfile="${basedir}/${ant.project.name}.${version}.zip" 
-         basedir="${work}/dist/" />
+    <zip destfile="${basedir}/${ant.project.name}.${version}.zip" basedir="${work}/dist/" />
     <checksum file="${basedir}/${ant.project.name}.${version}.zip" fileext=".md5" />
     <delete dir="${work}/dist/${ant.project.name}.${version}" />
-    <mkdir dir="${work}/dist/${ant.project.name}.${version}.jdk142"/>
-    <mkdir dir="${work}/dist/${ant.project.name}.${version}.jdk142/examples"/>
+    <mkdir dir="${work}/dist/${ant.project.name}.${version}.jdk142" />
+    <mkdir dir="${work}/dist/${ant.project.name}.${version}.jdk142/examples" />
     <copy todir="${work}/dist/${ant.project.name}.${version}.jdk142">
       <fileset dir="${dist}">
         <include name="**/*.jar" />
@@ -499,13 +438,12 @@ Working directory: ${work}
       </fileset>
     </copy>
     <copy todir="${work}/dist/${ant.project.name}.${version}.jdk142/examples">
-      <fileset dir="${basedir}/examples" includes="**/*" excludes="**/pom.xml"/>
+      <fileset dir="${basedir}/examples" includes="**/*" excludes="**/pom.xml" />
     </copy>
-    <zip destfile="${basedir}/${ant.project.name}.${version}.jdk142.zip" 
-         basedir="${work}/dist/" />
+    <zip destfile="${basedir}/${ant.project.name}.${version}.jdk142.zip" basedir="${work}/dist/" />
     <checksum file="${basedir}/${ant.project.name}.${version}.jdk142.zip" fileext=".md5" />
     <delete dir="${work}/dist/${ant.project.name}.${version}.jdk142" />
-    <mkdir dir="${work}/dist/${ant.project.name}.${version}.src"/>
+    <mkdir dir="${work}/dist/${ant.project.name}.${version}.src" />
     <copy todir="${work}/dist/${ant.project.name}.${version}.src">
       <fileset dir="${basedir}">
         <exclude name="dist/**/*" />
@@ -522,85 +460,51 @@ Working directory: ${work}
         <exclude name="**/dependencies/work/json/**/*" />
       </fileset>
     </copy>
-    <zip destfile="${basedir}/${ant.project.name}.${version}.src.zip"
-         basedir="${work}/dist/" />
+    <zip destfile="${basedir}/${ant.project.name}.${version}.src.zip" basedir="${work}/dist/" />
     <checksum file="${basedir}/${ant.project.name}.${version}.src.zip" fileext=".md5" />
     <delete dir="${work}" />
   </target>
 
   <target name="downloadsecurity" if="do.download.security">
     <parallel>
-    <get src="${xmlsecurity.dir}/${xmlsecurity.jar}"
-         dest="${dependencies}/${xmlsecurity.jar}"
-         usetimestamp="true" />
-    <get src="${bouncycastle.dir}/${bouncycastle.jar}"
-         dest="${dependencies}/${bouncycastle.jar}"
-         usetimestamp="true" />
+      <get src="${xmlsecurity.dir}/${xmlsecurity.jar}" dest="${dependencies}/${xmlsecurity.jar}" usetimestamp="true" />
+      <get src="${bouncycastle.dir}/${bouncycastle.jar}" dest="${dependencies}/${bouncycastle.jar}" usetimestamp="true" />
     </parallel>
   </target>
   <target name="download" if="do.download">
     <echo>Downloading project dependencies.  This may take a moment</echo>
     <parallel>
-      <get src="${geronimo.activation.dir}/${geronimo.activation.jar}"
-           dest="${dependencies}/${geronimo.activation.jar}"
-           usetimestamp="true" />
-      <get src="${geronimo.servlet.dir}/${geronimo.servlet.jar}"
-           dest="${dependencies}/${geronimo.servlet.jar}"
-           usetimestamp="true" />      
-      <get src="${axiom.dir}/${axiom.api.jar}"
-           dest="${dependencies}/${axiom.api.jar}"
-           usetimestamp="true" />
-      <get src="${axiom.dir}/${axiom.impl.jar}"
-           dest="${dependencies}/${axiom.impl.jar}"
-           usetimestamp="true" />
-      <get src="${jaxen.dir}/${jaxen.jar}"
-           dest="${dependencies}/${jaxen.jar}"
-           usetimestamp="true" />
-      <get src="${log4j.dir}/${log4j.jar}"
-           dest="${dependencies}/${log4j.jar}"
-           usetimestamp="true" />
+      <get src="${geronimo.activation.dir}/${geronimo.activation.jar}" dest="${dependencies}/${geronimo.activation.jar}" usetimestamp="true" />
+      <get src="${geronimo.servlet.dir}/${geronimo.servlet.jar}" dest="${dependencies}/${geronimo.servlet.jar}" usetimestamp="true" />
+      <get src="${axiom.dir}/${axiom.api.jar}" dest="${dependencies}/${axiom.api.jar}" usetimestamp="true" />
+      <get src="${axiom.dir}/${axiom.impl.jar}" dest="${dependencies}/${axiom.impl.jar}" usetimestamp="true" />
+      <get src="${jaxen.dir}/${jaxen.jar}" dest="${dependencies}/${jaxen.jar}" usetimestamp="true" />
+      <get src="${log4j.dir}/${log4j.jar}" dest="${dependencies}/${log4j.jar}" usetimestamp="true" />
       <!--get src="${stax.dir}/${stax.jar}"
            dest="${dependencies}/${stax.jar}"
            usetimestamp="true" /-->
-      <get src="${stax.dir}/${stax.api.jar}"
-           dest="${dependencies}/${stax.api.jar}"
-           usetimestamp="true" />
-      <get src="${commons.logging.dir}/${commons.logging.jar}"
-           dest="${dependencies}/${commons.logging.jar}"
-           usetimestamp="true" />
-      <get src="${commons.codec.dir}/${commons.codec.jar}"
-           dest="${dependencies}/${commons.codec.jar}"
-           usetimestamp="true" />
-      <get src="${commons.httpclient.dir}/${commons.httpclient.jar}"
-           dest="${dependencies}/${commons.httpclient.jar}"
-           usetimestamp="true" />
-      <get src="${junit.dir}/${junit.jar}"
-           dest="${dependencies}/${junit.jar}"
-           usetimestamp="true" />
-      <get src="${wstx.dir}/${wstx.jar}"
-           dest="${dependencies}/${wstx.jar}"
-           usetimestamp="true" />
-      <get src="${jetty.dir}/${jetty.jar}"
-           dest="${dependencies}/${jetty.jar}"
-           usetimestamp="true" />
-      <get src="${jetty-util.dir}/${jetty-util.jar}"
-           dest="${dependencies}/${jetty-util.jar}"
-           usetimestamp="true" />
-      <get src="${json.dir}/${json.zip}"
-           dest="${dependencies}/${json.zip}"
-           usetimestamp="true" />
+      <get src="${stax.dir}/${stax.api.jar}" dest="${dependencies}/${stax.api.jar}" usetimestamp="true" />
+      <get src="${commons.logging.dir}/${commons.logging.jar}" dest="${dependencies}/${commons.logging.jar}" usetimestamp="true" />
+      <get src="${commons.codec.dir}/${commons.codec.jar}" dest="${dependencies}/${commons.codec.jar}" usetimestamp="true" />
+      <get src="${commons.httpclient.dir}/${commons.httpclient.jar}" dest="${dependencies}/${commons.httpclient.jar}" usetimestamp="true" />
+      <get src="${junit.dir}/${junit.jar}" dest="${dependencies}/${junit.jar}" usetimestamp="true" />
+      <get src="${wstx.dir}/${wstx.jar}" dest="${dependencies}/${wstx.jar}" usetimestamp="true" />
+      <get src="${jetty.dir}/${jetty.jar}" dest="${dependencies}/${jetty.jar}" usetimestamp="true" />
+      <get src="${jetty-util.dir}/${jetty-util.jar}" dest="${dependencies}/${jetty-util.jar}" usetimestamp="true" />
+      <get src="${json.dir}/${json.zip}" dest="${dependencies}/${json.zip}" usetimestamp="true" />
     </parallel>
     <mkdir dir="${json.src}/main/java/org/json" />
-    <unzip src="${dependencies}/${json.zip}" 
-           dest="${json.src}" overwrite="true" />
+    <unzip src="${dependencies}/${json.zip}" dest="${json.src}" overwrite="true" />
     <copy todir="${json.src}/main/java/org/json" overwrite="true">
       <fileset dir="${json.src}/apache/json" />
     </copy>
     <delete dir="${json.src}/apache" />
   </target>
-  
+
   <target name="clean-downloads" depends="init">
-    <delete><fileset dir="${dependencies}" includes="**/*.jar" /></delete>
+    <delete>
+      <fileset dir="${dependencies}" includes="**/*.jar" />
+    </delete>
   </target>
 
   <target name="site-docs" depends="docs">
@@ -609,7 +513,7 @@ Working directory: ${work}
       <fileset dir="${javadocs}" />
     </copy>
   </target>
-  
+
   <target name="retro" depends="dist">
     <property name="retrozip" value="${basedir}/build/tools/${retroweaver.zip}" />
     <property name="retro" value="${basedir}/build/tools/retroweaver-1.2.3" />
@@ -620,21 +524,23 @@ Working directory: ${work}
     <property name="retro_server.jar" value="${dist}/${ant.project.name}.server.${version}.retro.jar" />
     <property name="retro_client.jar" value="${dist}/${ant.project.name}.client.${version}.retro.jar" />
     <condition property="do.download.retroweaver">
-      <not><available file="${retrozip}"/></not>
+      <not>
+        <available file="${retrozip}" />
+      </not>
     </condition>
     <antcall target="go_retro" />
     <path id="jar.retro">
       <fileset dir="${retro}/release" includes="**/*.jar" />
-    </path>    
+    </path>
     <echo>Retroweaving the Jars...</echo>
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${core.jar}&quot; &quot;${retro_core.jar}&quot;" />
     </java>
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
-      <arg line="-jar &quot;${parser.jar}&quot; &quot;${retro_parser.jar}&quot;"/>
+      <arg line="-jar &quot;${parser.jar}&quot; &quot;${retro_parser.jar}&quot;" />
     </java>
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
-      <arg line="-jar &quot;${protocol.jar}&quot; &quot;${retro_protocol.jar}&quot;"/>
+      <arg line="-jar &quot;${protocol.jar}&quot; &quot;${retro_protocol.jar}&quot;" />
     </java>
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${server.jar}&quot; &quot;${retro_server.jar}&quot;" />
@@ -648,34 +554,25 @@ Working directory: ${work}
     <antcall target="retro.security" />
     <copy todir="${dist_lib}" file="${retro}/release/retroweaver-rt-1.2.3.jar" />
   </target>
-  
+
   <target name="retro.security" if="do.security">
     <property name="retro_security.jar" value="${dist}/${ant.project.name}.security.${version}.retro.jar" />
     <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${security.jar}&quot; &quot;${retro_security.jar}&quot;" />
     </java>
-    <get src="${bouncycastle.dir}/${bouncycastle.jar.retro}"
-         dest="${dependencies}/${bouncycastle.jar.retro}"
-         usetimestamp="true" ignoreerrors="true"/>
+    <get src="${bouncycastle.dir}/${bouncycastle.jar.retro}" dest="${dependencies}/${bouncycastle.jar.retro}" usetimestamp="true" ignoreerrors="true" />
   </target>
-  
+
   <target name="go_retro" if="do.download.retroweaver">
     <echo>Downloading Retroweaver...</echo>
     <mkdir dir="${basedir}/build/tools" />
-    <get src="${retroweaver.dir}/${retroweaver.zip}"
-         dest="${basedir}/build/tools/${retroweaver.zip}"
-         usetimestamp="true" />
-    <unzip src="${basedir}/build/tools/${retroweaver.zip}"
-           dest="${basedir}/build/tools/" overwrite="true"/>
+    <get src="${retroweaver.dir}/${retroweaver.zip}" dest="${basedir}/build/tools/${retroweaver.zip}" usetimestamp="true" />
+    <unzip src="${basedir}/build/tools/${retroweaver.zip}" dest="${basedir}/build/tools/" overwrite="true" />
   </target>
-  
-  <target name="download_feedvalidator_tests" 
-    depends="init" if="do.download.feedvalidator.tests" >
+
+  <target name="download_feedvalidator_tests" depends="init" if="do.download.feedvalidator.tests">
     <mkdir dir="${parser.test.resources}/feedvalidator.org" />
-    <exec 
-      failifexecutionfails="false"
-      dir="${parser.test.resources}/feedvalidator.org" 
-      executable="svn">
+    <exec failifexecutionfails="false" dir="${parser.test.resources}/feedvalidator.org" executable="svn">
       <arg line="co https://svn.sourceforge.net/svnroot/feedvalidator/trunk/feedvalidator/testcases/atom testcases/atom" />
     </exec>
   </target>

@@ -25,7 +25,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.InflaterInputStream;
 
-import org.apache.abdera.util.unicode.Normalizer;
+import org.apache.abdera.g14n.unicode.Normalizer;
 import org.apache.commons.codec.net.QCodec;
 
 public class EncodingUtil {

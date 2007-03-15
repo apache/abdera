@@ -48,7 +48,7 @@ import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.test.client.JettyTest;
 import org.apache.abdera.util.MimeTypeHelper;
-import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.g14n.iri.IRI;
 
 /**
  * Test to make sure that we can operate as a simple APP client

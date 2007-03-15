@@ -21,8 +21,8 @@ import java.util.List;
 
 import javax.activation.MimeType;
 
-import org.apache.abdera.util.iri.IRI;
-import org.apache.abdera.util.iri.IRISyntaxException;
+import org.apache.abdera.g14n.iri.IRI;
+import org.apache.abdera.g14n.iri.IRISyntaxException;
 
 /**
  * <p>Represents an collection element in an Atom Publishing Protocol 

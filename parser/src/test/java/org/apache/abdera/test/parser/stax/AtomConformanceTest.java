@@ -27,7 +27,7 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Text;
-import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.g14n.iri.IRI;
 import org.apache.axiom.om.OMElement;
 
 public class AtomConformanceTest extends BaseParserTestCase {

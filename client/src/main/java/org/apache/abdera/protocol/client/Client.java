@@ -110,13 +110,13 @@ public abstract class Client {
   public ClientResponse head(
     String uri, 
     RequestOptions options) {
-      return execute("HEAD", uri, null, options);
+      return execute("HEAD", uri, (RequestEntity)null, options);
   }
   
   public ClientResponse get(
     String uri, 
     RequestOptions options) {
-      return execute("GET", uri, null, options);
+      return execute("GET", uri, (RequestEntity)null, options);
   }
   
   public ClientResponse post(
@@ -164,7 +164,7 @@ public abstract class Client {
   public ClientResponse delete(
     String uri, 
     RequestOptions options) {
-      return execute("DELETE", uri, null, options);
+      return execute("DELETE", uri, (RequestEntity)null, options);
   }
   
   public ClientResponse head(String uri) {
@@ -231,6 +231,18 @@ public abstract class Client {
     RequestEntity entity, 
     RequestOptions options);
 
+  public abstract ClientResponse execute(
+    String method,
+    String uri,
+    Base base,
+    RequestOptions options);
+  
+  public abstract ClientResponse execute(
+    String method,
+    String uri,
+    InputStream in,
+    RequestOptions options);
+  
   /**
    * Register a new authentication scheme.
    * 

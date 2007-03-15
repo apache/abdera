@@ -42,7 +42,7 @@ import org.apache.abdera.protocol.server.provider.RequestContext;
 import org.apache.abdera.protocol.server.provider.ResponseContext;
 import org.apache.abdera.protocol.server.provider.TargetType;
 import org.apache.abdera.util.MimeTypeHelper;
-import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.g14n.iri.IRI;
 import org.apache.axiom.om.util.Base64;
 
 public class SimpleProvider 

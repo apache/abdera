@@ -38,7 +38,7 @@ import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.model.Content.Type;
 import org.apache.abdera.util.AbstractNamedWriter;
-import org.apache.abdera.util.iri.IRISyntaxException;
+import org.apache.abdera.g14n.iri.IRISyntaxException;
 import org.apache.abdera.writer.NamedWriter;
 import org.json.JSONArray;
 import org.json.JSONException;

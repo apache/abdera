@@ -29,8 +29,8 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.util.AbstractRequest;
-import org.apache.abdera.util.iri.IRI;
-import org.apache.abdera.util.iri.IRISyntaxException;
+import org.apache.abdera.g14n.iri.IRI;
+import org.apache.abdera.g14n.iri.IRISyntaxException;
 
 public abstract class AbstractRequestContext 
   extends AbstractRequest

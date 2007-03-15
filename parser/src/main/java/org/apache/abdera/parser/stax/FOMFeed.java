@@ -121,13 +121,17 @@ public class FOMFeed
 
   public Source getAsSource() {
     FOMSource source = (FOMSource) ((FOMFactory)factory).newSource(null);
-    OMElement _source = source;
     for (Iterator i = this.getChildElements(); i.hasNext();) {
-      OMElement _child = (OMElement) i.next();
-      if (!_child.getQName().equals(ENTRY)) {
-        _source.addChild(_child.cloneOMElement());
+      FOMElement child = (FOMElement)i.next();
+      if (!child.getQName().equals(ENTRY)) {
+        source.addChild((OMNode)child.clone());
       }
     }
+    try {
+      if (this.getBaseUri() != null) {
+        source.setBaseUri(this.getBaseUri());
+      }
+    } catch (Exception e) {}
     return source;
   }
 

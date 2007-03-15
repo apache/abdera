@@ -17,14 +17,17 @@
 */
 package org.apache.abdera.protocol.client;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.model.Base;
 import org.apache.abdera.protocol.client.cache.Cache;
 import org.apache.abdera.protocol.client.cache.CacheDisposition;
 import org.apache.abdera.protocol.client.cache.CachedResponse;
+import org.apache.abdera.protocol.client.util.BaseRequestEntity;
 import org.apache.abdera.protocol.client.util.MethodHelper;
 import org.apache.abdera.protocol.util.CacheControlUtil;
 import org.apache.abdera.util.Version;
@@ -35,6 +38,7 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
+import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpClientParams;
 
@@ -112,6 +116,34 @@ public class CommonsClient extends Client {
       }
     }
     return false;
+  }
+  
+  public ClientResponse execute(
+    String method,
+    String uri,
+    Base base,
+    RequestOptions options) {
+      RequestEntity re = new BaseRequestEntity(base);
+      return execute(method,uri,re,options);
+  }
+    
+  public ClientResponse execute(
+    String method,
+    String uri,
+    InputStream in,
+    RequestOptions options) {
+      RequestEntity re = null;
+      try {
+        if (options.getContentType() != null) { 
+          re = new InputStreamRequestEntity(
+            in, options.getContentType().toString());
+        } else {
+          re = new InputStreamRequestEntity(in);
+        }
+      } catch (Exception e) {
+        re = new InputStreamRequestEntity(in);
+      }
+      return execute(method,uri,re,options);
   }
   
   @Override

@@ -22,10 +22,10 @@ import java.util.Locale;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.util.iri.IRI;
-import org.apache.abdera.util.iri.IRISyntaxException;
-import org.apache.abdera.util.lang.InvalidLangTagSyntax;
-import org.apache.abdera.util.lang.Lang;
+import org.apache.abdera.g14n.iri.IRI;
+import org.apache.abdera.g14n.iri.IRISyntaxException;
+import org.apache.abdera.g14n.lang.InvalidLangTagSyntax;
+import org.apache.abdera.g14n.lang.Lang;
 
 /**
  * Root interface for all elements in the Feed Object Model

@@ -28,7 +28,7 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Person;
-import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.g14n.iri.IRI;
 
 public class FeedParserTest extends BaseParserTestCase {
 

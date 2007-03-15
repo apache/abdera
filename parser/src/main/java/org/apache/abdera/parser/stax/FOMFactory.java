@@ -55,7 +55,7 @@ import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.Version;
-import org.apache.abdera.util.iri.IRISyntaxException;
+import org.apache.abdera.g14n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;

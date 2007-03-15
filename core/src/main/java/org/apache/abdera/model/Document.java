@@ -23,8 +23,8 @@ import java.util.Date;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
-import org.apache.abdera.util.iri.IRI;
-import org.apache.abdera.util.iri.IRISyntaxException;
+import org.apache.abdera.g14n.iri.IRI;
+import org.apache.abdera.g14n.iri.IRISyntaxException;
 
 /**
  * <p>The top level artifact of the Feed Object Model.  The Parser component

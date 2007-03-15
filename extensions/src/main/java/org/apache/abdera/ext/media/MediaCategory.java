@@ -22,8 +22,8 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
-import org.apache.abdera.util.iri.IRI;
-import org.apache.abdera.util.iri.IRISyntaxException;
+import org.apache.abdera.g14n.iri.IRI;
+import org.apache.abdera.g14n.iri.IRISyntaxException;
 
 public class MediaCategory extends ElementWrapper {
 

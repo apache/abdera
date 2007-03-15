@@ -17,8 +17,8 @@
 */
 package org.apache.abdera.model;
 
-import org.apache.abdera.util.iri.IRI;
-import org.apache.abdera.util.iri.IRISyntaxException;
+import org.apache.abdera.g14n.iri.IRI;
+import org.apache.abdera.g14n.iri.IRISyntaxException;
 
 /**
  * <p>Provides categorization informaton for a feed or entry</p>

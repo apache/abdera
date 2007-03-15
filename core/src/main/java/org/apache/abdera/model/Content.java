@@ -22,8 +22,8 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.util.MimeTypeHelper;
-import org.apache.abdera.util.iri.IRI;
-import org.apache.abdera.util.iri.IRISyntaxException;
+import org.apache.abdera.g14n.iri.IRI;
+import org.apache.abdera.g14n.iri.IRISyntaxException;
 
 /**
  * <p>Represents an atom:content element.</p>

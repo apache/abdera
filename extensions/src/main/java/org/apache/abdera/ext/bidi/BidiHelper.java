@@ -21,7 +21,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Element;
-import org.apache.abdera.util.io.CharUtils;
+import org.apache.abdera.g14n.io.CharUtils;
 
 /**
  * <p>This is (hopefully) temporary.  Ideally, this would be wrapped into the 

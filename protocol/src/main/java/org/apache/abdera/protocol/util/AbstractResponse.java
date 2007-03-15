@@ -24,8 +24,8 @@ import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.protocol.EntityTag;
 import org.apache.abdera.protocol.Response;
-import org.apache.abdera.util.iri.IRI;
-import org.apache.abdera.util.iri.IRISyntaxException;
+import org.apache.abdera.g14n.iri.IRI;
+import org.apache.abdera.g14n.iri.IRISyntaxException;
 
 public abstract class AbstractResponse 
   implements Response {

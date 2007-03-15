@@ -19,8 +19,8 @@ package org.apache.abdera.util;
 
 import java.util.regex.Pattern;
 
-import org.apache.abdera.util.iri.IRI;
-import org.apache.abdera.util.iri.IRISyntaxException;
+import org.apache.abdera.g14n.iri.IRI;
+import org.apache.abdera.g14n.iri.IRISyntaxException;
 
 /**
  * Utility methods for working with URI's / IRI's

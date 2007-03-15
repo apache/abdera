@@ -20,7 +20,7 @@ package org.apache.abdera.model;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.abdera.util.iri.IRISyntaxException;
+import org.apache.abdera.g14n.iri.IRISyntaxException;
 
 /**
  * <p>Represents an Atom Feed Element</p>

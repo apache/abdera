@@ -26,7 +26,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.abdera.model.Div;
 import org.apache.abdera.util.Constants;
-import org.apache.abdera.util.iri.IRI;
+import org.apache.abdera.g14n.iri.IRI;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;

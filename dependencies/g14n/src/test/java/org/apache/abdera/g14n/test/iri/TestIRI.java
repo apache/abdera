@@ -30,7 +30,7 @@ public class TestIRI extends TestCase {
   public static void testSimple() throws Exception {
     IRI iri = new IRI("http://validator.w3.org/check?uri=http%3A%2F%2Fr\u00E9sum\u00E9.example.org");
     assertEquals(iri.toString(),"http://validator.w3.org/check?uri=http%3A%2F%2Fr\u00E9sum\u00E9.example.org");
-    assertEquals(iri.toURI().toString(),"http://validator.w3.org/check?uri=http://r%C3%A9sum%C3%A9.example.org");   
+    assertEquals(iri.toURI().toString(),"http://validator.w3.org/check?uri=http%3A%2F%2Fr%C3%A9sum%C3%A9.example.org");   
   }
 
   public static void testSimple2() throws Exception {

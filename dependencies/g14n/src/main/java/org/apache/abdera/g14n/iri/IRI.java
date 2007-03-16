@@ -25,7 +25,6 @@ import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.abdera.g14n.ChainableBitSet;
 import org.apache.abdera.g14n.io.CharUtils;
 import org.apache.abdera.g14n.io.InvalidCharacterException;
 import org.apache.abdera.g14n.unicode.Normalizer;

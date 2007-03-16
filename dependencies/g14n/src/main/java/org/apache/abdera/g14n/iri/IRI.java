@@ -196,7 +196,7 @@ public class IRI
     a_host = IDNA.toASCII(d_host);
     a_fragment = Escaping.encode(getFragment(),Constants.FRAGMENT);
     a_path = Escaping.encode(getPath(), Constants.PATH);
-    a_query = Escaping.encode(getQuery(),Constants.PATH);
+    a_query = Escaping.encode(getQuery(),Constants.QUERY, Constants.PATH);
     a_userinfo = Escaping.encode(getUserInfo(),Constants.USERINFO);
     a_authority = buildASCIIAuthority();
   }

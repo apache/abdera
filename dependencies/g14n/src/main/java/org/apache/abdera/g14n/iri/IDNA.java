@@ -99,6 +99,7 @@ public final class IDNA
   public static String toASCII(String regname) {
     try {    
       if (regname == null) return null;
+      if (regname.length() == 0) return regname;
       String[] labels = regname.split("\\\u002E");
       StringBuffer buf = new StringBuffer();
       for (String label : labels) {
@@ -127,6 +128,7 @@ public final class IDNA
   
   public static String toUnicode(String regname) {
     if (regname == null) return null;
+    if (regname.length() == 0) return regname;
     String[] labels = regname.split("\\\u002E");
     StringBuffer buf = new StringBuffer();
     for (String label : labels) {

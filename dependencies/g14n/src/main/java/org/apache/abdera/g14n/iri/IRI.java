@@ -25,6 +25,7 @@ import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.abdera.g14n.ChainableBitSet;
 import org.apache.abdera.g14n.io.CharUtils;
 import org.apache.abdera.g14n.io.InvalidCharacterException;
 import org.apache.abdera.g14n.unicode.Normalizer;
@@ -180,23 +181,23 @@ public class IRI
     this.scheme = scheme;
     this.authority = authority;
     this.userinfo = userinfo;
-    this.host = host;
+    this.host = host; 
     this.port = port;
     this.path = (path != null) ? path : "";
     this.query = query;
     this.fragment = fragment;
-    
-    d_authority = Escaping.decode(authority);
+
+    d_authority = Escaping.decode(this.authority);
     d_userinfo = Escaping.decode(userinfo);
     d_path = Escaping.decode(path);
-    d_query = Escaping.decode(query);
+    d_query = query; //Escaping.decode(query);
     d_fragment = Escaping.decode(fragment);
-    d_host = IDNA.toUnicode(Escaping.decode(host));
+    d_host = IDNA.toUnicode(Escaping.decode(this.host));
 
     a_host = IDNA.toASCII(d_host);
     a_fragment = Escaping.encode(getFragment(),Constants.FRAGMENT);
     a_path = Escaping.encode(getPath(), Constants.PATH);
-    a_query = Escaping.encode(getQuery(),Constants.QUERY);
+    a_query = Escaping.encode(getQuery(),Constants.PATH);
     a_userinfo = Escaping.encode(getUserInfo(),Constants.USERINFO);
     a_authority = buildASCIIAuthority();
   }
@@ -275,7 +276,7 @@ public class IRI
   }
   
   public String getAuthority() {
-    return d_authority;
+    return (d_authority != null && d_authority.length() > 0) ? d_authority : null;
   }
   
   public String getFragment() {
@@ -283,7 +284,7 @@ public class IRI
   }
   
   public String getHost() {
-    return d_host;
+    return (d_host != null && d_host.length() > 0) ? d_host : null;
   }
   
   public IDNA getIDN() {
@@ -291,7 +292,7 @@ public class IRI
   }
   
   public String getASCIIHost() {
-    return a_host;
+    return (a_host != null && a_host.length() > 0) ? a_host : null;
   }
   
   public String getPath() {
@@ -322,8 +323,12 @@ public class IRI
     return d_userinfo;
   }
   
+  public String getRawHost() {
+    return (host != null && host.length() > 0) ? host : null;
+  }
+  
   public String getRawAuthority() {
-    return authority;
+    return (authority != null && authority.length() > 0) ? authority : null;
   }
   
   public String getRawFragment() {
@@ -378,7 +383,7 @@ public class IRI
       return buf.toString();
     } else {
       return Escaping.encode(
-        getAuthority(), 
+        authority, 
         Constants.USERINFO, 
         Constants.REGNAME, 
         Constants.GENDELIMS);
@@ -386,7 +391,7 @@ public class IRI
   }
   
   public String getASCIIAuthority() {
-    return a_authority;
+    return (a_authority != null && a_authority.length() > 0) ? a_authority : null;
   }
   
   public String getASCIIFragment() {
@@ -407,10 +412,10 @@ public class IRI
   
   public String getASCIISchemeSpecificPart() {
     return buildSchemeSpecificPart(
-      getASCIIAuthority(), 
-      getASCIIPath(), 
-      getASCIIQuery(), 
-      getASCIIFragment());
+      a_authority, 
+      a_path, 
+      a_query, 
+      a_fragment);
   }
   
   private String buildSchemeSpecificPart(
@@ -738,7 +743,9 @@ public class IRI
           if (auth.group(2) != null) builder.userinfo = auth.group(2);
           if (auth.group(3) != null) builder.host = auth.group(3);
           else builder.host = auth.group(4);
-          if (auth.group(6) != null) builder.port = Integer.parseInt(auth.group(6));
+          try {
+            if (auth.group(6) != null) builder.port = Integer.parseInt(auth.group(6));
+          } catch (NumberFormatException e) {}
         }
         try {
           CharUtils.verify(builder.userinfo, Constants.IUSERINFO);

@@ -32,6 +32,11 @@ public class TestIRI extends TestCase {
     assertEquals(iri.toString(),"http://validator.w3.org/check?uri=http%3A%2F%2Fr\u00E9sum\u00E9.example.org");
     assertEquals(iri.toURI().toString(),"http://validator.w3.org/check?uri=http%3A%2F%2Fr%C3%A9sum%C3%A9.example.org");   
   }
+  
+  public static void testFile() throws Exception {
+    IRI iri = new IRI("file:///tmp/test/foo");
+    assertEquals(iri.toURI().toString(),"file:///tmp/test/foo");
+  }
 
   public static void testSimple2() throws Exception {
     IRI iri = new IRI("http://www.example.org/red%09ros\u00E9#red");

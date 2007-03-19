@@ -21,6 +21,7 @@ import org.apache.abdera.test.ext.media.MediaTest;
 import org.apache.abdera.test.ext.opensearch.*;
 import org.apache.abdera.test.ext.thread.ThreadTest;
 import org.apache.abdera.test.ext.bidi.BidiTest;
+import org.apache.abdera.test.ext.features.FeatureTest;
 import org.apache.abdera.test.ext.history.FeedPagingTest;
 
 public class TestSuite extends junit.framework.TestSuite {
@@ -36,5 +37,6 @@ public class TestSuite extends junit.framework.TestSuite {
     addTestSuite(ThreadTest.class);
     addTestSuite(MediaTest.class);
     addTestSuite(BidiTest.class);
+    addTestSuite(FeatureTest.class);
   }
 }

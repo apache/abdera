@@ -42,7 +42,7 @@ public class Feature
       return (ref != null) ? new IRI(ref) : null;
   }
   
-  public boolean getRequired() {
+  public boolean isRequired() {
     String req = getAttributeValue("required");
     if ("yes".equals(req)) return true;
     return false;

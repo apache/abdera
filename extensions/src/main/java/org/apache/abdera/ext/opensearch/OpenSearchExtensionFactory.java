@@ -24,7 +24,7 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.model.Element;
 
-public class OpenSearchExtensionFactory 
+public final class OpenSearchExtensionFactory 
   implements ExtensionFactory {
 
   @SuppressWarnings("unchecked")

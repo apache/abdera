@@ -25,7 +25,7 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.model.Element;
 
-public class ThreadExtensionFactory 
+public final class ThreadExtensionFactory 
   implements ExtensionFactory {
 
   public boolean handlesNamespace(String namespace) {

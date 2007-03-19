@@ -24,7 +24,7 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.model.Element;
 
-public class MediaExtensionFactory implements ExtensionFactory {
+public final class MediaExtensionFactory implements ExtensionFactory {
 
   @SuppressWarnings({ "unchecked", "deprecation" })
   public <T extends Element> T getElementWrapper(Element internal) {

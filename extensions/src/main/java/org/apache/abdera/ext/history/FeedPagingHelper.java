@@ -29,12 +29,14 @@ import org.apache.abdera.g14n.iri.IRISyntaxException;
  * Initial support for Mark Nottingham's Feed Paging and Archiving draft 
  * (http://ietfreport.isoc.org/all-ids/draft-nottingham-atompub-feed-history-07.txt)
  */
-public class FeedPagingHelper {
+public final class FeedPagingHelper {
 
   public static final String FH_PREFIX = "fh";
   public static final String FHNS = "http://purl.org/syndication/history/1.0";
   public static final QName COMPLETE = new QName(FHNS, "complete", FH_PREFIX);
   public static final QName ARCHIVE = new QName(FHNS, "archive", FH_PREFIX);
+  
+  FeedPagingHelper() {}
   
   /**
    * Returns true if the feed is "complete". According to the Feed Paging

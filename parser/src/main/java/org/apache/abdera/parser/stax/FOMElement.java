@@ -665,7 +665,7 @@ public class FOMElement
     return null;
   }
   
-  public void declareNS(String prefix, String uri) {
+  public void declareNS(String uri, String prefix) {
     super.declareNamespace(uri,prefix);
   }
 }

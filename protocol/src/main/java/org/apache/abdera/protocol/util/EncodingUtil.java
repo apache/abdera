@@ -28,6 +28,7 @@ import java.util.zip.InflaterInputStream;
 import org.apache.abdera.g14n.iri.Escaping;
 import org.apache.abdera.g14n.iri.Constants;
 import org.apache.abdera.g14n.unicode.Normalizer;
+import org.apache.abdera.g14n.ChainableBitSet;
 import org.apache.commons.codec.net.QCodec;
 
 public class EncodingUtil {
@@ -71,9 +72,9 @@ public class EncodingUtil {
         slug = Escaping.encode(slug, Constants.PATH);
       }
       if (filler != null) {
-        slug = slug.replaceAll("[^A-Za-z0-9\\%]",filler);
+        slug = slug.replaceAll("[^A-Za-z0-9\\%!$&\\\\'()*+,;=]",filler);
       } else { 
-        slug = Escaping.encode(slug, Constants.PATH);
+        slug = Escaping.encode(slug, Constants.PATHNODELIMS);
       }
       return slug;
   }

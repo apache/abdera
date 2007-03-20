@@ -25,11 +25,25 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.InflaterInputStream;
 
+import org.apache.abdera.g14n.iri.Escaping;
+import org.apache.abdera.g14n.iri.Constants;
 import org.apache.abdera.g14n.unicode.Normalizer;
 import org.apache.commons.codec.net.QCodec;
 
 public class EncodingUtil {
 
+  public static String sanitize(String slug) {
+    return sanitize(slug, null, false, null);
+  }
+  
+  public static String sanitize(String slug, String filler) {
+    return sanitize(slug, filler, false, null);
+  }
+  
+  public static String sanitize(String slug, String filler, boolean lower) {
+    return sanitize(slug, filler, lower, null);
+  }
+  
   /**
    * Used to sanitize a string.  Optionally performs Unicode Form KD normalization
    * on a string to break extended characters down, then replaces non alphanumeric
@@ -37,19 +51,31 @@ public class EncodingUtil {
    * @param slug The source string
    * @param filler The replacement string
    * @param lower True if the result should be lowercase
-   * @param normalize True if the result should be Form KD normalized
+   * @param form Unicode Normalization form to use (or null)
    */
-  public static String sanitize(String slug, String filler, boolean lower, boolean normalize) {
-    if (filler == null) filler = "";
-    if (slug == null) return null;
-    if (normalize) {
-      try {
-        StringBuffer value = Normalizer.normalize(slug, Normalizer.Form.KD);
-        slug = value.toString();
-      } catch (Exception e) {}
-    }
-    slug = slug.replaceAll("[^A-Za-z0-9]",filler);
-    return (lower) ? slug.toLowerCase() : slug;
+  public static String sanitize(
+    String slug, 
+    String filler, 
+    boolean lower, 
+    Normalizer.Form form) {
+      if (slug == null) return null;
+      if (lower) slug = slug.toLowerCase();
+      if (form != null) {
+        try {
+          StringBuffer value = 
+            Normalizer.normalize(
+              slug, form);          
+          slug = value.toString();
+        } catch (Exception e) {}
+      } else {
+        slug = Escaping.encode(slug, Constants.PATH);
+      }
+      if (filler != null) {
+        slug = slug.replaceAll("[^A-Za-z0-9\\%]",filler);
+      } else { 
+        slug = Escaping.encode(slug, Constants.PATH);
+      }
+      return slug;
   }
   
   /**

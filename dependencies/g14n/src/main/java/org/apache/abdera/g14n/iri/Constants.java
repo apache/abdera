@@ -50,6 +50,7 @@ public class Constants {
   public final static BitSet SUBDELIMS  = new ChainableBitSet().set2("!$&\\'()*+,;=");
   public final static BitSet PCHAR      = new ChainableBitSet().set2(UNRESERVED).set2(ESCAPED).set2(":@&=+$,");
   public final static BitSet PATH       = new ChainableBitSet().set2(PCHAR).set2(";/%");
+  public final static BitSet PATHNODELIMS = new ChainableBitSet().set2(PATH).addNot2(GENDELIMS);
   public final static BitSet SCHEME     = new ChainableBitSet().set2(ALPHA).set2(DIGIT).set2("+-.");
   public final static BitSet USERINFO   = new ChainableBitSet().set2(UNRESERVED).set2(SUBDELIMS).set2('%').set2(HEX);
   public final static BitSet QUERY      = new ChainableBitSet().set2(PCHAR).set2('/','?');

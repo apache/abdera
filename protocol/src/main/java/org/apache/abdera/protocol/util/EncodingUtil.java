@@ -28,7 +28,6 @@ import java.util.zip.InflaterInputStream;
 import org.apache.abdera.g14n.iri.Escaping;
 import org.apache.abdera.g14n.iri.Constants;
 import org.apache.abdera.g14n.unicode.Normalizer;
-import org.apache.abdera.g14n.ChainableBitSet;
 import org.apache.commons.codec.net.QCodec;
 
 public class EncodingUtil {

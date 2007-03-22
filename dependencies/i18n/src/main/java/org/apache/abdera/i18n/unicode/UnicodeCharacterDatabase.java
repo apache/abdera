@@ -49,7 +49,7 @@ final class UnicodeCharacterDatabase
 
   private static final long serialVersionUID = 1596950870716625345L;
 
-  private static final String UCD = "org/apache/abdera/g14n/unicode/data/ucd.res";
+  private static final String UCD = "org/apache/abdera/i18n/unicode/data/ucd.res";
   
   private final HashMap<Integer,Integer> cc = new HashMap<Integer,Integer>();
   private final HashMap<Integer,String>  decompose = new HashMap<Integer,String>();
@@ -138,7 +138,7 @@ final class UnicodeCharacterDatabase
    */
   public static void main(String... args) throws Exception {
     if (args.length == 0) usage();
-    base = (args.length > 1) ? args[1]: "org/apache/abdera/g14n/unicode/data/";
+    base = (args.length > 1) ? args[1]: "org/apache/abdera/i18n/unicode/data/";
     version = (args.length > 2) ? args[2]: "3.2.0";
     UnicodeCharacterDatabase ucd = UnicodeCharacterDatabase.getInstance();
     if (ucd == null) {

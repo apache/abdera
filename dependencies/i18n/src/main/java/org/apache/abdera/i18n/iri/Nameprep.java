@@ -80,7 +80,7 @@ public class Nameprep {
     return i;
   }
   
-  private static final String B2DAT = "/org/apache/abdera/g14n/iri/data/B2.dat";
+  private static final String B2DAT = "/org/apache/abdera/i18n/iri/data/B2.dat";
   
   public static int[][] loadb2() {
     int[][] map = new int[120764][];

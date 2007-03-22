@@ -28,7 +28,7 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
-import org.apache.abdera.g14n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRI;
 
 
 public class Create {

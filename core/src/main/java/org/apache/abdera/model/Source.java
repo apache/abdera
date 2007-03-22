@@ -22,8 +22,8 @@ import java.util.List;
 
 import javax.activation.MimeTypeParseException;
 
-import org.apache.abdera.g14n.iri.IRI;
-import org.apache.abdera.g14n.iri.IRISyntaxException;
+import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * <p>Per RFC4287:</p>

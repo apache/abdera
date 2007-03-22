@@ -17,8 +17,8 @@
 */
 package org.apache.abdera.model;
 
-import org.apache.abdera.g14n.iri.IRI;
-import org.apache.abdera.g14n.iri.IRISyntaxException;
+import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * <p>An Atom Person Construct</p>

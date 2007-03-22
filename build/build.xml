@@ -90,17 +90,17 @@
   <property name="json.version" value="1.0" />
   <property name="json.jar" value="${dependencies}/json-${json.version}.jar" />
 
-  <property name="g14n.src" value="${dependencies}/g14n/src" />
-  <property name="g14n.src.java" value="${g14n.src}/main/java" />
-  <property name="g14n.src.resources" value="${g14n.src}/main/resources" />
-  <property name="g14n.version" value="0.2.2" />
-  <property name="g14n.jar" value="${dependencies}/abdera-g14n-${g14n.version}.jar" />
+  <property name="i18n.src" value="${dependencies}/i18n/src" />
+  <property name="i18n.src.java" value="${i18n.src}/main/java" />
+  <property name="i18n.src.resources" value="${i18n.src}/main/resources" />
+  <property name="i18n.version" value="0.2.2" />
+  <property name="i18n.jar" value="${dependencies}/abdera-i18n-${i18n.version}.jar" />
 
   <property file="${dependencies}/deps.properties" />
 
   <path id="jar.dependencies">
     <fileset dir="${dependencies}" includes="**/*.jar" />
-    <fileset file="${g14n.jar}" />
+    <fileset file="${i18n.jar}" />
     <fileset file="${json.jar}" />
   </path>
 
@@ -113,12 +113,12 @@
     <jar destfile="${json.jar}" basedir="${dependencies.work}/json" includes="org/json/*.class" />
 
 
-    <mkdir dir="${dependencies.work}/g14n" />
-    <javac srcdir="${g14n.src.java}" destdir="${dependencies.work}/g14n" debug="${debug}" />
-    <copy todir="${dependencies.work}/g14n">
-      <fileset dir="${g14n.src.resources}" includes="**/*" />
+    <mkdir dir="${dependencies.work}/i18n" />
+    <javac srcdir="${i18n.src.java}" destdir="${dependencies.work}/i18n" debug="${debug}" />
+    <copy todir="${dependencies.work}/i18n">
+      <fileset dir="${i18n.src.resources}" includes="**/*" />
     </copy>
-    <jar destfile="${g14n.jar}" basedir="${dependencies.work}/g14n" includes="org/apache/abdera/g14n/**/*" />
+    <jar destfile="${i18n.jar}" basedir="${dependencies.work}/i18n" includes="org/apache/abdera/i18n/**/*" />
 
   </target>
 
@@ -356,7 +356,7 @@ Working directory: ${work}
     <delete dir="${dist}" />
     <delete dir="${dependencies.work}" />
     <delete file="${json.jar}" />
-    <delete file="${g14n.jar}" />
+    <delete file="${i18n.jar}" />
     <delete>
       <fileset dir="${basedir}" includes="*.zip" />
       <fileset dir="${basedir}" includes="*.md5" />

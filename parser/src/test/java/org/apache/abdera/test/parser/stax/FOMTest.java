@@ -63,7 +63,7 @@ import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.util.Version;
 import org.apache.abdera.util.filter.BlackListParseFilter;
 import org.apache.abdera.util.filter.WhiteListParseFilter;
-import org.apache.abdera.g14n.lang.Lang;
+import org.apache.abdera.i18n.lang.Lang;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
 import org.apache.abdera.xpath.XPath;

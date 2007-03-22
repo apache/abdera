@@ -34,8 +34,8 @@ import org.apache.abdera.protocol.server.auth.SubjectResolver;
 import org.apache.abdera.protocol.server.provider.AbstractRequestContext;
 import org.apache.abdera.protocol.server.provider.RequestContext;
 import org.apache.abdera.protocol.server.provider.TargetResolver;
-import org.apache.abdera.g14n.iri.IRI;
-import org.apache.abdera.g14n.iri.IRISyntaxException;
+import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 public class HttpServletRequestContext 
   extends AbstractRequestContext

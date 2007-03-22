@@ -26,10 +26,10 @@ import java.util.Locale;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
-import org.apache.abdera.g14n.iri.IRI;
-import org.apache.abdera.g14n.iri.IRISyntaxException;
-import org.apache.abdera.g14n.lang.InvalidLangTagSyntax;
-import org.apache.abdera.g14n.lang.Lang;
+import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRISyntaxException;
+import org.apache.abdera.i18n.lang.InvalidLangTagSyntax;
+import org.apache.abdera.i18n.lang.Lang;
 
 public abstract class ElementWrapper 
   implements Element {

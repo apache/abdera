@@ -22,7 +22,7 @@ import java.io.Reader;
 
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
-import org.apache.abdera.g14n.iri.IRISyntaxException;
+import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 public interface Parser {
 

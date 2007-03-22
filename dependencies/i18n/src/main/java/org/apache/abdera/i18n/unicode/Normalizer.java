@@ -174,7 +174,7 @@ public final class Normalizer {
   
   public static void main(String... args) throws Exception {
     
-    UnicodeCharacterDatabase.main("g14n/src/main/resources/org/apache/abdera/g14n/unicode/data/ucd.res");
+    UnicodeCharacterDatabase.main("i18n/src/main/resources/org/apache/abdera/i18n/unicode/data/ucd.res");
     
   }
 }

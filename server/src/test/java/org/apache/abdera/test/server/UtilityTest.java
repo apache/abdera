@@ -32,7 +32,7 @@ import org.apache.abdera.protocol.server.provider.Target;
 import org.apache.abdera.protocol.server.provider.TargetType;
 import org.apache.abdera.protocol.server.util.RegexTargetResolver;
 import org.apache.abdera.protocol.server.util.SimpleSubjectResolver;
-import org.apache.abdera.g14n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRI;
 
 import junit.framework.TestCase;
 

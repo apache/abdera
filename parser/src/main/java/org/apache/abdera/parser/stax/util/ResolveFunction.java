@@ -24,7 +24,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
-import org.apache.abdera.g14n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMNode;

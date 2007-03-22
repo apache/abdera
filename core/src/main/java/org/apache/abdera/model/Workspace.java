@@ -19,7 +19,7 @@ package org.apache.abdera.model;
 
 import java.util.List;
 
-import org.apache.abdera.g14n.iri.IRISyntaxException;
+import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * <p>An Atom Publishing Protocol Introspection Document workspace element.</p>

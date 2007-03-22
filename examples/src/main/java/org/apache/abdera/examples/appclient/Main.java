@@ -29,7 +29,7 @@ import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.protocol.client.Client;
 import org.apache.abdera.protocol.client.CommonsClient;
-import org.apache.abdera.g14n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRI;
 
 
 public class Main {

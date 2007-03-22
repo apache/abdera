@@ -25,7 +25,7 @@ import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.util.Constants;
-import org.apache.abdera.g14n.iri.IRISyntaxException;
+import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;

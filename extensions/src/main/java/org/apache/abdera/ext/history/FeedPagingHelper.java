@@ -22,8 +22,8 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Link;
-import org.apache.abdera.g14n.iri.IRI;
-import org.apache.abdera.g14n.iri.IRISyntaxException;
+import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * Initial support for Mark Nottingham's Feed Paging and Archiving draft 

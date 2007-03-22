@@ -25,8 +25,8 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.protocol.util.ProtocolConstants;
-import org.apache.abdera.g14n.iri.IRI;
-import org.apache.abdera.g14n.iri.IRISyntaxException;
+import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 public interface Response
   extends ProtocolConstants {

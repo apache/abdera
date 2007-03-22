@@ -34,7 +34,7 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.ExtensibleElement;
 import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.util.MimeTypeHelper;
-import org.apache.abdera.g14n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRI;
 
 public abstract class AbstractProvider 
   implements Provider {
@@ -220,7 +220,7 @@ public abstract class AbstractProvider
    */
   protected String sanitizeSlug(String slug) {
     if (slug == null) throw new IllegalArgumentException("Slug cannot be null");
-    return EncodingUtil.sanitize(slug,"",true,true);
+    return EncodingUtil.sanitize(slug);
   }
 
   protected abstract int getDefaultPageSize();

@@ -214,7 +214,11 @@ public class FOMElement
   }
   
   public String getLanguage() {
-    return getAttributeValue(LANG);
+    String lang = getAttributeValue(LANG);
+    Base parent = this.getParentElement();
+    return (lang != null) ? lang :
+      (parent != null && parent instanceof Element) ? 
+        ((Element)parent).getLanguage() : null;
   }
 
   public void setLanguage(String language) {

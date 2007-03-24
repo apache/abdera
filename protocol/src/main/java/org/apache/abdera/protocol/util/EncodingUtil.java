@@ -28,6 +28,8 @@ import java.util.zip.InflaterInputStream;
 import org.apache.abdera.i18n.iri.Constants;
 import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.i18n.unicode.Normalizer;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.net.BCodec;
 import org.apache.commons.codec.net.QCodec;
 
 public class EncodingUtil {
@@ -78,15 +80,29 @@ public class EncodingUtil {
       return slug;
   }
   
+  public static enum Codec { B, Q };
+  
+  public static String encode(String value) {
+    return encode(value, "UTF-8", Codec.B);
+  }
+  
+  public static String encode(String value, String charset) {
+    return encode(value, charset, Codec.B);
+  }
+  
   /**
    * Used to encode a string as specified by RFC 2047
    * @param value The string to encode
    * @param charset The character set to use for the encoding
    */
-  public static String encode(String value, String charset) {
+  public static String encode(String value, String charset, Codec codec) {
     if (value == null) return null;
     try {
-      return (new QCodec(charset)).encode(value);
+      switch(codec) {
+        case Q:  return (new QCodec(charset)).encode(value);
+        case B:
+        default: return (new BCodec(charset)).encode(value);
+      }
     } catch (Exception e) {
       return value;
     }
@@ -99,7 +115,15 @@ public class EncodingUtil {
   public static String decode(String value) {
     if (value == null) return null;
     try {
-      return (new QCodec()).decode(value);
+      // try BCodec first
+      return (new BCodec()).decode(value);
+    } catch (DecoderException de) {
+      // try QCodec next
+      try {
+        return (new QCodec()).decode(value);
+      } catch (Exception ex) {
+        return value;
+      }
     } catch (Exception e) {
       return value;
     }

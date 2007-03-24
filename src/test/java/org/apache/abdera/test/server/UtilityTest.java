@@ -32,12 +32,37 @@ import org.apache.abdera.protocol.server.provider.Target;
 import org.apache.abdera.protocol.server.provider.TargetType;
 import org.apache.abdera.protocol.server.util.RegexTargetResolver;
 import org.apache.abdera.protocol.server.util.SimpleSubjectResolver;
+import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.i18n.iri.IRI;
 
 import junit.framework.TestCase;
 
 public class UtilityTest extends TestCase {
 
+  public static void testEncoding() throws Exception {
+    String t = "tést";
+    String tb1 = EncodingUtil.encode(t);
+    String tb2 = EncodingUtil.encode(t, "UTF-8");
+    String tb3 = EncodingUtil.encode(t, "UTF-8", EncodingUtil.Codec.B);
+    String tb4 = EncodingUtil.encode(t, "UTF-16", EncodingUtil.Codec.B);
+    String tq1 = EncodingUtil.encode(t, "UTF-8", EncodingUtil.Codec.Q);
+    String tq2 = EncodingUtil.encode(t, "UTF-16", EncodingUtil.Codec.Q);
+    
+    assertEquals("=?UTF-8?B?dMOpc3Q=?=", tb1);
+    assertEquals("=?UTF-8?B?dMOpc3Q=?=", tb2);
+    assertEquals("=?UTF-8?B?dMOpc3Q=?=", tb3);
+    assertEquals("=?UTF-16?B?/v8AdADpAHMAdA==?=", tb4);
+    assertEquals("=?UTF-8?Q?t=C3=A9st?=", tq1);
+    assertEquals("=?UTF-16?Q?=FE=FF=00t=00=E9=00s=00t?=", tq2);
+    
+    assertEquals(EncodingUtil.decode(tb1),t);
+    assertEquals(EncodingUtil.decode(tb2),t);
+    assertEquals(EncodingUtil.decode(tb3),t);
+    assertEquals(EncodingUtil.decode(tb4),t);
+    assertEquals(EncodingUtil.decode(tq1),t);
+    assertEquals(EncodingUtil.decode(tq2),t);
+  }
+  
   public static void testServiceManager() throws Exception {
     ServiceManager sm = ServiceManager.getInstance();
     assertNotNull(sm);

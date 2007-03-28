@@ -270,6 +270,11 @@ public interface Source
   IRIElement setId(String id) throws IRISyntaxException;
   
   /**
+   * Creates a new randomized atom:id for the entry
+   */
+  IRIElement newId() throws IRISyntaxException;
+  
+  /**
    * Sets the universally unique identifier for this feed
    * @param id The atom:id value
    * @param normalize True if the atom:id value should be normalized

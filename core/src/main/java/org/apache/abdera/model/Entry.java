@@ -349,6 +349,11 @@ public interface Entry
   IRIElement setId(String id) throws IRISyntaxException;
   
   /**
+   * Creates a new randomized atom:id for the entry
+   */
+  IRIElement newId() throws IRISyntaxException;
+  
+  /**
    * Sets the universally unique identifier for this entry
    * @param id The atom:id value
    * @param normalize true if the atom:id value should be normalized as called for by RFC4287

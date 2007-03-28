@@ -330,6 +330,10 @@ public class FOMEntry
     return setId(value, false);
   }
   
+  public IRIElement newId() throws IRISyntaxException {
+    return setId(this.getFactory().newUuidUri(), false);
+  }
+  
   public IRIElement setId(String value, boolean normalize) throws IRISyntaxException {
     if (value == null) {
       _removeChildren(ID, false);

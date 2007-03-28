@@ -209,6 +209,10 @@ public class FOMSource
   public IRIElement setId(String value) throws IRISyntaxException {
     return setId(value, false);
   }
+  
+  public IRIElement newId() throws IRISyntaxException {
+    return setId(this.getFactory().newUuidUri(), false);
+  }
     
   public IRIElement setId(String value, boolean normalize) throws IRISyntaxException {
     if (value == null) {

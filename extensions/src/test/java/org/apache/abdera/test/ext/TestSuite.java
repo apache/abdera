@@ -23,6 +23,7 @@ import org.apache.abdera.test.ext.thread.ThreadTest;
 import org.apache.abdera.test.ext.bidi.BidiTest;
 import org.apache.abdera.test.ext.features.FeatureTest;
 import org.apache.abdera.test.ext.history.FeedPagingTest;
+import org.apache.abdera.test.license.LicenseTest;
 
 public class TestSuite extends junit.framework.TestSuite {
   public static void main(String[] args)
@@ -38,5 +39,6 @@ public class TestSuite extends junit.framework.TestSuite {
     addTestSuite(MediaTest.class);
     addTestSuite(BidiTest.class);
     addTestSuite(FeatureTest.class);
+    addTestSuite(LicenseTest.class);
   }
 }

@@ -124,7 +124,7 @@ public class HttpServletRequestContext
   @SuppressWarnings("unchecked")
   public String[] getAttributeNames(Scope scope) {
     switch(scope) {
-      case REQUEST: enum2array(request.getAttributeNames());
+      case REQUEST: return enum2array(request.getAttributeNames());
       case SESSION: return (session != null) ? enum2array(session.getAttributeNames()) : null;
     }
     return null;
@@ -188,7 +188,7 @@ public class HttpServletRequestContext
         "org.apache.abdera.protocol.server.Port");
       return (port != null) ? 
         Integer.parseInt(port) : 
-        request.getLocalPort();
+        request.getServerPort();
   }
   
   private static IRI initBaseUri(

@@ -17,9 +17,12 @@
 */
 package org.apache.abdera.test.parser.stax;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
@@ -765,7 +768,32 @@ public class FOMTest extends TestCase   {
     entry.setContent(foo, "application/foo+xml");
     assertEquals(entry.getContentElement().getValueElement(),foo);
     
+  }
+  
+  public void testSetContent2() throws Exception {
     
+    Abdera abdera = new Abdera();
+    Entry entry = abdera.newEntry();
+    InputStream in = 
+      new ByteArrayInputStream(
+        "tóst".getBytes("utf-16"));
+    
+    Document<Entry> edoc = entry.getDocument();
+    entry.setContent(in,"text/plain;charset=\"utf-16\"");
+    
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    OutputStreamWriter w = new OutputStreamWriter(out);
+    edoc.writeTo(w);
+    
+    in = new ByteArrayInputStream(out.toByteArray());
+
+    entry = (Entry) abdera.getParser().parse(in).getRoot();
+    
+    in = entry.getContentStream();
+    
+    InputStreamReader r = new InputStreamReader(in,entry.getContentMimeType().getParameter("charset"));
+    BufferedReader b = new BufferedReader(r);
+    assertEquals(b.readLine(),"tóst");
     
   }
 }

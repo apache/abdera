@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.parser.stax;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -44,6 +46,7 @@ import org.apache.abdera.model.Content.Type;
 import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
+import org.apache.abdera.i18n.io.InputStreamDataSource;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
@@ -255,6 +258,30 @@ public class FOMEntry
     content.setDataHandler(dataHandler);
     setContentElement(content);
     return content;
+  }
+  
+  /**
+   * Sets the content for this entry
+   */
+  public Content setContent(InputStream in) {
+    InputStreamDataSource ds = new InputStreamDataSource(in);
+    DataHandler dh = new DataHandler(ds);
+    Content content = null;
+    try {
+      content = setContent(dh);
+    } catch (MimeTypeParseException e) {
+      // should not happen
+    }
+    return content;
+  }
+  
+  /**
+   * Sets the content for this entry
+   */
+  public Content setContent(InputStream in, String mediatype) throws MimeTypeParseException {
+    InputStreamDataSource ds = new InputStreamDataSource(in, mediatype);
+    DataHandler dh = new DataHandler(ds);
+    return setContent(dh, mediatype);
   }
   
   /**
@@ -733,6 +760,12 @@ public class FOMEntry
   public String getContent() {
     Content content = getContentElement();
     return (content != null) ? content.getValue() : null;
+  }
+  
+  public InputStream getContentStream() throws IOException {
+    Content content = getContentElement();
+    DataHandler dh = content.getDataHandler();
+    return dh.getInputStream();
   }
   
   public IRI getContentSrc() throws IRISyntaxException {

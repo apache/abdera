@@ -231,7 +231,8 @@ public class FOMEntry
    */
   public Content setContent(Element element, String mediaType) throws MimeTypeParseException {
     FOMFactory factory = (FOMFactory) this.factory;
-    Content content = factory.newContent(new MimeType(mediaType), element);
+    Content content = factory.newContent(new MimeType(mediaType));
+    content.setValueElement(element);
     setContentElement(content);
     return content;
   }

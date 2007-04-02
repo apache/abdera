@@ -753,4 +753,19 @@ public class FOMTest extends TestCase   {
     assertEquals(lang.getSubtag(0), "US");
     assertEquals(lang.getLocale(), java.util.Locale.US);
   }
+  
+  public void testSetContent() throws Exception {
+    
+    Abdera abdera = new Abdera();
+    
+    Entry entry = abdera.newEntry();
+    Document<Element> foodoc = abdera.getParser().parse(
+      new ByteArrayInputStream("<a><b><c/></b></a>".getBytes()));
+    Element foo = foodoc.getRoot();
+    entry.setContent(foo, "application/foo+xml");
+    assertEquals(entry.getContentElement().getValueElement(),foo);
+    
+    
+    
+  }
 }

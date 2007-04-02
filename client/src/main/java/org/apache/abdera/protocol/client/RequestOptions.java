@@ -39,7 +39,7 @@ public class RequestOptions
 
   private boolean noLocalCache = false;
   private boolean revalidateAuth = false;
-  private boolean useChunked = true;
+  private boolean useChunked = false;
   
   private final Map<String,List<String>> headers;  
   

@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.model;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -242,10 +244,27 @@ public interface Entry
   /**
    * Sets the content for this entry
    * @param dataHandler The Data Handler containing the binary content needing Base64 encoding.
-   * @return mediaType The mediatype of the binary content
+   * @param mediaType The mediatype of the binary content
+   * @return The created content element
    * @throws MimeTypeParseException if the media type specified is malformed
    */
   Content setContent(DataHandler dataHandler, String mediatype) throws MimeTypeParseException;
+  
+  /**
+   * Sets the content for this entry
+   * @param inputStream An inputstream providing binary content 
+   * @return The created content element
+   */
+  Content setContent(InputStream inputStream);
+  
+  /**
+   * Sets the content for this entry
+   * @param inputStream An inputstream providing binary content
+   * @param mediaType The mediatype of the binary content
+   * @return The created content element
+   * @throws MimeTypeParseException if the media type specified is malformed
+   */
+  Content setContent(InputStream inputStream, String mediatype) throws MimeTypeParseException;
   
   /**
    * Sets the content for this entry
@@ -272,6 +291,13 @@ public interface Entry
    * @return text content
    */
   String getContent();
+  
+  /**
+   * Returns an input stream from the content element value. This is particularly
+   * useful when dealing with Base64 binary content.
+   * @throws IOException 
+   */
+  InputStream getContentStream() throws IOException;
   
   /**
    * Returns the content/@src attribute, if any

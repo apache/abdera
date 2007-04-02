@@ -27,6 +27,7 @@ import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Text;
+import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMConstants;
@@ -240,13 +241,15 @@ public class FOMBuilder
                 lastNode = createOMText(XMLStreamConstants.ENTITY_REFERENCE);
                 break;
             default :
-                throw new OMException();
+                throw new ParseException();
         }
         return token;
-    } catch (OMException e) {
+    } catch (ParseException e) {
         throw e;
+    } catch (OMException e) {
+        throw new ParseException(e);
     } catch (Exception e) {
-        throw new OMException(e);
+        throw new ParseException(e);
     }
   }
   

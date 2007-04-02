@@ -87,21 +87,21 @@ public class FOMSniffingInputStream
       return null;
     } else if (equals(bom,2,UTF16be)) {
       bomset = true;
-      return "utf-16be";
+      return "utf-16";
     } else if (equals(bom,2,UTF16le)) {
       bomset = true;
-      return "utf-16le";
+      return "utf-16";
     } else if (equals(bom,3,UTF8))  {
       bomset = true;
       return "utf-8";
     } else if (equals(bom,4,UTF32be2)) {
-      charset = "utf-32be";
+      charset = "utf-32";
     } else if (equals(bom,4,UTF32le2)) {
-      charset = "utf-32le";
+      charset = "utf-32";
     } else if (equals(bom,4,UTF16be2)) {
-      charset = "utf-16be";
+      charset = "utf-16";
     } else if (equals(bom,4,UTF16le2)) {
-      charset = "utf-16le";
+      charset = "utf-16";
     }
     bomset = false;
     try { 

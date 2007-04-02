@@ -95,13 +95,13 @@ public class FOMSniffingInputStream
       bomset = true;
       return "utf-8";
     } else if (equals(bom,4,UTF32be2)) {
-      charset = "utf-32";
+      charset = "utf-32be";
     } else if (equals(bom,4,UTF32le2)) {
-      charset = "utf-32";
+      charset = "utf-32le";
     } else if (equals(bom,4,UTF16be2)) {
-      charset = "utf-16";
+      charset = "utf-16be";
     } else if (equals(bom,4,UTF16le2)) {
-      charset = "utf-16";
+      charset = "utf-16le";
     }
     bomset = false;
     try { 

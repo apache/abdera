@@ -77,10 +77,10 @@ public class FOMSniffingInputStream
     String charset = null;
     if (equals(bom,4,UTF32be)) {
       bomset = true;
-      return "utf-32be";
+      return "utf-32";
     } else if (equals(bom,4,UTF32le)) {
       bomset = true;
-      return "utf-32le";
+      return "utf-32";
     } else if ((equals(bom,4,INVALID1)) ||
                (equals(bom,4,INVALID2))) {
       bomset = true;

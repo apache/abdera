@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.abdera.protocol.EntityTag;
 import org.apache.abdera.protocol.server.ServiceManager;
 import org.apache.abdera.protocol.server.provider.AbstractRequestContext;
 import org.apache.abdera.protocol.server.provider.Target;
@@ -33,6 +32,7 @@ import org.apache.abdera.protocol.server.provider.TargetType;
 import org.apache.abdera.protocol.server.util.RegexTargetResolver;
 import org.apache.abdera.protocol.server.util.SimpleSubjectResolver;
 import org.apache.abdera.protocol.util.EncodingUtil;
+import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.i18n.iri.IRI;
 
 import junit.framework.TestCase;

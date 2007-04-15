@@ -31,6 +31,7 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
+import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMComment;
@@ -55,6 +56,7 @@ public class FOMDocument<T extends Element>
   protected IRI base = null;
   protected MimeType contentType = null;
   protected Date lastModified = null;
+  protected EntityTag etag = null;
 
   public FOMDocument() {
     super();
@@ -219,6 +221,18 @@ public class FOMDocument<T extends Element>
     } else {
       this.addChild(comment);
     }
+  }
+
+  public EntityTag getEntityTag() {
+    return etag;
+  }
+
+  public void setEntityTag(EntityTag tag) {
+    this.etag = tag;
+  }
+
+  public void setEntityTag(String tag) {
+    this.etag = new EntityTag(tag);
   }
   
 }

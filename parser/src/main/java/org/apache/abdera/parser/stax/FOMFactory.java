@@ -68,6 +68,7 @@ public class FOMFactory
   implements Factory, Constants, ExtensionFactory {
 
   private final ExtensionFactoryMap factoriesMap;
+  private final Abdera abdera;
   
   public FOMFactory() {
     this(new Abdera());
@@ -80,6 +81,7 @@ public class FOMFactory
       (f != null) ? 
         new ArrayList<ExtensionFactory>(f) :
         new ArrayList<ExtensionFactory>());
+    this.abdera = abdera;
   }
   
   public Parser newParser() {
@@ -822,4 +824,7 @@ public class FOMFactory
     return factoriesMap.handlesNamespace(namespace);
   }
 
+  public Abdera getAbdera() {
+    return abdera;
+  }
 }

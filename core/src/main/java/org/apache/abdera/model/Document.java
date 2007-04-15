@@ -25,6 +25,7 @@ import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.iri.IRISyntaxException;
+import org.apache.abdera.util.EntityTag;
 
 /**
  * <p>The top level artifact of the Feed Object Model.  The Parser component
@@ -115,4 +116,18 @@ public interface Document<T extends Element>
    */
   void addStylesheet(String href, String media);
   
+  /**
+   * Return the entity tag for this document
+   */
+  EntityTag getEntityTag();
+  
+  /**
+   * Set the entity tag for this document
+   */
+  void setEntityTag(EntityTag tag);
+  
+  /**
+   * Set the entity tag for this document
+   */
+  void setEntityTag(String tag);
 }

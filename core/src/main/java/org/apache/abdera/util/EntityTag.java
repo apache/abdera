@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol;
+package org.apache.abdera.util;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -20,6 +20,7 @@ package org.apache.abdera.factory;
 import javax.activation.MimeType;
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Category;
@@ -639,4 +640,9 @@ public interface Factory {
    * Set an element wrapper
    */
   void setElementWrapper(Element element, Element wrapper);
+  
+  /**
+   * Get the Abdera instance for this factory
+   */
+  Abdera getAbdera();
 }

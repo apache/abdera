@@ -41,12 +41,12 @@ import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
-import org.apache.abdera.protocol.EntityTag;
 import org.apache.abdera.protocol.client.Client;
 import org.apache.abdera.protocol.client.CommonsClient;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.test.client.JettyTest;
+import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.i18n.iri.IRI;
 

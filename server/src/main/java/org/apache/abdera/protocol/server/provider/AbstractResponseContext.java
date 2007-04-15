@@ -23,10 +23,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.abdera.protocol.EntityTag;
 import org.apache.abdera.protocol.server.provider.ResponseContext;
 import org.apache.abdera.protocol.util.AbstractResponse;
 import org.apache.abdera.protocol.util.EncodingUtil;
+import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.writer.Writer;
 
 public abstract class AbstractResponseContext

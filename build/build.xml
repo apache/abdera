@@ -114,7 +114,8 @@
 
 
     <mkdir dir="${dependencies.work}/i18n" />
-    <javac srcdir="${i18n.src.java}" destdir="${dependencies.work}/i18n" debug="${debug}" />
+    
+    <javac srcdir="${i18n.src.java}" classpathref="jar.dependencies" destdir="${dependencies.work}/i18n" debug="${debug}" />
     <copy todir="${dependencies.work}/i18n">
       <fileset dir="${i18n.src.resources}" includes="**/*" />
     </copy>

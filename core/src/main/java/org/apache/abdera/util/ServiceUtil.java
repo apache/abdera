@@ -231,7 +231,7 @@ public final class ServiceUtil
   public static Object locateInstance(ClassLoader loader, String id, Abdera abdera, Object... args) {
     try {
       Class _class = loader.loadClass(id);
-      return _create(_class, abdera);
+      return _create(_class, abdera, args);
     } catch (Exception e) {
       // Nothing
     }

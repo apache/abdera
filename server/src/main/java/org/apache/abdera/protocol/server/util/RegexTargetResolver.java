@@ -69,8 +69,7 @@ public class RegexTargetResolver
     this.patterns = new HashMap<Pattern, TargetType>();
     for (String p : patterns.keySet()) {
       TargetType type = patterns.get(p);
-      Pattern pattern = Pattern.compile(p);
-      this.patterns.put(pattern,type);
+      setPattern(p,type);
     }
   }
   

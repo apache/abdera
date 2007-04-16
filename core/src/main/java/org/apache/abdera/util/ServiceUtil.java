@@ -203,7 +203,7 @@ public final class ServiceUtil
       types = new Class[args.length];
       for (int n = 0; n < args.length; n++)
         types[n] = args[n].getClass();
-      _class.getConstructor(types).newInstance(args);
+      return _class.getConstructor(types).newInstance(args);
     } catch (Exception e) {
       // Nothing
     }

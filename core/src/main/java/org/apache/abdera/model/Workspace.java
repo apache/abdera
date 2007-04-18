@@ -19,6 +19,8 @@ package org.apache.abdera.model;
 
 import java.util.List;
 
+import javax.activation.MimeType;
+
 import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
@@ -107,5 +109,34 @@ public interface Workspace
     String title, 
     String href) 
       throws IRISyntaxException;
+  
+  /**
+   * Returns a collection that accepts the specified media types
+   * @param a listing of media types the collection must accept
+   * @return A matching app:collection element
+   */
+  Collection getCollectionThatAccepts(MimeType... type);
+  
+  /**
+   * Returns a collection that accepts the specified media types
+   * @param a listing of media types the collection must accept
+   * @return A matching app:collection element
+   */
+  Collection getCollectionThatAccepts(String... type);
+  
+  
+  /**
+   * Returns collections that accept the specified media types
+   * @param a listing of media types the collection must accept
+   * @return A listing matching app:collection elements
+   */
+  List<Collection> getCollectionsThatAccept(MimeType... type);
+  
+  /**
+   * Returns collections that accept the specified media types
+   * @param a listing of media types the collection must accept
+   * @return A listing of matching app:collection elements
+   */
+  List<Collection> getCollectionsThatAccept(String... type);
   
 }

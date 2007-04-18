@@ -17,8 +17,10 @@
 */
 package org.apache.abdera.parser.stax;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.activation.MimeType;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Collection;
@@ -126,6 +128,42 @@ public class FOMService
       col = w.getCollection(collection);
     }
     return col;
+  }
+
+  public Collection getCollectionThatAccepts(MimeType... types) {
+    Collection collection = null;
+    for (Workspace workspace : getWorkspaces()) {
+      collection = workspace.getCollectionThatAccepts(types);
+      if (collection != null) break;
+    }
+    return collection;
+  }
+
+  public Collection getCollectionThatAccepts(String... types) {
+    Collection collection = null;
+    for (Workspace workspace : getWorkspaces()) {
+      collection = workspace.getCollectionThatAccepts(types);
+      if (collection != null) break;
+    }
+    return collection;
+  }
+
+  public List<Collection> getCollectionsThatAccept(MimeType... types) {
+    List<Collection> collections = new ArrayList<Collection>();
+    for (Workspace workspace : getWorkspaces()) {
+      List<Collection> colls = workspace.getCollectionsThatAccept(types);
+      collections.addAll(colls);
+    }
+    return collections;
+  }
+
+  public List<Collection> getCollectionsThatAccept(String... types) {
+    List<Collection> collections = new ArrayList<Collection>();
+    for (Workspace workspace : getWorkspaces()) {
+      List<Collection> colls = workspace.getCollectionsThatAccept(types);
+      collections.addAll(colls);
+    }
+    return collections;
   }
 
 }

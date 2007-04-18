@@ -22,6 +22,8 @@ import java.security.SecureRandom;
 import java.util.Date;
 
 import org.apache.abdera.model.AtomDate;
+import org.apache.abdera.protocol.client.Client;
+import org.apache.abdera.protocol.client.CommonsClient;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.httpclient.Credentials;
@@ -42,6 +44,14 @@ public class WSSEAuthScheme
   implements AuthScheme {
 
   private final int NONCE_LENGTH = 16;
+  
+  public static void register(Client client, boolean exclusive) {
+    Client.registerScheme("WSSE", WSSEAuthScheme.class);
+    if (exclusive)
+      ((CommonsClient)client).setAuthenticationSchemePriority("WSSE");
+    else
+      ((CommonsClient)client).setAuthenticationSchemeDefaults();
+  }
   
   @Override
   public String authenticate(

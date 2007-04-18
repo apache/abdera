@@ -17,8 +17,10 @@
 */
 package org.apache.abdera.parser.stax;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.activation.MimeType;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Collection;
@@ -145,4 +147,55 @@ public class FOMWorkspace
     collection.setHref(href);
     return collection;
   }
+  
+  public Collection getCollectionThatAccepts(MimeType... types) {
+    Collection collection = null;
+    for (Collection coll : getCollections()) {
+      int matches = 0;
+      for (MimeType type : types) if (coll.accepts(type)) matches++;
+      if (matches == types.length) {
+        collection = coll;
+        break;
+      }
+    }
+    return collection;
+  }
+
+  public Collection getCollectionThatAccepts(String... types) {
+    Collection collection = null;
+    for (Collection coll : getCollections()) {
+      int matches = 0;
+      for (String type : types) if (coll.accepts(type)) matches++;
+      if (matches == types.length) {
+        collection = coll;
+        break;
+      }
+    }
+    return collection;
+  }
+
+  public List<Collection> getCollectionsThatAccept(MimeType... types) {
+    List<Collection> collections = new ArrayList<Collection>();
+    for (Collection coll : getCollections()) {
+      int matches = 0;
+      for (MimeType type : types) if (coll.accepts(type)) matches++;
+      if (matches == types.length) {
+        collections.add(coll);
+      }
+    }
+    return collections;
+  }
+
+  public List<Collection> getCollectionsThatAccept(String... types) {
+    List<Collection> collections = new ArrayList<Collection>();
+    for (Collection coll : getCollections()) {
+      int matches = 0;
+      for (String type : types) if (coll.accepts(type)) matches++;
+      if (matches == types.length) {
+        collections.add(coll);
+      }
+    }
+    return collections;
+  }
+
 }

@@ -59,7 +59,7 @@ public class WSSEAuthScheme
                     "PasswordDigest=\"" + digest + "\", " +
                     "Nonce=\"" + nonce + "\", " +
                     "Created=\"" + now.getValue() + "\"";
-      method.addRequestHeader("X-WSSE", wsse);
+      if (method != null) method.addRequestHeader("X-WSSE", wsse);
       return "WSSE profile=\"UsernameToken\"";
     } else {
       return null;

@@ -55,8 +55,12 @@ public class GoogleLoginAuthScheme
   extends RFC2617Scheme
   implements AuthScheme {
   
-  public static void register() {
+  public static void register(Client client, boolean exclusive) {
     Client.registerScheme("GoogleLogin", GoogleLoginAuthScheme.class);
+    if (exclusive)
+      ((CommonsClient)client).setAuthenticationSchemePriority("GoogleLogin");
+    else
+      ((CommonsClient)client).setAuthenticationSchemeDefaults();
   }
   
   private String service = null;

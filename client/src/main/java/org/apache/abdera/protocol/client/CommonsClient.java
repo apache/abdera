@@ -88,6 +88,7 @@ public class CommonsClient extends Client {
       HttpClientParams.USE_EXPECT_CONTINUE, true);  
     client.getParams().setCookiePolicy(
       CookiePolicy.BROWSER_COMPATIBILITY);
+    setAuthenticationSchemeDefaults();
   }
   
   /**
@@ -225,11 +226,20 @@ public class CommonsClient extends Client {
       scope, credentials);
   }
 
+  public void setAuthenticationSchemeDefaults() {
+    List authPrefs = AuthPolicy.getDefaultAuthPrefs();
+    client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
+  }
+  
   public void setAuthenticationSchemePriority(String... scheme) {
     List authPrefs = java.util.Arrays.asList(scheme);
     client.getParams().setParameter(
       AuthPolicy.AUTH_SCHEME_PRIORITY, 
       authPrefs);
+  }
+  
+  public List getAuthenticationSchemePriority() {
+    return (List)client.getParams().getParameter(AuthPolicy.AUTH_SCHEME_PRIORITY);
   }
   
   /**

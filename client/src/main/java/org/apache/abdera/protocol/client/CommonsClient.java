@@ -208,12 +208,19 @@ public class CommonsClient extends Client {
     String scheme,
     Credentials credentials) 
       throws URISyntaxException {
-    URI uri = new URI(target);
+    String host = AuthScope.ANY_HOST;
+    int port = AuthScope.ANY_PORT;
+    if (target != null) {
+      URI uri = new URI(target);
+      host = uri.getHost();
+      port = uri.getPort();
+    }
     AuthScope scope = 
       new AuthScope(
-        uri.getHost(), 
-        uri.getPort(), 
-        realm, scheme);
+        host, 
+        port, 
+        (realm != null) ? realm : AuthScope.ANY_REALM, 
+        (scheme != null) ? scheme : AuthScope.ANY_SCHEME);
     client.getState().setCredentials(
       scope, credentials);
   }

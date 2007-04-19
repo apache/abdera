@@ -218,7 +218,9 @@ public class FOMElement
     Base parent = this.getParentElement();
     return (lang != null) ? lang :
       (parent != null && parent instanceof Element) ? 
-        ((Element)parent).getLanguage() : null;
+        ((Element)parent).getLanguage() : 
+      (parent != null && parent instanceof Document) ? 
+        ((Document)parent).getLanguage(): null;
   }
 
   public void setLanguage(String language) {

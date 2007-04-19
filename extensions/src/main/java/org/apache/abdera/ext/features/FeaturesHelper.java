@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.ext.thread.ThreadConstants;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.iri.IRISyntaxException;
@@ -35,7 +36,6 @@ public final class FeaturesHelper {
 
   public static final String FNS = "http://purl.org/atompub/features/1.0";
   public static final QName FEATURE = new QName(FNS, "feature","f");
-  public static final QName CONTROL = new QName(FNS, "control","f");
   
   public static final String FEATURE_DRAFTS = "http://purl.org/atom/app#drafts";
   public static final String FEATURE_PRESERVE_ENTRY = "http://purl.org/atom/app#preserve-entry";
@@ -59,10 +59,12 @@ public final class FeaturesHelper {
   public static final String FEATURE_PRESERVE_UPDATED = "http://purl.org/atom/app#preserve-updated";
   public static final String FEATURE_PRESERVE_EXTENSIONS = "http://purl.org/atom/app#preserve-extensions";
   public static final String FEATURE_PRESERVE_LINKS = "http://purl.org/atom/app#preserve-links";
+  public static final String FEATURE_PRESERVE_RIGHTS = "http://purl.org/atom/app#preserve-rights";
   public static final String FEATURE_SLUG = "http://purl.org/atom/app#slug";
   public static final String FEATURE_MULTIPLE_CATEGORIES= "http://purl.org/atom/app#multiple-categories";
   public static final String FEATURE_CONTRIBUTORS = "http://purl.org/atom/app#contributors";
   public static final String FEATURE_MULTIPLE_AUTHORS = "http://purl.org/atom/app#multiple-authors";
+  public static final String FEATURE_FEED_THREAD = ThreadConstants.THR_NS;
   
   private FeaturesHelper() {}
   
@@ -76,20 +78,6 @@ public final class FeaturesHelper {
       for (Element el : list) {
         if (el.getAttributeValue("ref").equals(feature))
           return (Feature) el;
-      }
-      return null;
-  }
-  
-  /**
-   * Returns the specified control element or null
-   */
-  public static Control getControl(
-    Collection collection,
-    String control) {
-      List<Element> list = collection.getExtensions(CONTROL);
-      for (Element el : list) {
-        if (el.getAttributeValue("ref").equals(control))
-          return (Control)el;
       }
       return null;
   }
@@ -113,24 +101,6 @@ public final class FeaturesHelper {
       return check(list,features) == features.length;
   }
   
-  /**
-   * Returns true if the collection contains the specified control element
-   */
-  public static boolean supportsControl(
-    Collection collection,
-    String control) { 
-      return supportsControl(collection, new String[] {control});
-  }
-  
-  /**
-   * Returns true if the collection contains the specified control element(s)
-   */
-  public static boolean supportsControl(
-    Collection collection, 
-    String... controls) {
-      List<Element> list = collection.getExtensions(CONTROL);
-      return check(list, controls) == controls.length;
-  }
   
   private static int check(List<Element> exts, String... refvals) {
     int c = 0;
@@ -175,32 +145,4 @@ public final class FeaturesHelper {
     return el;
   }
   
-  /**
-   * Add the specified control to the collection
-   * @param collection The collection
-   * @param feature The IRI of the control to add 
-   * @param required True if the control is required
-   * @param href An IRI pointing to a human readable resource describing the control
-   * @param label A human readable label for the control
-   */
-  public static Control addControl(
-    Collection collection,
-    String control,
-    boolean required,
-    String href,
-    String label) 
-      throws IRISyntaxException {
-    if (supportsControl(collection, control)) 
-      throw new IllegalArgumentException("Control already supported");
-    Factory factory = collection.getFactory();
-    Control el = 
-      (Control)factory.newExtensionElement(
-        FeaturesHelper.CONTROL, collection);
-    collection.declareNS(FNS, "f");
-    el.setAttributeValue("ref", (new IRI(control)).toString());
-    if (required) el.setAttributeValue("required", "yes");
-    if (href != null) el.setAttributeValue("href", (new IRI(href)).toString());
-    if (label != null) el.setAttributeValue("label", label);
-    return el;
-  }
 }

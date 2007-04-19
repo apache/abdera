@@ -34,6 +34,8 @@ import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.iri.IRISyntaxException;
+import org.apache.abdera.i18n.lang.InvalidLangTagSyntax;
+import org.apache.abdera.i18n.lang.Lang;
 import org.apache.axiom.om.OMComment;
 import org.apache.axiom.om.OMDocType;
 import org.apache.axiom.om.OMDocument;
@@ -57,6 +59,8 @@ public class FOMDocument<T extends Element>
   protected MimeType contentType = null;
   protected Date lastModified = null;
   protected EntityTag etag = null;
+  protected String language = null;
+  protected String slug = null;
 
   public FOMDocument() {
     super();
@@ -235,4 +239,24 @@ public class FOMDocument<T extends Element>
     this.etag = new EntityTag(tag);
   }
   
+  public String getLanguage() {
+    return language;
+  }
+  
+  public Lang getLanguageTag() throws InvalidLangTagSyntax {
+    String lang = getLanguage();
+    return (lang != null) ? new Lang(lang) : null;
+  }
+  
+  public void setLanguage(String lang) {
+    this.language = lang;
+  }
+  
+  public String getSlug() {
+    return slug;
+  }
+  
+  public void setSlug(String slug) {
+    this.slug = slug;
+  }
 }

@@ -25,6 +25,8 @@ import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.iri.IRISyntaxException;
+import org.apache.abdera.i18n.lang.InvalidLangTagSyntax;
+import org.apache.abdera.i18n.lang.Lang;
 import org.apache.abdera.util.EntityTag;
 
 /**
@@ -130,4 +132,30 @@ public interface Document<T extends Element>
    * Set the entity tag for this document
    */
   void setEntityTag(String tag);
+  
+  /**
+   * Get the language
+   */
+  String getLanguage();
+  
+  /**
+   * Returns the value of the xml:lang attribute as a Lang object
+   */
+  Lang getLanguageTag() throws InvalidLangTagSyntax;
+  
+  /**
+   * set the base language
+   */
+  void setLanguage(String lang);
+  
+  /**
+   * Get the slug for this document
+   */
+  String getSlug();
+  
+  /**
+   * Set the slug for this document
+   */
+  void setSlug(String slug);
+  
 }

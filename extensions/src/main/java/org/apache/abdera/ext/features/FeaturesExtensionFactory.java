@@ -43,8 +43,6 @@ public final class FeaturesExtensionFactory
     QName qname = internal.getQName();
     if (FeaturesHelper.FEATURE.equals(qname)) 
       return (T)new Feature(internal);
-    else if (FeaturesHelper.CONTROL.equals(qname))
-      return (T)new Control(internal);
     else return (T)internal;
   }
 

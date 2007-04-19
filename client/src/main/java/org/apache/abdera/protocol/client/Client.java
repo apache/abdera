@@ -24,6 +24,7 @@ import javax.net.ssl.TrustManager;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
+import org.apache.abdera.model.Document;
 import org.apache.abdera.protocol.client.cache.Cache;
 import org.apache.abdera.protocol.client.cache.CacheFactory;
 import org.apache.abdera.protocol.client.cache.lru.LRUCache;
@@ -137,6 +138,12 @@ public abstract class Client {
     String uri, 
     Base base, 
     RequestOptions options) {
+      if (base instanceof Document) {
+        Document d = (Document) base;
+        if (options.getSlug() == null && 
+            d.getSlug() != null) 
+          options.setSlug(d.getSlug());
+      }
       return execute("POST", uri, new BaseRequestEntity(base, options.isUseChunked()), options);
   }
     
@@ -158,6 +165,12 @@ public abstract class Client {
       String uri, 
       Base base, 
       RequestOptions options) {
+    if (base instanceof Document) {
+      Document d = (Document) base;
+      if (options.getSlug() == null && 
+          d.getSlug() != null) 
+        options.setSlug(d.getSlug());
+    }
     return execute("PUT", uri, new BaseRequestEntity(base, options.isUseChunked()), options);
   }
       

@@ -21,7 +21,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
+
 import org.apache.abdera.Abdera;
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.ParseException;
@@ -29,6 +33,7 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.protocol.util.AbstractResponse;
 import org.apache.abdera.protocol.util.CacheControlUtil;
+import org.apache.abdera.util.EntityTag;
 
 public abstract class AbstractClientResponse
   extends AbstractResponse
@@ -72,7 +77,26 @@ public abstract class AbstractClientResponse
     ParserOptions options) 
       throws ParseException {
     try {
-      return parser.parse(getInputStream(), getUri(), options);
+      String charset = getCharacterEncoding();
+      if (charset != null) options.setCharset(charset);
+      IRI cl = getContentLocation();
+      if (!cl.isAbsolute()) {
+        IRI r = new IRI(getUri());
+        cl = r.resolve(cl);
+      }
+      String base = (cl != null) ? cl.toASCIIString() : getUri();
+      Document<T> doc = parser.parse(getInputStream(), base, options);
+      EntityTag etag = getEntityTag();
+      if (etag != null) doc.setEntityTag(etag);
+      Date lm = getLastModified();
+      if (lm != null) doc.setLastModified(lm);
+      MimeType mt = getContentType();
+      if (mt != null) doc.setContentType(mt.toString());
+      String language = getContentLanguage();
+      if (language != null) doc.setLanguage(language);
+      String slug = getSlug();
+      if (slug != null) doc.setSlug(slug);
+      return doc;
     } catch (Exception e) {
       throw new ParseException(e);
     }
@@ -98,6 +122,14 @@ public abstract class AbstractClientResponse
     String cc = getHeader("Cache-Control");
     if (cc != null)
       CacheControlUtil.parseCacheControl(cc, this);
+  }
+  
+  public String getCharacterEncoding() throws MimeTypeParseException {
+    MimeType mt = getContentType();
+    String charset = null;
+    if (mt != null)
+      charset = mt.getParameter("charset");
+    return charset;
   }
 
 }

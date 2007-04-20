@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.parser.stax;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.activation.MimeType;
@@ -42,8 +44,8 @@ public class FOMCollection
   extends FOMExtensibleElement 
   implements Collection {
 
+  private static final String[] ENTRY = {"application/atom+xml;type=\"entry\""};
   private static final String[] EMPTY = new String[0];
-  private static final String[] ENTRY = new String[] {"entry"};
   
   private static final long serialVersionUID = -5291734055253987136L;
 
@@ -143,21 +145,25 @@ public class FOMCollection
       removeAttribute(HREF);
   }
   
-  public Element getAcceptElement() {
-    return getFirstChild(ACCEPT);
-  }
-  
   public String[] getAccept(){
-    String accept = _getElementValue(ACCEPT);
-    if (accept == null) return ENTRY;
-    else accept = accept.trim();
-    if (accept.length() == 0) return EMPTY;
-    String[] list = accept.split("\\s*,\\s*(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
-    return MimeTypeHelper.condense(list);
+    List<String> accept = new ArrayList<String>();
+    for (Iterator i = getChildrenWithName(ACCEPT); i.hasNext();) {
+      Element e = (Element) i.next();
+      String t = e.getText();
+      if (t != null) { 
+        accept.add(t.trim());
+      }
+    }
+    if (accept.size() > 0) {
+      String[] list = accept.toArray(new String[accept.size()]);
+      return MimeTypeHelper.condense(list);
+    } else {
+      return EMPTY;
+    }
   }
 
   public void setAccept(String... mediaRanges) {
-    if (mediaRanges != null) {
+    if (mediaRanges != null || mediaRanges.length == 0) {
       mediaRanges = MimeTypeHelper.condense(mediaRanges);
       StringBuffer value = new StringBuffer();
       for (String type : mediaRanges) {
@@ -165,17 +171,16 @@ public class FOMCollection
           value.append(",");
         value.append(type);
       }
-      _setElementValue(ACCEPT, value.toString());
+      addSimpleExtension(ACCEPT, value.toString());
     } else {
-      _removeChildren(ACCEPT, false);
+      _removeChildren(ACCEPT, true);
     }
   }
 
   public boolean accepts(String mediaType) {
     String[] accept = getAccept();
+    if (accept.length == 0) accept = ENTRY;
     for (String a : accept) {
-      if (mediaType.equalsIgnoreCase("entry") && 
-          a.equalsIgnoreCase("entry")) return true;
       if (MimeTypeHelper.isMatch(a, mediaType)) return true;
     }
     return false;

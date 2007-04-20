@@ -102,12 +102,6 @@ public interface Collection
    * @throws IRISyntaxException if the href attribute is malformed 
    */
   void setHref(String href) throws IRISyntaxException;
-
-  /**
-   * Returns the app:accept element
-   * @return The app:accept element
-   */
-  Element getAcceptElement();
   
   /**
    * Returns the listing of media-ranges allowed for this collection

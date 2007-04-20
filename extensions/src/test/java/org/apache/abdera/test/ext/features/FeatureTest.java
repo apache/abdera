@@ -35,9 +35,6 @@ public class FeatureTest extends TestCase {
     FeaturesHelper.addFeature(
       coll, "http://example.com/features/bar", 
       false, null, null);
-    FeaturesHelper.addControl(
-      coll, "http://example.com/features/bar", 
-      false, null, null);
     assertTrue(FeaturesHelper.supportsFeature(
       coll, "http://example.com/features/foo"));
     assertTrue(FeaturesHelper.supportsFeature(

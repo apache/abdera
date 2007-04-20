@@ -20,9 +20,11 @@ package org.apache.abdera.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.activation.MimeType;
+import javax.activation.MimeTypeParameterList;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.model.Base;
@@ -70,15 +72,30 @@ public class MimeTypeHelper {
   public static boolean isMatch(MimeType a, MimeType b) {
     try {
       if (a == null || b == null) return true;
-      if (a.match(b)) return true;
+      if (a.match(b)) {
+        MimeTypeParameterList aparams = a.getParameters();
+        MimeTypeParameterList bparams = b.getParameters();
+        if (aparams.isEmpty() && bparams.isEmpty()) return true;
+        if (aparams.isEmpty() && !bparams.isEmpty()) return false;
+        if (!aparams.isEmpty() && bparams.isEmpty()) return false;
+        boolean answer = true;
+        for (Enumeration e = aparams.getNames(); e.hasMoreElements();) {
+          String aname = (String)e.nextElement();
+          String avalue = aparams.get(aname);
+          String bvalue = bparams.get(aname);
+          if (avalue.equals(bvalue)) answer = true;
+          else { answer = false; break; }
+        }
+        return answer;
+      }
       if (a.equals(WILDCARD)) return true;
       if (a.getPrimaryType().equals("*")) {
         MimeType c = new MimeType(b.getPrimaryType(), a.getSubType());
-        return c.match(b);
+        return isMatch(c,b);
       }
       if (b.getPrimaryType().equals("*")) {
         MimeType c = new MimeType(a.getPrimaryType(), b.getSubType());
-        return c.match(a);
+        return isMatch(a,c);
       }
     } catch (Exception e) {}
     return false;

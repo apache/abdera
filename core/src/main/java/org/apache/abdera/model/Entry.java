@@ -785,6 +785,13 @@ public interface Entry
   DateTime setEdited(String value);
   
   /**
+   * Returns this entries Atom Publishing Protocol control element.
+   * A new control element will be created if one currently does not exist
+   * @return The app:control element
+   */
+  Control getControl(boolean create);
+  
+  /**
    * Returns this entries Atom Publishing Protocol control element
    * @return The app:control element
    */

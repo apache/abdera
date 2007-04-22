@@ -124,6 +124,39 @@ public interface Collection
   boolean accepts(String mediaType);
   
   /**
+   * Returns true if the collections accepts Atom entry documents 
+   * (equivalent to calling accepts("application/atom+xml;type=entry");)
+   */
+  boolean acceptsEntry();
+  
+  /**
+   * Sets the appropriate accept element to indicate that entries are accepted
+   * (equivalent to calling setAccept("application/atom+xml;type=entry");)
+   */
+  void setAcceptsEntry();
+  
+  /**
+   * Sets the collection so that nothing is accepted
+   * (equivalent to calling setAccept(""); )
+   */
+  void setAcceptsNothing();
+  
+  /**
+   * Adds a new accept element to the collection
+   */
+  void addAccepts(String mediaRange);
+  
+  /**
+   * Adds new accept elements to the collection
+   */
+  void addAccepts(String... mediaRanges);
+  
+  /**
+   * Same as setAcceptsEntry except the existing accepts are not discarded
+   */
+  void addAcceptsEntry();
+  
+  /**
    * Returns true if the collection accepts the given media-type
    * @param mediaType The media-type to check
    * @return True if the media-type is acceptable

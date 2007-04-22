@@ -102,9 +102,7 @@ public class FOMExtensibleElement
     }
     QName qname = extension.getQName();
     String prefix = qname.getPrefix();
-    if (prefix != null) {
-      declareNS(qname.getNamespaceURI(), prefix);
-    }
+    declareIfNecessary(qname.getNamespaceURI(), prefix);
     addChild((OMElement)extension);
   }
   
@@ -112,28 +110,22 @@ public class FOMExtensibleElement
   public <T extends Element>T addExtension(QName qname) {
     FOMFactory fomfactory = (FOMFactory) factory;
     String prefix = qname.getPrefix();
-    if (prefix != null) {
-      declareNS(qname.getNamespaceURI(),prefix);
-    }
+    declareIfNecessary(qname.getNamespaceURI(), prefix);
     return (T)fomfactory.newExtensionElement(qname, this);
   }
   
   @SuppressWarnings("unchecked")
   public <T extends Element>T addExtension(String namespace, String localpart, String prefix) {
-    if (prefix != null) {
-      declareNS(namespace, prefix);
-    }
+    declareIfNecessary(namespace, prefix);
     return (T)addExtension(new QName(namespace, localpart, prefix));
   }
-
+  
   public Element addSimpleExtension(QName qname, String value) {
     FOMFactory fomfactory = (FOMFactory) factory;
     Element el = fomfactory.newElement(qname, this);
     el.setText(value);
     String prefix = qname.getPrefix();
-    if (prefix != null) {
-      declareNS(qname.getNamespaceURI(),prefix);
-    }
+    declareIfNecessary(qname.getNamespaceURI(),prefix);
     return el;
   }
   
@@ -142,9 +134,7 @@ public class FOMExtensibleElement
     String localPart, 
     String prefix, 
     String value) {
-      if (prefix != null) {
-        declareNS(namespace,prefix);
-      }
+      declareIfNecessary(namespace,prefix);
       return addSimpleExtension(
         new QName(
           namespace, 

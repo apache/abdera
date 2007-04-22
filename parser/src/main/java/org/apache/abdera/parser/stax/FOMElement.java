@@ -403,10 +403,6 @@ public class FOMElement
 
   protected <T extends Text>void setTextElement(QName qname, T text, boolean many) {
     if (text != null) {
-      if (!many) {
-        OMElement el = getFirstChildWithName(qname);
-        if (el != null) el.discard();
-      }
       _setChild(qname, (OMElement)text);
     } else _removeChildren(qname, false);
   }
@@ -672,6 +668,28 @@ public class FOMElement
   }
   
   public void declareNS(String uri, String prefix) {
-    super.declareNamespace(uri,prefix);
+    if (!isDeclared(uri,prefix)) {
+      super.declareNamespace(uri,prefix);
+    }
+  }
+  
+  protected boolean isDeclared(String ns, String prefix) {
+    for (Iterator i = this.getAllDeclaredNamespaces(); i.hasNext();) {
+      OMNamespace omn = (OMNamespace) i.next();
+      if (omn.getNamespaceURI().equals(ns) && 
+           (omn.getPrefix() != null && 
+             omn.getPrefix().equals(prefix))) 
+               return true;
+    }
+    Base parent = this.getParentElement();
+    if (parent != null && parent instanceof FOMElement) {
+      return ((FOMElement)parent).isDeclared(ns, prefix);
+    } else return false;
+  }
+  
+  protected void declareIfNecessary(String ns, String prefix) {
+    if (prefix != null && !isDeclared(ns, prefix)) {
+      declareNS(ns,prefix);
+    }
   }
 }

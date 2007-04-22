@@ -162,19 +162,58 @@ public class FOMCollection
     }
   }
 
+  public void setAccept(String mediaRange) {
+    setAccept(new String[] {mediaRange});
+  }
+  
   public void setAccept(String... mediaRanges) {
-    if (mediaRanges != null || mediaRanges.length == 0) {
-      mediaRanges = MimeTypeHelper.condense(mediaRanges);
-      StringBuffer value = new StringBuffer();
-      for (String type : mediaRanges) {
-        if (value.length() > 0)
-          value.append(",");
-        value.append(type);
+    if (mediaRanges != null && mediaRanges.length > 0) {
+      _removeChildren(ACCEPT, true);
+      if (mediaRanges.length == 1 && mediaRanges[0].equals("")) {
+        addExtension(ACCEPT);
+      } else {
+        mediaRanges = MimeTypeHelper.condense(mediaRanges);
+        for (String type : mediaRanges) {
+          try {
+            addSimpleExtension(ACCEPT, new MimeType(type).toString());
+          } catch (Exception e) {}
+        }
       }
-      addSimpleExtension(ACCEPT, value.toString());
     } else {
       _removeChildren(ACCEPT, true);
     }
+  }
+  
+  public void addAccepts(String mediaRange) {
+    addAccepts(new String[] {mediaRange});
+  }
+  
+  public void addAccepts(String... mediaRanges) {
+    if (mediaRanges != null) {
+      for (String type : mediaRanges) {
+        if (!accepts(type)) {
+          try {
+            addSimpleExtension(ACCEPT, new MimeType(type).toString());
+          } catch (Exception e) {}
+        }
+      }
+    }
+  }
+  
+  public void addAcceptsEntry() {
+    addAccepts("application/atom+xml;type=entry");
+  }
+  
+  public void setAcceptsEntry() {
+    setAccept("application/atom+xml;type=entry");
+  }
+  
+  public void setAcceptsNothing() {
+    setAccept("");
+  }
+  
+  public boolean acceptsEntry() {
+    return accepts("application/atom+xml;type=entry");
   }
 
   public boolean accepts(String mediaType) {

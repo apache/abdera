@@ -142,6 +142,11 @@ public interface Feed
   void sortEntriesByUpdated(boolean new_first);
   
   /**
+   * Sorts entries by the app:edited property. if app:edited is null, use app:updated
+   */
+  void sortEntriesByEdited(boolean new_first);
+  
+  /**
    * Sorts entries using the given comparator
    * @param comparator Sort the entries using the comparator
    */

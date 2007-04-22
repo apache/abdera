@@ -179,8 +179,6 @@ public class FOMEntry
 
   public void setContentElement(Content content) {
     if (content != null) {
-      Content element = getContentElement();
-      if (element != null) element.discard();
       _setChild(CONTENT, (OMElement)content);
     } else {
       _removeChildren(CONTENT, false);
@@ -692,6 +690,15 @@ public class FOMEntry
   
   public DateTime setEdited(String value) {
     return setUpdated((value != null) ? AtomDate.valueOf(value) : null);
+  }
+
+  public Control getControl(boolean create) {
+    Control control = getControl();
+    if (control == null && create) {
+      control = getFactory().newControl();
+      setControl(control);
+    }
+    return control;
   }
   
   public Control getControl() {

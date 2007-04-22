@@ -151,6 +151,10 @@ public class FOMFeed
     sortEntries(new UpdatedComparator(new_first));
   }
   
+  public void sortEntriesByEdited(boolean new_first) {
+    sortEntries(new EditedComparator(new_first));
+  }
+  
   public void sortEntries(Comparator<Entry> comparator) {
     if (comparator == null) return;
     List<Entry> entries = this.getEntries();
@@ -159,6 +163,24 @@ public class FOMFeed
     for (Entry e: entries) { e.discard(); }
     for (Entry e: a) { addEntry(e); }
   }
+  
+  private static class EditedComparator implements Comparator<Entry> {
+    private boolean new_first = true;
+    EditedComparator(boolean new_first) {
+      this.new_first = new_first;
+    }
+    public int compare(Entry o1, Entry o2) {
+      Date d1 = o1.getEdited();
+      Date d2 = o2.getEdited();
+      if (d1 == null) d1 = o1.getUpdated();
+      if (d2 == null) d2 = o2.getUpdated();
+      if (d1 == null && d2 == null) return 0;
+      if (d1 == null && d2 != null) return -1;
+      if (d1 != null && d2 == null) return 1;
+      int r = d1.compareTo(d2);
+      return (new_first) ? -r : r;
+    }
+  };
   
   private static class UpdatedComparator implements Comparator<Entry> {
     private boolean new_first = true;

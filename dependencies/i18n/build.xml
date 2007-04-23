@@ -1,0 +1,61 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  The ASF licenses this file to You
+  under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License.
+  You may obtain a copy of the License at
+ 
+      http://www.apache.org/licenses/LICENSE-2.0
+ 
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.  For additional information regarding
+  copyright in this work, please see the NOTICE file in the top level
+  directory of this distribution. -->
+<project name="i18n" default="dist" basedir=".">
+ <description>RFC 3987 (IRI) support library for Apache Abdera</description>
+ <property name="version" value="0.3.0-incubating-SNAPSHOT"/>
+
+ <property file="${basedir}/build.properties"/>
+
+ <path id="test.classpath">
+   <pathelement path="${dest.dir}"/>
+   <pathelement path="${test.dest.dir}"/>
+   <pathelement path="${junit.jar}"/>
+ </path> 
+
+ <target name="clean">
+   <delete dir="${dest.dir}"/>
+   <delete dir="${test.dest.dir}"/>
+ </target>
+
+ <target name="prepare">
+  <mkdir dir="${dest.dir}"/>
+  <mkdir dir="${test.dest.dir}"/>
+ </target>
+
+ <target name="compile" depends="prepare">
+  <javac srcdir="${src.dir}" destdir="${dest.dir}"/>
+ </target>
+
+ <target name="test-compile" depends="compile">
+  <javac srcdir="${test.src.dir}" destdir="${test.dest.dir}"
+         classpathref="test.classpath"/>
+ </target>
+
+
+ <target name="test" depends="test-compile">
+  <junit printsummary="yes" haltonfailure="yes">
+    <classpath>
+      <path refid="test.classpath"/>
+    </classpath>
+  </junit>
+ </target>
+
+ <target name="dist" depends="test">
+   <jar basedir="${dest.dir}" 
+        jarfile="${basedir}/../abdera-i18n-${version}.jar"/>
+ </target>
+</project>

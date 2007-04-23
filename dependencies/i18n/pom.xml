@@ -19,37 +19,56 @@
   xmlns="http://maven.apache.org/POM/4.0.0" 
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <parent>
-    <groupId>org.apache.abdera</groupId>
-    <artifactId>abdera</artifactId>
-    <version>0.3.0-incubating-SNAPSHOT</version>
-  </parent>
+
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>abdera-core</artifactId>
+  <groupId>org.apache.abdera</groupId>
+  <artifactId>abdera-i18n</artifactId>
   <packaging>jar</packaging>
-  <name>Abdera Core</name>
+  <name>I18N Libraries</name>
   <version>0.3.0-incubating-SNAPSHOT</version>
-  <description>Atom Specification Implementation Core</description>
-  <inceptionYear>2006</inceptionYear>
+  <description>RFC 3987 (Internationlaized Resource Identifier) libraries.</description>
+  <inceptionYear>2007</inceptionYear>
   <url>http://incubator.apache.org/abdera</url>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/core/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/core/</developerConnection>
-    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/core/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/dependencies/i18n/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/dependencies/i18n/</developerConnection>
+    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/dependencies/i18n/</url>
   </scm>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-    </dependency>
-    <dependency>
-	<groupId>org.apache.abdera</groupId>
-	<artifactId>abdera-i18n</artifactId>
-	<version>${project.version}</version>
+      <version>3.8.2</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
       <artifactId>geronimo-activation_1.0.2_spec</artifactId>
+      <version>1.1</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>apache.snapshots</id>
+      <name>Apache SNAPSHOT Repository</name>
+      <url>scp://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</url>
+    </snapshotRepository>
+    <repository>
+      <id>apache.incubating</id>
+      <name>Apache Incubating Repository</name>
+      <url>scp://people.apache.org/www/people.apache.org/repo/m2-incubating-repository</url>
+    </repository>
+  </distributionManagement>
 </project>

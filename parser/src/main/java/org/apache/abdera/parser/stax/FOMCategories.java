@@ -210,6 +210,12 @@ public class FOMCategories
     return false;
   }
   
-
+  public boolean isOutOfLine() {
+    boolean answer = false;
+    try {
+      answer = getHref() != null;
+    } catch (Exception e) {}
+    return answer;
+  }
 
 }

@@ -172,6 +172,6 @@ public class FOMPerson
   
   public IRI getUri() throws IRISyntaxException {
     IRIElement iri = getUriElement();
-    return (iri != null) ? iri.getValue() : null;
+    return (iri != null) ? iri.getResolvedValue() : null;
   }
 }

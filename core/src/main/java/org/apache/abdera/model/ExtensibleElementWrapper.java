@@ -23,7 +23,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
 
-public class ExtensibleElementWrapper 
+public abstract class ExtensibleElementWrapper 
   extends ElementWrapper 
   implements ExtensibleElement {
 
@@ -35,7 +35,7 @@ public class ExtensibleElementWrapper
     super(factory, qname);
   }
 
-  private ExtensibleElement getExtInternal() {
+  protected ExtensibleElement getExtInternal() {
     return (ExtensibleElement) getInternal();
   }
   

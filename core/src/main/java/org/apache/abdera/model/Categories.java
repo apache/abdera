@@ -156,5 +156,9 @@ public interface Categories
    */
   boolean contains(String term, String scheme) throws IRISyntaxException;
   
+  /**
+   * Returns true if the href attribute is set
+   */
+  boolean isOutOfLine();
 }
 

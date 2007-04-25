@@ -424,21 +424,16 @@ public class FOMFactory
       return (ATOM_NS.equals(ns) || APP_NS.equals(ns)) ?
         el : factoriesMap.getElementWrapper(el);
   }
-
-  private List<ExtensionFactory> getExtensionFactories() {
-    return factoriesMap.getFactories();
-  }
   
   @SuppressWarnings("unchecked")
-  public Element newExtensionElement(
+  private Element newExtensionElement(
     QName qname,
     OMContainer parent,
     OMXMLParserWrapper parserWrapper) {
     Element element = (parserWrapper == null) ?
       new FOMExtensibleElement(qname, parent, this) :
       new FOMExtensibleElement(qname, parent, this, parserWrapper);
-    //return factoriesMap.getElementWrapper(element);
-      return element;
+    return element;
   }
   
   public Control newControl() {
@@ -779,7 +774,7 @@ public class FOMFactory
   }
 
   public void registerExtension(ExtensionFactory factory) {
-    getExtensionFactories().add(factory);
+    factoriesMap.addFactory(factory);
   }
 
   public Categories newCategories() {

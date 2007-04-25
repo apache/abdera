@@ -46,7 +46,7 @@ public class ExtensionFactoryMap
       for (ExtensionFactory factory : factories) {
         t = (T) factory.getElementWrapper(internal);
         if (t != null && t != internal) {
-          wrappers.put(internal, t);
+          setElementWrapper(internal,t);
           return t;
         }
       }
@@ -55,7 +55,7 @@ public class ExtensionFactoryMap
     return (t != null) ? t : (T)internal;
   }
   
-  public void setElementWrapper(Element internal, Element wrapper) {
+  public synchronized void setElementWrapper(Element internal, Element wrapper) {
     wrappers.put(internal, wrapper);
   }
 

@@ -18,6 +18,7 @@
 package org.apache.abdera.factory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -34,8 +35,9 @@ public class ExtensionFactoryMap
   private final Map<Element,Element> wrappers;
   
   public ExtensionFactoryMap(List<ExtensionFactory> factories) {
-    this.factories = factories;
-    this.wrappers = new WeakHashMap<Element,Element>();
+    this.factories = factories;;
+    this.wrappers = Collections.synchronizedMap(
+      new WeakHashMap<Element,Element>());
   }
 
   @SuppressWarnings("unchecked")
@@ -43,11 +45,13 @@ public class ExtensionFactoryMap
     if (internal == null) return null;
     T t = (T)wrappers.get(internal);
     if (t == null) {
-      for (ExtensionFactory factory : factories) {
-        t = (T) factory.getElementWrapper(internal);
-        if (t != null && t != internal) {
-          setElementWrapper(internal,t);
-          return t;
+      synchronized(factories) {
+        for (ExtensionFactory factory : factories) {
+          t = (T) factory.getElementWrapper(internal);
+          if (t != null && t != internal) {
+            setElementWrapper(internal,t);
+            return t;
+          }
         }
       }
       t = (T) internal;
@@ -55,21 +59,25 @@ public class ExtensionFactoryMap
     return (t != null) ? t : (T)internal;
   }
   
-  public synchronized void setElementWrapper(Element internal, Element wrapper) {
+  public void setElementWrapper(Element internal, Element wrapper) {
     wrappers.put(internal, wrapper);
   }
 
   public List<String> getNamespaces() {
     List<String> ns = new ArrayList<String>();
-    for (ExtensionFactory factory : factories) {
-      ns.addAll(factory.getNamespaces());
+    synchronized(factories) {
+      for (ExtensionFactory factory : factories) {
+        ns.addAll(factory.getNamespaces());
+      }
     }
     return ns;
   }
 
   public boolean handlesNamespace(String namespace) {
-    for (ExtensionFactory factory : factories) {
-      if (factory.handlesNamespace(namespace)) return true;
+    synchronized(factories) {
+      for (ExtensionFactory factory : factories) {
+        if (factory.handlesNamespace(namespace)) return true;
+      }
     }
     return false;
   }

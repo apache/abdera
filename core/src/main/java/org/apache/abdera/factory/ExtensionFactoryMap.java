@@ -35,7 +35,7 @@ public class ExtensionFactoryMap
   private final Map<Element,Element> wrappers;
   
   public ExtensionFactoryMap(List<ExtensionFactory> factories) {
-    this.factories = factories;;
+    this.factories = Collections.synchronizedList(factories);
     this.wrappers = Collections.synchronizedMap(
       new WeakHashMap<Element,Element>());
   }
@@ -88,8 +88,9 @@ public class ExtensionFactoryMap
     Factory factory) {
       return null;
   }
-
-  public List<ExtensionFactory> getFactories() {
-    return factories;
+  
+  public void addFactory(ExtensionFactory factory) {
+    if (!factories.contains(factory))
+      factories.add(factory);
   }
 }

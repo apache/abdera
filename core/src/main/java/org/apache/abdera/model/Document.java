@@ -112,6 +112,11 @@ public interface Document<T extends Element>
   void addProcessingInstruction(String target, String value);
   
   /**
+   * Get the values for the given processing instruction
+   */
+  String[] getProcessingInstruction(String target);
+  
+  /**
    * Add a xml-stylesheet processing instruction to the document
    * @param href The href of the stylesheet
    * @param media The media target for this stylesheet or null if none

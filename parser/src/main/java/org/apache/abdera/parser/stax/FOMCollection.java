@@ -215,6 +215,10 @@ public class FOMCollection
   public boolean acceptsEntry() {
     return accepts("application/atom+xml;type=entry");
   }
+  
+  public boolean acceptsNothing() {
+    return accepts("");
+  }
 
   public boolean accepts(String mediaType) {
     String[] accept = getAccept();

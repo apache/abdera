@@ -124,10 +124,15 @@ public interface Collection
   boolean accepts(String mediaType);
   
   /**
-   * Returns true if the collections accepts Atom entry documents 
+   * Returns true if the collection accepts Atom entry documents 
    * (equivalent to calling accepts("application/atom+xml;type=entry");)
    */
   boolean acceptsEntry();
+  
+  /**
+   * Returns true if the collection accepts nothing (i.e. there is an empty accept element)
+   */
+  boolean acceptsNothing();
   
   /**
    * Sets the appropriate accept element to indicate that entries are accepted

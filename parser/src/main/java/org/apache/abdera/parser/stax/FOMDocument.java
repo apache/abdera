@@ -20,8 +20,10 @@ package org.apache.abdera.parser.stax;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
@@ -193,6 +195,19 @@ public class FOMDocument<T extends Element>
 
   public Factory getFactory() {
     return (Factory) this.factory;
+  }
+  
+  public String[] getProcessingInstruction(String target) {
+    List<String> values = new ArrayList<String>();
+    for (Iterator i = getChildren(); i.hasNext();) {
+      OMNode node = (OMNode) i.next();
+      if (node.getType() == OMNode.PI_NODE) {
+        OMProcessingInstruction pi = (OMProcessingInstruction) node;
+        if (pi.getTarget().equalsIgnoreCase(target))
+          values.add(pi.getValue());
+      }
+    }
+    return values.toArray(new String[values.size()]);
   }
 
   public void addProcessingInstruction(String target, String value) {

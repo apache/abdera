@@ -117,7 +117,9 @@ public class FOMExtensibleElement
   @SuppressWarnings("unchecked")
   public <T extends Element>T addExtension(String namespace, String localpart, String prefix) {
     declareIfNecessary(namespace, prefix);
-    return (T)addExtension(new QName(namespace, localpart, prefix));
+    return (prefix != null) ? 
+      (T)addExtension(new QName(namespace, localpart, prefix)) :
+      (T)addExtension(new QName(namespace, localpart, ""));
   }
   
   public Element addSimpleExtension(QName qname, String value) {
@@ -136,10 +138,14 @@ public class FOMExtensibleElement
     String value) {
       declareIfNecessary(namespace,prefix);
       return addSimpleExtension(
-        new QName(
-          namespace, 
-          localPart, 
-          prefix), 
+        (prefix != null) ?
+          new QName(
+            namespace, 
+            localPart, 
+            prefix) :
+          new QName(
+            namespace, 
+            localPart), 
         value);
   }
   

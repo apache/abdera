@@ -28,6 +28,8 @@ import java.util.TimeZone;
  * <p>Provides an implementation of the Atom Date Construct, 
  * which is itself a specialization of the RFC3339 date-time.</p>
  * 
+ * <p>Accessors on this class are not synchronized.</p>
+ * 
  * <p>Per RFC4287:</p>
  * 
  * <pre>

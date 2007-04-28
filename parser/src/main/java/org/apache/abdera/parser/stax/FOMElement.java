@@ -688,7 +688,7 @@ public class FOMElement
   }
   
   protected void declareIfNecessary(String ns, String prefix) {
-    if (prefix != null && !isDeclared(ns, prefix)) {
+    if (prefix != null && !prefix.equals("") && !isDeclared(ns, prefix)) {
       declareNS(ns,prefix);
     }
   }

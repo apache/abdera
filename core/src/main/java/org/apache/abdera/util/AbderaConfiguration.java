@@ -29,7 +29,8 @@ import org.apache.abdera.parser.NamedParser;
 import org.apache.abdera.writer.NamedWriter;
 
 /**
- * Provides the basic configuration for the Abdera default implementation.
+ * Provides the basic configuration for the Abdera default implementation.  This
+ * class should not be accessed by applications directly without very good reason.
  */
 public final class AbderaConfiguration 
   implements Constants, Cloneable {

@@ -35,6 +35,7 @@ public class FOMDateTime
   implements DateTime {
   
   private static final long serialVersionUID = -6611503566172011733L;
+  private AtomDate value;
 
   public FOMDateTime(QName qname) {
     super(qname);
@@ -92,15 +93,17 @@ public class FOMDateTime
   }
   
   public AtomDate getValue() {
-    AtomDate value = null;
-    String v = getText();
-    if (v != null) {
-      value = AtomDate.valueOf(v);
+    if (value == null) {
+      String v = getText();
+      if (v != null) {
+        value = AtomDate.valueOf(v);
+      }
     }
     return value;
   }
 
   public void setValue(AtomDate dateTime) {
+    value = null;
     if (dateTime != null)
       setText(dateTime.getValue());
     else 
@@ -108,6 +111,7 @@ public class FOMDateTime
   }
 
   public void setDate(Date date) {
+    value = null;
     if (date != null)
       setText(AtomDate.valueOf(date).getValue());
     else 
@@ -115,6 +119,7 @@ public class FOMDateTime
   }
 
   public void setCalendar(Calendar date) {
+    value = null;
     if (date != null)
       setText(AtomDate.valueOf(date).getValue());
     else 
@@ -122,10 +127,12 @@ public class FOMDateTime
   }
 
   public void setTime(long date) {
+    value = null;
     setText(AtomDate.valueOf(date).getValue());
   }
 
   public void setString(String date) {
+    value = null;
     if (date != null)
       setText(AtomDate.valueOf(date).getValue());
     else 

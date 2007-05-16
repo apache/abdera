@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -503,11 +504,11 @@ public class FOMElement
   }
   
   
-  protected Element _parse(String value, IRI baseUri) throws ParseException, IRISyntaxException {
+  protected Element _parse(String value, IRI baseUri) throws ParseException, IRISyntaxException, UnsupportedEncodingException {
     if (value == null) return null;
     FOMFactory fomfactory = (FOMFactory) factory;
     Parser parser = fomfactory.newParser();
-    ByteArrayInputStream bais = new ByteArrayInputStream(value.getBytes());
+    ByteArrayInputStream bais = new ByteArrayInputStream(value.getBytes(getXMLStreamReader().getCharacterEncodingScheme()));
     ParserOptions options = parser.getDefaultParserOptions();
     options.setCharset(getXMLStreamReader().getCharacterEncodingScheme());
     options.setFactory(fomfactory);

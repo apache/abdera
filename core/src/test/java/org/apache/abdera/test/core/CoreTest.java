@@ -19,7 +19,10 @@ package org.apache.abdera.test.core;
 
 import java.util.Date;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.AtomDate;
+import org.apache.abdera.model.Content;
+import org.apache.abdera.model.Entry;
 import org.apache.abdera.util.AbderaConfiguration;
 import org.apache.abdera.util.URIHelper;
 
@@ -70,5 +73,20 @@ public class CoreTest extends TestCase {
     atomNow = AtomDate.valueOf(rfc3339);
     Date parsed = atomNow.getDate();
     assertEquals(now, parsed);
+  }
+  
+  public void testAbderaEncodingHandling() throws Exception {
+      Abdera abdera = new Abdera();
+      Entry entry = abdera.newEntry();
+      entry.setId("http://example.com/entry/1");
+      entry.setTitle("Whatever");
+      entry.setUpdated(new Date());
+      Content content = entry.getFactory().newContent(Content.Type.XML);
+      String s = "<x>" + new Character((char) 224) + "</x>";
+      content.setValue(s);
+      content.setMimeType("application/xml+whatever");
+      entry.setContentElement(content);
+      assertNotNull(entry.getContent());
+      assertEquals(s, entry.getContent());
   }
 }

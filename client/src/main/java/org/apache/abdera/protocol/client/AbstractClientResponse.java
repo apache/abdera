@@ -80,7 +80,7 @@ public abstract class AbstractClientResponse
       String charset = getCharacterEncoding();
       if (charset != null) options.setCharset(charset);
       IRI cl = getContentLocation();
-      if (!cl.isAbsolute()) {
+      if (cl != null && !cl.isAbsolute()) {
         IRI r = new IRI(getUri());
         cl = r.resolve(cl);
       }

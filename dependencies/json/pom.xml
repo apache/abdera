@@ -47,7 +47,7 @@
                 <mkdir dir="${basedir}/target" />
                 <get src="http://json.org/java/apache.zip" dest="${basedir}/target/apache.zip" usetimestamp="true"/>
                 <unzip src="${basedir}/target/apache.zip" dest="${basedir}/target/generated-sources/main/java" />
-                <move file="${basedir}/target/generated-sources/main/java/apache" tofile="${basedir}/target/generated-sources/main/java/json" />
+                <move file="${basedir}/target/generated-sources/main/java/apache" tofile="${basedir}/target/generated-sources/main/java/org" />
               </tasks>
               <sourceRoot>${project.build.directory}/generated-sources/main/java</sourceRoot>
             </configuration>

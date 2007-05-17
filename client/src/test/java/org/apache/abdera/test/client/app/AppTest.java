@@ -185,7 +185,7 @@ public class AppTest extends JettyTest {
         try {
           if (MimeTypeHelper.isMatch(
             request.getContentType(), 
-            "application/atom+xml")) {
+            "application/atom+xml;type=entry")) {
             MimeType type = new MimeType(request.getContentType());
             String charset = type.getParameter("charset");
             String uri = AppTest.INSTANCE.getBase() + "/collections/entries";
@@ -246,7 +246,7 @@ public class AppTest extends JettyTest {
         switch(t) {
           case ENTRY:
             try {
-              if (MimeTypeHelper.isMatch(request.getContentType(), "application/atom+xml")) {
+              if (MimeTypeHelper.isMatch(request.getContentType(), "application/atom+xml;type=entry")) {
                 Entry entry = feed.getRoot().getEntries().get(target);
                 MimeType type = new MimeType(request.getContentType());
                 String charset = type.getParameter("charset");
@@ -510,7 +510,7 @@ public class AppTest extends JettyTest {
 
     // submit the changes
     options = client.getDefaultRequestOptions();
-    options.setContentType("application/atom+xml");
+    options.setContentType("application/atom+xml;type=entry");
     options.setHeader("Connection", "close");
 
     response = client.put(edit_uri, entry, options);

@@ -105,7 +105,7 @@ public class DSigThirdPartyVerifyTest extends TestCase {
     ClientResponse response = client.post(
       "http://verisignlabs.com/tg/verify", 
       bre, reqoptions);
-    assertEquals(response.getStatus(),200);
+    assertEquals(200, response.getStatus());
     Document<Element> result = response.getDocument();
     
     XPath xpath = abdera.getXPath();

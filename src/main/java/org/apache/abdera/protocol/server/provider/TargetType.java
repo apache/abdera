@@ -37,6 +37,7 @@ public final class TargetType {
     if (name == null) return null;
     name = name.toUpperCase();
     if (name.equals(UNKNOWN)) return TYPE_UNKNOWN;
+    if (name.equals(SERVICE)) return TYPE_SERVICE;
     if (name.equals(COLLECTION)) return TYPE_COLLECTION;
     if (name.equals(ENTRY)) return TYPE_ENTRY;
     if (name.equals(MEDIA)) return TYPE_MEDIA;

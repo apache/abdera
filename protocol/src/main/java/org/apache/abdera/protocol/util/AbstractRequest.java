@@ -23,6 +23,7 @@ import java.util.List;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
+import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.protocol.Request;
 
 public abstract class AbstractRequest implements Request {
@@ -57,7 +58,7 @@ public abstract class AbstractRequest implements Request {
   }
   
   public String getSlug() {
-    return EncodingUtil.decode(getHeader("Slug"));
+    return Escaping.decode(EncodingUtil.decode(getHeader("Slug")));
   }
 
   public MimeType getContentType() throws MimeTypeParseException {

@@ -131,5 +131,8 @@ public class Constants {
                                                 .set2(0x005B,0x0060)
                                                 .set2(0x007B,0x007F);
   
+  public final static BitSet ASCIISANSCRLF = new ChainableBitSet()
+                                                .set2(1, 127)
+                                                .clear2(10,13);
 
 }

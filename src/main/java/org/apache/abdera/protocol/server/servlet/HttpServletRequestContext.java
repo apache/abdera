@@ -35,7 +35,6 @@ import org.apache.abdera.protocol.server.provider.AbstractRequestContext;
 import org.apache.abdera.protocol.server.provider.RequestContext;
 import org.apache.abdera.protocol.server.provider.TargetResolver;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 public class HttpServletRequestContext 
   extends AbstractRequestContext
@@ -208,24 +207,18 @@ public class HttpServletRequestContext
       buffer.append(request.getContextPath());
       // So that .resolve() works appropriately.
       buffer.append("/");
-      try {
-        return new IRI(buffer.toString());
-      } catch (IRISyntaxException e) {
-        throw new RuntimeException(e);
-      }
+      return new IRI(buffer.toString());
   }
   
   private static IRI initRequestUri(HttpServletRequest request) {
     IRI uri = null;
-    try {
-      StringBuffer buf = 
-        new StringBuffer(
-          request.getRequestURI());
-      String qs = request.getQueryString();
-      if (qs != null && qs.length() != 0)
-        buf.append("?" + request.getQueryString());
-      uri = new IRI(buf.toString());
-    } catch (IRISyntaxException e) {}
+    StringBuffer buf = 
+      new StringBuffer(
+        request.getRequestURI());
+    String qs = request.getQueryString();
+    if (qs != null && qs.length() != 0)
+      buf.append("?" + request.getQueryString());
+    uri = new IRI(buf.toString());
     return uri;
   }
 }

@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.abdera.i18n.iri.Constants;
+import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.protocol.server.provider.ResponseContext;
 import org.apache.abdera.protocol.util.AbstractResponse;
 import org.apache.abdera.protocol.util.EncodingUtil;
@@ -213,16 +215,16 @@ public abstract class AbstractResponseContext
     setHeader("Content-Location", uri);
   }
   
-  public void setSlug(String slug, String charset) {
-    setSlug(EncodingUtil.encode(slug, charset));
-  }
-  
   public void setSlug(String slug) {
     if (slug == null) {
       removeHeader("Slug");
       return;
     }
-    setHeader("Slug", slug);
+    if (slug.indexOf((char)10) > -1 ||
+        slug.indexOf((char)13) > -1)
+      throw new IllegalArgumentException(
+        "The slug must not contain ASCII carriage return or linefeed characters");
+    setHeader("Slug", Escaping.encode(slug, Constants.ASCIISANSCRLF));
   }
   
   public void setContentType(String type) {

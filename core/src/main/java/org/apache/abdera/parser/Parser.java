@@ -22,7 +22,6 @@ import java.io.Reader;
 
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 public interface Parser {
 
@@ -34,7 +33,7 @@ public interface Parser {
    */
   <T extends Element>Document<T> parse(
     InputStream in) 
-      throws ParseException, IRISyntaxException;
+      throws ParseException;
   
   /**
    * Parse the input stream using the default character set encoding (UTF-8).
@@ -49,7 +48,7 @@ public interface Parser {
   <T extends Element>Document<T> parse(
     InputStream in, 
     String base) 
-      throws ParseException, IRISyntaxException;
+      throws ParseException;
   
   /**
    * Parse the input stream using using the specified Parse options.  The 
@@ -68,7 +67,7 @@ public interface Parser {
     InputStream in, 
     String base, 
     ParserOptions options) 
-      throws ParseException, IRISyntaxException;
+      throws ParseException;
 
   /**
    * Parse the reader using the default Base URI and options
@@ -79,7 +78,7 @@ public interface Parser {
    */
   <T extends Element>Document<T> parse(
       Reader in) 
-        throws ParseException, IRISyntaxException;
+        throws ParseException;
     
   /**
    * Parse the reader using the specified Base URI
@@ -92,7 +91,7 @@ public interface Parser {
   <T extends Element>Document<T> parse(
     Reader in, 
     String base) 
-      throws ParseException, IRISyntaxException;
+      throws ParseException;
   
   /**
    * Parse the reader using using the specified Parse options.  The 
@@ -111,7 +110,7 @@ public interface Parser {
     Reader in, 
     String base, 
     ParserOptions options) 
-      throws ParseException, IRISyntaxException;
+      throws ParseException;
   
   /**
    * Return the default parser options for this Parser. This method 

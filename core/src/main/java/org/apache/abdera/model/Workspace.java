@@ -21,8 +21,6 @@ import java.util.List;
 
 import javax.activation.MimeType;
 
-import org.apache.abdera.i18n.iri.IRISyntaxException;
-
 /**
  * <p>An Atom Publishing Protocol Introspection Document workspace element.</p>
  * 
@@ -107,8 +105,7 @@ public interface Workspace
    */
   Collection addCollection(
     String title, 
-    String href) 
-      throws IRISyntaxException;
+    String href);
   
   /**
    * Returns a collection that accepts the specified media types

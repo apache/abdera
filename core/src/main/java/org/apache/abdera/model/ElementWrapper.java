@@ -27,7 +27,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.abdera.i18n.lang.InvalidLangTagSyntax;
 import org.apache.abdera.i18n.lang.Lang;
 
@@ -84,7 +83,7 @@ public abstract class ElementWrapper
     return internal.getAttributeValue(name);
   }
 
-  public IRI getBaseUri() throws IRISyntaxException {
+  public IRI getBaseUri() {
     return internal.getBaseUri();
   }
 
@@ -144,7 +143,7 @@ public abstract class ElementWrapper
     return internal.getQName();
   }
 
-  public IRI getResolvedBaseUri() throws IRISyntaxException {
+  public IRI getResolvedBaseUri() {
     return internal.getResolvedBaseUri();
   }
 
@@ -168,7 +167,7 @@ public abstract class ElementWrapper
     internal.setBaseUri(base);
   }
 
-  public void setBaseUri(String base) throws IRISyntaxException {
+  public void setBaseUri(String base) {
     internal.setBaseUri(base);
   }
 

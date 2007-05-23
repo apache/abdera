@@ -30,7 +30,6 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 public final class ThreadHelper {
 
@@ -141,7 +140,7 @@ public final class ThreadHelper {
     return irt;
   }
 
-  public static InReplyTo addInReplyTo(Entry entry, String ref) throws IRISyntaxException {
+  public static InReplyTo addInReplyTo(Entry entry, String ref) {
     return addInReplyTo(entry, new IRI(ref));
   }
 
@@ -166,8 +165,7 @@ public final class ThreadHelper {
     String source, 
     String href, 
     String type) 
-      throws IRISyntaxException, 
-             MimeTypeParseException {
+      throws MimeTypeParseException {
     InReplyTo irt = addInReplyTo(entry, ref);
     if (irt != null) {
       if (source != null) irt.setSource(source);

@@ -55,7 +55,6 @@ import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.Version;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
@@ -284,9 +283,7 @@ public class FOMFactory
       Generator generator = newGenerator(parent);
       generator.setVersion(Version.VERSION);
       generator.setText(Version.APP_NAME);
-      try {
-        generator.setUri(Version.URI);
-      } catch (IRISyntaxException e) { /* Can't happen */ }
+      generator.setUri(Version.URI);
       return generator;
   }
   

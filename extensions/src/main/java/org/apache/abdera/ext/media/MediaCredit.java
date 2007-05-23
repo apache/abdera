@@ -23,7 +23,6 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 public class MediaCredit extends ElementWrapper {
 
@@ -35,12 +34,12 @@ public class MediaCredit extends ElementWrapper {
     super(factory, MediaConstants.CREDIT);
   }
   
-  public IRI getScheme() throws IRISyntaxException {
+  public IRI getScheme() {
     String scheme = getAttributeValue("scheme");
     return (scheme != null) ? new IRI(scheme) : null;
   }
   
-  public void setScheme(String scheme) throws IRISyntaxException {
+  public void setScheme(String scheme) {
     if (scheme != null)
       setAttributeValue("scheme",(new IRI(scheme)).toString());
     else

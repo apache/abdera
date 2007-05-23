@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.i18n.iri;
 
-public class IRISyntaxException extends Exception {
+public class IRISyntaxException extends RuntimeException {
   private static final long serialVersionUID = 5177739661976965423L;
 
   IRISyntaxException(String message) {

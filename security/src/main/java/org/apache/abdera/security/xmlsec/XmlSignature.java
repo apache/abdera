@@ -30,7 +30,6 @@ import org.apache.abdera.security.SignatureOptions;
 import org.apache.abdera.security.util.Constants;
 import org.apache.abdera.security.util.SignatureBase;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.KeyInfo;
 import org.apache.xml.security.signature.XMLSignature;
@@ -60,8 +59,7 @@ public class XmlSignature
   private <T extends Element>T _sign(
     T element, 
     SignatureOptions options) 
-      throws XMLSecurityException, 
-             IRISyntaxException {    
+      throws XMLSecurityException{    
     element.setBaseUri(element.getResolvedBaseUri());
     org.w3c.dom.Element dom = fomToDom((Element)element.clone(), options);
     org.w3c.dom.Document domdoc = dom.getOwnerDocument();
@@ -98,8 +96,7 @@ public class XmlSignature
   private boolean is_valid_signature(
     XMLSignature sig) 
       throws XMLSignatureException, 
-             XMLSecurityException, 
-             IRISyntaxException {
+             XMLSecurityException {
     boolean answer = false;
     KeyInfo ki = sig.getKeyInfo();
     if (ki != null) {
@@ -120,8 +117,7 @@ public class XmlSignature
     T element, 
     SignatureOptions options)
       throws XMLSignatureException, 
-             XMLSecurityException, 
-             IRISyntaxException {
+             XMLSecurityException {
     List<X509Certificate> certs = new ArrayList<X509Certificate>();
     org.w3c.dom.Element dom = fomToDom((Element)element, options);
     NodeList children = dom.getChildNodes();
@@ -164,8 +160,7 @@ public class XmlSignature
     Element element, 
     SignatureOptions options) 
       throws XMLSignatureException, 
-             XMLSecurityException, 
-             IRISyntaxException {
+             XMLSecurityException {
     boolean answer = false;
     org.w3c.dom.Element dom = fomToDom((Element)element, options);
     NodeList children = dom.getChildNodes();

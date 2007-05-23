@@ -38,7 +38,6 @@ import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.model.Content.Type;
 import org.apache.abdera.util.AbstractNamedWriter;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.abdera.writer.NamedWriter;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -232,7 +231,7 @@ public class JSONWriter
     return jssvc;
   }
 
-  private static JSONArray categoriesToJSON(List<Category> categories) throws IRISyntaxException, JSONException {
+  private static JSONArray categoriesToJSON(List<Category> categories) throws JSONException {
     JSONArray jscategories = new JSONArray();
     for (Category category : categories) {
       if (category.getScheme() != null || category.getLabel() != null || category.getTerm() != null) {
@@ -251,7 +250,7 @@ public class JSONWriter
     return jscategories;
   }
 
-  private static JSONArray personsToJSON(List<Person> persons) throws IRISyntaxException, JSONException {
+  private static JSONArray personsToJSON(List<Person> persons) throws JSONException {
     JSONArray jspersons = new JSONArray();
     for (Person p : persons) {
       if (p.getName() != null || p.getUri() != null || p.getEmail() != null) {
@@ -268,7 +267,7 @@ public class JSONWriter
     return jspersons;
   }
 
-  private static JSONArray linksToJSON(List<Link> links) throws IRISyntaxException, MimeTypeParseException, JSONException {
+  private static JSONArray linksToJSON(List<Link> links) throws MimeTypeParseException, JSONException {
     JSONArray jslinks = new JSONArray();
     for (Link link : links) {
       JSONObject jslink = new JSONObject();

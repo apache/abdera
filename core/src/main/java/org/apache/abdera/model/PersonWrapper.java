@@ -21,7 +21,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.abdera.util.Constants;
 
 public abstract class PersonWrapper 
@@ -54,7 +53,7 @@ public abstract class PersonWrapper
     return getInternal().getFirstChild(NAME);
   }
 
-  public IRI getUri() throws IRISyntaxException {
+  public IRI getUri() {
     IRIElement iri = getUriElement();
     return (iri != null) ? iri.getResolvedValue() : null;
   }
@@ -107,7 +106,7 @@ public abstract class PersonWrapper
       internal.addExtension(element);
   }
 
-  public IRIElement setUri(String uri) throws IRISyntaxException {
+  public IRIElement setUri(String uri) {
     ExtensibleElement internal = getExtInternal();
     IRIElement el = getUriElement();
     if (uri != null) {

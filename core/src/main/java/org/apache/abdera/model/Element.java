@@ -23,7 +23,6 @@ import java.util.Locale;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.abdera.i18n.lang.InvalidLangTagSyntax;
 import org.apache.abdera.i18n.lang.Lang;
 
@@ -120,13 +119,13 @@ public interface Element
    * @return The Base URI
    * @throws IRISyntaxException if the Base URI is malformed
    */
-  IRI getBaseUri() throws IRISyntaxException;
+  IRI getBaseUri();
   
   /**
    * Returns the current in-scope, fully qualified Base URI for this element.
    * @throws IRISyntaxException if the Base URI is malformed
    */
-  IRI getResolvedBaseUri() throws IRISyntaxException;
+  IRI getResolvedBaseUri();
   
   /**
    * Sets the value of this element's <code>xml:base</code> attribute.
@@ -139,7 +138,7 @@ public interface Element
    * @param base The Base IRI
    * @throws IRISyntaxException if the base URI is malformed 
    */
-  void setBaseUri(String base) throws IRISyntaxException;
+  void setBaseUri(String base);
   
   /**
    * Returns the document to which this element belongs

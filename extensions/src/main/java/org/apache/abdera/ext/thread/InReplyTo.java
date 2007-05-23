@@ -24,7 +24,6 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 public class InReplyTo 
   extends ElementWrapper {
@@ -37,7 +36,7 @@ public class InReplyTo
     super(factory, ThreadConstants.IN_REPLY_TO);
   }
 
-  public IRI getHref() throws IRISyntaxException {
+  public IRI getHref() {
     String href = getAttributeValue("href");
     return (href != null) ? new IRI(href) : null;
   }
@@ -47,24 +46,24 @@ public class InReplyTo
     return (type != null) ? new MimeType(type) : null;
   }
 
-  public IRI getRef() throws IRISyntaxException {
+  public IRI getRef() {
     String ref = getAttributeValue("ref");
     return (ref != null) ? new IRI(ref) : null;
   }
 
-  public IRI getResolvedHref() throws IRISyntaxException {
+  public IRI getResolvedHref() {
     IRI href = getHref();
     IRI base = getBaseUri();
     return (base == null) ? href : (href != null) ? base.resolve(href) : null; 
   }
 
-  public IRI getResolvedSource() throws IRISyntaxException {
+  public IRI getResolvedSource() {
     IRI href = getSource();
     IRI base = getBaseUri();
     return (base == null) ? href : (href != null) ? base.resolve(href) : null;
   }
 
-  public IRI getSource() throws IRISyntaxException {
+  public IRI getSource() {
     String source = getAttributeValue("source");
     return (source != null) ? new IRI(source) : null;
   }
@@ -73,7 +72,7 @@ public class InReplyTo
     setAttributeValue("href", ref.toString());
   }
 
-  public void setHref(String ref) throws IRISyntaxException {
+  public void setHref(String ref) {
     setAttributeValue("href", ref);
   }
 
@@ -89,7 +88,7 @@ public class InReplyTo
     setAttributeValue("ref", ref.toString());
   }
 
-  public void setRef(String ref) throws IRISyntaxException {
+  public void setRef(String ref) {
     setAttributeValue("ref", ref);
   }
 
@@ -97,7 +96,7 @@ public class InReplyTo
     setAttributeValue("source", source.toString());
   }
 
-  public void setSource(String source) throws IRISyntaxException {
+  public void setSource(String source) {
     setAttributeValue("source", source);
   }
 

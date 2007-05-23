@@ -56,8 +56,7 @@ public class Editor {
   private Document<Feed> feeddoc;
   
   public Editor(
-    String serviceDocument) 
-      throws IRISyntaxException {
+    String serviceDocument) {
     this(new Abdera(), serviceDocument);
   }
   
@@ -70,8 +69,7 @@ public class Editor {
   
   public Editor(
     Abdera abdera,
-    String serviceDocument) 
-      throws IRISyntaxException {
+    String serviceDocument) {
     this.abdera = abdera;
     this.client = new CommonsClient(abdera);
     Document<Service> servicedoc = 
@@ -93,8 +91,7 @@ public class Editor {
   private static <T extends Element>Document<T> getDocument(
     Client client,
     Abdera abdera, 
-    String document)
-      throws IRISyntaxException {
+    String document) {
     
     ClientResponse resp = client.get(document);
     switch(resp.getType()) {
@@ -155,8 +152,7 @@ public class Editor {
     return collection;
   }
   
-  public Feed getFeed() 
-    throws IRISyntaxException {
+  public Feed getFeed()  {
       Collection collection = getCurrentCollection();
       if (collection == null)
         throw new IllegalStateException(
@@ -186,8 +182,7 @@ public class Editor {
     return nextPage;
   }
   
-  public void nextPage() 
-    throws IRISyntaxException {
+  public void nextPage()  {
       IRI np = getNextPage();
       if (np != null) {
         this.feeddoc = 
@@ -213,8 +208,7 @@ public class Editor {
     return prevPage;
   }
   
-  public void previousPage() 
-    throws IRISyntaxException {
+  public void previousPage()  {
       IRI np = getPreviousPage();
       if (np != null) {
         this.feeddoc = 
@@ -225,8 +219,7 @@ public class Editor {
       }
   }
   
-  public List<Entry> getEntries() 
-    throws IRISyntaxException {
+  public List<Entry> getEntries() {
       Feed feed = getFeed();
       if (feed == null) 
         throw new IllegalStateException(
@@ -235,8 +228,7 @@ public class Editor {
   }
   
   public EntryEditor editEntry(
-    Entry entry) 
-      throws IRISyntaxException {
+    Entry entry) {
     return new EntryEditor(entry);
   }
   
@@ -249,15 +241,13 @@ public class Editor {
     private MimeType contentType;
     
     public MediaEditor(IRI editMediaLink) 
-      throws IOException, 
-             IRISyntaxException {
+      throws IOException {
       this.editMediaLink = editMediaLink;
       getMedia(this.editMediaLink);
     }
     
     private void getMedia(IRI editMediaLink) 
-      throws IOException,
-             IRISyntaxException {
+      throws IOException {
       ClientResponse resp = client.get(editMediaLink.toString());
       switch(resp.getType()) {
         case SUCCESS:
@@ -297,7 +287,7 @@ public class Editor {
       this.contentType = contentType;
     }
     
-    public boolean delete() throws IRISyntaxException  {
+    public boolean delete() {
       RequestOptions options = client.getDefaultRequestOptions();
       if (etag != null) {
         options.setIfMatch(etag.toString());
@@ -320,7 +310,7 @@ public class Editor {
       }
     }
     
-    public boolean save() throws IRISyntaxException  {
+    public boolean save() {
       RequestOptions options = client.getDefaultRequestOptions();
       if (etag != null) {
         options.setIfMatch(etag.toString());
@@ -345,8 +335,7 @@ public class Editor {
     }
     
     public void refresh() 
-      throws IRISyntaxException, 
-             MimeTypeParseException, 
+      throws MimeTypeParseException, 
              IOException {
       getMedia(editMediaLink);
     }
@@ -359,7 +348,7 @@ public class Editor {
     private final IRI editMediaLink;
     private Document<Entry> entryDoc;
     
-    public EntryEditor(Entry entry) throws IRISyntaxException {
+    public EntryEditor(Entry entry) {
       this.editLink = entry.getEditLinkResolvedHref();
       this.editMediaLink = entry.getEditMediaLinkResolvedHref();
       entryDoc = getDocument(client,abdera,this.editLink.toString());
@@ -374,14 +363,13 @@ public class Editor {
     }
     
     public MediaEditor editMedia() 
-      throws IOException, 
-             IRISyntaxException {
+      throws IOException {
       if (this.editMediaLink == null) 
         throw new IllegalStateException("This is not a media link entry");
       return new MediaEditor(this.editMediaLink);
     }
     
-    public boolean delete() throws IRISyntaxException  {
+    public boolean delete() {
       RequestOptions options = client.getDefaultRequestOptions();
       EntityTag etag = entryDoc.getEntityTag();
       Date lm = entryDoc.getLastModified();
@@ -406,7 +394,7 @@ public class Editor {
       }
     }
     
-    public boolean save() throws IRISyntaxException  {
+    public boolean save() {
       RequestOptions options = client.getDefaultRequestOptions();
       EntityTag etag = entryDoc.getEntityTag();
       Date lm = entryDoc.getLastModified();
@@ -431,7 +419,7 @@ public class Editor {
       }
     }
     
-    public void refresh() throws IRISyntaxException {
+    public void refresh() {
       entryDoc = getDocument(
         client, 
         abdera, 

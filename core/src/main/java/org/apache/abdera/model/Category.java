@@ -18,7 +18,6 @@
 package org.apache.abdera.model;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * <p>Provides categorization informaton for a feed or entry</p>
@@ -66,7 +65,7 @@ public interface Category
    * @return The IRI value of the scheme attribute
    * @throws IRISyntaxException if the scheme IRI is malformed
    */
-  IRI getScheme() throws IRISyntaxException;
+  IRI getScheme();
 
   /**
    * RFC4287: The "scheme" attribute is an IRI that identifies a 
@@ -75,7 +74,7 @@ public interface Category
    * @param scheme The IRI of the scheme
    * @throws URISyntaxException if the scheme provided is malformed
    */
-  void setScheme(String scheme) throws IRISyntaxException;
+  void setScheme(String scheme);
  
   /**
    * RFC4287: The "label" attribute provides a human-readable label 

@@ -29,7 +29,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * Provides a simple (and likely somewhat inefficient) implementation of 
@@ -59,11 +58,7 @@ public class AbderaResult
   public <T extends Element>Document<T> getDocument() {
     if (doc == null) {
       if (pipein == null) return null;
-      try {
-        doc = abdera.getParser().parse(pipein);
-      } catch (IRISyntaxException e) {
-        // Not going to happen
-      }
+      doc = abdera.getParser().parse(pipein);
     } 
     return doc;
   }

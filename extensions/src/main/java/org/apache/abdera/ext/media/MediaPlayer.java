@@ -23,7 +23,6 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 public class MediaPlayer extends ElementWrapper {
 
@@ -35,12 +34,12 @@ public class MediaPlayer extends ElementWrapper {
     super(factory, MediaConstants.PLAYER);
   }
   
-  public IRI getUrl() throws IRISyntaxException {
+  public IRI getUrl() {
     String url = getAttributeValue("url");
     return (url != null) ? new IRI(url) : null;
   }
   
-  public void setUrl(String url) throws IRISyntaxException {
+  public void setUrl(String url) {
     if (url != null) {
       setAttributeValue("url", (new IRI(url)).toString());
     } else {

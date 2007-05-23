@@ -23,7 +23,6 @@ import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * <p>Represents an atom:content element.</p>
@@ -196,14 +195,14 @@ public interface Content extends Element {
    * @return The IRI value of the src attribute or null if none
    * @throws IRISyntaxException if the src attribute value is malformed
    */
-  IRI getSrc() throws IRISyntaxException;
+  IRI getSrc();
   
   /**
    * Returns the fully qualified URI form of the content src attribute.
    * @return The IRI value of the src attribute resolved against the in-scope Base URI
    * @throws IRISyntaxException if the src attribute value is malformed
    */
-  IRI getResolvedSrc() throws IRISyntaxException;
+  IRI getResolvedSrc();
 
   /**
    * <p>RFC4287: atom:content MAY have a "src" attribute, whose value MUST 
@@ -218,7 +217,7 @@ public interface Content extends Element {
    * @param src The IRI to use as the src attribute value for the content
    * @throws IRISyntaxException if the src value is malformed
    */
-  void setSrc(String src) throws IRISyntaxException;
+  void setSrc(String src);
   
   /**
    * Attempts to Base64 decode the string value of the content element.

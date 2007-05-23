@@ -18,7 +18,6 @@
 package org.apache.abdera.model;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * <p>An Atom Person Construct</p>
@@ -137,7 +136,7 @@ public interface Person
    * @param uri The atom:uri value
    * @throws IRISyntaxException if the uri is malformed
    */
-  IRIElement setUri(String uri) throws IRISyntaxException;
+  IRIElement setUri(String uri);
   
   /**
    * The "atom:uri" element's content conveys an IRI associated with the
@@ -147,5 +146,5 @@ public interface Person
    * @return The atom:uri value
    * @throws IRISyntaxException if the uri is invalid 
    */
-  IRI getUri() throws IRISyntaxException;
+  IRI getUri();
 }

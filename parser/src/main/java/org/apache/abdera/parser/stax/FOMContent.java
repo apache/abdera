@@ -28,7 +28,6 @@ import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.attachments.utils.DataHandlerUtils;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
@@ -160,15 +159,15 @@ public class FOMContent
       removeAttribute(TYPE);
   }
 
-  public IRI getSrc() throws IRISyntaxException {
+  public IRI getSrc() {
     return _getUriValue(getAttributeValue(SRC));
   }
 
-  public IRI getResolvedSrc() throws IRISyntaxException {
+  public IRI getResolvedSrc() {
     return _resolve(getResolvedBaseUri(), getSrc());
   }
   
-  public void setSrc(String src) throws IRISyntaxException {
+  public void setSrc(String src) {
     if (src != null)
       setAttributeValue(SRC, (new IRI(src)).toString());
     else 
@@ -298,8 +297,7 @@ public class FOMContent
   }
 
   @Override
-  public IRI getBaseUri()
-    throws IRISyntaxException {
+  public IRI getBaseUri() {
       if (Type.XHTML.equals(type)) {
         Element el = getValueElement();
         if (el != null) {
@@ -316,8 +314,7 @@ public class FOMContent
   }
 
   @Override
-  public IRI getResolvedBaseUri()
-    throws IRISyntaxException {
+  public IRI getResolvedBaseUri() {
       if (Type.XHTML.equals(type)) {
         Element el = getValueElement();
         if (el != null) {

@@ -22,7 +22,6 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.model.Generator;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -43,7 +42,7 @@ public class FOMGenerator
     String value, 
     String version, 
     String uri) 
-      throws IRISyntaxException {
+      {
     this();
     setText(value);
     setVersion(version);
@@ -89,16 +88,16 @@ public class FOMGenerator
     super(GENERATOR, parent, factory, builder);
   }
   
-  public IRI getUri() throws IRISyntaxException {
+  public IRI getUri() {
     String value = getAttributeValue(AURI);
     return (value != null) ? new IRI(value) : null;
 }
 
-  public IRI getResolvedUri() throws IRISyntaxException {
+  public IRI getResolvedUri() {
     return _resolve(getResolvedBaseUri(), getUri());
   }
 
-  public void setUri(String uri) throws IRISyntaxException {
+  public void setUri(String uri) {
     if (uri != null)
       setAttributeValue(AURI, (new IRI(uri)).toString());
     else 

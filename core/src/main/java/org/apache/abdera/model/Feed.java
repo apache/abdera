@@ -20,8 +20,6 @@ package org.apache.abdera.model;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.abdera.i18n.iri.IRISyntaxException;
-
 /**
  * <p>Represents an Atom Feed Element</p>
  * 
@@ -158,6 +156,6 @@ public interface Feed
    * @return The matching atom:entry
    * @throws IRISyntaxException if the id is malformed
    */
-  Entry getEntry(String id) throws IRISyntaxException;
+  Entry getEntry(String id);
   
 }

@@ -20,7 +20,6 @@ package org.apache.abdera.util;
 import java.util.regex.Pattern;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * Utility methods for working with URI's / IRI's
@@ -48,13 +47,12 @@ public class URIHelper {
    * Normalize a URI as specified by RFC4287 Section 4.2.6
    */
   public static IRI normalize(
-    IRI uri) 
-      throws IRISyntaxException {
+    IRI uri)  {
     if (uri == null) return null;
     return uri.normalize();
   }
   
-  public static String normalize(String uri) throws IRISyntaxException {
+  public static String normalize(String uri) {
     return normalize(new IRI(uri)).toASCIIString();
   }
 }

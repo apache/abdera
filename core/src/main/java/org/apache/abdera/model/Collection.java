@@ -22,7 +22,6 @@ import java.util.List;
 import javax.activation.MimeType;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * <p>Represents an collection element in an Atom Publishing Protocol 
@@ -87,21 +86,21 @@ public interface Collection
    * @return The href attribute IRI value
    * @throws IRISyntaxException if the value of the href attribute is malformed
    */
-  IRI getHref() throws IRISyntaxException;
+  IRI getHref();
 
   /**
    * Return the href attribute resolved against the in-scope Base URI
    * @return The href attribute IRI value
    * @throws IRISyntaxException if the value of the href attribute is malformed
    */
-  IRI getResolvedHref() throws IRISyntaxException;
+  IRI getResolvedHref();
   
   /**
    * Set the value of the href attribute
    * @param href The value of href attribute
    * @throws IRISyntaxException if the href attribute is malformed 
    */
-  void setHref(String href) throws IRISyntaxException;
+  void setHref(String href);
   
   /**
    * Returns the listing of media-ranges allowed for this collection
@@ -186,7 +185,7 @@ public interface Collection
    * @return The newly created app:categories element
    * @throws IRISyntaxException if the href value is malformed
    */
-  Categories addCategories(String href) throws IRISyntaxException;
+  Categories addCategories(String href);
   
   /**
    * Add the app:categories element to the collection
@@ -202,6 +201,6 @@ public interface Collection
    * @return The newly created app:categories element
    * @throws IRISyntaxException if the scheme value if malformed
    */
-  Categories addCategories(List<Category> categories, boolean fixed, String scheme) throws IRISyntaxException;
+  Categories addCategories(List<Category> categories, boolean fixed, String scheme);
   
 }

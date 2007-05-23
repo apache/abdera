@@ -24,7 +24,6 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.ext.thread.ThreadConstants;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Element;
 
@@ -129,8 +128,7 @@ public final class FeaturesHelper {
     String feature,
     boolean required,
     String href,
-    String label) 
-      throws IRISyntaxException {
+    String label) {
     if (supportsFeature(collection, feature)) 
       throw new IllegalArgumentException("Feature already supported");
     Factory factory = collection.getFactory();

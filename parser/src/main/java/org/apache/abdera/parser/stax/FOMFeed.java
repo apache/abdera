@@ -30,7 +30,6 @@ import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -198,7 +197,7 @@ public class FOMFeed
     }
   };
 
-  public Entry getEntry(String id) throws IRISyntaxException {
+  public Entry getEntry(String id) {
     if (id == null) return null;
     List<Entry> l = getEntries();
     for (Entry e : l) {

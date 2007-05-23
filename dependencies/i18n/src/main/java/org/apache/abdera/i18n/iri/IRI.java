@@ -66,7 +66,7 @@ public class IRI
   private String d_query;
   private String d_fragment;
   
-  public IRI(java.net.URL url) throws IRISyntaxException {
+  public IRI(java.net.URL url) {
     this(Escaping.encode(
         Escaping.decode(url.toString()), 
         Constants.IUNRESERVED, 
@@ -74,7 +74,7 @@ public class IRI
         Constants.PCTENC));
   }
   
-  public IRI(java.net.URI uri) throws IRISyntaxException {
+  public IRI(java.net.URI uri) {
     this(Escaping.encode(
       Escaping.decode(uri.toString()), 
       Constants.IUNRESERVED, 
@@ -83,7 +83,7 @@ public class IRI
       Constants.GENDELIMS));
   }
   
-  public IRI(java.net.URI uri, String enc) throws IRISyntaxException, UnsupportedEncodingException {
+  public IRI(java.net.URI uri, String enc) throws UnsupportedEncodingException {
     this(Escaping.encode(
         Escaping.decode(uri.toString(),enc), enc,
         Constants.IUNRESERVED, 
@@ -92,7 +92,7 @@ public class IRI
         Constants.GENDELIMS));
   }
   
-  public IRI(String iri) throws IRISyntaxException {
+  public IRI(String iri) {
     Builder b = new Builder();
     parse(CharUtils.stripBidi(iri), b);
     init(
@@ -107,7 +107,7 @@ public class IRI
       b.fragment);
   }
   
-  public IRI(String iri, Normalizer.Form nf) throws IRISyntaxException, IOException {
+  public IRI(String iri, Normalizer.Form nf) throws IOException {
     this(Normalizer.normalize(CharUtils.stripBidi(iri),nf).toString());
   }
   
@@ -133,8 +133,7 @@ public class IRI
     String authority,
     String path,
     String query,
-    String fragment) 
-      throws IRISyntaxException {
+    String fragment) {
     Builder builder = new Builder();
     Parser.parseAuthority(authority, builder);
     SchemeRegistry reg = SchemeRegistry.getInstance();
@@ -497,8 +496,7 @@ public class IRI
   public static IRI resolve(
     IRI b, 
     String c) 
-      throws IRISyntaxException, 
-             IOException {
+      throws IOException {
     return resolve(b, IRI.create(c));
   }
   
@@ -639,7 +637,7 @@ public class IRI
     return resolve(this,iri);
   }
   
-  public IRI resolve(String iri) throws IRISyntaxException {
+  public IRI resolve(String iri) {
     return resolve(this,IRI.create(iri));
   }
   
@@ -684,8 +682,7 @@ public class IRI
   
   private static void parse(
     String uri,
-    Builder builder) 
-      throws IRISyntaxException {
+    Builder builder) {
     try {
       Parser.parse(uri, builder, SchemeRegistry.getInstance());
     } catch (IOException e) {
@@ -694,16 +691,14 @@ public class IRI
   }
   
   public static IRI create(
-    String iri) 
-      throws IRISyntaxException {
+    String iri) {
     return new IRI(iri);
   }
   
   public static IRI create(
     String iri, 
     Normalizer.Form nf) 
-      throws IRISyntaxException, 
-             IOException {
+      throws IOException {
     return new IRI(iri,nf);
   }
   
@@ -735,7 +730,7 @@ public class IRI
     static final Pattern a =
       Pattern.compile("^((.*)?@)?(\\[.*\\])?([^:]*)?(:(\\d*))?");
     
-    static void parseAuthority(String authority, Builder builder) throws IRISyntaxException {
+    static void parseAuthority(String authority, Builder builder) {
       if (authority != null) {
         Matcher auth = a.matcher(authority);
         if (auth.find()) {
@@ -756,8 +751,7 @@ public class IRI
     }
     
     static void parse(String iri, Builder builder, SchemeRegistry reg) 
-      throws IRISyntaxException, 
-             IOException {
+      throws IOException {
       Matcher irim = p.matcher(iri);
       if (irim.find()) {
         

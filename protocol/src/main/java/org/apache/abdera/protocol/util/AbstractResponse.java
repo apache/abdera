@@ -26,7 +26,6 @@ import org.apache.abdera.protocol.Response;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 public abstract class AbstractResponse 
   implements Response {
@@ -59,7 +58,7 @@ public abstract class AbstractResponse
     return (value != null) ? Long.parseLong(value) : -1;
   }
 
-  public IRI getContentLocation() throws IRISyntaxException {
+  public IRI getContentLocation() {
     return getUriHeader("Content-Location");
   }
   
@@ -85,7 +84,7 @@ public abstract class AbstractResponse
     return getDateHeader("Last-Modified");
   }
 
-  public IRI getLocation() throws IRISyntaxException {
+  public IRI getLocation() {
     return getUriHeader("Location");
   }
 
@@ -109,7 +108,7 @@ public abstract class AbstractResponse
     return ResponseType.select(getStatus());
   }
 
-  public IRI getUriHeader(String name) throws IRISyntaxException {
+  public IRI getUriHeader(String name) {
     String value = getHeader(name);
     return (value != null) ? new IRI(value) : null;
   }

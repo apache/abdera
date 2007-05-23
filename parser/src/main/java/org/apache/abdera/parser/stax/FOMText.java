@@ -24,7 +24,6 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -174,8 +173,7 @@ public class FOMText
   }
 
   @Override
-  public IRI getBaseUri()
-    throws IRISyntaxException {
+  public IRI getBaseUri() {
       if (Type.XHTML.equals(type)) {
         Element el = getValueElement();
         if (el != null) {
@@ -192,8 +190,7 @@ public class FOMText
   }
 
   @Override
-  public IRI getResolvedBaseUri()
-    throws IRISyntaxException {
+  public IRI getResolvedBaseUri() {
       if (Type.XHTML.equals(type)) {
         Element el = getValueElement();
         if (el != null) {

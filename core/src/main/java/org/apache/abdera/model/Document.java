@@ -24,7 +24,6 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.abdera.i18n.lang.InvalidLangTagSyntax;
 import org.apache.abdera.i18n.lang.Lang;
 import org.apache.abdera.util.EntityTag;
@@ -65,7 +64,7 @@ public interface Document<T extends Element>
    * @param base The Base URI
    * @throws IRISyntaxException if the IRI is malformed 
    */
-  void setBaseUri(String base) throws IRISyntaxException;
+  void setBaseUri(String base);
   
   /**
    * Returns the content type of this document

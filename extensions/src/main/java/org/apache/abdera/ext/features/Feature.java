@@ -21,7 +21,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ExtensibleElementWrapper;
 
@@ -36,8 +35,7 @@ public class Feature
     super(factory, FeaturesHelper.FEATURE);
   }
   
-  public IRI getRef() 
-    throws IRISyntaxException {
+  public IRI getRef()  {
       String ref = getAttributeValue("ref");
       return (ref != null) ? new IRI(ref) : null;
   }
@@ -48,8 +46,7 @@ public class Feature
     return false;
   }
   
-  public IRI getHref() 
-    throws IRISyntaxException {
+  public IRI getHref()  {
       String href = getAttributeValue("href");
       return (href != null) ? new IRI(href) : null;
   }
@@ -58,8 +55,7 @@ public class Feature
     return getAttributeValue("label");
   }
   
-  public void setRef(String ref) 
-    throws IRISyntaxException {
+  public void setRef(String ref) {
       if (ref == null) throw new IllegalArgumentException();
       setAttributeValue("ref", (new IRI(ref)).toString());
   }
@@ -72,8 +68,7 @@ public class Feature
     }
   }
   
-  public void setHref(String href) 
-    throws IRISyntaxException {
+  public void setHref(String href)  {
       if (href != null)
         setAttributeValue("href", (new IRI(href)).toString());
       else 

@@ -48,7 +48,6 @@ import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.i18n.io.InputStreamDataSource;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -124,7 +123,7 @@ public class FOMEntry
     return person;
   }
 
-  public Person addAuthor(String name, String email, String uri) throws IRISyntaxException {
+  public Person addAuthor(String name, String email, String uri) {
     FOMFactory fomfactory = (FOMFactory) this.factory;
     Person person = fomfactory.newAuthor(this);
     person.setName(name);
@@ -137,7 +136,7 @@ public class FOMEntry
     return _getChildrenAsSet(CATEGORY);
   }
 
-  public List<Category> getCategories(String scheme) throws IRISyntaxException {
+  public List<Category> getCategories(String scheme) {
     return FOMHelper.getCategories(this, scheme);
   }
 
@@ -163,7 +162,7 @@ public class FOMEntry
     return category;
   }
 
-  public Category addCategory(String scheme, String term, String label) throws IRISyntaxException {
+  public Category addCategory(String scheme, String term, String label) {
     FOMFactory factory = (FOMFactory) this.factory;
     Category category = factory.newCategory(this);
     category.setTerm(term);
@@ -299,7 +298,7 @@ public class FOMEntry
    * @throws MimeTypeParseException 
  * @throws IRISyntaxException 
    */
-  public Content setContent(IRI uri, String mediatype) throws MimeTypeParseException, IRISyntaxException {
+  public Content setContent(IRI uri, String mediatype) throws MimeTypeParseException {
     FOMFactory factory = (FOMFactory) this.factory;
     Content content = factory.newContent(new MimeType(mediatype));
     content.setSrc(uri.toString());
@@ -327,7 +326,7 @@ public class FOMEntry
     String name, 
     String email, 
     String uri) 
-      throws IRISyntaxException {
+      {
     FOMFactory fomfactory = (FOMFactory) this.factory;
     Person person = fomfactory.newContributor(this);
     person.setName(name);
@@ -347,20 +346,20 @@ public class FOMEntry
       _removeChildren(ID, false);
   }
 
-  public IRI getId() throws IRISyntaxException {
+  public IRI getId() {
     IRIElement id = getIdElement();
     return (id != null) ? id.getValue() : null;
   }
   
-  public IRIElement setId(String value) throws IRISyntaxException {
+  public IRIElement setId(String value) {
     return setId(value, false);
   }
   
-  public IRIElement newId() throws IRISyntaxException {
+  public IRIElement newId() {
     return setId(this.getFactory().newUuidUri(), false);
   }
   
-  public IRIElement setId(String value, boolean normalize) throws IRISyntaxException {
+  public IRIElement setId(String value, boolean normalize) {
     if (value == null) {
       _removeChildren(ID, false);
       return null;
@@ -390,11 +389,11 @@ public class FOMEntry
     addChild((OMElement)link);
   }
 
-  public Link addLink(String href) throws IRISyntaxException {
+  public Link addLink(String href) {
     return addLink(href, null);
   }
   
-  public Link addLink(String href, String rel) throws IRISyntaxException {
+  public Link addLink(String href, String rel) {
     FOMFactory fomfactory = (FOMFactory) factory;
     Link link = fomfactory.newLink(this);
     link.setHref(href);
@@ -409,7 +408,7 @@ public class FOMEntry
     String title, 
     String hreflang, 
     long length) 
-      throws IRISyntaxException, MimeTypeParseException {
+      throws MimeTypeParseException {
     FOMFactory fomfactory = (FOMFactory) factory;
     Link link = fomfactory.newLink(this);
     link.setHref(href);
@@ -739,27 +738,27 @@ public class FOMEntry
     return getLink(Link.REL_EDIT_MEDIA);
   }
   
-  public IRI getLinkResolvedHref(String rel) throws IRISyntaxException {
+  public IRI getLinkResolvedHref(String rel) {
     Link link = getLink(rel);
     return (link != null) ? link.getResolvedHref() : null;
   }
-  public IRI getAlternateLinkResolvedHref() throws IRISyntaxException {
+  public IRI getAlternateLinkResolvedHref() {
     Link link = getAlternateLink();
     return (link != null) ? link.getResolvedHref() : null;
   }
-  public IRI getEnclosureLinkResolvedHref() throws IRISyntaxException {
+  public IRI getEnclosureLinkResolvedHref() {
     Link link = getEnclosureLink();
     return (link != null) ? link.getResolvedHref() : null;
   }
-  public IRI getEditLinkResolvedHref() throws IRISyntaxException {
+  public IRI getEditLinkResolvedHref() {
     Link link = getEditLink();
     return (link != null) ? link.getResolvedHref() : null;
   }
-  public IRI getEditMediaLinkResolvedHref() throws IRISyntaxException {
+  public IRI getEditMediaLinkResolvedHref() {
     Link link = getEditMediaLink();
     return (link != null) ? link.getResolvedHref() : null;
   }
-  public IRI getSelfLinkResolvedHref() throws IRISyntaxException {
+  public IRI getSelfLinkResolvedHref() {
     Link link = getSelfLink();
     return (link != null) ? link.getResolvedHref() : null;
   }
@@ -775,7 +774,7 @@ public class FOMEntry
     return dh.getInputStream();
   }
   
-  public IRI getContentSrc() throws IRISyntaxException {
+  public IRI getContentSrc() {
     Content content = getContentElement();
     return (content != null) ? content.getResolvedSrc() : null;
   }
@@ -815,8 +814,7 @@ public class FOMEntry
   public IRI getAlternateLinkResolvedHref(
     String type, 
     String hreflang) 
-      throws IRISyntaxException, 
-             MimeTypeParseException {
+      throws MimeTypeParseException {
     Link link = getAlternateLink(type, hreflang);
     return (link != null) ? link.getResolvedHref() : null;
   }
@@ -831,8 +829,7 @@ public class FOMEntry
   public IRI getEditMediaLinkResolvedHref(
     String type, 
     String hreflang) 
-      throws IRISyntaxException, 
-             MimeTypeParseException {
+      throws MimeTypeParseException {
     Link link = getEditMediaLink(type, hreflang);
     return (link != null) ? link.getResolvedHref() : null;
   }

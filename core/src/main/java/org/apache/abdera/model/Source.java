@@ -23,7 +23,6 @@ import java.util.List;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * <p>Per RFC4287:</p>
@@ -101,7 +100,7 @@ public interface Source
    * @return The newly created atom:author element
    * @throws IRISyntaxException  if the iri is malformed
    */
-  Person addAuthor(String name, String email, String iri) throws IRISyntaxException;
+  Person addAuthor(String name, String email, String iri) ;
   
   /**
    * Lists the complete set of categories listed for the entry
@@ -115,7 +114,7 @@ public interface Source
    * @return The listing of app:category elements 
    * @throws IRISyntaxException if the scheme is malformed
    */
-  List<Category> getCategories(String scheme) throws IRISyntaxException;
+  List<Category> getCategories(String scheme) ;
   
   /**
    * Adds an individual category to the entry
@@ -138,7 +137,7 @@ public interface Source
    * @return the newly created atom:category element
    * @throws IRISyntaxException if the scheme is malformed
    */
-  Category addCategory(String scheme, String term, String label) throws IRISyntaxException;
+  Category addCategory(String scheme, String term, String label) ;
   
   /**
    * Lists the complete set of contributors for this entry
@@ -167,7 +166,7 @@ public interface Source
    * @return The atom:contributor element
    * @throws IRISyntaxException if the iri is malformed
    */
-  Person addContributor(String name, String email, String iri) throws IRISyntaxException;
+  Person addContributor(String name, String email, String iri) ;
   
   /**
    * RFC4287: The "atom:generator" element's content identifies the 
@@ -196,7 +195,7 @@ public interface Source
     String iri, 
     String version, 
     String value) 
-      throws IRISyntaxException;
+      ;
   
   /** 
    * RFC4287: The "atom:icon" element's content is an IRI reference 
@@ -227,7 +226,7 @@ public interface Source
    * @param iri The atom:icon IRI value
    * @throws IRISyntaxException if the iri is malformed
    */
-  IRIElement setIcon(String iri) throws IRISyntaxException;
+  IRIElement setIcon(String iri) ;
 
   /** 
    * RFC4287: The "atom:icon" element's content is an IRI reference 
@@ -238,7 +237,7 @@ public interface Source
    * @return The atom:icon value
    * @throws IRISyntaxException if the atom:icon value is malformed
    */
-  IRI getIcon() throws IRISyntaxException;
+  IRI getIcon() ;
   
   /**
    * RFC4287: The "atom:id" element conveys a permanent, universally unique
@@ -259,7 +258,7 @@ public interface Source
    * @return The atom:id value
    * @throws IRISyntaxException if the atom:id is malformed
    */
-  IRI getId() throws IRISyntaxException;
+  IRI getId() ;
 
   /**
    * Sets the universally unique identifier for this feed
@@ -267,12 +266,12 @@ public interface Source
    * @return The newly created atom:id element
    * @throws IRISyntaxException  if the id is malformed
    */
-  IRIElement setId(String id) throws IRISyntaxException;
+  IRIElement setId(String id) ;
   
   /**
    * Creates a new randomized atom:id for the entry
    */
-  IRIElement newId() throws IRISyntaxException;
+  IRIElement newId() ;
   
   /**
    * Sets the universally unique identifier for this feed
@@ -281,7 +280,7 @@ public interface Source
    * @return The newly created atom:id element
    * @throws IRISyntaxException if the id is malformed
    */
-  IRIElement setId(String id, boolean normalize) throws IRISyntaxException;
+  IRIElement setId(String id, boolean normalize) ;
    
   /**
    * Lists the complete set of links for this entry
@@ -308,7 +307,7 @@ public interface Source
    * @return The newly created atom:link
    * @throws IRISyntaxException if the href is malformed
    */
-  Link addLink(String href) throws IRISyntaxException;
+  Link addLink(String href) ;
   
   /**
    * Adds an individual link element
@@ -317,7 +316,7 @@ public interface Source
    * @return The newly created atom:link
    * @throws IRISyntaxException if the href is malformed
    */
-  Link addLink(String href, String rel) throws IRISyntaxException;
+  Link addLink(String href, String rel) ;
   
   /**
    * Adds an individual link element
@@ -329,7 +328,7 @@ public interface Source
    * @return The newly created atom:link
    * @throws IRISyntaxException if the href is malformed
    */
-  Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws IRISyntaxException, MimeTypeParseException;
+  Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws MimeTypeParseException;
    
   /**
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
@@ -355,7 +354,7 @@ public interface Source
    * @return The newly created atom:logo element
    * @throws IRISyntaxException if the iri is malformed
    */
-  IRIElement setLogo(String iri) throws IRISyntaxException;
+  IRIElement setLogo(String iri) ;
 
   /**
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
@@ -364,7 +363,7 @@ public interface Source
    * @return The atom:logo element value
    * @throws IRISyntaxException  if the atom:logo value is malformed
    */
-  IRI getLogo() throws IRISyntaxException;
+  IRI getLogo() ;
   
   /**
    * <p>The rights element is typically used to convey a human readable 
@@ -644,17 +643,17 @@ public interface Source
    * @param rel A link relation
    * @return An atom:link
    */
-  IRI getLinkResolvedHref(String rel) throws IRISyntaxException;
+  IRI getLinkResolvedHref(String rel) ;
   
   /**
    * @return An atom:link
    */
-  IRI getSelfLinkResolvedHref() throws IRISyntaxException;
+  IRI getSelfLinkResolvedHref() ;
   
   /**
    * @return An atom:link
    */
-  IRI getAlternateLinkResolvedHref() throws IRISyntaxException;
+  IRI getAlternateLinkResolvedHref() ;
   
   /**
    * @param type A media type
@@ -662,7 +661,7 @@ public interface Source
    * @return A matching atom:link
    * @throws MimeTypeParseException if the type if malformed
    */
-  IRI getAlternateLinkResolvedHref(String type, String hreflang) throws IRISyntaxException, MimeTypeParseException;
+  IRI getAlternateLinkResolvedHref(String type, String hreflang) throws MimeTypeParseException;
   
   /**
    * Return an app:collection element associatd with this atom:source.  The 

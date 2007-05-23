@@ -22,7 +22,6 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -48,8 +47,7 @@ public class FOMCategory
   public FOMCategory(
     String term, 
     String scheme, 
-    String label) 
-      throws IRISyntaxException {
+    String label) {
     this();
     setTerm(term);
     setScheme(scheme);
@@ -104,12 +102,12 @@ public class FOMCategory
       removeAttribute(TERM);
   }
 
-  public IRI getScheme() throws IRISyntaxException {
+  public IRI getScheme() {
     String value = getAttributeValue(SCHEME);
     return (value != null) ? new IRI(value) : null;
   }
 
-  public void setScheme(String scheme) throws IRISyntaxException {
+  public void setScheme(String scheme) {
     if (scheme != null)
       setAttributeValue(SCHEME, new IRI(scheme).toString());
     else 

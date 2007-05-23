@@ -21,7 +21,6 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * <p>Represents an Atom Link element.</p>
@@ -90,7 +89,7 @@ public interface Link
    * @return The href IRI value
    * @throws IRISyntaxException if the href is malformed
    */
-  IRI getHref() throws IRISyntaxException;
+  IRI getHref();
   
   /**
    * Returns the value of the link's href attribute resolved against the 
@@ -98,7 +97,7 @@ public interface Link
    * @return The href IRI value
    * @throws IRISyntaxException if the href is malformed
    */
-  IRI getResolvedHref() throws IRISyntaxException;
+  IRI getResolvedHref();
   
   /**
    * RFC4287: The "href" attribute contains the link's IRI. atom:link 
@@ -107,7 +106,7 @@ public interface Link
    * @param href The href IRI
    * @throws IRISyntaxException if the href is malformed
    */
-  void setHref(String href) throws IRISyntaxException;
+  void setHref(String href);
   
   /**
    * <p>RFC4287: atom:link elements MAY have a "rel" attribute that indicates the link

@@ -23,7 +23,6 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -52,8 +51,7 @@ public class FOMPerson
     QName qname, 
     String name, 
     String email, 
-    String uri) 
-      throws IRISyntaxException {
+    String uri) {
     this(qname);
     setName(name);
     setEmail(email);
@@ -157,7 +155,7 @@ public class FOMPerson
       _removeChildren(URI, false);
   }
 
-  public IRIElement setUri(String uri) throws IRISyntaxException {
+  public IRIElement setUri(String uri) {
     if (uri != null) {
       FOMFactory fomfactory = (FOMFactory) factory;
       IRIElement el = fomfactory.newUri(null);
@@ -170,7 +168,7 @@ public class FOMPerson
     }
   }
   
-  public IRI getUri() throws IRISyntaxException {
+  public IRI getUri() {
     IRIElement iri = getUriElement();
     return (iri != null) ? iri.getResolvedValue() : null;
   }

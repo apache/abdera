@@ -30,7 +30,6 @@ import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.util.AbstractRequest;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 public abstract class AbstractRequestContext 
   extends AbstractRequest
@@ -100,13 +99,9 @@ public abstract class AbstractRequestContext
       throws ParseException, 
              IOException {
     if (document == null) {
-      try {
-        return parser.parse(
-          getInputStream(), 
-          null, options);
-      } catch (IRISyntaxException e) {
-        throw new ParseException(e); // won't never happen
-      }
+      return parser.parse(
+        getInputStream(), 
+        null, options);
     } 
     return document;
   }

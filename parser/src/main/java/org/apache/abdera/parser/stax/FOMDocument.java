@@ -35,7 +35,6 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.abdera.i18n.lang.InvalidLangTagSyntax;
 import org.apache.abdera.i18n.lang.Lang;
 import org.apache.axiom.om.OMComment;
@@ -115,7 +114,7 @@ public class FOMDocument<T extends Element>
     return base;
   }
 
-  public void setBaseUri(String base) throws IRISyntaxException {
+  public void setBaseUri(String base) {
     this.base = new IRI(base);
   }
 

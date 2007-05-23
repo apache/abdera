@@ -27,7 +27,6 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * <p>Represents an Atom Entry element.</p>
@@ -140,7 +139,7 @@ public interface Entry
    * @return The newly created atom:author element
    * @throws IRISyntaxException if the URI is malformed
    */
-  Person addAuthor(String name, String email, String uri) throws IRISyntaxException;
+  Person addAuthor(String name, String email, String uri);
   
   /**
    * Lists the complete set of categories listed for the entry
@@ -153,7 +152,7 @@ public interface Entry
    * A listing of atom:category elements using the specified scheme
    * @throws IRISyntaxException if the scheme is malformed
    */
-  List<Category> getCategories(String scheme) throws IRISyntaxException;
+  List<Category> getCategories(String scheme) ;
 
   /**
    * Adds an individual category to the entry
@@ -176,7 +175,7 @@ public interface Entry
    * @return The newly create atom:category
    * @throws IRISyntaxException if the scheme is malformed
    */
-  Category addCategory(String scheme, String term, String label) throws IRISyntaxException;
+  Category addCategory(String scheme, String term, String label);
   
   /**
    * Returns the content for this entry
@@ -284,7 +283,7 @@ public interface Entry
    * @throws MimeTypeParseException if the mime type is invalid.
    * @throws IRISyntaxException if the URI is invalid.
    */
-  Content setContent(IRI uri, String mediatype) throws MimeTypeParseException, IRISyntaxException;
+  Content setContent(IRI uri, String mediatype) throws MimeTypeParseException;
   
   /**
    * Returns the text of the content element
@@ -304,7 +303,7 @@ public interface Entry
    * @return The src IRI
    * @throws IRISyntaxException if the src attribute is invalid
    */
-  IRI getContentSrc() throws IRISyntaxException;
+  IRI getContentSrc() ;
   
   /**
    * Returns the content type
@@ -346,7 +345,7 @@ public interface Entry
    * @return The newly created atom:contributor
    * @throws IRISyntaxException  if the uri is malformed
    */
-  Person addContributor(String name, String email, String uri) throws IRISyntaxException;
+  Person addContributor(String name, String email, String uri) ;
   
   /**
    * Returns the universally unique identifier for this entry
@@ -364,7 +363,7 @@ public interface Entry
    * Returns the universally unique identifier for this entry
    * @throws IRISyntaxException  if the atom:id value is malformed
    */
-  IRI getId() throws IRISyntaxException;
+  IRI getId() ;
 
   /**
    * Sets the universally unique identifier for this entry
@@ -372,12 +371,12 @@ public interface Entry
    * @return The newly created atom:id element
    * @throws IRISyntaxException  if the atom:id value is malformed
    */
-  IRIElement setId(String id) throws IRISyntaxException;
+  IRIElement setId(String id) ;
   
   /**
    * Creates a new randomized atom:id for the entry
    */
-  IRIElement newId() throws IRISyntaxException;
+  IRIElement newId() ;
   
   /**
    * Sets the universally unique identifier for this entry
@@ -386,7 +385,7 @@ public interface Entry
    * @return The newly created atom:id element
    * @throws IRISyntaxException if the atom:id value is malformed
    */
-  IRIElement setId(String id, boolean normalize) throws IRISyntaxException;
+  IRIElement setId(String id, boolean normalize) ;
   
   /**
    * Lists the complete set of links for this entry
@@ -413,7 +412,7 @@ public interface Entry
    * @return The newly created atom:link
    * @throws IRISyntaxException if the href is malformed
    */
-  Link addLink(String href) throws IRISyntaxException;
+  Link addLink(String href) ;
 
   /**
    * Add a link to the entry
@@ -422,7 +421,7 @@ public interface Entry
    * @return The newly created atom:link
    * @throws IRISyntaxException if the href is malformed
    */
-  Link addLink(String href, String rel) throws IRISyntaxException;
+  Link addLink(String href, String rel) ;
   
   /**
    * Add a link to the entry
@@ -434,7 +433,7 @@ public interface Entry
    * @return The newly created atom:link
    * @throws IRISyntaxException if the href is malformed
    */  
-  Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws IRISyntaxException, MimeTypeParseException;
+  Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws MimeTypeParseException;
   
   /**
    * RFC4287: The "atom:published" element is a Date construct indicating an
@@ -877,14 +876,14 @@ public interface Entry
    * @return The resolved IRI
    * @throws IRISyntaxException if the href attribute is malformed
    */
-  IRI getLinkResolvedHref(String rel) throws IRISyntaxException;
+  IRI getLinkResolvedHref(String rel) ;
 
   /**
    * Return a link href resolved against the in-scope Base URI
    * @return The resolved IRI
    * @throws IRISyntaxException if the href attribute is malformed
    */
-  IRI getAlternateLinkResolvedHref() throws IRISyntaxException;
+  IRI getAlternateLinkResolvedHref() ;
 
   /**
    * Return a link href resolved against the in-scope Base URI
@@ -893,28 +892,28 @@ public interface Entry
    * @return The resolved IRI
    * @throws IRISyntaxException if the href attribute is malformed
    */
-  IRI getAlternateLinkResolvedHref(String type, String hreflang) throws IRISyntaxException, MimeTypeParseException;
+  IRI getAlternateLinkResolvedHref(String type, String hreflang) throws MimeTypeParseException;
 
   /**
    * Return a link href resolved against the in-scope Base URI
    * @return The resolved IRI
    * @throws IRISyntaxException if the href attribute is malformed
    */
-  IRI getEnclosureLinkResolvedHref() throws IRISyntaxException;
+  IRI getEnclosureLinkResolvedHref() ;
 
   /**
    * Return a link href resolved against the in-scope Base URI
    * @return The resolved IRI
    * @throws IRISyntaxException if the href attribute is malformed
    */
-  IRI getEditLinkResolvedHref() throws IRISyntaxException;
+  IRI getEditLinkResolvedHref() ;
 
   /**
    * Return a link href resolved against the in-scope Base URI
    * @return The resolved IRI
    * @throws IRISyntaxException if the href attribute is malformed
    */
-  IRI getEditMediaLinkResolvedHref() throws IRISyntaxException;
+  IRI getEditMediaLinkResolvedHref() ;
 
   /**
    * Return a link href resolved against the in-scope Base URI
@@ -924,13 +923,13 @@ public interface Entry
    * @throws IRISyntaxException if the href attribute is malformed
    * @throws MimeTypeParseException if the type is malformed
    */
-  IRI getEditMediaLinkResolvedHref(String type, String hreflang) throws IRISyntaxException, MimeTypeParseException;
+  IRI getEditMediaLinkResolvedHref(String type, String hreflang) throws MimeTypeParseException;
  
   /**
    * Return a link href resolved against the in-scope Base URI
    * @return The resolved IRI
    * @throws IRISyntaxException if the href attribute is malformed
    */
-  IRI getSelfLinkResolvedHref() throws IRISyntaxException;
+  IRI getSelfLinkResolvedHref();
 }
 

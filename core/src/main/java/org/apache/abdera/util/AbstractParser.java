@@ -27,7 +27,6 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * Abstract base implementation of Abdera Parser.
@@ -56,15 +55,14 @@ public abstract class AbstractParser
   
   public <T extends Element>Document<T> parse(
     InputStream in) 
-      throws ParseException, IRISyntaxException {
+      throws ParseException {
     return parse(in, null, getDefaultParserOptions());
   }
 
   public <T extends Element>Document<T> parse(
     InputStream in, 
     String base) 
-      throws ParseException, 
-             IRISyntaxException {
+      throws ParseException {
     return parse(in, base, getDefaultParserOptions());
   }
   
@@ -72,22 +70,20 @@ public abstract class AbstractParser
     InputStream in, 
     String base, 
     ParserOptions options) 
-      throws ParseException, 
-             IRISyntaxException {
+      throws ParseException{
     return parse(in, base, options);
   }
   
   public <T extends Element>Document<T> parse(
     Reader in) 
-      throws ParseException, IRISyntaxException {
+      throws ParseException {
     return parse(in, null, getDefaultParserOptions());
   }
 
   public <T extends Element>Document<T> parse(
     Reader in, 
     String base) 
-      throws ParseException, 
-             IRISyntaxException {
+      throws ParseException {
     return parse(in, base, getDefaultParserOptions());
   }
 

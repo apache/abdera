@@ -22,7 +22,6 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -39,7 +38,7 @@ public class FOMIRI
     super(qname);
   }
   
-  public FOMIRI(QName qname, String value) throws IRISyntaxException {
+  public FOMIRI(QName qname, String value) {
     this(qname);
     setValue(value);
   }
@@ -70,11 +69,11 @@ public class FOMIRI
     super(qname, parent, factory, builder);
   }
   
-  public IRI getValue() throws IRISyntaxException {
+  public IRI getValue() {
     return _getUriValue(getText());
   }
 
-  public void setValue(String iri) throws IRISyntaxException {
+  public void setValue(String iri) {
     if (iri != null)
       setText((new IRI(iri)).toString());
     else
@@ -82,11 +81,11 @@ public class FOMIRI
 
   }
   
-  public IRI getResolvedValue() throws IRISyntaxException {
+  public IRI getResolvedValue() {
     return _resolve(getResolvedBaseUri(), getValue());
   }
 
-  public void setNormalizedValue(String uri) throws IRISyntaxException {
+  public void setNormalizedValue(String uri) {
     if (uri != null)
       setValue(URIHelper.normalize(uri));
     else 

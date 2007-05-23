@@ -52,7 +52,6 @@ import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.abdera.i18n.lang.InvalidLangTagSyntax;
 import org.apache.abdera.i18n.lang.Lang;
 import org.apache.axiom.om.OMAttribute;
@@ -228,7 +227,7 @@ public class FOMElement
     setAttributeValue(LANG,language);
   }
 
-  public IRI getBaseUri() throws IRISyntaxException {
+  public IRI getBaseUri() {
     IRI uri = _getUriValue(getAttributeValue(BASE));
     if (URIHelper.isJavascriptUri(uri) || 
         URIHelper.isMailtoUri(uri)) { uri = null; }
@@ -242,7 +241,7 @@ public class FOMElement
     return uri;
   }
 
-  public IRI getResolvedBaseUri() throws IRISyntaxException {
+  public IRI getResolvedBaseUri() {
     IRI baseUri = null;
     IRI uri = _getUriValue(getAttributeValue(BASE));
     if (URIHelper.isJavascriptUri(uri) || 
@@ -263,7 +262,7 @@ public class FOMElement
     setAttributeValue(BASE,_getStringValue(base));
   }
   
-  public void setBaseUri(String base) throws IRISyntaxException {
+  public void setBaseUri(String base) {
     setBaseUri((base != null) ? new IRI(base) : null);
   }
   
@@ -317,7 +316,7 @@ public class FOMElement
     }
   }
   
-  protected IRI _getUriValue(String v) throws IRISyntaxException {
+  protected IRI _getUriValue(String v) {
     return (v != null) ? new IRI(v) : null;
   }
   
@@ -325,7 +324,7 @@ public class FOMElement
     return (uri != null) ? uri.toString() : null;
   }
   
-  protected IRI _resolve(IRI base, IRI value) throws IRISyntaxException {
+  protected IRI _resolve(IRI base, IRI value) {
     if (value == null) return null;
     if ("".equals(value.toString()) || 
         "#".equals(value.toString()) ||
@@ -504,7 +503,7 @@ public class FOMElement
   }
   
   
-  protected Element _parse(String value, IRI baseUri) throws ParseException, IRISyntaxException, UnsupportedEncodingException {
+  protected Element _parse(String value, IRI baseUri) throws ParseException, UnsupportedEncodingException {
     if (value == null) return null;
     FOMFactory fomfactory = (FOMFactory) factory;
     Parser parser = fomfactory.newParser();

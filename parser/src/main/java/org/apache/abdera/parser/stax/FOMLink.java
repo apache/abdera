@@ -28,7 +28,6 @@ import org.apache.abdera.model.Link;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -47,7 +46,7 @@ public class FOMLink
   
   public FOMLink(
     String href) 
-      throws IRISyntaxException {
+      {
     this();
     setHref(href);
   }
@@ -55,7 +54,7 @@ public class FOMLink
   public FOMLink(
     String href, 
     String rel) 
-      throws IRISyntaxException {
+      {
     this();
     setHref(href);
     setRel(rel);
@@ -102,15 +101,15 @@ public class FOMLink
     super(qname, parent, factory, builder);
   }
   
-  public IRI getHref() throws IRISyntaxException {
+  public IRI getHref() {
     return _getUriValue(getAttributeValue(HREF));
   }
 
-  public IRI getResolvedHref() throws IRISyntaxException {
+  public IRI getResolvedHref() {
     return _resolve(getResolvedBaseUri(), getHref());
   }
   
-  public void setHref(String href) throws IRISyntaxException {
+  public void setHref(String href) {
     if (href != null)
       setAttributeValue(HREF, (new IRI(href)).toString());
     else 

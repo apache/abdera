@@ -32,7 +32,6 @@ import org.apache.abdera.model.Text;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -56,8 +55,7 @@ public class FOMCollection
   public FOMCollection(
     String title, 
     String href, 
-    String[] accepts) 
-      throws IRISyntaxException {
+    String[] accepts) {
     this();
     setTitle(title);
     setHref(href);
@@ -130,15 +128,15 @@ public class FOMCollection
     return getFirstChild(TITLE);
   }
   
-  public IRI getHref() throws IRISyntaxException {
+  public IRI getHref() {
     return _getUriValue(getAttributeValue(HREF));
   }
 
-  public IRI getResolvedHref() throws IRISyntaxException {
+  public IRI getResolvedHref() {
     return _resolve(getResolvedBaseUri(), getHref());
   }
   
-  public void setHref(String href) throws IRISyntaxException {
+  public void setHref(String href) {
     if (href != null)
       setAttributeValue(HREF, (new IRI(href).toString()));
     else 
@@ -242,8 +240,7 @@ public class FOMCollection
   }
 
   public Categories addCategories(
-    String href) 
-      throws IRISyntaxException {
+    String href) {
     Categories cats = ((FOMFactory)factory).newCategories();
     cats.setHref(href);
     addCategories(cats);
@@ -253,8 +250,7 @@ public class FOMCollection
   public Categories addCategories(
     List<Category> categories, 
     boolean fixed, 
-    String scheme) 
-      throws IRISyntaxException {
+    String scheme) {
       Categories cats = ((FOMFactory)factory).newCategories();
       cats.setFixed(fixed);
       if (scheme != null) cats.setScheme(scheme);

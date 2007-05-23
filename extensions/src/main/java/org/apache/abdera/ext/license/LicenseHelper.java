@@ -22,7 +22,6 @@ import java.util.List;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Link;
@@ -66,12 +65,7 @@ public final class LicenseHelper {
   public static boolean hasUnspecifiedLicense(
     Base base, 
     boolean inherited) {
-      try {
-        return hasLicense(base, UNSPECIFIED_LICENSE, inherited);
-      } catch (IRISyntaxException i) {
-        // not going to happen
-        return false;
-      }
+      return hasLicense(base, UNSPECIFIED_LICENSE, inherited);
   }
   
   public static boolean hasUnspecifiedLicense(
@@ -82,8 +76,7 @@ public final class LicenseHelper {
   public static boolean hasLicense(
     Base base, 
     String iri, 
-    boolean inherited)
-      throws IRISyntaxException {
+    boolean inherited) {
     List<Link> links = getLicense(base, inherited);
     IRI check = new IRI(iri);
     boolean answer = false;
@@ -100,8 +93,7 @@ public final class LicenseHelper {
   
   public static boolean hasLicense(
     Base base, 
-    String iri) 
-      throws IRISyntaxException {
+    String iri) {
     return hasLicense(base, iri, false);
   }
   
@@ -119,22 +111,16 @@ public final class LicenseHelper {
   
   public static Link addUnspecifiedLicense(
     Base base) {
-      try {
-        if (hasUnspecifiedLicense(base)) 
-          throw new IllegalStateException("Unspecified license already added");
-        if (hasLicense(base)) 
-          throw new IllegalStateException("Other licenses are already added.");
-        return addLicense(base, UNSPECIFIED_LICENSE);
-      } catch (IRISyntaxException i) {
-        // not going to happen
-        return null;
-      }
+      if (hasUnspecifiedLicense(base)) 
+        throw new IllegalStateException("Unspecified license already added");
+      if (hasLicense(base)) 
+        throw new IllegalStateException("Other licenses are already added.");
+      return addLicense(base, UNSPECIFIED_LICENSE);
   }
   
   public static Link addLicense(
     Base base, 
-    String iri) 
-      throws IRISyntaxException {
+    String iri) {
     try {
       return addLicense(base, iri, null, null, null);
     } catch (MimeTypeParseException m) {
@@ -146,8 +132,7 @@ public final class LicenseHelper {
   public static Link addLicense(
     Base base,
     String iri,
-    String title) 
-    throws IRISyntaxException {
+    String title) {
     try {
       return addLicense(base, iri, null, title, null);
     } catch (MimeTypeParseException m) {
@@ -162,8 +147,7 @@ public final class LicenseHelper {
     String type,
     String title,
     String hreflang) 
-      throws IRISyntaxException,
-             MimeTypeParseException {
+      throws MimeTypeParseException {
     if (hasLicense(base, iri))
       throw new IllegalStateException("License '" + iri + "' has already been added");
     if (hasUnspecifiedLicense(base))

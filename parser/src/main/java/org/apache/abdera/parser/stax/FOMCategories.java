@@ -26,7 +26,6 @@ import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -105,8 +104,7 @@ public class FOMCategories
   public Category addCategory(
     String scheme, 
     String term, 
-    String label)
-      throws IRISyntaxException {
+    String label) {
     FOMFactory factory = (FOMFactory) this.factory;
     Category category = factory.newCategory(this);
     category.setTerm(term);
@@ -120,13 +118,12 @@ public class FOMCategories
     return _getChildrenAsSet(CATEGORY);
   }
 
-  public List<Category> getCategories(String scheme) throws IRISyntaxException {
+  public List<Category> getCategories(String scheme) {
     return FOMHelper.getCategories(this, scheme);
   }
   
   private List<Category> copyCategoriesWithScheme(
-    List<Category> cats) 
-      throws IRISyntaxException {
+    List<Category> cats)  {
     List<Category> newcats = new ArrayList<Category>();
     IRI scheme = getScheme();
     for (Category cat : cats) {
@@ -138,15 +135,15 @@ public class FOMCategories
     return newcats;
   }
   
-  public List<Category> getCategoriesWithScheme() throws IRISyntaxException {
+  public List<Category> getCategoriesWithScheme() {
     return copyCategoriesWithScheme(getCategories());
   }
   
-  public List<Category> getCategoriesWithScheme(String scheme) throws IRISyntaxException {
+  public List<Category> getCategoriesWithScheme(String scheme) {
     return copyCategoriesWithScheme(getCategories(scheme));
   }
 
-  public IRI getScheme() throws IRISyntaxException {
+  public IRI getScheme() {
     String value = getAttributeValue(SCHEME);
     return (value != null) ? new IRI(value) : null;
   }
@@ -163,22 +160,22 @@ public class FOMCategories
       removeAttribute(FIXED);
   }
 
-  public void setScheme(String scheme) throws IRISyntaxException {
+  public void setScheme(String scheme) {
     if (scheme != null)
       setAttributeValue(SCHEME, new IRI(scheme).toString());
     else 
       removeAttribute(SCHEME);
   }
   
-  public IRI getHref() throws IRISyntaxException {
+  public IRI getHref()  {
     return _getUriValue(getAttributeValue(HREF));
   }
 
-  public IRI getResolvedHref() throws IRISyntaxException {
+  public IRI getResolvedHref() {
     return _resolve(getResolvedBaseUri(), getHref());
   }
   
-  public void setHref(String href) throws IRISyntaxException {
+  public void setHref(String href) {
     if (href != null)
       setAttributeValue(HREF, (new IRI(href)).toString());
     else 
@@ -186,15 +183,13 @@ public class FOMCategories
   }
 
   public boolean contains(
-    String term) 
-      throws IRISyntaxException {
+    String term)  {
     return contains(term,null);
   }
 
   public boolean contains(
     String term, 
-    String scheme) 
-      throws IRISyntaxException {
+    String scheme)  {
     List<Category> categories = getCategories();
     IRI catscheme = getScheme();
     IRI uri = (scheme != null) ? 

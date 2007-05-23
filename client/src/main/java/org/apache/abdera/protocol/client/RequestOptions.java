@@ -26,6 +26,8 @@ import java.util.Set;
 
 import javax.activation.MimeType;
 
+import org.apache.abdera.i18n.iri.Constants;
+import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.protocol.Request;
 import org.apache.abdera.protocol.util.AbstractRequest;
 import org.apache.abdera.protocol.util.CacheControlUtil;
@@ -379,14 +381,11 @@ public class RequestOptions
    * Sets the value of the Atom Publishing Protocol Slug header
    */
   public void setSlug(String slug) {
-    setHeader("Slug", slug);
-  }
-  
-  /**
-   * Sets the value of the Atom Publishing Protocol Slug header
-   */
-  public void setSlug(String slug, String charset) {
-    setEncodedHeader("Slug", charset, slug);
+    if (slug.indexOf((char)10) > -1 ||
+        slug.indexOf((char)13) > -1)
+      throw new IllegalArgumentException(
+        "The slug must not contain ASCII carriage return or linefeed characters");
+    setHeader("Slug", Escaping.encode(slug,Constants.ASCIISANSCRLF));
   }
   
   /**

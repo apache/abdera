@@ -24,6 +24,7 @@ import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.protocol.Response;
 import org.apache.abdera.util.EntityTag;
+import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.iri.IRISyntaxException;
 
@@ -192,7 +193,7 @@ public abstract class AbstractResponse
   }
   
   public String getDecodedHeader(String header) {
-    return EncodingUtil.decode(getHeader(header));
+    return Escaping.decode(EncodingUtil.decode(getHeader(header)));
   }
   
 }

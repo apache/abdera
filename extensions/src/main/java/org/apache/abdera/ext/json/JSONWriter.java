@@ -139,7 +139,7 @@ public class JSONWriter
       } else {
         jscontent.put("type", content.getMimeType().toString());
       }
-      jscontent.put("value", JSONObject.quote(content.getValue()));
+      jscontent.put("value", content.getValue());;
       jsentry.put("content", jscontent);
     }
 

@@ -40,7 +40,7 @@ import junit.framework.TestCase;
 public class UtilityTest extends TestCase {
 
   public static void testEncoding() throws Exception {
-    String t = "tést";
+    String t = "t\u00e9st";
     String tb1 = EncodingUtil.encode(t);
     String tb2 = EncodingUtil.encode(t, "UTF-8");
     String tb3 = EncodingUtil.encode(t, "UTF-8", EncodingUtil.Codec.B);

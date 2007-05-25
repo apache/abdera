@@ -29,7 +29,7 @@ import org.apache.abdera.model.Element;
 
 /**
  * Implementation of the current APP Features Draft
- * (http://www.ietf.org/internet-drafts/draft-snell-atompub-feature-01.txt)
+ * (http://www.ietf.org/internet-drafts/draft-snell-atompub-feature-04.txt)
  */
 public final class FeaturesHelper {
 

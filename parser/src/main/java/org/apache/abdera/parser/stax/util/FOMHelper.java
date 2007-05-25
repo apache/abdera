@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.parser.stax.util;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,6 +39,15 @@ public class FOMHelper implements Constants {
   public static List<Link> getLinks(Element element, String rel) {
     Iterator i = new FOMLinkIterator(element, Link.class, REL, rel, Link.REL_ALTERNATE);
     return new FOMList<Link>(i);
+  }
+  
+  public static List<Link> getLinks(Element element, String... rels) {
+    List<Link> links = new ArrayList<Link>();
+    for (String rel : rels) {
+      List<Link> l = getLinks(element, rel);
+      links.addAll(l);
+    }
+    return links;
   }
   
   public static String generateUuid() {

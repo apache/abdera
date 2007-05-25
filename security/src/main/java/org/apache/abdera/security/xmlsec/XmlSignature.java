@@ -24,7 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.Entry;
+import org.apache.abdera.model.Link;
+import org.apache.abdera.model.Source;
 import org.apache.abdera.security.SecurityException;
 import org.apache.abdera.security.SignatureOptions;
 import org.apache.abdera.security.util.Constants;
@@ -65,6 +69,7 @@ public class XmlSignature
     org.w3c.dom.Document domdoc = dom.getOwnerDocument();
     PrivateKey signingKey = options.getSigningKey();
     X509Certificate cert = options.getCertificate();
+    PublicKey pkey = options.getPublicKey();
     IRI baseUri = element.getResolvedBaseUri();
     XMLSignature sig = new XMLSignature(
       domdoc, 
@@ -77,7 +82,28 @@ public class XmlSignature
     sig.addDocument("", transforms, org.apache.xml.security.utils.Constants.ALGO_ID_DIGEST_SHA1);
     String[] refs = options.getReferences();
     for (String ref : refs) sig.addDocument(ref);
-    sig.addKeyInfo(cert);
+    
+    if (options.isSignLinks()) {
+      String[] rels = options.getSignLinkRels();
+      List<Link> links = null;
+      Content content = null;
+      if (element instanceof Source) {
+        links = (rels == null) ? ((Source)element).getLinks() : ((Source)element).getLinks(rels); 
+      } else if (element instanceof Entry) {
+        links = (rels == null) ? ((Entry)element).getLinks() : ((Entry)element).getLinks(rels);
+        content = ((Entry)element).getContentElement();
+      }
+      if (links != null) {
+        for (Link link :links) {
+          sig.addDocument(link.getResolvedHref().toASCIIString());
+        }
+      }
+      if (content != null && content.getResolvedSrc() != null)
+        sig.addDocument(content.getResolvedSrc().toASCIIString());
+    }
+    
+    if (cert != null) sig.addKeyInfo(cert);
+    if (pkey != null) sig.addKeyInfo(pkey);
     sig.sign(signingKey);    
     return (T)domToFom(dom, options);
   }
@@ -94,23 +120,29 @@ public class XmlSignature
   }
   
   private boolean is_valid_signature(
-    XMLSignature sig) 
+    XMLSignature sig, SignatureOptions options) 
       throws XMLSignatureException, 
              XMLSecurityException {
-    boolean answer = false;
     KeyInfo ki = sig.getKeyInfo();
     if (ki != null) {
       X509Certificate cert = ki.getX509Certificate();
       if (cert != null) {
-        answer = sig.checkSignatureValue(cert);
+        return sig.checkSignatureValue(cert);
       } else {
         PublicKey key = ki.getPublicKey();
         if (key != null) {
-          answer = sig.checkSignatureValue(key);
+          return sig.checkSignatureValue(key);
         }
       }
+    } else if (options != null) {
+      PublicKey key = options.getPublicKey();
+      X509Certificate cert = options.getCertificate();
+      if (key != null)
+        return sig.checkSignatureValue(key);
+      if (cert != null)
+        return sig.checkSignatureValue(cert);
     }
-    return answer;
+    return false;
   }
   
   private <T extends Element>X509Certificate[] _getcerts(
@@ -132,7 +164,7 @@ public class XmlSignature
             XMLSignature sig = 
               new XMLSignature(
                 el, (baseUri != null) ? baseUri.toString() : "");
-            if (is_valid_signature(sig)) {
+            if (is_valid_signature(sig,options)) {
               KeyInfo ki = sig.getKeyInfo();
               if (ki != null) {
                 X509Certificate cert = ki.getX509Certificate();
@@ -174,7 +206,7 @@ public class XmlSignature
           XMLSignature sig = 
             new XMLSignature(
               el, (baseUri != null) ? baseUri.toString() : "");
-          answer = is_valid_signature(sig);
+          answer = is_valid_signature(sig, options);
         }
       }
     }

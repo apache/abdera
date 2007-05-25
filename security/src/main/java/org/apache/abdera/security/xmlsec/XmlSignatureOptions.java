@@ -18,6 +18,7 @@
 package org.apache.abdera.security.xmlsec;
 
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,10 @@ public class XmlSignatureOptions
   implements SignatureOptions {
 
   private PrivateKey signingKey = null;
+  private PublicKey publickey = null;
   private X509Certificate cert = null;
+  private String[] linkrels = null;
+  private boolean signlinks = false;
   private List<String> references = null;
   private String algo = "http://www.w3.org/2000/09/xmldsig#dsa-sha1";
   
@@ -69,6 +73,30 @@ public class XmlSignatureOptions
 
   public String[] getReferences() {
     return references.toArray(new String[references.size()]);
+  }
+
+  public PublicKey getPublicKey() {
+    return publickey;
+  }
+
+  public void setPublicKey(PublicKey publickey) {
+    this.publickey = publickey;
+  }
+
+  public boolean isSignLinks() {
+    return signlinks;
+  }
+
+  public void setSignLinks(boolean signlinks) {
+    this.signlinks = signlinks;
+  }
+
+  public String[] getSignLinkRels() {
+    return this.linkrels;
+  }
+
+  public void setSignedLinkRels(String... rel) {
+    this.linkrels = rel;
   }
 
 }

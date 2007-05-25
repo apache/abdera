@@ -52,7 +52,6 @@ import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.lang.InvalidLangTagSyntax;
 import org.apache.abdera.i18n.lang.Lang;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMComment;
@@ -208,7 +207,7 @@ public class FOMElement
     return (T)getWrapped((Element)this.getFirstChildWithName(qname));
   }
   
-  public Lang getLanguageTag() throws InvalidLangTagSyntax {
+  public Lang getLanguageTag() {
     String lang = getLanguage();
     return (lang != null) ? new Lang(lang) : null;
   }

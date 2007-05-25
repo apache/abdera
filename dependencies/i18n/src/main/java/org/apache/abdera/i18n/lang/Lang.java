@@ -52,11 +52,11 @@ public class Lang
     this.locale = locale;
   }
   
-  public Lang(String tag) throws InvalidLangTagSyntax {
+  public Lang(String tag) {
     this(parse(tag));
   }
   
-  public Lang(String... tags) throws InvalidLangTagSyntax {
+  public Lang(String... tags) {
     verify(tags);
     this.tags = tags;
     this.locale = initLocale();
@@ -99,7 +99,7 @@ public class Lang
     return buf.toString();
   }
   
-  public static boolean matches(Lang lang, String range) throws InvalidLangTagSyntax {
+  public static boolean matches(Lang lang, String range) {
     if (range.equals("*")) return true;
     return matches(lang, new Lang(range));
   }
@@ -114,7 +114,7 @@ public class Lang
     return true;
   }
   
-  public boolean matches(String range) throws InvalidLangTagSyntax {
+  public boolean matches(String range) {
     return matches(this,range);
   }
   
@@ -158,7 +158,7 @@ public class Lang
     return true;
   }
 
-  private static void verify(String[] tags) throws InvalidLangTagSyntax {
+  private static void verify(String[] tags) {
     if (tags.length == 0) throw new InvalidLangTagSyntax();
     String primary = tags[0];
     try {
@@ -175,7 +175,7 @@ public class Lang
     }
   }
   
-  private static String[] parse(String tag) throws InvalidLangTagSyntax {
+  private static String[] parse(String tag) {
     String[] tags = tag.split("\u002D");
     verify(tags);
     return tags;

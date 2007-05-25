@@ -45,13 +45,15 @@ public class FOMParserFactory
     return abdera;
   }
   
-  public Parser getParser() {
-    return getAbdera().getParser();
+  @SuppressWarnings("unchecked")
+  public <T extends Parser>T getParser() {
+    return (T)getAbdera().getParser();
   }
 
-  public Parser getParser(String name) {
-    return (name != null) ? 
-      getParsers().get(name.toLowerCase()) : getParser();
+  @SuppressWarnings("unchecked")
+  public <T extends Parser>T getParser(String name) {
+    return (T)((name != null) ? 
+      getParsers().get(name.toLowerCase()) : getParser());
   }
 
   private Map<String,NamedParser> getParsers() {

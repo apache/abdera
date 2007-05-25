@@ -28,13 +28,13 @@ public interface ParserFactory {
    * Get the default parser.  This is equivalent to calling Abdera.getParser()
    * @return The default parser implementation
    */
-  Parser getParser();
+  <T extends Parser>T getParser();
   
   /**
    * Get the named parser
    * @param name The name of the parser instance to retrieve
    * @return The Named parser instance
    */
-  Parser getParser(String name); 
+  <T extends Parser>T getParser(String name); 
   
 }

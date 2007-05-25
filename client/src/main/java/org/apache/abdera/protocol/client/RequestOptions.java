@@ -42,6 +42,7 @@ public class RequestOptions
   private boolean noLocalCache = false;
   private boolean revalidateAuth = false;
   private boolean useChunked = false;
+  private boolean usePostOverride = false;
   
   private final Map<String,List<String>> headers;  
   
@@ -435,5 +436,19 @@ public class RequestOptions
    */
   public void setUseChunked(boolean useChunked) {
     this.useChunked = useChunked;
+  }
+
+  /**
+   * Set whether the request should use the X-HTTP-Method-Override option
+   */
+  public void setUsePostOverride(boolean useOverride) {
+    this.usePostOverride = useOverride;
+  }
+  
+  /**
+   * Return whether the request should use the X-HTTP-Method-Override option
+   */
+  public boolean isUsePostOverride() {
+    return this.usePostOverride;
   }
 }

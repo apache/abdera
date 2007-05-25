@@ -124,7 +124,16 @@ public class MethodHelper {
     RequestOptions options) {
       if (method == null) return null;
       Method m = Method.fromString(method);
+      Method actual = null;
       HttpMethod httpMethod = null;
+      if (options.isUsePostOverride()) {
+        if (m.equals(Method.PUT)) {
+          actual = m;
+        } else if (m.equals(Method.DELETE)) {
+          actual = m;
+        }
+        if (actual != null) m = Method.POST;
+      }
       switch(m) {
         case GET:     httpMethod = new GetMethod(uri); break;
         case POST:    httpMethod = getMethod(new PostMethod(uri), entity); break;
@@ -134,6 +143,9 @@ public class MethodHelper {
         case OPTIONS: httpMethod = new OptionsMethod(uri); break;
         case TRACE:   httpMethod = new TraceMethod(uri); break;
         default:      httpMethod = getMethod(new ExtensionMethod(method,uri), entity);
+      }
+      if (actual != null) {
+        httpMethod.addRequestHeader("X-HTTP-Method-Override", actual.name());
       }
       initHeaders(options, httpMethod);
       return httpMethod;

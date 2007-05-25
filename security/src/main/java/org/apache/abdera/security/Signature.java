@@ -20,6 +20,7 @@ package org.apache.abdera.security;
 import java.security.cert.X509Certificate;
 
 import org.apache.abdera.model.Element;
+import org.apache.xml.security.keys.KeyInfo;
 
 /**
  * Interface used for digitally signing and verifying Abdera elements
@@ -45,6 +46,8 @@ public interface Signature {
    * Returns a listing of X.509 certificates of valid digital signatures in the element
    */
   <T extends Element>X509Certificate[] getValidSignatureCertificates(T element, SignatureOptions options) throws SecurityException;
+  
+  <T extends Element>KeyInfo getSignatureKeyInfo(T element, SignatureOptions options) throws SecurityException;
   
   /**
    * Returns the default signing options

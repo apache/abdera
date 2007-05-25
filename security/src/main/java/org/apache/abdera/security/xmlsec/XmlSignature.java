@@ -188,6 +188,32 @@ public class XmlSignature
     return null;
   }
   
+  public <T extends Element> KeyInfo getSignatureKeyInfo(
+    T element, 
+    SignatureOptions options) 
+      throws SecurityException {
+    KeyInfo ki = null;
+    org.w3c.dom.Element dom = fomToDom((Element)element, options);
+    NodeList children = dom.getChildNodes();
+    for (int n = 0; n < children.getLength(); n++) {
+      try {
+        Node node = children.item(n);
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+          org.w3c.dom.Element el = (org.w3c.dom.Element) node;
+          if (Constants.DSIG_NS.equals(el.getNamespaceURI()) &&
+              Constants.LN_SIGNATURE.equals(el.getLocalName())) {
+            IRI baseUri = element.getResolvedBaseUri();
+            XMLSignature sig = 
+              new XMLSignature(
+                el, (baseUri != null) ? baseUri.toString() : "");
+            ki = sig.getKeyInfo();
+          }
+        }
+      } catch (Exception e) {}
+    }
+    return ki;
+  }
+  
   private boolean _verify(
     Element element, 
     SignatureOptions options) 

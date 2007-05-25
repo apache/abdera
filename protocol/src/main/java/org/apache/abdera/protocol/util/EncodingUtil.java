@@ -34,16 +34,34 @@ import org.apache.commons.codec.net.QCodec;
 
 public class EncodingUtil {
 
+  public static final String SANITIZE_PATTERN = "[^A-Za-z0-9\\%!$&\\\\'()*+,;=]";
+  
   public static String sanitize(String slug) {
-    return sanitize(slug, null, false, null);
+    return sanitize(slug, null, false, null, SANITIZE_PATTERN);
   }
   
   public static String sanitize(String slug, String filler) {
-    return sanitize(slug, filler, false, null);
+    return sanitize(slug, filler, false, null, SANITIZE_PATTERN);
   }
   
   public static String sanitize(String slug, String filler, boolean lower) {
-    return sanitize(slug, filler, lower, null);
+    return sanitize(slug, filler, lower, null, SANITIZE_PATTERN);
+  }
+  
+  public static String sanitize(String slug, String filler, String pattern) {
+    return sanitize(slug, filler, false, null, pattern);
+  }
+  
+  public static String sanitize(String slug, String filler, boolean lower, String pattern) {
+    return sanitize(slug, filler, lower, null, pattern);
+  }
+
+  public static String sanitize(
+      String slug, 
+      String filler, 
+      boolean lower, 
+      Normalizer.Form form) {
+    return sanitize(slug,filler,lower,form,SANITIZE_PATTERN);
   }
   
   /**
@@ -59,7 +77,8 @@ public class EncodingUtil {
     String slug, 
     String filler, 
     boolean lower, 
-    Normalizer.Form form) {
+    Normalizer.Form form,
+    String pattern) {
       if (slug == null) return null;
       if (lower) slug = slug.toLowerCase();
       if (form != null) {
@@ -73,7 +92,7 @@ public class EncodingUtil {
         slug = Escaping.encode(slug, Constants.PATH);
       }
       if (filler != null) {
-        slug = slug.replaceAll("[^A-Za-z0-9\\%!$&\\\\'()*+,;=]",filler);
+        slug = slug.replaceAll(pattern,filler);
       } else { 
         slug = Escaping.encode(slug, Constants.PATHNODELIMS);
       }

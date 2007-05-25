@@ -45,19 +45,22 @@ public class FOMWriterFactory
     return abdera;
   }
   
-  public Writer getWriter() {
-    return getAbdera().getWriter();
+  @SuppressWarnings("unchecked")
+  public <T extends Writer>T getWriter() {
+    return (T)getAbdera().getWriter();
   }
 
-  public Writer getWriter(String name) {
-    return (name != null) ? 
-      getWriters().get(name.toLowerCase()) : getWriter();
+  @SuppressWarnings("unchecked")
+  public <T extends Writer>T getWriter(String name) {
+    return (T)((name != null) ? 
+      getWriters().get(name.toLowerCase()) : getWriter());
   }
 
-  public Writer getWriterByMediaType(String mediatype) {
+  @SuppressWarnings("unchecked")
+  public <T extends Writer>T getWriterByMediaType(String mediatype) {
     Map<String,NamedWriter> writers = getWriters();
     for (NamedWriter writer : writers.values()) {
-      if (writer.outputsFormat(mediatype)) return writer;
+      if (writer.outputsFormat(mediatype)) return (T)writer;
     }
     return null;
   }

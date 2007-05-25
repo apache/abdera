@@ -29,19 +29,19 @@ public interface WriterFactory {
    * abdera.getWriter();
    * @return The default writer
    */
-  Writer getWriter();
+  <T extends Writer>T getWriter();
   
   /**
    * Get the named writer.
    * @param name The name of the writer
    * @return The specified writer
    */
-  Writer getWriter(String name);
+  <T extends Writer>T getWriter(String name);
   
   /**
    * Return a writer capable of outputting the given MIME media type
    * @param mediatype A MIME media type
    * @return A matching writer
    */
-  Writer getWriterByMediaType(String mediatype);
+  <T extends Writer>T getWriterByMediaType(String mediatype);
 }

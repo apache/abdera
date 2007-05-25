@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.i18n.lang;
 
-public class InvalidLangTagSyntax extends Exception {
+public class InvalidLangTagSyntax extends RuntimeException {
 
   private static final long serialVersionUID = -2653819135178550519L;
 

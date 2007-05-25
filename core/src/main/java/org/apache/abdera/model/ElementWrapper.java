@@ -27,7 +27,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.lang.InvalidLangTagSyntax;
 import org.apache.abdera.i18n.lang.Lang;
 
 public abstract class ElementWrapper 
@@ -111,7 +110,7 @@ public abstract class ElementWrapper
     return internal.getLanguage();
   }
   
-  public Lang getLanguageTag() throws InvalidLangTagSyntax {
+  public Lang getLanguageTag() {
     return internal.getLanguageTag();
   }
 

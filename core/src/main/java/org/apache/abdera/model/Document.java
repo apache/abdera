@@ -24,7 +24,6 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.lang.InvalidLangTagSyntax;
 import org.apache.abdera.i18n.lang.Lang;
 import org.apache.abdera.util.EntityTag;
 
@@ -145,7 +144,7 @@ public interface Document<T extends Element>
   /**
    * Returns the value of the xml:lang attribute as a Lang object
    */
-  Lang getLanguageTag() throws InvalidLangTagSyntax;
+  Lang getLanguageTag();
   
   /**
    * set the base language

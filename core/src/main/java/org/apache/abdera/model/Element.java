@@ -23,7 +23,6 @@ import java.util.Locale;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.lang.InvalidLangTagSyntax;
 import org.apache.abdera.i18n.lang.Lang;
 
 /**
@@ -99,7 +98,7 @@ public interface Element
   /**
    * Returns the value of the xml:lang attribute as a Lang object
    */
-  Lang getLanguageTag() throws InvalidLangTagSyntax;
+  Lang getLanguageTag();
   
   /**
    * Returns a Locale object created from the <code>xml:lang</code> attribute

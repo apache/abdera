@@ -35,7 +35,6 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.lang.InvalidLangTagSyntax;
 import org.apache.abdera.i18n.lang.Lang;
 import org.apache.axiom.om.OMComment;
 import org.apache.axiom.om.OMDocType;
@@ -257,7 +256,7 @@ public class FOMDocument<T extends Element>
     return language;
   }
   
-  public Lang getLanguageTag() throws InvalidLangTagSyntax {
+  public Lang getLanguageTag() {
     String lang = getLanguage();
     return (lang != null) ? new Lang(lang) : null;
   }

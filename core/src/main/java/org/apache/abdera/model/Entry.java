@@ -401,6 +401,13 @@ public interface Entry
   List<Link> getLinks(String rel);
   
   /**
+   * Lists the complete set of links using the specified rel attributes values
+   * @param rels A listing of link relations
+   * @return A listof atom:link elements
+   */
+  List<Link> getLinks(String... rel);
+  
+  /**
    * Adds an individual link to the entry
    * @param link the atom:link to add
    */

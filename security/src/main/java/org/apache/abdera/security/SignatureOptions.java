@@ -18,6 +18,7 @@
 package org.apache.abdera.security;
 
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
 /**
@@ -49,9 +50,40 @@ public interface SignatureOptions
    * Set the X.509 cert to associate with the signature
    */
   void setCertificate(X509Certificate cert);
+  
+  /**
+   * Get the public key associated with the signature
+   */
+  PublicKey getPublicKey();
+  
+  /**
+   * Set the public key to associate with the signature
+   */
+  void setPublicKey(PublicKey publickey);
 
   void addReference(String href);
   
   String[] getReferences();
   
+  /**
+   * True if atom:link/@href and atom:content/@src targets should be 
+   * included in the signature
+   */
+  void setSignLinks(boolean signlinks);
+  
+  /**
+   * True if atom:link/@href and atom:content/@src targets should be 
+   * included in the signature
+   */
+  boolean isSignLinks();
+  
+  /**
+   * Only sign links whose link rels match those provided in the list
+   */
+  void setSignedLinkRels(String... rel);
+  
+  /**
+   * Get the list of link relations to sign
+   */
+  String[] getSignLinkRels();
 }

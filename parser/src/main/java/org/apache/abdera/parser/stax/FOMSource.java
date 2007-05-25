@@ -238,6 +238,10 @@ public class FOMSource
   public List<Link> getLinks(String rel) {
     return FOMHelper.getLinks(this, rel);
   }
+  
+  public List<Link> getLinks(String... rels) {
+    return FOMHelper.getLinks(this, rels);
+  }
 
   public void addLink(Link link) {
     addChild((OMElement)link);

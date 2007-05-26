@@ -357,7 +357,9 @@ public class FOMBuilder
    */
   private OMNode createOMText(String value, OMElement omElement, int textType) {
       try {
-          if (isDataHandlerAware && Boolean.TRUE == parser.getProperty(OMConstants.IS_BINARY)) {
+          //TODO:Check on this. I'm not sure it's actually used
+          //if (isDataHandlerAware && Boolean.TRUE == parser.getProperty(OMConstants.IS_BINARY)) {
+          if (Boolean.TRUE == parser.getProperty(OMConstants.IS_BINARY)) {
               Object dataHandler = parser.getProperty(OMConstants.DATA_HANDLER);
               OMText text = omfactory.createOMText(dataHandler, true);
               omElement.addChild(text);

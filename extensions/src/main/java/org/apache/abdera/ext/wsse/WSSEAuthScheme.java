@@ -53,7 +53,6 @@ public class WSSEAuthScheme
       ((CommonsClient)client).setAuthenticationSchemeDefaults();
   }
   
-  @Override
   public String authenticate(
     Credentials credentials, 
     HttpMethod method) 
@@ -103,7 +102,6 @@ public class WSSEAuthScheme
       }
   }
 
-  @Override
   public String authenticate(
     Credentials credentials, 
     String method, 
@@ -112,17 +110,14 @@ public class WSSEAuthScheme
     return authenticate(credentials, null);
   }
 
-  @Override
   public String getSchemeName() {
     return "WSSE";
   }
 
-  @Override
   public boolean isComplete() {
     return true;
   }
 
-  @Override
   public boolean isConnectionBased() {
     return false;
   } 

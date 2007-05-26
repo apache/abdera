@@ -73,7 +73,6 @@ public class GoogleLoginAuthScheme
     service = getParameter("service");
   }
   
-  @Override
   public String authenticate(
     Credentials credentials, 
     HttpMethod method) 
@@ -99,7 +98,6 @@ public class GoogleLoginAuthScheme
     return buf.toString();
   }
   
-  @Override
   public String authenticate(
     Credentials credentials, 
     String method, 
@@ -108,17 +106,14 @@ public class GoogleLoginAuthScheme
     return authenticate(credentials, null);
   }
   
-  @Override
   public String getSchemeName() {
     return "GoogleLogin";
   }
   
-  @Override
   public boolean isComplete() {
     return true;
   }
   
-  @Override
   public boolean isConnectionBased() {
     return false;
   }
@@ -138,7 +133,8 @@ public class GoogleLoginAuthScheme
         URLEncoder.encode(pwd, "utf-8"),
         (service != null) ? URLEncoder.encode(service, "utf-8") : "",
         URLEncoder.encode(Version.APP_NAME, "utf-8"));
-      StringRequestEntity stringreq = new StringRequestEntity(f.toString());
+      StringRequestEntity stringreq = new StringRequestEntity(
+        f.toString(),"application/x-www-form-urlencoded","utf-8");
       String uri = "https://www.google.com/accounts/ClientLogin";
       RequestOptions options = client.getDefaultRequestOptions();
       options.setContentType("application/x-www-form-urlencoded");

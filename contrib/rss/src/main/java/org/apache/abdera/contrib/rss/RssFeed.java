@@ -192,7 +192,7 @@ public class RssFeed
   }
 
   public List<Person> getContributors() {
-    throw new UnsupportedOperationException("Contributor's are not supported");
+    return getChannel().getContributors();
   }
 
   public Generator getGenerator() {

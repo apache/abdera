@@ -24,6 +24,7 @@ public interface RssConstants {
   public static final String ENC_NS = "http://purl.org/rss/1.0/modules/content/";
   public static final String RDF_NS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
   public static final String RSS1_NS = "http://purl.org/rss/1.0/";
+  public static final String DC_NS = "http://purl.org/dc/elements/1.1/";
   
   public static final QName QNAME_RDF = new QName(RDF_NS,"RDF");
   public static final QName QNAME_RDF_CHANNEL = new QName(RSS1_NS,"channel");
@@ -82,5 +83,21 @@ public interface RssConstants {
   public static final QName QNAME_NAME = new QName("name");
   
   public static final QName QNAME_CONTENT_ENCODED = new QName(ENC_NS, "encoded");
+  
+  public static final QName QNAME_DC_TITLE = new QName(DC_NS, "title");
+  public static final QName QNAME_DC_CREATOR = new QName(DC_NS, "creator");
+  public static final QName QNAME_DC_SUBJECT = new QName(DC_NS, "subject");
+  public static final QName QNAME_DC_DESCRIPTION = new QName(DC_NS, "description");
+  public static final QName QNAME_DC_PUBLISHER = new QName(DC_NS, "publisher");
+  public static final QName QNAME_DC_CONTRIBUTOR = new QName(DC_NS, "contributor");
+  public static final QName QNAME_DC_DATE = new QName(DC_NS, "date");
+  public static final QName QNAME_DC_TYPE = new QName(DC_NS, "type");
+  public static final QName QNAME_DC_FORMAT = new QName(DC_NS, "format");
+  public static final QName QNAME_DC_IDENTIFIER = new QName(DC_NS, "identifier");
+  public static final QName QNAME_DC_SOURCE = new QName(DC_NS, "source");
+  public static final QName QNAME_DC_LANGUAGE = new QName(DC_NS, "language");
+  public static final QName QNAME_DC_RELATION = new QName(DC_NS, "relation");
+  public static final QName QNAME_DC_COVERAGE = new QName(DC_NS, "covrerage");
+  public static final QName QNAME_DC_RIGHTS = new QName(DC_NS, "rights");
   
 }

@@ -20,7 +20,6 @@ package org.apache.abdera.contrib.rss;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -87,9 +86,7 @@ public class RssChannel
               Element entryel = null;
               try {
                 entryel = locate(path);
-              } catch (Exception e) {
-                e.printStackTrace();
-              }
+              } catch (Exception e) {}
               if (entryel != null) {
                 //TODO:fix this.. entryel should already be an RssItem
                 entries.add(new RssItem(entryel));
@@ -197,21 +194,34 @@ public class RssChannel
   }
 
   public Person getAuthor() {
-    return getExtension(RssConstants.QNAME_MANAGINGEDITOR);
+    Person person = getExtension(RssConstants.QNAME_MANAGINGEDITOR);
+    if (person == null) person = getExtension(RssConstants.QNAME_DC_CREATOR);
+    return person;
   }
 
   public List<Person> getAuthors() {
-    return getExtensions(RssConstants.QNAME_MANAGINGEDITOR);
+    List<Person> people = getExtensions(RssConstants.QNAME_MANAGINGEDITOR);
+    if (people == null || people.size() == 0) people = getExtensions(RssConstants.QNAME_DC_CREATOR);
+    return people;
+  }
+  
+  public List<Person> getContributors() {
+    List<Person> people = getExtensions(RssConstants.QNAME_DC_CONTRIBUTOR);
+    return people;
   }
 
   public List<Category> getCategories() {
-    return getExtensions(RssConstants.QNAME_CATEGORY);
+    List<Category> cats = getExtensions(RssConstants.QNAME_CATEGORY);
+    if (cats == null || cats.size() == 0) cats = getExtensions(RssConstants.QNAME_DC_SUBJECT);
+    return cats;
   }
 
   @SuppressWarnings("unchecked")
   public List<Category> getCategories(String scheme) {
-    Iterator i = new FOMElementIterator(getInternal(), RssCategory.class, new QName("domain"), scheme, null);
-    return new FOMList<Category>(i);
+    return (scheme != null) ? 
+      new FOMList<Category>(
+        new FOMElementIterator(getInternal(), RssCategory.class, new QName("domain"), scheme, null)
+      ) : getCategories();
   }
 
   public Generator getGenerator() {
@@ -228,14 +238,20 @@ public class RssChannel
   }
 
   public IRI getId() {
-    return null;
+    IRIElement id = getIdElement();
+    return (id != null) ? id.getValue() : null;
   }
 
   public IRIElement getIdElement() {
-    return null;
+    return getExtension(RssConstants.QNAME_DC_IDENTIFIER);
   }
 
   public Link getLink(String rel) {
+    if (rel.equals(Link.REL_ALTERNATE) || rel.equals(Link.REL_ALTERNATE_IANA)) {
+      RssGuid guid = (RssGuid) getIdElement();
+      if (guid != null && guid.isPermalink()) return guid;
+      return getAlternateLink();
+    }
     List<Link> links = FOMHelper.getLinks(getInternal(), rel);
     return (links != null && links.size() > 0) ? links.get(0) : null;
   }
@@ -296,7 +312,9 @@ public class RssChannel
   }
 
   public Text getRightsElement() {
-    return getExtension(RssConstants.QNAME_COPYRIGHT);
+    Text text = getExtension(RssConstants.QNAME_COPYRIGHT);
+    if (text == null) text = getExtension(RssConstants.QNAME_DC_RIGHTS);
+    return text;
   }
 
   public Type getRightsType() {
@@ -321,6 +339,7 @@ public class RssChannel
   public Text getSubtitleElement() {
     Text text = getExtension(RssConstants.QNAME_DESCRIPTION);
     if (text == null) text = getExtension(RssConstants.QNAME_RDF_DESCRIPTION);
+    if (text == null) text = getExtension(RssConstants.QNAME_DC_DESCRIPTION);
     return text;
   }
 
@@ -337,6 +356,7 @@ public class RssChannel
   public Text getTitleElement() {
     Text text = getExtension(RssConstants.QNAME_TITLE);
     if (text == null) text = getExtension(RssConstants.QNAME_RDF_TITLE);
+    if (text == null) text = getExtension(RssConstants.QNAME_DC_TITLE);
     return text;
   }
 
@@ -355,6 +375,7 @@ public class RssChannel
     if (dt == null) dt = getExtension(RssConstants.QNAME_LASTBUILDDATE2);
     if (dt == null) dt = getExtension(RssConstants.QNAME_PUBDATE);
     if (dt == null) dt = getExtension(RssConstants.QNAME_PUBDATE2);
+    if (dt == null) dt = getExtension(RssConstants.QNAME_DC_DATE);
     return dt;
   }
 
@@ -371,6 +392,7 @@ public class RssChannel
   public DateTime getPublishedElement() {
     DateTime dt = getExtension(RssConstants.QNAME_PUBDATE);
     if (dt == null) dt = getExtension(RssConstants.QNAME_PUBDATE2);
+    if (dt == null) dt = getExtension(RssConstants.QNAME_DC_DATE);
     return dt;
   }
 
@@ -504,7 +526,9 @@ public class RssChannel
   }
 
   public String getLanguage() {
-    return getSimpleExtension(RssConstants.QNAME_LANGUAGE);
+    String lang = getSimpleExtension(RssConstants.QNAME_LANGUAGE);
+    if (lang == null) lang = getSimpleExtension(RssConstants.QNAME_DC_LANGUAGE);
+    return lang;
   }
 
   public void setLanguage(String language) {  

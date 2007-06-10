@@ -44,20 +44,30 @@ public class RssExtensionFactory
       return (T)(new RssItem(internal));
     } else if (qname.equals(QNAME_LINK) || qname.equals(QNAME_RDF_LINK)) {
       return (T)(new RssLink(internal));
-    } else if (qname.equals(QNAME_TITLE) || qname.equals(QNAME_RDF_TITLE)) {
+    } else if (qname.equals(QNAME_TITLE) || 
+               qname.equals(QNAME_RDF_TITLE) ||
+               qname.equals(QNAME_DC_TITLE) ||
+               qname.equals(QNAME_DESCRIPTION) || 
+               qname.equals(QNAME_RDF_DESCRIPTION) ||
+               qname.equals(QNAME_DC_DESCRIPTION) ||
+               qname.equals(QNAME_COPYRIGHT) || 
+               qname.equals(QNAME_DC_RIGHTS)) {
       return (T)(new RssText(internal));
-    } else if (qname.equals(QNAME_DESCRIPTION) || qname.equals(QNAME_RDF_DESCRIPTION)) {
-      return (T)(new RssText(internal));
-    } else if (qname.equals(QNAME_COPYRIGHT)) {
-      return (T)(new RssText(internal));
-    } else if (qname.equals(QNAME_MANAGINGEDITOR) || qname.equals(QNAME_MANAGINGEDITOR2)) {
+    } else if (qname.equals(QNAME_MANAGINGEDITOR) || 
+               qname.equals(QNAME_MANAGINGEDITOR2) || 
+               qname.equals(QNAME_DC_CREATOR) ||
+               qname.equals(QNAME_DC_CONTRIBUTOR) ||
+               qname.equals(QNAME_WEBMASTER) ||
+               qname.equals(QNAME_WEBMASTER2)) {
       return (T)(new RssPerson(internal));
-    } else if (qname.equals(QNAME_WEBMASTER) || qname.equals(QNAME_WEBMASTER2)) {
-      return (T)(new RssPerson(internal));
-    } else if (qname.equals(QNAME_PUBDATE) || qname.equals(QNAME_PUBDATE2) ||
-               qname.equals(QNAME_LASTBUILDDATE) || qname.equals(QNAME_LASTBUILDDATE2)) {
+    } else if (qname.equals(QNAME_PUBDATE) || 
+               qname.equals(QNAME_PUBDATE2) ||
+               qname.equals(QNAME_LASTBUILDDATE) || 
+               qname.equals(QNAME_LASTBUILDDATE2) ||
+               qname.equals(QNAME_DC_DATE)) {
       return (T)(new RssDateTime(internal));
-    } else if (qname.equals(QNAME_CATEGORY)) {
+    } else if (qname.equals(QNAME_CATEGORY) || 
+               qname.equals(QNAME_DC_SUBJECT)) {
       return (T)(new RssCategory(internal));
     } else if (qname.equals(QNAME_GENERATOR)) {
       return (T)(new RssGenerator(internal));
@@ -83,11 +93,13 @@ public class RssExtensionFactory
       return (T)(new RssPerson(internal));
     } else if (qname.equals(QNAME_ENCLOSURE)) {
       return (T)(new RssEnclosure(internal));
-    } else if (qname.equals(QNAME_GUID)) {
+    } else if (qname.equals(QNAME_GUID) || 
+               qname.equals(QNAME_DC_IDENTIFIER)) {
       return (T)(new RssGuid(internal));
     } else if (qname.equals(QNAME_COMMENTS)) {
       return (T)(new RssLink(internal));
-    } else if (qname.equals(QNAME_SOURCE)) {
+    } else if (qname.equals(QNAME_SOURCE) || 
+               qname.equals(QNAME_DC_SOURCE)) {
       return (T)(new RssSource(internal));
     } else if (qname.equals(QNAME_CONTENT_ENCODED)) {
       return (T)(new RssContent(internal));

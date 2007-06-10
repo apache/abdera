@@ -20,7 +20,6 @@ package org.apache.abdera.contrib.rss;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.activation.DataHandler;
@@ -51,7 +50,7 @@ import org.apache.abdera.util.Constants;
 
 public class RssItem 
   extends ExtensibleElementWrapper 
-  implements Entry {
+  implements Entry, IRIElement {
 
   public RssItem(Element internal) {
     super(internal);
@@ -115,10 +114,14 @@ public class RssItem
   }
 
   public Link getAlternateLink() {
-    RssGuid guid = (RssGuid) getIdElement();
-    if (guid != null && guid.isPermalink())
-      return guid;
-    return getExtension(RssConstants.QNAME_LINK);
+    Link link = getExtension(RssConstants.QNAME_LINK);
+    if (link == null) link = getExtension(RssConstants.QNAME_RDF_LINK);
+    if (link == null) {
+      IRIElement guid = getIdElement();
+      if (guid != null && guid instanceof RssGuid && ((RssGuid)guid).isPermalink())
+        return (Link)guid;
+    }
+    return link;
   }
 
   public Link getAlternateLink(String type, String hreflang)
@@ -137,21 +140,29 @@ public class RssItem
   }
 
   public Person getAuthor() {
-    return getExtension(RssConstants.QNAME_AUTHOR);
+    Person person = getExtension(RssConstants.QNAME_AUTHOR);
+    if (person == null) person = getExtension(RssConstants.QNAME_DC_CREATOR);
+    return person;
   }
 
   public List<Person> getAuthors() {
-    return getExtensions(RssConstants.QNAME_AUTHOR);
+    List<Person> people = getExtensions(RssConstants.QNAME_AUTHOR);
+    if (people == null || people.size() == 0) people = getExtensions(RssConstants.QNAME_DC_CREATOR);
+    return people;
   }
 
   public List<Category> getCategories() {
-    return getExtensions(RssConstants.QNAME_CATEGORY);
+    List<Category> cats = getExtensions(RssConstants.QNAME_CATEGORY);
+    if (cats == null || cats.size() == 0) cats = getExtensions(RssConstants.QNAME_DC_SUBJECT);
+    return cats;
   }
 
   @SuppressWarnings("unchecked")
   public List<Category> getCategories(String scheme) {
-    Iterator i = new FOMElementIterator(getInternal(), RssCategory.class, new QName("domain"), scheme, null);
-    return new FOMList<Category>(i);
+    return (scheme != null) ? 
+        new FOMList<Category>(
+          new FOMElementIterator(getInternal(), RssCategory.class, new QName("domain"), scheme, null)
+        ) : getCategories();
   }
 
   public String getContent() {
@@ -163,9 +174,7 @@ public class RssItem
   public Content getContentElement() {
     Content content = getExtension(RssConstants.QNAME_CONTENT_ENCODED);
     // what else to return other than content:encoded and possibly atom:content?
-    if (content == null) {
-      content = getExtension(Constants.CONTENT);
-    }
+    if (content == null) content = getExtension(Constants.CONTENT);
     return content;
   }
 
@@ -174,11 +183,11 @@ public class RssItem
   }
 
   public IRI getContentSrc() {
-    throw new UnsupportedOperationException("RSS does not support content by reference");
+    return null;
   }
 
   public InputStream getContentStream() throws IOException {
-    throw new UnsupportedOperationException("RSS does not support encoded binary content");
+    return null;
   }
 
   public Type getContentType() {
@@ -197,51 +206,50 @@ public class RssItem
   }
 
   public List<Person> getContributors() {
-    return null;
+    List<Person> people = getExtensions(RssConstants.QNAME_DC_CONTRIBUTOR);
+    return people;
   }
 
   public Control getControl(boolean create) {
-    throw new UnsupportedOperationException("RSS does not support APP features");
+    return null;
   }
 
   public Control getControl() {
-    throw new UnsupportedOperationException("RSS does not support APP features");
+    return null;
   }
 
   public Link getEditLink() {
-    throw new UnsupportedOperationException("RSS does not support APP features");
+    return null;
   }
 
   public IRI getEditLinkResolvedHref() {
-    @SuppressWarnings("unused")
-    Link link = getEditLink();
-    throw new UnsupportedOperationException("RSS does not support APP features");
+    return null;
   }
 
   public Link getEditMediaLink() {
-    throw new UnsupportedOperationException("RSS does not support APP features");
+    return null;
   }
 
   public Link getEditMediaLink(String type, String hreflang)
       throws MimeTypeParseException {
-    throw new UnsupportedOperationException("RSS does not support APP features");
+    return null;
   }
 
   public IRI getEditMediaLinkResolvedHref() {
-    throw new UnsupportedOperationException("RSS does not support APP features");
+    return null;
   }
 
   public IRI getEditMediaLinkResolvedHref(String type, String hreflang)
       throws MimeTypeParseException {
-    throw new UnsupportedOperationException("RSS does not support APP features");
+    return null;
   }
 
   public Date getEdited() {
-    throw new UnsupportedOperationException("RSS does not support APP features");
+    return null;
   }
 
   public DateTime getEditedElement() {
-    throw new UnsupportedOperationException("RSS does not support APP features");
+    return null;
   }
 
   public Link getEnclosureLink() {
@@ -259,7 +267,10 @@ public class RssItem
   }
 
   public IRIElement getIdElement() {
-    return getExtension(RssConstants.QNAME_GUID);
+    IRIElement id = getExtension(RssConstants.QNAME_GUID);
+    if (id == null) id = getExtension(RssConstants.QNAME_DC_IDENTIFIER);
+    if (id == null && this.getQName().equals(RssConstants.QNAME_RDF_ITEM)) return this;
+    return id;
   }
 
   public Link getLink(String rel) {
@@ -267,6 +278,7 @@ public class RssItem
       RssGuid guid = (RssGuid) getIdElement();
       if (guid != null && guid.isPermalink())
         return guid;
+      return getAlternateLink();
     }
     List<Link> links = FOMHelper.getLinks(getInternal(), rel);
     return (links != null && links.size() > 0) ? links.get(0) : null;
@@ -297,6 +309,7 @@ public class RssItem
   public DateTime getPublishedElement() {
     DateTime dt = getExtension(RssConstants.QNAME_PUBDATE);
     if (dt == null) dt = getExtension(RssConstants.QNAME_PUBDATE2);
+    if (dt == null) dt = getExtension(RssConstants.QNAME_DC_DATE);
     return dt;
   }
 
@@ -311,7 +324,8 @@ public class RssItem
       return ((RssChannel)el).getRightsElement();
     else if (el instanceof RssFeed) 
       return ((RssFeed)el).getRightsElement();
-    return null;
+    Text text = getExtension(RssConstants.QNAME_DC_RIGHTS);
+    return text;
   }
 
   public org.apache.abdera.model.Text.Type getRightsType() {
@@ -329,16 +343,21 @@ public class RssItem
   }
 
   public Source getSource() {
-    return getExtension(RssConstants.QNAME_SOURCE);
+    Source source = getExtension(RssConstants.QNAME_SOURCE);
+    if (source == null) getExtension(RssConstants.QNAME_DC_SOURCE);
+    return source;
   }
 
   public String getSummary() {
-    Text text = getSummaryElement();
+    Text text = getSummaryElement(); 
     return (text != null) ? text.getValue() : null;
   }
 
   public Text getSummaryElement() {
-    return getExtension(RssConstants.QNAME_DESCRIPTION);
+    Text text = getExtension(RssConstants.QNAME_DESCRIPTION);
+    if (text == null) text = getExtension(RssConstants.QNAME_RDF_DESCRIPTION);
+    if (text == null) text = getExtension(RssConstants.QNAME_DC_DESCRIPTION);
+    return text;
   }
 
   public org.apache.abdera.model.Text.Type getSummaryType() {
@@ -352,7 +371,10 @@ public class RssItem
   }
 
   public Text getTitleElement() {
-    return getExtension(RssConstants.QNAME_TITLE);
+    Text text = getExtension(RssConstants.QNAME_TITLE);
+    if (text == null) text = getExtension(RssConstants.QNAME_RDF_TITLE);
+    if (text == null) text = getExtension(RssConstants.QNAME_DC_TITLE);
+    return text;
   }
 
   public org.apache.abdera.model.Text.Type getTitleType() {
@@ -568,5 +590,23 @@ public class RssItem
 
   public Link getComments() {
     return getExtension(RssConstants.QNAME_COMMENTS);
+  }
+
+  
+  public IRI getResolvedValue() {
+    return getValue();
+  }
+
+  public IRI getValue() {
+    String about = getAttributeValue(RssConstants.QNAME_RDF_ABOUT);
+    return (about != null) ? new IRI(about) : null;
+  }
+
+  public void setNormalizedValue(String iri) {
+    throw new UnsupportedOperationException("Modifications are not allowed");
+  }
+
+  public void setValue(String iri) {
+    throw new UnsupportedOperationException("Modifications are not allowed");
   }
 }

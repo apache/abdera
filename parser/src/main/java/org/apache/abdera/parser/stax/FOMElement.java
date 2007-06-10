@@ -24,9 +24,11 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
@@ -690,5 +692,30 @@ public class FOMElement
     if (prefix != null && !prefix.equals("") && !isDeclared(ns, prefix)) {
       declareNS(ns,prefix);
     }
+  }
+
+  public Map<String, String> getNamespaces() {
+    Map<String,String> namespaces = new HashMap<String,String>();
+    OMElement current = this;
+    while(current != null) {
+      Iterator i = current.getAllDeclaredNamespaces();
+      while (i.hasNext()) {
+        OMNamespace ns = (OMNamespace) i.next();
+        String prefix = ns.getPrefix();
+        String uri = ns.getNamespaceURI();
+        if (!namespaces.containsKey(prefix))
+          namespaces.put(prefix, uri);
+      }
+      OMContainer parent = current.getParent();
+      current = (OMElement) ((parent != null && parent instanceof OMElement) ? parent : null);
+    }
+    return namespaces;
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T extends Element>List<T> getElements() {
+    return new FOMList<T>(
+        new FOMElementIteratorWrapper(
+          (FOMFactory)factory,getChildElements()));
   }
 }

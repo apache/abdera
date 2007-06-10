@@ -2,12 +2,21 @@
 
 <rdf:RDF 
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
   xmlns="http://purl.org/rss/1.0/"
 >
 
   <channel rdf:about="http://www.xml.com/xml/news.rss">
     <title>XML.com</title>
     <link>http://xml.com/pub</link>
+    <dc:creator>James Snell (mailto:jasnell@example.com)</dc:creator>
+    <dc:subject>Anything</dc:subject>
+    <dc:identifier>foo</dc:identifier>
+    <dc:rights>Copyright 2007 Foo</dc:rights>
+    <dc:date>2000-01-01T12:00+00:00</dc:date>
+    <dc:language>en-US</dc:language>
+    <dc:contributor>John Doe (mailto:jdoe@example.org)</dc:contributor>
     <description>
       XML.com features a rich mix of information and services 
       for the XML community.
@@ -40,6 +49,8 @@
      problematic. This article proposes a way of preserving inclusion 
      information through SAX-based processing.
     </description>
+    <content:encoded>testing</content:encoded>
+    <dc:creator>Bob (mailto:bob@example.org)</dc:creator>
   </item>
   
   <item rdf:about="http://xml.com/pub/2000/08/09/rdfdb/index.html">
@@ -50,6 +61,8 @@
      is slowly coming of age. Edd Dumbill takes a look at RDFDB, 
      one of the most exciting new RDF toolkits.
     </description>
+    <content:encoded>testing</content:encoded>
+    <dc:creator>Joe (mailto:joe@example.org)</dc:creator>
   </item>
 
   <textinput rdf:about="http://search.xml.com">

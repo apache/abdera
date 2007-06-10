@@ -44,7 +44,8 @@ public class RssCategory
   }
 
   public IRI getScheme() {
-    return new IRI(this.getAttributeValue("domain"));
+    String domain = this.getAttributeValue("domain");
+    return (domain != null) ? new IRI(this.getAttributeValue("domain")) : null;
   }
 
   public String getTerm() {

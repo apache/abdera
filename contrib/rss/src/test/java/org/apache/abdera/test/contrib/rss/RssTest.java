@@ -24,6 +24,7 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
+import org.apache.abdera.model.Person;
 
 import junit.framework.TestCase;
 
@@ -42,10 +43,45 @@ public class RssTest extends TestCase {
     assertEquals("XML.com",feed.getTitle());
     assertEquals("http://xml.com/pub", feed.getAlternateLinkResolvedHref().toASCIIString());
     assertEquals("XML.com features a rich mix of information and services \n      for the XML community.", feed.getSubtitle().trim());
+    assertNotNull(feed.getAuthor());
+    assertEquals("James Snell", feed.getAuthor().getName());
+    assertEquals("jasnell@example.com", feed.getAuthor().getEmail());
+    assertEquals(1,feed.getCategories().size());
+    assertEquals("Anything",feed.getCategories().get(0).getTerm());
+    assertEquals("foo", feed.getId().toASCIIString());
+    assertEquals("Copyright 2007 Foo", feed.getRights());
+    assertNotNull(feed.getUpdated());
+    assertEquals("en-US", feed.getLanguage());
+    assertEquals(1,feed.getContributors().size());
+    Person person = feed.getContributors().get(0);
+    assertEquals("John Doe", person.getName());
+    assertEquals("jdoe@example.org",person.getEmail());
+    
     List<Entry> entries = feed.getEntries();
     assertEquals(2, entries.size());
     
-    // TODO: finish this test as the RSS 1.0 impl is completed
+    Entry entry = entries.get(0);
+    assertEquals("Processing Inclusions with XSLT",entry.getTitle());
+    assertEquals("http://xml.com/pub/2000/08/09/xslt/xslt.html",entry.getId().toASCIIString());
+    assertEquals("http://xml.com/pub/2000/08/09/xslt/xslt.html",entry.getAlternateLinkResolvedHref().toASCIIString());
+    assertNotNull(entry.getSummary());
+    assertEquals("testing",entry.getContent());
+    
+    person = entry.getAuthor();
+    System.out.println(person.getName());
+    assertEquals("Bob",person.getName());
+    
+    entry = entries.get(1);
+    assertEquals("Putting RDF to Work",entry.getTitle());
+    assertEquals("http://xml.com/pub/2000/08/09/rdfdb/index.html",entry.getId().toASCIIString());
+    assertEquals("http://xml.com/pub/2000/08/09/rdfdb/index.html",entry.getAlternateLinkResolvedHref().toASCIIString());
+    
+    assertNotNull(entry.getSummary());
+    assertEquals("testing",entry.getContent());
+    
+    person = entry.getAuthor();
+    assertEquals("Joe",person.getName());
+   
   }
   
 }

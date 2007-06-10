@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
 
@@ -205,4 +206,13 @@ public abstract class ElementWrapper
   public Element getInternal() {
     return internal;
   }
+
+  public <T extends Element> List<T> getElements() {
+    return internal.getElements();
+  }
+
+  public Map<String, String> getNamespaces() {
+    return internal.getNamespaces();
+  }
+  
 }

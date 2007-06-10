@@ -19,6 +19,7 @@ package org.apache.abdera.model;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
 
@@ -214,5 +215,9 @@ public interface Element
    * Declare a namespace
    */
   void declareNS(String uri, String prefix);
+  
+  Map<String,String> getNamespaces();
+  
+  <T extends Element>List<T> getElements();
   
 }

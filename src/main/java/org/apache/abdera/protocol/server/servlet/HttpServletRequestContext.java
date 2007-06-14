@@ -144,7 +144,8 @@ public class HttpServletRequestContext
   }
   
   public Date getDateHeader(String name) {
-    return new Date(request.getDateHeader(name));
+    long value = request.getDateHeader(name);
+    return value != -1 ? new Date(value) : null;
   }
 
   public String getHeader(String name) {

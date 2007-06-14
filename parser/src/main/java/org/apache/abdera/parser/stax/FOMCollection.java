@@ -145,7 +145,9 @@ public class FOMCollection
   
   public String[] getAccept(){
     List<String> accept = new ArrayList<String>();
-    for (Iterator i = getChildrenWithName(ACCEPT); i.hasNext();) {
+    Iterator i = getChildrenWithName(ACCEPT);
+    if (i == null || !i.hasNext()) i = getChildrenWithName(PRE_RFC_ACCEPT);
+    while(i.hasNext()) {
       Element e = (Element) i.next();
       String t = e.getText();
       if (t != null) { 
@@ -167,6 +169,7 @@ public class FOMCollection
   public void setAccept(String... mediaRanges) {
     if (mediaRanges != null && mediaRanges.length > 0) {
       _removeChildren(ACCEPT, true);
+      _removeChildren(PRE_RFC_ACCEPT, true);
       if (mediaRanges.length == 1 && mediaRanges[0].equals("")) {
         addExtension(ACCEPT);
       } else {
@@ -179,6 +182,7 @@ public class FOMCollection
       }
     } else {
       _removeChildren(ACCEPT, true);
+      _removeChildren(PRE_RFC_ACCEPT,true);
     }
   }
   
@@ -264,7 +268,9 @@ public class FOMCollection
   }
 
   public List<Categories> getCategories() {
-    return _getChildrenAsSet(CATEGORIES);
+    List<Categories> list =  _getChildrenAsSet(CATEGORIES);
+    if (list == null || list.size() == 0) list = _getChildrenAsSet(PRE_RFC_CATEGORIES);
+    return list;
   }
 
 }

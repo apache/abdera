@@ -573,14 +573,18 @@ public class FOMSource
   }
 
   public Collection getCollection() {
-    return getFirstChild(COLLECTION);
+    Collection coll = getFirstChild(COLLECTION);
+    if (coll == null) coll = getFirstChild(PRE_RFC_COLLECTION);
+    return coll;
   }
   
   public void setCollection(Collection collection) {
-    if (collection != null) 
+    if (collection != null) {
+      _removeChildren(PRE_RFC_COLLECTION, true);
       _setChild(COLLECTION, (OMElement)collection);
-    else 
+    } else { 
       _removeChildren(COLLECTION, false);
+    }
   }
   
   public Link getAlternateLink(

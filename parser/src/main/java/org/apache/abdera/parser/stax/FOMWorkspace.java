@@ -120,7 +120,9 @@ public class FOMWorkspace
   }
   
   public List<Collection> getCollections() {
-    return _getChildrenAsSet(COLLECTION);
+    List<Collection> list = _getChildrenAsSet(COLLECTION);
+    if (list == null || list.size() == 0) list = _getChildrenAsSet(PRE_RFC_COLLECTION);
+    return list;
   }
 
   public Collection getCollection(String title) {

@@ -46,7 +46,11 @@ public interface Constants {
   public static final String MULTIPART_MEDIA_TYPE = "multipart/related";
   
   public static final String ATOM_NS              = "http://www.w3.org/2005/Atom";
-  public static final String APP_NS               = "http://purl.org/atom/app#";
+  public static final String APP_NS               = "http://www.w3.org/2007/app";
+  
+  /** @deprecated Use Constants.APP_NS instead**/
+  public static final String APP_NS_PRE_RFC       = "http://purl.org/atom/app#";
+  
   /** @deprecated **/
   public static final String CONTROL_NS           = "http://example.net/appns/";
   public static final String XML_NS               = "http://www.w3.org/XML/1998/namespace";
@@ -98,11 +102,34 @@ public interface Constants {
   public static final String LN_FIXED             = "fixed";
   
   public static final QName DIV                   = new QName(XHTML_NS, LN_DIV, "");
+  
   public static final QName CONTROL               = new QName(APP_NS, LN_CONTROL, "app");
   public static final QName DRAFT                 = new QName(APP_NS, LN_DRAFT, "app");
   public static final QName CATEGORIES            = new QName(APP_NS, LN_CATEGORIES, APP_PREFIX);
-  public static final QName FEED                  = new QName(ATOM_NS, LN_FEED, PREFIX);
   public static final QName SERVICE               = new QName(APP_NS, LN_SERVICE, APP_PREFIX);
+  public static final QName EDITED                = new QName(APP_NS, LN_EDITED, "app");
+  public static final QName ACCEPT                = new QName(APP_NS, LN_ACCEPT, APP_PREFIX);
+  public static final QName WORKSPACE             = new QName(APP_NS, LN_WORKSPACE, APP_PREFIX);
+  public static final QName COLLECTION            = new QName(APP_NS, LN_COLLECTION, APP_PREFIX);
+  
+  /** @deprecated **/
+  public static final QName PRE_RFC_CONTROL               = new QName(APP_NS_PRE_RFC, LN_CONTROL, "app");
+  /** @deprecated **/
+  public static final QName PRE_RFC_DRAFT                 = new QName(APP_NS_PRE_RFC, LN_DRAFT, "app");
+  /** @deprecated **/
+  public static final QName PRE_RFC_CATEGORIES            = new QName(APP_NS_PRE_RFC, LN_CATEGORIES, APP_PREFIX);
+  /** @deprecated **/
+  public static final QName PRE_RFC_SERVICE               = new QName(APP_NS_PRE_RFC, LN_SERVICE, APP_PREFIX);
+  /** @deprecated **/
+  public static final QName PRE_RFC_EDITED                = new QName(APP_NS_PRE_RFC, LN_EDITED, "app");
+  /** @deprecated **/
+  public static final QName PRE_RFC_ACCEPT                = new QName(APP_NS_PRE_RFC, LN_ACCEPT, APP_PREFIX);
+  /** @deprecated **/
+  public static final QName PRE_RFC_WORKSPACE             = new QName(APP_NS_PRE_RFC, LN_WORKSPACE, APP_PREFIX);
+  /** @deprecated **/
+  public static final QName PRE_RFC_COLLECTION            = new QName(APP_NS_PRE_RFC, LN_COLLECTION, APP_PREFIX);
+  
+  public static final QName FEED                  = new QName(ATOM_NS, LN_FEED, PREFIX);
   public static final QName AUTHOR                = new QName(ATOM_NS, LN_AUTHOR, PREFIX);
   public static final QName CATEGORY              = new QName(ATOM_NS, LN_CATEGORY, PREFIX);
   public static final QName CONTENT               = new QName(ATOM_NS, LN_CONTENT, PREFIX);
@@ -120,7 +147,6 @@ public interface Constants {
   public static final QName TITLE                 = new QName(ATOM_NS, LN_TITLE, PREFIX);
   public static final QName PREFIXED_TITLE        = new QName(ATOM_NS, LN_TITLE, "atom");
   public static final QName UPDATED               = new QName(ATOM_NS, LN_UPDATED, PREFIX);
-  public static final QName EDITED                = new QName(APP_NS, LN_EDITED, "app");
   public static final QName ENTRY                 = new QName(ATOM_NS, LN_ENTRY, PREFIX);
   public static final QName TERM                  = new QName(LN_TERM);
   public static final QName SCHEME                = new QName(LN_SCHEME);
@@ -128,7 +154,6 @@ public interface Constants {
   public static final QName LABEL                 = new QName(LN_LABEL);
   public static final QName ATITLE                = new QName(LN_TITLE);
   public static final QName HREF                  = new QName(LN_HREF);
-  public static final QName ACCEPT                = new QName(APP_NS, LN_ACCEPT, APP_PREFIX);
   public static final QName LANG                  = new QName(XML_NS, LN_LANG, "xml");
   public static final QName BASE                  = new QName(XML_NS, LN_BASE, "xml");
   public static final QName AURI                  = new QName(LN_URI);
@@ -140,9 +165,7 @@ public interface Constants {
   public static final QName NAME                  = new QName(ATOM_NS, LN_NAME, PREFIX);
   public static final QName EMAIL                 = new QName(ATOM_NS, LN_EMAIL, PREFIX);
   public static final QName URI                   = new QName(ATOM_NS, LN_URI, PREFIX);
-  public static final QName WORKSPACE             = new QName(APP_NS, LN_WORKSPACE, APP_PREFIX);
   public static final QName SRC                   = new QName(LN_SRC);
-  public static final QName COLLECTION            = new QName(APP_NS, LN_COLLECTION, APP_PREFIX);
   public static final QName AID                   = new QName(LN_ID);
   public static final QName CLASS                 = new QName(LN_CLASS);
   

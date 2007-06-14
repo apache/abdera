@@ -51,8 +51,8 @@ public abstract class AbstractRequestHandler
       throws IOException {
     
     ProviderManager manager = context.getProviderManager();
-    Provider provider = manager.getProvider();
     RequestContext requestContext = getRequestContext(context,request);
+    Provider provider = manager.getProvider(requestContext);
     
     try {
       if (preconditions(provider, requestContext, response)) {

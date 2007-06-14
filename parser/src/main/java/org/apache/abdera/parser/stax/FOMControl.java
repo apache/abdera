@@ -79,17 +79,18 @@ public class FOMControl
 
   public boolean isDraft() {
     String value = _getElementValue(DRAFT);
+    if (value == null) value = _getElementValue(PRE_RFC_DRAFT);
     return (value != null && YES.equalsIgnoreCase(value));
   }
 
   public void setDraft(boolean draft) {
+    _removeChildren(PRE_RFC_DRAFT, true);
     _setElementValue(DRAFT, (draft) ? YES:NO);
   }
   
   public void unsetDraft() {
-    OMElement el = getFirstChildWithName(DRAFT);
-    if (el != null)
-      el.discard();
+    _removeChildren(PRE_RFC_DRAFT, true);
+    _removeChildren(DRAFT, true);
   }
 
 }

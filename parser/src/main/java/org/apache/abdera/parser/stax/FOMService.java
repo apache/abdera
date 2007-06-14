@@ -95,7 +95,9 @@ public class FOMService
   }
   
   public List<Workspace> getWorkspaces() {
-    return _getChildrenAsSet(WORKSPACE);
+    List<Workspace> list = _getChildrenAsSet(WORKSPACE);
+    if (list == null || list.size() == 0) list = _getChildrenAsSet(PRE_RFC_WORKSPACE);
+    return list;
   }
 
   public Workspace getWorkspace(String title) {

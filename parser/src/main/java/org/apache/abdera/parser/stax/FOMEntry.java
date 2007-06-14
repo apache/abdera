@@ -653,14 +653,17 @@ public class FOMEntry
   }
 
   public DateTime getEditedElement() {
-    return (DateTime)getFirstChildWithName(EDITED);
+    DateTime dt =  (DateTime)getFirstChildWithName(EDITED);
+    if (dt == null) dt = (DateTime)getFirstChildWithName(PRE_RFC_EDITED);
+    return dt;
   }
 
   public void setEditedElement(DateTime updated) {
     declareNamespace(APP_NS, "app");
+    _removeChildren(PRE_RFC_EDITED,false);
     if (updated != null)
       _setChild(EDITED, (OMElement)updated);
-    else 
+    else
       _removeChildren(EDITED, false);
   }
 
@@ -669,9 +672,10 @@ public class FOMEntry
     return (dte != null) ? dte.getDate() : null;
   }
   
-  private DateTime setModified(AtomDate value) {
+  private DateTime setEdited(AtomDate value) {
     declareNamespace(APP_NS, "app");
     if (value == null) {
+      _removeChildren(PRE_RFC_EDITED, false);
       _removeChildren(EDITED, false);
       return null;
     }
@@ -688,7 +692,7 @@ public class FOMEntry
   }
   
   public DateTime setEdited(Date value) {
-    return setModified((value != null) ? AtomDate.valueOf(value) : null);
+    return setEdited((value != null) ? AtomDate.valueOf(value) : null);
   }
   
   public DateTime setEdited(String value) {
@@ -705,10 +709,13 @@ public class FOMEntry
   }
   
   public Control getControl() {
-    return (Control)getFirstChildWithName(CONTROL);
+    Control control = (Control)getFirstChildWithName(CONTROL);
+    if (control == null) control = (Control)getFirstChildWithName(PRE_RFC_CONTROL);
+    return control;
   }
 
   public void setControl(Control control) {
+    _removeChildren(PRE_RFC_CONTROL,true);
     if (control != null) 
       _setChild(CONTROL, (OMElement)control);
     else 

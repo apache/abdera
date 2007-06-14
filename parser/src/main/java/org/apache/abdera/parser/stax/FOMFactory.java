@@ -628,7 +628,7 @@ public class FOMFactory
           qname.getPrefix());
       if (FEED.equals(qname)) {
         element = new FOMFeed(qname.getLocalPart(), namespace, parent, factory);
-      } else if (SERVICE.equals(qname)) {
+      } else if (SERVICE.equals(qname) || PRE_RFC_SERVICE.equals(qname)) {
         element = new FOMService(qname.getLocalPart(), namespace, parent, factory);
       } else if (ENTRY.equals(qname)) {
         element = new FOMEntry(qname.getLocalPart(), namespace, parent, factory);
@@ -669,9 +669,9 @@ public class FOMFactory
         element = new FOMText(type, qname.getLocalPart(), namespace, parent, factory);
       } else if (UPDATED.equals(qname)) {
         element = new FOMDateTime(qname.getLocalPart(), namespace, parent, factory);          
-      } else if (WORKSPACE.equals(qname)) {
+      } else if (WORKSPACE.equals(qname) || PRE_RFC_WORKSPACE.equals(qname)) {
         element = new FOMWorkspace(qname.getLocalPart(), namespace, parent, factory);
-      } else if (COLLECTION.equals(qname)) {
+      } else if (COLLECTION.equals(qname) || PRE_RFC_COLLECTION.equals(qname)) {
         element = new FOMCollection(qname.getLocalPart(), namespace, parent, factory);
       } else if (NAME.equals(qname)) {
         element = new FOMElement(qname.getLocalPart(), namespace, parent, factory);
@@ -679,17 +679,16 @@ public class FOMFactory
         element = new FOMElement(qname.getLocalPart(), namespace, parent, factory);
       } else if (URI.equals(qname)) {
         element = new FOMIRI(qname.getLocalPart(), namespace, parent, factory);
-      } else if (CONTROL.equals(qname)) {
+      } else if (CONTROL.equals(qname) || PRE_RFC_CONTROL.equals(qname)) {
         element = new FOMControl(qname.getLocalPart(), namespace, parent, factory);
       } else if (DIV.equals(qname)) {
         element = new FOMDiv(qname.getLocalPart(), namespace, parent, factory);
-      } else if (CATEGORIES.equals(qname)) {
+      } else if (CATEGORIES.equals(qname) || PRE_RFC_CATEGORIES.equals(qname)) {
         element = new FOMCategories(qname.getLocalPart(), namespace, parent, factory);
-      } else if (EDITED.equals(qname)) {
+      } else if (EDITED.equals(qname) || PRE_RFC_EDITED.equals(qname)) {
         element = new FOMDateTime(qname.getLocalPart(), namespace, parent, factory);
       } else if (parent instanceof ExtensibleElement || 
                  parent instanceof Document) {
-        //element = (OMElement) newExtensionElement(qname, parent);
         element = (OMElement) new FOMExtensibleElement(
           qname.getLocalPart(), namespace, parent, this);
       }
@@ -704,7 +703,7 @@ public class FOMFactory
     OMElement element = null;    
     if (FEED.equals(qname)) {
       element = (OMElement) newFeed(qname, parent, builder);
-    } else if (SERVICE.equals(qname)) {
+    } else if (SERVICE.equals(qname) || PRE_RFC_SERVICE.equals(qname)) {
       element = (OMElement) newService(qname, parent, builder);
     } else if (ENTRY.equals(qname)) {
       element = (OMElement) newEntry(qname, parent, builder);
@@ -745,9 +744,9 @@ public class FOMFactory
       element = (OMElement) newText(qname, type, parent, builder);
     } else if (UPDATED.equals(qname)) {
       element = (OMElement) newDateTimeElement(qname, parent, builder);          
-    } else if (WORKSPACE.equals(qname)) {
+    } else if (WORKSPACE.equals(qname) || PRE_RFC_WORKSPACE.equals(qname)) {
       element = (OMElement) newWorkspace(qname, parent, builder);
-    } else if (COLLECTION.equals(qname)) {
+    } else if (COLLECTION.equals(qname) || PRE_RFC_COLLECTION.equals(qname)) {
       element = (OMElement) newCollection(qname, parent, builder);
     } else if (NAME.equals(qname)) {
       element = (OMElement) new FOMElement(qname,parent,this,builder);
@@ -755,16 +754,15 @@ public class FOMFactory
       element = (OMElement) new FOMElement(qname,parent,this,builder);
     } else if (URI.equals(qname)) {
       element = (OMElement) newURIElement(qname, parent, builder);
-    } else if (CONTROL.equals(qname)) {
+    } else if (CONTROL.equals(qname) || PRE_RFC_CONTROL.equals(qname)) {
       element = (OMElement) newControl(qname, parent, builder);
     } else if (DIV.equals(qname)) {
       element = (OMElement) newDiv(qname, parent, builder);
-    } else if (CATEGORIES.equals(qname)) {
+    } else if (CATEGORIES.equals(qname) || PRE_RFC_CATEGORIES.equals(qname)) {
       element = (OMElement) newCategories(qname, parent, builder);
-    } else if (EDITED.equals(qname)) {
+    } else if (EDITED.equals(qname) || PRE_RFC_EDITED.equals(qname)) {
       element = (OMElement) newDateTimeElement(qname, parent, builder);
     } else if (parent instanceof ExtensibleElement || parent instanceof Document) {
-      //element = (OMElement) newExtensionElement(qname, parent, builder);
       element = (OMElement) new FOMExtensibleElement(qname, parent, this,builder);
     }
     return element;

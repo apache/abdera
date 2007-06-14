@@ -23,8 +23,7 @@ public abstract class AbstractProviderManager
   extends PoolManager<Provider>
   implements ProviderManager {
 
-  public Provider getProvider() {
-    return getInstance();
+  public Provider getProvider(RequestContext request) {
+      return getInstance();
   }
-
 }

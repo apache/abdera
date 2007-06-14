@@ -19,13 +19,14 @@ package org.apache.abdera.protocol.server.util;
 
 import org.apache.abdera.protocol.server.provider.Provider;
 import org.apache.abdera.protocol.server.provider.ProviderManager;
+import org.apache.abdera.protocol.server.provider.RequestContext;
 
 public abstract class AbstractSingletonProviderManager 
   implements ProviderManager {
 
   protected Provider provider;
   
-  public Provider getProvider() {
+  public Provider getProvider(RequestContext request) {
     if (provider == null) {
       synchronized(this) {
         provider = initProvider();

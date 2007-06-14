@@ -19,13 +19,14 @@ package org.apache.abdera.examples.appserver;
 
 import org.apache.abdera.protocol.server.provider.Provider;
 import org.apache.abdera.protocol.server.provider.ProviderManager;
+import org.apache.abdera.protocol.server.provider.RequestContext;
 
 public class SimpleProviderManager 
   implements ProviderManager {
 
   private static Provider provider = null; 
 
-  public synchronized Provider getProvider() {
+  public synchronized Provider getProvider(RequestContext request) {
     if (provider == null)
       provider = new SimpleProvider();
     return provider;

@@ -19,7 +19,7 @@ package org.apache.abdera.protocol.server.provider;
 
 public interface ProviderManager {
 
-  Provider getProvider();
+  Provider getProvider(RequestContext request);
   
   void release(Provider provider);
   

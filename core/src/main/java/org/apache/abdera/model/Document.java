@@ -161,4 +161,8 @@ public interface Document<T extends Element>
    */
   void setSlug(String slug);
   
+  boolean getMustPreserveWhitespace();
+  
+  void setMustPreserveWhitespace(boolean preserve);
+  
 }

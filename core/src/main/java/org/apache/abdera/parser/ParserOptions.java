@@ -76,4 +76,15 @@ public interface ParserOptions extends Cloneable {
    */
   void setAutodetectCharset(boolean detect);
   
+  /**
+   * If false, the parser will trim leading and trailing whitespace in element
+   * and attribute values unless there is an in-scope xml:space="preserve".
+   */
+  boolean getMustPreserveWhitespace();
+  
+  /**
+   * If false, the parser will trim leading and trailing whitespace in element
+   * and attribute values unless there is an in-scope xml:space="preserve".
+   */
+  void setMustPreserveWhitespace(boolean preserve);
 }

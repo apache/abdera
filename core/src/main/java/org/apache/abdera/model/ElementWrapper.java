@@ -214,5 +214,14 @@ public abstract class ElementWrapper
   public Map<String, String> getNamespaces() {
     return internal.getNamespaces();
   }
+
+  public boolean getMustPreserveWhitespace() {
+    return internal.getMustPreserveWhitespace();
+  }
+
+  public void setMustPreserveWhitespace(boolean preserve) {
+    internal.setMustPreserveWhitespace(preserve);
+  }
+  
   
 }

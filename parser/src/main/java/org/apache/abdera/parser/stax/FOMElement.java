@@ -269,7 +269,8 @@ public class FOMElement
   
   public String getAttributeValue(QName qname) {
     OMAttribute attr = getAttribute(qname);
-    return (attr != null) ? attr.getAttributeValue() : null;    
+    String value = (attr != null) ? attr.getAttributeValue() : null;
+    return getMustPreserveWhitespace() || value == null ? value : value.trim();
   }
   
   public void setAttributeValue(QName qname, String value) {
@@ -394,7 +395,7 @@ public class FOMElement
     OMElement element = this.getFirstChildWithName(qname);
     if (element != null)
       value = element.getText();
-    return value;
+    return getMustPreserveWhitespace() || value == null ? value : value.trim();
   }
 
   @SuppressWarnings("unchecked")
@@ -472,7 +473,8 @@ public class FOMElement
         // out all markup but leaving all text, even in child nodes
       }
     }
-    return buf.toString();
+    String value = buf.toString();
+    return getMustPreserveWhitespace() || value == null ? value : value.trim();
   }
   
   protected String getText(QName qname) {
@@ -717,5 +719,25 @@ public class FOMElement
     return new FOMList<T>(
         new FOMElementIteratorWrapper(
           (FOMFactory)factory,getChildElements()));
+  }
+  
+  public boolean getMustPreserveWhitespace() {
+    OMAttribute attr = getAttribute(SPACE);
+    String space = (attr != null) ? attr.getAttributeValue() : null;
+    Base parent = this.getParentElement();
+    
+    return space != null && space.equalsIgnoreCase("preserve") ? true :
+      (parent != null && parent instanceof Element) ? 
+        ((Element)parent).getMustPreserveWhitespace() : 
+      (parent != null && parent instanceof Document) ? 
+        ((Document)parent).getMustPreserveWhitespace() : true;
+  }
+  
+  public void setMustPreserveWhitespace(boolean preserve) {
+    if (preserve && !getMustPreserveWhitespace()) {
+      setAttributeValue(SPACE, "preserve");
+    } else if (!preserve && getMustPreserveWhitespace()) {
+      setAttributeValue(SPACE, "default");
+    }
   }
 }

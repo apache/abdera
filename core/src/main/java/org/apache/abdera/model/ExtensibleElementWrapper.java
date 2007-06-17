@@ -86,5 +86,13 @@ public abstract class ExtensibleElementWrapper
   public String getSimpleExtension(String namespace, String localPart, String prefix) {
     return getExtInternal().getSimpleExtension(namespace, localPart, prefix);
   }
+
+  public boolean getMustPreserveWhitespace() {
+    return getExtInternal().getMustPreserveWhitespace();
+  }
+
+  public void setMustPreserveWhitespace(boolean preserve) {
+    getExtInternal().setMustPreserveWhitespace(preserve);
+  }
   
 }

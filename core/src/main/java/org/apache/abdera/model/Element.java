@@ -220,4 +220,7 @@ public interface Element
   
   <T extends Element>List<T> getElements();
   
+  boolean getMustPreserveWhitespace();
+  
+  void setMustPreserveWhitespace(boolean preserve);
 }

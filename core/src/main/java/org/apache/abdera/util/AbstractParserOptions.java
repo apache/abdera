@@ -31,6 +31,7 @@ public abstract class AbstractParserOptions
   protected String charset = null;
   protected ParseFilter parseFilter = null;
   protected boolean detect = false;
+  protected boolean preserve = true;
 
   protected abstract void initFactory();
   protected abstract void checkFactory(Factory factory);
@@ -80,4 +81,13 @@ public abstract class AbstractParserOptions
   public void setAutodetectCharset(boolean detect) {
     this.detect = detect;
   }
+  
+  public boolean getMustPreserveWhitespace() {
+    return preserve;
+  }
+  
+  public void setMustPreserveWhitespace(boolean preserve) {
+    this.preserve = preserve;
+  }
+  
 }

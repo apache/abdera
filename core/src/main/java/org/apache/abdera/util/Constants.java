@@ -85,6 +85,7 @@ public interface Constants {
   public static final String LN_HREF              = "href";
   public static final String LN_LANG              = "lang";
   public static final String LN_BASE              = "base";
+  public static final String LN_SPACE             = "space";
   public static final String LN_URI               = "uri";
   public static final String LN_VERSION           = "version";
   public static final String LN_REL               = "rel";
@@ -156,6 +157,7 @@ public interface Constants {
   public static final QName HREF                  = new QName(LN_HREF);
   public static final QName LANG                  = new QName(XML_NS, LN_LANG, "xml");
   public static final QName BASE                  = new QName(XML_NS, LN_BASE, "xml");
+  public static final QName SPACE                 = new QName(XML_NS, LN_SPACE, "xml");
   public static final QName AURI                  = new QName(LN_URI);
   public static final QName VERSION               = new QName(LN_VERSION);
   public static final QName REL                   = new QName(LN_REL);

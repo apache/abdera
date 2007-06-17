@@ -70,6 +70,7 @@ public class FOMParser
         document.setBaseUri(base.toString());
       if (options != null && options.getCharset() != null)
         ((OMDocument)document).setCharsetEncoding(options.getCharset());
+      if (options != null) document.setMustPreserveWhitespace(options.getMustPreserveWhitespace());
     } catch (Exception e) {
       if (!(e instanceof ParseException))
         e = new ParseException(e);

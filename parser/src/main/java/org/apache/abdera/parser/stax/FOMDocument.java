@@ -61,6 +61,7 @@ public class FOMDocument<T extends Element>
   protected EntityTag etag = null;
   protected String language = null;
   protected String slug = null;
+  protected boolean preserve = true;
 
   public FOMDocument() {
     super();
@@ -271,5 +272,13 @@ public class FOMDocument<T extends Element>
   
   public void setSlug(String slug) {
     this.slug = slug;
+  }
+  
+  public boolean getMustPreserveWhitespace() {
+    return preserve;
+  }
+  
+  public void setMustPreserveWhitespace(boolean preserve) {
+    this.preserve = preserve;
   }
 }

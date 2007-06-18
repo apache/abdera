@@ -29,41 +29,44 @@ import org.apache.abdera.model.Element;
 
 /**
  * Implementation of the current APP Features Draft
- * (http://www.ietf.org/internet-drafts/draft-snell-atompub-feature-04.txt)
+ * (http://www.ietf.org/internet-drafts/draft-snell-atompub-feature-05.txt)
  */
 public final class FeaturesHelper {
 
   public static final String FNS = "http://purl.org/atompub/features/1.0";
   public static final QName FEATURE = new QName(FNS, "feature","f");
   
-  public static final String FEATURE_DRAFTS = "http://purl.org/atom/app/drafts";
-  public static final String FEATURE_PRESERVE_ENTRY = "http://purl.org/atom/app/preserve-entry";
-  public static final String FEATURE_PRESERVE_ID = "http://purl.org/atom/app/preserve-id";
-  public static final String FEATURE_XHTML_CONTENT = "_http://purl.org/atom/app/xhtml-content";
-  public static final String FEATURE_HTML_CONTENT = "http://purl.org/atom/app/html-content";
-  public static final String FEATURE_TEXT_CONTENT = "http://purl.org/atom/app/text-content";
-  public static final String FEATURE_BINARY_CONTENT = "http://purl.org/atom/app/binary-content";
-  public static final String FEATURE_REF_CONTENT = "http://purl.org/atom/app/ref-content";
-  public static final String FEATURE_XHTML_TITLE = "http://purl.org/atom/app/xhtml-title";
-  public static final String FEATURE_HTML_TITLE = "http://purl.org/atom/app/html-title";
-  public static final String FEATURE_TEXT_TITLE = "http://purl.org/atom/app/text-title";
-  public static final String FEATURE_XHTML_SUMMARY = "http://purl.org/atom/app/xhtml-summary";
-  public static final String FEATURE_HTML_SUMMARY = "http://purl.org/atom/app/html-summary";
-  public static final String FEATURE_TEXT_SUMMARY = "http://purl.org/atom/app/text-summary";
-  public static final String FEATURE_AUTO_SUMMARY = "http://purl.org/atom/app/auto-summary";
-  public static final String FEATURE_XHTML_RIGHTS = "http://purl.org/atom/app/xhtml-rights";
-  public static final String FEATURE_HTML_RIGHTS = "http://purl.org/atom/app/html-rights";
-  public static final String FEATURE_TEXT_RIGHTS = "http://purl.org/atom/app/text-rights";
-  public static final String FEATURE_AUTH_AUTHOR = "http://purl.org/atom/app/auth-author";
-  public static final String FEATURE_PRESERVE_UPDATED = "http://purl.org/atom/app/preserve-updated";
-  public static final String FEATURE_PRESERVE_EXTENSIONS = "http://purl.org/atom/app/preserve-extensions";
-  public static final String FEATURE_PRESERVE_LINKS = "http://purl.org/atom/app/preserve-links";
-  public static final String FEATURE_PRESERVE_RIGHTS = "http://purl.org/atom/app/preserve-rights";
-  public static final String FEATURE_SLUG = "http://purl.org/atom/app/slug";
-  public static final String FEATURE_MULTIPLE_CATEGORIES= "http://purl.org/atom/app/multiple-categories";
-  public static final String FEATURE_CONTRIBUTORS = "http://purl.org/atom/app/contributors";
-  public static final String FEATURE_MULTIPLE_AUTHORS = "http://purl.org/atom/app/multiple-authors";
-  public static final String FEATURE_FEED_THREAD = ThreadConstants.THR_NS;
+  private static final String FEATURE_BASE                 = "http://www.w3.org/2007/app/";
+  public static final String FEATURE_DRAFTS                = FEATURE_BASE + "drafts";
+  public static final String FEATURE_XHTML_CONTENT         = FEATURE_BASE + "xhtml-content";
+  public static final String FEATURE_HTML_CONTENT          = FEATURE_BASE + "html-content";
+  public static final String FEATURE_TEXT_CONTENT          = FEATURE_BASE + "text-content";
+  public static final String FEATURE_XML_CONTENT           = FEATURE_BASE + "xml-content";
+  public static final String FEATURE_BINARY_CONTENT        = FEATURE_BASE + "binary-content";
+  public static final String FEATURE_REF_CONTENT           = FEATURE_BASE + "src-content";
+  public static final String FEATURE_XHTML_TITLE           = FEATURE_BASE + "xhtml-title";
+  public static final String FEATURE_HTML_TITLE            = FEATURE_BASE + "html-title";
+  public static final String FEATURE_TEXT_TITLE            = FEATURE_BASE + "text-title";
+  public static final String FEATURE_XHTML_SUMMARY         = FEATURE_BASE + "xhtml-summary";
+  public static final String FEATURE_HTML_SUMMARY          = FEATURE_BASE + "html-summary";
+  public static final String FEATURE_TEXT_SUMMARY          = FEATURE_BASE + "text-summary";
+  public static final String FEATURE_AUTO_SUMMARY          = FEATURE_BASE + "auto-summary";
+  public static final String FEATURE_XHTML_RIGHTS          = FEATURE_BASE + "xhtml-rights";
+  public static final String FEATURE_HTML_RIGHTS           = FEATURE_BASE + "html-rights";
+  public static final String FEATURE_TEXT_RIGHTS           = FEATURE_BASE + "text-rights";
+  public static final String FEATURE_AUTH_AUTHOR           = FEATURE_BASE + "auth-author";
+  public static final String FEATURE_SLUG                  = FEATURE_BASE + "slug";
+  public static final String FEATURE_MULTIPLE_CATEGORIES   = FEATURE_BASE + "multiple-categories";
+  public static final String FEATURE_MULTIPLE_AUTHORS      = FEATURE_BASE + "multiple-authors";
+  public static final String FEATURE_MULTIPLE_CONTRIBUTORS = FEATURE_BASE + "multiple-contributors";
+  public static final String FEATURE_PRESERVE_INFOSET      = FEATURE_BASE + "preserve-infoset";
+  public static final String FEATURE_PRESERVE_ID           = FEATURE_BASE + "preserve-id";
+  public static final String FEATURE_PRESERVE_DATES        = FEATURE_BASE + "preserve-dates";
+  public static final String FEATURE_PRESERVE_EXTENSIONS   = FEATURE_BASE + "preserve-extensions";
+  public static final String FEATURE_PRESERVE_LINKS        = FEATURE_BASE + "preserve-links";
+  public static final String FEATURE_PRESERVE_RIGHTS       = FEATURE_BASE + "preserve-rights";
+  public static final String FEATURE_THREADING             = ThreadConstants.THR_NS;
+
   
   private FeaturesHelper() {}
   
@@ -113,6 +116,36 @@ public final class FeaturesHelper {
       }
     }
     return c;
+  }
+  
+  /**
+   * Add the specified feature to the collection
+   * @param collection The collection
+   * @param feature The IRI of the feature to add 
+   */
+  public static Feature addFeature(
+    Collection collection, 
+    String feature) {
+      return addFeature(
+        collection, 
+        feature, 
+        false, null, null);
+  }
+  
+  /**
+   * Add the specified feature to the collection
+   * @param collection The collection
+   * @param feature The IRI of the feature to add 
+   */
+  public static Feature addFeature(
+    Collection collection, 
+    String feature, 
+    boolean required) {
+      return addFeature(
+        collection, 
+        feature, 
+        required, 
+        null, null);
   }
   
   /**

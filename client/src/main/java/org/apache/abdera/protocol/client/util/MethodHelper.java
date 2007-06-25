@@ -185,14 +185,17 @@ public class MethodHelper {
   public static RequestOptions createDefaultRequestOptions() {
     RequestOptions options = new RequestOptions();
     options.setAcceptEncoding(
-      "gzip;q=1.0", 
-      "deflate;q=1.0");
+      "gzip", 
+      "deflate");
     options.setAccept(
+      "application/atom+xml;type=entry",
+      "application/atom+xml;type=feed",
       "application/atom+xml",
-      "application/atomserv+xml",
-      "application/xml;q=0.8",
-      "text/xml;q=0.5",
-      "*/*;q=0.1");
+      "application/atomsvc+xml",
+      "application/atomcat+xml",
+      "application/xml",
+      "text/xml",
+      "*/*");
     options.setAcceptCharset(
       "utf-8", "*;q=0.5");
     return options;

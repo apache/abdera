@@ -120,7 +120,7 @@ public abstract class AbstractProvider
     Abdera abdera, 
     RequestContext request,
     String reason,
-    String[] methods) {
+    String... methods) {
       BaseResponseContext resp = 
         (BaseResponseContext)returnBase(
           createErrorDocument(

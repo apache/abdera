@@ -90,6 +90,8 @@ public class DSig {
     
     System.out.println("Valid after changing the title? " + sig.verify(entry,null));
     
+    entry = sig.removeInvalidSignatures(entry, options);
+    
   }
   
 }

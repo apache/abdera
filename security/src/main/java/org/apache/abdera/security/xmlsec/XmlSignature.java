@@ -251,8 +251,39 @@ public class XmlSignature
       }
   }
 
-  public SignatureOptions getDefaultSignatureOptions() throws SecurityException {
-    return new XmlSignatureOptions(getAbdera());
+  public SignatureOptions getDefaultSignatureOptions() 
+    throws SecurityException {
+      return new XmlSignatureOptions(getAbdera());
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T extends Element> T removeInvalidSignatures(
+    T element, 
+    SignatureOptions options) 
+      throws SecurityException {
+    List<org.w3c.dom.Element> remove = new ArrayList<org.w3c.dom.Element>(); 
+    org.w3c.dom.Element dom = fomToDom((Element)element, options);
+    NodeList children = dom.getChildNodes();
+    for (int n = 0; n < children.getLength(); n++) {
+      try {
+        Node node = children.item(n);
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+          org.w3c.dom.Element el = (org.w3c.dom.Element) node;
+          if (Constants.DSIG_NS.equals(el.getNamespaceURI()) &&
+              Constants.LN_SIGNATURE.equals(el.getLocalName())) {
+            IRI baseUri = element.getResolvedBaseUri();
+            XMLSignature sig = 
+              new XMLSignature(
+                el, (baseUri != null) ? baseUri.toString() : "");
+            if (!is_valid_signature(sig,options)) {
+              remove.add(el);
+            }
+          }
+        }
+      } catch (Exception e) {}
+    }
+    for (org.w3c.dom.Element el : remove) dom.removeChild(el);
+    return (T)domToFom(dom, options);
   }
 
 }

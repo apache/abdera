@@ -55,4 +55,6 @@ public interface Signature {
    */
   SignatureOptions getDefaultSignatureOptions() throws SecurityException;
   
+  <T extends Element>T removeInvalidSignatures(T element, SignatureOptions options) throws SecurityException;
+  
 }

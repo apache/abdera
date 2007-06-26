@@ -81,4 +81,6 @@ public interface RequestContext
   <T extends Element>Document<T> getDocument(Parser parser, ParserOptions options) throws ParseException, IOException;
   
   <T extends Element>Document<T> getDocument(ParserOptions options) throws ParseException, IOException;
+  
+  boolean isUserInRole(String role);
 }

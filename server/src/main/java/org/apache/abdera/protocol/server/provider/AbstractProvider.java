@@ -94,6 +94,20 @@ public abstract class AbstractProvider
     String reason) {
       return returnBase(
         createErrorDocument(
+          abdera, 401, 
+          reason, null), 
+        401, null);
+  }
+  
+  /**
+   * Return an unauthorized error
+   */
+  protected ResponseContext forbidden(
+    Abdera abdera,
+    RequestContext request,
+    String reason) {
+      return returnBase(
+        createErrorDocument(
           abdera, 403, 
           reason, null), 
         403, null);

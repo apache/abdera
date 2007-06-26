@@ -179,7 +179,9 @@ public class EntityTag
     String etag = null;
     try {
       MessageDigest md = MessageDigest.getInstance("md5");
-      for (String s : material) md.update(s.getBytes("utf-8"));
+      for (String s : material) {
+        if (s != null) md.update(s.getBytes("utf-8"));
+      }
       byte[] digest = md.digest();
       etag = new String(Hex.encodeHex(digest));
     } catch (NoSuchAlgorithmException e) {

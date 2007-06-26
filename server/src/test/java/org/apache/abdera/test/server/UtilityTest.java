@@ -183,6 +183,10 @@ public class UtilityTest extends TestCase {
     public List<String> getHeaders(String name) {
       return null;
     }
+
+    public boolean isUserInRole(String role) {
+      return false;
+    }
     
   }
 }

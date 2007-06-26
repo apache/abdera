@@ -191,11 +191,9 @@ public abstract class AbstractProvider
     Abdera abdera, 
     RequestContext request,
     String reason) {
-      return returnBase(
-        createErrorDocument(
-          abdera, 304, 
-          reason, null), 
-        304, null);
+      EmptyResponseContext rc = new EmptyResponseContext(304);
+      rc.setStatusText(reason);
+      return rc;
   }
 
   protected ResponseContext preconditionfailed(

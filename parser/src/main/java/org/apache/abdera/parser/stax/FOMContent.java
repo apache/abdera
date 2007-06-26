@@ -26,6 +26,7 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.attachments.utils.DataHandlerUtils;
@@ -121,7 +122,8 @@ public class FOMContent
   
   @SuppressWarnings("unchecked")
   public <T extends Element> T getValueElement() {
-    return (T)this.getFirstElement();
+    FOMFactory factory = (FOMFactory) getFactory();
+    return (T)factory.getElementWrapper((Element)this.getFirstElement());
   }
 
   public <T extends Element> void setValueElement(T value) {
@@ -135,7 +137,8 @@ public class FOMContent
           init(Content.Type.XML);
         }
       }
-      this.setFirstChild((OMElement)value);
+      OMElement el = (OMElement) (value instanceof ElementWrapper ? ((ElementWrapper)value).getInternal() : value); 
+      this.setFirstChild(el);
     } else {
       _removeAllChildren();
     }

@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -221,5 +222,9 @@ public class HttpServletRequestContext
       buf.append("?" + request.getQueryString());
     uri = new IRI(buf.toString());
     return uri;
+  }
+
+  public boolean isUserInRole(String role) {
+    return request.isUserInRole(role);
   }
 }

@@ -798,6 +798,7 @@ public class FOMFactory
   
   @SuppressWarnings("unchecked")
   public <T extends Element> T getElementWrapper(Element internal) {
+    if (internal == null) return null;
     String ns = internal.getQName().getNamespaceURI();
     return (T) ((ATOM_NS.equals(ns) || 
                  APP_NS.equals(ns) || 

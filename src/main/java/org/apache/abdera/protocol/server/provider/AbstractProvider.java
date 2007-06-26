@@ -225,6 +225,14 @@ public abstract class AbstractProvider
       response.setStatus(status);
       if (lastModified != null) response.setLastModified(lastModified);
       response.setContentType(MimeTypeHelper.getMimeType(base));
+      
+      Document doc = base instanceof Document ? (Document)base : ((Element)base).getDocument();
+      if (doc.getEntityTag() != null) {
+        response.setEntityTag(doc.getEntityTag());
+      } else if (doc.getLastModified() != null) {
+        response.setLastModified(doc.getLastModified());
+      }
+      
       return response;
   }
 

@@ -198,6 +198,16 @@ public abstract class AbstractProvider
         304, null);
   }
 
+  protected ResponseContext preconditionfailed(
+    Abdera abdera, 
+    RequestContext request,
+    String reason) {
+      return returnBase(
+        createErrorDocument(
+          abdera, 412, 
+          reason, null), 
+        412, null);
+  }
   
   /**
    * Return a 415 media type not-supported error

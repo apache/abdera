@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.activation.DataHandler;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
@@ -183,6 +184,10 @@ public abstract class ElementWrapper
     internal.setText(text);
   }
 
+  public void setText(DataHandler handler) {
+    internal.setText(handler);
+  }
+  
   public void writeTo(OutputStream out) throws IOException {
     internal.writeTo(out);
   }

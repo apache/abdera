@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.activation.DataHandler;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
@@ -739,5 +740,10 @@ public class FOMElement
     } else if (!preserve && getMustPreserveWhitespace()) {
       setAttributeValue(SPACE, "default");
     }
+  }
+  
+  public void setText(DataHandler handler) {
+    _removeAllChildren();
+    addChild(factory.createOMText(handler, true));
   }
 }

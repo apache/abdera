@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.activation.DataHandler;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.iri.IRI;
@@ -210,6 +211,11 @@ public interface Element
    * @param text The text value
    */
   void setText(String text);
+  
+  /**
+   * Set the Text value of this element using the data handler
+   */
+  void setText(DataHandler dataHandler);
   
   /**
    * Declare a namespace

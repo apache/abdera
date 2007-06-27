@@ -57,6 +57,17 @@
           <target>1.5</target>
         </configuration>
       </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>**/*TestSuite*</exclude>
+            <exclude>**/*$Test*</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <distributionManagement>

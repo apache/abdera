@@ -128,7 +128,7 @@ public abstract class AbstractProvider
   }
   
   /**
-   * Return a forbidden error
+   * Return a 405 method not allowed error
    */
   protected ResponseContext notallowed(
     Abdera abdera, 
@@ -138,9 +138,9 @@ public abstract class AbstractProvider
       BaseResponseContext resp = 
         (BaseResponseContext)returnBase(
           createErrorDocument(
-            abdera, 403, 
+            abdera, 405, 
             reason, null), 
-          403, null);
+          405, null);
         resp.setAllow(methods);
         return resp;
   }
@@ -220,6 +220,20 @@ public abstract class AbstractProvider
           reason, null),
         415,null);
   }
+
+  /**
+   * Return a 423 locked error
+   */
+  protected ResponseContext locked(
+    Abdera abdera,
+    RequestContext request,
+    String reason) {
+      return returnBase(
+        createErrorDocument(
+          abdera, 423,
+          reason, null),
+        423,null);
+    }
 
   /**
    * Return a document

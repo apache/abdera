@@ -20,6 +20,8 @@ package org.apache.abdera.security.util.servlet;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.Provider;
+import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,9 +52,17 @@ public abstract class AbstractEncryptedRequestFilter
     for (String method: methods) this.methods.add(method);
   }
 
+  protected void initProvider() {}
+    
+  protected void addProvider(Provider provider) {
+    if (Security.getProvider(provider.getName()) == null) 
+      Security.addProvider(provider);
+  }
+  
   @Override
   public void init(FilterConfig config) throws ServletException {
     super.init(config);
+    initProvider();
     String s = config.getInitParameter("methods");
     if (s != null && s.length() > 0) {
       this.methods.clear();

@@ -19,13 +19,16 @@ package org.apache.abdera.protocol.util;
 
 import java.util.Stack;
 
+import org.apache.abdera.protocol.ItemManager;
+
 /**
  * Implements a simple pool manager.
  * 
  * By default, an upper limit to the pool is set at 25 entries.  
  * New items can always be created. 
  */
-public abstract class PoolManager<T> {
+public abstract class PoolManager<T> 
+  implements ItemManager<T> {
 
   private static final int DEFAULT_SIZE = 25;
   private final Stack<T> pool;

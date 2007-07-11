@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.servlet;
+package org.apache.abdera.protocol.server.impl;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -25,49 +25,48 @@ import java.util.Map;
 
 import javax.activation.MimeType;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.abdera.protocol.ItemManager;
+import org.apache.abdera.protocol.server.Provider;
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.RequestHandler;
+import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.ServiceContext;
-import org.apache.abdera.protocol.server.provider.EmptyResponseContext;
-import org.apache.abdera.protocol.server.provider.Provider;
-import org.apache.abdera.protocol.server.provider.ProviderManager;
-import org.apache.abdera.protocol.server.provider.RequestContext;
-import org.apache.abdera.protocol.server.provider.ResponseContext;
-import org.apache.abdera.protocol.server.provider.Target;
-import org.apache.abdera.protocol.server.provider.TargetType;
+import org.apache.abdera.protocol.server.Target;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public abstract class AbstractRequestHandler 
   implements RequestHandler {
 
-  private static final Log logger = LogFactory.getLog(AbstractRequestHandler.class);
+  private static final Log log = LogFactory.getLog(AbstractRequestHandler.class);
   
   public void process(
     ServiceContext context, 
-    HttpServletRequest request,
+    RequestContext request,
     HttpServletResponse response) 
       throws IOException {
     
-    ProviderManager manager = context.getProviderManager();
-    RequestContext requestContext = getRequestContext(context,request);
-    Provider provider = manager.getProvider(requestContext);
-    
+    log.debug("Processing the request");
+    ItemManager<Provider> manager = context.getProviderManager();
+    Provider provider = manager.get(request);
+    log.debug("Using provider - " + provider);
     try {
-      if (preconditions(provider, requestContext, response)) {
-        output(response,process(provider, requestContext));
+      if (preconditions(provider, request, response)) {
+        output(response,provider.request(request));
       }
     } catch (Throwable e) {
-      logger.error("Error producing output", e);
+      log.error("Error producing output", e);
       try {
         output(response,new EmptyResponseContext(500));
       } catch (Exception ex) {
-        logger.error("Error outputting error", ex);
+        log.error("Error outputting error", ex);
         response.sendError(500);
       }
     } finally {
-      manager.release(provider);
+      log.debug("Releasing provider - " + provider);
+      if (provider != null) manager.release(provider);
     }
   }
   
@@ -88,19 +87,15 @@ public abstract class AbstractRequestHandler
       return false;
     }
     // Check The Method
-    if (!checkMethod(request)) {
+    if (!checkMethod(provider,request)) {
       notallowed(
         response, 
         request.getMethod(), 
-        getAllowedMethods(target.getType()));
+        provider.getAllowedMethods(target.getType()));
       return false;
     }
     return true;
   }
-  
-  protected abstract ResponseContext process(
-    Provider provider, 
-    RequestContext request);
   
   protected void output(
     HttpServletResponse response, 
@@ -141,23 +136,16 @@ public abstract class AbstractRequestHandler
   }
   
   protected boolean checkMethod(
+    Provider provider,
     RequestContext context) 
       throws IOException {
     String method = context.getMethod();
     Target target = context.getTarget();
-    String[] methods = getAllowedMethods(target.getType());
+    String[] methods = provider.getAllowedMethods(target.getType());
     java.util.Arrays.sort(methods);
     return (java.util.Arrays.binarySearch(methods, method) >= 0);
   }
-
-  protected abstract String[] getAllowedMethods(TargetType type);
-  
-  protected RequestContext getRequestContext(
-    ServiceContext context, 
-    HttpServletRequest request) {
-      return new HttpServletRequestContext(context, request);
-  }
-  
+    
   protected void noprovider(HttpServletResponse response) throws IOException {
     response.sendError(500, "No Provider");
   }

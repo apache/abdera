@@ -15,18 +15,18 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.util;
+package org.apache.abdera.protocol.server.impl;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.abdera.protocol.server.provider.AbstractTarget;
-import org.apache.abdera.protocol.server.provider.RequestContext;
-import org.apache.abdera.protocol.server.provider.Target;
-import org.apache.abdera.protocol.server.provider.TargetResolver;
-import org.apache.abdera.protocol.server.provider.TargetType;
+import org.apache.abdera.protocol.Request;
+import org.apache.abdera.protocol.Resolver;
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.Target;
+import org.apache.abdera.protocol.server.TargetType;
 
 /**
  * <p>Provides a utility class helpful for determining which type of resource
@@ -54,7 +54,7 @@ import org.apache.abdera.protocol.server.provider.TargetType;
  *  
  */
 public class RegexTargetResolver 
-  implements TargetResolver {
+  implements Resolver<Target> {
 
   private final Map<Pattern, TargetType> patterns;
   private String contextPath;
@@ -78,13 +78,14 @@ public class RegexTargetResolver
     this.patterns.put(p,type);
   }
   
-  public Target resolve(RequestContext request) {
-    String uri = request.getUri().toString();
+  public Target resolve(Request request) {
+    RequestContext context = (RequestContext) request;
+    String uri = context.getUri().toString();
     for (Pattern pattern : patterns.keySet()) {
       Matcher matcher = pattern.matcher(uri);
       if (matcher.matches()) {
         TargetType type = patterns.get(pattern);
-        return getTarget(type, request, matcher);
+        return getTarget(type, context, matcher);
       }
     }
     return null;

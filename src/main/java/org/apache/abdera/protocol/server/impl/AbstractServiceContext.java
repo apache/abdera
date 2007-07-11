@@ -15,26 +15,30 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server;
+package org.apache.abdera.protocol.server.impl;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.security.auth.Subject;
+
 import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.server.auth.SubjectResolver;
-import org.apache.abdera.protocol.server.provider.ProviderManager;
-import org.apache.abdera.protocol.server.provider.TargetResolver;
-import org.apache.abdera.protocol.server.servlet.RequestHandlerManager;
+import org.apache.abdera.protocol.ItemManager;
+import org.apache.abdera.protocol.Resolver;
+import org.apache.abdera.protocol.server.Provider;
+import org.apache.abdera.protocol.server.RequestHandler;
+import org.apache.abdera.protocol.server.ServiceContext;
+import org.apache.abdera.protocol.server.Target;
 
 public abstract class AbstractServiceContext 
   implements ServiceContext {
 
   protected Abdera abdera;
   protected Map<String,String> config;
-  protected ProviderManager providerManager;
-  protected RequestHandlerManager handlerManager;
-  protected SubjectResolver subjectResolver;
-  protected TargetResolver targetResolver;
+  protected ItemManager<Provider> providerManager;
+  protected ItemManager<RequestHandler> handlerManager;
+  protected Resolver<Subject> subjectResolver;
+  protected Resolver<Target> targetResolver;
   
   public synchronized void init(
     Abdera abdera, 

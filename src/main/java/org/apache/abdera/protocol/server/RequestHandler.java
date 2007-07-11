@@ -15,31 +15,18 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.provider;
+package org.apache.abdera.protocol.server;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
-import org.apache.abdera.writer.Writer;
+import javax.servlet.http.HttpServletResponse;
 
-public final class EmptyResponseContext 
-  extends AbstractResponseContext {
 
-  public EmptyResponseContext(int status) {
-    setStatus(status);
-  }
+public interface RequestHandler {
+
+  void process(
+    ServiceContext context, 
+    RequestContext request,
+    HttpServletResponse response) throws IOException;
   
-  public boolean hasEntity() {
-    return false;
-  }
-
-  public void writeTo(OutputStream out) 
-    throws IOException {}
-
-  public void writeTo(OutputStream out, Writer writer) throws IOException {}
-
-  public void writeTo(java.io.Writer javaWriter, Writer abderaWriter) throws IOException {}
-
-  public void writeTo(java.io.Writer javaWriter) throws IOException {}
-
 }

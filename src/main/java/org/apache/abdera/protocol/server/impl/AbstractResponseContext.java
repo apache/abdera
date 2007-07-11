@@ -15,9 +15,10 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.provider;
+package org.apache.abdera.protocol.server.impl;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.Map;
 
 import org.apache.abdera.i18n.iri.Constants;
 import org.apache.abdera.i18n.iri.Escaping;
-import org.apache.abdera.protocol.server.provider.ResponseContext;
+import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.util.AbstractResponse;
 import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.util.EntityTag;
@@ -59,6 +60,10 @@ public abstract class AbstractResponseContext
       values.add(EncodingUtil.encode(value, charset));
     }
     headers.put(name, values);
+  }
+  
+  public void setEscapedHeader(String name, BitSet mask, String value) {
+    setHeader(name,Escaping.encode(value, mask));
   }
   
   public void setHeader(String name, Object value) {
@@ -224,7 +229,7 @@ public abstract class AbstractResponseContext
         slug.indexOf((char)13) > -1)
       throw new IllegalArgumentException(
         "The slug must not contain ASCII carriage return or linefeed characters");
-    setHeader("Slug", Escaping.encode(slug, Constants.ASCIISANSCRLF));
+    setEscapedHeader("Slug", Constants.ASCIISANSCRLF, slug);
   }
   
   public void setContentType(String type) {

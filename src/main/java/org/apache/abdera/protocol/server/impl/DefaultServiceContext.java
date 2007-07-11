@@ -15,16 +15,16 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server;
+package org.apache.abdera.protocol.server.impl;
 
-import org.apache.abdera.protocol.server.auth.SubjectResolver;
-import org.apache.abdera.protocol.server.provider.ProviderManager;
-import org.apache.abdera.protocol.server.provider.TargetResolver;
-import org.apache.abdera.protocol.server.servlet.DefaultRequestHandlerManager;
-import org.apache.abdera.protocol.server.servlet.RequestHandlerManager;
-import org.apache.abdera.protocol.server.util.RegexTargetResolver;
+import javax.security.auth.Subject;
+
+import org.apache.abdera.protocol.ItemManager;
+import org.apache.abdera.protocol.Resolver;
+import org.apache.abdera.protocol.server.Provider;
+import org.apache.abdera.protocol.server.RequestHandler;
+import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.util.ServerConstants;
-import org.apache.abdera.protocol.server.util.SimpleSubjectResolver;
 import org.apache.abdera.util.ServiceUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,63 +35,70 @@ public class DefaultServiceContext
 
   private static final Log logger = LogFactory.getLog(DefaultServiceContext.class);
   
+  protected String defaultrequesthandlermanager = DefaultRequestHandlerManager.class.getName();
+  protected String defaultsubjectresolver = SimpleSubjectResolver.class.getName();
+  protected String defaulttargetresolver = RegexTargetResolver.class.getName();
+  protected String defaultprovidermanager = null;
+  
+  protected DefaultServiceContext() {}
+  
   private Object instance(String id, String _default) {
     String instance = getProperty(id);
     Object obj =  ServiceUtil.newInstance( id, (instance!=null)?instance:_default, abdera);
-    if (logger.isDebugEnabled()) {
-      logger.debug("Returning " + obj + " as instance of '" + id + "'.");
-    }
+    logger.debug("Returning " + obj + " as instance of '" + id + "'.");
     return obj;
   }
   
   private Object instance(String id, String _default, Object... args) {
     String instance = getProperty(id);
     Object obj =  ServiceUtil.newInstance( id, (instance!=null)?instance:_default, abdera, args);
-    if (logger.isDebugEnabled()) {
-      logger.debug("Returning " + obj + " as instance of '" + id + "'.");
-    }
+    logger.debug("Returning " + obj + " as instance of '" + id + "'.");
     return obj;
   }
   
-  public synchronized ProviderManager getProviderManager() {
+  @SuppressWarnings("unchecked")
+  public synchronized ItemManager<Provider> getProviderManager() {
     if (providerManager == null) {
-      providerManager = (ProviderManager) instance(
+      providerManager = (ItemManager<Provider>) instance(
         PROVIDER_MANAGER, getDefaultProviderManager());
     }
     return providerManager;
   }
   
   protected String getDefaultProviderManager() {
-    return null;
+    return defaultprovidermanager;
   }
 
-  public synchronized RequestHandlerManager getRequestHandlerManager() {
+  @SuppressWarnings("unchecked")
+  public synchronized ItemManager<RequestHandler> getRequestHandlerManager() {
     if (handlerManager == null) {
-      handlerManager = (RequestHandlerManager) instance(
+      handlerManager = (ItemManager<RequestHandler>) instance(
         REQUEST_HANDLER_MANAGER, getDefaultRequestHandlerManager());
     }
     return handlerManager;
   }
   
   protected String getDefaultRequestHandlerManager() {
-    return DefaultRequestHandlerManager.class.getName();
+    return defaultrequesthandlermanager;
   }
 
-  public SubjectResolver getSubjectResolver() {
+  @SuppressWarnings("unchecked")
+  public Resolver<Subject> getSubjectResolver() {
     if (subjectResolver == null) {
-      subjectResolver = (SubjectResolver) instance(
+      subjectResolver = (Resolver<Subject>) instance(
         SUBJECT_RESOLVER, getDefaultSubjectResolver());
     }
     return subjectResolver;
   }
   
   protected String getDefaultSubjectResolver() {
-    return SimpleSubjectResolver.class.getName();
+    return defaultsubjectresolver;
   }
 
-  public TargetResolver getTargetResolver(String contextPath) {
+  @SuppressWarnings("unchecked")
+  public Resolver<Target> getTargetResolver(String contextPath) {
     if (targetResolver == null) {
-      targetResolver = (TargetResolver) instance(
+      targetResolver = (Resolver<Target>) instance(
         TARGET_RESOLVER, getDefaultTargetResolver(), 
         contextPath);
     }
@@ -99,7 +106,7 @@ public class DefaultServiceContext
   }
   
   protected String getDefaultTargetResolver() {
-    return RegexTargetResolver.class.getName();
+    return defaulttargetresolver;
   }
 
 }

@@ -17,30 +17,33 @@
 */
 package org.apache.abdera.protocol.server;
 
-import java.util.Map;
+public interface Provider {
 
-import javax.security.auth.Subject;
-
-import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.ItemManager;
-import org.apache.abdera.protocol.Resolver;
-
-public interface ServiceContext {
-
-  Abdera getAbdera();
+  ResponseContext createEntry(RequestContext request);
   
-  void init(Abdera abdera, Map<String,String> config);
+  ResponseContext deleteEntry(RequestContext request);
   
-  ItemManager<RequestHandler> getRequestHandlerManager();
+  ResponseContext deleteMedia(RequestContext request);
   
-  ItemManager<Provider> getProviderManager();
+  ResponseContext updateEntry(RequestContext request);
   
-  Resolver<Subject> getSubjectResolver();
+  ResponseContext updateMedia(RequestContext request);
   
-  Resolver<Target> getTargetResolver(String contextPath);
+  ResponseContext getService(RequestContext request);
   
-  String getProperty(String name);
+  ResponseContext getFeed(RequestContext request);
   
-  String[] getPropertyNames();
+  ResponseContext getEntry(RequestContext request);
   
+  ResponseContext getMedia(RequestContext request);
+  
+  ResponseContext getCategories(RequestContext request);
+  
+  ResponseContext entryPost(RequestContext request);
+  
+  ResponseContext mediaPost(RequestContext request);
+  
+  ResponseContext request(RequestContext request);
+  
+  String[] getAllowedMethods(TargetType type);
 }

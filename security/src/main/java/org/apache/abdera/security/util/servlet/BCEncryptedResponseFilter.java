@@ -15,19 +15,18 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.examples.appserver;
+package org.apache.abdera.security.util.servlet;
 
-import org.apache.abdera.protocol.server.TargetType;
-import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-public class SimpleTargetResolver 
-  extends RegexTargetResolver {
+public abstract class BCEncryptedResponseFilter 
+  extends AbstractEncryptedResponseFilter {
 
-  public SimpleTargetResolver(String contextPath) {
-    super(contextPath);
-    setPattern("/atom(\\?[^#]*)?", TargetType.TYPE_SERVICE);
-    setPattern("/atom/feed(\\?[^#]*)?", TargetType.TYPE_COLLECTION);
-    setPattern("/atom/feed/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY);
+  public void initProvider() {
+    try {
+      Class.forName("org.bouncycastle.LICENSE");
+    } catch (Exception e) {}
+    addProvider(new BouncyCastleProvider());
   }
   
 }

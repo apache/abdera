@@ -15,19 +15,16 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.examples.appserver;
+package org.apache.abdera.protocol.server.impl;
 
-import org.apache.abdera.protocol.server.TargetType;
-import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
+import org.apache.abdera.protocol.server.RequestHandler;
 
-public class SimpleTargetResolver 
-  extends RegexTargetResolver {
+public class DefaultRequestHandlerManager 
+  extends AbstractItemManager<RequestHandler> {
 
-  public SimpleTargetResolver(String contextPath) {
-    super(contextPath);
-    setPattern("/atom(\\?[^#]*)?", TargetType.TYPE_SERVICE);
-    setPattern("/atom/feed(\\?[^#]*)?", TargetType.TYPE_COLLECTION);
-    setPattern("/atom/feed/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY);
+  @Override
+  protected RequestHandler internalNewInstance() {
+    return new DefaultRequestHandler();
   }
-  
+
 }

@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.examples.appserver;
 
-import java.security.MessageDigest;
 import java.util.Date;
 
 import javax.activation.MimeType;
@@ -33,24 +32,29 @@ import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
-import org.apache.abdera.protocol.server.provider.AbstractResponseContext;
-import org.apache.abdera.protocol.server.provider.BaseResponseContext;
-import org.apache.abdera.protocol.server.provider.EmptyResponseContext;
-import org.apache.abdera.protocol.server.provider.Provider;
-import org.apache.abdera.protocol.server.provider.RequestContext;
-import org.apache.abdera.protocol.server.provider.ResponseContext;
-import org.apache.abdera.protocol.server.provider.TargetType;
+import org.apache.abdera.protocol.server.Provider;
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.ResponseContext;
+import org.apache.abdera.protocol.server.TargetType;
+import org.apache.abdera.protocol.server.impl.AbstractProvider;
+import org.apache.abdera.protocol.server.impl.AbstractResponseContext;
+import org.apache.abdera.protocol.server.impl.BaseResponseContext;
+import org.apache.abdera.protocol.server.impl.EmptyResponseContext;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.axiom.om.util.Base64;
 
 public class SimpleProvider 
+  extends AbstractProvider
   implements Provider {
 
   private EntityTag service_etag = new EntityTag("simple");
   private Document<Service> service_doc;
   private Document<Feed> feed_doc;
+  
+  public SimpleProvider() {
+    super(10);
+  }
   
   private Document<Service> init_service_doc(Abdera abdera) {
     Factory factory = abdera.getFactory();
@@ -94,7 +98,7 @@ public class SimpleProvider
   
   public ResponseContext getService(
     RequestContext request) {
-      Abdera abdera = request.getServiceContext().getAbdera();
+      Abdera abdera = request.getAbdera();
       Document<Service> service = get_service_doc(abdera);
       AbstractResponseContext rc; 
       rc = new BaseResponseContext<Document<Service>>(service); 
@@ -104,7 +108,7 @@ public class SimpleProvider
   
   public ResponseContext getFeed(
     RequestContext request) {
-      Abdera abdera = request.getServiceContext().getAbdera();
+      Abdera abdera = request.getAbdera();
       Document<Feed> feed = get_feed_doc(abdera);
       AbstractResponseContext rc; 
       rc = new BaseResponseContext<Document<Feed>>(feed);
@@ -115,7 +119,7 @@ public class SimpleProvider
   @SuppressWarnings("unchecked")
   public ResponseContext createEntry(
     RequestContext request) {
-      Abdera abdera = request.getServiceContext().getAbdera();
+      Abdera abdera = request.getAbdera();
       Factory factory = abdera.getFactory();
       Parser parser = abdera.getParser();
       try {
@@ -155,10 +159,6 @@ public class SimpleProvider
       }
   }
   
-  private IRI resolveBase(RequestContext request) {
-    return request.getBaseUri().resolve(request.getUri());
-  }
-  
   public ResponseContext deleteEntry(
     RequestContext request) {
       Entry entry = getAbderaEntry(request);
@@ -186,7 +186,7 @@ public class SimpleProvider
   @SuppressWarnings("unchecked")
   public ResponseContext updateEntry(
     RequestContext request) {
-      Abdera abdera = request.getServiceContext().getAbdera();
+      Abdera abdera = request.getAbdera();
       Parser parser = abdera.getParser();
       Factory factory = abdera.getFactory();
       Entry orig_entry = getAbderaEntry(request);
@@ -228,28 +228,20 @@ public class SimpleProvider
   }
 
   private EntityTag calculateEntityTag(Base base) {
-    try {
-      String id = null;
-      String modified = null;
-      if (base instanceof Entry) {
-        id = ((Entry)base).getId().toString();
-        modified = ((Entry)base).getUpdatedElement().getText();
-      } else if (base instanceof Feed) {
-        id = ((Feed)base).getId().toString();
-        modified = ((Feed)base).getUpdatedElement().getText();
-      }
-      String tag = id + ":" + modified;
-      byte[] digest = MessageDigest.getInstance("sha1").digest(tag.getBytes());
-      String etag = Base64.encode(digest);
-      return new EntityTag(etag);
-    } catch (Exception e) {
-      // Not going to happen
+    String id = null;
+    String modified = null;
+    if (base instanceof Entry) {
+      id = ((Entry)base).getId().toString();
+      modified = ((Entry)base).getUpdatedElement().getText();
+    } else if (base instanceof Feed) {
+      id = ((Feed)base).getId().toString();
+      modified = ((Feed)base).getUpdatedElement().getText();
     }
-    return null;
+    return EntityTag.generate(id, modified);      
   }
   
   private Entry getAbderaEntry(RequestContext request) {
-    Abdera abdera = request.getServiceContext().getAbdera();
+    Abdera abdera = request.getAbdera();
     String entry_id = getEntryID(request);
     Document<Feed> feed = get_feed_doc(abdera);
     try { 
@@ -266,50 +258,4 @@ public class SimpleProvider
     return segments[segments.length-1];
   }
   
-  public ResponseContext entryPost(
-    RequestContext request) {
-      return new EmptyResponseContext(403);
-  }
-  
-  public ResponseContext deleteMedia(
-    RequestContext request) {
-      throw new UnsupportedOperationException();
-  }
-  
-  public ResponseContext mediaPost(
-    RequestContext request) {
-      throw new UnsupportedOperationException();
-  }
-  
-  public ResponseContext getMedia(
-    RequestContext request) {
-      throw new UnsupportedOperationException();
-  }
-  
-  public ResponseContext updateMedia(
-    RequestContext request) {
-      throw new UnsupportedOperationException();
-  }
-
-  private boolean isValidEntry(Entry entry) {
-    try {
-      if (entry.getId() == null || 
-          entry.getId().toString().length() == 0) return false;
-      if (entry.getTitle() == null) return false;
-      if (entry.getAuthor() == null) return false;
-      if (entry.getUpdated() == null) return false;
-      if (entry.getContent() == null) {
-        if (entry.getAlternateLink() == null) return false;
-        if (entry.getSummary() == null) return false;
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return true;
-  }
-
-  public ResponseContext getCategories(RequestContext request) {
-    return null;
-  }
-
 }

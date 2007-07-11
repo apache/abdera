@@ -19,14 +19,14 @@ package org.apache.abdera.protocol.util;
 
 public interface ProtocolConstants {
 
-  public final static int NOCACHE = 1;
-  public final static int NOSTORE = 2;
-  public final static int NOTRANSFORM = 4;
-  public final static int PUBLIC = 8;
-  public final static int PRIVATE = 16;
-  public final static int REVALIDATE = 32;
+  public final static int NOCACHE         = 1;
+  public final static int NOSTORE         = 2;
+  public final static int NOTRANSFORM     = 4;
+  public final static int PUBLIC          = 8;
+  public final static int PRIVATE         = 16;
+  public final static int REVALIDATE      = 32;
   public final static int PROXYREVALIDATE = 64;
-  public final static int ONLYIFCACHED = 128;
+  public final static int ONLYIFCACHED    = 128;
 
   
 }

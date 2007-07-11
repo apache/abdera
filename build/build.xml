@@ -276,9 +276,9 @@ Working directory: ${work}
     </copy>
   </target>
 
-  <target name="compile.security" depends="init, compile.core" if="do.security">
+  <target name="compile.security" depends="init, compile.core, compile.server" if="do.security">
     <mkdir dir="${security.work}" />
-    <javac srcdir="${security.src}" destdir="${security.work}" classpathref="jar.dependencies" classpath="${core.work}" debug="${debug}" />
+    <javac srcdir="${security.src}" destdir="${security.work}" classpathref="jar.dependencies" classpath="${core.work};${protocol.work};${server.work}" debug="${debug}" />
     <javac srcdir="${security.test.java}" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${security.work};${protocol.work}:${client.work}" debug="${debug}" />
     <mkdir dir="${security.work}/META-INF" />
     <copy todir="${test}">

@@ -15,19 +15,26 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.examples.appserver;
+package org.apache.abdera.protocol.server;
 
-import org.apache.abdera.protocol.server.TargetType;
-import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
+import java.io.IOException;
+import java.io.OutputStream;
 
-public class SimpleTargetResolver 
-  extends RegexTargetResolver {
+import org.apache.abdera.protocol.Response;
+import org.apache.abdera.writer.Writer;
 
-  public SimpleTargetResolver(String contextPath) {
-    super(contextPath);
-    setPattern("/atom(\\?[^#]*)?", TargetType.TYPE_SERVICE);
-    setPattern("/atom/feed(\\?[^#]*)?", TargetType.TYPE_COLLECTION);
-    setPattern("/atom/feed/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY);
-  }
+public interface ResponseContext 
+  extends Response {
+
+  public boolean hasEntity();
   
+  public void writeTo(OutputStream out) throws IOException;
+  
+  public void writeTo(java.io.Writer javaWriter) throws IOException;
+  
+  public void writeTo(OutputStream out, Writer writer) throws IOException;
+  
+  public void writeTo(java.io.Writer javaWriter, Writer abderaWriter) throws IOException;
+  
+  public void setWriter(Writer writer);
 }

@@ -17,21 +17,15 @@
 */
 package org.apache.abdera.examples.appserver;
 
-import org.apache.abdera.protocol.server.provider.Provider;
-import org.apache.abdera.protocol.server.provider.ProviderManager;
-import org.apache.abdera.protocol.server.provider.RequestContext;
+import org.apache.abdera.protocol.server.Provider;
+import org.apache.abdera.protocol.server.impl.AbstractSingletonProviderManager;
 
 public class SimpleProviderManager 
-  implements ProviderManager {
+  extends AbstractSingletonProviderManager {
 
-  private static Provider provider = null; 
-
-  public synchronized Provider getProvider(RequestContext request) {
-    if (provider == null)
-      provider = new SimpleProvider();
-    return provider;
+  @Override
+  protected Provider initProvider() {
+    return new SimpleProvider();
   }
-
-  public void release(Provider provider) {}
 
 }

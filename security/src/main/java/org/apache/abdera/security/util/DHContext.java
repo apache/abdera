@@ -219,7 +219,7 @@ public class DHContext
   @Override
   public Object clone() 
     throws CloneNotSupportedException {
-      if (publicKey == null) throw new CloneNotSupportedException();
+      if (publicKey != null) throw new CloneNotSupportedException();
       // create a copy, not an actual clone
       return new DHContext(keyPair,p,g,l);
   }

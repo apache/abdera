@@ -15,20 +15,31 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.servlet;
+package org.apache.abdera.protocol.server.impl;
 
-import java.io.IOException;
+import org.apache.abdera.protocol.ItemManager;
+import org.apache.abdera.protocol.Request;
+import org.apache.abdera.protocol.server.RequestHandler;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+public abstract class AbstractSingletonRequestHandlerManager 
+  implements ItemManager<RequestHandler> {
 
-import org.apache.abdera.protocol.server.ServiceContext;
-
-public interface RequestHandler {
-
-  void process(
-    ServiceContext context, 
-    HttpServletRequest request, 
-    HttpServletResponse response) throws IOException;
+  protected RequestHandler handler;
   
+  public RequestHandler get(Request request) {
+    if (handler == null) {
+      synchronized(this) {
+        handler = initHandler();
+      }
+    }
+    return handler;
+  }
+
+  protected abstract RequestHandler initHandler();
+  
+  public void release(RequestHandler item) {
+    // nothing to release. subclasses could choose to do reference counting
+    // if they want
+  }
+
 }

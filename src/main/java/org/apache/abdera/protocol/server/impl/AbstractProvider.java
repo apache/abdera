@@ -15,10 +15,8 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.provider;
+package org.apache.abdera.protocol.server.impl;
 
-import java.io.CharArrayWriter;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,27 +25,40 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
+import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.ExtensibleElement;
+import org.apache.abdera.protocol.server.Provider;
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.ResponseContext;
+import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public abstract class AbstractProvider 
   implements Provider {
 
+  private final static Log log = LogFactory.getLog(AbstractProvider.class);
+  
   private static final String NS        = "http://incubator.apache.org/abdera";
   private static final String PFX       = "a";
   private static final QName ERROR         = new QName(NS, "error", PFX);
   private static final QName CODE          = new QName(NS, "code", PFX);
   private static final QName MESSAGE       = new QName(NS, "message", PFX);
-  private static final QName TRACE         = new QName(NS, "trace", PFX);
+
   
-  protected boolean isDebug() {
-    return false;
+  protected int defaultpagesize = 10;
+  
+  protected AbstractProvider() {}
+  
+  protected AbstractProvider(int defaultpagesize) {
+    this.defaultpagesize = defaultpagesize;
   }
   
   protected Document createErrorDocument(
@@ -55,18 +66,13 @@ public abstract class AbstractProvider
     int code, 
     String message, 
     Throwable e) {
+      if (e != null) log.debug("Creating error document - " + code + ", " + message, e);
+      else log.debug("Creating error document - " + code + ", " + message);
       Document doc = abdera.getFactory().newDocument();
       ExtensibleElement root = 
         (ExtensibleElement) abdera.getFactory().newElement(ERROR, doc);
       root.addSimpleExtension(CODE, (code != -1) ? String.valueOf(code) : "");
       root.addSimpleExtension(MESSAGE, (message != null) ? message : "");
-      if (isDebug()) {
-        if (e != null) {
-          CharArrayWriter out = new CharArrayWriter();
-          e.printStackTrace(new PrintWriter(out));
-          root.addSimpleExtension(TRACE, out.toString());
-        }
-      }
       return doc;
   }
 
@@ -78,6 +84,7 @@ public abstract class AbstractProvider
     RequestContext request,
     String reason,
     Throwable t) {
+      log.debug("Server error");
       return returnBase(
         createErrorDocument(
           abdera, 500, 
@@ -92,6 +99,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
+      log.debug("Unauthorized");
       return returnBase(
         createErrorDocument(
           abdera, 401, 
@@ -106,6 +114,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
+      log.debug("Forbidden");
       return returnBase(
         createErrorDocument(
           abdera, 403, 
@@ -120,6 +129,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
+    log.debug("Unknown");
     return returnBase(
       createErrorDocument(
         abdera, 404, 
@@ -135,6 +145,7 @@ public abstract class AbstractProvider
     RequestContext request,
     String reason,
     String... methods) {
+      log.debug("Not Allowed"); 
       BaseResponseContext resp = 
         (BaseResponseContext)returnBase(
           createErrorDocument(
@@ -152,6 +163,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
+      log.debug("Bad Request");
       return returnBase(
         createErrorDocument(
           abdera, 400, 
@@ -166,6 +178,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
+    log.debug("Conflict");
       return returnBase(
         createErrorDocument(
           abdera, 409, 
@@ -180,6 +193,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
+      log.debug("Unavailable");
       return returnBase(
         createErrorDocument(
           abdera, 503, 
@@ -191,6 +205,7 @@ public abstract class AbstractProvider
     Abdera abdera, 
     RequestContext request,
     String reason) {
+      log.debug("Not modified");
       EmptyResponseContext rc = new EmptyResponseContext(304);
       rc.setStatusText(reason);
       return rc;
@@ -200,6 +215,7 @@ public abstract class AbstractProvider
     Abdera abdera, 
     RequestContext request,
     String reason) {
+      log.debug("Precondition failed");
       return returnBase(
         createErrorDocument(
           abdera, 412, 
@@ -214,6 +230,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
+      log.debug("Not supported");
       return returnBase(
         createErrorDocument(
           abdera, 415, 
@@ -228,6 +245,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
+      log.debug("Locked");
       return returnBase(
         createErrorDocument(
           abdera, 423,
@@ -243,18 +261,17 @@ public abstract class AbstractProvider
     Base base, 
     int status,
     Date lastModified) {
+      log.debug("Returning Abdera document");
       BaseResponseContext response = new BaseResponseContext(base);
       response.setStatus(status);
       if (lastModified != null) response.setLastModified(lastModified);
       response.setContentType(MimeTypeHelper.getMimeType(base));
-      
       Document doc = base instanceof Document ? (Document)base : ((Element)base).getDocument();
       if (doc.getEntityTag() != null) {
         response.setEntityTag(doc.getEntityTag());
       } else if (doc.getLastModified() != null) {
         response.setLastModified(doc.getLastModified());
       }
-      
       return response;
   }
 
@@ -264,37 +281,44 @@ public abstract class AbstractProvider
    */
   protected String sanitizeSlug(String slug) {
     if (slug == null) throw new IllegalArgumentException("Slug cannot be null");
-    return EncodingUtil.sanitize(slug);
+    String sanitized = EncodingUtil.sanitize(slug);
+    log.debug("Sanitized slug '" + slug + "' to '" + sanitized + "'");
+    return sanitized;
   }
 
-  protected abstract int getDefaultPageSize();
+  protected int getDefaultPageSize() {
+    log.debug("Getting default page size: " + defaultpagesize);
+    return defaultpagesize;
+  }
   
 
   protected int getPageSize(
     RequestContext request, 
     String pagesizeparam) {
       int max = getDefaultPageSize();
+      int size = max;
       try {
         String _ps = request.getParameter(pagesizeparam);
-        return (_ps != null) ? 
+        size = (_ps != null) ? 
           Math.min(Math.max(Integer.parseInt(_ps),0),max) : max;
-      } catch (Exception e) {
-        return max;
-      }
+      } catch (Exception e) {}
+      log.debug("Getting page size: " + size);
+      return size;
   }
   
   protected int getOffset(
     RequestContext request, 
     String pageparam, 
     int pageSize) {
+      int offset = 0;
       try {
         String _page = request.getParameter(pageparam);
         int page =(_page != null) ? Integer.parseInt(_page) : 1;
         page = Math.max(page, 1) - 1;
-        return pageSize * page;
-      } catch (Exception e) {
-        return 0;
-      }
+        offset = pageSize * page;
+      } catch (Exception e) {}
+      log.debug("Getting offset: " + offset);
+      return offset;
   }
   
   /**
@@ -319,12 +343,15 @@ public abstract class AbstractProvider
             content.getContentType() == Content.Type.MEDIA || 
             content.getContentType() == Content.Type.XML) &&
             entry.getSummary() == null) {
+          log.debug("Checking valid entry: " + false);
           return false;
         }
       }
     } catch (Exception e) {
+      log.debug("Checking valid entry: " + false);
       return false;
     }
+    log.debug("Checking valid entry: " + true);
     return true;
   }
   
@@ -347,7 +374,9 @@ public abstract class AbstractProvider
       ignore.add(org.apache.abdera.util.Constants.XHTML_NS);
       ignore.add(org.apache.abdera.util.Constants.XML_NS);
       checkEntryAddAdditionalNamespaces(ignore);
-      return (checkElement(entry,ignore));
+      boolean answer = checkElement(entry,ignore);
+      log.debug("Checking entry namespaces: " + answer);
+      return answer;
   }
   
   /**
@@ -383,5 +412,145 @@ public abstract class AbstractProvider
   
   protected IRI resolveBase(RequestContext request) {
     return request.getBaseUri().resolve(request.getUri());
+  }
+
+  public ResponseContext request(RequestContext request) {
+    TargetType type = request.getTarget().getType();
+    String method = request.getMethod();
+    log.debug("Target type: " + type);
+    log.debug("Target id: " + request.getTarget().getIdentity());
+    log.debug("Method: " + method);
+    if (method.equals("GET")) {
+      if (type == TargetType.TYPE_SERVICE) {
+        return getService(request);
+      }
+      if (type == TargetType.TYPE_COLLECTION) {
+        return getFeed(request);
+      }
+      if (type == TargetType.TYPE_ENTRY) {
+        return getEntry(request);
+      }
+      if (type == TargetType.TYPE_MEDIA) {
+        return getMedia(request);
+      }
+      if (type == TargetType.TYPE_CATEGORIES) {
+        return getCategories(request);
+      }
+    }
+    else if (method.equals("HEAD")) {
+      if (type == TargetType.TYPE_SERVICE) {
+        return getService(request);
+      }
+      if (type == TargetType.TYPE_COLLECTION) {
+        return getFeed(request);
+      }
+      if (type == TargetType.TYPE_ENTRY) {
+        return getEntry(request);
+      }
+      if (type == TargetType.TYPE_MEDIA) {
+        return getMedia(request);
+      }
+      if (type == TargetType.TYPE_CATEGORIES) {
+        return getCategories(request);
+      }
+    }
+    else if (method.equals("POST")) {
+      if (type == TargetType.TYPE_COLLECTION) {
+        return createEntry(request);
+      }
+      if (type == TargetType.TYPE_ENTRY) {
+        return entryPost(request);
+      }
+      if (type == TargetType.TYPE_MEDIA) {
+        return mediaPost(request);
+      }
+    }
+    else if (method.equals("PUT")) {
+      if (type == TargetType.TYPE_ENTRY) {
+        return updateEntry(request);
+      }
+      if (type == TargetType.TYPE_MEDIA) {
+        return updateMedia(request);
+      }
+    }
+    else if (method.equals("DELETE")) {
+      if (type == TargetType.TYPE_ENTRY) {
+        return deleteEntry(request);
+      }
+      if (type == TargetType.TYPE_MEDIA) {
+        return deleteMedia(request);
+      }
+    } 
+    else if (method.equals("OPTIONS")) {
+      AbstractResponseContext rc = new EmptyResponseContext(200);
+      rc.addHeader("Allow", combine(getAllowedMethods(type)));
+      return rc;
+    }
+    return notallowed(
+      request.getAbdera(), 
+      request, 
+      "Not Allowed", 
+      getAllowedMethods(
+        request.getTarget().getType()));
+  }
+  
+  public String[] getAllowedMethods(TargetType type) {
+    if (type == null)                       return new String[0];
+    if (type == TargetType.TYPE_COLLECTION) return new String[] { "GET", "POST", "HEAD", "OPTIONS" };
+    if (type == TargetType.TYPE_CATEGORIES) return new String[] { "GET", "HEAD", "OPTIONS" };
+    if (type == TargetType.TYPE_ENTRY)      return new String[] { "GET", "DELETE", "PUT", "POST", "HEAD", "OPTIONS" };
+    if (type == TargetType.TYPE_MEDIA)      return new String[] { "GET", "DELETE", "PUT", "POST", "HEAD", "OPTIONS" };
+    if (type == TargetType.TYPE_SERVICE)    return new String[] { "GET", "HEAD", "OPTIONS" };
+    return new String[] { "GET", "HEAD", "OPTIONS" };
+  }
+  
+  protected String combine(String... vals) {
+    StringBuffer buf = new StringBuffer();
+    for(String val : vals) {
+      if (buf.length() > 0) buf.append(", ");
+      buf.append(val);
+    }
+    return buf.toString();
+  }
+  
+  public ResponseContext entryPost(
+    RequestContext request) {
+      return notallowed(
+        request.getAbdera(), 
+        request, 
+        "Not Allowed", 
+        getAllowedMethods(
+          request.getTarget().getType()));
+  }
+    
+  public ResponseContext mediaPost(
+    RequestContext request) {
+      return notallowed(
+        request.getAbdera(), 
+        request, 
+        "Not Allowed", 
+        getAllowedMethods(
+          request.getTarget().getType()));
+  } 
+
+  public ResponseContext getCategories(
+    RequestContext request) {
+      Categories cats = request.getAbdera().newCategories();
+      return returnBase(cats.getDocument(), 200, new Date());
+  }
+  
+  public ResponseContext deleteMedia(
+    RequestContext request) {
+      throw new UnsupportedOperationException();
+  }
+    
+  public ResponseContext getMedia(
+    RequestContext request) {
+      throw new UnsupportedOperationException();
+  }
+  
+  public ResponseContext updateMedia(
+    RequestContext request) {
+      throw new UnsupportedOperationException();
   }
 }

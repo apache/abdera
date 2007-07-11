@@ -19,11 +19,11 @@ package org.apache.abdera.protocol.server;
 
 import java.util.Map;
 
+import javax.security.auth.Subject;
+
 import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.server.auth.SubjectResolver;
-import org.apache.abdera.protocol.server.provider.ProviderManager;
-import org.apache.abdera.protocol.server.provider.TargetResolver;
-import org.apache.abdera.protocol.server.servlet.RequestHandlerManager;
+import org.apache.abdera.protocol.ItemManager;
+import org.apache.abdera.protocol.Resolver;
 
 public interface ServiceContext {
 
@@ -31,13 +31,13 @@ public interface ServiceContext {
   
   void init(Abdera abdera, Map<String,String> config);
   
-  RequestHandlerManager getRequestHandlerManager();
+  ItemManager<RequestHandler> getRequestHandlerManager();
   
-  ProviderManager getProviderManager();
+  ItemManager<Provider> getProviderManager();
   
-  SubjectResolver getSubjectResolver();
+  Resolver<Subject> getSubjectResolver();
   
-  TargetResolver getTargetResolver(String contextPath);
+  Resolver<Target> getTargetResolver(String contextPath);
   
   String getProperty(String name);
   

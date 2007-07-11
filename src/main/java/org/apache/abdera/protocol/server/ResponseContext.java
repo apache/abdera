@@ -15,16 +15,26 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.auth;
+package org.apache.abdera.protocol.server;
 
-import java.security.Principal;
+import java.io.IOException;
+import java.io.OutputStream;
 
-import javax.security.auth.Subject;
+import org.apache.abdera.protocol.Response;
+import org.apache.abdera.writer.Writer;
 
-public interface SubjectResolver {
+public interface ResponseContext 
+  extends Response {
 
-  Subject resolve(Principal principal);
+  public boolean hasEntity();
   
-  Subject resolve(String userid);
+  public void writeTo(OutputStream out) throws IOException;
   
+  public void writeTo(java.io.Writer javaWriter) throws IOException;
+  
+  public void writeTo(OutputStream out, Writer writer) throws IOException;
+  
+  public void writeTo(java.io.Writer javaWriter, Writer abderaWriter) throws IOException;
+  
+  public void setWriter(Writer writer);
 }

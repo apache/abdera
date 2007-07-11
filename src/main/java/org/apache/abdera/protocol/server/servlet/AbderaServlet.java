@@ -18,7 +18,6 @@
 package org.apache.abdera.protocol.server.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,13 +28,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.abdera.protocol.ItemManager;
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.RequestHandler;
 import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.server.ServiceManager;
+import org.apache.abdera.protocol.server.impl.HttpServletRequestContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Sample APP servlet.
+ * Simple APP servlet.
  * 
  * @version $Id$
  */
@@ -44,12 +47,22 @@ public class AbderaServlet
 
   private static final long serialVersionUID = 2393643907128535158L;
   
-  private final static Log logger = LogFactory.getLog(AbderaServlet.class);
+  private final static Log log = LogFactory.getLog(AbderaServlet.class);
   
-  protected ServiceManager serviceManager;
+  protected ServiceManager manager;
+  protected ServiceContext context;
   
   public void init() throws ServletException {
-    serviceManager = ServiceManager.getInstance();
+    log.debug("Initialing Abdera Servlet");
+    manager = ServiceManager.getInstance();
+    context = 
+      manager.newServiceContext(
+        getProperties(
+          getServletConfig()));
+    if (context == null) {
+      log.debug("Cannot create service context");
+      throw new ServletException("Cannot create service context");
+    }
   }
   
   @Override
@@ -57,23 +70,32 @@ public class AbderaServlet
     HttpServletRequest request, 
     HttpServletResponse response) 
       throws ServletException, IOException {
-    ServiceContext context = 
-      serviceManager.newServiceContext(
-        getProperties(getServletConfig()));
-    RequestHandlerManager manager = context.getRequestHandlerManager();
-    RequestHandler handler = manager.getRequestHandler();
+    RequestContext reqcontext = new HttpServletRequestContext(context, request);
+    ItemManager<RequestHandler> manager = context.getRequestHandlerManager();
+    log.debug("Processing request");
+    RequestHandler handler = manager.get(reqcontext);
+    log.debug("Handler - " + handler);
     try {
-      handler.process(context, request, response);
+      handler.process(context, reqcontext, response);
     } catch (Throwable t) {
-      logger.error("Error servicing request", t);
-      response.setContentType("text/plain");
-      PrintWriter out = response.getWriter();
-      out.println(t);
-      t.printStackTrace(out);
-      response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      error("Error servicing request", t, response);
+      return;
     } finally {
+      log.debug("Releasing handler - " + handler);
       manager.release(handler);
     }
+    log.debug("Request complete");
+  }
+  
+  private void error(
+    String message, 
+    Throwable t, 
+    HttpServletResponse response) 
+      throws IOException {
+    if (response.isCommitted()) response.reset();
+    if (t != null) log.error(message, t);
+    else log.error(message);
+    response.sendError(500, message);
   }
   
   private Map<String,String> getProperties(ServletConfig config) {

@@ -15,7 +15,11 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.provider;
+package org.apache.abdera.protocol.server.impl;
+
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.Target;
+import org.apache.abdera.protocol.server.TargetType;
 
 public abstract class AbstractTarget 
   implements Target {
@@ -45,6 +49,10 @@ public abstract class AbstractTarget
 
   public TargetType getType() {
     return type;
+  }
+  
+  public String toString() {
+    return getType() + " - " + getIdentity();
   }
 
   @Override

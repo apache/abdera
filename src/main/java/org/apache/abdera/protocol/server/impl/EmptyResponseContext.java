@@ -15,12 +15,31 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.provider;
+package org.apache.abdera.protocol.server.impl;
 
-public interface TargetResolver {
+import java.io.IOException;
+import java.io.OutputStream;
 
-  Target resolve(RequestContext context);
+import org.apache.abdera.writer.Writer;
+
+public final class EmptyResponseContext 
+  extends AbstractResponseContext {
+
+  public EmptyResponseContext(int status) {
+    setStatus(status);
+  }
   
-  void setContextPath(String contextPath);
-  
+  public boolean hasEntity() {
+    return false;
+  }
+
+  public void writeTo(OutputStream out) 
+    throws IOException {}
+
+  public void writeTo(OutputStream out, Writer writer) throws IOException {}
+
+  public void writeTo(java.io.Writer javaWriter, Writer abderaWriter) throws IOException {}
+
+  public void writeTo(java.io.Writer javaWriter) throws IOException {}
+
 }

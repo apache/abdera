@@ -15,22 +15,23 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.provider;
+package org.apache.abdera.protocol.server;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.security.Principal;
 import java.util.List;
 
 import javax.security.auth.Subject;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.protocol.Request;
-import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.i18n.iri.IRI;
 
 public interface RequestContext 
@@ -40,13 +41,19 @@ public interface RequestContext
   public enum Property { 
     SESSIONID, SESSIONCREATED, SESSIONACCESSED, SESSIONTIMEOUT,
     CHARACTERENCODING, LOCALES, PROTOCOL, REMOTEADDRESS, REMOTEHOST,
-    REMOTEUSER, SCHEME, PRINCIPAL};
+    REMOTEUSER, SCHEME, PRINCIPAL, AUTHTYPE, CONTENTLENGTH, 
+    CONTENTTYPE, CONTEXTPATH, LOCALADDR, LOCALNAME,
+    SERVERNAME, SERVERPORT};
   
+  Abdera getAbdera();
+    
   ServiceContext getServiceContext();
     
   Target getTarget();
     
   Subject getSubject();
+  
+  Principal getPrincipal();
   
   String getMethod();
   

@@ -15,26 +15,35 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.provider;
+package org.apache.abdera.protocol.server;
 
-import java.io.IOException;
-import java.io.OutputStream;
+public interface Provider {
 
-import org.apache.abdera.protocol.Response;
-import org.apache.abdera.writer.Writer;
-
-public interface ResponseContext 
-  extends Response {
-
-  public boolean hasEntity();
+  ResponseContext createEntry(RequestContext request);
   
-  public void writeTo(OutputStream out) throws IOException;
+  ResponseContext deleteEntry(RequestContext request);
   
-  public void writeTo(java.io.Writer javaWriter) throws IOException;
+  ResponseContext deleteMedia(RequestContext request);
   
-  public void writeTo(OutputStream out, Writer writer) throws IOException;
+  ResponseContext updateEntry(RequestContext request);
   
-  public void writeTo(java.io.Writer javaWriter, Writer abderaWriter) throws IOException;
+  ResponseContext updateMedia(RequestContext request);
   
-  public void setWriter(Writer writer);
+  ResponseContext getService(RequestContext request);
+  
+  ResponseContext getFeed(RequestContext request);
+  
+  ResponseContext getEntry(RequestContext request);
+  
+  ResponseContext getMedia(RequestContext request);
+  
+  ResponseContext getCategories(RequestContext request);
+  
+  ResponseContext entryPost(RequestContext request);
+  
+  ResponseContext mediaPost(RequestContext request);
+  
+  ResponseContext request(RequestContext request);
+  
+  String[] getAllowedMethods(TargetType type);
 }

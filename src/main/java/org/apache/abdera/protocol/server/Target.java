@@ -15,12 +15,16 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.servlet;
+package org.apache.abdera.protocol.server;
 
-public interface RequestHandlerManager {
+public interface Target {
 
-  RequestHandler getRequestHandler();
+  TargetType getType();
   
-  void release(RequestHandler handler);
+  String getIdentity();
+  
+  String getParameter(String name);
+  
+  String[] getParameterNames();
   
 }

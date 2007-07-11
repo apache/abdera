@@ -15,31 +15,18 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.util;
+package org.apache.abdera.protocol.server.impl;
 
-import org.apache.abdera.protocol.server.provider.Provider;
-import org.apache.abdera.protocol.server.provider.ProviderManager;
-import org.apache.abdera.protocol.server.provider.RequestContext;
+import org.apache.abdera.protocol.ItemManager;
+import org.apache.abdera.protocol.Request;
+import org.apache.abdera.protocol.util.PoolManager;
 
-public abstract class AbstractSingletonProviderManager 
-  implements ProviderManager {
+public abstract class AbstractItemManager<T>
+  extends PoolManager<T>
+  implements ItemManager<T> {
 
-  protected Provider provider;
-  
-  public Provider getProvider(RequestContext request) {
-    if (provider == null) {
-      synchronized(this) {
-        provider = initProvider();
-      }
-    }
-    return provider;
-  }
-
-  protected abstract Provider initProvider();
-  
-  public void release(Provider provider) {
-    // nothing to release. subclasses could choose to do reference counting
-    // if they want
+  public T get(Request request) {
+    return getInstance();
   }
 
 }

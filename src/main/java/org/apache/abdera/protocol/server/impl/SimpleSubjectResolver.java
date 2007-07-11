@@ -15,19 +15,26 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.util;
+package org.apache.abdera.protocol.server.impl;
 
 import java.io.Serializable;
 import java.security.Principal;
 
 import javax.security.auth.Subject;
 
-import org.apache.abdera.protocol.server.auth.SubjectResolver;
+import org.apache.abdera.protocol.Request;
+import org.apache.abdera.protocol.Resolver;
+import org.apache.abdera.protocol.server.RequestContext;
 
 public class SimpleSubjectResolver 
-  implements SubjectResolver {
+  implements Resolver<Subject> {
 
   public static final Principal ANONYMOUS = new AnonymousPrincipal();
+  
+  public Subject resolve(Request request) {
+    RequestContext context = (RequestContext) request;
+    return resolve(context.getPrincipal());
+  }
   
   public Subject resolve(Principal principal) {
     Subject subject = new Subject();

@@ -15,9 +15,10 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.provider;
+package org.apache.abdera.protocol.server.impl;
 
 import java.io.IOException;
+import java.security.Principal;
 
 import javax.security.auth.Subject;
 
@@ -27,16 +28,23 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
+import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ServiceContext;
+import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.util.AbstractRequest;
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public abstract class AbstractRequestContext 
   extends AbstractRequest
   implements RequestContext {
 
+  private final static Log log = LogFactory.getLog(AbstractRequestContext.class);
+  
   protected final ServiceContext context;
   protected Subject subject;
+  protected Principal principal;
   protected Target target;
   protected final String method;
   protected final IRI requestUri;
@@ -53,16 +61,20 @@ public abstract class AbstractRequestContext
       this.baseUri = baseUri;
       this.requestUri = requestUri;
   }
+  
+  public Abdera getAbdera() {
+    return context.getAbdera();
+  }
     
   @SuppressWarnings("unchecked")
   public synchronized <T extends Element>Document<T> getDocument()
     throws ParseException, 
            IOException {
+    log.debug("Parsing request document");
     if (document == null) {
       Abdera abdera = context.getAbdera();
       Parser parser = abdera.getParser();
-      ParserOptions options = parser.getDefaultParserOptions();
-      document = getDocument(parser, options);
+      document = getDocument(parser);
     } 
     return document;
   }
@@ -72,6 +84,7 @@ public abstract class AbstractRequestContext
     Parser parser)
       throws ParseException, 
              IOException {
+    log.debug("Parsing request document");
     if (document == null) {
       ParserOptions options = parser.getDefaultParserOptions();
       document = getDocument(parser, options);
@@ -84,6 +97,7 @@ public abstract class AbstractRequestContext
     ParserOptions options)
      throws ParseException, 
             IOException  {
+    log.debug("Parsing request document");
     if (document == null) {
       Abdera abdera = context.getAbdera();
       Parser parser = abdera.getParser();
@@ -98,6 +112,7 @@ public abstract class AbstractRequestContext
     ParserOptions options) 
       throws ParseException, 
              IOException {
+    log.debug("Parsing request document");
     if (document == null) {
       return parser.parse(
         getInputStream(), 
@@ -124,6 +139,10 @@ public abstract class AbstractRequestContext
   
   public Subject getSubject() {
     return subject;
+  }
+  
+  public Principal getPrincipal() {
+    return principal;
   }
 
   public Target getTarget() {

@@ -15,15 +15,16 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.provider;
+package org.apache.abdera.protocol.server.impl;
 
-import org.apache.abdera.protocol.util.PoolManager;
+import org.apache.abdera.protocol.server.RequestHandler;
 
-public abstract class AbstractProviderManager
-  extends PoolManager<Provider>
-  implements ProviderManager {
+public class DefaultRequestHandlerManager 
+  extends AbstractItemManager<RequestHandler> {
 
-  public Provider getProvider(RequestContext request) {
-      return getInstance();
+  @Override
+  protected RequestHandler internalNewInstance() {
+    return new DefaultRequestHandler();
   }
+
 }

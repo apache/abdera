@@ -31,11 +31,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
+
 /**
  * HTTP Servlet Filter that implements support for Google's X-HTTP-Method-Override
  * header to perform "POST Tunneling" of various HTTP operations 
  */
 public class MethodOverrideFilter 
+  extends AbstractFilter
   implements Filter {
 
   public static final String METHODS = "org.apache.abdera.protocol.server.servlet.Overrides";
@@ -54,9 +56,10 @@ public class MethodOverrideFilter
         response);
     
     HttpServletResponse hresponse = (HttpServletResponse) response;
-    hresponse.addHeader("Vary", "X-HTTP-Method-Override, X-Method-Override");
+    hresponse.setHeader("Cache-Control", "no-cache");
   }
 
+  @Override
   public void init(FilterConfig config) throws ServletException {
     String param = config.getInitParameter(METHODS);
     if (param != null) {
@@ -68,17 +71,14 @@ public class MethodOverrideFilter
     }
   }
 
-  public void destroy() {}
-
   private class MethodOverrideRequestWrapper 
     extends HttpServletRequestWrapper {
 
+    private final String method;
+    
     public MethodOverrideRequestWrapper(HttpServletRequest request) {
       super(request);
-    }
-
-    @Override
-    public String getMethod() {
+      
       String method = super.getMethod();
       String xheader = getHeader("X-HTTP-Method-Override");
       if (xheader == null) xheader = getHeader("X-Method-Override");
@@ -88,6 +88,11 @@ public class MethodOverrideFilter
           METHODS_TO_OVERRIDE.contains(xheader)) {
         method = xheader;
       }
+      this.method = method;
+    }
+
+    @Override
+    public String getMethod() {
       return method;
     }
     

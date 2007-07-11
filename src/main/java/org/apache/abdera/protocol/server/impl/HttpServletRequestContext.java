@@ -15,12 +15,11 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.servlet;
+package org.apache.abdera.protocol.server.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.security.Principal;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
@@ -30,11 +29,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.protocol.Resolver;
+import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ServiceContext;
-import org.apache.abdera.protocol.server.auth.SubjectResolver;
-import org.apache.abdera.protocol.server.provider.AbstractRequestContext;
-import org.apache.abdera.protocol.server.provider.RequestContext;
-import org.apache.abdera.protocol.server.provider.TargetResolver;
+import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.i18n.iri.IRI;
 
 public class HttpServletRequestContext 
@@ -55,11 +53,12 @@ public class HttpServletRequestContext
       this.request = request;
       this.session = request.getSession(false);
       
-      SubjectResolver subjectResolver = context.getSubjectResolver();
+      Resolver<Subject> subjectResolver = context.getSubjectResolver();
+      principal = request.getUserPrincipal();
       subject = (subjectResolver != null)? 
-        subjectResolver.resolve((Principal)getProperty(Property.PRINCIPAL)) : null;
+        subjectResolver.resolve(this) : null;
       
-      TargetResolver targetResolver = 
+      Resolver<Target> targetResolver = 
         context.getTargetResolver(
           request.getContextPath());
       target = (targetResolver != null) ? 
@@ -80,6 +79,14 @@ public class HttpServletRequestContext
       case REMOTEUSER:        return request.getRemoteUser();
       case SCHEME:            return request.getScheme();
       case PRINCIPAL:         return request.getUserPrincipal();
+      case AUTHTYPE:          return request.getAuthType();
+      case CONTENTLENGTH:     return request.getContentLength();
+      case CONTENTTYPE:       return request.getContentType();
+      case CONTEXTPATH:       return request.getContextPath();
+      case LOCALADDR:         return request.getLocalAddr();
+      case LOCALNAME:         return request.getLocalName();
+      case SERVERNAME:        return request.getServerName();
+      case SERVERPORT:        return request.getServerPort();
       default:
         throw new UnsupportedOperationException("Property not supported"); 
     }

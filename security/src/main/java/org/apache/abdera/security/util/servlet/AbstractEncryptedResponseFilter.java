@@ -39,6 +39,7 @@ public abstract class AbstractEncryptedResponseFilter
   public void init(
     FilterConfig config) 
       throws ServletException {
+    super.init(config);
     initProvider();
   }
   

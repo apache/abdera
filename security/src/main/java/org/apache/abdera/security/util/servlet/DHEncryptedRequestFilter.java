@@ -37,7 +37,7 @@ import org.apache.abdera.security.util.DHContext;
  * Note: this is currently untested.
  */
 public class DHEncryptedRequestFilter 
-  extends AbstractEncryptedRequestFilter {
+  extends BCEncryptedRequestFilter {
 
   private DHContext context;
   
@@ -72,7 +72,9 @@ public class DHEncryptedRequestFilter
       try {
         context = (DHContext) this.context.clone();
         context.setPublicKey(dh);
-      } catch (Exception e) {}
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
     return context;
   }

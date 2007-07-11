@@ -17,19 +17,14 @@
 */
 package org.apache.abdera.examples.appserver;
 
-import org.apache.abdera.protocol.server.DefaultServiceContext;
+import org.apache.abdera.protocol.server.impl.DefaultServiceContext;
 
 public class SimpleServiceContext 
   extends DefaultServiceContext {
 
-  @Override
-  protected String getDefaultProviderManager() {
-    return SimpleProviderManager.class.getName();
-  }
-
-  @Override
-  protected String getDefaultTargetResolver() {
-    return SimpleTargetResolver.class.getName();
+  public SimpleServiceContext() {
+    this.defaultprovidermanager = SimpleProviderManager.class.getName();
+    this.defaulttargetresolver = SimpleTargetResolver.class.getName();
   }
   
 }

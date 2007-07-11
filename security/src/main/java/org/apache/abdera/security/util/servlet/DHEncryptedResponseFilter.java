@@ -17,24 +17,14 @@
 */
 package org.apache.abdera.security.util.servlet;
 
-import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.NoSuchAlgorithmException;
-import java.security.Security;
-import java.security.spec.InvalidKeySpecException;
-
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Element;
 import org.apache.abdera.security.Encryption;
 import org.apache.abdera.security.EncryptionOptions;
+import org.apache.abdera.security.util.DHContext;
 
 /**
  * A Servlet Filter that uses Diffie-Hellman Key Exchange to encrypt 
@@ -78,57 +68,45 @@ import org.apache.abdera.security.EncryptionOptions;
  * </pre>
  */
 public class DHEncryptedResponseFilter 
-  extends SecurityFilter {
+  extends BCEncryptedResponseFilter {
 
-  public void init(
-    FilterConfig config) 
-      throws ServletException {
-    try {
-      Class.forName("org.bouncycastle.LICENSE");
-      Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-    } catch (Exception e) {}
+  public static final String DH = "X-DH";
+    
+  protected boolean doEncryption(ServletRequest request, Object arg) {
+    return arg != null;
   }
   
-  @SuppressWarnings("unchecked")
-  public void doFilter(
-    ServletRequest request, 
-    ServletResponse response,
-    FilterChain chain) 
-      throws IOException, 
-             ServletException {
+  protected Object initArg(ServletRequest request) {
+    return getDHContext((HttpServletRequest)request);
+  }
+  
+  protected EncryptionOptions initEncryptionOptions(
+      ServletRequest request, 
+      ServletResponse response,
+      Encryption enc,
+      Object arg) {
+    EncryptionOptions options = null;
     try {
-      DHContext context = getDHContext((HttpServletRequest)request);
-      if (context != null) {
-        BufferingResponseWrapper wrapper = 
-          new BufferingResponseWrapper(
-            (HttpServletResponse)response);
-        chain.doFilter(request, wrapper);
-        Document<Element> doc = getDocument(wrapper);
-        if (doc != null) {  
-          Encryption enc = security.getEncryption(); 
-          EncryptionOptions options = context.getEncryptionOptions(enc);
-          Document<Element> enc_doc = enc.encrypt(doc, options);
-          returnPublicKey((HttpServletResponse)response,context);
-          enc_doc.writeTo(response.getOutputStream());
-        }
-      } else {
-        chain.doFilter(request, response);
-      }
+      DHContext context = (DHContext) arg;
+      options = context.getEncryptionOptions(enc);
+      returnPublicKey((HttpServletResponse)response,context);
     } catch (Exception e) {}
-  } 
+    return options;
+    
+  }
   
   private void returnPublicKey(HttpServletResponse response, DHContext context) {
-    response.setHeader("X-DH",context.getResponseString());
+    response.setHeader(DH,context.getResponseString());
   }
   
-  private DHContext getDHContext(HttpServletRequest request) 
-    throws InvalidAlgorithmParameterException, 
-           NoSuchAlgorithmException, 
-           InvalidKeySpecException {
-    String dh_req = request.getHeader("X-DH");
-    if (dh_req == null || dh_req.length() == 0) return null;
-    DHContext context = new DHContext(dh_req);
-    return context;
+  private DHContext getDHContext(HttpServletRequest request) {
+    try {
+      String dh_req = request.getHeader(DH);
+      if (dh_req == null || dh_req.length() == 0) return null;
+      return new DHContext(dh_req);
+    } catch (Exception e) {
+      return null;
+    }
   }
   
 }

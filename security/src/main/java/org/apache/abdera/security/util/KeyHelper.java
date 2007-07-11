@@ -24,18 +24,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.cert.Certificate;
 import java.security.Key;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+
+import org.apache.commons.codec.binary.Hex;
 
 public class KeyHelper {
   
@@ -136,6 +141,13 @@ public class KeyHelper {
       return keyGenerator.generateKey();
     }
   
+  public static Key generateKey(String type) 
+    throws NoSuchAlgorithmException {
+      KeyGenerator keygen = KeyGenerator.getInstance(type);
+      keygen.init(new SecureRandom());
+      return keygen.generateKey();
+  }
+  
   public static SecretKey generateSecretKey(
     String type, 
     int size,
@@ -146,4 +158,17 @@ public class KeyHelper {
     keyGenerator.init(size);
     return keyGenerator.generateKey();
   }
+  
+  public static PublicKey generatePublicKey(String hex) {
+    try {
+      if (hex == null || hex.trim().length() == 0) return null;
+      byte[] data = Hex.decodeHex(hex.toCharArray());
+      X509EncodedKeySpec keyspec = new X509EncodedKeySpec(data);
+      KeyFactory keyfactory = KeyFactory.getInstance("RSA");
+      return keyfactory.generatePublic(keyspec);
+    } catch (Exception e) {
+      return null;
+    }
+  }
+  
 }

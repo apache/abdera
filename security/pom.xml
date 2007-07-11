@@ -67,6 +67,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-server</artifactId>
+      <version>0.3.0-incubating-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>xml-security</groupId>
       <artifactId>xmlsec</artifactId>
     </dependency>

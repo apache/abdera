@@ -26,11 +26,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.abdera.protocol.server.ServiceManager;
-import org.apache.abdera.protocol.server.provider.AbstractRequestContext;
-import org.apache.abdera.protocol.server.provider.Target;
-import org.apache.abdera.protocol.server.provider.TargetType;
-import org.apache.abdera.protocol.server.util.RegexTargetResolver;
-import org.apache.abdera.protocol.server.util.SimpleSubjectResolver;
+import org.apache.abdera.protocol.server.Target;
+import org.apache.abdera.protocol.server.TargetType;
+import org.apache.abdera.protocol.server.impl.AbstractRequestContext;
+import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
+import org.apache.abdera.protocol.server.impl.SimpleSubjectResolver;
 import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.i18n.iri.IRI;
@@ -126,8 +126,9 @@ public class UtilityTest extends TestCase {
         new IRI(request), 
         new IRI(base));
       
-      subject = context.getSubjectResolver().resolve(
-        (Principal) getProperty(Property.PRINCIPAL));
+      principal = (Principal) getProperty(Property.PRINCIPAL); 
+      
+      subject = context.getSubjectResolver().resolve(this);
     }
 
     public Object getAttribute(Scope scope, String name) {

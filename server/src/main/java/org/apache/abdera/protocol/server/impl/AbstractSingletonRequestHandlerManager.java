@@ -15,19 +15,31 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.examples.appserver;
+package org.apache.abdera.protocol.server.impl;
 
-import org.apache.abdera.protocol.server.TargetType;
-import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
+import org.apache.abdera.protocol.ItemManager;
+import org.apache.abdera.protocol.Request;
+import org.apache.abdera.protocol.server.RequestHandler;
 
-public class SimpleTargetResolver 
-  extends RegexTargetResolver {
+public abstract class AbstractSingletonRequestHandlerManager 
+  implements ItemManager<RequestHandler> {
 
-  public SimpleTargetResolver(String contextPath) {
-    super(contextPath);
-    setPattern("/atom(\\?[^#]*)?", TargetType.TYPE_SERVICE);
-    setPattern("/atom/feed(\\?[^#]*)?", TargetType.TYPE_COLLECTION);
-    setPattern("/atom/feed/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY);
-  }
+  protected RequestHandler handler;
   
+  public RequestHandler get(Request request) {
+    if (handler == null) {
+      synchronized(this) {
+        handler = initHandler();
+      }
+    }
+    return handler;
+  }
+
+  protected abstract RequestHandler initHandler();
+  
+  public void release(RequestHandler item) {
+    // nothing to release. subclasses could choose to do reference counting
+    // if they want
+  }
+
 }

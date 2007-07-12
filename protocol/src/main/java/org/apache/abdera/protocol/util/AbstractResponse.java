@@ -38,7 +38,11 @@ public abstract class AbstractResponse
   
   public long getAge() {
     String value = getHeader("Age");
-    return (value != null) ? Long.parseLong(value) : -1;
+    try {
+      return (value != null) ? Long.parseLong(value) : -1;
+    } catch (NumberFormatException e) {
+      return -1;
+    }
   }
 
   public String getAllow() {
@@ -55,7 +59,11 @@ public abstract class AbstractResponse
 
   public long getContentLength() {
     String value = getHeader("Content-Length");
-    return (value != null) ? Long.parseLong(value) : -1;
+    try {
+      return (value != null) ? Long.parseLong(value) : -1;
+    } catch (NumberFormatException e) {
+      return -1;
+    }
   }
 
   public IRI getContentLocation() {

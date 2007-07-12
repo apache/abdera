@@ -22,9 +22,8 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.Formatter;
 
-import org.apache.abdera.protocol.client.Client;
+import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.ClientResponse;
-import org.apache.abdera.protocol.client.CommonsClient;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.util.Version;
 import org.apache.commons.httpclient.Credentials;
@@ -43,7 +42,7 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
  * <pre>
  *   GoogleLoginAuthScheme.register();
  *   
- *   Client client = new CommonsClient();
+ *   AbderaClient client = new CommonsClient();
  *   client.addCredentials(
  *     "http://beta.blogger.com", 
  *     null, "GoogleLogin", 
@@ -55,12 +54,12 @@ public class GoogleLoginAuthScheme
   extends RFC2617Scheme
   implements AuthScheme {
   
-  public static void register(Client client, boolean exclusive) {
-    Client.registerScheme("GoogleLogin", GoogleLoginAuthScheme.class);
+  public static void register(AbderaClient abderaClient, boolean exclusive) {
+    AbderaClient.registerScheme("GoogleLogin", GoogleLoginAuthScheme.class);
     if (exclusive)
-      ((CommonsClient)client).setAuthenticationSchemePriority("GoogleLogin");
+      ((AbderaClient)abderaClient).setAuthenticationSchemePriority("GoogleLogin");
     else
-      ((CommonsClient)client).setAuthenticationSchemeDefaults();
+      ((AbderaClient)abderaClient).setAuthenticationSchemeDefaults();
   }
   
   private String service = null;
@@ -125,7 +124,7 @@ public class GoogleLoginAuthScheme
   
   protected String getAuth(String id, String pwd, String service) {
     try {
-      Client client = new CommonsClient();
+      AbderaClient abderaClient = new AbderaClient();
       Formatter f = new Formatter();
       f.format(
         "Email=%s&Passwd=%s&service=%s&source=%s",
@@ -136,9 +135,9 @@ public class GoogleLoginAuthScheme
       StringRequestEntity stringreq = new StringRequestEntity(
         f.toString(),"application/x-www-form-urlencoded","utf-8");
       String uri = "https://www.google.com/accounts/ClientLogin";
-      RequestOptions options = client.getDefaultRequestOptions();
+      RequestOptions options = abderaClient.getDefaultRequestOptions();
       options.setContentType("application/x-www-form-urlencoded");
-      ClientResponse response = client.post(uri, stringreq, options);
+      ClientResponse response = abderaClient.post(uri, stringreq, options);
       InputStream in = response.getInputStream();
       ByteArrayOutputStream out = new ByteArrayOutputStream();
       int n = -1;

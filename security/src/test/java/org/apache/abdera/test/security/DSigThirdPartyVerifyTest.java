@@ -29,9 +29,8 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
-import org.apache.abdera.protocol.client.Client;
+import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.ClientResponse;
-import org.apache.abdera.protocol.client.CommonsClient;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.util.BaseRequestEntity;
 import org.apache.abdera.security.AbderaSecurity;
@@ -98,11 +97,11 @@ public class DSigThirdPartyVerifyTest extends TestCase {
           "Signature")));
 
     // Verify the signature with Verisign's "Signed Ping" interop endpoint
-    Client client = new CommonsClient();
-    RequestOptions reqoptions = client.getDefaultRequestOptions();
+    AbderaClient abderaClient = new AbderaClient();
+    RequestOptions reqoptions = abderaClient.getDefaultRequestOptions();
     reqoptions.setContentType("application/xml");
     BaseRequestEntity bre = new BaseRequestEntity(entry,false);
-    ClientResponse response = client.post(
+    ClientResponse response = abderaClient.post(
       "http://verisignlabs.com/tg/verify", 
       bre, reqoptions);
     assertEquals(200, response.getStatus());

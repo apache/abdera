@@ -43,6 +43,8 @@ public class RequestOptions
   private boolean revalidateAuth = false;
   private boolean useChunked = false;
   private boolean usePostOverride = false;
+  private boolean requestException4xx = false;
+  private boolean requestException5xx = false;
   
   private final Map<String,List<String>> headers;  
   
@@ -411,14 +413,14 @@ public class RequestOptions
   }
 
   /**
-   * Configure the Client Side cache to revalidate when using Authorization
+   * Configure the AbderaClient Side cache to revalidate when using Authorization
    */
   public boolean getRevalidateWithAuth() {
     return revalidateAuth;
   }
   
   /**
-   * Configure the Client Side cache to revalidate when using Authorization
+   * Configure the AbderaClient Side cache to revalidate when using Authorization
    */
   public void setRevalidateWithAuth(boolean revalidateAuth) {
     this.revalidateAuth= revalidateAuth;
@@ -450,5 +452,33 @@ public class RequestOptions
    */
   public boolean isUsePostOverride() {
     return this.usePostOverride;
+  }
+  
+  /**
+   * Set whether or not to throw a RequestExeption on 4xx responses
+   */
+  public void set4xxRequestException(boolean v) {
+    this.requestException4xx = v;
+  }
+  
+  /**
+   * Return true if a RequestException should be thrown on 4xx responses
+   */
+  public boolean is4xxRequestException() {
+    return this.requestException4xx;
+  }
+  
+  /**
+   * Set whether or not to throw a RequestExeption on 5xx responses
+   */
+  public void set5xxRequestException(boolean v) {
+    this.requestException5xx = v;
+  }
+  
+  /**
+   * Return true if a RequestException should be thrown on 5xx responses
+   */
+  public boolean is5xxRequestException() {
+    return this.requestException5xx;
   }
 }

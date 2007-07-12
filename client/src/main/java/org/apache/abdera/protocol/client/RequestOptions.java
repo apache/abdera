@@ -45,6 +45,7 @@ public class RequestOptions
   private boolean usePostOverride = false;
   private boolean requestException4xx = false;
   private boolean requestException5xx = false;
+  private boolean useExpectContinue = true;
   
   private final Map<String,List<String>> headers;  
   
@@ -480,5 +481,20 @@ public class RequestOptions
    */
   public boolean is5xxRequestException() {
     return this.requestException5xx;
+  }
+  
+  /**
+   * Set whether or not to use the HTTP Expect-Continue mechanism
+   * (enabled by default)
+   */
+  public void setUseExpectContinue(boolean useExpect) {
+    this.useExpectContinue = useExpect;
+  }
+  
+  /**
+   * Return true if Expect-Continue should be used
+   */
+  public boolean isUseExpectContinue() {
+    return this.useExpectContinue;
   }
 }

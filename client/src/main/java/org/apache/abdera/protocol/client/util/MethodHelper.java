@@ -34,6 +34,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.TraceMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 
 public class MethodHelper {
 
@@ -148,6 +149,13 @@ public class MethodHelper {
         httpMethod.addRequestHeader("X-HTTP-Method-Override", actual.name());
       }
       initHeaders(options, httpMethod);
+      
+      // by default use expect-continue is enabled on the client
+      // only disable if explicitly disabled
+      if (!options.isUseExpectContinue())
+        httpMethod.getParams().setBooleanParameter(
+          HttpMethodParams.USE_EXPECT_CONTINUE, false);
+      
       return httpMethod;
   }
 

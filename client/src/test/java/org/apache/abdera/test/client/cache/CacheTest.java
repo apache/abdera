@@ -22,14 +22,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.abdera.protocol.client.Client;
-import org.apache.abdera.protocol.client.CommonsClient;
+import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.protocol.client.cache.CachedResponse;
 import org.apache.abdera.test.client.JettyTest;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.mortbay.jetty.servlet.ServletHandler;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -209,7 +206,7 @@ public class CacheTest extends JettyTest {
 //      being cacheable (e.g. using Cache-Control: public). So this test 
 //      was testing incorrect behavior. 
     
-//    Client client = new CommonsClient();
+//    AbderaClient client = new CommonsClient();
 //    client.usePreemptiveAuthentication(true);
 //    client.addCredentials(CHECK_AUTH, null, null, new UsernamePasswordCredentials("james","snell"));
 //    RequestOptions options = client.getDefaultRequestOptions();
@@ -261,18 +258,18 @@ public class CacheTest extends JettyTest {
   }
   
   public void testResponseMustRevalidate() throws Exception {
-    Client client = new CommonsClient();
-    RequestOptions options = client.getDefaultRequestOptions();
+    AbderaClient abderaClient = new AbderaClient();
+    RequestOptions options = abderaClient.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
     options.setHeader("x-reqnum", "1");
-    ClientResponse response = client.get(CHECK_MUST_REVALIDATE, options);
+    ClientResponse response = abderaClient.get(CHECK_MUST_REVALIDATE, options);
   
     String resp1 = getResponse(response);
     assertEquals(resp1, "1");
     
     // Should be revalidated and use the cache
     options.setHeader("x-reqnum", "2");
-    response = client.get(CHECK_MUST_REVALIDATE, options);
+    response = abderaClient.get(CHECK_MUST_REVALIDATE, options);
     assertTrue(response instanceof CachedResponse);
     
     String resp2 = getResponse(response);
@@ -280,7 +277,7 @@ public class CacheTest extends JettyTest {
     
     // Should be revalidated and return a 404
     options.setHeader("x-reqnum", "3");
-    response = client.get(CHECK_MUST_REVALIDATE, options);  
+    response = abderaClient.get(CHECK_MUST_REVALIDATE, options);  
     assertEquals(response.getStatus(), 404);
     response.release();
 
@@ -288,11 +285,11 @@ public class CacheTest extends JettyTest {
   
   private void _methodInvalidates(int type) throws Exception {
     
-    Client client = new CommonsClient();
-    RequestOptions options = client.getDefaultRequestOptions();
+    AbderaClient abderaClient = new AbderaClient();
+    RequestOptions options = abderaClient.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
     options.setHeader("x-reqnum", "1");
-    ClientResponse response = client.get(CHECK_CACHE_INVALIDATE, options);
+    ClientResponse response = abderaClient.get(CHECK_CACHE_INVALIDATE, options);
   
     String resp1 = getResponse(response);
     response.release();
@@ -302,19 +299,19 @@ public class CacheTest extends JettyTest {
     options.setHeader("x-reqnum", "2");
     switch(type) {
       case POST:  
-        response = client.post(
+        response = abderaClient.post(
           CHECK_CACHE_INVALIDATE, 
           new ByteArrayInputStream("".getBytes()), 
           options);
         break;
       case PUT:
-        response = client.put(
+        response = abderaClient.put(
           CHECK_CACHE_INVALIDATE, 
           new ByteArrayInputStream("".getBytes()), 
           options);
         break;
       case DELETE:
-        response = client.delete(
+        response = abderaClient.delete(
           CHECK_CACHE_INVALIDATE, 
           options);
         break;
@@ -322,7 +319,7 @@ public class CacheTest extends JettyTest {
     response.release();
     
     options.setHeader("x-reqnum", "3");
-    response = client.get(CHECK_CACHE_INVALIDATE, options);
+    response = abderaClient.get(CHECK_CACHE_INVALIDATE, options);
   
     resp1 = getResponse(response);
     response.release();
@@ -331,11 +328,11 @@ public class CacheTest extends JettyTest {
   
   private void _requestCacheInvalidation(int type) throws Exception {
     
-    Client client = new CommonsClient();
-    RequestOptions options = client.getDefaultRequestOptions();
+    AbderaClient abderaClient = new AbderaClient();
+    RequestOptions options = abderaClient.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
     options.setHeader("x-reqnum", "1");
-    ClientResponse response = client.get(CHECK_CACHE_INVALIDATE, options);  
+    ClientResponse response = abderaClient.get(CHECK_CACHE_INVALIDATE, options);  
     String resp1 = getResponse(response);
     assertEquals(resp1, "1");
     
@@ -346,7 +343,7 @@ public class CacheTest extends JettyTest {
       case NOSTORE: options.setNoStore(true); break;
       case MAXAGE0: options.setMaxAge(0); break;
     }
-    response = client.get(CHECK_CACHE_INVALIDATE, options);
+    response = abderaClient.get(CHECK_CACHE_INVALIDATE, options);
   
     String resp2 = getResponse(response);
     assertEquals(resp2, "2");
@@ -358,7 +355,7 @@ public class CacheTest extends JettyTest {
       case NOSTORE: options.setNoStore(false); break;
       case MAXAGE0: options.setMaxAge(60); break;
     }
-    response = client.get(CHECK_CACHE_INVALIDATE, options);
+    response = abderaClient.get(CHECK_CACHE_INVALIDATE, options);
   
     String resp3 = getResponse(response);
     assertEquals(resp3, "2");
@@ -366,26 +363,26 @@ public class CacheTest extends JettyTest {
   
   private void _responseNoCache(int type) throws Exception {
     
-    Client client = new CommonsClient();
-    RequestOptions options = client.getDefaultRequestOptions();
+    AbderaClient abderaClient = new AbderaClient();
+    RequestOptions options = abderaClient.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
     options.setHeader("x-reqnum", "1");
     options.setHeader("x-reqtest", String.valueOf(type));
-    ClientResponse response = client.get(CHECK_NO_CACHE, options);
+    ClientResponse response = abderaClient.get(CHECK_NO_CACHE, options);
   
     String resp1 = getResponse(response);
     assertEquals(resp1, "1");
     
     // Should not use the cache
     options.setHeader("x-reqnum", "2");
-    response = client.get(CHECK_NO_CACHE, options);
+    response = abderaClient.get(CHECK_NO_CACHE, options);
   
     String resp2 = getResponse(response);
     assertEquals(resp2, "2");
     
     // Should use the cache
     options.setHeader("x-reqnum", "3");
-    response = client.get(CHECK_NO_CACHE, options);
+    response = abderaClient.get(CHECK_NO_CACHE, options);
   
     String resp3 = getResponse(response);
     assertEquals(resp3, "3");

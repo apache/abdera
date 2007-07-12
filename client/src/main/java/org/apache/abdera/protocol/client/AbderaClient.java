@@ -22,73 +22,271 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import javax.net.ssl.TrustManager;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
+import org.apache.abdera.model.Document;
+import org.apache.abdera.protocol.Response.ResponseType;
 import org.apache.abdera.protocol.client.cache.Cache;
 import org.apache.abdera.protocol.client.cache.CacheDisposition;
+import org.apache.abdera.protocol.client.cache.CacheFactory;
 import org.apache.abdera.protocol.client.cache.CachedResponse;
+import org.apache.abdera.protocol.client.cache.lru.LRUCache;
 import org.apache.abdera.protocol.client.util.BaseRequestEntity;
 import org.apache.abdera.protocol.client.util.MethodHelper;
+import org.apache.abdera.protocol.client.util.SimpleSSLProtocolSocketFactory;
 import org.apache.abdera.protocol.util.CacheControlUtil;
+import org.apache.abdera.util.ServiceUtil;
 import org.apache.abdera.util.Version;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.auth.AuthPolicy;
+import org.apache.commons.httpclient.auth.AuthScheme;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpClientParams;
+import org.apache.commons.httpclient.protocol.Protocol;
+import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
 
 /**
- * The primary Abdera HTTP Client
+ * An Atom Publishing Protocol client.
  */
-public class CommonsClient extends Client {
+public class AbderaClient {
 
-  private static final String DEFAULT_USER_AGENT = 
+  public static final String DEFAULT_USER_AGENT = 
     Version.APP_NAME + "/" + Version.VERSION;
   
+  protected final Abdera abdera;
+  protected final Cache cache;
   private final HttpClient client;
-  
-  /**
-   * Initialize the Commons Client using the default Abdera instance and User agent
-   */
-  public CommonsClient() {
-    this(DEFAULT_USER_AGENT);
+
+  public AbderaClient() {
+    this(new Abdera(),DEFAULT_USER_AGENT);
   }
   
-  /**
-   * Initialize the Commons Client using the specified Abdera instance and default user agent
-   */
-  public CommonsClient(Abdera abdera) {
-    this(DEFAULT_USER_AGENT, abdera);
+  public AbderaClient(String useragent) {
+    this(new Abdera(), useragent);
   }
   
-  /**
-   * Initialize the Commons Client using the default Abdera instance and specified user agent
-   */
-  public CommonsClient(String userAgent) {
-    this(userAgent, new Abdera());
-  }
-  
-  /**
-   * Initialize the Commons Client using the specified Abdera instance and user agent
-   */
-  public CommonsClient(String userAgent,Abdera abdera) {
-    super(abdera);
+  public AbderaClient(Abdera abdera, String useragent) {
+    this.abdera = abdera;
+    this.cache = initCache(initCacheFactory());
     MultiThreadedHttpConnectionManager connManager = 
       new MultiThreadedHttpConnectionManager();
     client = new HttpClient(connManager);
     client.getParams().setParameter(
       HttpClientParams.USER_AGENT, 
-      userAgent);
+      useragent);
     client.getParams().setBooleanParameter(
       HttpClientParams.USE_EXPECT_CONTINUE, true);  
     client.getParams().setCookiePolicy(
       CookiePolicy.BROWSER_COMPATIBILITY);
     setAuthenticationSchemeDefaults();
+  }
+  
+  public AbderaClient(Abdera abdera) {
+    this(abdera,DEFAULT_USER_AGENT);
+  }
+    
+  private CacheFactory initCacheFactory() {
+    CacheFactory cacheFactory = 
+      (CacheFactory)ServiceUtil.newInstance(
+        "org.apache.abdera.protocol.cache.CacheFactory",
+        "org.apache.abdera.protocol.cache.lru.LRUCacheFactory", 
+        abdera);
+    return cacheFactory;
+  }
+  
+  public Cache getCache() {
+    return cache;
+  }
+  
+  public Cache initCache(CacheFactory factory) {
+    Cache cache = null;
+    if (factory != null) cache = factory.getCache(abdera);
+    return (cache != null) ? cache : new LRUCache(abdera);
+  }
+  
+  public ClientResponse head(
+    String uri, 
+    RequestOptions options) {
+      return execute("HEAD", uri, (RequestEntity)null, options);
+  }
+  
+  public ClientResponse get(
+    String uri, 
+    RequestOptions options) {
+      return execute("GET", uri, (RequestEntity)null, options);
+  }
+  
+  public ClientResponse post(
+    String uri, 
+    RequestEntity entity, 
+    RequestOptions options) {
+      return execute("POST", uri, entity, options);
+  }
+
+  public ClientResponse post(
+    String uri, 
+    InputStream in, 
+    RequestOptions options) {
+      return execute("POST", uri, new InputStreamRequestEntity(in), options);
+  }
+
+  public ClientResponse post(
+    String uri, 
+    Base base, 
+    RequestOptions options) {
+      if (base instanceof Document) {
+        Document d = (Document) base;
+        if (options.getSlug() == null && 
+            d.getSlug() != null) 
+          options.setSlug(d.getSlug());
+      }
+      return execute("POST", uri, new BaseRequestEntity(base, options.isUseChunked()), options);
+  }
+    
+  public ClientResponse put(
+    String uri, 
+    RequestEntity entity, 
+    RequestOptions options) {
+      return execute("PUT", uri, entity, options);
+  }
+
+  public ClientResponse put(
+    String uri, 
+    InputStream in, 
+    RequestOptions options) {
+      return execute("PUT", uri, new InputStreamRequestEntity(in), options);
+  }
+
+  public ClientResponse put(
+      String uri, 
+      Base base, 
+      RequestOptions options) {
+    if (base instanceof Document) {
+      Document d = (Document) base;
+      if (options.getSlug() == null && 
+          d.getSlug() != null) 
+        options.setSlug(d.getSlug());
+    }
+    return execute("PUT", uri, new BaseRequestEntity(base, options.isUseChunked()), options);
+  }
+      
+  public ClientResponse delete(
+    String uri, 
+    RequestOptions options) {
+      return execute("DELETE", uri, (RequestEntity)null, options);
+  }
+  
+  public ClientResponse head(String uri) {
+    return head(uri, getDefaultRequestOptions());
+  }
+  
+  public ClientResponse get(String uri) {
+    return get(uri, getDefaultRequestOptions());
+  }
+    
+  public ClientResponse post(
+    String uri, 
+    RequestEntity entity) {
+    return post(uri, entity, getDefaultRequestOptions());
+  }
+  
+  public ClientResponse post(
+    String uri, 
+    InputStream in) {
+      return post(uri, in, getDefaultRequestOptions());
+  }
+  
+  public ClientResponse post(
+    String uri, 
+    Base base) {
+      return post(uri, base, getDefaultRequestOptions());
+  }
+
+  public ClientResponse put(
+    String uri, 
+    RequestEntity entity) {
+      return put(uri, entity, getDefaultRequestOptions());
+  }
+  
+  public ClientResponse put(
+    String uri, 
+    InputStream in) {
+      return put(uri, in, getDefaultRequestOptions());
+  }
+  
+  public ClientResponse put(
+    String uri, 
+    Base base) {
+      return put(uri, base, getDefaultRequestOptions());
+  }
+
+  public ClientResponse delete(
+    String uri) {
+      return delete(uri, getDefaultRequestOptions());
+  }
+  
+  /**
+   * Register a new authentication scheme.
+   * 
+   * @param name
+   * @param scheme
+   */
+  public static <T extends AuthScheme>void registerScheme(
+    String name, 
+    Class<T> scheme) {
+      AuthPolicy.registerAuthScheme(name, scheme);
+  }
+  
+  public static void registerTrustManager(
+    TrustManager trustManager) {
+      registerTrustManager(trustManager,443);
+  }
+  
+  public static void registerTrustManager() {
+    registerTrustManager(443);
+  }
+  
+  public static void registerTrustManager(
+    TrustManager trustManager, 
+    int port) {
+      SimpleSSLProtocolSocketFactory f = 
+        new SimpleSSLProtocolSocketFactory(trustManager);
+      registerFactory(f,port);
+  }
+  
+  public static void registerTrustManager(int port) {
+    SimpleSSLProtocolSocketFactory f = 
+      new SimpleSSLProtocolSocketFactory();
+    registerFactory(f,port);
+  }
+  
+  public static void registerFactory(
+    SecureProtocolSocketFactory factory, 
+    int port) {
+      Protocol.registerProtocol(
+        "https",
+        new Protocol(
+          "https", 
+          (ProtocolSocketFactory)factory, port));
+  }
+  
+  private static void registerFactory(
+    SimpleSSLProtocolSocketFactory factory, 
+    int port) {
+      Protocol.registerProtocol(
+        "https", 
+        new Protocol(
+          "https", 
+          (ProtocolSocketFactory)factory, port));
   }
   
   /**
@@ -147,7 +345,6 @@ public class CommonsClient extends Client {
       return execute(method,uri,re,options);
   }
   
-  @Override
   public ClientResponse execute(
     String method, 
     String uri, 
@@ -168,8 +365,10 @@ public class CommonsClient extends Client {
                   disp;
         switch(disp) {
           case FRESH:                                                            // CACHE HIT: FRESH
-            if (cached_response != null)
+            if (cached_response != null) {
+              checkRequestException(cached_response,options);
               return cached_response;
+            }
           case STALE:                                                            // CACHE HIT: STALE
             // revalidate the cached entry
             if (cached_response != null && cached_response.getEntityTag() != null) {
@@ -188,21 +387,32 @@ public class CommonsClient extends Client {
                  httpMethod.getStatusCode() == 412) &&
                 cached_response != null) return cached_response;
             ClientResponse response = new CommonsResponse(abdera,httpMethod);
-            return (options.getUseLocalCache()) ?
+            response = (options.getUseLocalCache()) ?
               response = cache.update(options, response, cached_response) : 
               response;
+            checkRequestException(response,options);
+            return response;
         }
       } catch (Throwable t) {
+        if (t instanceof ClientException) throw (ClientException)t;
         throw new ClientException(t);
       }
   }
 
-  @Override
+  private void checkRequestException(
+    ClientResponse response, 
+    RequestOptions options) {
+      if (response == null) return;
+      ResponseType type = response.getType();
+      if ((type.equals(ResponseType.CLIENT_ERROR) && options.is4xxRequestException()) ||
+          (type.equals(ResponseType.SERVER_ERROR) && options.is5xxRequestException()))
+        throw new RequestException(response);
+  }
+  
   public RequestOptions getDefaultRequestOptions() {
     return MethodHelper.createDefaultRequestOptions();
   }
   
-  @Override
   public void addCredentials(
     String target,
     String realm,
@@ -258,4 +468,5 @@ public class CommonsClient extends Client {
     ((MultiThreadedHttpConnectionManager)
       client.getHttpConnectionManager()).shutdown();
   }
+
 }

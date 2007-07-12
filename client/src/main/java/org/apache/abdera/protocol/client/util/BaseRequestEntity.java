@@ -26,7 +26,7 @@ import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.commons.httpclient.methods.RequestEntity;
 
 /**
- * Required for the Apache Commons HTTP Client.
+ * Required for the Apache Commons HTTP AbderaClient.
  */
 public class BaseRequestEntity 
   implements RequestEntity {

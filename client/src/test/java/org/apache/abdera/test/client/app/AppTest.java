@@ -41,8 +41,7 @@ import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
-import org.apache.abdera.protocol.client.Client;
-import org.apache.abdera.protocol.client.CommonsClient;
+import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.test.client.JettyTest;
@@ -331,20 +330,20 @@ public class AppTest extends JettyTest {
   }  
   
   public void testRequestOptions() throws Exception {
-    Client client = new CommonsClient();
-    RequestOptions options = client.getDefaultRequestOptions();
+    AbderaClient abderaClient = new AbderaClient();
+    RequestOptions options = abderaClient.getDefaultRequestOptions();
     options.setIfModifiedSince(new Date());
     assertNotNull(options.getIfModifiedSince());
   }
   
   public void testAppClient() throws Exception {
-    Client client = new CommonsClient();
+    AbderaClient abderaClient = new AbderaClient();
     Entry entry = getFactory().newEntry();
-    RequestOptions options = client.getDefaultRequestOptions();
+    RequestOptions options = abderaClient.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
 
     // do the introspection step
-    ClientResponse response = client.get("http://localhost:8080/service",
+    ClientResponse response = abderaClient.get("http://localhost:8080/service",
                                          options);
     String col_uri;
 
@@ -369,7 +368,7 @@ public class AppTest extends JettyTest {
     }
 
     // post a new entry
-    response = client.post(col_uri, entry, options);
+    response = abderaClient.post(col_uri, entry, options);
 
     String self_uri;
 
@@ -384,7 +383,7 @@ public class AppTest extends JettyTest {
     }
  
     // get the collection to see if our entry is there
-    response = client.get(col_uri, options);
+    response = abderaClient.get(col_uri, options);
 
     try {
       assertEquals(200, response.getStatus());
@@ -395,7 +394,7 @@ public class AppTest extends JettyTest {
     }
 
     // get the entry to see if we can get it
-    response = client.get(self_uri, options);
+    response = abderaClient.get(self_uri, options);
 
     String edit_uri;
 
@@ -418,7 +417,7 @@ public class AppTest extends JettyTest {
     }
 
     // submit the changed entry back to the server
-    response = client.put(edit_uri, entry, options);
+    response = abderaClient.put(edit_uri, entry, options);
 
     try {
       assertEquals(204, response.getStatus());
@@ -427,7 +426,7 @@ public class AppTest extends JettyTest {
     }
 
     // check to see if the entry was modified properly
-    response = client.get(self_uri, options);
+    response = abderaClient.get(self_uri, options);
 
     try {
       assertEquals(200, response.getStatus());
@@ -439,7 +438,7 @@ public class AppTest extends JettyTest {
     }
 
     // delete the entry
-    response = client.delete(edit_uri, options);
+    response = abderaClient.delete(edit_uri, options);
 
     try {
       assertEquals(204, response.getStatus());
@@ -448,7 +447,7 @@ public class AppTest extends JettyTest {
     }
 
     // is it gone?
-    response = client.get(self_uri, options);
+    response = abderaClient.get(self_uri, options);
 
     try {
       assertEquals(404, response.getStatus());
@@ -461,11 +460,11 @@ public class AppTest extends JettyTest {
     // Now let's try to do a media post
     
     // Post the media resource
-    options = client.getDefaultRequestOptions();
+    options = abderaClient.getDefaultRequestOptions();
     options.setContentType("text/plain");
     options.setHeader("Connection", "close");
 
-    response = client.post(col_uri,
+    response = abderaClient.post(col_uri,
                            new ByteArrayInputStream("test".getBytes()),
                            options);
 
@@ -480,9 +479,9 @@ public class AppTest extends JettyTest {
     }
 
     // was an entry created?
-    options = client.getDefaultRequestOptions();
+    options = abderaClient.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
-    response = client.get(self_uri, options);
+    response = abderaClient.get(self_uri, options);
 
     String edit_media, media;
 
@@ -509,11 +508,11 @@ public class AppTest extends JettyTest {
     }
 
     // submit the changes
-    options = client.getDefaultRequestOptions();
+    options = abderaClient.getDefaultRequestOptions();
     options.setContentType("application/atom+xml;type=entry");
     options.setHeader("Connection", "close");
 
-    response = client.put(edit_uri, entry, options);
+    response = abderaClient.put(edit_uri, entry, options);
 
     try {
       assertEquals(204, response.getStatus());
@@ -522,7 +521,7 @@ public class AppTest extends JettyTest {
     }
 
     // get the media resource
-    response = client.get(media);
+    response = abderaClient.get(media);
 
     try {
       assertEquals(200, response.getStatus());
@@ -534,11 +533,11 @@ public class AppTest extends JettyTest {
     }
 
     // edit the media resource
-    options = client.getDefaultRequestOptions();
+    options = abderaClient.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
     options.setContentType("text/plain");
 
-    response = client.put(edit_media,
+    response = abderaClient.put(edit_media,
                           new ByteArrayInputStream("TEST".getBytes()),
                           options);
 
@@ -549,7 +548,7 @@ public class AppTest extends JettyTest {
     }
 
     // was the resource changed?
-    response = client.get(media, options);
+    response = abderaClient.get(media, options);
 
     try {
       assertEquals(200, response.getStatus());
@@ -561,7 +560,7 @@ public class AppTest extends JettyTest {
     }
 
     // delete the entry
-    response = client.delete(edit_uri, options);
+    response = abderaClient.delete(edit_uri, options);
 
     try {
       assertEquals(204, response.getStatus());
@@ -570,7 +569,7 @@ public class AppTest extends JettyTest {
     }
 
     // is the entry gone?
-    response = client.get(self_uri, options);
+    response = abderaClient.get(self_uri, options);
 
     try {
       assertEquals(404, response.getStatus());
@@ -581,7 +580,7 @@ public class AppTest extends JettyTest {
     // is the media resource gone?
     options.setNoCache(true); // need to force revalidation to check
 
-    response = client.get(media, options);
+    response = abderaClient.get(media, options);
 
     try {
       assertEquals(404, response.getStatus());

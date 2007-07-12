@@ -22,8 +22,7 @@ import java.security.SecureRandom;
 import java.util.Date;
 
 import org.apache.abdera.model.AtomDate;
-import org.apache.abdera.protocol.client.Client;
-import org.apache.abdera.protocol.client.CommonsClient;
+import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.httpclient.Credentials;
@@ -34,7 +33,7 @@ import org.apache.commons.httpclient.auth.AuthenticationException;
 import org.apache.commons.httpclient.auth.RFC2617Scheme;
 
 /**
- * WSSE Auth Scheme implementation for use with HTTP Commons Client
+ * WSSE Auth Scheme implementation for use with HTTP Commons AbderaClient
  * Some APP implementations use WSSE for authentication
  * 
  * @see http://www.xml.com/pub/a/2003/12/17/dive.html
@@ -45,12 +44,12 @@ public class WSSEAuthScheme
 
   private final int NONCE_LENGTH = 16;
   
-  public static void register(Client client, boolean exclusive) {
-    Client.registerScheme("WSSE", WSSEAuthScheme.class);
+  public static void register(AbderaClient abderaClient, boolean exclusive) {
+    AbderaClient.registerScheme("WSSE", WSSEAuthScheme.class);
     if (exclusive)
-      ((CommonsClient)client).setAuthenticationSchemePriority("WSSE");
+      ((AbderaClient)abderaClient).setAuthenticationSchemePriority("WSSE");
     else
-      ((CommonsClient)client).setAuthenticationSchemeDefaults();
+      ((AbderaClient)abderaClient).setAuthenticationSchemeDefaults();
   }
   
   public String authenticate(

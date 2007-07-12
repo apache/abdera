@@ -20,7 +20,7 @@ package org.apache.abdera.ext.gdata;
 import org.apache.commons.httpclient.Credentials;
 
 /**
- * <p>When using the GoogleLoginAuthScheme with the typical Commons Client
+ * <p>When using the GoogleLoginAuthScheme with the typical Commons AbderaClient
  * UsernamePasswordCredentials, the AuthScheme implementation will request
  * a new auth token from the Google server for every request.  To make it 
  * a more efficient, clients can use GoogleLoginAuthCredentials which will
@@ -30,7 +30,7 @@ import org.apache.commons.httpclient.Credentials;
  * <pre>
  *    GoogleLoginAuthScheme.register();
  *   
- *   Client client = new CommonsClient();
+ *   AbderaClient client = new CommonsClient();
  *   
  *   GoogleLoginAuthCredentials credentials = 
  *     new GoogleLoginAuthCredentials(

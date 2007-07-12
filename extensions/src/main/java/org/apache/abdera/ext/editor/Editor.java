@@ -35,21 +35,20 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
-import org.apache.abdera.protocol.client.Client;
+import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.ClientResponse;
-import org.apache.abdera.protocol.client.CommonsClient;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.util.EntityTag;
 
 /**
- * A rudimentary, and currently incomplete editor client.  Encapsulates the
- * use of the client module apis to interact with APP servers. 
+ * A rudimentary, and currently incomplete editor abderaClient.  Encapsulates the
+ * use of the abderaClient module apis to interact with APP servers. 
  */
 public class Editor {
 
   private final Abdera abdera;
   private final Service service;
-  private final Client client;
+  private final AbderaClient abderaClient;
   private Workspace workspace;
   private Collection collection;
   private Document<Feed> feeddoc;
@@ -70,10 +69,10 @@ public class Editor {
     Abdera abdera,
     String serviceDocument) {
     this.abdera = abdera;
-    this.client = new CommonsClient(abdera);
+    this.abderaClient = new AbderaClient(abdera);
     Document<Service> servicedoc = 
       getDocument(
-        client, 
+        abderaClient, 
         abdera, 
         serviceDocument);
     this.service = servicedoc.getRoot();
@@ -84,15 +83,15 @@ public class Editor {
     Service service) {
       this.abdera = abdera;
       this.service = service;
-      this.client = new CommonsClient(abdera);
+      this.abderaClient = new AbderaClient(abdera);
   }
   
   private static <T extends Element>Document<T> getDocument(
-    Client client,
+    AbderaClient abderaClient,
     Abdera abdera, 
     String document) {
     
-    ClientResponse resp = client.get(document);
+    ClientResponse resp = abderaClient.get(document);
     switch(resp.getType()) {
       case SUCCESS:
         Document<T> doc = resp.getDocument();
@@ -121,8 +120,8 @@ public class Editor {
     return service;
   }
   
-  public Client getClient() {
-    return client;
+  public AbderaClient getClient() {
+    return abderaClient;
   }
   
   public List<Workspace> getWorkspaces() {
@@ -159,7 +158,7 @@ public class Editor {
       if (this.feeddoc == null) {
         this.feeddoc = 
           getDocument(
-            client, 
+            abderaClient, 
             abdera, 
             collection.getResolvedHref().toString());
       }
@@ -186,7 +185,7 @@ public class Editor {
       if (np != null) {
         this.feeddoc = 
           getDocument(
-            client, 
+            abderaClient, 
             abdera, 
             np.toString());
       }
@@ -212,7 +211,7 @@ public class Editor {
       if (np != null) {
         this.feeddoc = 
           getDocument(
-            client, 
+            abderaClient, 
             abdera, 
             np.toString());
       }
@@ -247,7 +246,7 @@ public class Editor {
     
     private void getMedia(IRI editMediaLink) 
       throws IOException {
-      ClientResponse resp = client.get(editMediaLink.toString());
+      ClientResponse resp = abderaClient.get(editMediaLink.toString());
       switch(resp.getType()) {
         case SUCCESS:
           this.media = resp.getInputStream();
@@ -287,14 +286,14 @@ public class Editor {
     }
     
     public boolean delete() {
-      RequestOptions options = client.getDefaultRequestOptions();
+      RequestOptions options = abderaClient.getDefaultRequestOptions();
       if (etag != null) {
         options.setIfMatch(etag.toString());
       }
       if (lastModified != null && etag == null) {
         options.setIfUnmodifiedSince(lastModified);
       }
-      ClientResponse resp = client.delete(editMediaLink.toString(),options);
+      ClientResponse resp = abderaClient.delete(editMediaLink.toString(),options);
       switch(resp.getType()) {
         case SUCCESS:
           return true;
@@ -310,7 +309,7 @@ public class Editor {
     }
     
     public boolean save() {
-      RequestOptions options = client.getDefaultRequestOptions();
+      RequestOptions options = abderaClient.getDefaultRequestOptions();
       if (etag != null) {
         options.setIfMatch(etag.toString());
       }
@@ -318,7 +317,7 @@ public class Editor {
         options.setIfUnmodifiedSince(lastModified);
       }
       if (contentType != null) options.setContentType(contentType);
-      ClientResponse resp = client.put(editMediaLink.toString(), media, options);
+      ClientResponse resp = abderaClient.put(editMediaLink.toString(), media, options);
       switch(resp.getType()) {
         case SUCCESS:
           return true;
@@ -350,7 +349,7 @@ public class Editor {
     public EntryEditor(Entry entry) {
       this.editLink = entry.getEditLinkResolvedHref();
       this.editMediaLink = entry.getEditMediaLinkResolvedHref();
-      entryDoc = getDocument(client,abdera,this.editLink.toString());
+      entryDoc = getDocument(abderaClient,abdera,this.editLink.toString());
     }
     
     public Entry getEntry() {
@@ -369,7 +368,7 @@ public class Editor {
     }
     
     public boolean delete() {
-      RequestOptions options = client.getDefaultRequestOptions();
+      RequestOptions options = abderaClient.getDefaultRequestOptions();
       EntityTag etag = entryDoc.getEntityTag();
       Date lm = entryDoc.getLastModified();
       if (etag != null) {
@@ -378,7 +377,7 @@ public class Editor {
       if (lm != null && etag == null) {
         options.setIfUnmodifiedSince(lm);
       }
-      ClientResponse resp = client.delete(editLink.toString(),options);
+      ClientResponse resp = abderaClient.delete(editLink.toString(),options);
       switch(resp.getType()) {
         case SUCCESS:
           return true;
@@ -394,7 +393,7 @@ public class Editor {
     }
     
     public boolean save() {
-      RequestOptions options = client.getDefaultRequestOptions();
+      RequestOptions options = abderaClient.getDefaultRequestOptions();
       EntityTag etag = entryDoc.getEntityTag();
       Date lm = entryDoc.getLastModified();
       if (etag != null) {
@@ -403,7 +402,7 @@ public class Editor {
       if (lm != null && etag == null) {
         options.setIfUnmodifiedSince(lm);
       }
-      ClientResponse resp = client.put(editLink.toString(), entryDoc, options);
+      ClientResponse resp = abderaClient.put(editLink.toString(), entryDoc, options);
       switch(resp.getType()) {
         case SUCCESS:
           return true;
@@ -420,7 +419,7 @@ public class Editor {
     
     public void refresh() {
       entryDoc = getDocument(
-        client, 
+        abderaClient, 
         abdera, 
         editLink.toString());
     }

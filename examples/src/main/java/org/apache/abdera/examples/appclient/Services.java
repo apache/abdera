@@ -33,8 +33,7 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.protocol.Response;
-import org.apache.abdera.protocol.client.Client;
-import org.apache.abdera.protocol.client.CommonsClient;
+import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
@@ -57,21 +56,21 @@ public class Services {
     entry.setContentAsXhtml("<p>This is an example post to the new blogger beta</p>");
     
     // Initialize the client
-    Client client = new CommonsClient(abdera);
+    AbderaClient abderaClient = new AbderaClient(abdera);
     
     // Get and set the GoogleLogin authentication token
     GoogleLoginAuthCredentials creds = 
       new GoogleLoginAuthCredentials(
         "username", "password","blogger");
-    client.addCredentials(
+    abderaClient.addCredentials(
       "http://beta.blogger.com", 
       null, "GoogleLogin", creds);
     
-    RequestOptions options = client.getDefaultRequestOptions();
+    RequestOptions options = abderaClient.getDefaultRequestOptions();
     options.setUseChunked(false);
     
     // Post the entry
-    Response response = client.post(
+    Response response = abderaClient.post(
       "http://beta.blogger.com/feeds/7352231422284704069/posts/full", 
       entry, options);
     
@@ -103,20 +102,20 @@ public class Services {
     entry.setContentAsHtml("<p>This is an example post to Roller</p>");
     
     // Initialize the client and set the authentication credentials
-    Client client = new CommonsClient(abdera);
-    client.addCredentials(
+    AbderaClient abderaClient = new AbderaClient(abdera);
+    abderaClient.addCredentials(
     start, null, null, 
     new UsernamePasswordCredentials(
       "username", "password"));
     
     // Get the service document and look up the collection uri
-    Document<Service> service_doc = client.get(start).getDocument();
+    Document<Service> service_doc = abderaClient.get(start).getDocument();
     Service service = service_doc.getRoot();
     Collection collection = service.getWorkspaces().get(0).getCollections().get(0);
     String uri = collection.getHref().toString();
       
     // Post the entry to the collection
-    Response response = client.post(uri, entry);
+    Response response = abderaClient.post(uri, entry);
     
     // Check the result
     if (response.getStatus() == 201)
@@ -140,14 +139,14 @@ public class Services {
     InputStreamRequestEntity re = new InputStreamRequestEntity(fis, "audio/mp3");
     
     // Initialize the client and set the auth credentials
-    Client client = new CommonsClient(abdera);
-    client.addCredentials(
+    AbderaClient abderaClient = new AbderaClient(abdera);
+    abderaClient.addCredentials(
     start, null, null, 
     new UsernamePasswordCredentials(
       "username", "password"));
     
     // Get the service doc and locate the href of the collection
-    Document<Service> service_doc = client.get(start).getDocument();
+    Document<Service> service_doc = abderaClient.get(start).getDocument();
     Service service = service_doc.getRoot();
     Collection collection = service.getWorkspaces().get(0).getCollections().get(1);
     String uri = collection.getHref().toString();
@@ -155,11 +154,11 @@ public class Services {
     // Set the filename.  Note: the Title header was used by older drafts
     // of the Atom Publishing Protocol and should no longer be used.  The
     // current Roller APP implementation still currently requires it.
-    RequestOptions options = client.getDefaultRequestOptions();
+    RequestOptions options = abderaClient.getDefaultRequestOptions();
     options.setHeader("Title", "mypodcast.mp3");
     
     // Post the entry
-    Response response = client.post(uri, re, options);
+    Response response = abderaClient.post(uri, re, options);
     
     // Check the response
     if (response.getStatus() == 201)
@@ -211,29 +210,29 @@ public class Services {
     el.setAttributeValue("endTime", AtomDate.valueOf(new Date()).toString());
     
     // Prepare the client
-    Client client = new CommonsClient(abdera);
+    AbderaClient abderaClient = new AbderaClient(abdera);
     
     // Get and set the GoogleLogin auth token
     GoogleLoginAuthCredentials creds = 
       new GoogleLoginAuthCredentials(
         "username", "password","cl");
-    client.addCredentials(
+    abderaClient.addCredentials(
       "http://www.google.com/calendar", 
       null, "GoogleLogin", creds);
     
     String uri = "http://www.google.com/calendar/feeds/default/private/full";
     
-    RequestOptions options = client.getDefaultRequestOptions();
+    RequestOptions options = abderaClient.getDefaultRequestOptions();
     options.setUseChunked(false);
     
     // Post the entry
-    Response response = client.post(uri, entry, options);
+    Response response = abderaClient.post(uri, entry, options);
     
     // Google Calendar might return a 302 response with a new POST URI.
     // If it does, get the new URI and post again
     if (response.getStatus() == 302) {
       uri = response.getLocation().toString();
-      response = client.post(uri, entry, options);
+      response = abderaClient.post(uri, entry, options);
     }
     
     // Check the response

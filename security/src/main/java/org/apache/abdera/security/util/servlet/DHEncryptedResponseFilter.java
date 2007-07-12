@@ -32,7 +32,7 @@ import org.apache.abdera.security.util.DHContext;
  * 
  * X-DH: p={dh_p}, g={dh_g}, l={dh_l}, k={base64_pubkey}
  * 
- * Example Client Code:
+ * Example AbderaClient Code:
  * <pre>
  *   DHContext context = new DHContext();
  *   Abdera abdera = new Abdera();

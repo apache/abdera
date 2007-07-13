@@ -30,34 +30,39 @@ import org.apache.abdera.model.Base;
 /**
  * Utility implementation of javax.activation.DataSource that wraps Abdera Base
  */
-public class AbderaDataSource 
+public final class AbderaDataSource 
   implements DataSource {
-
-  private Base base = null;
+  
+  private final byte[] data;
+  private final String mimetype;
+  private final String name;
   
   public AbderaDataSource(Base base) {
-    this.base = base;
+    this.data = read(base);
+    this.mimetype = MimeTypeHelper.getMimeType(base);
+    this.name = base.getClass().getName();
   }
   
-  public String getContentType() {
-    return MimeTypeHelper.getMimeType(base);
-  }
-
-  public InputStream getInputStream() throws IOException {
+  private byte[] read(Base base) {
+    byte[] data = null;
     try {
       ByteArrayOutputStream out = new ByteArrayOutputStream();
       base.writeTo(out);
-      ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
-      return in;
-    } catch (IOException io) {
-      throw io;
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+      data = out.toByteArray();
+    } catch (IOException e) {}
+    return data;
+  }
+  
+  public String getContentType() {
+    return mimetype;
+  }
+
+  public InputStream getInputStream() throws IOException {
+    return new ByteArrayInputStream(data);
   }
 
   public String getName() {
-    return "Abdera Data Source::" + base.getClass().getName();
+    return "Abdera Data Source::" + name;
   }
 
   public OutputStream getOutputStream() throws IOException {

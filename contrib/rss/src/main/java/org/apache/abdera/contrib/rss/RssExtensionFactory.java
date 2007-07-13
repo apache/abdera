@@ -17,114 +17,67 @@
 */
 package org.apache.abdera.contrib.rss;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.namespace.QName;
-
-import org.apache.abdera.factory.ExtensionFactory;
-import org.apache.abdera.model.Base;
-import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Element;
+import org.apache.abdera.util.AbstractExtensionFactory;
 
 public class RssExtensionFactory 
-  implements ExtensionFactory, RssConstants {
+  extends AbstractExtensionFactory 
+  implements RssConstants {
 
-  @SuppressWarnings("unchecked")
-  public <T extends Element> T getElementWrapper(Element internal) {
-    
-    QName qname = internal.getQName();
-    if (qname.equals(QNAME_RSS)) {
-      if (internal.getAttributeValue("version") != null) {
-        return (T)(new RssFeed(internal));
-      }
-    } if (qname.equals(QNAME_RDF)) {
-      return (T)(new RssFeed(internal));
-    } else if (qname.equals(QNAME_CHANNEL) || qname.equals(QNAME_RDF_CHANNEL)) {
-      return (T)(new RssChannel(internal)); 
-    } else if (qname.equals(QNAME_ITEM) || qname.equals(QNAME_RDF_ITEM)) {
-      return (T)(new RssItem(internal));
-    } else if (qname.equals(QNAME_LINK) || qname.equals(QNAME_RDF_LINK)) {
-      return (T)(new RssLink(internal));
-    } else if (qname.equals(QNAME_TITLE) || 
-               qname.equals(QNAME_RDF_TITLE) ||
-               qname.equals(QNAME_DC_TITLE) ||
-               qname.equals(QNAME_DESCRIPTION) || 
-               qname.equals(QNAME_RDF_DESCRIPTION) ||
-               qname.equals(QNAME_DC_DESCRIPTION) ||
-               qname.equals(QNAME_COPYRIGHT) || 
-               qname.equals(QNAME_DC_RIGHTS)) {
-      return (T)(new RssText(internal));
-    } else if (qname.equals(QNAME_MANAGINGEDITOR) || 
-               qname.equals(QNAME_MANAGINGEDITOR2) || 
-               qname.equals(QNAME_DC_CREATOR) ||
-               qname.equals(QNAME_DC_CONTRIBUTOR) ||
-               qname.equals(QNAME_WEBMASTER) ||
-               qname.equals(QNAME_WEBMASTER2)) {
-      return (T)(new RssPerson(internal));
-    } else if (qname.equals(QNAME_PUBDATE) || 
-               qname.equals(QNAME_PUBDATE2) ||
-               qname.equals(QNAME_LASTBUILDDATE) || 
-               qname.equals(QNAME_LASTBUILDDATE2) ||
-               qname.equals(QNAME_DC_DATE)) {
-      return (T)(new RssDateTime(internal));
-    } else if (qname.equals(QNAME_CATEGORY) || 
-               qname.equals(QNAME_DC_SUBJECT)) {
-      return (T)(new RssCategory(internal));
-    } else if (qname.equals(QNAME_GENERATOR)) {
-      return (T)(new RssGenerator(internal));
-    } else if (qname.equals(QNAME_DOCS)) {
-      return (T)(new RssLink(internal));
-    } else if (qname.equals(QNAME_CLOUD)) {
-      return (T)(new RssCloud(internal));
-    } else if (qname.equals(QNAME_TTL)) {
-      return (T)(new RssText(internal));
-    } else if (qname.equals(QNAME_IMAGE) || qname.equals(QNAME_RDF_IMAGE)) {
-      return (T)(new RssImage(internal));
-    } else if (qname.equals(QNAME_RATING)) {
-      return (T) internal;
-    } else if (qname.equals(QNAME_TEXTINPUT) || qname.equals(QNAME_TEXTINPUT2)) {
-      return (T)(new RssTextInput(internal));
-    } else if (qname.equals(QNAME_SKIPHOURS) || qname.equals(QNAME_SKIPHOURS2)) {
-      return (T)(new RssSkipHours(internal));
-    } else if (qname.equals(QNAME_SKIPDAYS) || qname.equals(QNAME_SKIPDAYS2)) {
-      return (T)(new RssSkipDays(internal));
-    } else if (qname.equals(QNAME_URL) || qname.equals(QNAME_RDF_URL)) {
-      return (T)(new RssUriElement(internal));
-    } else if (qname.equals(QNAME_AUTHOR)) {
-      return (T)(new RssPerson(internal));
-    } else if (qname.equals(QNAME_ENCLOSURE)) {
-      return (T)(new RssEnclosure(internal));
-    } else if (qname.equals(QNAME_GUID) || 
-               qname.equals(QNAME_DC_IDENTIFIER)) {
-      return (T)(new RssGuid(internal));
-    } else if (qname.equals(QNAME_COMMENTS)) {
-      return (T)(new RssLink(internal));
-    } else if (qname.equals(QNAME_SOURCE) || 
-               qname.equals(QNAME_DC_SOURCE)) {
-      return (T)(new RssSource(internal));
-    } else if (qname.equals(QNAME_CONTENT_ENCODED)) {
-      return (T)(new RssContent(internal));
-    }
-    
-    return (T) internal;
-  }
-
-  public List<String> getNamespaces() {
-    List<String> namespaces = new ArrayList<String>();
-    namespaces.add("");
-    namespaces.add(ENC_NS);
-    return namespaces;
-  }
-
-  public boolean handlesNamespace(String namespace) {
-    return (namespace.equals("") || namespace.equals(ENC_NS));
-  }
-
-  public <T extends Base> String getMimeType(T base) {
-    Element element = base instanceof Element ? (Element)base : ((Document)base).getRoot();
-    if (element instanceof RssFeed) return RssConstants.RSS_MEDIATYPE;
-    return null;
+  public RssExtensionFactory() {
+    super("",ENC_NS,DC_NS,RDF_NS);
+    addMimeType(QNAME_RSS, RSS_MEDIATYPE);
+    addMimeType(QNAME_RDF, RDF_MEDIATYPE);
+    addImpl(QNAME_RSS,RssFeed.class);
+    addImpl(QNAME_RDF,RssFeed.class);
+    addImpl(QNAME_CHANNEL,RssChannel.class);
+    addImpl(QNAME_RDF_CHANNEL,RssChannel.class);
+    addImpl(QNAME_ITEM,RssItem.class);
+    addImpl(QNAME_RDF_ITEM,RssItem.class);
+    addImpl(QNAME_LINK,RssLink.class);
+    addImpl(QNAME_RDF_LINK,RssLink.class);
+    addImpl(QNAME_TITLE,RssText.class);
+    addImpl(QNAME_RDF_TITLE,RssText.class);
+    addImpl(QNAME_DC_TITLE,RssText.class);
+    addImpl(QNAME_DESCRIPTION,RssText.class);
+    addImpl(QNAME_RDF_DESCRIPTION,RssText.class);
+    addImpl(QNAME_DC_DESCRIPTION,RssText.class);
+    addImpl(QNAME_COPYRIGHT,RssText.class);
+    addImpl(QNAME_DC_RIGHTS,RssText.class);
+    addImpl(QNAME_MANAGINGEDITOR,RssPerson.class);
+    addImpl(QNAME_MANAGINGEDITOR2,RssPerson.class);
+    addImpl(QNAME_DC_CREATOR,RssPerson.class);
+    addImpl(QNAME_DC_CONTRIBUTOR,RssPerson.class);
+    addImpl(QNAME_WEBMASTER,RssPerson.class);
+    addImpl(QNAME_WEBMASTER2,RssPerson.class);
+    addImpl(QNAME_PUBDATE,RssDateTime.class);
+    addImpl(QNAME_PUBDATE2,RssDateTime.class);
+    addImpl(QNAME_LASTBUILDDATE,RssDateTime.class);
+    addImpl(QNAME_LASTBUILDDATE2,RssDateTime.class);
+    addImpl(QNAME_DC_DATE,RssDateTime.class);
+    addImpl(QNAME_CATEGORY,RssCategory.class);
+    addImpl(QNAME_DC_SUBJECT,RssCategory.class);
+    addImpl(QNAME_GENERATOR,RssGenerator.class);
+    addImpl(QNAME_DOCS,RssLink.class);
+    addImpl(QNAME_CLOUD,RssCloud.class);
+    addImpl(QNAME_TTL,RssText.class);
+    addImpl(QNAME_IMAGE,RssImage.class);
+    addImpl(QNAME_RDF_IMAGE,RssImage.class);
+    addImpl(QNAME_TEXTINPUT,RssTextInput.class);
+    addImpl(QNAME_TEXTINPUT2,RssTextInput.class);
+    addImpl(QNAME_SKIPHOURS,RssSkipHours.class);
+    addImpl(QNAME_SKIPHOURS2,RssSkipHours.class);
+    addImpl(QNAME_SKIPDAYS,RssSkipDays.class);
+    addImpl(QNAME_SKIPDAYS2,RssSkipDays.class);
+    addImpl(QNAME_URL,RssUriElement.class);
+    addImpl(QNAME_RDF_URL,RssUriElement.class);
+    addImpl(QNAME_AUTHOR,RssPerson.class);
+    addImpl(QNAME_ENCLOSURE,RssEnclosure.class);
+    addImpl(QNAME_GUID,RssGuid.class);
+    addImpl(QNAME_DC_IDENTIFIER,RssGuid.class);
+    addImpl(QNAME_COMMENTS,RssLink.class);
+    addImpl(QNAME_SOURCE,RssSource.class);
+    addImpl(QNAME_DC_SOURCE,RssSource.class);
+    addImpl(QNAME_CONTENT_ENCODED,RssContent.class);
   }
 
 }

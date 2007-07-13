@@ -19,6 +19,7 @@ package org.apache.abdera.factory;
 
 import java.util.List;
 
+import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Element;
 
 /**
@@ -63,4 +64,9 @@ public interface ExtensionFactory {
    * the parameter itself if a wrapper could not be retrieved
    */
   <T extends  Element>T getElementWrapper(Element internal);
+  
+  /**
+   * Retrieve the mime type for the element
+   */
+  <T extends Base>String getMimeType(T base);
 }

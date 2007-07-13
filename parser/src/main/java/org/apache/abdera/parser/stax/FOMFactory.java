@@ -393,44 +393,45 @@ public class FOMFactory
     return new FOMText(type, qname, (OMContainer)parent,this);
   }
   
-  public Element newElement(QName qname) {
+  public <T extends Element>T newElement(QName qname) {
     return newElement(qname, null);
   }
   
-  public Element newElement(
+  public <T extends Element>T newElement(
     QName qname, 
     Base parent) {
       return newExtensionElement(qname, parent);
   }
   
-  public Element newExtensionElement(QName qname) {
+  public <T extends Element>T newExtensionElement(QName qname) {
     return newExtensionElement(qname, (OMContainer)null);
   }
   
-  public Element newExtensionElement(
+  public <T extends Element>T newExtensionElement(
     QName qname, 
     Base parent) {
     return newExtensionElement(qname, (OMContainer)parent);
   }
   
-  private Element newExtensionElement(
+  @SuppressWarnings("unchecked")
+  private <T extends Element>T newExtensionElement(
     QName qname, 
     OMContainer parent) {
       String ns = qname.getNamespaceURI();
       Element el = newExtensionElement(qname, parent, null);
-      return (ATOM_NS.equals(ns) || APP_NS.equals(ns)) ?
-        el : factoriesMap.getElementWrapper(el);
+      return (T)((ATOM_NS.equals(ns) || APP_NS.equals(ns)) ?
+        el : factoriesMap.getElementWrapper(el));
   }
   
   @SuppressWarnings("unchecked")
-  private Element newExtensionElement(
+  private <T extends Element>T newExtensionElement(
     QName qname,
     OMContainer parent,
     OMXMLParserWrapper parserWrapper) {
     Element element = (parserWrapper == null) ?
       new FOMExtensibleElement(qname, parent, this) :
       new FOMExtensibleElement(qname, parent, this, parserWrapper);
-    return element;
+    return (T) element;
   }
   
   public Control newControl() {
@@ -817,5 +818,9 @@ public class FOMFactory
 
   public Abdera getAbdera() {
     return abdera;
+  }
+
+  public <T extends Base> String getMimeType(T base) {
+    return factoriesMap.getMimeType(base);
   }
 }

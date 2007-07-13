@@ -22,6 +22,7 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.ExtensionFactory;
+import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Element;
 
 public final class MediaExtensionFactory implements ExtensionFactory {
@@ -53,6 +54,10 @@ public final class MediaExtensionFactory implements ExtensionFactory {
 
   public boolean handlesNamespace(String namespace) {
     return namespace.equals(MediaConstants.MEDIA_NS);
+  }
+
+  public <T extends Base> String getMimeType(T base) {
+    return null;
   }
 
 }

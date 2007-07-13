@@ -21,6 +21,8 @@ import javax.xml.namespace.QName;
 
 public interface RssConstants {
 
+  public static final String RSS_MEDIATYPE = "application/rss+xml";
+  
   public static final String ENC_NS = "http://purl.org/rss/1.0/modules/content/";
   public static final String RDF_NS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
   public static final String RSS1_NS = "http://purl.org/rss/1.0/";

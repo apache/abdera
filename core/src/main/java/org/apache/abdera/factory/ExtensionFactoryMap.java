@@ -26,6 +26,7 @@ import java.util.WeakHashMap;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Base;
+import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 
 public class ExtensionFactoryMap 
@@ -92,5 +93,17 @@ public class ExtensionFactoryMap
   public void addFactory(ExtensionFactory factory) {
     if (!factories.contains(factory))
       factories.add(factory);
+  }
+
+  public <T extends Base> String getMimeType(T base) {
+    Element element = base instanceof Element ? (Element)base : ((Document)base).getRoot();
+    String namespace = element.getQName().getNamespaceURI();
+    synchronized(factories) {
+      for (ExtensionFactory factory : factories) {
+        if (factory.handlesNamespace(namespace)) 
+          return factory.getMimeType(base);
+      }
+    }
+    return null;
   }
 }

@@ -23,6 +23,7 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.ExtensionFactory;
+import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Element;
 
 public final class FeaturesExtensionFactory 
@@ -44,6 +45,10 @@ public final class FeaturesExtensionFactory
     if (FeaturesHelper.FEATURE.equals(qname)) 
       return (T)new Feature(internal);
     else return (T)internal;
+  }
+
+  public <T extends Base> String getMimeType(T base) {
+    return null;
   }
 
 

@@ -114,7 +114,7 @@ public class EntityTag
   }
   
   private void checkTag(String tag) {
-    if (tag.contains("\"")) 
+    if (tag.indexOf('"') != -1)
       throw new IllegalArgumentException(INVALID_ENTITY_TAG);
   }
   

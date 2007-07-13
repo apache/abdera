@@ -54,7 +54,7 @@ public abstract class AbstractExtensionFactory
             new Object[] {internal});
       } catch (Exception e) {}
     }
-    return t;
+    return t != null ? t : (T)internal;
   }
 
   protected void addMimeType(QName qname, String mimetype) {

@@ -401,7 +401,7 @@ public class AbderaClient {
                  httpMethod.getStatusCode() == 412) &&
                 cached_response != null) return cached_response;
             ClientResponse response = new CommonsResponse(abdera,httpMethod);
-            response = usecache ?
+            response = options.getUseLocalCache() ?
               response = cache.update(options, response, cached_response) : 
               response;
             checkRequestException(response,options);

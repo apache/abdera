@@ -26,15 +26,21 @@ import java.security.MessageDigest;
 public class SimpleCacheKey implements CacheKey {
 
   private static final long serialVersionUID = 8757289485580165536L;
-  private byte[] key = null;
+  private static MessageDigest md;
   
-  private MessageDigest md = null;
+  private final byte[] key;
   
   public SimpleCacheKey(String uri) {
-    try {
-      md = MessageDigest.getInstance("md5");
-      key = md.digest(uri.getBytes());
-    } catch (Exception e) {}
+    key = getMessageDigest().digest(uri.getBytes());
+  }
+  
+  private static MessageDigest getMessageDigest() {
+    if (md == null) {
+      try {
+        md = MessageDigest.getInstance("md5");
+      } catch (Exception e) {}
+    }
+    return md;
   }
   
   public byte[] getKey() {
@@ -49,7 +55,7 @@ public class SimpleCacheKey implements CacheKey {
   
   @Override
   public boolean equals(Object obj) {
-    return (obj instanceof CacheKey) ? isMatch((CacheKey)obj) : false;
+    return obj instanceof CacheKey ? isMatch((CacheKey)obj) : false;
   }
   
   @Override

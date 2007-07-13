@@ -130,10 +130,22 @@ public class FOMContent
     if (value != null) {
       if (this.getFirstElement() != null)
         this.getFirstElement().discard();
+      
+      MimeType mtype = this.getMimeType();
+      if (mtype == null) {
+        try {
+          String mt = getFactory().getMimeType(value);
+          if (mt != null) {
+            setMimeType(mt);
+            mtype = getMimeType();
+          }
+        } catch (MimeTypeParseException e) {}
+      }
+      
       if (value instanceof Div && !type.equals(Content.Type.XML)) 
         init(Content.Type.XHTML);
       else {
-        if (this.getMimeType() == null) {
+        if (mtype == null) {
           init(Content.Type.XML);
         }
       }

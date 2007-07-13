@@ -219,7 +219,7 @@ public class FOMEntry
    */
   public Content setContent(Element value) {
     FOMFactory factory = (FOMFactory) this.factory;
-    Content content = factory.newContent(Content.Type.XHTML);
+    Content content = factory.newContent();
     content.setValueElement(value);
     setContentElement(content);
     return content;

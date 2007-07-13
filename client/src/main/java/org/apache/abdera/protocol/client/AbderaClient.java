@@ -50,6 +50,7 @@ import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpClientParams;
+import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
@@ -345,24 +346,34 @@ public class AbderaClient {
       return execute(method,uri,re,options);
   }
   
+  private CacheDisposition getCacheDisposition(
+    boolean usecache, 
+    String uri, 
+    RequestOptions options,
+    CachedResponse cached_response) {
+    CacheDisposition disp = 
+      (usecache) ? 
+        cache.getDisposition(uri, options) : 
+        CacheDisposition.TRANSPARENT;
+    disp = (!disp.equals(CacheDisposition.TRANSPARENT) && 
+            mustRevalidate(options, cached_response)) ? 
+              CacheDisposition.STALE : 
+              disp;
+    return disp;
+  }
+  
   public ClientResponse execute(
     String method, 
     String uri, 
     RequestEntity entity,
     RequestOptions options) {
       boolean usecache = useCache(method,options);
+      options = options != null ? options : getDefaultRequestOptions();
       try {
-        if (options == null) options = getDefaultRequestOptions();
         Cache cache = getCache();
-        CacheDisposition disp = 
-          (usecache) ? 
-            cache.getDisposition(uri, options) : 
-            CacheDisposition.TRANSPARENT;
         CachedResponse cached_response = cache.get(uri, options);
-        disp = (!disp.equals(CacheDisposition.TRANSPARENT) && 
-                mustRevalidate(options, cached_response)) ? 
-                  CacheDisposition.STALE : 
-                  disp;
+        CacheDisposition disp = getCacheDisposition(
+          usecache, uri, options, cached_response);
         switch(disp) {
           case FRESH:                                                            // CACHE HIT: FRESH
             if (cached_response != null) {
@@ -371,9 +382,12 @@ public class AbderaClient {
             }
           case STALE:                                                            // CACHE HIT: STALE
             // revalidate the cached entry
-            if (cached_response != null && cached_response.getEntityTag() != null) {
-              options.setIfModifiedSince(cached_response.getLastModified());
-              options.setIfNoneMatch(cached_response.getEntityTag().toString());
+            if (cached_response != null) {
+              if (cached_response.getEntityTag() != null)
+                options.setIfNoneMatch(cached_response.getEntityTag().toString());
+              else if (cached_response.getLastModified() != null) 
+                options.setIfModifiedSince(cached_response.getLastModified());
+              else options.setNoCache(true);
             } else {
               disp = CacheDisposition.TRANSPARENT;
             }
@@ -387,7 +401,7 @@ public class AbderaClient {
                  httpMethod.getStatusCode() == 412) &&
                 cached_response != null) return cached_response;
             ClientResponse response = new CommonsResponse(abdera,httpMethod);
-            response = (options.getUseLocalCache()) ?
+            response = usecache ?
               response = cache.update(options, response, cached_response) : 
               response;
             checkRequestException(response,options);
@@ -469,4 +483,37 @@ public class AbderaClient {
       client.getHttpConnectionManager()).shutdown();
   }
 
+  /**
+   * Set the maximum number of connections allowed for a single host
+   */
+  public void setMaxConnectionsPerHost(int max) {
+    client.getHttpConnectionManager().getParams().setIntParameter(
+      HttpConnectionManagerParams.MAX_HOST_CONNECTIONS, max);
+  }
+  
+  /**
+   * Return the maximum number of connections allowed for a single host
+   */
+  public int getMaxConnectionsPerHost() {
+    return client.getHttpConnectionManager().getParams().getIntParameter(
+      HttpConnectionManagerParams.MAX_HOST_CONNECTIONS,
+      MultiThreadedHttpConnectionManager.DEFAULT_MAX_HOST_CONNECTIONS);
+  }
+  
+  /**
+   * Return the maximum number of connections allowed for the client
+   */
+  public void setMaxConnectionsTotal(int max) {
+    client.getHttpConnectionManager().getParams().setIntParameter(
+      HttpConnectionManagerParams.MAX_TOTAL_CONNECTIONS, max);
+  }
+  
+  /**
+   * Return the maximum number of connections allowed for the client
+   */
+  public int getMaxConnectionsTotal() {
+    return client.getHttpConnectionManager().getParams().getIntParameter(
+      HttpConnectionManagerParams.MAX_TOTAL_CONNECTIONS,
+      MultiThreadedHttpConnectionManager.DEFAULT_MAX_TOTAL_CONNECTIONS);
+  }
 }

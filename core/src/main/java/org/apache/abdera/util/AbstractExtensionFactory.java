@@ -73,8 +73,8 @@ public abstract class AbstractExtensionFactory
     return element != null && qname != null ? mimetypes.get(qname) : null;
   }
 
-  public List<String> getNamespaces() {
-    return new ArrayList<String>(namespaces);  // return a copy
+  public String[] getNamespaces() {
+    return namespaces.toArray(new String[namespaces.size()]);
   }
 
   public boolean handlesNamespace(String namespace) {

@@ -808,7 +808,7 @@ public class FOMFactory
       factoriesMap.getElementWrapper(internal));
   }
 
-  public List<String> getNamespaces() {
+  public String[] getNamespaces() {
     return factoriesMap.getNamespaces();
   }
 

@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.factory;
 
-import java.util.List;
-
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Element;
 
@@ -57,7 +55,7 @@ public interface ExtensionFactory {
    *
    * @return A List of Namespace URIs Supported by this Extension
    */
-  List<String> getNamespaces();
+  String[] getNamespaces();
 
   /**
    * Retrieve an ElementWrapper for the specified Element or return

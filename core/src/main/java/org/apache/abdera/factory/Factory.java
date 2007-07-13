@@ -553,7 +553,7 @@ public interface Factory {
    * Create a new Element with the given QName.
    * @return A newly created element
    */
-  Element newElement(QName qname);
+  <T extends Element>T newElement(QName qname);
 
   /**
    * Create a new Element with the given QName as a child of the given Base.
@@ -561,14 +561,14 @@ public interface Factory {
    * @param parent The element or document to which the new element should be added as a child
    * @return A newly created element
    */
-  Element newElement(QName qname, Base parent);
+  <T extends Element>T newElement(QName qname, Base parent);
 
   /**
    * Create a new extension element with the given QName.
    * @param qname The XML QName of the element to create
    * @return A newly created element
    */
-  Element newExtensionElement(QName qname);
+  <T extends Element>T newExtensionElement(QName qname);
 
   /**
    * Create a new extension element with the given QName as a child of the given Base.
@@ -576,7 +576,7 @@ public interface Factory {
    * @param parent The element or document to which the new element should be added as a child
    * @return A newly created element
    */
-  Element newExtensionElement(QName qname, Base parent);
+  <T extends Element>T newExtensionElement(QName qname, Base parent);
 
   /**
    * Create a new Control element.  The app:control element is introduced by
@@ -645,4 +645,9 @@ public interface Factory {
    * Get the Abdera instance for this factory
    */
   Abdera getAbdera();
+  
+  /**
+   * Get the mime type for the specified extension element / document
+   */
+  <T extends Base>String getMimeType(T base);
 }

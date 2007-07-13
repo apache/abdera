@@ -210,10 +210,10 @@ public class MimeTypeHelper {
           type = Constants.APP_MEDIA_TYPE;
         else if (el instanceof Categories)
           type = Constants.CAT_MEDIA_TYPE;
-        else 
-          type = Constants.XML_MEDIA_TYPE;
       }
     }    
+    if (type == null)
+      type = base.getFactory().getMimeType(base);
     return (type != null) ? type : Constants.XML_MEDIA_TYPE;
   }
   

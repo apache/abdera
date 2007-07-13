@@ -22,6 +22,7 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.ExtensionFactory;
+import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Element;
 
 public class FooExtensionFactory 
@@ -45,6 +46,10 @@ public class FooExtensionFactory
 
   public boolean handlesNamespace(String namespace) {
     return NS.equals(namespace);
+  }
+
+  public <T extends Base> String getMimeType(T base) {
+    return null;
   }
 
 }

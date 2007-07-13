@@ -23,6 +23,8 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.ExtensionFactory;
+import org.apache.abdera.model.Base;
+import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 
 public class RssExtensionFactory 
@@ -117,6 +119,12 @@ public class RssExtensionFactory
 
   public boolean handlesNamespace(String namespace) {
     return (namespace.equals("") || namespace.equals(ENC_NS));
+  }
+
+  public <T extends Base> String getMimeType(T base) {
+    Element element = base instanceof Element ? (Element)base : ((Document)base).getRoot();
+    if (element instanceof RssFeed) return RssConstants.RSS_MEDIATYPE;
+    return null;
   }
 
 }

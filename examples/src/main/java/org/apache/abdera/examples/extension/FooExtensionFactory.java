@@ -17,39 +17,21 @@
 */
 package org.apache.abdera.examples.extension;
 
-import java.util.List;
-
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.factory.ExtensionFactory;
-import org.apache.abdera.model.Base;
-import org.apache.abdera.model.Element;
+import org.apache.abdera.util.AbstractExtensionFactory;
 
 public class FooExtensionFactory 
-  implements ExtensionFactory {
-
+  extends AbstractExtensionFactory {
+  
   public static final String NS = "tag:example.org,2006:foo";
   public static final QName FOO = new QName(NS, "foo", "f");
   public static final QName BAR = new QName(NS, "bar", "f");
   
-  @SuppressWarnings("unchecked")
-  public <T extends Element> T getElementWrapper(Element internal) {
-    QName qname = internal.getQName();
-    if (FOO.equals(qname)) return (T)new Foo(internal);
-    else if (BAR.equals(qname)) return (T)new Bar(internal);
-    else return (T)internal;
+  public FooExtensionFactory() {
+    super(NS);
+    addImpl(FOO,Foo.class);
+    addImpl(BAR,Bar.class);
   }
-
-  public List<String> getNamespaces() {
-    return java.util.Arrays.asList(new String[] {NS});
-  }
-
-  public boolean handlesNamespace(String namespace) {
-    return NS.equals(namespace);
-  }
-
-  public <T extends Base> String getMimeType(T base) {
-    return null;
-  }
-
+  
 }

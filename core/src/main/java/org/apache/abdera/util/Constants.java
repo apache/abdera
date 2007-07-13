@@ -43,7 +43,6 @@ public interface Constants {
   public static final String APP_MEDIA_TYPE       = "application/atomsvc+xml";
   public static final String XML_MEDIA_TYPE       = "application/xml";
   public static final String CAT_MEDIA_TYPE       = "application/atomcat+xml";
-  public static final String MULTIPART_MEDIA_TYPE = "multipart/related";
   
   public static final String ATOM_NS              = "http://www.w3.org/2005/Atom";
   public static final String APP_NS               = "http://www.w3.org/2007/app";

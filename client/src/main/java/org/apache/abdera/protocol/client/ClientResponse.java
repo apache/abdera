@@ -86,6 +86,6 @@ public interface ClientResponse extends Response {
    * Return the character set encoding specified in the ContentType header, if ant
    * @throws MimeTypeParseException 
    */
-  String getCharacterEncoding() throws MimeTypeParseException;
+  String getCharacterEncoding();
   
 }

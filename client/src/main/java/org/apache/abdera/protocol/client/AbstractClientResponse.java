@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.util.Date;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.iri.IRI;
@@ -124,11 +123,12 @@ public abstract class AbstractClientResponse
       CacheControlUtil.parseCacheControl(cc, this);
   }
   
-  public String getCharacterEncoding() throws MimeTypeParseException {
-    MimeType mt = getContentType();
+  public String getCharacterEncoding() {
     String charset = null;
-    if (mt != null)
-      charset = mt.getParameter("charset");
+    try {
+      MimeType mt = getContentType();
+      if (mt != null) charset = mt.getParameter("charset");
+    } catch (Exception e) {}
     return charset;
   }
 

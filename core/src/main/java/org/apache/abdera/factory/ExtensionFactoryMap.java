@@ -64,14 +64,15 @@ public class ExtensionFactoryMap
     wrappers.put(internal, wrapper);
   }
 
-  public List<String> getNamespaces() {
+  public String[] getNamespaces() {
     List<String> ns = new ArrayList<String>();
     synchronized(factories) {
       for (ExtensionFactory factory : factories) {
-        ns.addAll(factory.getNamespaces());
+        String[] namespaces = factory.getNamespaces();
+        for (String uri : namespaces) ns.add(uri);
       }
     }
-    return ns;
+    return ns.toArray(new String[ns.size()]);
   }
 
   public boolean handlesNamespace(String namespace) {

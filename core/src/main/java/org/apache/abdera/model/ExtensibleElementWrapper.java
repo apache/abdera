@@ -43,10 +43,12 @@ public abstract class ExtensibleElementWrapper
     getExtInternal().addExtension(extension);
   }
 
+  @SuppressWarnings("unchecked")
   public <T extends Element> T addExtension(QName qname) {
     return (T) getExtInternal().addExtension(qname);
   }
 
+  @SuppressWarnings("unchecked")
   public <T extends Element> T addExtension(String namespace, String localPart, String prefix) {
     return (T) getExtInternal().addExtension(namespace, localPart, prefix);
   }
@@ -59,6 +61,7 @@ public abstract class ExtensibleElementWrapper
     return getExtInternal().addSimpleExtension(namespace, localPart, prefix, value);
   }
 
+  @SuppressWarnings("unchecked")
   public <T extends Element> T getExtension(QName qname) {
     return (T) getExtInternal().getExtension(qname);
   }

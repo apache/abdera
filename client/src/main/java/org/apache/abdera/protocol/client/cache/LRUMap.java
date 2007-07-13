@@ -15,29 +15,24 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.client.cache.lru;
+package org.apache.abdera.protocol.client.cache;
 
-import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.client.cache.Cache;
-import org.apache.abdera.protocol.client.cache.CacheKey;
-import org.apache.abdera.protocol.client.cache.CachedResponse;
-import org.apache.abdera.protocol.client.cache.InMemoryCache;
-import org.apache.abdera.protocol.client.cache.LRUMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-@SuppressWarnings("serial")
-public class LRUCache
-  extends InMemoryCache
-  implements Cache {
+public final class LRUMap<A,B> extends LinkedHashMap<A,B> {
 
-  private final static int DEFAULT_SIZE = 10;
+  private static final long serialVersionUID = -8243948270889739367L;
+  private final int size;
   
-  public LRUCache(Abdera abdera) {
-    this(abdera,DEFAULT_SIZE);
+  public LRUMap(int initialSize, float loadFactor, boolean accessOrder) {
+    super(initialSize, loadFactor, accessOrder);
+    this.size = initialSize;
   }
   
-  public LRUCache(Abdera abdera, final int size) {
-    super(abdera);
-    setMap(new LRUMap<CacheKey,CachedResponse>(size,0.75f,true));    
+  protected boolean removeEldestEntry(
+    Map.Entry<A,B> eldest) {
+    return size() > size;
   }
   
 }

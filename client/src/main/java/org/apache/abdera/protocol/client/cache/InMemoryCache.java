@@ -29,6 +29,8 @@ public abstract class InMemoryCache
   extends CacheBase {
 
   protected transient Map<CacheKey,CachedResponse> cache;
+  protected transient final Map<String,SimpleCacheKey> keycache = 
+    new LRUMap<String,SimpleCacheKey>(20,0.75f,true);
 
   protected InMemoryCache(Abdera abdera) {
     super(abdera);
@@ -58,8 +60,7 @@ public abstract class InMemoryCache
   public CacheKey getCacheKey(
     String uri, 
     RequestOptions options) {
-      //TODO: We need a complete solution that takes the Vary header into account
-      return new SimpleCacheKey(uri);
+      return getCacheKey(uri,options,null);
   }
   
   public CacheKey getCacheKey(
@@ -67,7 +68,12 @@ public abstract class InMemoryCache
     RequestOptions options,
     ClientResponse response) {
       //TODO: We need a complete solution that takes the Vary header into account
-      return new SimpleCacheKey(uri);
+    SimpleCacheKey key = keycache.get(uri);
+    if (key == null) {
+      key = new SimpleCacheKey(uri);
+      keycache.put(uri, key);
+    } 
+    return key;
   }
 
   public void remove(

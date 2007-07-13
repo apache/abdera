@@ -19,6 +19,7 @@ package org.apache.abdera.util;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.Writer;
@@ -37,17 +38,17 @@ import org.apache.abdera.model.Element;
  * 
  * Only use this once per transform!!!
  */
-public class AbderaResult 
+public final class AbderaResult 
   extends StreamResult 
   implements Result {
 
-  private Abdera abdera = null;
+  private final Abdera abdera;
   private PipedOutputStream pipeout = null;
   private PipedInputStream pipein = null;
   private Document doc = null;
   
   public AbderaResult() {
-    this.abdera = new Abdera();
+    this(new Abdera());
   }
   
   public AbderaResult(Abdera abdera) {
@@ -76,7 +77,7 @@ public class AbderaResult
 
   @Override
   public Writer getWriter() {
-    return null;
+    return new OutputStreamWriter(getOutputStream());
   }
 
   @Override

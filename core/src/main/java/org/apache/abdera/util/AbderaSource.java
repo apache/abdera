@@ -19,6 +19,7 @@ package org.apache.abdera.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.Reader;
@@ -33,11 +34,11 @@ import org.apache.abdera.model.Base;
  * javax.xml.transform.Source that allows Abdera objects to be used with
  * the javax.xml.transform API's
  */
-public class AbderaSource 
+public final class AbderaSource 
   extends StreamSource 
   implements Source {
 
-  private Base base = null;
+  private final Base base;
   
   public AbderaSource(Base base) {
     this.base = base;
@@ -59,7 +60,7 @@ public class AbderaSource
 
   @Override
   public Reader getReader() {
-    return null;
+    return new InputStreamReader(getInputStream());
   }
 
   @Override

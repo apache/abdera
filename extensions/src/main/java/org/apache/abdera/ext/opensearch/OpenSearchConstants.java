@@ -19,8 +19,7 @@ package org.apache.abdera.ext.opensearch;
 
 import javax.xml.namespace.QName;
 
-public final class OpenSearchConstants {
-  private OpenSearchConstants() {}
+public interface OpenSearchConstants {
 
   public static final String OPENSEARCH_V10_NS = "http://a9.com/-/spec/opensearchrss/1.0/";
   public static final String OPENSEARCH_NS = "http://a9.com/-/spec/opensearchrss/1.1/";

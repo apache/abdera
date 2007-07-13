@@ -17,40 +17,14 @@
 */
 package org.apache.abdera.ext.features;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.namespace.QName;
-
-import org.apache.abdera.factory.ExtensionFactory;
-import org.apache.abdera.model.Base;
-import org.apache.abdera.model.Element;
+import org.apache.abdera.util.AbstractExtensionFactory;
 
 public final class FeaturesExtensionFactory 
-  implements ExtensionFactory {
+  extends AbstractExtensionFactory {
 
-  public boolean handlesNamespace(String namespace) {
-    return (FeaturesHelper.FNS.equals(namespace));
+  public FeaturesExtensionFactory() {
+    super(FeaturesHelper.FNS);
+    addImpl(FeaturesHelper.FEATURE,Feature.class);
   }
-
-  public List<String> getNamespaces() {
-    List<String> lst = new ArrayList<String>();
-    lst.add(FeaturesHelper.FNS);
-    return lst;
-  }
-
-  @SuppressWarnings("unchecked")
-  public <T extends Element> T getElementWrapper(Element internal) {
-    QName qname = internal.getQName();
-    if (FeaturesHelper.FEATURE.equals(qname)) 
-      return (T)new Feature(internal);
-    else return (T)internal;
-  }
-
-  public <T extends Base> String getMimeType(T base) {
-    return null;
-  }
-
-
-
+  
 }

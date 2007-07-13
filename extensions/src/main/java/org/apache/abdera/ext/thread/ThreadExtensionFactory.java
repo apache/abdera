@@ -17,42 +17,16 @@
 */
 package org.apache.abdera.ext.thread;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.namespace.QName;
-
-import org.apache.abdera.factory.ExtensionFactory;
-import org.apache.abdera.model.Base;
-import org.apache.abdera.model.Element;
+import org.apache.abdera.util.AbstractExtensionFactory;
 
 public final class ThreadExtensionFactory 
-  implements ExtensionFactory {
+  extends AbstractExtensionFactory
+  implements ThreadConstants {
 
-  public boolean handlesNamespace(String namespace) {
-    return (ThreadConstants.THR_NS.equals(namespace));
+  public ThreadExtensionFactory() {
+    super(ThreadConstants.THR_NS);
+    addImpl(IN_REPLY_TO,InReplyTo.class);
+    addImpl(THRTOTAL,Total.class);
   }
-
-  public List<String> getNamespaces() {
-    List<String> lst = new ArrayList<String>();
-    lst.add(ThreadConstants.THR_NS);
-    return lst;
-  }
-
-  @SuppressWarnings("unchecked")
-  public <T extends Element> T getElementWrapper(Element internal) {
-    QName qname = internal.getQName();
-    if (ThreadConstants.IN_REPLY_TO.equals(qname)) 
-      return (T)new InReplyTo(internal);
-    else if (ThreadConstants.THRTOTAL.equals(qname))
-      return (T)new Total(internal);
-    else return (T)internal;
-  }
-
-  public <T extends Base> String getMimeType(T base) {
-    return null;
-  }
-
-
-
+  
 }

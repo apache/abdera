@@ -17,47 +17,30 @@
 */
 package org.apache.abdera.ext.media;
 
-import java.util.List;
+import org.apache.abdera.util.AbstractExtensionFactory;
 
-import javax.xml.namespace.QName;
-
-import org.apache.abdera.factory.ExtensionFactory;
-import org.apache.abdera.model.Base;
-import org.apache.abdera.model.Element;
-
-public final class MediaExtensionFactory implements ExtensionFactory {
-
-  @SuppressWarnings({ "unchecked", "deprecation" })
-  public <T extends Element> T getElementWrapper(Element internal) {
-    QName qname = internal.getQName();
-    if (qname.equals(MediaConstants.ADULT)) return (T) new MediaAdult(internal);
-    if (qname.equals(MediaConstants.CATEGORY)) return (T) new MediaCategory(internal);
-    if (qname.equals(MediaConstants.CONTENT)) return (T) new MediaContent(internal);
-    if (qname.equals(MediaConstants.COPYRIGHT)) return (T) new MediaCopyright(internal);
-    if (qname.equals(MediaConstants.CREDIT)) return (T) new MediaCredit(internal);
-    if (qname.equals(MediaConstants.DESCRIPTION)) return (T) new MediaDescription(internal);
-    if (qname.equals(MediaConstants.GROUP)) return (T) new MediaGroup(internal);
-    if (qname.equals(MediaConstants.HASH)) return (T) new MediaHash(internal);
-    if (qname.equals(MediaConstants.KEYWORDS)) return (T) new MediaKeywords(internal);
-    if (qname.equals(MediaConstants.PLAYER)) return (T) new MediaPlayer(internal);
-    if (qname.equals(MediaConstants.RATING)) return (T) new MediaRating(internal);
-    if (qname.equals(MediaConstants.RESTRICTION)) return (T) new MediaRestriction(internal);
-    if (qname.equals(MediaConstants.TEXT)) return (T) new MediaText(internal);
-    if (qname.equals(MediaConstants.THUMBNAIL)) return (T) new MediaThumbnail(internal);
-    if (qname.equals(MediaConstants.TITLE)) return (T) new MediaTitle(internal);
-    return (T)internal;
-  }
-
-  public List<String> getNamespaces() {
-    return java.util.Arrays.asList(new String[] {MediaConstants.MEDIA_NS});
-  }
-
-  public boolean handlesNamespace(String namespace) {
-    return namespace.equals(MediaConstants.MEDIA_NS);
-  }
-
-  public <T extends Base> String getMimeType(T base) {
-    return null;
+public final class MediaExtensionFactory 
+  extends AbstractExtensionFactory
+  implements MediaConstants {
+  
+  @SuppressWarnings("deprecation")
+  public MediaExtensionFactory() {
+    super(MediaConstants.MEDIA_NS);
+    addImpl(ADULT,MediaAdult.class);
+    addImpl(CATEGORY,MediaCategory.class);
+    addImpl(CONTENT,MediaContent.class);
+    addImpl(COPYRIGHT,MediaCopyright.class);
+    addImpl(CREDIT,MediaCredit.class);
+    addImpl(DESCRIPTION,MediaDescription.class);
+    addImpl(GROUP,MediaGroup.class);
+    addImpl(HASH,MediaHash.class);
+    addImpl(KEYWORDS,MediaKeywords.class);
+    addImpl(PLAYER,MediaPlayer.class);
+    addImpl(RATING,MediaRating.class);
+    addImpl(RESTRICTION,MediaRestriction.class);
+    addImpl(TEXT,MediaText.class);
+    addImpl(THUMBNAIL,MediaThumbnail.class);
+    addImpl(TITLE,MediaTitle.class);
   }
 
 }

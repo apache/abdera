@@ -27,19 +27,22 @@ public class SimpleCacheKey implements CacheKey {
 
   private static final long serialVersionUID = 8757289485580165536L;
   private static MessageDigest md;
+  static {
+    try {
+      md = MessageDigest.getInstance("md5");
+    } catch (Exception e) {}
+  }
   
   private final byte[] key;
   
   public SimpleCacheKey(String uri) {
-    key = getMessageDigest().digest(uri.getBytes());
+    MessageDigest md = getMessageDigest();
+    synchronized(md) {
+      key = getMessageDigest().digest(uri.getBytes());
+    }
   }
   
   private static MessageDigest getMessageDigest() {
-    if (md == null) {
-      try {
-        md = MessageDigest.getInstance("md5");
-      } catch (Exception e) {}
-    }
     return md;
   }
   

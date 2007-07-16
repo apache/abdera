@@ -18,6 +18,7 @@
 package org.apache.abdera.parser.stax;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.activation.MimeTypeParseException;
@@ -30,6 +31,7 @@ import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.DateTime;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
 import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.model.Link;
@@ -45,6 +47,7 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
+import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
 public class FOMSource
@@ -600,6 +603,22 @@ public class FOMSource
       throws MimeTypeParseException {
     Link link = getAlternateLink(type, hreflang);
     return (link != null) ? link.getResolvedHref() : null;
+  }
+
+  public Feed getAsFeed() {
+    FOMFeed feed = (FOMFeed) ((FOMFactory)factory).newFeed();
+    for (Iterator i = this.getChildElements(); i.hasNext();) {
+      FOMElement child = (FOMElement)i.next();
+      if (!child.getQName().equals(ENTRY)) {
+        feed.addChild((OMNode)child.clone());
+      }
+    }
+    try {
+      if (this.getBaseUri() != null) {
+        feed.setBaseUri(this.getBaseUri());
+      }
+    } catch (Exception e) {}
+    return feed;
   }
 
 }

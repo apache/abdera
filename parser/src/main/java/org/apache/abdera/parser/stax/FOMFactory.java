@@ -827,4 +827,8 @@ public class FOMFactory
   public <T extends Base> String getMimeType(T base) {
     return factoriesMap.getMimeType(base);
   }
+
+  public String[] listExtensionFactories() {
+    return factoriesMap.listExtensionFactories();
+  }
 }

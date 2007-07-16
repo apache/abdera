@@ -107,4 +107,15 @@ public class ExtensionFactoryMap
     }
     return null;
   }
+  
+  public String[] listExtensionFactories() {
+    List<String> names = new ArrayList<String>();
+    synchronized(factories) {
+      for (ExtensionFactory factory : factories) {
+        String name = factory.getClass().getName();
+        if (!names.contains(name)) names.add(name);
+      }
+    }
+    return names.toArray(new String[names.size()]);
+  }
 }

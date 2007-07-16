@@ -650,4 +650,9 @@ public interface Factory {
    * Get the mime type for the specified extension element / document
    */
   <T extends Base>String getMimeType(T base);
+  
+  /**
+   * Returns a listing of extension factories registered
+   */
+  String[] listExtensionFactories();
 }

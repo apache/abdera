@@ -31,6 +31,7 @@ import org.apache.abdera.model.DateTime;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ExtensibleElementWrapper;
+import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
 import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.model.Link;
@@ -383,6 +384,10 @@ public class RssSource
 
   public Link getAlternateLink() {
     return self;
+  }
+
+  public Feed getAsFeed() {
+    throw new UnsupportedOperationException("Converting to feed is not supported");
   }
 
 }

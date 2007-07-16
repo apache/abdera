@@ -537,4 +537,8 @@ public class RssFeed
   public String getVersion() {
     return super.getAttributeValue("version");
   }
+
+  public Feed getAsFeed() {
+    throw new UnsupportedOperationException("Converting to feed is not supported");
+  }
 }

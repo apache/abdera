@@ -684,4 +684,8 @@ public interface Source
    */
   void setCollection(Collection collection);
   
+  /**
+   * Convert the Source element into an empty Feed element
+   */
+  Feed getAsFeed();
 }

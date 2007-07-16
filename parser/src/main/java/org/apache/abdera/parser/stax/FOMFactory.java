@@ -393,24 +393,28 @@ public class FOMFactory
     return new FOMText(type, qname, (OMContainer)parent,this);
   }
   
+  @SuppressWarnings("unchecked")
   public <T extends Element>T newElement(QName qname) {
-    return newElement(qname, null);
+    return (T)newElement(qname, null);
   }
   
+  @SuppressWarnings("unchecked")
   public <T extends Element>T newElement(
     QName qname, 
     Base parent) {
-      return newExtensionElement(qname, parent);
+      return (T)newExtensionElement(qname, parent);
   }
   
+  @SuppressWarnings("unchecked")
   public <T extends Element>T newExtensionElement(QName qname) {
-    return newExtensionElement(qname, (OMContainer)null);
+    return (T)newExtensionElement(qname, (OMContainer)null);
   }
   
+  @SuppressWarnings("unchecked")
   public <T extends Element>T newExtensionElement(
     QName qname, 
     Base parent) {
-    return newExtensionElement(qname, (OMContainer)parent);
+    return (T)newExtensionElement(qname, (OMContainer)parent);
   }
   
   @SuppressWarnings("unchecked")

@@ -38,13 +38,10 @@ import org.apache.abdera.security.util.DHContext;
  */
 public class DHEncryptedRequestFilter 
   extends BCEncryptedRequestFilter {
-
-  private DHContext context;
   
   @Override
   public void init(FilterConfig config) throws ServletException {
     super.init(config);
-    context = new DHContext();
   }
   
   @Override
@@ -58,19 +55,23 @@ public class DHEncryptedRequestFilter
     if ("GET".equalsIgnoreCase(method) || 
         "HEAD".equalsIgnoreCase(method) || 
         "OPTIONS".equalsIgnoreCase(method)) {
+      DHContext context = new DHContext();
       ((HttpServletResponse)response).setHeader(
         DHEncryptedResponseFilter.DH, 
-        this.context.getRequestString());
+        context.getRequestString());
+      ((HttpServletRequest) request).getSession(true).setAttribute(
+        "dhcontext", context);
     } 
   }
 
   @Override
   protected Object initArg(ServletRequest request) {
-    DHContext context = null;
+    DHContext context = 
+      (DHContext) ((HttpServletRequest)request).
+        getSession(true).getAttribute("dhcontext");
     String dh = ((HttpServletRequest)request).getHeader(DHEncryptedResponseFilter.DH);
-    if (dh != null && dh.length() > 0) {
+    if (context != null && dh != null && dh.length() > 0) {
       try {
-        context = (DHContext) this.context.clone();
         context.setPublicKey(dh);
       } catch (Exception e) {
         e.printStackTrace();

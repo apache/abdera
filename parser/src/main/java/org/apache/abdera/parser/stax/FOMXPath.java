@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.parser.stax;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import org.apache.abdera.model.Base;
 import org.apache.abdera.parser.stax.util.ResolveFunction;
 import org.apache.abdera.util.AbstractXPath;
 import org.apache.abdera.xpath.XPathException;
+import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.xpath.DocumentNavigator;
 import org.jaxen.BaseXPath;
 import org.jaxen.Function;
@@ -146,6 +148,7 @@ public class FOMXPath extends AbstractXPath {
     return getXPath(path, namespaces, null, null);
   }
 
+  @SuppressWarnings("unchecked")
   public List selectNodes(
     String path, 
     Base base, 
@@ -154,8 +157,17 @@ public class FOMXPath extends AbstractXPath {
     Map<QName,Object> variables) 
       throws XPathException {
     try {
+      List nodes = new ArrayList();
       XPath xpath = getXPath(path, namespaces, functions, variables);
-      return xpath.selectNodes(base);
+      List results = xpath.selectNodes(base);
+      for (Object obj : results) {
+        if (obj instanceof OMAttribute) {
+          nodes.add(new FOMAttribute((OMAttribute) obj));
+        } else {
+          nodes.add(obj);
+        }
+      }
+      return nodes;
     } catch (JaxenException e) {
       throw new XPathException(e);
     }
@@ -176,7 +188,9 @@ public class FOMXPath extends AbstractXPath {
     Map<QName,Object> variables) throws XPathException {
     try {
       XPath xpath = getXPath(path, namespaces, functions, variables);
-      return xpath.selectSingleNode(base);
+      Object obj = xpath.selectSingleNode(base);
+      if (obj instanceof OMAttribute) obj = new FOMAttribute((OMAttribute) obj);
+      return obj;
     } catch (JaxenException e) {
       throw new XPathException(e);
     }

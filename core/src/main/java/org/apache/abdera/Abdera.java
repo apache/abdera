@@ -172,7 +172,7 @@ public final class Abdera {
     try {
       return ServiceUtil.newXPathInstance(this);
     } catch (NoClassDefFoundError n) {
-      return null;  // Don't die if the component is not available
+      throw new RuntimeException("An Abdera XPath implementation is not available",n);
     }
   }
     
@@ -183,7 +183,7 @@ public final class Abdera {
     try {
       return ServiceUtil.newParserFactoryInstance(this);
     } catch (NoClassDefFoundError n) {
-      return null;  // Don't die if the component is not available
+      throw new RuntimeException("An Abdera Parser implementation is not available",n);
     }
   }
     
@@ -194,7 +194,7 @@ public final class Abdera {
     try {
       return ServiceUtil.newWriterFactoryInstance(this);
     } catch (NoClassDefFoundError n) {
-      return null;  // Don't die if the component is not available
+      throw new RuntimeException("An Abdera WriterFactory implementation is not available",n);
     }
   }
     
@@ -205,7 +205,7 @@ public final class Abdera {
     try {
       return ServiceUtil.newWriterInstance(this);
     } catch (NoClassDefFoundError n) {
-      return null;  // Don't die if the component is not available
+      throw new RuntimeException("An Abdera Writer implementation is not available",n);
     }
   }
   

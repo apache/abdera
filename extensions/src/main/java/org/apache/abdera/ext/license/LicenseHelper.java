@@ -28,7 +28,7 @@ import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Source;
 
 /**
- * Implementation of the Atom License Extension I-D
+ * Implementation of the Atom License Extension, RFC 4946
  */
 public final class LicenseHelper {
 
@@ -59,7 +59,7 @@ public final class LicenseHelper {
   
   public static List<Link> getLicense(
     Base base) {
-      return getLicense(base, false);
+      return getLicense(base, true);
   }
   
   public static boolean hasUnspecifiedLicense(
@@ -70,7 +70,7 @@ public final class LicenseHelper {
   
   public static boolean hasUnspecifiedLicense(
     Base base) {
-      return hasUnspecifiedLicense(base, false);
+      return hasUnspecifiedLicense(base, true);
   }
   
   public static boolean hasLicense(
@@ -94,7 +94,7 @@ public final class LicenseHelper {
   public static boolean hasLicense(
     Base base, 
     String iri) {
-    return hasLicense(base, iri, false);
+    return hasLicense(base, iri, true);
   }
   
   public static boolean hasLicense(
@@ -106,7 +106,7 @@ public final class LicenseHelper {
   
   public static boolean hasLicense(
     Base base) {
-      return hasLicense(base, false);
+      return hasLicense(base, true);
   }
   
   public static Link addUnspecifiedLicense(

@@ -148,9 +148,9 @@ public final class LicenseHelper {
     String title,
     String hreflang) 
       throws MimeTypeParseException {
-    if (hasLicense(base, iri))
+    if (hasLicense(base, iri,false))
       throw new IllegalStateException("License '" + iri + "' has already been added");
-    if (hasUnspecifiedLicense(base))
+    if (hasUnspecifiedLicense(base,false))
       throw new IllegalStateException("Unspecified license already added");
     if (base instanceof Source) {
       return ((Source)base).addLink((new IRI(iri)).toString(), Link.REL_LICENSE, type, title, hreflang, -1);

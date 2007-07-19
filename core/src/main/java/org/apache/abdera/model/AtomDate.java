@@ -220,6 +220,18 @@ public final class AtomDate {
    * @return The created java.util.Date
    */
   public static Date parse(String date) {
+    int ndx = date.indexOf('T');
+    if (ndx == -1) ndx = date.indexOf('t');
+    if (ndx > -1 && !date.endsWith("Z") && !date.endsWith("z")) {
+      int off = date.indexOf('+', ndx);
+      if (off == -1) off = date.indexOf('-', ndx);
+      if (off > -1) {
+        String s = date.substring(0,off);
+        String e = date.substring(off);
+        date = s + "GMT" + e;
+      }
+    }
+    
     Date d = null;
     SimpleDateFormat sdf = new SimpleDateFormat();
     for (int n = 0; n < masks.length; n++) {

@@ -26,7 +26,7 @@ import org.apache.abdera.i18n.iri.IRI;
 
 /**
  * Initial support for Mark Nottingham's Feed Paging and Archiving draft 
- * (http://ietfreport.isoc.org/all-ids/draft-nottingham-atompub-feed-history-07.txt)
+ * (http://ietfreport.isoc.org/all-ids/draft-nottingham-atompub-feed-history-11.txt)
  */
 public final class FeedPagingHelper {
 

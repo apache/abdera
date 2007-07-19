@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.test.ext.history;
 
+import javax.xml.namespace.QName;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.history.FeedPagingHelper;
 import org.apache.abdera.model.Feed;
@@ -29,7 +31,7 @@ public class FeedPagingTest extends TestCase {
     
     Abdera abdera = new Abdera();
     
-    Feed feed = abdera.getFactory().newFeed();
+    Feed feed = abdera.newFeed();
 
     FeedPagingHelper.setComplete(feed, true);
     FeedPagingHelper.setArchive(feed, true);
@@ -70,4 +72,11 @@ public class FeedPagingTest extends TestCase {
     assertEquals(FeedPagingHelper.getNext(feed).toString(),"http://example.org/bar");
   }
   
+  public static void testHistory2() throws Exception {
+    Abdera abdera = new Abdera();
+    Feed feed = abdera.newFeed();
+    QName complete = new QName(FeedPagingHelper.FHNS, "complete","x");
+    feed.addExtension(complete);
+    assertTrue(FeedPagingHelper.isComplete(feed));
+  }
 }

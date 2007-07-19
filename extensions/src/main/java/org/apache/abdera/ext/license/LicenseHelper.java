@@ -111,9 +111,9 @@ public final class LicenseHelper {
   
   public static Link addUnspecifiedLicense(
     Base base) {
-      if (hasUnspecifiedLicense(base)) 
+      if (hasUnspecifiedLicense(base,false)) 
         throw new IllegalStateException("Unspecified license already added");
-      if (hasLicense(base)) 
+      if (hasLicense(base,false)) 
         throw new IllegalStateException("Other licenses are already added.");
       return addLicense(base, UNSPECIFIED_LICENSE);
   }

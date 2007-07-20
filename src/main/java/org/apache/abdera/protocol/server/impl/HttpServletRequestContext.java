@@ -33,6 +33,7 @@ import org.apache.abdera.protocol.Resolver;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.server.Target;
+import org.apache.abdera.util.Messages;
 import org.apache.abdera.i18n.iri.IRI;
 
 public class HttpServletRequestContext 
@@ -88,7 +89,7 @@ public class HttpServletRequestContext
       case SERVERNAME:        return request.getServerName();
       case SERVERPORT:        return request.getServerPort();
       default:
-        throw new UnsupportedOperationException("Property not supported"); 
+        throw new UnsupportedOperationException(Messages.get("PROPERTY.NOT.SUPPORTED")); 
     }
   }
   

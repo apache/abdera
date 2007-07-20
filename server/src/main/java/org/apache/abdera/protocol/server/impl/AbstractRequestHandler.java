@@ -34,6 +34,7 @@ import org.apache.abdera.protocol.server.RequestHandler;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.server.Target;
+import org.apache.abdera.util.Messages;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -48,24 +49,24 @@ public abstract class AbstractRequestHandler
     HttpServletResponse response) 
       throws IOException {
     
-    log.debug("Processing the request");
+    log.debug(Messages.get("PROCESSING.REQUEST"));
     ItemManager<Provider> manager = context.getProviderManager();
     Provider provider = manager.get(request);
-    log.debug("Using provider - " + provider);
+    log.debug(Messages.format("USING.PROVIDER",provider));
     try {
       if (preconditions(provider, request, response)) {
         output(response,provider.request(request));
       }
     } catch (Throwable e) {
-      log.error("Error producing output", e);
+      log.error(Messages.get("OUTPUT.ERROR"), e);
       try {
         output(response,new EmptyResponseContext(500));
       } catch (Exception ex) {
-        log.error("Error outputting error", ex);
+        log.error(Messages.get("OUTPUT.ERROR"), ex);
         response.sendError(500);
       }
     } finally {
-      log.debug("Releasing provider - " + provider);
+      log.debug(Messages.format("RELEASING.PROVIDER", provider));
       if (provider != null) manager.release(provider);
     }
   }
@@ -147,11 +148,11 @@ public abstract class AbstractRequestHandler
   }
     
   protected void noprovider(HttpServletResponse response) throws IOException {
-    response.sendError(500, "No Provider");
+    response.sendError(500, Messages.get("NO.PROVIDER"));
   }
   
   protected void notfound(HttpServletResponse response) throws IOException {
-    response.sendError(404, "Not Found");
+    response.sendError(404, Messages.get("NOT.FOUND"));
   }
   
   protected void notallowed(
@@ -159,7 +160,7 @@ public abstract class AbstractRequestHandler
     String method, 
     String[] methods) 
       throws IOException {
-    response.sendError(405, "Method '" + method + "' Not Allowed");
+    response.sendError(405, Messages.format("METHOD.NOT.ALLOWED", method));
     response.setHeader("Allow", combine(methods));;
   }
   

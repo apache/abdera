@@ -70,6 +70,7 @@ import org.apache.axiom.om.OMText;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.llom.OMElementImpl;
 
+@SuppressWarnings("unchecked")
 public class FOMElement 
   extends OMElementImpl 
   implements Element, 
@@ -138,7 +139,7 @@ public class FOMElement
     return factory.getElementWrapper(internal);
   }
   
-  @SuppressWarnings("unchecked")
+  
   public <T extends Base>T getParentElement() {
     T parent = (T)super.getParent();
     return (T) ((parent instanceof Element) ? 
@@ -156,7 +157,7 @@ public class FOMElement
     super.setParent((FOMElement)parent);
   }
 
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element>T getPreviousSibling() {
     OMNode el = this.getPreviousOMSibling();
     while (el != null) {
@@ -166,7 +167,7 @@ public class FOMElement
     return null;
   }
   
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element>T getNextSibling() {
     OMNode el = this.getNextOMSibling();
     while (el != null) {
@@ -176,12 +177,12 @@ public class FOMElement
     return null;
   }
   
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element>T getFirstChild() {
     return (T)getWrapped((Element)this.getFirstElement());
   }
   
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element>T getPreviousSibling(QName qname) {
     Element el = getPreviousSibling();
     while (el != null) {
@@ -193,7 +194,7 @@ public class FOMElement
     return null;
   }
   
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element>T getNextSibling(QName qname) {
     Element el = getNextSibling();
     while (el != null) {
@@ -205,7 +206,7 @@ public class FOMElement
     return null;
   }
   
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element>T getFirstChild(QName qname) {
     return (T)getWrapped((Element)this.getFirstChildWithName(qname));
   }
@@ -300,7 +301,7 @@ public class FOMElement
     }
   }
   
-  @SuppressWarnings("unchecked")
+  
   protected <E extends Element>List<E> _getChildrenAsSet(QName qname) {
     FOMFactory factory = (FOMFactory) getFactory();
     return new FOMList(new FOMElementIteratorWrapper(
@@ -354,7 +355,7 @@ public class FOMElement
     }
   }
   
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element>Document<T> getDocument() {
     Document<T> document = null;
     if (parent != null) {
@@ -399,7 +400,7 @@ public class FOMElement
     return getMustPreserveWhitespace() || value == null ? value : value.trim();
   }
 
-  @SuppressWarnings("unchecked")
+  
   protected <T extends Text>T getTextElement(QName qname) {
     return (T)getFirstChildWithName(qname);
   }
@@ -547,7 +548,7 @@ public class FOMElement
     }
   }
   
-  @SuppressWarnings("unchecked")
+  
   public Object clone() {
     OMElement el = _create(this);
     _copyElement(this, el);
@@ -715,7 +716,7 @@ public class FOMElement
     return namespaces;
   }
 
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element>List<T> getElements() {
     return new FOMList<T>(
         new FOMElementIteratorWrapper(

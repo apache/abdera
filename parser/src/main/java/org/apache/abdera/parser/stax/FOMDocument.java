@@ -49,7 +49,7 @@ import org.apache.axiom.om.impl.MTOMXMLStreamWriter;
 import org.apache.axiom.om.impl.llom.OMDocumentImpl;
 import org.apache.axiom.om.util.StAXUtils;
 
-
+@SuppressWarnings("unchecked")
 public class FOMDocument<T extends Element> 
   extends OMDocumentImpl 
   implements Document<T> {
@@ -96,7 +96,6 @@ public class FOMDocument<T extends Element>
       super(parserWrapper);
   }
 
-  @SuppressWarnings("unchecked")
   public T getRoot() {  
     FOMFactory factory = (FOMFactory) getFactory();
     return (T) factory.getElementWrapper((T) this.getOMDocumentElement());
@@ -156,7 +155,6 @@ public class FOMDocument<T extends Element>
     this.lastModified = lastModified;
   }
   
-  @SuppressWarnings("unchecked")
   public Object clone() {
     Document<T> doc = ((FOMFactory)factory).newDocument();
     OMDocument omdoc = (OMDocument) doc;

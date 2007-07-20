@@ -36,6 +36,7 @@ import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.util.EncodingUtil;
+import org.apache.abdera.util.Messages;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.commons.logging.Log;
@@ -66,7 +67,7 @@ public abstract class AbstractProvider
     int code, 
     String message, 
     Throwable e) {
-      if (e != null) log.debug("Creating error document - " + code + ", " + message, e);
+      if (e != null) log.debug(Messages.format("CREATING.ERROR.DOC",code,message), e);
       else log.debug("Creating error document - " + code + ", " + message);
       Document doc = abdera.getFactory().newDocument();
       ExtensibleElement root = 
@@ -84,7 +85,7 @@ public abstract class AbstractProvider
     RequestContext request,
     String reason,
     Throwable t) {
-      log.debug("Server error");
+      log.debug(Messages.get("SERVER_ERROR"));
       return returnBase(
         createErrorDocument(
           abdera, 500, 
@@ -99,7 +100,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
-      log.debug("Unauthorized");
+      log.debug(Messages.get("UNAUTHORIZED"));
       return returnBase(
         createErrorDocument(
           abdera, 401, 
@@ -114,7 +115,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
-      log.debug("Forbidden");
+      log.debug(Messages.get("FORBIDDEN"));
       return returnBase(
         createErrorDocument(
           abdera, 403, 
@@ -129,7 +130,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
-    log.debug("Unknown");
+    log.debug(Messages.get("UNKNOWN"));
     return returnBase(
       createErrorDocument(
         abdera, 404, 
@@ -145,7 +146,7 @@ public abstract class AbstractProvider
     RequestContext request,
     String reason,
     String... methods) {
-      log.debug("Not Allowed"); 
+      log.debug(Messages.get("NOT.ALLOWED")); 
       BaseResponseContext resp = 
         (BaseResponseContext)returnBase(
           createErrorDocument(
@@ -163,7 +164,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
-      log.debug("Bad Request");
+      log.debug(Messages.get("BAD.REQUEST"));
       return returnBase(
         createErrorDocument(
           abdera, 400, 
@@ -178,7 +179,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
-    log.debug("Conflict");
+    log.debug(Messages.get("CONFLICT"));
       return returnBase(
         createErrorDocument(
           abdera, 409, 
@@ -193,7 +194,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
-      log.debug("Unavailable");
+      log.debug(Messages.get("UNAVAILABLE"));
       return returnBase(
         createErrorDocument(
           abdera, 503, 
@@ -205,7 +206,7 @@ public abstract class AbstractProvider
     Abdera abdera, 
     RequestContext request,
     String reason) {
-      log.debug("Not modified");
+      log.debug(Messages.get("NOT.MODIFIED"));
       EmptyResponseContext rc = new EmptyResponseContext(304);
       rc.setStatusText(reason);
       return rc;
@@ -215,7 +216,7 @@ public abstract class AbstractProvider
     Abdera abdera, 
     RequestContext request,
     String reason) {
-      log.debug("Precondition failed");
+      log.debug(Messages.get("PRECONDITION.FAILED"));
       return returnBase(
         createErrorDocument(
           abdera, 412, 
@@ -230,7 +231,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
-      log.debug("Not supported");
+      log.debug(Messages.get("NOT.SUPPORTED"));
       return returnBase(
         createErrorDocument(
           abdera, 415, 
@@ -245,7 +246,7 @@ public abstract class AbstractProvider
     Abdera abdera,
     RequestContext request,
     String reason) {
-      log.debug("Locked");
+      log.debug(Messages.get("LOCKED"));
       return returnBase(
         createErrorDocument(
           abdera, 423,
@@ -261,7 +262,7 @@ public abstract class AbstractProvider
     Base base, 
     int status,
     Date lastModified) {
-      log.debug("Returning Abdera document");
+      log.debug(Messages.get("RETURNING.DOCUMENT"));
       BaseResponseContext response = new BaseResponseContext(base);
       response.setStatus(status);
       if (lastModified != null) response.setLastModified(lastModified);
@@ -280,14 +281,14 @@ public abstract class AbstractProvider
    * the slug are replaced with an underscore
    */
   protected String sanitizeSlug(String slug) {
-    if (slug == null) throw new IllegalArgumentException("Slug cannot be null");
+    if (slug == null) throw new IllegalArgumentException(Messages.get("SLUG.NOT.NULL"));
     String sanitized = EncodingUtil.sanitize(slug);
-    log.debug("Sanitized slug '" + slug + "' to '" + sanitized + "'");
+    log.debug(Messages.format("SLUG.SANITIZED", slug, sanitized));
     return sanitized;
   }
 
   protected int getDefaultPageSize() {
-    log.debug("Getting default page size: " + defaultpagesize);
+    log.debug(Messages.format("DEFAULT.PAGE.SIZE",defaultpagesize));
     return defaultpagesize;
   }
   
@@ -302,7 +303,7 @@ public abstract class AbstractProvider
         size = (_ps != null) ? 
           Math.min(Math.max(Integer.parseInt(_ps),0),max) : max;
       } catch (Exception e) {}
-      log.debug("Getting page size: " + size);
+      log.debug(Messages.format("PAGE.SIZE",size));
       return size;
   }
   
@@ -317,7 +318,7 @@ public abstract class AbstractProvider
         page = Math.max(page, 1) - 1;
         offset = pageSize * page;
       } catch (Exception e) {}
-      log.debug("Getting offset: " + offset);
+      log.debug(Messages.format("OFFSET",offset));
       return offset;
   }
   
@@ -343,15 +344,15 @@ public abstract class AbstractProvider
             content.getContentType() == Content.Type.MEDIA || 
             content.getContentType() == Content.Type.XML) &&
             entry.getSummary() == null) {
-          log.debug("Checking valid entry: " + false);
+          log.debug(Messages.format("CHECKING.VALID.ENTRY",false));
           return false;
         }
       }
     } catch (Exception e) {
-      log.debug("Checking valid entry: " + false);
+      log.debug(Messages.format("CHECKING.VALID.ENTRY",false));
       return false;
     }
-    log.debug("Checking valid entry: " + true);
+    log.debug(Messages.format("CHECKING.VALID.ENTRY",true));
     return true;
   }
   
@@ -375,7 +376,7 @@ public abstract class AbstractProvider
       ignore.add(org.apache.abdera.util.Constants.XML_NS);
       checkEntryAddAdditionalNamespaces(ignore);
       boolean answer = checkElement(entry,ignore);
-      log.debug("Checking entry namespaces: " + answer);
+      log.debug(Messages.format("CHECKING.ENTRY.NAMESPACES",answer));
       return answer;
   }
   
@@ -417,9 +418,9 @@ public abstract class AbstractProvider
   public ResponseContext request(RequestContext request) {
     TargetType type = request.getTarget().getType();
     String method = request.getMethod();
-    log.debug("Target type: " + type);
-    log.debug("Target id: " + request.getTarget().getIdentity());
-    log.debug("Method: " + method);
+    log.debug(Messages.format("TARGET.TYPE",type));
+    log.debug(Messages.format("TARGET.ID",request.getTarget().getIdentity()));
+    log.debug(Messages.format("METHOD",method));
     if (method.equals("GET")) {
       if (type == TargetType.TYPE_SERVICE) {
         return getService(request);
@@ -489,7 +490,7 @@ public abstract class AbstractProvider
     return notallowed(
       request.getAbdera(), 
       request, 
-      "Not Allowed", 
+      Messages.get("NOT.ALLOWED"), 
       getAllowedMethods(
         request.getTarget().getType()));
   }
@@ -518,7 +519,7 @@ public abstract class AbstractProvider
       return notallowed(
         request.getAbdera(), 
         request, 
-        "Not Allowed", 
+        Messages.get("NOT.ALLOWED"), 
         getAllowedMethods(
           request.getTarget().getType()));
   }
@@ -528,7 +529,7 @@ public abstract class AbstractProvider
       return notallowed(
         request.getAbdera(), 
         request, 
-        "Not Allowed", 
+        Messages.get("NOT.ALLOWED"), 
         getAllowedMethods(
           request.getTarget().getType()));
   } 

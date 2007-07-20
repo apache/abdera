@@ -66,6 +66,7 @@ import org.apache.axiom.om.OMText;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.llom.factory.OMLinkedListImplFactory;
 
+@SuppressWarnings("unchecked")
 public class FOMFactory 
   extends OMLinkedListImplFactory 
   implements Factory, Constants, ExtensionFactory {
@@ -97,18 +98,18 @@ public class FOMFactory
     return new FOMParser();
   }
   
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element>Document<T> newDocument() {
     return new FOMDocument(this);
   }
   
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element>Document<T> newDocument(
     OMXMLParserWrapper parserWrapper) {
       return new FOMDocument(parserWrapper, this);
   }
   
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element>Document<T> newDocument(
     T root, 
     OMXMLParserWrapper parserWrapper) {
@@ -403,31 +404,31 @@ public class FOMFactory
     return new FOMText(type, qname, (OMContainer)parent,this);
   }
   
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element>T newElement(QName qname) {
     return (T)newElement(qname, null);
   }
   
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element>T newElement(
     QName qname, 
     Base parent) {
       return (T)newExtensionElement(qname, parent);
   }
   
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element>T newExtensionElement(QName qname) {
     return (T)newExtensionElement(qname, (OMContainer)null);
   }
   
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element>T newExtensionElement(
     QName qname, 
     Base parent) {
     return (T)newExtensionElement(qname, (OMContainer)parent);
   }
   
-  @SuppressWarnings("unchecked")
+  
   private <T extends Element>T newExtensionElement(
     QName qname, 
     OMContainer parent) {
@@ -437,7 +438,7 @@ public class FOMFactory
         el : factoriesMap.getElementWrapper(el));
   }
   
-  @SuppressWarnings("unchecked")
+  
   private <T extends Element>T newExtensionElement(
     QName qname,
     OMContainer parent,
@@ -630,7 +631,7 @@ public class FOMFactory
       return new FOMExtensibleElement(qname,parent,this,parserWrapper);
   }
   
-  @SuppressWarnings("unchecked")
+  
   protected OMElement createElement(
       QName qname, 
       OMContainer parent, 
@@ -710,7 +711,7 @@ public class FOMFactory
       return element;
     }
   
-  @SuppressWarnings("unchecked")
+  
   protected OMElement createElement(
     QName qname, 
     OMContainer parent, 
@@ -811,7 +812,7 @@ public class FOMFactory
     factoriesMap.setElementWrapper(internal, wrapper);
   }
   
-  @SuppressWarnings("unchecked")
+  
   public <T extends Element> T getElementWrapper(Element internal) {
     if (internal == null) return null;
     String ns = internal.getQName().getNamespaceURI();

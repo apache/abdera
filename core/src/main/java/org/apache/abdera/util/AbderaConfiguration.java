@@ -249,4 +249,5 @@ public final class AbderaConfiguration
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
   }
+  
 }

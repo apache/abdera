@@ -43,6 +43,7 @@ import org.apache.axiom.om.impl.OMNodeEx;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axiom.om.impl.util.OMSerializerUtil;
 
+@SuppressWarnings("unchecked")
 public class FOMBuilder 
   extends StAXOMBuilder
   implements Constants {
@@ -310,7 +311,6 @@ public class FOMBuilder
     depth--;
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Element>Document<T> getFomDocument() {
     while ((fomDocument == null) && !done) {
       next();

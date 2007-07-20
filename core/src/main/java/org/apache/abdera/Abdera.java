@@ -25,6 +25,7 @@ import org.apache.abdera.model.Service;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserFactory;
 import org.apache.abdera.util.AbderaConfiguration;
+import org.apache.abdera.util.Messages;
 import org.apache.abdera.util.ServiceUtil;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
@@ -172,7 +173,7 @@ public final class Abdera {
     try {
       return ServiceUtil.newXPathInstance(this);
     } catch (NoClassDefFoundError n) {
-      throw new RuntimeException("An Abdera XPath implementation is not available",n);
+      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","XPath"),n);
     }
   }
     
@@ -183,7 +184,7 @@ public final class Abdera {
     try {
       return ServiceUtil.newParserFactoryInstance(this);
     } catch (NoClassDefFoundError n) {
-      throw new RuntimeException("An Abdera Parser implementation is not available",n);
+      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","Parser"),n);
     }
   }
     
@@ -194,7 +195,7 @@ public final class Abdera {
     try {
       return ServiceUtil.newWriterFactoryInstance(this);
     } catch (NoClassDefFoundError n) {
-      throw new RuntimeException("An Abdera WriterFactory implementation is not available",n);
+      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","WriterFactory"),n);
     }
   }
     
@@ -205,7 +206,7 @@ public final class Abdera {
     try {
       return ServiceUtil.newWriterInstance(this);
     } catch (NoClassDefFoundError n) {
-      throw new RuntimeException("An Abdera Writer implementation is not available",n);
+      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","Writer"),n);
     }
   }
   

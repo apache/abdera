@@ -27,15 +27,15 @@ import org.apache.abdera.model.Link;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.util.UUIDGenerator;
 
-public class FOMHelper implements Constants {
+@SuppressWarnings("unchecked")
+public class FOMHelper 
+  implements Constants {
 
-  @SuppressWarnings("unchecked")
   public static List<Category> getCategories(Element element, String scheme) {
     Iterator i = new FOMElementIterator(element, Category.class, SCHEME, scheme, null);
     return new FOMList<Category>(i);
   }
   
-  @SuppressWarnings("unchecked")
   public static List<Link> getLinks(Element element, String rel) {
     Iterator i = new FOMLinkIterator(element, Link.class, REL, rel, Link.REL_ALTERNATE);
     return new FOMList<Link>(i);

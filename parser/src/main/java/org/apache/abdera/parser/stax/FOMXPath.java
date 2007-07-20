@@ -39,6 +39,7 @@ import org.jaxen.SimpleVariableContext;
 import org.jaxen.VariableContext;
 import org.jaxen.XPath;
 
+@SuppressWarnings("unchecked")
 public class FOMXPath extends AbstractXPath {
   
   private final Map<QName,Function> functions;
@@ -147,8 +148,7 @@ public class FOMXPath extends AbstractXPath {
       throws JaxenException {
     return getXPath(path, namespaces, null, null);
   }
-
-  @SuppressWarnings("unchecked")
+  
   public List selectNodes(
     String path, 
     Base base, 

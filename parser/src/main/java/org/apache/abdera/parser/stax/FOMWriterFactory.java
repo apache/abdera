@@ -25,6 +25,7 @@ import org.apache.abdera.writer.NamedWriter;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
 
+@SuppressWarnings("unchecked")
 public class FOMWriterFactory 
   implements WriterFactory {
 
@@ -45,18 +46,15 @@ public class FOMWriterFactory
     return abdera;
   }
   
-  @SuppressWarnings("unchecked")
   public <T extends Writer>T getWriter() {
     return (T)getAbdera().getWriter();
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Writer>T getWriter(String name) {
     return (T)((name != null) ? 
       getWriters().get(name.toLowerCase()) : getWriter());
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Writer>T getWriterByMediaType(String mediatype) {
     Map<String,NamedWriter> writers = getWriters();
     for (NamedWriter writer : writers.values()) {

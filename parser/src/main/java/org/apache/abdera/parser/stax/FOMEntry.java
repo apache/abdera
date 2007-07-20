@@ -55,6 +55,7 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
+@SuppressWarnings("unchecked")
 public class FOMEntry
   extends FOMExtensibleElement 
   implements Entry {
@@ -171,7 +172,6 @@ public class FOMEntry
     return category;    
   }
   
-  @SuppressWarnings("unchecked")
   public Content getContentElement() {
     return (Content)getFirstChildWithName(CONTENT);
   }
@@ -465,7 +465,6 @@ public class FOMEntry
     return setPublished((value != null) ? AtomDate.valueOf(value) : null);
   }
   
-  @SuppressWarnings("unchecked")
   public Text getRightsElement() {
     return getTextElement(RIGHTS);
   }
@@ -523,7 +522,6 @@ public class FOMEntry
     }
   }
 
-  @SuppressWarnings("unchecked")
   public Text getSummaryElement() {
     return getTextElement(SUMMARY);
   }
@@ -567,7 +565,6 @@ public class FOMEntry
     return getText(SUMMARY);
   }
 
-  @SuppressWarnings("unchecked")
   public Text getTitleElement() {
     return getTextElement(TITLE);
   }

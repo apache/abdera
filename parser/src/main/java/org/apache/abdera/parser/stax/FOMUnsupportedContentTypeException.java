@@ -17,13 +17,15 @@
 */
 package org.apache.abdera.parser.stax;
 
+import org.apache.abdera.util.Messages;
+
 public class FOMUnsupportedContentTypeException 
   extends FOMException {
 
   private static final long serialVersionUID = 4156893310308105899L;
 
   public FOMUnsupportedContentTypeException(String message) {
-    super("Unsupported Content Type: " + message);
+    super(Messages.format("UNSUPPORTED.CONTENT.TYPE",message));
   }
 
 }

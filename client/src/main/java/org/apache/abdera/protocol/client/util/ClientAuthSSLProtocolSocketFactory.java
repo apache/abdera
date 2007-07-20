@@ -33,6 +33,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.apache.abdera.util.Messages;
 import org.apache.commons.httpclient.ConnectTimeoutException;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
@@ -57,7 +58,7 @@ public class ClientAuthSSLProtocolSocketFactory
     String protocol, 
     String kmfFactory,
     TrustManager tm) {
-      if (ks == null) throw new IllegalArgumentException("Invalid Keystore");
+      if (ks == null) throw new IllegalArgumentException(Messages.get("INVALID.KEYSTORE"));
       this.ks = ks;
       this.keyStorePass = keyStorePass;
       if (protocol != null) this.protocol = protocol;

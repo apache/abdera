@@ -32,6 +32,7 @@ import org.apache.abdera.protocol.Request;
 import org.apache.abdera.protocol.util.AbstractRequest;
 import org.apache.abdera.protocol.util.CacheControlUtil;
 import org.apache.abdera.protocol.util.EncodingUtil;
+import org.apache.abdera.util.Messages;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
 
@@ -388,7 +389,7 @@ public class RequestOptions
     if (slug.indexOf((char)10) > -1 ||
         slug.indexOf((char)13) > -1)
       throw new IllegalArgumentException(
-        "The slug must not contain ASCII carriage return or linefeed characters");
+        Messages.get("SLUG.BAD.CHARACTERS"));
     setHeader("Slug", Escaping.encode(slug,Constants.ASCIISANSCRLF));
   }
   

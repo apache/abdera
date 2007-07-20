@@ -31,6 +31,7 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.security.AbderaSecurity;
 import org.apache.abdera.security.Signature;
+import org.apache.abdera.util.Messages;
 
 /**
  * Servlet Filter that verifies that an Atom document received by the server
@@ -61,7 +62,7 @@ public class SignedRequestFilter
         boolean valid = sig.verify(doc.getRoot(), null);
         if (!valid) {
           ((HttpServletResponse)response).sendError(
-            400, "A Valid Signature is required");
+            400, Messages.get("VALID.SIGNATURE.REQUIRED"));
           return;
         }
         wrapper.setAttribute(VALID, Boolean.valueOf(valid));

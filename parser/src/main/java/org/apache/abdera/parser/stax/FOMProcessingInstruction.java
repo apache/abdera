@@ -25,6 +25,7 @@ import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.impl.llom.OMProcessingInstructionImpl;
 
+@SuppressWarnings("unchecked")
 public class FOMProcessingInstruction 
   extends OMProcessingInstructionImpl
   implements ProcessingInstruction {
@@ -37,7 +38,6 @@ public class FOMProcessingInstruction
     super(arg0, arg1, arg2, arg3);
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Base>T getParentElement() {
     T parent = (T)super.getParent();
     return (T) ((parent instanceof Element) ? 

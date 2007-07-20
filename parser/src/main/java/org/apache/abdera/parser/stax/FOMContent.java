@@ -28,6 +28,7 @@ import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.util.Constants;
+import org.apache.abdera.util.Messages;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.attachments.utils.DataHandlerUtils;
 import org.apache.axiom.om.OMContainer;
@@ -37,6 +38,7 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
+@SuppressWarnings("unchecked")
 public class FOMContent 
   extends FOMExtensibleElement 
   implements Content {
@@ -120,7 +122,6 @@ public class FOMContent
     init(type);
   }
   
-  @SuppressWarnings("unchecked")
   public <T extends Element> T getValueElement() {
     FOMFactory factory = (FOMFactory) getFactory();
     return (T)factory.getElementWrapper((Element)this.getFirstElement());
@@ -193,7 +194,7 @@ public class FOMContent
   public DataHandler getDataHandler() {
     if (!Type.MEDIA.equals(type)) 
       throw new UnsupportedOperationException(
-        "Only supported on media content entries");
+        Messages.get("DATA.HANDLER.NOT.SUPPORTED"));
     MimeType type = getMimeType();
     java.net.URL src = null;
     try {

@@ -34,6 +34,7 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
+@SuppressWarnings("unchecked")
 public class FOMExtensibleElement 
   extends FOMElement 
   implements ExtensibleElement {
@@ -70,17 +71,14 @@ public class FOMExtensibleElement
     super(qname, parent, factory, builder);
   }
 
-  @SuppressWarnings("unchecked")
   public List<Element> getExtensions() {
     return new FOMList<Element>(new FOMExtensionIterator(this));
   }
 
-  @SuppressWarnings("unchecked")
   public List<Element> getExtensions(String uri) {
     return new FOMList<Element>(new FOMExtensionIterator(this, uri));
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Element>List<T> getExtensions(QName qname) {
     FOMFactory factory = (FOMFactory) this.getFactory();
     return new FOMList<T>(
@@ -88,7 +86,6 @@ public class FOMExtensibleElement
         factory,getChildrenWithName(qname)));
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Element>T getExtension(QName qname) {
     FOMFactory factory = (FOMFactory) getFactory();
     T t = (T) this.getFirstChildWithName(qname);
@@ -106,7 +103,6 @@ public class FOMExtensibleElement
     addChild((OMElement)extension);
   }
   
-  @SuppressWarnings("unchecked")
   public <T extends Element>T addExtension(QName qname) {
     FOMFactory fomfactory = (FOMFactory) factory;
     String prefix = qname.getPrefix();
@@ -114,7 +110,6 @@ public class FOMExtensibleElement
     return (T)fomfactory.newExtensionElement(qname, this);
   }
   
-  @SuppressWarnings("unchecked")
   public <T extends Element>T addExtension(String namespace, String localpart, String prefix) {
     declareIfNecessary(namespace, prefix);
     return (prefix != null) ? 
@@ -175,7 +170,6 @@ public class FOMExtensibleElement
    * Trick using Generics to find an extension element without 
    * having to pass in it's QName
    */ 
-  @SuppressWarnings("unchecked")
   public <T extends Element> T getExtension(Class<T> _class) {
     T t = null;
     List<Element> extensions = getExtensions();

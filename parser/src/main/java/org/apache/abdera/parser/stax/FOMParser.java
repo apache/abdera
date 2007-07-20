@@ -31,6 +31,7 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.parser.stax.util.FOMSniffingInputStream;
 import org.apache.abdera.util.AbstractParser;
+import org.apache.abdera.util.Messages;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.util.StAXUtils;
@@ -85,7 +86,7 @@ public class FOMParser
     ParserOptions options)
       throws ParseException {
     if (in == null)
-      throw new IllegalArgumentException("InputStream must not be null");
+      throw new IllegalArgumentException(Messages.get("INPUTSTREAM.NOT.NULL"));
     try {
       if (options == null) options = getDefaultParserOptions();
       String charset = options.getCharset();
@@ -115,7 +116,7 @@ public class FOMParser
     ParserOptions options) 
       throws ParseException {
     if (in == null)
-      throw new IllegalArgumentException("Reader must not be null");
+      throw new IllegalArgumentException(Messages.get("READER.NOT.NULL"));
     try {
       if (options == null) options = getDefaultParserOptions();
       return parse(StAXUtils.createXMLStreamReader(in), base, options);

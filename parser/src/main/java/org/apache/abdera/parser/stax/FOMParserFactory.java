@@ -25,6 +25,7 @@ import org.apache.abdera.parser.NamedParser;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserFactory;
 
+@SuppressWarnings("unchecked")
 public class FOMParserFactory 
   implements ParserFactory {
 
@@ -45,12 +46,10 @@ public class FOMParserFactory
     return abdera;
   }
   
-  @SuppressWarnings("unchecked")
   public <T extends Parser>T getParser() {
     return (T)getAbdera().getParser();
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Parser>T getParser(String name) {
     return (T)((name != null) ? 
       getParsers().get(name.toLowerCase()) : getParser());

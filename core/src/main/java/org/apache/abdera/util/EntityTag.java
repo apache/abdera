@@ -34,7 +34,7 @@ public class EntityTag
              Serializable {
 
   private static final long serialVersionUID = 1559972888659121461L;
-  private static final String INVALID_ENTITY_TAG = "Invalid Entity Tag";
+  private static final String INVALID_ENTITY_TAG = Messages.get("INVALID.ENTITY.TAG");
 
   public static EntityTag parse(String entity_tag) {
     if (entity_tag == null || entity_tag.length() == 0) 
@@ -186,10 +186,10 @@ public class EntityTag
       etag = new String(Hex.encodeHex(digest));
     } catch (NoSuchAlgorithmException e) {
       throw new UnsupportedOperationException(
-        "The hashing function is not available");
+        Messages.get("HASHING.NOT.AVAILABLE"));
     } catch (UnsupportedEncodingException e) {
       // should not happen
-      throw new RuntimeException("UTF-8 not supported?", e);
+      throw new RuntimeException(Messages.get("UTF8.NOT.SUPPORTED"), e);
     }
     return new EntityTag(etag);
   }

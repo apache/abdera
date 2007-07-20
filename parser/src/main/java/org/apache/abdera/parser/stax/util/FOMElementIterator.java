@@ -23,7 +23,9 @@ import org.apache.abdera.model.Element;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.impl.traverse.OMChildrenIterator;
 
-public class FOMElementIterator extends OMChildrenIterator {
+@SuppressWarnings("unchecked")
+public class FOMElementIterator 
+  extends OMChildrenIterator {
 
   /**
    * Field givenQName
@@ -68,7 +70,6 @@ public class FOMElementIterator extends OMChildrenIterator {
    *
    * @return Returns <tt>true</tt> if the iterator has more elements.
    */
-  @SuppressWarnings("unchecked")
   public boolean hasNext() {
       while (needToMoveForward) {
           if (currentChild != null) {

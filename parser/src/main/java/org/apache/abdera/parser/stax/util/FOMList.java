@@ -42,6 +42,7 @@ import java.util.ListIterator;
  *   
  *   The List itself is unmodifiable. 
  */
+@SuppressWarnings("unchecked")
 public class FOMList<T> 
   extends java.util.AbstractCollection<T>
   implements List<T> {
@@ -76,7 +77,6 @@ public class FOMList<T>
     return buffered();
   }
   
-  @SuppressWarnings("unchecked")
   public T get(int index) {
     int n = buffered();
     if (index > n && (index > buffer(index - n)))
@@ -180,7 +180,6 @@ public class FOMList<T>
     return buffer.toArray();
   }
 
-  @SuppressWarnings("unchecked")
   public Object[] toArray(Object[] a) {
     buffer(-1);
     return buffer.toArray(a);
@@ -206,7 +205,6 @@ public class FOMList<T>
           (set.finished() && counter < buffer.size());
       }
     
-      @SuppressWarnings("unchecked")
       public M next() {
         return (M) set.get(counter++);
       }
@@ -230,7 +228,6 @@ public class FOMList<T>
           return buffer.size();
       }
     
-      @SuppressWarnings("unchecked")
       public M previous() {
         return (M) set.get(--counter);
       }

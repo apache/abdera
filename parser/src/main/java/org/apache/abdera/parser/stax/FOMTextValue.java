@@ -29,6 +29,7 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.llom.OMTextImpl;
 
+@SuppressWarnings("unchecked")
 public class FOMTextValue 
   extends OMTextImpl
   implements TextValue {
@@ -85,7 +86,6 @@ public class FOMTextValue
     return (DataHandler) super.getDataHandler();
   }
   
-  @SuppressWarnings("unchecked")
   public <T extends Base>T getParentElement() {
     T parent = (T)super.getParent();
     return (T) ((parent instanceof Element) ? 

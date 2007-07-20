@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.protocol;
 
-
-
 public interface ItemManager<T> {
 
   T get(Request request);

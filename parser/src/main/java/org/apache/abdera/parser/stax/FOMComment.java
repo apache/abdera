@@ -25,6 +25,7 @@ import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.impl.llom.OMCommentImpl;
 
+@SuppressWarnings("unchecked")
 public class FOMComment 
   extends OMCommentImpl 
   implements Comment {
@@ -45,7 +46,6 @@ public class FOMComment
     super.setValue(text);
   }
   
-  @SuppressWarnings("unchecked")
   public <T extends Base>T getParentElement() {
     T parent = (T)super.getParent();
     return (T) ((parent instanceof Element) ? 

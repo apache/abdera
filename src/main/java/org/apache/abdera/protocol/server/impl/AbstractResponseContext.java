@@ -30,6 +30,7 @@ import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.util.AbstractResponse;
 import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.util.EntityTag;
+import org.apache.abdera.util.Messages;
 import org.apache.abdera.writer.Writer;
 
 public abstract class AbstractResponseContext
@@ -228,7 +229,7 @@ public abstract class AbstractResponseContext
     if (slug.indexOf((char)10) > -1 ||
         slug.indexOf((char)13) > -1)
       throw new IllegalArgumentException(
-        "The slug must not contain ASCII carriage return or linefeed characters");
+        Messages.get("SLUG.BAD.CHARACTERS"));
     setEscapedHeader("Slug", Constants.ASCIISANSCRLF, slug);
   }
   

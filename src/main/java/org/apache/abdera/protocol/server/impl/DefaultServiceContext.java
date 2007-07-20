@@ -25,6 +25,7 @@ import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.RequestHandler;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.util.ServerConstants;
+import org.apache.abdera.util.Messages;
 import org.apache.abdera.util.ServiceUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,14 +46,14 @@ public class DefaultServiceContext
   private Object instance(String id, String _default) {
     String instance = getProperty(id);
     Object obj =  ServiceUtil.newInstance( id, (instance!=null)?instance:_default, abdera);
-    logger.debug("Returning " + obj + " as instance of '" + id + "'.");
+    logger.debug(Messages.format("RETURNING.INSTANCE", obj, id));
     return obj;
   }
   
   private Object instance(String id, String _default, Object... args) {
     String instance = getProperty(id);
     Object obj =  ServiceUtil.newInstance( id, (instance!=null)?instance:_default, abdera, args);
-    logger.debug("Returning " + obj + " as instance of '" + id + "'.");
+    logger.debug(Messages.format("RETURNING.INSTANCE", obj, id));
     return obj;
   }
   

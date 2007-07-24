@@ -95,7 +95,7 @@ public class FOMFactory
   }
   
   public Parser newParser() {
-    return new FOMParser();
+    return new FOMParser(abdera);
   }
   
   

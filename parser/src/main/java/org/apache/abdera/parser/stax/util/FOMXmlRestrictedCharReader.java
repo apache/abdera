@@ -21,70 +21,71 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 
-import org.apache.abdera.util.XmlRestrictedCharFilter;
+import org.apache.abdera.util.XmlRestrictedCharReader;
+import org.apache.abdera.util.XmlUtil;
 
-public final class FOMXmlRestrictedCharFilter 
-  extends XmlRestrictedCharFilter {
+public final class FOMXmlRestrictedCharReader 
+  extends XmlRestrictedCharReader {
 
-  public FOMXmlRestrictedCharFilter(
+  public FOMXmlRestrictedCharReader(
     Reader in) {
       this(new FOMXmlVersionReader(in));
   }
   
-  public FOMXmlRestrictedCharFilter(
+  public FOMXmlRestrictedCharReader(
     FOMXmlVersionReader in) {
-      super(in,getMode(in.getVersion()));
+      super(in,XmlUtil.getVersion(in.getVersion()));
   }
   
-  public FOMXmlRestrictedCharFilter(
+  public FOMXmlRestrictedCharReader(
     Reader in, 
     char replacement) {
       this(new FOMXmlVersionReader(in), replacement);
   }
   
-  public FOMXmlRestrictedCharFilter(
+  public FOMXmlRestrictedCharReader(
     FOMXmlVersionReader in, 
     char replacement) {
-      super(in,getMode(in.getVersion()), replacement);
+      super(in,XmlUtil.getVersion(in.getVersion()), replacement);
   }
 
-  public FOMXmlRestrictedCharFilter(
+  public FOMXmlRestrictedCharReader(
     InputStream in) {
       this(new FOMXmlVersionInputStream(in));
   }
   
-  public FOMXmlRestrictedCharFilter(
+  public FOMXmlRestrictedCharReader(
     FOMXmlVersionInputStream in) {
-      super(in,getMode(in.getVersion()));
+      super(in,XmlUtil.getVersion(in.getVersion()));
   }
   
-  public FOMXmlRestrictedCharFilter(
+  public FOMXmlRestrictedCharReader(
     InputStream in, 
     char replacement) {
       this(new FOMXmlVersionInputStream(in), replacement);
   }
   
-  public FOMXmlRestrictedCharFilter(
+  public FOMXmlRestrictedCharReader(
     FOMXmlVersionInputStream in, 
     char replacement) {
-      super(in,getMode(in.getVersion()), replacement);
+      super(in,XmlUtil.getVersion(in.getVersion()), replacement);
   }
 
-  public FOMXmlRestrictedCharFilter(
+  public FOMXmlRestrictedCharReader(
     InputStream in, 
     String charset) 
       throws UnsupportedEncodingException {
     this(new FOMXmlVersionInputStream(in),charset);
   }
   
-  public FOMXmlRestrictedCharFilter(
+  public FOMXmlRestrictedCharReader(
     FOMXmlVersionInputStream in, 
     String charset) 
       throws UnsupportedEncodingException {
-    super(in,charset,getMode(in.getVersion()));
+    super(in,charset,XmlUtil.getVersion(in.getVersion()));
   }
   
-  public FOMXmlRestrictedCharFilter(
+  public FOMXmlRestrictedCharReader(
     InputStream in, 
     String charset, 
     char replacement) 
@@ -92,19 +93,12 @@ public final class FOMXmlRestrictedCharFilter
     this(new FOMXmlVersionInputStream(in), charset, replacement);
   }
   
-  public FOMXmlRestrictedCharFilter(
+  public FOMXmlRestrictedCharReader(
     FOMXmlVersionInputStream in, 
     String charset, 
     char replacement) 
       throws UnsupportedEncodingException {
-    super(in,charset, getMode(in.getVersion()), replacement);
-  }
-  
-  private static Mode getMode(String version) {
-    return version == null ? Mode.XML10 :
-           version.equals("1.0") ? Mode.XML10 :
-           version.equals("1.1") ? Mode.XML11 : 
-           Mode.XML10;
+    super(in,charset, XmlUtil.getVersion(in.getVersion()), replacement);
   }
   
 }

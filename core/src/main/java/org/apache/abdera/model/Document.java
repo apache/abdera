@@ -26,6 +26,7 @@ import javax.activation.MimeTypeParseException;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.lang.Lang;
 import org.apache.abdera.util.EntityTag;
+import org.apache.abdera.util.XmlUtil.XMLVersion;
 
 /**
  * <p>The top level artifact of the Feed Object Model.  The Parser component
@@ -165,4 +166,8 @@ public interface Document<T extends Element>
   
   void setMustPreserveWhitespace(boolean preserve);
   
+  /**
+   * Get the XMLVersion used by this document
+   */
+  XMLVersion getXmlVersion();
 }

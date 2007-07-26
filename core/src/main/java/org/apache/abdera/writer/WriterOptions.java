@@ -15,38 +15,29 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.util;
+package org.apache.abdera.writer;
 
-import org.apache.abdera.writer.NamedWriter;
+import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 
-/**
- * Base abstract implementation of NamedWriter
- */
-public abstract class AbstractNamedWriter 
-  extends AbstractWriter
-  implements NamedWriter {
+public interface WriterOptions extends Cloneable {
 
-  protected final String name;
-  protected final String[] formats;
+  /**
+   * When writing, use the specified compression codecs
+   */
+  CompressionCodec[] getCompressionCodecs();
+
+  /**
+   * When writing, use the specified compression codecs
+   */
+  void setCompressionCodecs(CompressionCodec... codecs);
+
+  Object clone() throws CloneNotSupportedException;
   
-  protected AbstractNamedWriter(String name, String... formats ) {
-    this.name = name;
-    this.formats = formats;
-  }
+  String getCharset();
   
-  public String getName() {
-    return name;
-  }
-
-  public String[] getOutputFormats() {
-    return formats;
-  }
-
-  public boolean outputsFormat(String mediatype) {
-    for (String format : formats) {
-      if (MimeTypeHelper.isMatch(format, mediatype))
-        return true;
-    }
-    return false;
-  }
+  void setCharset(String charset);
+  
+  boolean getAutoClose();
+  
+  void setAutoClose(boolean autoclose);
 }

@@ -15,38 +15,11 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.util;
+package org.apache.abdera.parser.stax;
 
-import org.apache.abdera.writer.NamedWriter;
+import org.apache.abdera.util.AbstractWriterOptions;
 
-/**
- * Base abstract implementation of NamedWriter
- */
-public abstract class AbstractNamedWriter 
-  extends AbstractWriter
-  implements NamedWriter {
+public class FOMWriterOptions 
+  extends AbstractWriterOptions {
 
-  protected final String name;
-  protected final String[] formats;
-  
-  protected AbstractNamedWriter(String name, String... formats ) {
-    this.name = name;
-    this.formats = formats;
-  }
-  
-  public String getName() {
-    return name;
-  }
-
-  public String[] getOutputFormats() {
-    return formats;
-  }
-
-  public boolean outputsFormat(String mediatype) {
-    for (String format : formats) {
-      if (MimeTypeHelper.isMatch(format, mediatype))
-        return true;
-    }
-    return false;
-  }
 }

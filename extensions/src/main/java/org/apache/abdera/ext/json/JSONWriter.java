@@ -38,7 +38,9 @@ import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
 import org.apache.abdera.model.Content.Type;
 import org.apache.abdera.util.AbstractNamedWriter;
+import org.apache.abdera.util.AbstractWriterOptions;
 import org.apache.abdera.writer.NamedWriter;
+import org.apache.abdera.writer.WriterOptions;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,7 +67,7 @@ public class JSONWriter
     return NAME;
   }
 
-  public Object write(Base base) throws IOException {
+  public Object write(Base base, WriterOptions options) throws IOException {
     try {
       return toJSON(base).toString();
     } catch (Exception e) {
@@ -73,19 +75,21 @@ public class JSONWriter
     }
   }
 
-  public void writeTo(Base base, OutputStream out) throws IOException {
+  public void writeTo(Base base, OutputStream out, WriterOptions options) throws IOException {
     try {
       Object result = toJSON(base);
       out.write(result.toString().getBytes());
+      if (options.getAutoClose()) out.close();
     } catch (Exception e) {
       throw new IOException(e.getMessage());
     }
   }
 
-  public void writeTo(Base base, java.io.Writer out) throws IOException {
+  public void writeTo(Base base, java.io.Writer out, WriterOptions options) throws IOException {
     try {
       Object result = toJSON(base);
       out.write(result.toString());
+      if (options.getAutoClose()) out.close();
     } catch (Exception e) {
       throw new IOException(e.getMessage());
     }
@@ -286,6 +290,11 @@ public class JSONWriter
       jslinks.put(jslink);
     }
     return jslinks;
+  }
+
+  @Override
+  protected WriterOptions initDefaultWriterOptions() {
+    return new AbstractWriterOptions() {};
   }
 
 }

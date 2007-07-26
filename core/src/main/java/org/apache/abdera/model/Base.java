@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.io.Writer;
 
 import org.apache.abdera.factory.Factory;
+import org.apache.abdera.writer.WriterOptions;
 
 /**
  * The Base interface provides the basis for the Feed Object Model API and 
@@ -34,6 +35,42 @@ import org.apache.abdera.factory.Factory;
 public interface Base 
   extends Cloneable {
 
+  WriterOptions getDefaultWriterOptions();
+  
+  /**
+   * Serializes the model component out to the specified stream
+   */
+  void writeTo(OutputStream out, WriterOptions options) throws IOException;
+  
+  /**
+   * Serializes the model component out to the specified java.io.Writer
+   */
+  void writeTo(Writer out, WriterOptions options) throws IOException;
+  
+  /**
+   * Serializes the model component out to the specified stream using the 
+   * given abdera writer
+   */
+  void writeTo(org.apache.abdera.writer.Writer writer, OutputStream out) throws IOException;
+  
+  /**
+   * Serializes the model component out to the specified java.io.Writer using the 
+   * given abdera writer
+   */
+  void writeTo(org.apache.abdera.writer.Writer writer, Writer out) throws IOException;
+  
+  /**
+   * Serializes the model component out to the specified stream using the 
+   * given abdera writer
+   */
+  void writeTo(org.apache.abdera.writer.Writer writer, OutputStream out, WriterOptions options) throws IOException;
+  
+  /**
+   * Serializes the model component out to the specified java.io.Writer using the 
+   * given abdera writer
+   */
+  void writeTo(org.apache.abdera.writer.Writer writer, Writer out, WriterOptions options) throws IOException;
+  
   /**
    * Serializes the model component out to the specified stream
    * @param out The java.io.OutputStream to use when serializing the Base. The charset encoding specified for the document will be used

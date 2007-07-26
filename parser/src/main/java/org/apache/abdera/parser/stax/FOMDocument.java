@@ -34,6 +34,10 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.util.EntityTag;
+import org.apache.abdera.util.XmlUtil;
+import org.apache.abdera.util.XmlUtil.XMLVersion;
+import org.apache.abdera.writer.Writer;
+import org.apache.abdera.writer.WriterOptions;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.lang.Lang;
 import org.apache.axiom.om.OMComment;
@@ -117,6 +121,52 @@ public class FOMDocument<T extends Element>
     this.base = new IRI(base);
   }
 
+  public void writeTo(
+    OutputStream out, 
+    WriterOptions options) 
+      throws IOException {
+    FOMWriter writer = new FOMWriter();
+    writer.writeTo(this,out,options);
+  }
+  
+  public void writeTo(
+    java.io.Writer out, 
+    WriterOptions options)
+      throws IOException {
+    FOMWriter writer = new FOMWriter();
+    writer.writeTo(this,out,options);
+  }
+  
+  public void writeTo(
+    Writer writer, 
+    OutputStream out) 
+      throws IOException {
+    writer.writeTo(this,out);
+  }
+  
+  public void writeTo(
+    Writer writer,
+    java.io.Writer out) 
+      throws IOException {
+    writer.writeTo(this,out);
+  }
+  
+  public void writeTo(
+    Writer writer, 
+    OutputStream out,
+    WriterOptions options) 
+      throws IOException {
+    writer.writeTo(this,out,options);
+  }
+  
+  public void writeTo(
+    Writer writer,
+    java.io.Writer out,
+    WriterOptions options) 
+      throws IOException {
+    writer.writeTo(this,out,options);
+  }
+  
   public void writeTo(OutputStream out) throws IOException {
     writeTo(new OutputStreamWriter(out));
   }
@@ -278,5 +328,13 @@ public class FOMDocument<T extends Element>
   
   public void setMustPreserveWhitespace(boolean preserve) {
     this.preserve = preserve;
+  }
+
+  public XMLVersion getXmlVersion() {
+    return XmlUtil.getVersion(super.getXMLVersion());
+  }
+  
+  public WriterOptions getDefaultWriterOptions() {
+    return new FOMWriter().getDefaultWriterOptions();
   }
 }

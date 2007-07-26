@@ -30,7 +30,7 @@ import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.parser.stax.util.FOMSniffingInputStream;
-import org.apache.abdera.parser.stax.util.FOMXmlRestrictedCharFilter;
+import org.apache.abdera.parser.stax.util.FOMXmlRestrictedCharReader;
 import org.apache.abdera.util.AbstractParser;
 import org.apache.abdera.util.CompressionUtil;
 import org.apache.abdera.util.Messages;
@@ -107,9 +107,9 @@ public class FOMParser
       }
       if (options.getFilterRestrictedCharacters()) {
         Reader rdr = (charset == null) ? 
-          new FOMXmlRestrictedCharFilter(
+          new FOMXmlRestrictedCharReader(
             in,options.getFilterRestrictedCharacterReplacement()) :
-          new FOMXmlRestrictedCharFilter(
+          new FOMXmlRestrictedCharReader(
             in,charset,options.getFilterRestrictedCharacterReplacement());
         return parse(StAXUtils.createXMLStreamReader(rdr), base, options);
       } else {
@@ -135,8 +135,8 @@ public class FOMParser
     try {
       if (options == null) options = getDefaultParserOptions();
       if (options.getFilterRestrictedCharacters() && 
-          !(in instanceof FOMXmlRestrictedCharFilter)) {
-        in = new FOMXmlRestrictedCharFilter(
+          !(in instanceof FOMXmlRestrictedCharReader)) {
+        in = new FOMXmlRestrictedCharReader(
           in,options.getFilterRestrictedCharacterReplacement());
       }
       return parse(StAXUtils.createXMLStreamReader(in), base, options);

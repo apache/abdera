@@ -46,4 +46,33 @@ public interface Writer {
    * Return the serialized form of the Abdera Base
    */
   Object write(Base base) throws IOException;
+  
+  
+  /**
+   * Serialized the given Abdera Base to the given outputstream 
+   */
+  void writeTo(Base base, 
+    OutputStream out, 
+    WriterOptions options) 
+      throws IOException;
+  
+  /**
+   * Serialized the given Abdera Base to the given writer  
+   */
+  void writeTo(
+    Base base, 
+    java.io.Writer out,
+    WriterOptions options) 
+      throws IOException;
+
+  /**
+   * Return the serialized form of the Abdera Base
+   */
+  Object write(
+    Base base, 
+    WriterOptions options) 
+      throws IOException;
+  
+  WriterOptions getDefaultWriterOptions();
+  
 }

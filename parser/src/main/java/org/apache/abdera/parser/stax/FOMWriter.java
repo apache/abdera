@@ -20,14 +20,19 @@ package org.apache.abdera.parser.stax;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
+import org.apache.abdera.model.Document;
+import org.apache.abdera.util.AbstractWriter;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
+import org.apache.abdera.writer.WriterOptions;
 
 public class FOMWriter 
+  extends AbstractWriter
   implements org.apache.abdera.writer.NamedWriter {
 
   public FOMWriter() {}
@@ -36,23 +41,37 @@ public class FOMWriter
   
   public void writeTo(
     Base base, 
-    OutputStream out) 
+    OutputStream out, 
+    WriterOptions options) 
       throws IOException {
-        base.writeTo(out);
+    out = getCompressedOutputStream(out, options);
+    String charset = options.getCharset();
+    if (charset != null) {
+      if (base instanceof Document)
+        ((Document)base).setCharset(charset);
+      base.writeTo(new OutputStreamWriter(out,charset));
+    } else {
+      base.writeTo(out);
+    }
+    finishCompressedOutputStream(out, options);
+    if (options.getAutoClose()) out.close();
   }
 
   public void writeTo(
     Base base, 
-    Writer out) 
+    Writer out,
+    WriterOptions options) 
       throws IOException {
-        base.writeTo(out);
+    base.writeTo(out);
+    if (options.getAutoClose()) out.close();
   }
 
   public Object write(
-    Base base) 
+    Base base,
+    WriterOptions options) 
       throws IOException {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
-    writeTo(base, out);
+    writeTo(base, out, options);
     return out.toString();
   }
 
@@ -74,6 +93,11 @@ public class FOMWriter
            MimeTypeHelper.isMatch(mediatype, Constants.APP_MEDIA_TYPE) ||
            MimeTypeHelper.isMatch(mediatype, Constants.CAT_MEDIA_TYPE) ||
            MimeTypeHelper.isMatch(mediatype, Constants.XML_MEDIA_TYPE);
+  }
+
+  @Override
+  protected WriterOptions initDefaultWriterOptions() {
+    return new FOMWriterOptions();
   }
 
 }

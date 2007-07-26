@@ -31,6 +31,7 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.util.CompressionUtil;
 import org.apache.abdera.util.CompressionUtil.CompressionCodec;
+import org.apache.abdera.writer.WriterOptions;
 
 import junit.framework.TestCase;
 
@@ -95,6 +96,33 @@ public class EncodingTest extends TestCase {
       options.setFilterRestrictedCharacters(true);
       options.setCharset("UTF-8");
       Document doc = parser.parse(new ByteArrayInputStream(s.getBytes("UTF-8")), null, options);
+      doc.getRoot().toString();
+    }
+    
+    /**
+     * Passes if the test does not throw any exceptions
+     */
+    public void testWriterOptions() throws Exception {
+      Abdera abdera = new Abdera();
+      Entry entry = abdera.newEntry();
+      entry.setTitle("1");
+      
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      WriterOptions writeoptions = entry.getDefaultWriterOptions();
+      writeoptions.setCompressionCodecs(CompressionCodec.DEFLATE);
+      writeoptions.setCharset("UTF-16");
+      writeoptions.setAutoClose(true);
+      entry.getDocument().writeTo(out,writeoptions);    
+      out.close();
+      
+      byte[] bytes = out.toByteArray();
+      
+      ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+      Parser parser = abdera.getParser();
+      ParserOptions options = parser.getDefaultParserOptions();
+      options.setCompressionCodecs(CompressionCodec.DEFLATE);
+      Document<Entry> doc = abdera.getParser().parse(in,null,options);
+      
       doc.getRoot().toString();
     }
 }

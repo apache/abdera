@@ -31,7 +31,9 @@ import javax.xml.stream.XMLStreamWriter;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.util.AbstractNamedWriter;
+import org.apache.abdera.util.AbstractWriterOptions;
 import org.apache.abdera.writer.NamedWriter;
+import org.apache.abdera.writer.WriterOptions;
 import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.StAXUtils;
@@ -50,29 +52,52 @@ public class PrettyWriter
     super("PrettyXML", FORMATS);
   }
   
-  public Object write(Base base) throws IOException {
+  public Object write(
+    Base base, 
+    WriterOptions options) 
+      throws IOException {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
-    writeTo(base,out);
+    writeTo(base,out,options);
     return out.toString();
   }
 
-  public void writeTo(Base base, OutputStream out) throws IOException {
-    writeTo(base,new OutputStreamWriter(out));
+  public void writeTo(
+    Base base, 
+    OutputStream out, 
+    WriterOptions options) 
+      throws IOException {
+    out = getCompressedOutputStream(out, options);
+    String charset = options.getCharset();
+    if (charset != null) {
+      writeTo(base,new OutputStreamWriter(out,charset),options);
+    } else {
+      writeTo(base,new OutputStreamWriter(out),options);
+    }
+    finishCompressedOutputStream(out, options);
+    if (options.getAutoClose()) out.close();
   }
 
-  public void writeTo(Base base, Writer out) throws IOException {
+  public void writeTo(
+    Base base, 
+    Writer out, 
+    WriterOptions options) 
+      throws IOException {
     try {
       XMLStreamWriter w = StAXUtils.createXMLStreamWriter(out);
       XMLStreamWriter pw = new PrettyStreamWriter(w);
       OMElement om = (base instanceof Document) ? 
         (OMElement)((Document)base).getRoot() : 
         (OMElement)base;
+      String charset = options.getCharset();
       if (om.getParent() != null && om.getParent() instanceof OMDocument) {
         OMDocument doc = (OMDocument) om.getParent();
-        pw.writeStartDocument(doc.getCharsetEncoding(), doc.getXMLVersion());
+        pw.writeStartDocument(
+          charset != null ? charset : 
+            doc.getCharsetEncoding(), doc.getXMLVersion());
       }
       om.serialize(pw);
       pw.writeEndDocument();
+      if (options.getAutoClose()) out.close();
     } catch (XMLStreamException e) {
       throw new RuntimeException(e);
     }
@@ -267,6 +292,11 @@ public class PrettyWriter
       java.util.Arrays.fill(spaces, ' ');
       return spaces;
     }
+  }
+
+  @Override
+  protected WriterOptions initDefaultWriterOptions() {
+    return new AbstractWriterOptions() {};
   }
 
 }

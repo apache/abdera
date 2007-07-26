@@ -30,6 +30,7 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.lang.Lang;
+import org.apache.abdera.writer.WriterOptions;
 
 public abstract class ElementWrapper 
   implements Element {
@@ -234,6 +235,33 @@ public abstract class ElementWrapper
   public void setMustPreserveWhitespace(boolean preserve) {
     internal.setMustPreserveWhitespace(preserve);
   }
-  
+
+  public void writeTo(OutputStream out, WriterOptions options) throws IOException {
+    internal.writeTo(out,options);
+  }
+
+  public void writeTo(org.apache.abdera.writer.Writer writer, OutputStream out, WriterOptions options) throws IOException {
+    internal.writeTo(writer,out,options);
+  }
+
+  public void writeTo(org.apache.abdera.writer.Writer writer, OutputStream out) throws IOException {
+    internal.writeTo(writer,out);
+  }
+
+  public void writeTo(org.apache.abdera.writer.Writer writer, Writer out, WriterOptions options) throws IOException {
+    internal.writeTo(writer,out,options);
+  }
+
+  public void writeTo(org.apache.abdera.writer.Writer writer, Writer out) throws IOException {
+    internal.writeTo(writer,out);
+  }
+
+  public void writeTo(Writer out, WriterOptions options) throws IOException {
+    internal.writeTo(out,options);
+  }
+
+  public WriterOptions getDefaultWriterOptions() {
+    return internal.getDefaultWriterOptions();
+  }
   
 }

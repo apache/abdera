@@ -54,6 +54,8 @@ import org.apache.abdera.parser.stax.util.FOMList;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.URIHelper;
+import org.apache.abdera.writer.Writer;
+import org.apache.abdera.writer.WriterOptions;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.lang.Lang;
 import org.apache.axiom.om.OMAttribute;
@@ -340,6 +342,52 @@ public class FOMElement
     return resolved;
   }
 
+  public void writeTo(
+    OutputStream out, 
+    WriterOptions options) 
+      throws IOException {
+    FOMWriter writer = new FOMWriter();
+    writer.writeTo(this,out,options);
+  }
+  
+  public void writeTo(
+    java.io.Writer out, 
+    WriterOptions options)
+      throws IOException {
+    FOMWriter writer = new FOMWriter();
+    writer.writeTo(this,out,options);
+  }
+  
+  public void writeTo(
+    Writer writer, 
+    OutputStream out) 
+      throws IOException {
+    writer.writeTo(this,out);
+  }
+  
+  public void writeTo(
+    Writer writer,
+    java.io.Writer out) 
+      throws IOException {
+    writer.writeTo(this,out);
+  }
+  
+  public void writeTo(
+    Writer writer, 
+    OutputStream out,
+    WriterOptions options) 
+      throws IOException {
+    writer.writeTo(this,out,options);
+  }
+  
+  public void writeTo(
+    Writer writer,
+    java.io.Writer out,
+    WriterOptions options) 
+      throws IOException {
+    writer.writeTo(this,out,options);
+  }
+  
   public void writeTo(OutputStream out) throws IOException {
     writeTo(new OutputStreamWriter(out));
   }
@@ -354,7 +402,6 @@ public class FOMElement
       throw new FOMException(e);
     }
   }
-  
   
   public <T extends Element>Document<T> getDocument() {
     Document<T> document = null;
@@ -746,5 +793,9 @@ public class FOMElement
   public void setText(DataHandler handler) {
     _removeAllChildren();
     addChild(factory.createOMText(handler, true));
+  }
+
+  public WriterOptions getDefaultWriterOptions() {
+    return new FOMWriter().getDefaultWriterOptions();
   }
 }

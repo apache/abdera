@@ -81,6 +81,14 @@ public class PeekAheadInputStream
 
   @Override
   public synchronized void unread(byte[] b, int off, int len) throws IOException {
+    // only unread non-null bytes, otherwise, 
+    // we end up stuffing the buffer with a bunch of garbage
+    int c = off;
+    for (;c < Math.min(len, b.length - off);c++) {
+      if (b[c] == 0) break;
+    }
+    len = Math.min(len, c);
+    
     if (len > pos && pos + len > buf.length) {
       resize(len-pos);
       pos += len-pos;

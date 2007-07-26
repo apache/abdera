@@ -87,4 +87,29 @@ public interface ParserOptions extends Cloneable {
    * and attribute values unless there is an in-scope xml:space="preserve".
    */
   void setMustPreserveWhitespace(boolean preserve);
+  
+  /**
+   * If true, the parser will attempt to silently filter out invalid XML
+   * characters appearing within the XML document.
+   */
+  boolean getFilterRestrictedCharacters();
+  
+  /**
+   * If true, the parser will attempt to silently filter out invalid XML
+   * characters appearing within the XML document
+   */
+  void setFilterRestrictedCharacters(boolean filter);
+  
+  /**
+   * If getFilterRestrictedCharacters is true, restricted characters will
+   * be replaced with the specified character
+   */
+  char getFilterRestrictedCharacterReplacement();
+  
+  /**
+   * If getFilterRestrictedCharacters is true, restricted characters will
+   * be replaced with the specified character
+   */
+  void setFilterRestrictedCharacterReplacement(char replacement);
+  
 }

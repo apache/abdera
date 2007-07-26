@@ -30,6 +30,7 @@ import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.parser.stax.util.FOMSniffingInputStream;
+import org.apache.abdera.parser.stax.util.FOMXmlRestrictedCharFilter;
 import org.apache.abdera.util.AbstractParser;
 import org.apache.abdera.util.Messages;
 import org.apache.abdera.i18n.iri.IRI;
@@ -99,10 +100,19 @@ public class FOMParser
         if (charset != null) options.setCharset(charset);
         in = sin;
       }
-      XMLStreamReader xmlreader = (charset == null) ? 
-        StAXUtils.createXMLStreamReader(in) : 
-        StAXUtils.createXMLStreamReader(in, charset); 
-      return parse(xmlreader, base, options);
+      if (options.getFilterRestrictedCharacters()) {
+        Reader rdr = (charset == null) ? 
+          new FOMXmlRestrictedCharFilter(
+            in,options.getFilterRestrictedCharacterReplacement()) :
+          new FOMXmlRestrictedCharFilter(
+            in,charset,options.getFilterRestrictedCharacterReplacement());
+        return parse(StAXUtils.createXMLStreamReader(rdr), base, options);
+      } else {
+        XMLStreamReader xmlreader = (charset == null) ? 
+          StAXUtils.createXMLStreamReader(in) : 
+          StAXUtils.createXMLStreamReader(in, charset); 
+        return parse(xmlreader, base, options);
+      }
     } catch (Exception e) {
       if (!(e instanceof ParseException))
         e = new ParseException(e);
@@ -119,6 +129,11 @@ public class FOMParser
       throw new IllegalArgumentException(Messages.get("READER.NOT.NULL"));
     try {
       if (options == null) options = getDefaultParserOptions();
+      if (options.getFilterRestrictedCharacters() && 
+          !(in instanceof FOMXmlRestrictedCharFilter)) {
+        in = new FOMXmlRestrictedCharFilter(
+          in,options.getFilterRestrictedCharacterReplacement());
+      }
       return parse(StAXUtils.createXMLStreamReader(in), base, options);
     } catch (Exception e) {
       if (!(e instanceof ParseException))

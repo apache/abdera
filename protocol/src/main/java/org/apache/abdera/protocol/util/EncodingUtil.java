@@ -20,14 +20,12 @@ package org.apache.abdera.protocol.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.zip.DeflaterOutputStream;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-import java.util.zip.InflaterInputStream;
 
 import org.apache.abdera.i18n.iri.Constants;
 import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.i18n.unicode.Normalizer;
+import org.apache.abdera.util.CompressionUtil;
+import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.net.BCodec;
 import org.apache.commons.codec.net.QCodec;
@@ -148,35 +146,34 @@ public class EncodingUtil {
     }
   }
   
-  
-  public enum ContentEncoding { GZIP, XGZIP, DEFLATE }
-  
-  public static OutputStream getEncodedOutputStream(OutputStream out, ContentEncoding encoding) throws IOException {
-    return getEncodedOutputStream(out, new ContentEncoding[] {encoding});
+  /**
+   * @deprecated use CompressionUtil.getEncodedOutputStream instead
+   * @see org.apache.abdera.util.CompressionUtil
+   */
+  public static OutputStream getEncodedOutputStream(
+    OutputStream out, 
+    CompressionCodec encoding) 
+      throws IOException {
+    return CompressionUtil.getEncodedOutputStream(
+      out, new CompressionCodec[] {encoding});
   }
   
-  public static OutputStream getEncodedOutputStream(OutputStream out, ContentEncoding... encodings) throws IOException {
-    for (ContentEncoding encoding:encodings) {
-      switch(encoding) {
-        case GZIP:
-          out = new GZIPOutputStream(out); break;
-        case DEFLATE:
-          out = new DeflaterOutputStream(out); break;
-      }
-    }
-    return out;
+  /**
+   * @deprecated use CompressionUtil.getEncodedOutputStream instead
+   * @see org.apache.abdera.util.CompressionUtil
+   */
+  public static OutputStream getEncodedOutputStream(
+    OutputStream out, 
+    CompressionCodec... encodings) 
+      throws IOException {
+    return CompressionUtil.getEncodedOutputStream(out, encodings);
   }
   
   public static InputStream getDecodingInputStream(InputStream in, String ce) throws IOException {
     String[] encodings = CacheControlUtil.CacheControlParser.splitAndTrim(ce, ",", false);
     for (int n = encodings.length -1; n >= 0; n--) {
-      switch(ContentEncoding.valueOf(encodings[n].toUpperCase().replaceAll("-", ""))) {
-        case GZIP:
-        case XGZIP:
-          in = new GZIPInputStream(in); break;
-        case DEFLATE:
-          in = new InflaterInputStream(in); break;
-      }
+      CompressionCodec encoding = CompressionCodec.valueOf(encodings[n].toUpperCase().replaceAll("-", ""));
+      in = CompressionUtil.getDecodingInputStream(in, encoding);
     }
     return in;
   }

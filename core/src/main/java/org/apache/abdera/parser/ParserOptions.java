@@ -19,6 +19,7 @@ package org.apache.abdera.parser;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.filter.ParseFilter;
+import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 
 /**
  * Parser options are used to modify the behavior of the parser. 
@@ -112,4 +113,17 @@ public interface ParserOptions extends Cloneable {
    */
   void setFilterRestrictedCharacterReplacement(char replacement);
   
+  /**
+   * When parsing an InputStream that contains compressed data, use these
+   * codecs to decompress the stream. Only used when parsing an InputStream.
+   * Ignored when parsing a Reader
+   */
+  CompressionCodec[] getCompressionCodecs();
+
+  /**
+   * When parsing an InputStream that contains compressed data, use these
+   * codecs to decompress the stream. Only used when parsing an InputStream.
+   * Ignored when parsing a Reader
+   */
+  void setCompressionCodecs(CompressionCodec... codecs);
 }

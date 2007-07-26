@@ -17,11 +17,20 @@
 */
 package org.apache.abdera.test.parser;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.io.StringReader;
 import java.util.Date;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Content;
+import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
+import org.apache.abdera.parser.Parser;
+import org.apache.abdera.parser.ParserOptions;
+import org.apache.abdera.util.CompressionUtil;
+import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 
 import junit.framework.TestCase;
 
@@ -43,4 +52,49 @@ public class EncodingTest extends TestCase {
         assertEquals(s, entry.getContent());
     }
 
+    /**
+     * Passes if the test does not throw a parse exception
+     */
+    public void testCompressionCodec() throws Exception {
+      Abdera abdera = new Abdera();
+      Entry entry = abdera.newEntry();
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      OutputStream cout = CompressionUtil.getEncodedOutputStream(out, CompressionCodec.GZIP);
+      entry.writeTo(cout);
+      cout.close();
+      byte[] bytes = out.toByteArray();
+      ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+      Parser parser = abdera.getParser();
+      ParserOptions options = parser.getDefaultParserOptions();
+      options.setCompressionCodecs(CompressionCodec.GZIP);
+      Document<Entry> doc = abdera.getParser().parse(in,null,options);
+      entry = doc.getRoot();
+    }
+    
+    /**
+     * Passes if the test does not throw a parse exception
+     */
+    public void testXMLRestrictedChar() throws Exception {
+      String s = "<?xml version='1.1'?><t t='\u007f' />";
+      Abdera abdera = new Abdera();
+      Parser parser = abdera.getParser();
+      ParserOptions options = parser.getDefaultParserOptions();
+      options.setFilterRestrictedCharacters(true);
+      Document doc = parser.parse(new StringReader(s), null, options);
+      doc.getRoot().toString();
+    }
+    
+    /**
+     * Passes if the test does not throw a parse exception
+     */
+    public void testXMLRestrictedChar2() throws Exception {
+      String s = "<?xml version='1.0'?><t t='\u0002' />";
+      Abdera abdera = new Abdera();
+      Parser parser = abdera.getParser();
+      ParserOptions options = parser.getDefaultParserOptions();
+      options.setFilterRestrictedCharacters(true);
+      options.setCharset("UTF-8");
+      Document doc = parser.parse(new ByteArrayInputStream(s.getBytes("UTF-8")), null, options);
+      doc.getRoot().toString();
+    }
 }

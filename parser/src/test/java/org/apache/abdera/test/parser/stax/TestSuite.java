@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.test.parser.stax;
 
+import org.apache.abdera.test.parser.EncodingTest;
 import org.apache.abdera.test.parser.stax.AtomConformanceTest;
 import org.apache.abdera.test.parser.stax.FeedParserTest;
 import org.apache.abdera.test.parser.stax.FeedValidatorTest;
@@ -36,5 +37,6 @@ public class TestSuite extends junit.framework.TestSuite {
     addTestSuite(ParserTest.class);
     addTestSuite(ConcurrencyTest.class);
     addTestSuite(XhtmlTest.class);
+    addTestSuite(EncodingTest.class);
   }
 }

@@ -20,6 +20,7 @@ package org.apache.abdera.util;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.filter.ParseFilter;
 import org.apache.abdera.parser.ParserOptions;
+import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 
 /**
  * Non thread-safe abstract implementation of ParserOptions
@@ -34,6 +35,7 @@ public abstract class AbstractParserOptions
   protected boolean preserve = true;
   protected boolean filterreserved = false;
   protected char replacement = 0;
+  protected CompressionCodec[] codecs = null;
 
   protected abstract void initFactory();
   protected abstract void checkFactory(Factory factory);
@@ -107,4 +109,13 @@ public abstract class AbstractParserOptions
   public void setFilterRestrictedCharacterReplacement(char replacement) {
     this.replacement = replacement;
   }
+  
+  public CompressionCodec[] getCompressionCodecs() {
+    return codecs;
+  }
+  
+  public void setCompressionCodecs(CompressionCodec... codecs) {
+    this.codecs = codecs;
+  }
+  
 }

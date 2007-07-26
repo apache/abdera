@@ -146,29 +146,6 @@ public class EncodingUtil {
     }
   }
   
-  /**
-   * @deprecated use CompressionUtil.getEncodedOutputStream instead
-   * @see org.apache.abdera.util.CompressionUtil
-   */
-  public static OutputStream getEncodedOutputStream(
-    OutputStream out, 
-    CompressionCodec encoding) 
-      throws IOException {
-    return CompressionUtil.getEncodedOutputStream(
-      out, new CompressionCodec[] {encoding});
-  }
-  
-  /**
-   * @deprecated use CompressionUtil.getEncodedOutputStream instead
-   * @see org.apache.abdera.util.CompressionUtil
-   */
-  public static OutputStream getEncodedOutputStream(
-    OutputStream out, 
-    CompressionCodec... encodings) 
-      throws IOException {
-    return CompressionUtil.getEncodedOutputStream(out, encodings);
-  }
-  
   public static InputStream getDecodingInputStream(InputStream in, String ce) throws IOException {
     String[] encodings = CacheControlUtil.CacheControlParser.splitAndTrim(ce, ",", false);
     for (int n = encodings.length -1; n >= 0; n--) {

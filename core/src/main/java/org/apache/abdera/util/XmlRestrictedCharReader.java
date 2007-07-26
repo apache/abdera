@@ -132,7 +132,8 @@ public class XmlRestrictedCharReader
       if (r != -1) cbuf[n] = (char)r;
       else break;
     }
-    return n - off;
+    n -= off;
+    return n <= 0 ? -1 : n;
   }
 
 }

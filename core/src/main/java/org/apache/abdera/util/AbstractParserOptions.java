@@ -32,6 +32,8 @@ public abstract class AbstractParserOptions
   protected ParseFilter parseFilter = null;
   protected boolean detect = false;
   protected boolean preserve = true;
+  protected boolean filterreserved = false;
+  protected char replacement = 0;
 
   protected abstract void initFactory();
   protected abstract void checkFactory(Factory factory);
@@ -90,4 +92,19 @@ public abstract class AbstractParserOptions
     this.preserve = preserve;
   }
   
+  public boolean getFilterRestrictedCharacters() {
+    return filterreserved;
+  }
+  
+  public void setFilterRestrictedCharacters(boolean filter) {
+    this.filterreserved = filter;
+  }
+  
+  public char getFilterRestrictedCharacterReplacement() {
+    return replacement;
+  }
+  
+  public void setFilterRestrictedCharacterReplacement(char replacement) {
+    this.replacement = replacement;
+  }
 }

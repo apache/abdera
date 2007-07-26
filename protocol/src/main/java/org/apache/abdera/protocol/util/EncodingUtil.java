@@ -19,7 +19,6 @@ package org.apache.abdera.protocol.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import org.apache.abdera.i18n.iri.Constants;
 import org.apache.abdera.i18n.iri.Escaping;

@@ -21,16 +21,35 @@ import java.io.InputStream;
 
 import javax.activation.DataHandler;
 
+/**
+ * A text value. Returned by the Abdera XPath implementation when querying for
+ * text nodes (e.g. xpath.selectNodes("//text()"); ...)
+ */
 public interface TextValue {
 
+  /**
+   * A DataHandler for Base64 encoded binary data
+   */
   DataHandler getDataHandler();
   
+  /**
+   * An InputStream used to read the text content
+   */
   InputStream getInputStream();
   
+  /**
+   * Return the text value
+   */
   String getText();
   
+  /**
+   * The parent element
+   */
   <T extends Base>T getParentElement();
   
+  /**
+   * Delete this node
+   */
   void discard();
   
 }

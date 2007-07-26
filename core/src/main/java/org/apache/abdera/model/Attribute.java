@@ -21,14 +21,30 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
 
+/**
+ * An attribute. Returned by the Abdera XPath implementation
+ * when querying for Attribute nodes
+ */
 public interface Attribute {
 
+  /**
+   * The QName of the attribute
+   */
   QName getQName();
   
+  /**
+   * The text value of the attribute
+   */
   String getText();
   
+  /**
+   * The text value of the attribute
+   */
   void setText(String text);
   
+  /**
+   * The Abdera Factory
+   */
   Factory getFactory();
   
 }

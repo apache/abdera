@@ -19,20 +19,45 @@ package org.apache.abdera.model;
 
 import org.apache.abdera.factory.Factory;
 
+/**
+ * A processing instruction. Returned by the Abdera XPath implementation when querying for
+ * PI nodes (e.g. xpath.selectNodes("//processing-instruction()"); ...)
+ */
 public interface ProcessingInstruction {
 
+  /**
+   * Delete this PI
+   */
   void discard();
   
+  /**
+   * The Abdera Factory
+   */
   Factory getFactory();
   
+  /**
+   * The parent node
+   */
   <T extends Base>T getParentElement();
   
+  /**
+   * The PI target
+   */
   String getTarget();
   
+  /**
+   * The PI target
+   */
   void setTarget(String target);
   
+  /**
+   * The PI text
+   */
   String getText();
   
+  /**
+   * The PI text
+   */
   void setText(String text);
   
 }

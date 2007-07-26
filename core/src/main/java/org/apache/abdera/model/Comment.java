@@ -19,15 +19,34 @@ package org.apache.abdera.model;
 
 import org.apache.abdera.factory.Factory;
 
+/**
+ * A comment. Returned by the Abdera XPath implementation when querying for
+ * comment nodes (e.g. xpath.selectNodes("//comment()"); ...)
+ */
 public interface Comment {
 
+  /**
+   * Delete the comment node
+   */
   void discard();
   
+  /**
+   * The text of this comment node
+   */
   String getText();
   
+  /**
+   * The text of this comment node
+   */
   void setText(String text);
   
+  /**
+   * The Abdera Factory
+   */
   Factory getFactory();
   
+  /**
+   * The parent node
+   */
   <T extends Base>T getParentElement();
 }

@@ -29,6 +29,15 @@ public class CompressionUtil {
 
   public enum CompressionCodec { GZIP, XGZIP, DEFLATE }
   
+  public static CompressionCodec getCodec(String name) {
+    CompressionCodec codec = null;
+    if (name == null) return null;
+    try {
+       codec = CompressionCodec.valueOf(name.toUpperCase().trim());
+    } catch (Exception e) {}
+    return codec;
+  }
+  
   public static OutputStream getEncodedOutputStream(
     OutputStream out, 
     CompressionCodec encoding) 

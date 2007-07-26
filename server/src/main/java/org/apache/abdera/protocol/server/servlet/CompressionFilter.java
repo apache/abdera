@@ -28,6 +28,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.abdera.protocol.server.util.ServerUtils;
+import org.apache.abdera.util.CompressionUtil;
+import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 
 /**
  * A filter that applies either GZip or Compress encoding on a response
@@ -53,9 +55,10 @@ public class CompressionFilter
         new String[0];
     for (String enc : encodings) {
       if (CompressingResponseWrapper.canHandle(enc)) {
+        CompressionCodec codec = CompressionUtil.getCodec(enc);
         CompressingResponseWrapper resp = 
           new CompressingResponseWrapper(
-            (HttpServletResponse) response, enc);
+            (HttpServletResponse) response, codec);
         chain.doFilter(request, response);
         resp.finish();
         return;

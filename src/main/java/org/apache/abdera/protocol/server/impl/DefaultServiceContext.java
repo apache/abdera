@@ -41,7 +41,7 @@ public class DefaultServiceContext
   protected String defaulttargetresolver = RegexTargetResolver.class.getName();
   protected String defaultprovidermanager = null;
   
-  protected DefaultServiceContext() {}
+  public DefaultServiceContext() {}
   
   private Object instance(String id, String _default) {
     String instance = getProperty(id);

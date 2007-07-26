@@ -23,11 +23,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.zip.DeflaterOutputStream;
-import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
@@ -40,6 +40,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.apache.abdera.i18n.io.RewindableInputStream;
+import org.apache.abdera.util.CompressionUtil;
+import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 
 /**
  * Utility class that serves as the basis for a variety of Filter implementations
@@ -72,11 +74,11 @@ public abstract class AbstractFilter
     
     public CompressingResponseWrapper(
       HttpServletResponse response, 
-      String method) 
+      CompressionCodec codec) 
         throws IOException {
       super(response);
       out = new CompressingServletOutputStream(
-        method, response.getOutputStream());
+        codec, response.getOutputStream());
     }
     
     @Override
@@ -112,14 +114,11 @@ public abstract class AbstractFilter
   public static class CompressingServletOutputStream 
     extends ServletOutputStream {
 
-    private DeflaterOutputStream dout;
+    private OutputStream dout;
     
-    public CompressingServletOutputStream(String method, ServletOutputStream out) {
+    public CompressingServletOutputStream(CompressionCodec codec, ServletOutputStream out) {
       try {
-        if ("gzip".equalsIgnoreCase(method)) 
-          dout = new GZIPOutputStream(out);
-        if ("compress".equalsIgnoreCase(method))
-          dout = new DeflaterOutputStream(out);
+        dout = CompressionUtil.getEncodedOutputStream(out,codec);        
       } catch (IOException e) {}
     }
     

@@ -32,6 +32,7 @@ import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.parser.stax.util.FOMSniffingInputStream;
 import org.apache.abdera.parser.stax.util.FOMXmlRestrictedCharFilter;
 import org.apache.abdera.util.AbstractParser;
+import org.apache.abdera.util.CompressionUtil;
 import org.apache.abdera.util.Messages;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMDocument;
@@ -90,6 +91,10 @@ public class FOMParser
       throw new IllegalArgumentException(Messages.get("INPUTSTREAM.NOT.NULL"));
     try {
       if (options == null) options = getDefaultParserOptions();
+      if (options.getCompressionCodecs() != null) {
+        in = CompressionUtil.getDecodingInputStream(
+          in, options.getCompressionCodecs());
+      }
       String charset = options.getCharset();
       if (charset == null && options.getAutodetectCharset()) {
         FOMSniffingInputStream sin = 

@@ -56,7 +56,9 @@ public class RssFeed
   
   @SuppressWarnings("unused")
   private RssChannel getChannel() {
-    return this.getFirstChild();
+    RssChannel c = super.getExtension(RssConstants.QNAME_CHANNEL);
+    if (c == null) c = super.getExtension(RssConstants.QNAME_RDF_CHANNEL);
+    return c;
   }
 
   public void addEntry(Entry entry) {

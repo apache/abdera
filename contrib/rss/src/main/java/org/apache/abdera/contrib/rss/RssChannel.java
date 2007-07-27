@@ -53,7 +53,7 @@ import org.apache.abdera.xpath.XPathException;
 public class RssChannel 
   extends ExtensibleElementWrapper {
 
-  protected RssChannel(Element internal) {
+  public RssChannel(Element internal) {
     super(internal);
   }
 

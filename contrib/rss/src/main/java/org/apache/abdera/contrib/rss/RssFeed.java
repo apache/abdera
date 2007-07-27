@@ -525,11 +525,11 @@ public class RssFeed
   }
 
   public void setBaseUri(IRI base) {
-    throw new UnsupportedOperationException("Setting the base uri with xml:base is not supported");
+    //throw new UnsupportedOperationException("Setting the base uri with xml:base is not supported");
   }
 
   public void setBaseUri(String base) {
-    throw new UnsupportedOperationException("Setting the base uri with xml:base is not supported");
+    //throw new UnsupportedOperationException("Setting the base uri with xml:base is not supported");
   }
 
   public void setLanguage(String language) {

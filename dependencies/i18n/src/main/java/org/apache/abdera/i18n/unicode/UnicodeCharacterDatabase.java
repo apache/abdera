@@ -79,7 +79,7 @@ final class UnicodeCharacterDatabase
   }
   
   public char getPairComposition(int f, int s) {
-    if (f < 0 || s > 0x10FFFF || s < 0 || s > 0x10FFFF) return '\uFFFF';
+    if (!isComposite(f,s)) return '\uFFFF';
     Integer i = compose.get((f << 16) | s);
     return (i != null) ? (char)i.intValue() : '\uFFFF';
   }

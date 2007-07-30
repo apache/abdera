@@ -400,7 +400,7 @@ Working directory: ${work}
         <exclude name="**/${jetty-util.jar}" />
         <exclude name="**/${jetty.jar}" />
         <exclude name="**/${junit.jar}" />
-        <exclude name="**/retroweaver-rt-1.2.3.jar" />
+        <exclude name="**/retroweaver-rt-${retroweaver.version}.jar" />
         <exclude name="**/${xmlsecurity.jar}" unless="do.security" />
       </fileset>
       <fileset dir="${docs}" includes="**/*" />
@@ -517,7 +517,7 @@ Working directory: ${work}
 
   <target name="retro" depends="dist">
     <property name="retrozip" value="${basedir}/build/tools/${retroweaver.zip}" />
-    <property name="retro" value="${basedir}/build/tools/retroweaver-1.2.3" />
+    <property name="retro" value="${basedir}/build/tools/retroweaver-${retroweaver.version}" />
     <property name="retro_core.jar" value="${dist}/${ant.project.name}.core.${version}.retro.jar" />
     <property name="retro_parser.jar" value="${dist}/${ant.project.name}.parser.${version}.retro.jar" />
     <property name="retro_protocol.jar" value="${dist}/${ant.project.name}.protocol.${version}.retro.jar" />
@@ -534,26 +534,26 @@ Working directory: ${work}
       <fileset dir="${retro}/release" includes="**/*.jar" />
     </path>
     <echo>Retroweaving the Jars...</echo>
-    <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
+    <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${core.jar}&quot; &quot;${retro_core.jar}&quot;" />
     </java>
-    <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
+    <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${parser.jar}&quot; &quot;${retro_parser.jar}&quot;" />
     </java>
-    <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
+    <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${protocol.jar}&quot; &quot;${retro_protocol.jar}&quot;" />
     </java>
-    <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
+    <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${server.jar}&quot; &quot;${retro_server.jar}&quot;" />
     </java>
-    <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
+    <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${extensions.jar}&quot; &quot;${retro_extensions.jar}&quot;" />
     </java>
-    <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
+    <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${client.jar}&quot; &quot;${retro_client.jar}&quot;" />
     </java>
     <antcall target="retro.security" />
-    <copy todir="${dist_lib}" file="${retro}/release/retroweaver-rt-1.2.3.jar" />
+    <copy todir="${dist_lib}" file="${retro}/release/retroweaver-rt-${retroweaver.version}.jar" />
   </target>
 
   <target name="retro.security" if="do.security">

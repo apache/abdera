@@ -25,6 +25,7 @@ import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.protocol.Request;
+import org.apache.abdera.util.EntityTag;
 
 public abstract class AbstractRequest implements Request {
 
@@ -66,16 +67,16 @@ public abstract class AbstractRequest implements Request {
     return (value != null) ? new MimeType(value) : null;
   }
 
-  public String getIfMatch() {
-    return getHeader("If-Match");
+  public EntityTag[] getIfMatch() {
+    return EntityTag.parseList(getHeader("If-Match"));
   }
 
   public Date getIfModifiedSince() {
     return getDateHeader("If-Modified-Since");
   }
 
-  public String getIfNoneMatch() {
-    return getHeader("If-None-Match");
+  public EntityTag[] getIfNoneMatch() {
+    return EntityTag.parseList(getHeader("If-None-Match"));
   }
 
   public Date getIfUnmodifiedSince() {

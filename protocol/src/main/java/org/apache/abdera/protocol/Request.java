@@ -24,6 +24,7 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.protocol.util.ProtocolConstants;
+import org.apache.abdera.util.EntityTag;
 
 public interface Request extends ProtocolConstants {
 
@@ -55,11 +56,11 @@ public interface Request extends ProtocolConstants {
   
   Date getDateHeader(String name);
   
-  String getIfMatch();
+  EntityTag[] getIfMatch();
   
   Date getIfModifiedSince();
   
-  String getIfNoneMatch();
+  EntityTag[] getIfNoneMatch();
   
   Date getIfUnmodifiedSince();
   

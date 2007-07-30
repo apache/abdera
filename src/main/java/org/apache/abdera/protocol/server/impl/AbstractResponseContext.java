@@ -240,7 +240,11 @@ public abstract class AbstractResponseContext
     }
     setHeader("Content-Type", type);
   }
-
+  
+  public void setEntityTag(String etag) {
+    setEntityTag(new EntityTag(etag));
+  }
+  
   public void setEntityTag(EntityTag etag) {
     if (etag == null) {
       removeHeader("ETag");

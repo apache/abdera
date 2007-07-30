@@ -47,6 +47,7 @@ import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.test.client.JettyTest;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.util.MimeTypeHelper;
+import org.apache.abdera.writer.WriterOptions;
 import org.apache.abdera.i18n.iri.IRI;
 
 /**
@@ -71,7 +72,7 @@ public class AppTest extends JettyTest {
     try {
       Service service = getFactory().newService();
       Workspace workspace = service.addWorkspace("Test");
-      workspace.addCollection("Entries", base + "/collections/entries").setAccept("entry");
+      workspace.addCollection("Entries", base + "/collections/entries").setAcceptsEntry();
       workspace.addCollection("Other", base + "/collections/other").setAccept("text/plain");
       Document<Service> doc = service.getDocument();
       return doc;
@@ -104,8 +105,10 @@ public class AppTest extends JettyTest {
         throws ServletException, IOException {
 
         response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType("application/atomserv+xml; charset=utf-8");
-        service.writeTo(response.getOutputStream());
+        response.setContentType("application/atomsvc+xml; charset=utf-8");
+        WriterOptions options = service.getDefaultWriterOptions();
+        options.setCharset("UTF-8");
+        service.writeTo(response.getOutputStream(),options);
     }
   }
   
@@ -145,14 +148,18 @@ public class AppTest extends JettyTest {
         case COLLECTION:
           response.setStatus(HttpServletResponse.SC_OK);
           response.setContentType("application/atom+xml; charset=utf-8");
-          feed.writeTo(response.getOutputStream());
+          WriterOptions options = feed.getDefaultWriterOptions();
+          options.setCharset("UTF-8");
+          feed.writeTo(response.getOutputStream(),options);
           break;
         case ENTRY:
           try {
             Entry entry = feed.getRoot().getEntries().get(getTarget());
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType("application/atom+xml; charset=utf-8");
-            entry.writeTo(response.getOutputStream());
+            options = entry.getDefaultWriterOptions();
+            options.setCharset("UTF-8");
+            entry.writeTo(response.getOutputStream(),options);
           } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             break;
@@ -202,7 +209,9 @@ public class AppTest extends JettyTest {
               response.setStatus(HttpServletResponse.SC_CREATED);
               response.setHeader("Location", entry.getId().toString());
               response.setHeader("Content-Location", entry.getId().toString());
-              entry.writeTo(response.getOutputStream());
+              WriterOptions woptions = entry.getDefaultWriterOptions();
+              woptions.setCharset("UTF-8");
+              entry.writeTo(response.getOutputStream(),woptions);
               return;
             }
           }
@@ -225,7 +234,9 @@ public class AppTest extends JettyTest {
             response.setStatus(HttpServletResponse.SC_CREATED);
             response.setHeader("Location", entry.getId().toString());
             response.setHeader("Content-Location", entry.getId().toString());
-            entry.writeTo(response.getOutputStream());
+            WriterOptions woptions = entry.getDefaultWriterOptions();
+            woptions.setCharset("UTF-8");
+            entry.writeTo(response.getOutputStream(),woptions);
             return;
           }
           response.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
@@ -334,6 +345,51 @@ public class AppTest extends JettyTest {
     RequestOptions options = abderaClient.getDefaultRequestOptions();
     options.setIfModifiedSince(new Date());
     assertNotNull(options.getIfModifiedSince());
+    
+    options.set4xxRequestException(true);
+    assertTrue(options.is4xxRequestException());
+    
+    options.set5xxRequestException(true);
+    assertTrue(options.is5xxRequestException());
+    
+    options.setAccept("text/plain");
+    assertEquals(options.getAccept(),"text/plain");
+    
+    options.setAcceptCharset("UTF-8");
+    assertEquals(options.getAcceptCharset(), "UTF-8");
+    
+    options.setAcceptEncoding("gzip");
+    assertEquals(options.getAcceptEncoding(), "gzip");
+    
+    options.setAcceptLanguage("en-US");
+    assertEquals(options.getAcceptLanguage(), "en-US");
+    
+    options.setAuthorization("auth");
+    assertEquals(options.getAuthorization(), "auth");
+    
+    options.setCacheControl("public");
+    assertEquals(options.getCacheControl(), "public");
+    
+    options.setContentType("text/plain");
+    assertEquals(options.getContentType(), new MimeType("text/plain"));
+    
+    options.setEncodedHeader("foo", "UTF-8", "bar");
+    assertEquals(options.getDecodedHeader("foo"),"bar");
+    
+    options.setHeader("foo", "bar");
+    assertEquals(options.getHeader("foo"),"bar");
+    
+    options.setIfMatch("testing");
+    assertEquals(options.getIfMatch(),"testing");
+    
+    options.setIfNoneMatch("testing");
+    assertEquals(options.getIfNoneMatch(),"testing");
+    
+    options.setSlug("This is the slug");
+    assertEquals(options.getSlug(),"This is the slug");
+    
+    options.setUsePostOverride(true);
+    assertTrue(options.isUsePostOverride());
   }
   
   public void testAppClient() throws Exception {

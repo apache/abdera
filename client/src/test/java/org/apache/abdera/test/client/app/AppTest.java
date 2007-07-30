@@ -341,6 +341,7 @@ public class AppTest extends JettyTest {
     Entry entry = getFactory().newEntry();
     RequestOptions options = abderaClient.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
+    options.setUseExpectContinue(false);
 
     // do the introspection step
     ClientResponse response = abderaClient.get("http://localhost:8080/service",
@@ -463,6 +464,7 @@ public class AppTest extends JettyTest {
     options = abderaClient.getDefaultRequestOptions();
     options.setContentType("text/plain");
     options.setHeader("Connection", "close");
+    options.setUseExpectContinue(false);
 
     response = abderaClient.post(col_uri,
                            new ByteArrayInputStream("test".getBytes()),
@@ -511,6 +513,7 @@ public class AppTest extends JettyTest {
     options = abderaClient.getDefaultRequestOptions();
     options.setContentType("application/atom+xml;type=entry");
     options.setHeader("Connection", "close");
+    options.setUseExpectContinue(false);
 
     response = abderaClient.put(edit_uri, entry, options);
 
@@ -536,6 +539,7 @@ public class AppTest extends JettyTest {
     options = abderaClient.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
     options.setContentType("text/plain");
+    options.setUseExpectContinue(false);
 
     response = abderaClient.put(edit_media,
                           new ByteArrayInputStream("TEST".getBytes()),

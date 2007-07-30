@@ -287,6 +287,7 @@ public class CacheTest extends JettyTest {
     RequestOptions options = client.getDefaultRequestOptions();
     options.setHeader("Connection", "close");
     options.setHeader("x-reqnum", String.valueOf(num));
+    options.setUseExpectContinue(false);
     return options;
   }
   
@@ -297,6 +298,7 @@ public class CacheTest extends JettyTest {
     ClientResponse response = abderaClient.get(CHECK_CACHE_INVALIDATE, options);
   
     String resp1 = getResponse(response);
+    
     response.release();
     assertEquals(resp1, "1");
     

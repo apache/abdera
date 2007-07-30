@@ -68,7 +68,7 @@ public abstract class AbstractRequest implements Request {
   }
 
   public EntityTag[] getIfMatch() {
-    return EntityTag.parseList(getHeader("If-Match"));
+    return EntityTag.parseTags(getHeader("If-Match"));
   }
 
   public Date getIfModifiedSince() {
@@ -76,7 +76,7 @@ public abstract class AbstractRequest implements Request {
   }
 
   public EntityTag[] getIfNoneMatch() {
-    return EntityTag.parseList(getHeader("If-None-Match"));
+    return EntityTag.parseTags(getHeader("If-None-Match"));
   }
 
   public Date getIfUnmodifiedSince() {

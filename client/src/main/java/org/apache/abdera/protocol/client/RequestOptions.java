@@ -32,6 +32,7 @@ import org.apache.abdera.protocol.Request;
 import org.apache.abdera.protocol.util.AbstractRequest;
 import org.apache.abdera.protocol.util.CacheControlUtil;
 import org.apache.abdera.protocol.util.EncodingUtil;
+import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.util.Messages;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
@@ -288,28 +289,56 @@ public class RequestOptions
    * Sets the value of the HTTP If-Match header
    */
   public void setIfMatch(String entity_tag) {
-    setHeader("If-Match", entity_tag);
+    setIfMatch(new EntityTag(entity_tag));
+  }
+  
+  /**
+   * Sets the value of the HTTP If-Match header
+   */
+  public void setIfMatch(EntityTag entity_tag) {
+    setHeader("If-Match", entity_tag.toString());
+  }
+  
+  /**
+   * Sets the value of the HTTP If-Match header
+   */
+  public void setIfMatch(EntityTag... entity_tags) {
+    setHeader("If-Match", EntityTag.toString(entity_tags));
   }
   
   /**
    * Sets the value of the HTTP If-Match header
    */
   public void setIfMatch(String... entity_tags) {
-    setHeader("If-Match", entity_tags);
+    setHeader("If-Match", EntityTag.toString(entity_tags));
   }
   
   /**
    * Sets the value of the HTTP If-None-Match header
    */
   public void setIfNoneMatch(String entity_tag) {
-    setHeader("If-None-Match", entity_tag);
+    setIfNoneMatch(new EntityTag(entity_tag));
+  }
+  
+  /**
+   * Sets the value of the HTTP If-None-Match header
+   */
+  public void setIfNoneMatch(EntityTag entity_tag) {
+    setHeader("If-None-Match", entity_tag.toString());
+  }
+  
+  /**
+   * Sets the value of the HTTP If-None-Match header
+   */
+  public void setIfNoneMatch(EntityTag... entity_tags) {
+    setHeader("If-None-Match", EntityTag.toString(entity_tags));
   }
   
   /**
    * Sets the value of the HTTP If-None-Match header
    */
   public void setIfNoneMatch(String... entity_tags) {
-    setHeader("If-None-Match", entity_tags);
+    setHeader("If-None-Match", EntityTag.toString(entity_tags));
   }
   
   /**

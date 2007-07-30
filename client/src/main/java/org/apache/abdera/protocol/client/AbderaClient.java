@@ -20,7 +20,9 @@ package org.apache.abdera.protocol.client;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.TrustManager;
 
@@ -40,6 +42,7 @@ import org.apache.abdera.protocol.util.CacheControlUtil;
 import org.apache.abdera.util.ServiceUtil;
 import org.apache.abdera.util.Version;
 import org.apache.commons.httpclient.Credentials;
+import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -487,17 +490,24 @@ public class AbderaClient {
    * Set the maximum number of connections allowed for a single host
    */
   public void setMaxConnectionsPerHost(int max) {
-    client.getHttpConnectionManager().getParams().setIntParameter(
-      HttpConnectionManagerParams.MAX_HOST_CONNECTIONS, max);
+    Map<HostConfiguration,Integer> m = new HashMap<HostConfiguration,Integer>();
+    m.put(HostConfiguration.ANY_HOST_CONFIGURATION, max);
+    client.getHttpConnectionManager().getParams().setParameter(
+      HttpConnectionManagerParams.MAX_HOST_CONNECTIONS, m);
   }
   
   /**
    * Return the maximum number of connections allowed for a single host
    */
+  
+  @SuppressWarnings("unchecked")
   public int getMaxConnectionsPerHost() {
-    return client.getHttpConnectionManager().getParams().getIntParameter(
-      HttpConnectionManagerParams.MAX_HOST_CONNECTIONS,
-      MultiThreadedHttpConnectionManager.DEFAULT_MAX_HOST_CONNECTIONS);
+    Map<HostConfiguration,Integer> m = (Map<HostConfiguration,Integer>) 
+      client.getHttpConnectionManager().getParams().getParameter(
+        HttpConnectionManagerParams.MAX_HOST_CONNECTIONS);
+    if (m == null) return MultiThreadedHttpConnectionManager.DEFAULT_MAX_HOST_CONNECTIONS;
+    Integer i = m.get(HostConfiguration.ANY_HOST_CONFIGURATION);
+    return i != null ? i.intValue() : MultiThreadedHttpConnectionManager.DEFAULT_MAX_HOST_CONNECTIONS;
   }
   
   /**

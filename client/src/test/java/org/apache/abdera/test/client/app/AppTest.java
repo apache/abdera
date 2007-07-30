@@ -367,11 +367,11 @@ public class AppTest extends JettyTest {
     options.setAuthorization("auth");
     assertEquals(options.getAuthorization(), "auth");
     
-    options.setCacheControl("public");
-    assertEquals(options.getCacheControl(), "public");
+    options.setCacheControl("no-cache");
+    assertEquals(options.getCacheControl(), "no-cache");
     
     options.setContentType("text/plain");
-    assertEquals(options.getContentType(), new MimeType("text/plain"));
+    assertTrue(MimeTypeHelper.isMatch(options.getContentType(), new MimeType("text/plain")));
     
     options.setEncodedHeader("foo", "UTF-8", "bar");
     assertEquals(options.getDecodedHeader("foo"),"bar");
@@ -380,10 +380,10 @@ public class AppTest extends JettyTest {
     assertEquals(options.getHeader("foo"),"bar");
     
     options.setIfMatch("testing");
-    assertEquals(options.getIfMatch(),"testing");
+    assertTrue(EntityTag.matchesAny(new EntityTag("testing"), options.getIfMatch()));
     
     options.setIfNoneMatch("testing");
-    assertEquals(options.getIfNoneMatch(),"testing");
+    assertTrue(EntityTag.matchesAny(new EntityTag("testing"), options.getIfNoneMatch()));
     
     options.setSlug("This is the slug");
     assertEquals(options.getSlug(),"This is the slug");

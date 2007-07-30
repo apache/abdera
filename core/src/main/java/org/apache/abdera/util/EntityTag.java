@@ -45,11 +45,10 @@ public class EntityTag implements Cloneable, Serializable {
   public static EntityTag[] parseTags(String entity_tags) {
     if (entity_tags == null || entity_tags.length() == 0)
       return new EntityTag[0];
+    String[] tags = entity_tags.split("((?<=\")\\s*,\\s*(?=\"))");
     List<EntityTag> etags = new ArrayList<EntityTag>();
-    String[] tags = entity_tags.split(",");
     for (String tag : tags) {
-      tag = tag.trim();
-      etags.add(parse(tag));
+      etags.add(EntityTag.parse(tag.trim()));
     }
     return etags.toArray(new EntityTag[etags.size()]);
   }
@@ -203,17 +202,6 @@ public class EntityTag implements Cloneable, Serializable {
     return EntityTag.matches(etag, etag2);
   }
 
-  public static EntityTag[] parseList(String list) {
-    if (list == null || list.length() == 0)
-      return new EntityTag[0];
-    String[] tags = list.split("((?<=\")\\s*,\\s*(?=\"))");
-    List<EntityTag> etags = new ArrayList<EntityTag>();
-    for (String tag : tags) {
-      etags.add(EntityTag.parse(tag));
-    }
-    return etags.toArray(new EntityTag[etags.size()]);
-  }
-  
   public static String toString(EntityTag... tags) {
     StringBuffer buf = new StringBuffer();
     for (EntityTag tag : tags) {

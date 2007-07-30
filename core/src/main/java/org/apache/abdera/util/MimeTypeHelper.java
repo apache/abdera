@@ -66,27 +66,33 @@ public class MimeTypeHelper {
     return answer;
   }  
   
+  public static boolean isMatch(MimeType a, MimeType b) {
+    return isMatch(a,b,false);
+  }
+  
   /**
    * Returns true if media type a matches media type b
    */
-  public static boolean isMatch(MimeType a, MimeType b) {
+  public static boolean isMatch(MimeType a, MimeType b, boolean includeparams) {
     try {
       if (a == null || b == null) return true;
       if (a.match(b)) {
-        MimeTypeParameterList aparams = a.getParameters();
-        MimeTypeParameterList bparams = b.getParameters();
-        if (aparams.isEmpty() && bparams.isEmpty()) return true;
-        if (aparams.isEmpty() && !bparams.isEmpty()) return false;
-        if (!aparams.isEmpty() && bparams.isEmpty()) return false;
-        boolean answer = true;
-        for (Enumeration e = aparams.getNames(); e.hasMoreElements();) {
-          String aname = (String)e.nextElement();
-          String avalue = aparams.get(aname);
-          String bvalue = bparams.get(aname);
-          if (avalue.equals(bvalue)) answer = true;
-          else { answer = false; break; }
-        }
-        return answer;
+        if (includeparams) {
+          MimeTypeParameterList aparams = a.getParameters();
+          MimeTypeParameterList bparams = b.getParameters();
+          if (aparams.isEmpty() && bparams.isEmpty()) return true;
+          if (aparams.isEmpty() && !bparams.isEmpty()) return false;
+          if (!aparams.isEmpty() && bparams.isEmpty()) return false;
+          boolean answer = true;
+          for (Enumeration e = aparams.getNames(); e.hasMoreElements();) {
+            String aname = (String)e.nextElement();
+            String avalue = aparams.get(aname);
+            String bvalue = bparams.get(aname);
+            if (avalue.equals(bvalue)) answer = true;
+            else { answer = false; break; }
+          }
+          return answer;
+        } else return true;
       }
       if (a.equals(WILDCARD)) return true;
       if (a.getPrimaryType().equals("*")) {
@@ -112,7 +118,8 @@ public class MimeTypeHelper {
    * Returns true if media type a matches application/atom+xml
    */
   public static boolean isAtom(String a) {
-    return isMatch(Constants.ATOM_MEDIA_TYPE, a);
+    if (isEntry(a) || isFeed(a)) return true;
+    return isMatch(Constants.ATOM_MEDIA_TYPE,a);
   }
   
   /**
@@ -139,7 +146,7 @@ public class MimeTypeHelper {
       MimeType mtb = new MimeType(Constants.ATOM_MEDIA_TYPE);
       if (isMatch(mta,mtb)) {
         String type = mta.getParameter("type");
-        return (type != null && type.equalsIgnoreCase("feed"));
+        return type != null ? type.equalsIgnoreCase("feed") : true;
       }
     } catch (Exception e) {}
     return false;

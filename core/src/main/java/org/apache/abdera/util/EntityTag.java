@@ -45,7 +45,7 @@ public class EntityTag implements Cloneable, Serializable {
   public static EntityTag[] parseTags(String entity_tags) {
     if (entity_tags == null || entity_tags.length() == 0)
       return new EntityTag[0];
-    String[] tags = entity_tags.split("((?<=\")\\s*,\\s*(?=\"))");
+    String[] tags = entity_tags.split("((?<=\")\\s*,\\s*(?=(W/)?\"))");
     List<EntityTag> etags = new ArrayList<EntityTag>();
     for (String tag : tags) {
       etags.add(EntityTag.parse(tag.trim()));

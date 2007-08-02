@@ -81,12 +81,12 @@
       <artifactId>stax-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>stax</groupId>
-      <artifactId>stax</artifactId>
-    </dependency>
-    <dependency>
       <groupId>woodstox</groupId>
       <artifactId>wstx-asl</artifactId>
     </dependency> 
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
   </dependencies>
 </project>

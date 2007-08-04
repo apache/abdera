@@ -21,6 +21,8 @@ import javax.xml.namespace.QName;
 
 public final class Constants {
 
+  public static final String CONTENT_ENCRYPTED = "Content-Encrypted";
+  public static final String ACCEPT_ENCRYPTION = "Accept-Encryption";
   Constants() {}
   
   public static final String DSIG_NS = "http://www.w3.org/2000/09/xmldsig#";

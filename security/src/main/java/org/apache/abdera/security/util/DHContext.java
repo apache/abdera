@@ -90,6 +90,7 @@ public class DHContext
   
   public String getRequestString() {
     StringBuffer buf = new StringBuffer();
+    buf.append("DH ");
     buf.append("p=");
     buf.append(p.toString());
     buf.append(", ");
@@ -106,6 +107,7 @@ public class DHContext
   
   public String getResponseString() {
     StringBuffer buf = new StringBuffer();
+    buf.append("DH ");
     buf.append("k=");
     buf.append(Base64.encode(keyPair.getPublic().getEncoded()));
     return buf.toString();
@@ -133,7 +135,10 @@ public class DHContext
       throws NoSuchAlgorithmException, 
              InvalidAlgorithmParameterException, 
              InvalidKeySpecException {
-    String[] params = dh.split("\\s*,\\s*");
+    String[] segments = dh.split("\\s+",2);
+    if (!segments[0].equalsIgnoreCase("DH"))
+      throw new IllegalArgumentException();
+    String[] params = segments[1].split("\\s*,\\s*");
     byte[] key = null;
     for (String param : params) {
       String name = param.substring(0,param.indexOf("="));
@@ -186,7 +191,10 @@ public class DHContext
     String dh) 
       throws NoSuchAlgorithmException, 
              InvalidKeySpecException {
-    String[] tokens = dh.split("\\s*,\\s*");
+    String[] segments = dh.split("\\s+",2);
+    if (!segments[0].equalsIgnoreCase("DH"))
+      throw new IllegalArgumentException();
+    String[] tokens = segments[1].split("\\s*,\\s*");
     byte[] key = null;
     for (String token : tokens) {
       String name = token.substring(0,token.indexOf("="));

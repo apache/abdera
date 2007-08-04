@@ -24,13 +24,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.abdera.security.Encryption;
 import org.apache.abdera.security.EncryptionOptions;
+import org.apache.abdera.security.util.Constants;
 import org.apache.abdera.security.util.DHContext;
 
 /**
  * A Servlet Filter that uses Diffie-Hellman Key Exchange to encrypt 
- * Atom documents.  The HTTP request must include a X-DH header in the form:
+ * Atom documents.  The HTTP request must include an Accept-Encryption header in the form:
  * 
- * X-DH: p={dh_p}, g={dh_g}, l={dh_l}, k={base64_pubkey}
+ * Accept-Encryption: DH p={dh_p}, g={dh_g}, l={dh_l}, k={base64_pubkey}
  * 
  * Example AbderaClient Code:
  * <pre>
@@ -38,12 +39,12 @@ import org.apache.abdera.security.util.DHContext;
  *   Abdera abdera = new Abdera();
  *   CommonsClient client = new CommonsClient(abdera);
  *   RequestOptions options = client.getDefaultRequestOptions();
- *   options.setHeader("X-DH", context.getRequestString());
+ *   options.setHeader("Accept-Encryption", context.getRequestString());
  *   
  *   ClientResponse response = client.get("http://localhost:8080/TestWeb/test",options);
  *   Document<Element> doc = response.getDocument();
  *   
- *   String dh_ret = response.getHeader("X-DH");
+ *   String dh_ret = response.getHeader("Content-Encrypted");
  *   if (dh_ret != null) {
  *     context.setPublicKey(dh_ret);
  *     AbderaSecurity absec = new AbderaSecurity(abdera);
@@ -69,8 +70,6 @@ import org.apache.abdera.security.util.DHContext;
  */
 public class DHEncryptedResponseFilter 
   extends BCEncryptedResponseFilter {
-
-  public static final String DH = "X-DH";
     
   protected boolean doEncryption(ServletRequest request, Object arg) {
     return arg != null;
@@ -96,12 +95,12 @@ public class DHEncryptedResponseFilter
   }
   
   private void returnPublicKey(HttpServletResponse response, DHContext context) {
-    response.setHeader(DH,context.getResponseString());
+    response.setHeader(Constants.CONTENT_ENCRYPTED,context.getResponseString());
   }
   
   private DHContext getDHContext(HttpServletRequest request) {
     try {
-      String dh_req = request.getHeader(DH);
+      String dh_req = request.getHeader(Constants.ACCEPT_ENCRYPTION);
       if (dh_req == null || dh_req.length() == 0) return null;
       return new DHContext(dh_req);
     } catch (Exception e) {

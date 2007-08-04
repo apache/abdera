@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.abdera.security.Encryption;
 import org.apache.abdera.security.EncryptionOptions;
+import org.apache.abdera.security.util.Constants;
 import org.apache.abdera.security.util.DHContext;
 
 /**
@@ -49,7 +50,7 @@ public class DHEncryptedRequestFilter
     ServletRequest request, 
     ServletResponse response ) {
     String method = ((HttpServletRequest)request).getMethod();
-    // include a X-DH header in the response to GET, HEAD and OPTIONS requests
+    // include a Accept-Encryption header in the response to GET, HEAD and OPTIONS requests
     // the header will specify all the information the client needs to construct
     // it's own DH context and encrypt the request
     if ("GET".equalsIgnoreCase(method) || 
@@ -57,7 +58,7 @@ public class DHEncryptedRequestFilter
         "OPTIONS".equalsIgnoreCase(method)) {
       DHContext context = new DHContext();
       ((HttpServletResponse)response).setHeader(
-        DHEncryptedResponseFilter.DH, 
+        Constants.ACCEPT_ENCRYPTION, 
         context.getRequestString());
       ((HttpServletRequest) request).getSession(true).setAttribute(
         "dhcontext", context);
@@ -69,7 +70,7 @@ public class DHEncryptedRequestFilter
     DHContext context = 
       (DHContext) ((HttpServletRequest)request).
         getSession(true).getAttribute("dhcontext");
-    String dh = ((HttpServletRequest)request).getHeader(DHEncryptedResponseFilter.DH);
+    String dh = ((HttpServletRequest)request).getHeader(Constants.CONTENT_ENCRYPTED);
     if (context != null && dh != null && dh.length() > 0) {
       try {
         context.setPublicKey(dh);

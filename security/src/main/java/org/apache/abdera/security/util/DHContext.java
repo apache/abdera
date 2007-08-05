@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.security.util;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.AlgorithmParameterGenerator;
 import java.security.AlgorithmParameters;
@@ -62,8 +63,10 @@ import org.apache.xml.security.encryption.XMLCipher;
  * 
  */
 public class DHContext 
-  implements Cloneable {
+  implements Cloneable, 
+             Serializable {
 
+  private static final long serialVersionUID = 9145945368596071015L;
   BigInteger p = null, g = null;
   int l = 0;
   private KeyPair keyPair;
@@ -96,9 +99,6 @@ public class DHContext
     buf.append(", ");
     buf.append("g=");
     buf.append(g.toString());
-    buf.append(", ");
-    buf.append("l=");
-    buf.append(l);
     buf.append(", ");
     buf.append("k=");
     buf.append(Base64.encode(keyPair.getPublic().getEncoded()));
@@ -147,8 +147,6 @@ public class DHContext
         p = new BigInteger(value);
       else if (name.equalsIgnoreCase("g"))
         g = new BigInteger(value);
-      else if (name.equalsIgnoreCase("l"))
-        l = Integer.parseInt(value);
       else if (name.equalsIgnoreCase("k"))
         key = Base64.decode(value);
     }

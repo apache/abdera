@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.ItemManager;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.RequestHandler;
@@ -54,15 +55,34 @@ public class AbderaServlet
   
   public void init() throws ServletException {
     log.debug("Initialing Abdera Servlet");
-    manager = ServiceManager.getInstance();
-    context = 
-      manager.newServiceContext(
-        getProperties(
-          getServletConfig()));
+    manager = createServiceManager();
+    context = createServiceContext();
     if (context == null) {
       log.debug("Cannot create service context");
       throw new ServletException("Cannot create service context");
     }
+  }
+
+  public Abdera getAbdera() {
+     return ServiceManager.getAbdera();
+  }
+  
+  public ServiceContext getServiceContext() {
+    return context;
+  }
+
+  public ServiceManager getServiceManager() {
+    return manager;
+  }
+
+  protected ServiceContext createServiceContext() {
+    return manager.newServiceContext(
+        getProperties(
+          getServletConfig()));
+  }
+
+  protected ServiceManager createServiceManager() {
+    return ServiceManager.getInstance();
   }
   
   @Override
@@ -98,7 +118,7 @@ public class AbderaServlet
     response.sendError(500, message);
   }
   
-  private Map<String,String> getProperties(ServletConfig config) {
+  protected Map<String,String> getProperties(ServletConfig config) {
     Map<String,String> properties = new HashMap<String,String>();
     Enumeration e = config.getInitParameterNames();
     while(e.hasMoreElements()) {

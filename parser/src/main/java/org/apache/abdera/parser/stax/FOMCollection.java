@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Categories;
@@ -55,7 +56,8 @@ public class FOMCollection
   public FOMCollection(
     String title, 
     String href, 
-    String[] accepts) {
+    String[] accepts) 
+      throws MimeTypeParseException {
     this();
     setTitle(title);
     setHref(href);
@@ -162,11 +164,11 @@ public class FOMCollection
     }
   }
 
-  public void setAccept(String mediaRange) {
+  public void setAccept(String mediaRange) throws MimeTypeParseException {
     setAccept(new String[] {mediaRange});
   }
   
-  public void setAccept(String... mediaRanges) {
+  public void setAccept(String... mediaRanges) throws MimeTypeParseException {
     if (mediaRanges != null && mediaRanges.length > 0) {
       _removeChildren(ACCEPT, true);
       _removeChildren(PRE_RFC_ACCEPT, true);
@@ -175,9 +177,11 @@ public class FOMCollection
       } else {
         mediaRanges = MimeTypeHelper.condense(mediaRanges);
         for (String type : mediaRanges) {
-          try {
+          if (type.equalsIgnoreCase("entry")) {
+            addSimpleExtension(ACCEPT,"application/atom+xml;type=entry");
+          } else {
             addSimpleExtension(ACCEPT, new MimeType(type).toString());
-          } catch (Exception e) {}
+          }
         }
       }
     } else {
@@ -207,11 +211,15 @@ public class FOMCollection
   }
   
   public void setAcceptsEntry() {
-    setAccept("application/atom+xml;type=entry");
+    try {
+      setAccept("application/atom+xml;type=entry");
+    } catch (MimeTypeParseException m) {}
   }
   
   public void setAcceptsNothing() {
-    setAccept("");
+    try {
+      setAccept("");
+    } catch (MimeTypeParseException m) {}
   }
   
   public boolean acceptsEntry() {

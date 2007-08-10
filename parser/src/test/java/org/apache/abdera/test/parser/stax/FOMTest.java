@@ -188,7 +188,7 @@ public class FOMTest extends TestCase   {
     URL url = FOMTest.class.getResource("/simple.xml");
     InputStream in = url.openStream();
 
-    Document<Feed> doc = getParser().parse(in, url.toString(), options);
+    Document<Feed> doc = getParser().parse(in, url.toString().replaceAll(" ", "%20"), options);
     Feed feed = doc.getRoot();
     
     assertEquals(feed.getTitle(),"Example Feed");
@@ -219,7 +219,7 @@ public class FOMTest extends TestCase   {
     URL url = FOMTest.class.getResource("/simple.xml");
     InputStream in = url.openStream();
 
-    Document<Feed> doc = getParser().parse(in, url.toString(), options);
+    Document<Feed> doc = getParser().parse(in, url.toString().replaceAll(" ", "%20"), options);
     Feed feed = doc.getRoot();
     
     assertEquals(feed.getTitle(),"Example Feed");

@@ -100,8 +100,7 @@ public class DefaultServiceContext
   public Resolver<Target> getTargetResolver(String contextPath) {
     if (targetResolver == null) {
       targetResolver = (Resolver<Target>) instance(
-        TARGET_RESOLVER, getDefaultTargetResolver(), 
-        contextPath);
+        TARGET_RESOLVER, getDefaultTargetResolver());
     }
     return targetResolver;
   }

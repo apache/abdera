@@ -235,4 +235,8 @@ public class HttpServletRequestContext
   public boolean isUserInRole(String role) {
     return request.isUserInRole(role);
   }
+
+  public String getContextPath() {
+    return request.getContextPath();
+  }
 }

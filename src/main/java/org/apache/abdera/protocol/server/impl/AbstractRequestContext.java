@@ -153,4 +153,11 @@ public abstract class AbstractRequestContext
   public ServiceContext getServiceContext() {
     return context;
   }
+
+  public String getTargetPath() {
+    String uri = getUri().toString();
+    String cpath = getContextPath();
+    return cpath == null ? uri : uri.substring(cpath.length());
+  }
+  
 }

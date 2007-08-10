@@ -90,4 +90,12 @@ public interface RequestContext
   <T extends Element>Document<T> getDocument(ParserOptions options) throws ParseException, IOException;
   
   boolean isUserInRole(String role);
+  
+  String getContextPath();
+  
+  /**
+   * Returns the subset of the request URI that is to be used to resolve the Target
+   * (everything after the context path)
+   */
+  String getTargetPath();
 }

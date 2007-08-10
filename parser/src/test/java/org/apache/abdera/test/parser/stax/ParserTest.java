@@ -58,22 +58,26 @@ public class ParserTest extends TestCase {
 
     InputStream is = ParserTest.class.getResourceAsStream("/simpleFeed.xml");
     Document<Feed> feedDoc = getParser().parse(new InputStreamReader(is), 
-        ParserTest.class.getResource("/simpleEntry.xml").toExternalForm());
+        getResourceName("/simpleEntry.xml"));
     assertTrue(feedDoc.getRoot() instanceof Feed);
     assertEquals(feedDoc.getCharset(), "utf-8");
 
     is = ParserTest.class.getResourceAsStream("/simpleEntry.xml");
     Document<Entry> entryDoc = getParser().parse(new InputStreamReader(is),
-        ParserTest.class.getResource("/simpleEntry.xml").toExternalForm());
+        getResourceName("/simpleEntry.xml"));
     assertTrue(entryDoc.getRoot() instanceof Entry);
     assertEquals(entryDoc.getCharset(), "utf-8");
 
     is = ParserTest.class.getResourceAsStream("/simpleService.xml");
     Document<Service> serviceDoc = getParser().parse(new InputStreamReader(is),
-        ParserTest.class.getResource("/simpleEntry.xml").toExternalForm());
+        getResourceName("/simpleEntry.xml"));
     assertTrue(serviceDoc.getRoot() instanceof Service);
     assertEquals(serviceDoc.getCharset(), "utf-8");
     
+  }
+
+  private static String getResourceName(String name) {
+    return ParserTest.class.getResource(name).toExternalForm().replaceAll(" ", "%20");
   }
   
   /**

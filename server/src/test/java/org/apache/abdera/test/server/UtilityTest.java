@@ -89,7 +89,7 @@ public class UtilityTest extends TestCase {
   
   public static void testRegexTargetResolver() throws Exception {
     
-    RegexTargetResolver r = new RegexTargetResolver("/test");
+    RegexTargetResolver r = new RegexTargetResolver();
     r.setPattern("", TargetType.TYPE_SERVICE);
     r.setPattern("/([^/?#]+)", TargetType.TYPE_COLLECTION);
     
@@ -187,6 +187,10 @@ public class UtilityTest extends TestCase {
 
     public boolean isUserInRole(String role) {
       return false;
+    }
+
+    public String getContextPath() {
+      return "/test";
     }
     
   }

@@ -20,7 +20,6 @@ package org.apache.abdera.contrib.rss;
 import java.util.List;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
@@ -55,9 +54,13 @@ public class RssEnclosure
     return (l != null) ? Integer.parseInt(l) : -1;
   }
 
-  public MimeType getMimeType() throws MimeTypeParseException {
-    String type = getAttributeValue("type");
-    return (type != null) ? new MimeType(type) : null;
+  public MimeType getMimeType() {
+    try {
+      String type = getAttributeValue("type");
+      return (type != null) ? new MimeType(type) : null;
+    } catch (javax.activation.MimeTypeParseException e) {
+      throw new org.apache.abdera.util.MimeTypeParseException(e);
+    }
   }
 
   public String getRel() {
@@ -84,7 +87,7 @@ public class RssEnclosure
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setMimeType(String type) throws MimeTypeParseException {
+  public void setMimeType(String type) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 

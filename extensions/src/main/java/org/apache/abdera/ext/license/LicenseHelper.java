@@ -19,8 +19,6 @@ package org.apache.abdera.ext.license;
 
 import java.util.List;
 
-import javax.activation.MimeTypeParseException;
-
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Entry;
@@ -121,24 +119,14 @@ public final class LicenseHelper {
   public static Link addLicense(
     Base base, 
     String iri) {
-    try {
       return addLicense(base, iri, null, null, null);
-    } catch (MimeTypeParseException m) {
-      // not going to happen
-      return null;
-    }
   }
   
   public static Link addLicense(
     Base base,
     String iri,
     String title) {
-    try {
       return addLicense(base, iri, null, title, null);
-    } catch (MimeTypeParseException m) {
-      // not going to happen
-      return null;
-    }
   }
   
   public static Link addLicense(
@@ -146,8 +134,7 @@ public final class LicenseHelper {
     String iri,
     String type,
     String title,
-    String hreflang) 
-      throws MimeTypeParseException {
+    String hreflang) {
     if (hasLicense(base, iri,false))
       throw new IllegalStateException("License '" + iri + "' has already been added");
     if (hasUnspecifiedLicense(base,false))

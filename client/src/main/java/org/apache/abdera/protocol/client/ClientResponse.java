@@ -21,8 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-import javax.activation.MimeTypeParseException;
-
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.ParseException;
@@ -84,7 +82,6 @@ public interface ClientResponse extends Response {
   
   /**
    * Return the character set encoding specified in the ContentType header, if ant
-   * @throws MimeTypeParseException 
    */
   String getCharacterEncoding();
   

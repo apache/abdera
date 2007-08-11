@@ -32,7 +32,6 @@ import java.util.Map;
 
 import javax.activation.DataHandler;
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 //import javax.xml.stream.XMLStreamWriter;
@@ -702,8 +701,7 @@ public class FOMElement
   protected Link selectLink(
     List<Link> links, 
     String type, 
-    String hreflang) 
-      throws MimeTypeParseException {
+    String hreflang) {
     for (Link link : links) {
       MimeType mt = link.getMimeType();
       boolean typematch =  

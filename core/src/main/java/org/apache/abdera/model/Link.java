@@ -18,7 +18,6 @@
 package org.apache.abdera.model;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.i18n.iri.IRI;
 
@@ -155,7 +154,7 @@ public interface Link
    * @return The value of the type attribute
    * @throws MimeTypeParseException if the type is malformed
    */
-  MimeType getMimeType() throws MimeTypeParseException;
+  MimeType getMimeType();
 
   /**
    * RFC4287: On the link element, the "type" attribute's value is an advisory
@@ -168,7 +167,7 @@ public interface Link
    * @param type The link type
    * @throws MimeTypeParseException if the type is malformed
    */
-  void setMimeType(String type) throws MimeTypeParseException;
+  void setMimeType(String type);
   
   /**
    * RFC4287: The "hreflang" attribute's content describes the language of the

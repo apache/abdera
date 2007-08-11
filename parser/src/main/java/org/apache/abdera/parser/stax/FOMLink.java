@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Link;
@@ -124,20 +123,28 @@ public class FOMLink
     setAttributeValue(REL, rel);
   }
 
-  public MimeType getMimeType() throws MimeTypeParseException {
-    String type = getAttributeValue(TYPE);
-    return (type != null) ? new MimeType(type) : null;
+  public MimeType getMimeType() {
+    try {
+      String type = getAttributeValue(TYPE);
+      return (type != null) ? new MimeType(type) : null;
+    } catch (javax.activation.MimeTypeParseException e) {
+      throw new org.apache.abdera.util.MimeTypeParseException(e);
+    }
   }
   
   public void setMimeType(MimeType type) {
     setAttributeValue(TYPE, (type != null) ? type.toString() : null);
   }
 
-  public void setMimeType(String type) throws MimeTypeParseException {
-    if (type != null) 
-      setAttributeValue(TYPE, (new MimeType(type)).toString());
-    else
-      removeAttribute(TYPE);
+  public void setMimeType(String type) {
+    try {
+      if (type != null) 
+        setAttributeValue(TYPE, (new MimeType(type)).toString());
+     else
+        removeAttribute(TYPE);
+    } catch (javax.activation.MimeTypeParseException e) {
+      throw new org.apache.abdera.util.MimeTypeParseException(e);
+    }
   }
 
   public String getHrefLang() {

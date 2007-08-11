@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.history.FeedPagingHelper;
@@ -333,9 +332,8 @@ public class Editor {
     }
     
     public void refresh() 
-      throws MimeTypeParseException, 
-             IOException {
-      getMedia(editMediaLink);
+      throws IOException {
+        getMedia(editMediaLink);
     }
 
   }

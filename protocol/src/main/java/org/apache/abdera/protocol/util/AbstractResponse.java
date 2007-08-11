@@ -20,7 +20,6 @@ package org.apache.abdera.protocol.util;
 import java.util.Date;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.protocol.Response;
 import org.apache.abdera.util.EntityTag;
@@ -74,9 +73,13 @@ public abstract class AbstractResponse
     return getDecodedHeader("Slug");
   }
 
-  public MimeType getContentType() throws MimeTypeParseException {
-    String value = getHeader("Content-Type");
-    return (value != null) ? new MimeType(value) : null;
+  public MimeType getContentType() {
+    try {
+      String value = getHeader("Content-Type");
+      return (value != null) ? new MimeType(value) : null;
+    } catch (javax.activation.MimeTypeParseException e) {
+      throw new org.apache.abdera.util.MimeTypeParseException(e);
+    }
   }
 
   public EntityTag getEntityTag() {

@@ -19,7 +19,6 @@ package org.apache.abdera.parser.stax;
 
 import javax.activation.DataHandler;
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 import javax.activation.URLDataSource;
 import javax.xml.namespace.QName;
 
@@ -134,13 +133,11 @@ public class FOMContent
       
       MimeType mtype = this.getMimeType();
       if (mtype == null) {
-        try {
-          String mt = getFactory().getMimeType(value);
-          if (mt != null) {
-            setMimeType(mt);
-            mtype = getMimeType();
-          }
-        } catch (MimeTypeParseException e) {}
+        String mt = getFactory().getMimeType(value);
+        if (mt != null) {
+          setMimeType(mt);
+          mtype = getMimeType();
+        }
       }
       
       if (value instanceof Div && !type.equals(Content.Type.XML)) 
@@ -168,11 +165,15 @@ public class FOMContent
     return type;
   }
   
-  public void setMimeType(String type) throws MimeTypeParseException {
-    if (type != null)
-      setAttributeValue(TYPE, (new MimeType(type)).toString());
-    else
-      removeAttribute(TYPE);
+  public void setMimeType(String type) {
+    try {
+      if (type != null)
+        setAttributeValue(TYPE, (new MimeType(type)).toString());
+      else
+        removeAttribute(TYPE);
+    } catch (javax.activation.MimeTypeParseException e) {
+      throw new org.apache.abdera.util.MimeTypeParseException(e);
+    }      
   }
 
   public IRI getSrc() {

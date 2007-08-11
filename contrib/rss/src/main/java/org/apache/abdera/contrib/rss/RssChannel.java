@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.Abdera;
@@ -168,7 +167,7 @@ public class RssChannel
   }
 
   public Link addLink(String href, String rel, String type, String title,
-      String hreflang, long length) throws MimeTypeParseException {
+      String hreflang, long length) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -178,8 +177,7 @@ public class RssChannel
     return link;
   }
 
-  public Link getAlternateLink(String type, String hreflang)
-      throws MimeTypeParseException {
+  public Link getAlternateLink(String type, String hreflang){
     return getAlternateLink();
   }
 
@@ -188,8 +186,7 @@ public class RssChannel
     return (link != null) ? link.getResolvedHref() : null;
   }
 
-  public IRI getAlternateLinkResolvedHref(String type, String hreflang)
-      throws MimeTypeParseException {
+  public IRI getAlternateLinkResolvedHref(String type, String hreflang){
     return getAlternateLinkResolvedHref();
   }
 

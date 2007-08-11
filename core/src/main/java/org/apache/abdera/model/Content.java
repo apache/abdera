@@ -19,7 +19,6 @@ package org.apache.abdera.model;
 
 import javax.activation.DataHandler;
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.i18n.iri.IRI;
@@ -179,7 +178,7 @@ public interface Content extends Element {
    * @param type The media type 
    * @throws MimeTypeParseException if the media type is malformed 
    */
-  void setMimeType(String type) throws MimeTypeParseException;
+  void setMimeType(String type);
 
   /**
    * <p>RFC4287: atom:content MAY have a "src" attribute, whose value MUST 

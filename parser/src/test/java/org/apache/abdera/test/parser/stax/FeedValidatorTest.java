@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.activation.DataHandler;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Category;
@@ -42,6 +41,7 @@ import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.model.Text;
+import org.apache.abdera.util.MimeTypeParseException;
 import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.iri.IRISyntaxException;

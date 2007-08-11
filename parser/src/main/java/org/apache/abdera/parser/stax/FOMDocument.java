@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.abdera.factory.Factory;
@@ -191,10 +190,14 @@ public class FOMDocument<T extends Element>
     return contentType;
   }
   
-  public void setContentType(String contentType) throws MimeTypeParseException {
-    this.contentType = new MimeType(contentType);
-    if (this.contentType.getParameter("charset") != null)
-      setCharset(this.contentType.getParameter("charset"));
+  public void setContentType(String contentType) {
+    try {
+      this.contentType = new MimeType(contentType);
+      if (this.contentType.getParameter("charset") != null)
+        setCharset(this.contentType.getParameter("charset"));
+    } catch (javax.activation.MimeTypeParseException e) {
+      throw new org.apache.abdera.util.MimeTypeParseException(e);
+    }
   }
   
   public Date getLastModified() {

@@ -18,7 +18,6 @@
 package org.apache.abdera.ext.thread;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Element;
@@ -41,9 +40,13 @@ public class InReplyTo
     return (href != null) ? new IRI(href) : null;
   }
 
-  public MimeType getMimeType() throws MimeTypeParseException {
-    String type = getAttributeValue("type");
-    return (type != null) ? new MimeType(type) : null;
+  public MimeType getMimeType() {
+    try {
+      String type = getAttributeValue("type");
+      return (type != null) ? new MimeType(type) : null;
+    } catch (javax.activation.MimeTypeParseException e) {
+      throw new org.apache.abdera.util.MimeTypeParseException(e);
+    }
   }
 
   public IRI getRef() {
@@ -80,7 +83,7 @@ public class InReplyTo
     setAttributeValue("type", mimeType.toString());
   }
 
-  public void setMimeType(String mimeType) throws MimeTypeParseException {
+  public void setMimeType(String mimeType) {
     setAttributeValue("type", mimeType);
   }
 

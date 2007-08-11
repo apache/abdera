@@ -21,7 +21,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.protocol.util.ProtocolConstants;
 import org.apache.abdera.util.EntityTag;
@@ -52,7 +51,7 @@ public interface Request extends ProtocolConstants {
   
   String getSlug();
   
-  MimeType getContentType() throws MimeTypeParseException;
+  MimeType getContentType();
   
   Date getDateHeader(String name);
   

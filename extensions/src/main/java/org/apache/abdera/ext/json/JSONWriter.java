@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-import javax.activation.MimeTypeParseException;
-
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
@@ -271,7 +269,7 @@ public class JSONWriter
     return jspersons;
   }
 
-  private static JSONArray linksToJSON(List<Link> links) throws MimeTypeParseException, JSONException {
+  private static JSONArray linksToJSON(List<Link> links) throws JSONException {
     JSONArray jslinks = new JSONArray();
     for (Link link : links) {
       JSONObject jslink = new JSONObject();

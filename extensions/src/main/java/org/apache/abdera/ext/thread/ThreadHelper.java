@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.AtomDate;
@@ -164,8 +163,7 @@ public final class ThreadHelper {
     String ref, 
     String source, 
     String href, 
-    String type) 
-      throws MimeTypeParseException {
+    String type) {
     InReplyTo irt = addInReplyTo(entry, ref);
     if (irt != null) {
       if (source != null) irt.setSource(source);

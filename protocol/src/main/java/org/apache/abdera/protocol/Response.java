@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.protocol.util.ProtocolConstants;
 import org.apache.abdera.util.EntityTag;
@@ -60,7 +59,7 @@ public interface Response
   
   public long getContentLength();
   
-  public MimeType getContentType() throws MimeTypeParseException;
+  public MimeType getContentType();
   
   public String getAllow();
   

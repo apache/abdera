@@ -21,7 +21,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.lang.Lang;
@@ -77,7 +76,7 @@ public interface Document<T extends Element>
    * @param contentType The content type of document
    * @throws MimeTypeParseException if the content type is malformed
    */
-  void setContentType(String contentType) throws MimeTypeParseException;
+  void setContentType(String contentType);
   
   /**
    * Returns the last modified date for this document

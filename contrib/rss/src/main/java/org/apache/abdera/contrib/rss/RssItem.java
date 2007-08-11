@@ -24,7 +24,6 @@ import java.util.List;
 
 import javax.activation.DataHandler;
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
@@ -109,7 +108,7 @@ public class RssItem
   }
 
   public Link addLink(String href, String rel, String type, String title,
-      String hreflang, long length) throws MimeTypeParseException {
+      String hreflang, long length) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -125,7 +124,7 @@ public class RssItem
   }
 
   public Link getAlternateLink(String type, String hreflang)
-      throws MimeTypeParseException {
+      {
     return getAlternateLink();
   }
 
@@ -135,7 +134,7 @@ public class RssItem
   }
 
   public IRI getAlternateLinkResolvedHref(String type, String hreflang)
-      throws MimeTypeParseException {
+      {
     return getAlternateLinkResolvedHref();
   }
 
@@ -231,7 +230,7 @@ public class RssItem
   }
 
   public Link getEditMediaLink(String type, String hreflang)
-      throws MimeTypeParseException {
+      {
     return null;
   }
 
@@ -240,7 +239,7 @@ public class RssItem
   }
 
   public IRI getEditMediaLinkResolvedHref(String type, String hreflang)
-      throws MimeTypeParseException {
+      {
     return null;
   }
 
@@ -411,17 +410,17 @@ public class RssItem
   }
 
   public Content setContent(Element element, String mediaType)
-      throws MimeTypeParseException {
+      {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
   public Content setContent(DataHandler dataHandler)
-      throws MimeTypeParseException {
+      {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
   public Content setContent(DataHandler dataHandler, String mediatype)
-      throws MimeTypeParseException {
+      {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -430,17 +429,17 @@ public class RssItem
   }
 
   public Content setContent(InputStream inputStream, String mediatype)
-      throws MimeTypeParseException {
+      {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
   public Content setContent(String value, String mediatype)
-      throws MimeTypeParseException {
+      {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
   public Content setContent(IRI uri, String mediatype)
-      throws MimeTypeParseException {
+      {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 

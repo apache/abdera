@@ -19,7 +19,6 @@ package org.apache.abdera.contrib.rss;
 
 import javax.activation.DataHandler;
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
@@ -80,7 +79,7 @@ public class RssContent
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setMimeType(String type) throws MimeTypeParseException {
+  public void setMimeType(String type){
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 

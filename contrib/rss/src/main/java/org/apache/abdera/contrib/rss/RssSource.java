@@ -20,7 +20,6 @@ package org.apache.abdera.contrib.rss;
 import java.util.Date;
 import java.util.List;
 
-import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
@@ -105,12 +104,11 @@ public class RssSource
   }
 
   public Link addLink(String href, String rel, String type, String title,
-      String hreflang, long length) throws MimeTypeParseException {
+      String hreflang, long length) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public Link getAlternateLink(String type, String hreflang)
-      throws MimeTypeParseException {
+  public Link getAlternateLink(String type, String hreflang)  {
     return getAlternateLink();
   }
 
@@ -119,8 +117,7 @@ public class RssSource
     return (link != null) ? link.getResolvedHref() : null;
   }
 
-  public IRI getAlternateLinkResolvedHref(String type, String hreflang)
-      throws MimeTypeParseException {
+  public IRI getAlternateLinkResolvedHref(String type, String hreflang) {
     Link link = getAlternateLink();
     return (link != null) ? link.getResolvedHref() : null;
   }

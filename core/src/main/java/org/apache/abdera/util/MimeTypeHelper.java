@@ -25,7 +25,6 @@ import java.util.List;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParameterList;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Categories;
@@ -187,7 +186,7 @@ public class MimeTypeHelper {
     try {
       new MimeType(a);
       answer = true;
-    } catch (MimeTypeParseException e) {
+    } catch (javax.activation.MimeTypeParseException e) {
       answer = false;
     }
     return answer;

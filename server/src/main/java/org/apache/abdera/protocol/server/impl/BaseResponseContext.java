@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.model.Base;
 import org.apache.abdera.util.MimeTypeHelper;
@@ -71,14 +70,17 @@ public class BaseResponseContext<T extends Base>
   }
 
   @Override
-  public MimeType getContentType() 
-    throws MimeTypeParseException {
+  public MimeType getContentType() {
+    try {
       MimeType t = super.getContentType();
       if (t == null) {
         String type = MimeTypeHelper.getMimeType(base);
         if (type != null) t = new MimeType(type);
       }
       return t;
+    } catch (javax.activation.MimeTypeParseException e) {
+      throw new org.apache.abdera.util.MimeTypeParseException(e);
+    }
   }
 
   @Override

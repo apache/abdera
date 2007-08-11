@@ -32,7 +32,6 @@ import java.util.Map;
 
 import javax.activation.DataHandler;
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import junit.framework.TestCase;
@@ -245,7 +244,7 @@ public class CoreTest extends TestCase {
       return null;
     }
 
-    public Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws MimeTypeParseException {
+    public Link addLink(String href, String rel, String type, String title, String hreflang, long length){
       return null;
     }
 
@@ -253,7 +252,7 @@ public class CoreTest extends TestCase {
       return null;
     }
 
-    public Link getAlternateLink(String type, String hreflang) throws MimeTypeParseException {
+    public Link getAlternateLink(String type, String hreflang){
       return null;
     }
 
@@ -261,7 +260,7 @@ public class CoreTest extends TestCase {
       return null;
     }
 
-    public IRI getAlternateLinkResolvedHref(String type, String hreflang) throws MimeTypeParseException {
+    public IRI getAlternateLinkResolvedHref(String type, String hreflang){
       return null;
     }
 
@@ -774,7 +773,7 @@ public class CoreTest extends TestCase {
       return null;
     }
 
-    public Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws MimeTypeParseException {
+    public Link addLink(String href, String rel, String type, String title, String hreflang, long length){
       return null;
     }
 
@@ -782,7 +781,7 @@ public class CoreTest extends TestCase {
       return null;
     }
 
-    public Link getAlternateLink(String type, String hreflang) throws MimeTypeParseException {
+    public Link getAlternateLink(String type, String hreflang){
       return null;
     }
 
@@ -790,7 +789,7 @@ public class CoreTest extends TestCase {
       return null;
     }
 
-    public IRI getAlternateLinkResolvedHref(String type, String hreflang) throws MimeTypeParseException {
+    public IRI getAlternateLinkResolvedHref(String type, String hreflang){
       return null;
     }
 
@@ -858,7 +857,7 @@ public class CoreTest extends TestCase {
       return null;
     }
 
-    public Link getEditMediaLink(String type, String hreflang) throws MimeTypeParseException {
+    public Link getEditMediaLink(String type, String hreflang){
       return null;
     }
 
@@ -866,7 +865,7 @@ public class CoreTest extends TestCase {
       return null;
     }
 
-    public IRI getEditMediaLinkResolvedHref(String type, String hreflang) throws MimeTypeParseException {
+    public IRI getEditMediaLinkResolvedHref(String type, String hreflang){
       return null;
     }
 
@@ -998,15 +997,15 @@ public class CoreTest extends TestCase {
       return null;
     }
 
-    public Content setContent(Element element, String mediaType) throws MimeTypeParseException {
+    public Content setContent(Element element, String mediaType){
       return null;
     }
 
-    public Content setContent(DataHandler dataHandler) throws MimeTypeParseException {
+    public Content setContent(DataHandler dataHandler){
       return null;
     }
 
-    public Content setContent(DataHandler dataHandler, String mediatype) throws MimeTypeParseException {
+    public Content setContent(DataHandler dataHandler, String mediatype){
       return null;
     }
 
@@ -1014,15 +1013,15 @@ public class CoreTest extends TestCase {
       return null;
     }
 
-    public Content setContent(InputStream inputStream, String mediatype) throws MimeTypeParseException {
+    public Content setContent(InputStream inputStream, String mediatype){
       return null;
     }
 
-    public Content setContent(String value, String mediatype) throws MimeTypeParseException {
+    public Content setContent(String value, String mediatype){
       return null;
     }
 
-    public Content setContent(IRI uri, String mediatype) throws MimeTypeParseException {
+    public Content setContent(IRI uri, String mediatype){
       return null;
     }
 

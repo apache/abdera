@@ -18,7 +18,6 @@
 package org.apache.abdera.ext.media;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
@@ -61,9 +60,13 @@ public class MediaContent
       removeAttribute(new QName("filesize"));
   }
   
-  public MimeType getType() throws MimeTypeParseException {
-    String type = getAttributeValue("type");
-    return (type != null) ? new MimeType(type) : null;
+  public MimeType getType() {
+    try {
+      String type = getAttributeValue("type");
+      return (type != null) ? new MimeType(type) : null;
+    } catch (javax.activation.MimeTypeParseException e) {
+      throw new org.apache.abdera.util.MimeTypeParseException(e);
+    }
   }
   
   public void setType(String type) {

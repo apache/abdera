@@ -24,7 +24,6 @@ import java.util.List;
 
 import javax.activation.DataHandler;
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.i18n.iri.IRI;
 
@@ -231,14 +230,14 @@ public interface Entry
    * @param mediaType The media type of the element
    * @throws MimeTypeParseException  if the mediaType is malformed
    */
-  Content setContent(Element element, String mediaType) throws MimeTypeParseException;
+  Content setContent(Element element, String mediaType);
   
   /**
    * Sets the content for this entry 
    * @param dataHandler The Data Handler containing the binary content needing Base64 encoding.
    * @throws MimeTypeParseException if the media Type specified by the dataHandler is malformed
    */
-  Content setContent(DataHandler dataHandler) throws MimeTypeParseException;
+  Content setContent(DataHandler dataHandler);
   
   /**
    * Sets the content for this entry
@@ -247,7 +246,7 @@ public interface Entry
    * @return The created content element
    * @throws MimeTypeParseException if the media type specified is malformed
    */
-  Content setContent(DataHandler dataHandler, String mediatype) throws MimeTypeParseException;
+  Content setContent(DataHandler dataHandler, String mediatype);
   
   /**
    * Sets the content for this entry
@@ -263,7 +262,7 @@ public interface Entry
    * @return The created content element
    * @throws MimeTypeParseException if the media type specified is malformed
    */
-  Content setContent(InputStream inputStream, String mediatype) throws MimeTypeParseException;
+  Content setContent(InputStream inputStream, String mediatype);
   
   /**
    * Sets the content for this entry
@@ -272,7 +271,7 @@ public interface Entry
    * @return The newly created atom:content
    * @throws MimeTypeParseException if the media type is malformed
    */
-  Content setContent(String value, String mediatype) throws MimeTypeParseException;
+  Content setContent(String value, String mediatype);
   
   /**
    * Sets the content for this entry as out of line.
@@ -283,7 +282,7 @@ public interface Entry
    * @throws MimeTypeParseException if the mime type is invalid.
    * @throws IRISyntaxException if the URI is invalid.
    */
-  Content setContent(IRI uri, String mediatype) throws MimeTypeParseException;
+  Content setContent(IRI uri, String mediatype);
   
   /**
    * Returns the text of the content element
@@ -440,7 +439,7 @@ public interface Entry
    * @return The newly created atom:link
    * @throws IRISyntaxException if the href is malformed
    */  
-  Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws MimeTypeParseException;
+  Link addLink(String href, String rel, String type, String title, String hreflang, long length);
   
   /**
    * RFC4287: The "atom:published" element is a Date construct indicating an
@@ -842,7 +841,7 @@ public interface Entry
    * @return The matching atom:link
    * @throws MimeTypeParseException if the type is malformed
    */
-  Link getAlternateLink(String type, String hreflang) throws MimeTypeParseException;
+  Link getAlternateLink(String type, String hreflang);
   
   /**
    * Returns this entries first enclosure link
@@ -869,7 +868,7 @@ public interface Entry
    * @return A matching atom:link element
    * @throws MimeTypeParseException 
    */
-  Link getEditMediaLink(String type, String hreflang) throws MimeTypeParseException;
+  Link getEditMediaLink(String type, String hreflang);
   
   /**
    * Returns this entries first self link
@@ -899,7 +898,7 @@ public interface Entry
    * @return The resolved IRI
    * @throws IRISyntaxException if the href attribute is malformed
    */
-  IRI getAlternateLinkResolvedHref(String type, String hreflang) throws MimeTypeParseException;
+  IRI getAlternateLinkResolvedHref(String type, String hreflang);
 
   /**
    * Return a link href resolved against the in-scope Base URI
@@ -930,7 +929,7 @@ public interface Entry
    * @throws IRISyntaxException if the href attribute is malformed
    * @throws MimeTypeParseException if the type is malformed
    */
-  IRI getEditMediaLinkResolvedHref(String type, String hreflang) throws MimeTypeParseException;
+  IRI getEditMediaLinkResolvedHref(String type, String hreflang);
  
   /**
    * Return a link href resolved against the in-scope Base URI

@@ -24,7 +24,6 @@ import java.util.List;
 
 import javax.activation.DataHandler;
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.AtomDate;
@@ -229,19 +228,23 @@ public class FOMEntry
    * Sets the content for this entry
    * @throws MimeTypeParseException 
    */
-  public Content setContent(Element element, String mediaType) throws MimeTypeParseException {
-    FOMFactory factory = (FOMFactory) this.factory;
-    Content content = factory.newContent(new MimeType(mediaType));
-    content.setValueElement(element);
-    setContentElement(content);
-    return content;
+  public Content setContent(Element element, String mediaType){
+    try {
+      FOMFactory factory = (FOMFactory) this.factory;
+      Content content = factory.newContent(new MimeType(mediaType));
+      content.setValueElement(element);
+      setContentElement(content);
+      return content;
+    } catch (javax.activation.MimeTypeParseException e) {
+      throw new org.apache.abdera.util.MimeTypeParseException(e);
+    }
   }
   
   /**
    * Sets the content for this entry
    * @throws MimeTypeParseException 
    */
-  public Content setContent(DataHandler dataHandler) throws MimeTypeParseException {
+  public Content setContent(DataHandler dataHandler){
      return setContent(dataHandler, dataHandler.getContentType());
   }  
   
@@ -249,12 +252,16 @@ public class FOMEntry
    * Sets the content for this entry
    * @throws MimeTypeParseException 
    */
-  public Content setContent(DataHandler dataHandler, String mediatype) throws MimeTypeParseException {
-    FOMFactory factory = (FOMFactory) this.factory;
-    Content content = factory.newContent(new MimeType(mediatype));
-    content.setDataHandler(dataHandler);
-    setContentElement(content);
-    return content;
+  public Content setContent(DataHandler dataHandler, String mediatype) {
+    try {
+      FOMFactory factory = (FOMFactory) this.factory;
+      Content content = factory.newContent(new MimeType(mediatype));
+      content.setDataHandler(dataHandler);
+      setContentElement(content);
+      return content;
+    } catch (javax.activation.MimeTypeParseException e) {
+      throw new org.apache.abdera.util.MimeTypeParseException(e);
+    }
   }
   
   /**
@@ -263,19 +270,14 @@ public class FOMEntry
   public Content setContent(InputStream in) {
     InputStreamDataSource ds = new InputStreamDataSource(in);
     DataHandler dh = new DataHandler(ds);
-    Content content = null;
-    try {
-      content = setContent(dh);
-    } catch (MimeTypeParseException e) {
-      // should not happen
-    }
+    Content content = setContent(dh);
     return content;
   }
   
   /**
    * Sets the content for this entry
    */
-  public Content setContent(InputStream in, String mediatype) throws MimeTypeParseException {
+  public Content setContent(InputStream in, String mediatype){
     InputStreamDataSource ds = new InputStreamDataSource(in, mediatype);
     DataHandler dh = new DataHandler(ds);
     return setContent(dh, mediatype);
@@ -285,12 +287,16 @@ public class FOMEntry
    * Sets the content for this entry
    * @throws MimeTypeParseException 
    */
-  public Content setContent(String value, String mediatype) throws MimeTypeParseException {
-    FOMFactory factory = (FOMFactory) this.factory;
-    Content content = factory.newContent(new MimeType(mediatype));
-    content.setValue(value);
-    setContentElement(content);
-    return content;
+  public Content setContent(String value, String mediatype){
+    try {
+      FOMFactory factory = (FOMFactory) this.factory;
+      Content content = factory.newContent(new MimeType(mediatype));
+      content.setValue(value);
+      setContentElement(content);
+      return content;
+    } catch (javax.activation.MimeTypeParseException e) {
+      throw new org.apache.abdera.util.MimeTypeParseException(e);
+    }
   }
   
   /**
@@ -298,12 +304,16 @@ public class FOMEntry
    * @throws MimeTypeParseException 
  * @throws IRISyntaxException 
    */
-  public Content setContent(IRI uri, String mediatype) throws MimeTypeParseException {
-    FOMFactory factory = (FOMFactory) this.factory;
-    Content content = factory.newContent(new MimeType(mediatype));
-    content.setSrc(uri.toString());
-    setContentElement(content);
-    return content;
+  public Content setContent(IRI uri, String mediatype) {
+    try {
+      FOMFactory factory = (FOMFactory) this.factory;
+      Content content = factory.newContent(new MimeType(mediatype));
+      content.setSrc(uri.toString());
+      setContentElement(content);
+      return content;
+    } catch (javax.activation.MimeTypeParseException e) {
+      throw new org.apache.abdera.util.MimeTypeParseException(e);
+    }
   }
 
   
@@ -412,7 +422,7 @@ public class FOMEntry
     String title, 
     String hreflang, 
     long length) 
-      throws MimeTypeParseException {
+     {
     FOMFactory fomfactory = (FOMFactory) factory;
     Link link = fomfactory.newLink(this);
     link.setHref(href);
@@ -815,14 +825,14 @@ public class FOMEntry
   public Link getAlternateLink(
     String type, 
     String hreflang) 
-      throws MimeTypeParseException {
+     {
     return selectLink(getLinks(Link.REL_ALTERNATE), type, hreflang);
   }
 
   public IRI getAlternateLinkResolvedHref(
     String type, 
     String hreflang) 
-      throws MimeTypeParseException {
+     {
     Link link = getAlternateLink(type, hreflang);
     return (link != null) ? link.getResolvedHref() : null;
   }
@@ -830,14 +840,14 @@ public class FOMEntry
   public Link getEditMediaLink(
     String type, 
     String hreflang) 
-      throws MimeTypeParseException {
+     {
     return selectLink(getLinks(Link.REL_EDIT_MEDIA), type, hreflang);
   }
 
   public IRI getEditMediaLinkResolvedHref(
     String type, 
     String hreflang) 
-      throws MimeTypeParseException {
+     {
     Link link = getEditMediaLink(type, hreflang);
     return (link != null) ? link.getResolvedHref() : null;
   }

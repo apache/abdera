@@ -20,8 +20,6 @@ package org.apache.abdera.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.activation.MimeTypeParseException;
-
 import org.apache.abdera.i18n.iri.IRI;
 
 /**
@@ -335,7 +333,7 @@ public interface Source
    * @return The newly created atom:link
    * @throws IRISyntaxException if the href is malformed
    */
-  Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws MimeTypeParseException;
+  Link addLink(String href, String rel, String type, String title, String hreflang, long length);
    
   /**
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
@@ -644,7 +642,7 @@ public interface Source
    * @return A matching atom:link
    * @throws MimeTypeParseException if the type if malformed
    */
-  Link getAlternateLink(String type, String hreflang) throws MimeTypeParseException;
+  Link getAlternateLink(String type, String hreflang);
   
   /**
    * @param rel A link relation
@@ -668,7 +666,7 @@ public interface Source
    * @return A matching atom:link
    * @throws MimeTypeParseException if the type if malformed
    */
-  IRI getAlternateLinkResolvedHref(String type, String hreflang) throws MimeTypeParseException;
+  IRI getAlternateLinkResolvedHref(String type, String hreflang);
   
   /**
    * Return an app:collection element associatd with this atom:source.  The 

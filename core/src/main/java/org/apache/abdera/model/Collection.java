@@ -20,7 +20,6 @@ package org.apache.abdera.model;
 import java.util.List;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.i18n.iri.IRI;
 
@@ -115,7 +114,7 @@ public interface Collection
    * @param mediaRanges a listing of media-ranges 
    * @throws MimeTypeParseException 
    */
-  void setAccept(String... mediaRanges) throws MimeTypeParseException;
+  void setAccept(String... mediaRanges);
   
   /**
    * Returns true if the collection accepts the given media-type

@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.Abdera;
@@ -241,10 +240,8 @@ public class FOMFactory
       if (type == null) type = Content.Type.TEXT;
       Content content = 
         new FOMContent(type, (OMContainer)parent,this);
-      try {
-        if (type.equals(Content.Type.XML))
-          content.setMimeType(XML_MEDIA_TYPE);
-      } catch (MimeTypeParseException e) { /* Can't happen */ }
+      if (type.equals(Content.Type.XML))
+        content.setMimeType(XML_MEDIA_TYPE);
       return content;
   }
   
@@ -259,9 +256,7 @@ public class FOMFactory
       (MimeTypeHelper.isXml(mediaType.toString())) ? 
          Content.Type.XML : Content.Type.MEDIA;
     Content content = newContent(type, parent);
-    try {
-      content.setMimeType(mediaType.toString());
-    } catch (MimeTypeParseException e) { /* Can't happen */ }
+    content.setMimeType(mediaType.toString());
     return content;
   }
 

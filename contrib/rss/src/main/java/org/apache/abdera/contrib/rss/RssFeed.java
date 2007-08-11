@@ -21,7 +21,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
@@ -150,7 +149,7 @@ public class RssFeed
   }
 
   public Link addLink(String href, String rel, String type, String title,
-      String hreflang, long length) throws MimeTypeParseException {
+      String hreflang, long length) {
     return getChannel().addLink(href, rel, type, title, hreflang, length);
   }
 
@@ -158,8 +157,7 @@ public class RssFeed
     return getChannel().getAlternateLink();
   }
 
-  public Link getAlternateLink(String type, String hreflang)
-      throws MimeTypeParseException {
+  public Link getAlternateLink(String type, String hreflang){
     return getChannel().getAlternateLink(type, hreflang);
   }
 
@@ -167,8 +165,7 @@ public class RssFeed
     return getChannel().getAlternateLinkResolvedHref();
   }
 
-  public IRI getAlternateLinkResolvedHref(String type, String hreflang)
-      throws MimeTypeParseException {
+  public IRI getAlternateLinkResolvedHref(String type, String hreflang){
     return getChannel().getAlternateLinkResolvedHref(type, hreflang);
   }
 

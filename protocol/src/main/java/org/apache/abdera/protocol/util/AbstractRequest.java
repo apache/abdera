@@ -21,7 +21,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.protocol.Request;
@@ -62,9 +61,13 @@ public abstract class AbstractRequest implements Request {
     return Escaping.decode(EncodingUtil.decode(getHeader("Slug")));
   }
 
-  public MimeType getContentType() throws MimeTypeParseException {
-    String value = getHeader("Content-Type");
-    return (value != null) ? new MimeType(value) : null;
+  public MimeType getContentType() {
+    try {
+      String value = getHeader("Content-Type");
+      return (value != null) ? new MimeType(value) : null;
+    } catch (javax.activation.MimeTypeParseException e) {
+      throw new org.apache.abdera.util.MimeTypeParseException(e);
+    }
   }
 
   public EntityTag[] getIfMatch() {

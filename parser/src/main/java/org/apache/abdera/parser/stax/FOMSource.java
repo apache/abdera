@@ -21,7 +21,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.AtomDate;
@@ -263,7 +262,7 @@ public class FOMSource
     return link;    
   }
   
-  public Link addLink(String href, String rel, String type, String title, String hreflang, long length) throws MimeTypeParseException {
+  public Link addLink(String href, String rel, String type, String title, String hreflang, long length) {
     FOMFactory fomfactory = (FOMFactory) factory;
     Link link = fomfactory.newLink(this);
     link.setHref(href);
@@ -592,15 +591,13 @@ public class FOMSource
   
   public Link getAlternateLink(
     String type, 
-    String hreflang) 
-      throws MimeTypeParseException {
+    String hreflang) {
     return selectLink(getLinks(Link.REL_ALTERNATE), type, hreflang);
   }
 
   public IRI getAlternateLinkResolvedHref(
     String type, 
-    String hreflang) 
-      throws MimeTypeParseException {
+    String hreflang) {
     Link link = getAlternateLink(type, hreflang);
     return (link != null) ? link.getResolvedHref() : null;
   }

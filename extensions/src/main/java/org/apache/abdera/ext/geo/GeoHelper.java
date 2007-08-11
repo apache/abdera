@@ -36,6 +36,7 @@ public class GeoHelper {
   public static final String SIMPLE_GEO_NS = "http://www.georss.org/georss/10";
   public static final String GML_NS = "http://www.opengis.net/gml";
   
+  public static final QName QNAME_W3C_POINT = new QName(W3C_GEO_NS, "Point", "geo");
   public static final QName QNAME_W3C_LAT = new QName(W3C_GEO_NS, "lat", "geo");
   public static final QName QNAME_W3C_LONG = new QName(W3C_GEO_NS, "long", "geo");
   
@@ -157,8 +158,11 @@ public class GeoHelper {
     el = entry.getExtension(QNAME_W3C_LONG);
     if (el != null) el.discard();    
     Point point = (Point) position;
-    entry.addSimpleExtension(QNAME_W3C_LAT, Double.toString(point.getCoordinate().getLatitude()));
-    entry.addSimpleExtension(QNAME_W3C_LONG, Double.toString(point.getCoordinate().getLongitude()));
+    
+    ExtensibleElement p = entry.addExtension(QNAME_W3C_POINT);
+    p.addSimpleExtension(QNAME_W3C_LAT, Double.toString(point.getCoordinate().getLatitude()));
+    p.addSimpleExtension(QNAME_W3C_LONG, Double.toString(point.getCoordinate().getLongitude()));
+    
   }
   
   private static List<Position> _getPositions(Entry entry) {
@@ -175,6 +179,7 @@ public class GeoHelper {
     if (entry.getExtensions(QNAME_SIMPLE_BOX).size() > 0) return true;
     if (entry.getExtensions(QNAME_SIMPLE_POLYGON).size() > 0) return true;
     if (entry.getExtensions(QNAME_WHERE).size() > 0) return true;
+    if (entry.getExtensions(QNAME_W3C_POINT).size() > 0) return true;
     if (entry.getExtensions(QNAME_W3C_LAT).size() > 0 && 
         entry.getExtensions(QNAME_W3C_LONG).size() > 0) return true;
     return false;
@@ -298,8 +303,14 @@ public class GeoHelper {
   }
   
   private static void getW3CPosition(Entry entry, List<Position> list) {
-    String slat = entry.getSimpleExtension(QNAME_W3C_LAT);
-    String slong = entry.getSimpleExtension(QNAME_W3C_LONG);
+    getW3CPosition((ExtensibleElement)entry, list);
+    List<ExtensibleElement> points = entry.getExtensions(QNAME_W3C_POINT);
+    for (ExtensibleElement point : points) getW3CPosition(point, list);
+  }
+  
+  private static void getW3CPosition(ExtensibleElement el, List<Position> list) {
+    String slat = el.getSimpleExtension(QNAME_W3C_LAT);
+    String slong = el.getSimpleExtension(QNAME_W3C_LONG);
     if (slat != null && slong != null) {
       Point point = new Point(slat.trim() + " " + slong.trim());
       list.add(point);

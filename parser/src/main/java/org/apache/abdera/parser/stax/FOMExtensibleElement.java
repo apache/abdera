@@ -181,4 +181,25 @@ public class FOMExtensibleElement
     }
     return t;
   }
+
+  public void addExtension(Element extension, Element before) {
+    if (before == null) {
+      addExtension(extension);
+    } else {
+      extension.setParentElement(this);
+      ((OMElement)before).insertSiblingBefore((OMElement)extension);
+    }
+  }
+
+  public <T extends Element> T addExtension(QName qname, QName before) {
+    OMElement el = getFirstChildWithName(before);
+    T element = getFactory().newElement(qname);
+    if (el == null) {
+      addExtension(element);
+    } else {
+      element.setParentElement(this);
+      el.insertSiblingBefore((OMElement)element);
+    }
+    return element;
+  }
 }

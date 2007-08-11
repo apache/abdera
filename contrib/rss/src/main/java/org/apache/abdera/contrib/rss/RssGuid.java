@@ -25,12 +25,12 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Element;
-import org.apache.abdera.model.ElementWrapper;
+import org.apache.abdera.model.ExtensibleElementWrapper;
 import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.model.Link;
 
 public class RssGuid 
-  extends ElementWrapper 
+  extends ExtensibleElementWrapper 
   implements IRIElement, Link {
 
   public RssGuid(Element internal) {

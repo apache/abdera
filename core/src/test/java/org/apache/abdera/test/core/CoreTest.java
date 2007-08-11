@@ -720,6 +720,12 @@ public class CoreTest extends TestCase {
 
     public void writeTo(Writer writer) throws IOException {
     }
+
+    public void addExtension(Element extension, Element before) {}
+
+    public <T extends Element> T addExtension(QName qname, QName before) {
+      return null;
+    }
     
   }
   
@@ -1362,6 +1368,12 @@ public class CoreTest extends TestCase {
     }
 
     public void writeTo(Writer writer) throws IOException {
+    }
+
+    public void addExtension(Element extension, Element before) {}
+
+    public <T extends Element> T addExtension(QName qname, QName before) {
+      return null;
     }
     
   }

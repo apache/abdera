@@ -97,5 +97,13 @@ public abstract class ExtensibleElementWrapper
   public void setMustPreserveWhitespace(boolean preserve) {
     getExtInternal().setMustPreserveWhitespace(preserve);
   }
+
+  public void addExtension(Element extension, Element before) {
+    getExtInternal().addExtension(extension,before);
+  }
+
+  public <T extends Element> T addExtension(QName qname, QName before) {
+    return getExtInternal().addExtension(qname,before);
+  }
   
 }

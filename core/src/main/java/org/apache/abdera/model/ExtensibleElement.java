@@ -63,11 +63,23 @@ public interface ExtensibleElement
   void addExtension(Element extension);
 
   /**
+   * Adds an individual extension element before the specified element 
+   */
+  void addExtension(Element extension, Element before);
+  
+  /**
    * Adds an individual extension element
    * @param qname An extension element to create
    * @return The newly created extension element
    */
   <T extends Element>T addExtension(QName qname);
+  
+  /**
+   * Adds an individual extension element
+   * @param qname An extension element to create
+   * @return The newly created extension element
+   */
+  <T extends Element>T addExtension(QName qname, QName before);
   
   /**
    * Adds an individual extension element

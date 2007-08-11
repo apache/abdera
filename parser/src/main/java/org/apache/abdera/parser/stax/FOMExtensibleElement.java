@@ -182,7 +182,21 @@ public class FOMExtensibleElement
     return t;
   }
 
+  private Element getInternal(Element element) {
+    if (element instanceof ElementWrapper) {
+      ElementWrapper wrapper = (ElementWrapper) element;
+      element = wrapper.getInternal();
+    }
+    return element;
+  }
+  
   public void addExtension(Element extension, Element before) {
+    extension = getInternal(extension);
+    before = getInternal(before);
+    if (before instanceof ElementWrapper) {
+      ElementWrapper wrapper = (ElementWrapper) before;
+      before = wrapper.getInternal();
+    }
     if (before == null) {
       addExtension(extension);
     } else {
@@ -198,7 +212,7 @@ public class FOMExtensibleElement
       addExtension(element);
     } else {
       element.setParentElement(this);
-      el.insertSiblingBefore((OMElement)element);
+      el.insertSiblingBefore((OMElement)getInternal(element));
     }
     return element;
   }

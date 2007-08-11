@@ -25,10 +25,10 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Element;
-import org.apache.abdera.model.ElementWrapper;
+import org.apache.abdera.model.ExtensibleElementWrapper;
 
 public class RssCategory 
-  extends ElementWrapper 
+  extends ExtensibleElementWrapper 
   implements Category {
 
   public RssCategory(Element internal) {

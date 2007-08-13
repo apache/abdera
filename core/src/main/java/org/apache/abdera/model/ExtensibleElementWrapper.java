@@ -67,7 +67,7 @@ public abstract class ExtensibleElementWrapper
   }
 
   public <T extends Element> T getExtension(Class<T> _class) {
-    return getExtInternal().getExtension(_class);
+    return (T)getExtInternal().getExtension(_class);
   }
 
   public List<Element> getExtensions() {
@@ -102,8 +102,9 @@ public abstract class ExtensibleElementWrapper
     getExtInternal().addExtension(extension,before);
   }
 
+  @SuppressWarnings("unchecked")
   public <T extends Element> T addExtension(QName qname, QName before) {
-    return getExtInternal().addExtension(qname,before);
+    return (T)getExtInternal().addExtension(qname,before);
   }
   
 }

@@ -44,6 +44,7 @@
   <property name="core.jar" value="${dist}/${ant.project.name}.core.${version}.jar" />
   <property name="protocol" value="${basedir}/protocol" />
   <property name="protocol.src" value="${protocol}/src/main/java" />
+  <property name="parser.resources" value="${protocol}/src/main/resources" />
   <property name="protocol.work" value="${work}/protocol" />
   <property name="protocol.jar" value="${dist}/${ant.project.name}.protocol.${version}.jar" />
   <property name="parser" value="${basedir}/parser" />
@@ -212,10 +213,13 @@ Working directory: ${work}
     </copy>
   </target>
 
-  <target name="compile.protocol" depends="init">
+  <target name="compile.protocol" depends="init,compile.core">
     <mkdir dir="${protocol.work}" />
     <javac srcdir="${protocol.src}" destdir="${protocol.work}" classpathref="jar.dependencies" classpath="${core.work}" debug="${debug}" />
     <mkdir dir="${protocol.work}/META-INF" />
+    <copy todir="${protocol.work}">
+      <fileset dir="${protocol.resources}" includes="**/*" />
+    </copy>
     <copy todir="${protocol.work}/META-INF">
       <fileset dir="${basedir}">
         <include name="LICENSE" />

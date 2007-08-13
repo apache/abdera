@@ -31,6 +31,7 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.ExtensibleElement;
+import org.apache.abdera.protocol.error.Error;
 import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
@@ -47,13 +48,6 @@ public abstract class AbstractProvider
 
   private final static Log log = LogFactory.getLog(AbstractProvider.class);
   
-  private static final String NS        = "http://incubator.apache.org/abdera";
-  private static final String PFX       = "a";
-  private static final QName ERROR         = new QName(NS, "error", PFX);
-  private static final QName CODE          = new QName(NS, "code", PFX);
-  private static final QName MESSAGE       = new QName(NS, "message", PFX);
-
-  
   protected int defaultpagesize = 10;
   
   protected AbstractProvider() {}
@@ -62,19 +56,13 @@ public abstract class AbstractProvider
     this.defaultpagesize = defaultpagesize;
   }
   
-  protected Document createErrorDocument(
+  protected Document<Error> createErrorDocument(
     Abdera abdera, 
     int code, 
     String message, 
     Throwable e) {
-      if (e != null) log.debug(Messages.format("CREATING.ERROR.DOC",code,message), e);
-      else log.debug("Creating error document - " + code + ", " + message);
-      Document doc = abdera.getFactory().newDocument();
-      ExtensibleElement root = 
-        (ExtensibleElement) abdera.getFactory().newElement(ERROR, doc);
-      root.addSimpleExtension(CODE, (code != -1) ? String.valueOf(code) : "");
-      root.addSimpleExtension(MESSAGE, (message != null) ? message : "");
-      return doc;
+      Error error = Error.create(abdera,code,message);
+      return error.getDocument();
   }
 
   /**

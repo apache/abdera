@@ -1,0 +1,5 @@
+org.apache.abdera.ext.thread.ThreadExtensionFactory
+org.apache.abdera.ext.opensearch.OpenSearchExtensionFactory
+org.apache.abdera.ext.media.MediaExtensionFactory
+org.apache.abdera.ext.features.FeaturesExtensionFactory
+org.apache.abdera.ext.sse.SharingExtensionFactory

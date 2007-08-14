@@ -207,7 +207,7 @@ public class FOMText
   public String getLanguage() {
     if (Type.XHTML.equals(type)) {
       Element el = getValueElement();
-      if (el.getAttributeValue(LANG) != null)
+      if (el != null && el.getAttributeValue(LANG) != null)
         return el.getAttributeValue(LANG);
     }
     return super.getLanguage();

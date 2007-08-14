@@ -214,6 +214,6 @@ public class FOMExtensibleElement
       element.setParentElement(this);
       el.insertSiblingBefore((OMElement)getInternal(element));
     }
-    return element;
+    return (T)element;
   }
 }

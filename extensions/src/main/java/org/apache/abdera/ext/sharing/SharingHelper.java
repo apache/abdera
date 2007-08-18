@@ -287,9 +287,7 @@ public class SharingHelper {
               break;
             }
           }
-          if (ok) {
-            sync.addHistory(h1);
-          }
+          if (ok) sync.addHistory(h1);
         }
       }
     }
@@ -369,5 +367,18 @@ public class SharingHelper {
       if (updated.before(d)) d = updated;
     }
     return d;
+  }
+  
+  public boolean hasConflicts(Entry entry) {
+    Sync sync = getSync(entry);
+    if (sync != null) {
+      Conflicts conflicts = sync.getConflicts();
+      if (conflicts != null) {
+        if (conflicts.getEntries().size() > 0) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

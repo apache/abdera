@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.xpath;
 
-public class XPathException extends Exception {
+public class XPathException extends RuntimeException {
 
   private static final long serialVersionUID = 7373747391262088925L;
 

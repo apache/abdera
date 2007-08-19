@@ -20,9 +20,16 @@ package org.apache.abdera.test.ext.features;
 import junit.framework.TestCase;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.ext.features.AcceptSelector;
 import org.apache.abdera.ext.features.Feature;
+import org.apache.abdera.ext.features.FeatureSelector;
 import org.apache.abdera.ext.features.FeaturesHelper;
+import org.apache.abdera.ext.features.Selector;
+import org.apache.abdera.ext.features.XPathSelector;
+import org.apache.abdera.ext.features.Feature.Status;
 import org.apache.abdera.model.Collection;
+import org.apache.abdera.model.Service;
+import org.apache.abdera.model.Workspace;
 
 public class FeatureTest extends TestCase {
 
@@ -31,28 +38,68 @@ public class FeatureTest extends TestCase {
     Collection coll = abdera.getFactory().newCollection();
     FeaturesHelper.addFeature(
       coll, "http://example.com/features/foo", 
-      true, null, "foo & here");
+      Status.REQUIRED, null, "foo & here");
     FeaturesHelper.addFeature(
       coll, "http://example.com/features/bar", 
-      false, null, null);
-    assertTrue(FeaturesHelper.supportsFeature(
+      null, null, null);
+    FeaturesHelper.addFeature(
+      coll, "http://example.com/features/baz",
+      Status.UNSUPPORTED);
+    
+    assertEquals(Status.REQUIRED,FeaturesHelper.getFeatureStatus(
       coll, "http://example.com/features/foo"));
-    assertTrue(FeaturesHelper.supportsFeature(
+    assertEquals(Status.SUPPORTED, FeaturesHelper.getFeatureStatus(
       coll, "http://example.com/features/bar"));
-    assertTrue(FeaturesHelper.supportsFeature(
-      coll, "http://example.com/features/foo",
-            "http://example.com/features/bar"));
-    assertFalse(FeaturesHelper.supportsFeature(
-      coll, "http://example.com/features/foo",
-            "http://example.com/features/pez"));
-    assertFalse(FeaturesHelper.supportsFeature(
-      coll, "http://example.com/features/pez",
-            "http://example.com/features/foo"));
-    assertFalse(FeaturesHelper.supportsFeature(
+    assertEquals(Status.UNSUPPORTED, FeaturesHelper.getFeatureStatus(
+      coll, "http://example.com/features/baz"));
+    assertEquals(Status.UNSPECIFIED,FeaturesHelper.getFeatureStatus(
       coll, "http://example.com/features/pez"));
-    Feature f = FeaturesHelper.getFeature(
-      coll, "http://example.com/features/foo");
-    assertTrue(f.isRequired());
+
   }
   
+  public static void testSelectors() throws Exception {
+    
+    Abdera abdera = new Abdera();
+    Service service = abdera.newService();
+    Workspace workspace = service.addWorkspace("a");
+    Collection collection1 = workspace.addCollection("a1","a1");
+    collection1.setAcceptsEntry();
+    FeaturesHelper.addFeature(collection1, FeaturesHelper.FEATURE_DRAFTS);
+    Collection collection2 = workspace.addCollection("a2","a2");
+    collection2.setAccept("image/*");
+    
+    Selector s1 = new FeatureSelector(FeaturesHelper.FEATURE_DRAFTS);
+    
+    Collection[] collections = FeaturesHelper.select(service, s1);
+    
+    assertEquals(1,collections.length);
+    assertEquals(collections[0],collection1);
+    
+    Selector s2 = new AcceptSelector("image/png");
+    
+    collections = FeaturesHelper.select(service,s2);
+    
+    assertEquals(1,collections.length);
+    assertEquals(collections[0],collection2);
+    
+    Selector s3 = new XPathSelector(
+      "f:feature[@ref='http://www.w3.org/2007/app/drafts']");
+    
+    collections = FeaturesHelper.select(service,s3);
+    
+    for (Collection c : collections) System.out.println(c);
+    
+    assertEquals(1,collections.length);
+    assertEquals(collections[0],collection1);
+  }
+  
+
+  public static void testType() throws Exception {
+     Abdera abdera = new Abdera();
+     Feature feature = abdera.getFactory().newElement(FeaturesHelper.FEATURE);
+     FeaturesHelper.addType(feature, "image/jpg","image/gif","image/png","image/*");
+     String[] types = FeaturesHelper.getTypes(feature);
+     assertEquals(1,types.length);
+     assertEquals("image/*", types[0]);
+  }
 }

@@ -17,15 +17,22 @@
 */
 package org.apache.abdera.ext.features;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.ext.features.Feature.Status;
 import org.apache.abdera.ext.thread.ThreadConstants;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.Service;
+import org.apache.abdera.model.Workspace;
+import org.apache.abdera.util.MimeTypeHelper;
 
 /**
  * Implementation of the current APP Features Draft
@@ -35,6 +42,7 @@ public final class FeaturesHelper {
 
   public static final String FNS = "http://purl.org/atompub/features/1.0";
   public static final QName FEATURE = new QName(FNS, "feature","f");
+  public static final QName TYPE = new QName(FNS, "type", "f");
   
   private static final String FEATURE_BASE                 = "http://www.w3.org/2007/app/";
   public static final String FEATURE_DRAFTS                = FEATURE_BASE + "drafts";
@@ -43,7 +51,7 @@ public final class FeaturesHelper {
   public static final String FEATURE_TEXT_CONTENT          = FEATURE_BASE + "text-content";
   public static final String FEATURE_XML_CONTENT           = FEATURE_BASE + "xml-content";
   public static final String FEATURE_BINARY_CONTENT        = FEATURE_BASE + "binary-content";
-  public static final String FEATURE_REF_CONTENT           = FEATURE_BASE + "src-content";
+  public static final String FEATURE_REF_CONTENT           = FEATURE_BASE + "ref-content";
   public static final String FEATURE_XHTML_TITLE           = FEATURE_BASE + "xhtml-title";
   public static final String FEATURE_HTML_TITLE            = FEATURE_BASE + "html-title";
   public static final String FEATURE_TEXT_TITLE            = FEATURE_BASE + "text-title";
@@ -65,8 +73,81 @@ public final class FeaturesHelper {
   public static final String FEATURE_PRESERVE_EXTENSIONS   = FEATURE_BASE + "preserve-extensions";
   public static final String FEATURE_PRESERVE_LINKS        = FEATURE_BASE + "preserve-links";
   public static final String FEATURE_PRESERVE_RIGHTS       = FEATURE_BASE + "preserve-rights";
+  public static final String FEATURE_SCHEDULED_PUBLISHING  = FEATURE_BASE + "scheduled-publishing";
   public static final String FEATURE_THREADING             = ThreadConstants.THR_NS;
 
+  
+  private static final String ABDERA_FEATURE_BASE = "http://incubator.apache.org/abdera/features/";
+  
+  /**
+   * Indicates that the collection will accept digitally signed entries
+   * If marked as "required", the collection will only accept digitally signed entries
+   */
+  public static final String ABDERA_FEATURE_SIGNATURE = ABDERA_FEATURE_BASE + "signature";
+  
+  /**
+   * Indicates that the collection will preserve XML digital signatures contained
+   * in member resources 
+   */
+  public static final String ABDERA_FEATURE_PRESERVE_SIGNATURE = ABDERA_FEATURE_BASE + "preserve-signature";
+  
+  /**
+   * Indicates that the collection supports the use of the Atom Bidi Attribute.
+   * If marked as "required", the collection will only accept entries that contain the bidi attribute
+   */
+  public static final String ABDERA_FEATURE_BIDI = ABDERA_FEATURE_BASE + "bidi";
+  
+  /**
+   * Indicates that the collection supports the use of Diffie-Hellman key exchange
+   * for XML encrypted requests
+   */
+  public static final String ABDERA_FEATURE_DHENCREQUEST = ABDERA_FEATURE_BASE + "dhenc-request";
+  
+  /**
+   * Indicates that the collection supports the use of Diffie-Hellman key exchange
+   * for XML encrypted responses
+   */
+  public static final String ABDERA_FEATURE_DHENCRESPONSE = ABDERA_FEATURE_BASE + "dhenc-response";
+  
+  /**
+   * Indicates that the collection will add it's own digital signature to the 
+   * collection feed and member resources
+   */
+  public static final String ABDERA_FEATURE_SIGNED_RESPONSE = ABDERA_FEATURE_BASE + "response-signature";
+  
+  /**
+   * Indicates that the collection supports the use of Geo extensions (see the
+   * org.apache.abdera.ext.geo Package)
+   */
+  public static final String ABDERA_FEATURE_GEO = ABDERA_FEATURE_BASE + "geo";
+  
+  /**
+   * Indicates that the collection supports the use of the Feed paging standard.
+   * (ftp://ftp.rfc-editor.org/in-notes/internet-drafts/draft-nottingham-atompub-feed-history-11.txt)
+   * See the org.apache.abdera.ext.history Package)
+   */
+  public static final String ABDERA_FEATURE_PAGING = ABDERA_FEATURE_BASE + "paging";
+  
+  /**
+   * Indicates that the collection supports the use of the Simple Sharing Extensions
+   * (see the org.apache.abdera.ext.sharing Package)
+   */
+  public static final String ABDERA_FEATURE_SHARING = ABDERA_FEATURE_BASE + "sharing";
+  
+  /**
+   * Indicates that the collection supports the GoogleLogin auth scheme
+   * (see the org.apache.abdera.ext.gdata Package)
+   */
+  public static final String ABDERA_FEATURE_GOOGLELOGIN = ABDERA_FEATURE_BASE + "googlelogin";
+  
+  /**
+   * Indicates that the collection supports the WSSE auth scheme
+   * (see the org.apache.abdera.ext.wsse Package)
+   */
+  public static final String ABDERA_FEATURE_WSSE = ABDERA_FEATURE_BASE + "wsse";
+  
+  
+  
   
   private FeaturesHelper() {}
   
@@ -84,38 +165,58 @@ public final class FeaturesHelper {
       return null;
   }
   
-  /**
-   * Returns true if the collection contains the specified feature element
-   */
-  public static boolean supportsFeature(
-    Collection collection,
-    String feature) { 
-      return supportsFeature(collection, new String[] {feature});
+  public static Status getFeatureStatus(Collection collection, String feature) {
+    Feature f = getFeature(collection,feature);
+    return f != null ? f.getStatus() : Status.UNSPECIFIED;
   }
   
-  /**
-   * Returns true if the collection contains the specified feature element(s)
-   */
-  public static boolean supportsFeature(
-    Collection collection, 
-    String... features) {
-      List<Element> list = collection.getExtensions(FEATURE);
-      return check(list,features) == features.length;
+  public static Feature[] getSupportedFeatures(Collection collection) {
+    return getFeatures(collection, Status.SUPPORTED);
   }
   
+  public static Feature[] getUnsupportedFeatures(Collection collection) {
+    return getFeatures(collection, Status.UNSUPPORTED);
+  }
   
-  private static int check(List<Element> exts, String... refvals) {
-    int c = 0;
-    for (String refval : refvals) {
-      for (Element el : exts) {
-        String ref = el.getAttributeValue("ref");
-        if (ref.equals(refval)) {
-          c++;
-          break;
-        }
+  public static Feature[] getRequiredFeatures(Collection collection) {
+    return getFeatures(collection, Status.REQUIRED);
+  }
+  
+  public static Feature[] getFeatures(Collection collection, Status status) {
+    if (status == null) status = Status.SUPPORTED;
+    List<Feature> list = new ArrayList<Feature>();
+    List<Feature> features = collection.getExtensions(FEATURE);
+    for (Feature feature : features) {
+      if (status == feature.getStatus()) {
+        list.add(feature);
       }
     }
-    return c;
+    return list.toArray(new Feature[list.size()]);
+  }
+  
+  /**
+   * Add the specified features to the collection
+   */
+  public static Feature[] addFeatures(
+    Collection collection, 
+    String... features) {
+      List<Feature> list = new ArrayList<Feature>();
+      for (String feature : features)
+        list.add(addFeature(collection,feature));
+      return list.toArray(new Feature[list.size()]);
+  }
+  
+  /**
+   * Add the specified features to the collection
+   */
+  public static Feature[] addFeatures(
+    Collection collection,
+    Status status,
+    String... features) {
+      List<Feature> list = new ArrayList<Feature>();
+      for (String feature : features)
+        list.add(addFeature(collection,feature, status));
+      return list.toArray(new Feature[list.size()]);
   }
   
   /**
@@ -129,7 +230,7 @@ public final class FeaturesHelper {
       return addFeature(
         collection, 
         feature, 
-        false, null, null);
+        null, null, null);
   }
   
   /**
@@ -140,11 +241,11 @@ public final class FeaturesHelper {
   public static Feature addFeature(
     Collection collection, 
     String feature, 
-    boolean required) {
+    Status status) {
       return addFeature(
         collection, 
         feature, 
-        required, 
+        status, 
         null, null);
   }
   
@@ -159,21 +260,93 @@ public final class FeaturesHelper {
   public static Feature addFeature(
     Collection collection, 
     String feature,
-    boolean required,
+    Status status,
     String href,
     String label) {
-    if (supportsFeature(collection, feature)) 
-      throw new IllegalArgumentException("Feature already supported");
+    if (getFeature(collection, feature) != null) 
+      throw new IllegalArgumentException("Feature already specified");
     Factory factory = collection.getFactory();
     Feature el = 
       (Feature)factory.newExtensionElement(
         FeaturesHelper.FEATURE, collection);
     collection.declareNS(FNS, "f");
-    el.setAttributeValue("ref", (new IRI(feature)).toString());
-    if (required) el.setAttributeValue("required", "yes");
-    if (href != null) el.setAttributeValue("href", (new IRI(href)).toString());
-    if (label != null) el.setAttributeValue("label", label);
+    el.setRef(new IRI(feature).toString());
+    el.setStatus(status);
+    if (href != null) el.setHref(new IRI(href).toString());
+    if (label != null) el.setLabel(label);
     return el;
+  }
+  
+  /**
+   * Select a Collection from the service document
+   */
+  public static Collection[] select(Service service, Selector selector) {
+    return select(service, new Selector[] {selector});
+  }
+  
+  /**
+   * Select a Collection from the service document
+   */
+  public static Collection[] select(Service service, Selector... selectors) {
+    List<Collection> list = new ArrayList<Collection>();
+    for (Workspace workspace : service.getWorkspaces()) {
+      Collection[] collections = select(workspace, selectors);
+      for (Collection collection : collections)
+        list.add(collection);
+    }
+    return list.toArray(new Collection[list.size()]);
+  }
+  
+  /**
+   * Select a Collection from the Workspace
+   */
+  public static Collection[] select(Workspace workspace, Selector selector) {
+    return select(workspace, new Selector[] {selector});
+  }
+  
+  /**
+   * Select a Collection from the Workspace
+   */
+  public static Collection[] select(Workspace workspace, Selector... selectors) {
+    List<Collection> list = new ArrayList<Collection>();
+    for (Collection collection : workspace.getCollections()) {
+      boolean accept = true;
+      for (Selector selector : selectors) {
+        if (!selector.select(collection)) {
+          accept = false;
+          break;
+        }
+      }
+      if (accept) list.add(collection);
+    }
+    return list.toArray(new Collection[list.size()]);
+  }
+  
+  public static void addType(Feature feature, String mediaRange) {
+    addType(feature, new String[] {mediaRange});
+  }
+  
+  public static void addType(Feature feature, String... mediaRanges) {
+    mediaRanges = MimeTypeHelper.condense(mediaRanges);
+    for (String mediaRange : mediaRanges) {
+      try {
+        feature.addSimpleExtension(TYPE, new MimeType(mediaRange).toString());
+      } catch (MimeTypeParseException e) {}
+    }
+  }
+  
+  public static String[] getTypes(Feature feature) {
+    List<String> list = new ArrayList<String>();
+    for (Element type : feature.getExtensions(TYPE)) {
+      String value = type.getText();
+      if (value != null) {
+        value = value.trim();
+        try {
+          list.add(new MimeType(value).toString());
+        } catch (MimeTypeParseException e) {}
+      }
+    }
+    return list.toArray(new String[list.size()]);
   }
   
 }

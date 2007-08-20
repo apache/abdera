@@ -1,6 +1,5 @@
 package org.apache.abdera.spring;
 
-import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.impl.AbstractProvider;

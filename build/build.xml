@@ -44,8 +44,8 @@
   <property name="core.jar" value="${dist}/${ant.project.name}.core.${version}.jar" />
   <property name="protocol" value="${basedir}/protocol" />
   <property name="protocol.src" value="${protocol}/src/main/java" />
-  <property name="parser.resources" value="${protocol}/src/main/resources" />
   <property name="protocol.work" value="${work}/protocol" />
+  <property name="protocol.resources" value="${protocol}/src/main/resources" />
   <property name="protocol.jar" value="${dist}/${ant.project.name}.protocol.${version}.jar" />
   <property name="parser" value="${basedir}/parser" />
   <property name="parser.src" value="${parser}/src/main/java" />

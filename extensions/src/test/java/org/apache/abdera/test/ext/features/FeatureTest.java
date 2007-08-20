@@ -87,8 +87,6 @@ public class FeatureTest extends TestCase {
     
     collections = FeaturesHelper.select(service,s3);
     
-    for (Collection c : collections) System.out.println(c);
-    
     assertEquals(1,collections.length);
     assertEquals(collections[0],collection1);
   }

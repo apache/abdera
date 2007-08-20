@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.test.sharing;
+package org.apache.abdera.test.ext.sharing;
 
 import java.io.StringReader;
 import java.util.Date;

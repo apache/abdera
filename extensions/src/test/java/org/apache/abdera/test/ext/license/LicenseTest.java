@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.test.license;
+package org.apache.abdera.test.ext.license;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.license.LicenseHelper;

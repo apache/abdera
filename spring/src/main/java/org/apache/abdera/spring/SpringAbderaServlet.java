@@ -18,6 +18,7 @@
 package org.apache.abdera.spring;
 
 import org.apache.abdera.protocol.server.ServiceContext;
+import org.apache.abdera.protocol.server.servlet.AbderaServlet;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -27,8 +28,11 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * This can be overridden by supplying the "serviceContextBeanName" initialization
  * parameter.
  */
-public class SpringAbderaServlet extends org.apache.abdera.protocol.server.servlet.AbderaServlet {
+public class SpringAbderaServlet 
+  extends AbderaServlet {
     
+    private static final long serialVersionUID = -7579564455804753809L;
+
     protected ServiceContext createServiceContext() {
         String contextName = getInitParameter("serviceContextBeanName");
         if (contextName == null) {

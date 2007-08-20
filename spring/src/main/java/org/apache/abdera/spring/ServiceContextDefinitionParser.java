@@ -18,23 +18,14 @@
  */
 package org.apache.abdera.spring;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.server.impl.DefaultServiceContext;
 import org.apache.abdera.protocol.server.impl.SingletonProviderManager;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
-import org.springframework.beans.factory.xml.BeanDefinitionParserDelegate;
 import org.springframework.beans.factory.xml.ParserContext;
+import org.w3c.dom.Element;
 
 public class ServiceContextDefinitionParser 
     extends org.apache.abdera.spring.AbstractSingleBeanDefinitionParser {

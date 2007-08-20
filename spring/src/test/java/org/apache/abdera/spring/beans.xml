@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:a="http://abdera.apache.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://abdera.apache.org http://abdera.apache.org/schemas/abdera-spring.xsd">
+
+  <!-- Abdera -->
+  <a:serviceContext>
+  
+    <a:provider>
+      <ref bean="provider"/>
+    </a:provider>
+    
+    <a:targetResolver>
+      <a:regexTargetResolver>
+        <a:collection>/atom/feed(\\?[^#]*)?</a:collection>
+        <a:entry>/atom/feed/([^/#?]+)(\\?[^#]*)?</a:entry>
+        <a:service>/atom(\\?[^#]*)?</a:service>
+      </a:regexTargetResolver>
+    </a:targetResolver>
+    
+  </a:serviceContext>
+
+  
+  <bean id="provider" class="org.apache.abdera.spring.TestProvider">
+  </bean>
+
+</beans><beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:a="http://abdera.apache.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://abdera.apache.org http://abdera.apache.org/schemas/abdera-spring.xsd">
+
+  <!-- Abdera -->
+  <a:serviceContext>
+  
+    <a:provider>
+      <ref bean="provider"/>
+    </a:provider>
+    
+    <a:targetResolver>
+      <a:regexTargetResolver>
+        <a:collection>/atom/feed(\\?[^#]*)?</a:collection>
+        <a:entry>/atom/feed/([^/#?]+)(\\?[^#]*)?</a:entry>
+        <a:service>/atom(\\?[^#]*)?</a:service>
+      </a:regexTargetResolver>
+    </a:targetResolver>
+    
+  </a:serviceContext>
+
+  
+  <bean id="provider" class="org.apache.abdera.spring.TestProvider">
+  </bean>
+
+</beans>

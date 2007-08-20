@@ -277,6 +277,7 @@
     <module>server</module>
     <module>client</module>
     <module>extensions</module>
+    <module>spring</module>
     <module>examples</module>
   </modules>
   

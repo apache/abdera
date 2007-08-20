@@ -207,7 +207,7 @@ public class FOMExtensibleElement
 
   public <T extends Element> T addExtension(QName qname, QName before) {
     OMElement el = getFirstChildWithName(before);
-    T element = getFactory().newElement(qname);
+    T element = (T)getFactory().newElement(qname);
     if (el == null) {
       addExtension(element);
     } else {

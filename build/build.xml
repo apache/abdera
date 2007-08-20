@@ -26,6 +26,7 @@
       * docs  (build the javadocs)
       
    Set the ABDERA_XMLSECURITY=yes environment variable to build the security module
+   Set the ABDERA_SPRING=yes environment variable to build the spring module
    
 -->
   <property name="version" value="0.3.0-incubating-SNAPSHOT" />
@@ -66,6 +67,13 @@
   <property name="server.src" value="${server}/src/main/java" />
   <property name="server.work" value="${work}/server" />
   <property name="server.jar" value="${dist}/${ant.project.name}.server.${version}.jar" />
+  <property name="spring" value="${basedir}/spring" />
+  <property name="spring.src" value="${spring}/src/main/java" />
+  <property name="spring.resources" value="${spring}/src/main/resources" />
+  <property name="spring.test.src" value="${spring}/src/test/java" />
+  <property name="spring.test.resources" value="${spring}/src/test/resources" />
+  <property name="spring.work" value="${work}/spring" />
+  <property name="spring.jar" value="${dist}/${ant.project.name}.spring.${version}.jar" />
   <property name="security" value="${basedir}/security" />
   <property name="security.src" value="${security}/src/main/java" />
   <property name="security.work" value="${work}/security" />
@@ -80,6 +88,7 @@
   <property name="examples" value="${basedir}/examples" />
   <property name="examples.work" value="${work}/examples" />
   <property name="examples.src" value="${examples}/src/main/java" />
+  
   <property name="debug" value="on" />
 
   <property environment="env" />
@@ -94,7 +103,7 @@
   <property name="i18n.src" value="${dependencies}/i18n/src" />
   <property name="i18n.src.java" value="${i18n.src}/main/java" />
   <property name="i18n.src.resources" value="${i18n.src}/main/resources" />
-  <property name="i18n.version" value="0.2.2" />
+  <property name="i18n.version" value="${version}" />
   <property name="i18n.jar" value="${dependencies}/abdera-i18n-${i18n.version}.jar" />
 
   <property file="${dependencies}/deps.properties" />
@@ -180,6 +189,19 @@ Working directory: ${work}
         </not>
       </and>
     </condition>
+    <condition property="do.spring">
+      <istrue value="${env.ABDERA_SPRING}" />
+    </condition>
+    <condition property="do.download.spring">
+      <and>
+        <istrue value="${do.spring}" />
+        <not>
+          <and>
+            <available file="${basedir}/build/tools/${spring.zip}" />
+          </and>
+        </not>
+      </and>
+    </condition>
 
     <mkdir dir="${work}" />
     <manifest file="${work}/MANIFEST.MF">
@@ -192,9 +214,11 @@ Working directory: ${work}
     </manifest>
 
     <echo>Building Security? ${do.security}</echo>
+    <echo>Building Spring? ${do.spring}</echo>
 
     <antcall target="download" />
     <antcall target="downloadsecurity" />
+    <antcall target="downloadspring" />
   </target>
 
   <target name="compile.core" depends="init,compile.dependencies">
@@ -279,6 +303,27 @@ Working directory: ${work}
       </fileset>
     </copy>
   </target>
+  
+  <target name="compile.spring" depends="compile.server" if="do.spring">
+    <path id="spring.dependencies">
+      <path refid="jar.dependencies" />
+      <fileset dir="${basedir}/build/tools/${spring.name}/dist" includes="**/*.jar" />
+      <fileset dir="${basedir}/build/tools/${spring.name}/dist/modules" includes="**/*.jar" />
+    </path>
+    <mkdir dir="${spring.work}" />
+    <javac srcdir="${spring.src}" destdir="${spring.work}" classpathref="spring.dependencies" classpath="${core.work};${protocol.work};${server.work}" debug="${debug}" />
+    <javac srcdir="${spring.test.src}" destdir="${test}" classpathref="spring.dependencies" classpath="${core.work};${parser.work};${spring.work};${protocol.work};${server.work}" debug="${debug}" />
+    <mkdir dir="${spring.work}/META-INF" />
+    <copy todir="${test}">
+      <fileset dir="${spring.test.resources}" includes="**/*" />
+    </copy>
+    <copy todir="${spring.work}/META-INF">
+      <fileset dir="${basedir}">
+        <include name="LICENSE" />
+        <include name="NOTICE" />
+      </fileset>
+    </copy>
+  </target>
 
   <target name="compile.security" depends="init, compile.core, compile.server" if="do.security">
     <mkdir dir="${security.work}" />
@@ -318,11 +363,11 @@ Working directory: ${work}
     <delete dir="${examples.work}" />
   </target>
 
-  <target name="build" depends="init,compile.core,compile.parser,compile.protocol,compile.server,compile.extensions,compile.client,compile.security,compile.examples">
+  <target name="build" depends="init,compile.core,compile.parser,compile.protocol,compile.server,compile.extensions,compile.client,compile.security,compile.examples,compile.spring">
   </target>
 
   <target name="docs" depends="init">
-    <javadoc packagenames="org.apache.abdera.*" excludepackagenames="org.apache.abdera.util,org.apache.abdera.ext.*.impl,org.apache.abdera.parser.**,org.apache.abdera.security.**" sourcepath="${core.src}:${extensions.src}:${security.src}:${server.src}:${parser.src}:${client.src}:${protocol.src}" destdir="${javadocs}" windowtitle="Abdera" classpathref="jar.dependencies" />
+    <javadoc packagenames="org.apache.abdera.*" excludepackagenames="org.apache.abdera.util,org.apache.abdera.parser.**,org.apache.abdera.security.**" sourcepath="${core.src}:${extensions.src}:${security.src}:${server.src}:${parser.src}:${client.src}:${protocol.src}:${spring.src}" destdir="${javadocs}" windowtitle="Abdera" classpathref="jar.dependencies" />
     <replaceregexp match="Generated by javadoc (.*) on (.*) --" replace="Generated by javadoc --" flags="g" byline="true">
       <fileset dir="${javadocs}" includes="**/*.html" />
     </replaceregexp>
@@ -378,6 +423,7 @@ Working directory: ${work}
     <jar destfile="${extensions.jar}" basedir="${extensions.work}" manifest="${work}/MANIFEST.MF" />
     <jar destfile="${client.jar}" basedir="${client.work}" manifest="${work}/MANIFEST.MF" />
     <antcall target="dist.security" />
+    <antcall target="dist.spring" />
     <copy todir="${dist_lib}">
       <fileset dir="${dependencies}" />
     </copy>
@@ -387,6 +433,10 @@ Working directory: ${work}
 
   <target name="dist.security" if="do.security">
     <jar destfile="${security.jar}" basedir="${security.work}" manifest="${work}/MANIFEST.MF" />
+  </target>
+  
+  <target name="dist.spring" if="do.spring">
+    <jar destfile="${spring.jar}" basedir="${spring.work}" manifest="${work}/MANIFEST.MF" />
   </target>
 
   <target name="zip" depends="retro">
@@ -406,6 +456,8 @@ Working directory: ${work}
         <exclude name="**/${junit.jar}" />
         <exclude name="**/retroweaver-rt-${retroweaver.version}.jar" />
         <exclude name="**/${xmlsecurity.jar}" unless="do.security" />
+        <exclude name="**/${spring.mock.dir}" unless="do.spring" />
+        <exclude name="**/${spring.web.dir}"  unless="do.spring" />
       </fileset>
       <fileset dir="${docs}" includes="**/*" />
       <fileset dir="${basedir}">
@@ -434,6 +486,8 @@ Working directory: ${work}
         <exclude name="**/${jetty.jar}}" />
         <exclude name="**/${junit.jar}" />
         <exclude name="**/${xmlsecurity.jar}" unless="do.security" />
+        <exclude name="**/${spring.mock.dir}" unless="do.spring" />
+        <exclude name="**/${spring.web.dir}"  unless="do.spring" />
       </fileset>
       <fileset dir="${docs}" includes="**/*" />
       <fileset dir="${basedir}">
@@ -476,6 +530,13 @@ Working directory: ${work}
       <get src="${bouncycastle.dir}/${bouncycastle.jar}" dest="${dependencies}/${bouncycastle.jar}" usetimestamp="true" />
     </parallel>
   </target>
+  
+  <target name="downloadspring" if="do.download.spring">
+    <mkdir dir="${basedir}/build/tools"/>
+    <get src="${spring.dir}/${spring.zip}" dest="${basedir}/build/tools/${spring.zip}" />
+    <unzip src="${basedir}/build/tools/${spring.zip}" dest="${basedir}/build/tools/" overwrite="true" />
+  </target>
+  
   <target name="download" if="do.download">
     <echo>Downloading project dependencies.  This may take a moment</echo>
     <parallel>
@@ -485,9 +546,6 @@ Working directory: ${work}
       <get src="${axiom.dir}/${axiom.impl.jar}" dest="${dependencies}/${axiom.impl.jar}" usetimestamp="true" />
       <get src="${jaxen.dir}/${jaxen.jar}" dest="${dependencies}/${jaxen.jar}" usetimestamp="true" />
       <get src="${log4j.dir}/${log4j.jar}" dest="${dependencies}/${log4j.jar}" usetimestamp="true" />
-      <!--get src="${stax.dir}/${stax.jar}"
-           dest="${dependencies}/${stax.jar}"
-           usetimestamp="true" /-->
       <get src="${stax.dir}/${stax.api.jar}" dest="${dependencies}/${stax.api.jar}" usetimestamp="true" />
       <get src="${commons.logging.dir}/${commons.logging.jar}" dest="${dependencies}/${commons.logging.jar}" usetimestamp="true" />
       <get src="${commons.codec.dir}/${commons.codec.jar}" dest="${dependencies}/${commons.codec.jar}" usetimestamp="true" />
@@ -528,6 +586,7 @@ Working directory: ${work}
     <property name="retro_extensions.jar" value="${dist}/${ant.project.name}.extensions.${version}.retro.jar" />
     <property name="retro_server.jar" value="${dist}/${ant.project.name}.server.${version}.retro.jar" />
     <property name="retro_client.jar" value="${dist}/${ant.project.name}.client.${version}.retro.jar" />
+    <property name="retro_spring.jar" value="${dist}/${ant.project.name}.spring.${version}.retro.jar" />
     <condition property="do.download.retroweaver">
       <not>
         <available file="${retrozip}" />
@@ -557,6 +616,7 @@ Working directory: ${work}
       <arg line="-jar &quot;${client.jar}&quot; &quot;${retro_client.jar}&quot;" />
     </java>
     <antcall target="retro.security" />
+    <antcall target="retro.spring" />
     <copy todir="${dist_lib}" file="${retro}/release/retroweaver-rt-${retroweaver.version}.jar" />
   </target>
 
@@ -566,6 +626,13 @@ Working directory: ${work}
       <arg line="-jar &quot;${security.jar}&quot; &quot;${retro_security.jar}&quot;" />
     </java>
     <get src="${bouncycastle.dir}/${bouncycastle.jar.retro}" dest="${dependencies}/${bouncycastle.jar.retro}" usetimestamp="true" ignoreerrors="true" />
+  </target>
+  
+  <target name="retro.spring" if="do.spring">
+    <property name="retro_spring.jar" value="${dist}/${ant.project.name}.spring.${version}.retro.jar" />
+    <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
+      <arg line="-jar &quot;${spring.jar}&quot; &quot;${retro_spring.jar}&quot;" />
+    </java>
   </target>
 
   <target name="go_retro" if="do.download.retroweaver">

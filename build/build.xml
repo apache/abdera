@@ -607,11 +607,9 @@ Working directory: ${work}
       <arg line="-jar &quot;${server.jar}&quot; &quot;${retro_server.jar}&quot;" />
     </java>
     <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
-      <arg line="-jar &quot;${extensions.jar}&quot; &quot;${retro_extensions.jar}&quot;" />
-    </java>
-    <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${client.jar}&quot; &quot;${retro_client.jar}&quot;" />
     </java>
+    <antcall target="retro.extensions" />
     <antcall target="retro.security" />
     <antcall target="retro.spring" />
     <copy todir="${dist_lib}" file="${retro}/release/retroweaver-rt-${retroweaver.version}.jar" />
@@ -619,7 +617,7 @@ Working directory: ${work}
 
   <target name="retro.security" if="do.security">
     <property name="retro_security.jar" value="${dist}/${ant.project.name}.security.${version}.retro.jar" />
-    <java classpathref="jar.retro" classname="com.rc.retroweaver.Weaver" fork="yes">
+    <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${security.jar}&quot; &quot;${retro_security.jar}&quot;" />
     </java>
     <get src="${bouncycastle.dir}/${bouncycastle.jar.retro}" dest="${dependencies}/${bouncycastle.jar.retro}" usetimestamp="true" ignoreerrors="true" />
@@ -790,5 +788,48 @@ Working directory: ${work}
       classpathref="jar.dependencies" 
       classpath="${core.work}:${parser.work}:${server.work}:${extensions.work}/${ext}:${test}" 
       classname="org.apache.abdera.test.ext.${ext}.TestSuite" fork="yes" failonerror="false"/>
+  </target>
+  
+  <target name="retro.extensions">
+    
+    <antcall target="retro.extension">
+      <param name="ext" value="main" />
+    </antcall>
+
+    <antcall target="retro.extension">
+      <param name="ext" value="gdata" />
+    </antcall>
+
+    <antcall target="retro.extension">
+      <param name="ext" value="geo" />
+    </antcall>
+
+    <antcall target="retro.extension">
+      <param name="ext" value="json" />
+    </antcall>
+
+    <antcall target="retro.extension">
+      <param name="ext" value="media" />
+    </antcall>
+
+    <antcall target="retro.extension">
+      <param name="ext" value="opensearch" />
+    </antcall>
+
+    <antcall target="retro.extension">
+      <param name="ext" value="sharing" />
+    </antcall>
+    
+    <antcall target="retro.extension">
+      <param name="ext" value="wsse" />
+    </antcall>
+  </target>
+  
+  <target name="retro.extension">
+    <echo>Retroweaving extension ${ext}...</echo>
+    <property name="retro_ext.jar" value="${extensions.jar.base}.${ext}.${version}.retro.jar" />
+    <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
+      <arg line="-jar &quot;${extensions.jar.base}.${ext}.${version}.jar&quot; &quot;${retro_ext.jar}&quot;" />
+    </java>
   </target>
 </project>

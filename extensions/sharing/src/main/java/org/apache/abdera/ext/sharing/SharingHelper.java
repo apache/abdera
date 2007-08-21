@@ -369,7 +369,7 @@ public class SharingHelper {
     return d;
   }
   
-  public boolean hasConflicts(Entry entry) {
+  public static boolean hasConflicts(Entry entry) {
     Sync sync = getSync(entry);
     if (sync != null) {
       Conflicts conflicts = sync.getConflicts();

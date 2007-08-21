@@ -249,7 +249,8 @@ public class SharingHelper {
         if (id != null) {
           Entry existing = destentries.get(id);
           if (existing == null) {
-            dest.addEntry((Entry)entry.clone());
+            Entry e = (Entry) entry.clone();
+            dest.addEntry(e);
           } else {
             Sync s1 = getSync(existing,false);
             List<Entry> c1 = getConflicts(existing);
@@ -258,7 +259,7 @@ public class SharingHelper {
             Entry w = null;
             w = compareConflicts(w, c1,c2,m);
             w = compareConflicts(w, c2,c1,m);
-            if (w != null) dest.addEntry(w);
+//            if (w != null) dest.addEntry((Entry)w.clone());
             if (s1.isNoConflicts()) return;
             if (m.size() > 0) {
               Sync sync = getSync(w,true);

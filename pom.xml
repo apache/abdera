@@ -276,7 +276,14 @@
     <module>security</module>
     <module>server</module>
     <module>client</module>
-    <module>extensions</module>
+    <module>extensions/gdata</module>
+    <module>extensions/geo</module>
+    <module>extensions/json</module>
+    <module>extensions/main</module>
+    <module>extensions/media</module>
+    <module>extensions/opensearch</module>
+    <module>extensions/sharing</module>
+    <module>extensions/wsse</module>
     <module>spring</module>
     <module>examples</module>
   </modules>

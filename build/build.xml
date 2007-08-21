@@ -346,7 +346,7 @@ Working directory: ${work}
     <echo>Make sure the example code compiles...</echo>
     <mkdir dir="${examples.work}" />
     <javac srcdir="${examples.src}" destdir="${examples.work}" classpathref="jar.dependencies" 
-      classpath="${core.work};${parser.work};${protocol.work};${client.work};${server.work};${extensions.work}/gdata;${security.work}" debug="${debug}">
+      classpath="${core.work};${parser.work};${protocol.work};${client.work};${server.work};${extensions.work}/gdata;${extensions.work}/main;${security.work};${extensions.work}/sharing;${extensions.work}/geo" debug="${debug}">
       <exclude unless="do.security" name="**/security/*.java" />
     </javac>
     <delete dir="${examples.work}" />

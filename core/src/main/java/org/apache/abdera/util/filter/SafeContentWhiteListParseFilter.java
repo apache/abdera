@@ -27,7 +27,7 @@ public class SafeContentWhiteListParseFilter
   implements ParseFilter {
 
   private static enum xhtml_elements {
-    a, abbr, acronym, address, area, b, big, blockquote, 
+    a, abbr, acronym, address, area, b, bdo, big, blockquote, 
     br, button, caption, center, cite, code, col, colgroup, 
     dd, del, dfn, dir, div, dl, dt, em, fieldset, font, form, 
     h1, h2, h3, h4, h5, h6, hr, i, img, input, ins, kbd, label, 
@@ -48,17 +48,17 @@ public class SafeContentWhiteListParseFilter
     vspace, width;
     
     static String fix(String v) {
-      if (v.equals("char"))  return "CHAR";
-      if (v.equals("for"))   return "FOR";
-      if (v.equals("class")) return "CLASS";
-      return v;
+      if (v.equalsIgnoreCase("char"))  return "CHAR";
+      if (v.equalsIgnoreCase("for"))   return "FOR";
+      if (v.equalsIgnoreCase("class")) return "CLASS";
+      return v.toLowerCase();
     }
   };
   
   public boolean acceptable(QName qname) {
     if (qname.getNamespaceURI().equals(Constants.XHTML_NS)) {
       try {
-        xhtml_elements.valueOf(qname.getLocalPart());
+        xhtml_elements.valueOf(qname.getLocalPart().toLowerCase());
         return true;
       } catch (Exception e) {}
       return false;

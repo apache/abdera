@@ -25,7 +25,8 @@ To build with ant (http://ant.apache.org/):
   ant -f build/build.xml clean-downloads
 
 Note: To build with XML Security support, set the ABDERA_XMLSECURITY environment
-variable to "yes" prior to running the ant build
+variable to "yes" prior to running the ant build.  To build with Spring support, 
+set the ABDERA_SPRING environment variable to "yes" prior to running the build
 
 To build with Eclipse (http://www.eclipse.org).  
 
@@ -52,12 +53,12 @@ Without Maven:
      * /java/trunk/core               project name: core
      * /java/trunk/dependencies       project name: dependencies
      * /java/trunk/docs               project name: docs
-     * /java/trunk/extensions         project name: extensions
      * /java/trunk/examples           project name: examples
      * /java/trunk/parser             project name: parser
      * /java/trunk/server             project name: server
      * /java/trunk/security           project name: security
-     * /java/branches/snell_sandbox   project name: snell_sandbox
+     * /java/trunk/spring             project name: spring
+     * /java/trunk/extensions         project name: eclipse
   
     From the eclipse workspace root, invoke:
       ant -f build/build.xml init

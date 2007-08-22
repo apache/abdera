@@ -42,6 +42,27 @@ you may have.
 
 Changes
 ============================
+0.3.0 - Support for the Atompub final draft 
+      - Refactored and simplified Server framework
+      - Refactored and simplified AbderaClient
+      - ExtensionFactory can now provide the mime type for extension elements
+      - Improved extensibility
+      - Updated dependencies
+      - XPath support improvements
+      - Geotagging extensions
+      - Simple Sharing extensions
+      - WSSE Authentication 
+      - Bidi extensions
+      - Atompub features extensions
+      - Feed paging extensions
+      - Feed license extensions
+      - XML Encryption with Diffie-Hellman key exchange
+      - Spring integration support
+      - Extensions now packaged in separate jars for modular distribution
+      - Improved error handling
+      - More examples
+      - Less bugs
+      - Lots of other improvements
 0.2.2 - Upgrade dependencies to Axiom 1.2.1
       - Remove dependency on Stax Reference Implementation
       - Fix Stax API conformance issues so we can work with more Stax parsers

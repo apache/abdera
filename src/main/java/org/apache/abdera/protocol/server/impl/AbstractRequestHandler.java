@@ -55,12 +55,12 @@ public abstract class AbstractRequestHandler
     log.debug(Messages.format("USING.PROVIDER",provider));
     try {
       if (preconditions(provider, request, response)) {
-        output(response,provider.request(request));
+        output(request, response,provider.request(request));
       }
     } catch (Throwable e) {
       log.error(Messages.get("OUTPUT.ERROR"), e);
       try {
-        output(response,new EmptyResponseContext(500));
+        output(request,response,new EmptyResponseContext(500));
       } catch (Exception ex) {
         log.error(Messages.get("OUTPUT.ERROR"), ex);
         response.sendError(500);
@@ -99,6 +99,7 @@ public abstract class AbstractRequestHandler
   }
   
   protected void output(
+    RequestContext request,
     HttpServletResponse response, 
     ResponseContext context) 
       throws IOException, ServletException {
@@ -126,7 +127,7 @@ public abstract class AbstractRequestHandler
           }
         }
       }  
-      if (context.hasEntity()) {
+      if (!request.getMethod().equals("HEAD") && context.hasEntity()) {
         OutputStream out = response.getOutputStream();
         context.writeTo(out);
         out.close();

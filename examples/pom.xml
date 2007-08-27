@@ -74,7 +74,25 @@
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
-      <artifactId>abdera-extensions</artifactId>
+      <artifactId>abdera-extensions-main</artifactId>
+      <version>0.3.0-incubating-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-extensions-gdata</artifactId>
+      <version>0.3.0-incubating-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-extensions-geo</artifactId>
+      <version>0.3.0-incubating-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-extensions-sharing</artifactId>
       <version>0.3.0-incubating-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>

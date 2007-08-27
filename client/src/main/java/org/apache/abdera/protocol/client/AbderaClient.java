@@ -526,4 +526,44 @@ public class AbderaClient {
       HttpConnectionManagerParams.MAX_TOTAL_CONNECTIONS,
       MultiThreadedHttpConnectionManager.DEFAULT_MAX_TOTAL_CONNECTIONS);
   }
+  
+  /**
+   * Configure the client to use the specified proxy
+   */
+  public void setProxy(
+    String host, 
+    int port) {
+      client.getHostConfiguration().setProxy(host, port);
+  }
+  
+  /**
+   * Specify the auth credentials for the proxy server
+   */
+  public void setProxyCredentials(
+      String host,
+      int port,
+      Credentials credentials) {
+    setProxyCredentials(host,port,null,null,credentials);
+  }
+  
+  /**
+   * Specify the auth credentials for the proxy server
+   */
+  public void setProxyCredentials(
+    String host,
+    int port,
+    String realm,
+    String scheme,
+    Credentials credentials) {
+      host = host != null ? host : AuthScope.ANY_HOST;
+      port = port > -1 ? port : AuthScope.ANY_PORT;
+      AuthScope scope = 
+        new AuthScope(
+          host, 
+          port, 
+          realm != null ? realm : AuthScope.ANY_REALM, 
+          scheme != null ? scheme : AuthScope.ANY_SCHEME);
+      client.getState().setProxyCredentials(
+        scope, credentials);
+  }
 }

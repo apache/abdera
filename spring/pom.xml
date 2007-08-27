@@ -37,6 +37,21 @@
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/spring/</developerConnection>
     <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/spring/</url>
   </scm>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <configuration>
+            <excludes>
+              <exclude>**/TestProvider.java</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
   <dependencies>
       <dependency>
         <groupId>junit</groupId>

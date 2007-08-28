@@ -22,13 +22,13 @@
   <parent>
     <groupId>org.apache.abdera</groupId>
     <artifactId>abdera</artifactId>
-    <version>0.3.0-incubating-SNAPSHOT</version>
+    <version>0.3.0-incubating</version>
   </parent>  
   <modelVersion>4.0.0</modelVersion>
   <artifactId>abdera-extensions-gdata</artifactId>
   <packaging>jar</packaging>
   <name>Abdera Extensions - GData</name>
-  <version>0.3.0-incubating-SNAPSHOT</version>
+  <version>0.3.0-incubating</version>
   <description>Atom Specification Extensions - GData</description>
   <inceptionYear>2006</inceptionYear>
   <url>http://incubator.apache.org/abdera</url>
@@ -41,25 +41,25 @@
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-core</artifactId>
-      <version>0.3.0-incubating-SNAPSHOT</version>
+      <version>0.3.0-incubating</version>
       <scope>compile</scope>
     </dependency>    
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-parser</artifactId>
-      <version>0.3.0-incubating-SNAPSHOT</version>
+      <version>0.3.0-incubating</version>
       <scope>compile</scope>
     </dependency>   
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-protocol</artifactId>
-      <version>0.3.0-incubating-SNAPSHOT</version>
+      <version>0.3.0-incubating</version>
       <scope>compile</scope>
     </dependency>  
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-client</artifactId>
-      <version>0.3.0-incubating-SNAPSHOT</version>
+      <version>0.3.0-incubating</version>
       <scope>compile</scope>
     </dependency>  
     <dependency>

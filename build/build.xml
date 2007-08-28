@@ -687,7 +687,9 @@ Working directory: ${work}
     <mkdir dir="${extensions.work}/${ext}" />
     <mkdir dir="${extensions.work}/${ext}/META-INF" />
     <javac srcdir="${extensions}/${ext}/src/main/java" destdir="${extensions.work}/${ext}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${client.work};${protocol.work}" debug="${debug}" />
-    <javac srcdir="${extensions}/${ext}/src/test/java" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${extensions.work}/${ext};${client.work};${protocol.work}" debug="${debug}" />
+
+    <available file="${extensions}/${ext}/src/test/java" property="is.available.${ext}.test" />
+    
     <copy todir="${extensions.work}/${ext}/META-INF">
       <fileset dir="${basedir}">
         <include name="LICENSE" />
@@ -697,9 +699,18 @@ Working directory: ${work}
     <copy todir="${extensions.work}/${ext}">
       <fileset dir="${extensions}/${ext}/src/main/resources" includes="**/*" />
     </copy>
-    <copy todir="${test}">
-      <fileset dir="${extensions}/${ext}/src/test/resources" includes="**/*" />
-    </copy>
+    
+    <antcall target="compile.extension.test">
+      <param name="ext" value="${ext}"/>
+    </antcall>
+  </target>
+  
+  <target name="compile.extension.test" if="is.available.${ext}.test">
+    <echo>Compiling tests for extension ${ext}...</echo>
+    <javac srcdir="${extensions}/${ext}/src/test/java" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${extensions.work}/${ext};${client.work};${protocol.work}" debug="${debug}" />
+      <copy todir="${test}">
+        <fileset dir="${extensions}/${ext}/src/test/resources" includes="**/*" />
+      </copy>
   </target>
   
   <target name="dist.extensions">

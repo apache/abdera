@@ -28,17 +28,20 @@ import org.apache.commons.codec.binary.Hex;
 public class EntityTag implements Cloneable, Serializable {
 
   private static final long serialVersionUID = 1559972888659121461L;
-
+  
   private static final String INVALID_ENTITY_TAG = Messages
       .get("INVALID.ENTITY.TAG");
 
+  public static final EntityTag WILD = new EntityTag("*");
+  
   public static EntityTag parse(String entity_tag) {
     if (entity_tag == null || entity_tag.length() == 0)
       throw new IllegalArgumentException(INVALID_ENTITY_TAG);
     boolean weak = entity_tag.startsWith("W/");
-    if (!weak && !entity_tag.startsWith("\""))
+    boolean wild = entity_tag.equals("*");
+    if (!wild && !weak && !entity_tag.startsWith("\""))
       throw new IllegalArgumentException(INVALID_ENTITY_TAG);
-    String tag = entity_tag.substring((weak) ? 3 : 1, entity_tag.length() - 1);
+    String tag = wild ? "*" : entity_tag.substring((weak) ? 3 : 1, entity_tag.length() - 1);
     return new EntityTag(tag, weak);
   }
 
@@ -77,8 +80,9 @@ public class EntityTag implements Cloneable, Serializable {
       boolean weak) {
     if (tags == null)
       return (tag1 == null) ? true : false;
+    if (tag1.isWild() && tags != null && tags.length > 0) return true;
     for (EntityTag tag : tags) {
-      if (tag1.equals(tag))
+      if (tag1.equals(tag) || tag.isWild())
         return true;
     }
     return false;
@@ -101,6 +105,7 @@ public class EntityTag implements Cloneable, Serializable {
   private final String tag;
 
   private final boolean weak;
+  private final boolean wild;
 
   public EntityTag(String tag) {
     this(tag, false);
@@ -110,6 +115,7 @@ public class EntityTag implements Cloneable, Serializable {
     checkTag(tag);
     this.tag = tag;
     this.weak = weak;
+    this.wild = tag.equals("*");
   }
 
   private void checkTag(String tag) {
@@ -118,6 +124,10 @@ public class EntityTag implements Cloneable, Serializable {
       throw new IllegalArgumentException("Invalid Entity Tag");
   }
 
+  public boolean isWild() {
+    return wild;
+  }
+  
   public String getTag() {
     return tag;
   }
@@ -128,39 +138,38 @@ public class EntityTag implements Cloneable, Serializable {
 
   public String toString() {
     StringBuffer buf = new StringBuffer();
-    if (weak)
-      buf.append("W/");
-    buf.append('"');
-    buf.append(tag);
-    buf.append('"');
+    if (wild) {
+      buf.append("*");
+    } else {
+      if (weak)
+        buf.append("W/");
+      buf.append('"');
+      buf.append(tag);
+      buf.append('"');
+    }
     return buf.toString();
   }
 
-  public int hashCode() {
-    final int PRIME = 31;
+  @Override public int hashCode() {
+    final int prime = 31;
     int result = 1;
-    result = PRIME * result + ((tag == null) ? 0 : tag.hashCode());
-    result = PRIME * result + (weak ? 1231 : 1237);
+    result = prime * result + ((tag == null) ? 0 : tag.hashCode());
+    result = prime * result + (weak ? 1231 : 1237);
+    result = prime * result + (wild ? 1231 : 1237);
     return result;
   }
 
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (obj instanceof String)
-      obj = new EntityTag((String) obj);
-    if (getClass() != obj.getClass())
-      return false;
+  @Override public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     final EntityTag other = (EntityTag) obj;
+    if (isWild() || other.isWild()) return true;
     if (tag == null) {
-      if (other.tag != null)
-        return false;
-    } else if (!tag.equals(other.tag))
-      return false;
-    if (weak != other.weak)
-      return false;
+      if (other.tag != null) return false;
+    } else if (!tag.equals(other.tag)) return false;
+    if (weak != other.weak) return false;
+    if (wild != other.wild) return false;
     return true;
   }
 

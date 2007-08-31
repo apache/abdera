@@ -26,6 +26,7 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.ExtensibleElement;
+import org.apache.abdera.util.Constants;
 
 /**
  * Basic support for the GeoRSS extensions to Atom: http://georss.org/1
@@ -189,6 +190,58 @@ public class GeoHelper {
     return _getPositions(entry).iterator();
   }
   
+  public static Position getAsPosition(Element element) {
+    Position pos = null;
+    QName qname = element.getQName();
+    String text = element.getText();
+    if (qname.equals(QNAME_GML_POINT)) {
+      element = traverse(
+        (ExtensibleElement)element, 
+        QNAME_GML_POS);
+      if (element != null && text != null) {
+        pos = new Point(text.trim());
+      }
+    } else if (qname.equals(QNAME_GML_LINESTRING)) {
+      element = traverse(
+          (ExtensibleElement)element,
+        QNAME_GML_POSLIST);
+      if (element != null && text != null) {
+        pos = new Line(text.trim());
+      }
+    } else if (qname.equals(QNAME_GML_POLYGON)) {
+      element = traverse(
+          (ExtensibleElement)element, 
+        QNAME_GML_EXTERIOR, 
+        QNAME_GML_LINEARRING, 
+        QNAME_GML_POSLIST);
+      if (element != null && text != null) {
+        pos = new Polygon(text.trim());
+      }
+    } else if (qname.equals(QNAME_GML_ENVELOPE)) {
+      String lc = ((ExtensibleElement)element).getSimpleExtension(QNAME_GML_LOWERCORNER);
+      String uc = ((ExtensibleElement)element).getSimpleExtension(QNAME_GML_UPPERCORNER);
+      if (lc != null && uc != null) {
+        Coordinate c1 = new Coordinate(lc);
+        Coordinate c2 = new Coordinate(uc);
+        pos = new Box(c1,c2);
+      }
+    } else if (qname.equals(QNAME_SIMPLE_POINT) && text != null) {
+      pos = new Point(text.trim());
+    } else if (qname.equals(QNAME_SIMPLE_LINE) && text != null) {
+      pos = new Line(text.trim());
+    } else if (qname.equals(QNAME_SIMPLE_BOX) && text != null) {
+      pos = new Box(text.trim());
+    } else if (qname.equals(QNAME_SIMPLE_POLYGON) && text != null) {
+      pos = new Polygon(text.trim());
+    } else if (qname.equals(QNAME_W3C_POINT) || 
+               qname.equals(Constants.ENTRY)) {
+      List<Position> list = new ArrayList<Position>();
+      getW3CPosition((ExtensibleElement)element, list);
+      if (list != null && list.size() > 0) pos = list.get(0);
+    }
+    return pos;
+  }
+  
   public static Position[] getPositions(Entry entry) {
     List<Position> positions = _getPositions(entry);
     return positions.toArray(new Position[positions.size()]);
@@ -197,20 +250,7 @@ public class GeoHelper {
   private static void getSimplePosition(Entry entry, List<Position> list) {
     List<Element> elements = entry.getExtensions(SIMPLE_GEO_NS);
     for (Element element : elements) {
-      Position pos = null;
-      QName qname = element.getQName();
-      String text = element.getText();
-      if (text != null) {
-        if (qname.equals(QNAME_SIMPLE_POINT)) {
-          pos = new Point(text.trim());
-        } else if (qname.equals(QNAME_SIMPLE_LINE)) {
-          pos = new Line(text.trim());
-        } else if (qname.equals(QNAME_SIMPLE_BOX)) {
-          pos = new Box(text.trim());
-        } else if (qname.equals(QNAME_SIMPLE_POLYGON)) {
-          pos = new Polygon(text.trim());
-        }
-      }
+      Position pos = getAsPosition(element);
       if (pos != null) {
         getPositionAttributes(element, pos);
         list.add(pos);
@@ -224,48 +264,7 @@ public class GeoHelper {
       Position pos = null;
       List<ExtensibleElement> children = where.getElements();
       for (ExtensibleElement element : children) {
-        QName qname = element.getQName();
-        if (qname.equals(QNAME_GML_POINT)) {
-          element = traverse(
-            element, 
-            QNAME_GML_POS);
-          if (element != null) {
-            String text = element.getText();
-            if (text != null) {
-              pos = new Point(text.trim());
-            }
-          }
-        } else if (qname.equals(QNAME_GML_LINESTRING)) {
-          element = traverse(
-            element,
-            QNAME_GML_POSLIST);
-          if (element != null) {
-            String text = element.getText();
-            if (text != null) {
-              pos = new Line(text.trim());
-            }
-          }
-        } else if (qname.equals(QNAME_GML_POLYGON)) {
-          element = traverse(
-            element, 
-            QNAME_GML_EXTERIOR, 
-            QNAME_GML_LINEARRING, 
-            QNAME_GML_POSLIST);
-          if (element != null) {
-            String text = element.getText();
-            if (text != null) {
-              pos = new Polygon(text.trim());
-            }
-          }
-        } else if (qname.equals(QNAME_GML_ENVELOPE)) {
-          String lc = element.getSimpleExtension(QNAME_GML_LOWERCORNER);
-          String uc = element.getSimpleExtension(QNAME_GML_UPPERCORNER);
-          if (lc != null && uc != null) {
-            Coordinate c1 = new Coordinate(lc);
-            Coordinate c2 = new Coordinate(uc);
-            pos = new Box(c1,c2);
-          }
-        }
+        pos = getAsPosition(element);
         if (pos != null) {
           getPositionAttributes(element, pos);
           list.add(pos);

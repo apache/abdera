@@ -18,6 +18,7 @@
 package org.apache.abdera.converter;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AccessibleObject;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +57,8 @@ public abstract class AbstractConversionContext
       }
       if (converter == null && !type.isAnnotation()) {
         for (Class knownType : converters.keySet()) {
-          if (knownType.isAssignableFrom(type)) {
+          if (!knownType.isAnnotation() && 
+              knownType.isAssignableFrom(type)) {
             return converters.get(knownType);
           }
         }
@@ -69,6 +71,28 @@ public abstract class AbstractConversionContext
 
   public boolean hasConverter(ObjectContext objectContext) {
     return getConverter(objectContext) != null;
+  }
+  
+  public boolean hasConverter(Object object) {
+    return hasConverter(new ObjectContext(object));
+  }
+  
+  public boolean hasConverter(
+    Object object, 
+    Object parent, 
+    AccessibleObject accessor) {
+      return hasConverter(new ObjectContext(object,parent,accessor));
+  }
+  
+  public boolean hasConverter(Class<?> type) {
+    if (converters.containsKey(type)) return true;
+    if (!type.isAnnotation()) {
+      for (Class<?> t : converters.keySet()) {
+        if (!t.isAnnotation() && 
+            t.isAssignableFrom(type)) return true;
+      }
+    }
+    return false;
   }
 
   public void setConverter(Class<?> type, Converter<?> converter) {

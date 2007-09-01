@@ -100,7 +100,7 @@ public abstract class AbstractConversionContext
   }
 
   public <T> T convert(Object object) {
-    return convert(object,new ObjectContext(object));
+    return (T)convert(object,new ObjectContext(object));
   }
 
   public <T> T convert(Object object, ObjectContext objectContext) {
@@ -115,7 +115,7 @@ public abstract class AbstractConversionContext
   }
 
   public <T> T convert(Object object, Converter<T> converter) {
-    return convert(object,new ObjectContext(object),converter);
+    return (T)convert(object,new ObjectContext(object),converter);
   }
 
   public <T> T convert(

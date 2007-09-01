@@ -18,6 +18,7 @@
 package org.apache.abdera.converter;
 
 import java.io.Serializable;
+import java.lang.reflect.AccessibleObject;
 
 import org.apache.abdera.Abdera;
 
@@ -58,9 +59,24 @@ public interface ConversionContext
   <T>Converter<T> getConverter(ObjectContext objectContext);
   
   /**
-   * True if a converter for the specified object or annotation type has been set
+   * True if a converter for the specified object is available
    */
   boolean hasConverter(ObjectContext objectContext);
 
+  /**
+   * True if a converter for the specified object is available
+   */
+  boolean hasConverter(Object object);
+  
+  /**
+   * True if a converter for the specified object is available
+   */
+  boolean hasConverter(Object object, Object parent, AccessibleObject accessor);
+
+  /**
+   * True if a converter for the specified object is available
+   */
+  boolean hasConverter(Class<?> type);
+  
   Object clone();
 }

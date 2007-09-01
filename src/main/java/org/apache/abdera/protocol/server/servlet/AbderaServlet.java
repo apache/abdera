@@ -39,10 +39,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Simple APP servlet.
- * 
- * @version $Id$
+ * Simple Atompub servlet.
  */
+@SuppressWarnings("unchecked") 
 public class AbderaServlet 
   extends HttpServlet {
 
@@ -120,7 +119,7 @@ public class AbderaServlet
   
   protected Map<String,String> getProperties(ServletConfig config) {
     Map<String,String> properties = new HashMap<String,String>();
-    Enumeration e = config.getInitParameterNames();
+    Enumeration<String> e = config.getInitParameterNames();
     while(e.hasMoreElements()) {
       String key = (String) e.nextElement();
       String val = config.getInitParameter(key);

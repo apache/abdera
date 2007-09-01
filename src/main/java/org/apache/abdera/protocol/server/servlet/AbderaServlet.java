@@ -96,7 +96,7 @@ public class AbderaServlet
     RequestHandler handler = manager.get(reqcontext);
     log.debug("Handler - " + handler);
     try {
-      handler.process(context, reqcontext, response);
+      handler.process(context, reqcontext, new HttpResponseServletAdapter(response));
     } catch (Throwable t) {
       error("Error servicing request", t, response);
       return;

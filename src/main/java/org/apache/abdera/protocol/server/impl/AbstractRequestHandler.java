@@ -19,6 +19,8 @@ package org.apache.abdera.protocol.server.impl;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.abdera.protocol.ItemManager;
+import org.apache.abdera.protocol.server.HttpResponse;
 import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.RequestHandler;
@@ -46,7 +49,7 @@ public abstract class AbstractRequestHandler
   public void process(
     ServiceContext context, 
     RequestContext request,
-    HttpServletResponse response) 
+    HttpResponse response) 
       throws IOException {
     
     log.debug(Messages.get("PROCESSING.REQUEST"));
@@ -55,15 +58,15 @@ public abstract class AbstractRequestHandler
     log.debug(Messages.format("USING.PROVIDER",provider));
     try {
       if (preconditions(provider, request, response)) {
-        output(request, response,provider.request(request));
+        response(request, response,provider.request(request));
       }
     } catch (Throwable e) {
       log.error(Messages.get("OUTPUT.ERROR"), e);
       try {
-        output(request,response,new EmptyResponseContext(500));
+        response(request,response,new EmptyResponseContext(500));
       } catch (Exception ex) {
         log.error(Messages.get("OUTPUT.ERROR"), ex);
-        response.sendError(500);
+        internalServerError(request, response);
       }
     } finally {
       log.debug(Messages.format("RELEASING.PROVIDER", provider));
@@ -74,22 +77,23 @@ public abstract class AbstractRequestHandler
   protected boolean preconditions(
     Provider provider, 
     RequestContext request, 
-    HttpServletResponse response)
+    HttpResponse response)
       throws IOException {
     // Check The Provider    
     if (provider == null) { 
-      noprovider(response); 
+      noprovider(request, response); 
       return false;
     }
     // Check The Target
     Target target = request.getTarget();
     if (target == null) { 
-      notfound(response); 
+      notfound(request, response); 
       return false;
     }
     // Check The Method
     if (!checkMethod(provider,request)) {
       notallowed(
+        request, 
         response, 
         request.getMethod(), 
         provider.getAllowedMethods(target.getType()));
@@ -98,9 +102,9 @@ public abstract class AbstractRequestHandler
     return true;
   }
   
-  protected void output(
+  protected void response(
     RequestContext request,
-    HttpServletResponse response, 
+    HttpResponse response, 
     ResponseContext context) 
       throws IOException, ServletException {
     if (context != null) {
@@ -133,8 +137,27 @@ public abstract class AbstractRequestHandler
         out.close();
       }  
     } else {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      internalServerError(request, response);
     }
+  }
+
+  private void internalServerError(RequestContext request, HttpResponse response)
+    throws UnsupportedEncodingException, IOException {
+    sendError(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+              "There was an error fulfilling your request.");
+  }
+
+  private void sendError(RequestContext request, 
+                         HttpResponse response, int code, 
+                         String message) throws UnsupportedEncodingException,
+    IOException {
+    response.setStatus(code);
+    OutputStream out = response.getOutputStream();
+    OutputStreamWriter writer = new OutputStreamWriter(out, request.getAcceptCharset());
+    // TODO: should we wrap this in some nice HTML?
+    writer.write(message);
+    writer.close();
+    out.close();
   }
   
   protected boolean checkMethod(
@@ -148,20 +171,22 @@ public abstract class AbstractRequestHandler
     return (java.util.Arrays.binarySearch(methods, method) >= 0);
   }
     
-  protected void noprovider(HttpServletResponse response) throws IOException {
-    response.sendError(500, Messages.get("NO.PROVIDER"));
+  protected void noprovider(RequestContext request, HttpResponse response) throws IOException {
+    sendError(request, response, 500, Messages.get("NO.PROVIDER"));
   }
   
-  protected void notfound(HttpServletResponse response) throws IOException {
-    response.sendError(404, Messages.get("NOT.FOUND"));
+  protected void notfound(RequestContext request, HttpResponse response) throws IOException {
+    sendError(request, response, 404,
+              Messages.get("NOT.FOUND"));
   }
   
   protected void notallowed(
-    HttpServletResponse response,
+    RequestContext request, 
+    HttpResponse response,
     String method, 
     String[] methods) 
       throws IOException {
-    response.sendError(405, Messages.format("METHOD.NOT.ALLOWED", method));
+    sendError(request, response, 405, Messages.format("METHOD.NOT.ALLOWED", method));
     response.setHeader("Allow", combine(methods));;
   }
   

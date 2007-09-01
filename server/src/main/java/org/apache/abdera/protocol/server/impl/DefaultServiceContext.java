@@ -50,13 +50,6 @@ public class DefaultServiceContext
     return obj;
   }
   
-  private Object instance(String id, String _default, Object... args) {
-    String instance = getProperty(id);
-    Object obj =  ServiceUtil.newInstance( id, (instance!=null)?instance:_default, abdera, args);
-    logger.debug(Messages.format("RETURNING.INSTANCE", obj, id));
-    return obj;
-  }
-  
   @SuppressWarnings("unchecked")
   public synchronized ItemManager<Provider> getProviderManager() {
     if (providerManager == null) {

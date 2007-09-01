@@ -19,7 +19,6 @@ package org.apache.abdera.protocol.server;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletResponse;
 
 
 public interface RequestHandler {
@@ -27,6 +26,6 @@ public interface RequestHandler {
   void process(
     ServiceContext context, 
     RequestContext request,
-    HttpServletResponse response) throws IOException;
+    HttpResponse output) throws IOException;
   
 }

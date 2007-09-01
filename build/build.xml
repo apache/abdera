@@ -41,6 +41,7 @@
   <property name="core.src" value="${core}/src/main/java" />
   <property name="core.resources" value="${core}/src/main/resources" />
   <property name="core.test" value="${core}/src/test/java" />
+  <property name="core.test.resources" value="${core}/src/test/resources" />
   <property name="core.work" value="${work}/core" />
   <property name="core.jar" value="${dist}/${ant.project.name}.core.${version}.jar" />
   <property name="protocol" value="${basedir}/protocol" />
@@ -235,6 +236,11 @@ Working directory: ${work}
     <mkdir dir="${core.work}/META-INF" />
     <copy todir="${core.work}">
       <fileset dir="${core.resources}" includes="**/*" />
+    </copy>
+    <copy todir="${test}">
+      <fileset dir="${core.test.resources}">
+        <include name="**" />
+      </fileset>
     </copy>
     <copy todir="${core.work}/META-INF">
       <fileset dir="${basedir}">

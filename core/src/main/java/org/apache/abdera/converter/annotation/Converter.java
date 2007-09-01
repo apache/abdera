@@ -15,16 +15,18 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.test.core;
+package org.apache.abdera.converter.annotation;
 
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.TYPE;
 
-public class TestSuite extends junit.framework.TestSuite {
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite());
-  }
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-  public TestSuite() {
-    addTestSuite(CoreTest.class);
-    addTestSuite(ConversionTest.class);
-  }
+@Retention(RUNTIME)
+@Target({TYPE,METHOD,FIELD})
+public @interface Converter {
+  Class<? extends org.apache.abdera.converter.Converter<?>> value();
 }

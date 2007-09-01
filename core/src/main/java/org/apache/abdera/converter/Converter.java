@@ -15,16 +15,22 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.test.core;
+package org.apache.abdera.converter;
 
+public abstract class Converter<T> {
 
-public class TestSuite extends junit.framework.TestSuite {
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite());
+  public T convert(
+    Object source, 
+    ConversionContext context) {
+      return convert(
+        source, 
+        new ObjectContext(source), 
+        context);
   }
-
-  public TestSuite() {
-    addTestSuite(CoreTest.class);
-    addTestSuite(ConversionTest.class);
-  }
+  
+  public abstract T convert(
+    Object source,
+    ObjectContext objectContext,
+    ConversionContext context);
+  
 }

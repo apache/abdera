@@ -15,16 +15,31 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.test.core;
+package org.apache.abdera.converter;
 
+public class ConversionException
+    extends RuntimeException {
 
-public class TestSuite extends junit.framework.TestSuite {
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite());
+  private static final long serialVersionUID = 3399703987771955406L;
+
+  public ConversionException() {
+    super();
   }
 
-  public TestSuite() {
-    addTestSuite(CoreTest.class);
-    addTestSuite(ConversionTest.class);
+  public ConversionException(
+    String message, 
+    Throwable cause) {
+      super(message, cause);
   }
+
+  public ConversionException(
+    String message) {
+      super(message);
+  }
+
+  public ConversionException(
+    Throwable cause) {
+      super(cause);
+  }
+  
 }

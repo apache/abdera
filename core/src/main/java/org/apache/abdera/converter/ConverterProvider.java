@@ -15,16 +15,27 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.test.core;
+package org.apache.abdera.converter;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
-public class TestSuite extends junit.framework.TestSuite {
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite());
+public abstract class ConverterProvider 
+  implements Iterable<Map.Entry<Class<?>,Converter<?>>>{
+
+  protected Map<Class<?>,Converter<?>> converters = 
+    new HashMap<Class<?>,Converter<?>>();
+  
+  protected void setConverter(
+    Class<?> type, 
+    Converter<?> converter) {
+      converters.put(type, converter);
   }
 
-  public TestSuite() {
-    addTestSuite(CoreTest.class);
-    addTestSuite(ConversionTest.class);
+  public Iterator<Entry<Class<?>, Converter<?>>> iterator() {
+    return converters.entrySet().iterator();
   }
+  
 }

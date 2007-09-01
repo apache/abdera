@@ -24,6 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.apache.abdera.converter.ConverterProvider;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.parser.NamedParser;
 import org.apache.abdera.writer.NamedWriter;
@@ -74,6 +75,7 @@ public final class AbderaConfiguration
   private final String writerFactory;
   private final String writer;
   private final List<ExtensionFactory> factories;
+  private final List<ConverterProvider> providers;
   private final Map<String,NamedWriter> writers;
   private final Map<String,NamedParser> parsers;
   
@@ -93,6 +95,7 @@ public final class AbderaConfiguration
     writerFactory = getConfigurationOption(CONFIG_WRITERFACTORY, DEFAULT_WRITERFACTORY);
     writer = getConfigurationOption(CONFIG_WRITER, DEFAULT_WRITER);
     factories = ServiceUtil.loadExtensionFactories();
+    providers = ServiceUtil.loadConverterProviders();
     writers = initNamedWriters();
     parsers = initNamedParsers();
   }  
@@ -184,6 +187,13 @@ public final class AbderaConfiguration
    */
   public List<ExtensionFactory> getExtensionFactories() {
     return factories;
+  }
+  
+  /**
+   * Returns the listing of registered ConverterProvider implementations
+   */
+  public List<ConverterProvider> getConverterProviders() {
+    return providers;
   }
   
   /**

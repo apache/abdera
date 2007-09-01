@@ -15,16 +15,36 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.test.core;
+package org.apache.abdera.converter;
 
+import java.util.List;
+import java.util.Map;
 
-public class TestSuite extends junit.framework.TestSuite {
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite());
+import org.apache.abdera.Abdera;
+
+public class DefaultConversionContext 
+  extends AbstractConversionContext {
+
+  private static final long serialVersionUID = 740460842415905883L;
+
+  public DefaultConversionContext() {
+    super();   
+    initConverters();
   }
-
-  public TestSuite() {
-    addTestSuite(CoreTest.class);
-    addTestSuite(ConversionTest.class);
+  
+  public DefaultConversionContext(Abdera abdera) {
+    super(abdera);
+    initConverters();
   }
+  
+  private void initConverters() {
+    List<ConverterProvider> providers = 
+      getAbdera().getConfiguration().getConverterProviders();
+    for (ConverterProvider provider : providers) {
+      for (Map.Entry<Class<?>,Converter<?>> entry : provider) {
+        setConverter(entry.getKey(), entry.getValue());
+      }
+    }
+  }
+  
 }

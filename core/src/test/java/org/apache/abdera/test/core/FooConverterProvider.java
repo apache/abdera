@@ -17,14 +17,15 @@
 */
 package org.apache.abdera.test.core;
 
+import org.apache.abdera.converter.ConverterProvider;
+import org.apache.abdera.test.core.ConversionTest.Bar;
+import org.apache.abdera.test.core.ConversionTest.FooConverter;
 
-public class TestSuite extends junit.framework.TestSuite {
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite());
+public class FooConverterProvider 
+  extends ConverterProvider {
+  
+  public FooConverterProvider() {
+    setConverter(Bar.class,new FooConverter());
   }
-
-  public TestSuite() {
-    addTestSuite(CoreTest.class);
-    addTestSuite(ConversionTest.class);
-  }
+      
 }

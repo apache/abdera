@@ -308,6 +308,9 @@ Working directory: ${work}
     <javac srcdir="${spring.src}" destdir="${spring.work}" classpathref="spring.dependencies" classpath="${core.work};${protocol.work};${server.work}" debug="${debug}" />
     <javac srcdir="${spring.test.src}" destdir="${test}" classpathref="spring.dependencies" classpath="${core.work};${parser.work};${spring.work};${protocol.work};${server.work}" debug="${debug}" />
     <mkdir dir="${spring.work}/META-INF" />
+    <copy todir="${spring.work}">
+      <fileset dir="${spring.resources}" includes="**/*" />
+    </copy>
     <copy todir="${test}">
       <fileset dir="${spring.test.resources}" includes="**/*" />
     </copy>

@@ -40,7 +40,7 @@ public class ServiceDocumentTest extends TestCase {
         Service svc = factory.newService();
         Workspace ws = svc.addWorkspace("test-ws");
         Collection coll = ws.addCollection("test-coll", ws.getTitle() + "/test-coll");
-        coll.addAcceptsEntry();
+        coll.setAcceptsEntry();
         assertTrue("Collection does not accept entries.", coll.acceptsEntry());
         coll.addAccepts("application/apples");
         assertTrue("Collection does not accept apples.", coll.accepts("application/apples"));
@@ -48,7 +48,7 @@ public class ServiceDocumentTest extends TestCase {
         svc.writeTo(sw);
         // System.out.println(sw);
         String s = sw.toString();
-        assertTrue("Service document does not specify acceptance of entries.", s.contains("application/atom+xml;type=entry"));
+        assertTrue("Service document does not specify acceptance of entries.", s.contains("application/atom+xml; type=entry"));
         assertTrue("Service document does not specify acceptance of apples.", s.contains("application/apples"));
     }
 }

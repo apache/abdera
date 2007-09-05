@@ -99,7 +99,7 @@ public class EntityTag implements Cloneable, Serializable {
   }
 
   public static boolean matches(EntityTag tag1, String tag2) {
-    return tag1.equals(tag2);
+    return tag1.equals(parse(tag2));
   }
 
   private final String tag;

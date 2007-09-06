@@ -19,6 +19,7 @@ package org.apache.abdera.protocol.client;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.Date;
 
 import org.apache.abdera.model.Document;
@@ -49,6 +50,19 @@ public interface ClientResponse extends Response {
    * Returns the inputstream used to read data from this response
    */
   InputStream getInputStream() throws IOException;
+  
+  /**
+   * Returns a reader used to read data from this response.  Will
+   * use the character set declared in the Content-Type to create
+   * the reader
+   */
+  Reader getReader() throws IOException;
+  
+  /**
+   * Returns a reader used to read data from this response. Will
+   * use the character set specified to create the reader
+   */
+  Reader getReader(String charset) throws IOException;
   
   void setInputStream(InputStream in);
 

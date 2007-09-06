@@ -26,6 +26,7 @@ import java.io.Writer;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.util.AbstractWriter;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
@@ -39,6 +40,7 @@ public class FOMWriter
   
   public FOMWriter(Abdera abdera) {}
   
+  @SuppressWarnings("unchecked") 
   public void writeTo(
     Base base, 
     OutputStream out, 
@@ -46,13 +48,23 @@ public class FOMWriter
       throws IOException {
     out = getCompressedOutputStream(out, options);
     String charset = options.getCharset();
-    if (charset != null) {
-      if (base instanceof Document)
-        ((Document)base).setCharset(charset);
-      base.writeTo(new OutputStreamWriter(out,charset));
+    if (charset == null) {
+      if (base instanceof Document) 
+        charset = ((Document)base).getCharset();
+      else if (base instanceof Element) {
+        Document doc = ((Element)base).getDocument();
+        if (doc != null) charset = doc.getCharset();
+      }
+      if (charset == null) charset = "UTF-8";
     } else {
-      base.writeTo(out);
+      Document doc = null;
+      if (base instanceof Document)
+        doc = (Document)base;
+      else if (base instanceof Element)
+        doc = ((Element)base).getDocument();
+      if (doc != null) doc.setCharset(charset);
     }
+    base.writeTo(new OutputStreamWriter(out,charset));  
     finishCompressedOutputStream(out, options);
     if (options.getAutoClose()) out.close();
   }

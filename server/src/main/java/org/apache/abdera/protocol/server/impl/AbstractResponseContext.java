@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.activation.MimeType;
+
 import org.apache.abdera.i18n.iri.Constants;
 import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.protocol.server.ResponseContext;
@@ -234,11 +236,19 @@ public abstract class AbstractResponseContext
   }
   
   public void setContentType(String type) {
+    setContentType(type,null);
+  }
+  
+  public void setContentType(String type, String charset) {
     if (type == null) {
       removeHeader("Content-Type");
       return;
     }
-    setHeader("Content-Type", type);
+    try {
+      MimeType mimeType = new MimeType(type);
+      if (charset != null) mimeType.setParameter("charset", charset);
+      setHeader("Content-Type", mimeType.toString());
+    } catch (Exception e) {}
   }
   
   public void setEntityTag(String etag) {

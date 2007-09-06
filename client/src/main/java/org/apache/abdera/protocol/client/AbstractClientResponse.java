@@ -19,6 +19,8 @@ package org.apache.abdera.protocol.client;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Date;
 
 import javax.activation.MimeType;
@@ -76,6 +78,7 @@ public abstract class AbstractClientResponse
     ParserOptions options) 
       throws ParseException {
     try {
+      if (options == null) options = parser.getDefaultParserOptions();
       String charset = getCharacterEncoding();
       if (charset != null) options.setCharset(charset);
       IRI cl = getContentLocation();
@@ -84,7 +87,7 @@ public abstract class AbstractClientResponse
         cl = r.resolve(cl);
       }
       String base = (cl != null) ? cl.toASCIIString() : getUri();
-      Document<T> doc = parser.parse(getInputStream(), base, options);
+      Document<T> doc = parser.parse(getReader(), base, options);
       EntityTag etag = getEntityTag();
       if (etag != null) doc.setEntityTag(etag);
       Date lm = getLastModified();
@@ -107,6 +110,16 @@ public abstract class AbstractClientResponse
 
   public void setInputStream(InputStream in) {
     this.in = in;
+  }
+  
+  public Reader getReader() throws IOException {
+    String charset = getCharacterEncoding();
+    return getReader(charset != null ? charset : "UTF-8");
+  }
+  
+  public Reader getReader(String charset) throws IOException {
+    if (charset == null) charset = "UTF-8";
+    return new InputStreamReader(getInputStream(),charset);
   }
 
   public Date getServerDate() {

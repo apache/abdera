@@ -24,6 +24,8 @@ import java.io.OutputStream;
 import javax.activation.MimeType;
 
 import org.apache.abdera.model.Base;
+import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.writer.Writer;
 
@@ -43,8 +45,23 @@ public class BaseResponseContext<T extends Base>
     setStatusText("OK");
     this.chunked = chunked;
     try {
-      setContentType(getContentType().toString());
+      MimeType type = getContentType();
+      String charset = type.getParameter("charset");
+      if (charset == null) charset = getCharsetFromBase(base);
+      if (charset == null) charset = "UTF-8";
+      type.setParameter("charset", charset);
+      setContentType(type.toString());
     } catch (Exception e) {}
+  }
+  
+  @SuppressWarnings("unchecked") private String getCharsetFromBase(Base base) {
+    if (base == null) return null;
+    if (base instanceof Document) {
+      return ((Document)base).getCharset();
+    } else if (base instanceof Element) {
+      return getCharsetFromBase(((Element)base).getDocument());
+    }
+    return null;
   }
   
   public T getBase() {

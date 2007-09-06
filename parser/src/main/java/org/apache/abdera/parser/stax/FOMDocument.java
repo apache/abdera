@@ -167,7 +167,9 @@ public class FOMDocument<T extends Element>
   }
   
   public void writeTo(OutputStream out) throws IOException {
-    writeTo(new OutputStreamWriter(out));
+    String charset = getCharset();
+    if (charset == null) charset = "UTF-8";
+    writeTo(new OutputStreamWriter(out, charset));
   }
 
   public void writeTo(java.io.Writer writer) throws IOException {

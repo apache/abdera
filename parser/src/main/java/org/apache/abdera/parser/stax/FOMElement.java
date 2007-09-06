@@ -388,7 +388,9 @@ public class FOMElement
   }
   
   public void writeTo(OutputStream out) throws IOException {
-    writeTo(new OutputStreamWriter(out));
+    Document doc = getDocument();
+    String charset = doc != null ? doc.getCharset() : "UTF-8";
+    writeTo(new OutputStreamWriter(out,charset));
   }
 
   public void writeTo(java.io.Writer writer) throws IOException {

@@ -36,7 +36,7 @@ import org.apache.abdera.util.MimeTypeHelper;
 
 /**
  * Implementation of the current APP Features Draft
- * (http://www.ietf.org/internet-drafts/draft-snell-atompub-feature-05.txt)
+ * (http://www.ietf.org/internet-drafts/draft-snell-atompub-feature-08.txt)
  */
 public final class FeaturesHelper {
 
@@ -55,6 +55,7 @@ public final class FeaturesHelper {
   public static final String FEATURE_XHTML_TITLE           = FEATURE_BASE + "xhtml-title";
   public static final String FEATURE_HTML_TITLE            = FEATURE_BASE + "html-title";
   public static final String FEATURE_TEXT_TITLE            = FEATURE_BASE + "text-title";
+  public static final String FEATURE_SUMMARY               = FEATURE_BASE + "summary";
   public static final String FEATURE_XHTML_SUMMARY         = FEATURE_BASE + "xhtml-summary";
   public static final String FEATURE_HTML_SUMMARY          = FEATURE_BASE + "html-summary";
   public static final String FEATURE_TEXT_SUMMARY          = FEATURE_BASE + "text-summary";
@@ -70,20 +71,20 @@ public final class FeaturesHelper {
   public static final String FEATURE_PRESERVE_INFOSET      = FEATURE_BASE + "preserve-infoset";
   public static final String FEATURE_PRESERVE_ID           = FEATURE_BASE + "preserve-id";
   public static final String FEATURE_PRESERVE_DATES        = FEATURE_BASE + "preserve-dates";
+  public static final String FEATURE_PRESERVE_TITLE        = FEATURE_BASE + "preserve-title";
   public static final String FEATURE_PRESERVE_EXTENSIONS   = FEATURE_BASE + "preserve-extensions";
   public static final String FEATURE_PRESERVE_LINKS        = FEATURE_BASE + "preserve-links";
   public static final String FEATURE_PRESERVE_RIGHTS       = FEATURE_BASE + "preserve-rights";
   public static final String FEATURE_SCHEDULED_PUBLISHING  = FEATURE_BASE + "scheduled-publishing";
+  public static final String FEATURE_SIGNED_ENTRIES        = FEATURE_BASE + "signed-entries";
+  public static final String FEATURE_PERSON_EMAIL          = FEATURE_BASE + "person-email";
+  public static final String FEATURE_PERSON_URI            = FEATURE_BASE + "person-uri";
+  public static final String FEATURE_PUBLISH_EMAIL         = FEATURE_BASE + "publish-email";
+  public static final String FEATURE_PUBLISH_URI           = FEATURE_BASE + "publish-uri";
+  public static final String FEATURE_XML_LANG              = FEATURE_BASE + "xml-lang";
   public static final String FEATURE_THREADING             = ThreadConstants.THR_NS;
-
   
   private static final String ABDERA_FEATURE_BASE = "http://incubator.apache.org/abdera/features/";
-  
-  /**
-   * Indicates that the collection will accept digitally signed entries
-   * If marked as "required", the collection will only accept digitally signed entries
-   */
-  public static final String ABDERA_FEATURE_SIGNATURE = ABDERA_FEATURE_BASE + "signature";
   
   /**
    * Indicates that the collection will preserve XML digital signatures contained

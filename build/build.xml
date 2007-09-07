@@ -480,6 +480,7 @@ Working directory: ${work}
         <include name="**/legal/*" />
         <exclude name="**/json/*" />
         <exclude name="**/*.${version}.jar" />
+        <exclude name="**/abdera-i18n-${i18n.version}.jar" />
         <exclude name="**/${bouncycastle.jar}" />
         <exclude name="**/${geronimo.servlet.jar}" />
         <exclude name="**/${jetty-util.jar}" />
@@ -516,7 +517,7 @@ Working directory: ${work}
         <exclude name="**/.project" />
         <exclude name="**/feedvalidator.org/**/*" />
         <exclude name="**/json/src/**/*" />
-        <exclude name="**/dependencies/work/json/**/*" />
+        <exclude name="dependencies/work/**/*" />
       </fileset>
     </copy>
     <zip destfile="${basedir}/${ant.project.name}.${version}.src.zip" basedir="${work}/dist/" />
@@ -587,6 +588,8 @@ Working directory: ${work}
     <property name="retro_server.jar" value="${dist}/${ant.project.name}.server.${version}.retro.jar" />
     <property name="retro_client.jar" value="${dist}/${ant.project.name}.client.${version}.retro.jar" />
     <property name="retro_spring.jar" value="${dist}/${ant.project.name}.spring.${version}.retro.jar" />
+    <property name="retro_i18n.jar" value="${dist}/lib/abdera-i18n-${i18n.version}.retro.jar" />
+    
     <condition property="do.download.retroweaver">
       <not>
         <available file="${retrozip}" />
@@ -612,6 +615,9 @@ Working directory: ${work}
     <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${client.jar}&quot; &quot;${retro_client.jar}&quot;" />
     </java>
+    <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
+      <arg line="-jar &quot;${i18n.jar}&quot; &quot;${retro_i18n.jar}&quot;" />
+    </java>    
     <antcall target="retro.extensions" />
     <antcall target="retro.security" />
     <antcall target="retro.spring" />

@@ -31,6 +31,7 @@ public class Feature
     UNSUPPORTED,
     UNSPECIFIED,
     SUPPORTED, 
+    PREFERRED,
     REQUIRED,  
   }
   

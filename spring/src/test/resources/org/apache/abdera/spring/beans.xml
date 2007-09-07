@@ -15,9 +15,9 @@
     
     <a:targetResolver>
       <a:regexTargetResolver>
-        <a:collection>/atom/feed(\\?[^#]*)?</a:collection>
-        <a:entry>/atom/feed/([^/#?]+)(\\?[^#]*)?</a:entry>
-        <a:service>/atom(\\?[^#]*)?</a:service>
+        <a:collection>/atom/feed(\?[^#]*)?</a:collection>
+        <a:entry>/atom/feed/([^/#?]+)(\?[^#]*)?</a:entry>
+        <a:service>/atom(\?[^#]*)?</a:service>
       </a:regexTargetResolver>
     </a:targetResolver>
     

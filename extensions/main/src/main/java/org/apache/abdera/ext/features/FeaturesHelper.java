@@ -82,6 +82,7 @@ public final class FeaturesHelper {
   public static final String FEATURE_PUBLISH_EMAIL         = FEATURE_BASE + "publish-email";
   public static final String FEATURE_PUBLISH_URI           = FEATURE_BASE + "publish-uri";
   public static final String FEATURE_XML_LANG              = FEATURE_BASE + "xml-lang";
+  public static final String FEATURE_CONDITIONAL           = FEATURE_BASE + "conditional";
   public static final String FEATURE_THREADING             = ThreadConstants.THR_NS;
   
   private static final String ABDERA_FEATURE_BASE = "http://incubator.apache.org/abdera/features/";

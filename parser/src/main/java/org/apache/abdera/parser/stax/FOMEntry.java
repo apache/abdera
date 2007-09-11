@@ -42,6 +42,7 @@ import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Content.Type;
+import org.apache.abdera.parser.stax.FOMFactory;
 import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
@@ -253,15 +254,12 @@ public class FOMEntry
    * @throws MimeTypeParseException 
    */
   public Content setContent(DataHandler dataHandler, String mediatype) {
-    try {
-      FOMFactory factory = (FOMFactory) this.factory;
-      Content content = factory.newContent(new MimeType(mediatype));
-      content.setDataHandler(dataHandler);
-      setContentElement(content);
-      return content;
-    } catch (javax.activation.MimeTypeParseException e) {
-      throw new org.apache.abdera.util.MimeTypeParseException(e);
-    }
+    FOMFactory factory = (FOMFactory) this.factory;
+    Content content = factory.newContent(Content.Type.MEDIA);
+    content.setDataHandler(dataHandler);
+    if (mediatype != null) content.setMimeType(mediatype);
+    setContentElement(content);
+    return content;
   }
   
   /**

@@ -253,15 +253,12 @@ public class FOMEntry
    * @throws MimeTypeParseException 
    */
   public Content setContent(DataHandler dataHandler, String mediatype) {
-    try {
-      FOMFactory factory = (FOMFactory) this.factory;
-      Content content = factory.newContent(new MimeType(mediatype));
-      content.setDataHandler(dataHandler);
-      setContentElement(content);
-      return content;
-    } catch (javax.activation.MimeTypeParseException e) {
-      throw new org.apache.abdera.util.MimeTypeParseException(e);
-    }
+    FOMFactory factory = (FOMFactory) this.factory;
+    Content content = factory.newContent(Content.Type.MEDIA);
+    content.setDataHandler(dataHandler);
+    if (mediatype != null) content.setMimeType(mediatype);
+    setContentElement(content);
+    return content;
   }
   
   /**

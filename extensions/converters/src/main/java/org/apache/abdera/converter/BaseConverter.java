@@ -22,13 +22,30 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.abdera.converter.annotation.BaseURI;
+import org.apache.abdera.converter.annotation.Charset;
+import org.apache.abdera.converter.annotation.EntityTag;
+import org.apache.abdera.converter.annotation.Language;
+import org.apache.abdera.converter.annotation.LastModified;
+import org.apache.abdera.converter.annotation.Slug;
+import org.apache.abdera.converter.impl.StringConverter;
+import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.model.AtomDate;
+import org.apache.abdera.model.Base;
+import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Element;
 
 @SuppressWarnings("unchecked")
 public abstract class BaseConverter<T> 
@@ -72,7 +89,90 @@ public abstract class BaseConverter<T>
         ((ConventionConversionContext)context)
           .getConventions();
       for (AccessibleObject accessor : objectContext.getAccessors()) {
-        process(source, objectContext, context, conventions, dest, accessor);
+        if (dest instanceof Base && 
+            accessor.isAnnotationPresent(Language.class) || 
+            Language.class.equals(conventions.matchConvention(accessor))) {
+          Object value = eval(accessor,source);
+          ObjectContext valueContext = new ObjectContext(value,source,accessor);
+          StringConverter c = new StringConverter();
+          StringBuffer buf = c.convert(value, valueContext, context);
+          if (buf != null) {
+            if (dest instanceof Document) ((Document)dest).setLanguage(buf.toString());
+            else if (dest instanceof Element) ((Element)dest).setLanguage(buf.toString());
+          }
+        } else if (dest instanceof Base &&
+            accessor.isAnnotationPresent(BaseURI.class) || 
+            BaseURI.class.equals(conventions.matchConvention(accessor))) {
+          
+          Object value = eval(accessor,source);
+          String iri = null;
+          if (value instanceof URI) {
+            iri = value.toString();
+          } else if (value instanceof URL) {
+            iri = value.toString();
+          } else if (value instanceof IRI) {
+            iri = value.toString();
+          } else {
+            ObjectContext valueContext = new ObjectContext(value,source,accessor);
+            StringConverter c = new StringConverter();
+            StringBuffer buf = c.convert(value, valueContext, context);
+            iri = buf.toString();
+          }
+          if (iri != null) {
+            if (dest instanceof Document) ((Document)dest).setBaseUri(iri);
+            else if (dest instanceof Element) ((Element)dest).setBaseUri(iri);
+          }
+        } else if (dest instanceof Document && 
+          accessor.isAnnotationPresent(Slug.class) || 
+          Slug.class.equals(conventions.matchConvention(accessor))) {
+            Object value = eval(accessor,source);
+            ObjectContext valueContext = new ObjectContext(value,source,accessor);
+            StringConverter c = new StringConverter();
+            StringBuffer buf = c.convert(value, valueContext, context);
+            if (buf != null) ((Document)dest).setSlug(buf.toString());
+        } else if (dest instanceof Document && 
+            accessor.isAnnotationPresent(LastModified.class) || 
+            LastModified.class.equals(conventions.matchConvention(accessor))) {
+          Object value = eval(accessor,source);
+          Document doc = (Document)dest;
+          if (value instanceof Date) {
+            doc.setLastModified((Date)value);
+          } else if (value instanceof Calendar) {
+            Calendar cal = (Calendar)value;
+            doc.setLastModified(cal.getTime());
+          } else if (value instanceof Long) {
+            Long l = (Long) value;
+            doc.setLastModified(new Date(l.longValue()));
+          } else if (value instanceof String) {
+            doc.setLastModified(AtomDate.parse((String)value));
+          } else {
+            StringConverter s = new StringConverter();
+            StringBuffer v = s.convert(source, objectContext, context);
+            if (v != null) doc.setLastModified(AtomDate.parse(v.toString()));
+          }
+        } else if (dest instanceof Document && 
+            accessor.isAnnotationPresent(Charset.class) || 
+            Charset.class.equals(conventions.matchConvention(accessor))) {
+          Object value = eval(accessor,source);
+          ObjectContext valueContext = new ObjectContext(value,source,accessor);
+          StringConverter c = new StringConverter();
+          StringBuffer buf = c.convert(value, valueContext, context);
+          if (buf != null) ((Document)dest).setCharset(buf.toString());
+        } else if (dest instanceof Document && 
+            accessor.isAnnotationPresent(EntityTag.class) || 
+            EntityTag.class.equals(conventions.matchConvention(accessor))) {
+              Object value = eval(accessor,source);
+              if (value instanceof org.apache.abdera.util.EntityTag) {
+                ((Document)dest).setEntityTag((org.apache.abdera.util.EntityTag)value);
+              } else {
+                ObjectContext valueContext = new ObjectContext(value,source,accessor);
+                StringConverter c = new StringConverter();
+                StringBuffer buf = c.convert(value, valueContext, context);
+                if (buf != null) ((Document)dest).setEntityTag(buf.toString());
+              }
+        } else {
+          process(source, objectContext, context, conventions, dest, accessor);
+        }
       }      
       finish(
         source, 

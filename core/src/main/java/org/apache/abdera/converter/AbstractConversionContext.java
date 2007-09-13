@@ -19,6 +19,8 @@ package org.apache.abdera.converter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -94,6 +96,15 @@ public abstract class AbstractConversionContext
     }
     return false;
   }
+  
+  public boolean hasConverter(AccessibleObject accessor) {
+    Class<? extends Object> returnType = getReturnType(accessor);
+    org.apache.abdera.converter.annotation.Converter converter = 
+      accessor.getAnnotation(org.apache.abdera.converter.annotation.Converter.class);
+    if (converter != null && hasConverter(converter.value())) return true;
+    if (returnType != null && hasConverter(returnType)) return true;
+    return false;
+  }
 
   public void setConverter(Class<?> type, Converter<?> converter) {
     converters.put(type, converter);
@@ -145,4 +156,14 @@ public abstract class AbstractConversionContext
   protected Object copy() {
     return new RuntimeException(new CloneNotSupportedException());
   }
+  
+  public static Class<? extends Object> getReturnType(
+    AccessibleObject accessor) {
+      if (accessor instanceof Field)
+        return ((Field)accessor).getType();
+      else if (accessor instanceof Method) 
+        return ((Method)accessor).getReturnType();
+      else return null;
+  }
+
 }

@@ -29,12 +29,14 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.converter.ConventionConversionContext;
 import org.apache.abdera.converter.ConversionContext;
 import org.apache.abdera.converter.annotation.Category;
+import org.apache.abdera.converter.annotation.Entry;
 import org.apache.abdera.converter.annotation.Feed;
 import org.apache.abdera.converter.annotation.Generator;
 import org.apache.abdera.converter.annotation.Link;
 import org.apache.abdera.converter.annotation.Rel;
 import org.apache.abdera.converter.annotation.Scheme;
 import org.apache.abdera.converter.annotation.TextType;
+import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Text;
 
 public class ConverterTest extends TestCase {
@@ -46,10 +48,16 @@ public class ConverterTest extends TestCase {
     
     FooFeed fooFeed = new FooFeed();
     
-    Object object = context.convert(fooFeed);
+    org.apache.abdera.model.Feed feed = context.convert(fooFeed);
     
-    System.out.println(object);
+    System.out.println(feed);
     
+    Document<org.apache.abdera.model.Feed> doc = feed.getDocument();
+    System.out.println(doc.getSlug());
+    
+    FooEntry fooEntry = new FooEntry();
+    org.apache.abdera.model.Entry entry = context.convert(fooEntry);
+    System.out.println(entry);
   }
   
   @Feed
@@ -66,8 +74,12 @@ public class ConverterTest extends TestCase {
     @Generator(version="1.0",uri="http://example.org") public String generator = "Bob";
     
     public FooEntry[] entries = new FooEntry[] { new FooEntry() };
+    
+    public String slug = "slug";
+    public Date lastmodified = new Date();
   }
   
+  @Entry
   public static class FooEntry {
     public String id = "http://example.org/1/1";
     @TextType(Text.Type.XHTML) public String title = "The title";

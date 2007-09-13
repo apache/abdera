@@ -22,6 +22,7 @@ import java.lang.reflect.AccessibleObject;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.converter.annotation.Feed;
+import org.apache.abdera.converter.annotation.Entry;
 
 public class ConventionConversionContext 
   extends DefaultConversionContext {
@@ -86,6 +87,5 @@ public class ConventionConversionContext
   }
   
   @SuppressWarnings("unchecked") private static final Class[] annotations = 
-  {Feed.class, 
-  };
+  {Feed.class, Entry.class};
 }

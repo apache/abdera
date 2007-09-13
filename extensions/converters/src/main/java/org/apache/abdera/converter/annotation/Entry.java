@@ -17,15 +17,18 @@
 */
 package org.apache.abdera.converter.annotation;
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.apache.abdera.converter.impl.EntryConverter;
+
 @Retention(RUNTIME)
 @Target({TYPE,METHOD,FIELD})
 @Convention(".*entry|.*entries")
+@Converter(EntryConverter.class)
 public @interface Entry {}

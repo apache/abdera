@@ -78,5 +78,10 @@ public interface ConversionContext
    */
   boolean hasConverter(Class<?> type);
   
+  /**
+   * True if a converter for the specified accessor is available
+   */
+  boolean hasConverter(AccessibleObject accessor);
+  
   Object clone();
 }

@@ -46,7 +46,12 @@ public class ObjectContext {
     Object object, 
     Object parent, 
     AccessibleObject accessor) {
-      this.objectType = object != null ? object.getClass() : null;
+      this.objectType = 
+        object != null ? 
+          object.getClass() : 
+        accessor != null ? 
+          AbstractConversionContext.getReturnType(accessor) : 
+          null;
       this.parent = parent;
       this.accessor = accessor;
       this.annotations = initAnnotations();

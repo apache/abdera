@@ -153,9 +153,9 @@ public abstract class AbstractRequestHandler
     IOException {
     response.setStatus(code);
     OutputStream out = response.getOutputStream();
-    OutputStreamWriter writer = new OutputStreamWriter(out, request.getAcceptCharset());
+    OutputStreamWriter writer = new OutputStreamWriter(out, "UTF-8");
     // TODO: should we wrap this in some nice HTML?
-    writer.write(message);
+    writer.write(message != null ? message : "");
     writer.close();
     out.close();
   }

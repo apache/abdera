@@ -24,6 +24,7 @@ import org.apache.abdera.converter.annotation.Author;
 import org.apache.abdera.converter.annotation.BaseURI;
 import org.apache.abdera.converter.annotation.Categories;
 import org.apache.abdera.converter.annotation.Category;
+import org.apache.abdera.converter.annotation.Charset;
 import org.apache.abdera.converter.annotation.Collection;
 import org.apache.abdera.converter.annotation.Content;
 import org.apache.abdera.converter.annotation.ContentType;
@@ -33,6 +34,7 @@ import org.apache.abdera.converter.annotation.Direction;
 import org.apache.abdera.converter.annotation.Draft;
 import org.apache.abdera.converter.annotation.Edited;
 import org.apache.abdera.converter.annotation.Email;
+import org.apache.abdera.converter.annotation.EntityTag;
 import org.apache.abdera.converter.annotation.Entry;
 import org.apache.abdera.converter.annotation.Extension;
 import org.apache.abdera.converter.annotation.Generator;
@@ -42,6 +44,7 @@ import org.apache.abdera.converter.annotation.ID;
 import org.apache.abdera.converter.annotation.Icon;
 import org.apache.abdera.converter.annotation.Label;
 import org.apache.abdera.converter.annotation.Language;
+import org.apache.abdera.converter.annotation.LastModified;
 import org.apache.abdera.converter.annotation.Length;
 import org.apache.abdera.converter.annotation.Link;
 import org.apache.abdera.converter.annotation.Logo;
@@ -51,6 +54,7 @@ import org.apache.abdera.converter.annotation.Published;
 import org.apache.abdera.converter.annotation.Rel;
 import org.apache.abdera.converter.annotation.Rights;
 import org.apache.abdera.converter.annotation.Scheme;
+import org.apache.abdera.converter.annotation.Slug;
 import org.apache.abdera.converter.annotation.Source;
 import org.apache.abdera.converter.annotation.Src;
 import org.apache.abdera.converter.annotation.Subtitle;
@@ -111,7 +115,11 @@ public class DefaultConventions
     URI.class, 
     Value.class, 
     Version.class, 
-    Workspace.class
+    Workspace.class,
+    Slug.class,
+    EntityTag.class,
+    Charset.class,
+    LastModified.class
    };
   
   public DefaultConventions() {

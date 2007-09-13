@@ -30,7 +30,6 @@ import org.apache.abdera.converter.annotation.Content;
 import org.apache.abdera.converter.annotation.ContentType;
 import org.apache.abdera.converter.annotation.Contributor;
 import org.apache.abdera.converter.annotation.Control;
-import org.apache.abdera.converter.annotation.Direction;
 import org.apache.abdera.converter.annotation.Draft;
 import org.apache.abdera.converter.annotation.Edited;
 import org.apache.abdera.converter.annotation.Email;
@@ -83,7 +82,6 @@ public class DefaultConventions
     ContentType.class, 
     Contributor.class, 
     Control.class, 
-    Direction.class, 
     Draft.class, 
     Edited.class, 
     Email.class, 

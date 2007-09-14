@@ -30,6 +30,7 @@ import org.apache.abdera.converter.ConventionConversionContext;
 import org.apache.abdera.converter.ConversionContext;
 import org.apache.abdera.converter.annotation.Category;
 import org.apache.abdera.converter.annotation.Entry;
+import org.apache.abdera.converter.annotation.Extension;
 import org.apache.abdera.converter.annotation.Feed;
 import org.apache.abdera.converter.annotation.Generator;
 import org.apache.abdera.converter.annotation.Link;
@@ -94,6 +95,8 @@ public class ConverterTest extends TestCase {
     //@MediaType("text/html") public IRI content = new IRI("http://example.com");
     
     public DataHandler content = new DataHandler(new URLDataSource(getUrl()));
+    
+    @Extension(simple=true,name="foo",ns="urn:foo") public String ext = "extension";
     
     private static URL getUrl() {
       try {

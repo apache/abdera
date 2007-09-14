@@ -25,8 +25,10 @@ import org.apache.abdera.converter.Conventions;
 import org.apache.abdera.converter.ConversionContext;
 import org.apache.abdera.converter.ObjectContext;
 import org.apache.abdera.converter.annotation.Email;
+import org.apache.abdera.converter.annotation.Extension;
 import org.apache.abdera.converter.annotation.Name;
 import org.apache.abdera.converter.annotation.URI;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.util.Constants;
@@ -76,7 +78,7 @@ public class PersonConverter
         if (v != null) dest.setName(v.toString());
       }
 
-      if (accessor.isAnnotationPresent(Email.class) || 
+      else if (accessor.isAnnotationPresent(Email.class) || 
           Email.class.equals(conventions.matchConvention(accessor))) {
         Object value = eval(accessor, source);
         ObjectContext valueContext = new ObjectContext(value);
@@ -85,13 +87,34 @@ public class PersonConverter
         if (v != null) dest.setEmail(v.toString());
       }
       
-      if (accessor.isAnnotationPresent(URI.class) || 
+      else if (accessor.isAnnotationPresent(URI.class) || 
           URI.class.equals(conventions.matchConvention(accessor))) {
         Object value = eval(accessor, source);
         ObjectContext valueContext = new ObjectContext(value);
         IRIConverter c = new IRIConverter(Constants.URI);
         IRIElement iri = c.convert(value, valueContext, context);
         if (iri != null) dest.setUriElement(iri);
+      }
+      
+      else if (accessor.isAnnotationPresent(Extension.class) || 
+          Extension.class.equals(conventions.matchConvention(accessor))) {
+        Extension ext = objectContext.getAnnotation(Extension.class);
+        Object val = eval(accessor, source);
+        Object[] values = toArray(val);
+        for (Object value : values) {
+          ObjectContext valueContext = new ObjectContext(value, source, accessor);
+          QName qname = ExtensionConverter.getQName(ext);
+          if (ext.simple() && qname != null) {
+            StringConverter c = new StringConverter();
+            StringBuffer buf = c.convert(value, valueContext, context);
+            dest.addSimpleExtension(qname, buf.toString());
+          } else {
+            Object converted = context.convert(value, valueContext);
+            if (converted != null && converted instanceof Element) {
+              dest.addExtension((Element)converted);
+            }
+          }
+        }
       }
   }
 

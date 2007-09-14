@@ -21,7 +21,6 @@ import java.lang.reflect.AccessibleObject;
 
 import javax.activation.MimeType;
 
-import org.apache.abdera.converter.BaseConverter;
 import org.apache.abdera.converter.Conventions;
 import org.apache.abdera.converter.ConversionContext;
 import org.apache.abdera.converter.ObjectContext;
@@ -35,7 +34,7 @@ import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Link;
 
 public class LinkConverter 
-  extends BaseConverter<Link> {
+  extends ExtensionConverter<Link> {
 
   @Override 
   protected Link create(
@@ -89,7 +88,7 @@ public class LinkConverter
         if (v != null) dest.setHref(v.toString());
       }
 
-      if (accessor.isAnnotationPresent(MediaType.class) || 
+      else if (accessor.isAnnotationPresent(MediaType.class) || 
           MediaType.class.equals(conventions.matchConvention(accessor))) {
         Object value = eval(accessor, source);
         if (value != null && value instanceof MimeType) {
@@ -102,7 +101,7 @@ public class LinkConverter
         }
       }
       
-      if (accessor.isAnnotationPresent(Title.class) || 
+      else if (accessor.isAnnotationPresent(Title.class) || 
           Title.class.equals(conventions.matchConvention(accessor))) {
         Object value = eval(accessor, source);
         ObjectContext valueContext = new ObjectContext(value,source,accessor);
@@ -111,7 +110,7 @@ public class LinkConverter
         if (v != null) dest.setTitle(v.toString());
       }
 
-      if (accessor.isAnnotationPresent(HrefLanguage.class) || 
+      else if (accessor.isAnnotationPresent(HrefLanguage.class) || 
           HrefLanguage.class.equals(conventions.matchConvention(accessor))) {
         Object value = eval(accessor, source);
         ObjectContext valueContext = new ObjectContext(value,source,accessor);
@@ -120,7 +119,7 @@ public class LinkConverter
         if (v != null) dest.setHrefLang(v.toString());
       }
 
-      if (accessor.isAnnotationPresent(Rel.class) || 
+      else if (accessor.isAnnotationPresent(Rel.class) || 
           Rel.class.equals(conventions.matchConvention(accessor))) {
         Object value = eval(accessor, source);
         ObjectContext valueContext = new ObjectContext(value,source,accessor);
@@ -129,7 +128,7 @@ public class LinkConverter
         if (v != null) dest.setRel(v.toString());
       }
 
-      if (accessor.isAnnotationPresent(Length.class) || 
+      else if (accessor.isAnnotationPresent(Length.class) || 
           Length.class.equals(conventions.matchConvention(accessor))) {
         Object value = eval(accessor, source);
         if (value instanceof Long) {
@@ -148,6 +147,15 @@ public class LinkConverter
         }
       }
 
+      else {
+        super.process(
+          source, 
+          objectContext, 
+          context, 
+          conventions, 
+          dest, 
+          accessor);
+      }
   }
 
 }

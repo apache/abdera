@@ -19,7 +19,6 @@ package org.apache.abdera.converter.impl;
 
 import java.lang.reflect.AccessibleObject;
 
-import org.apache.abdera.converter.BaseConverter;
 import org.apache.abdera.converter.Conventions;
 import org.apache.abdera.converter.ConversionContext;
 import org.apache.abdera.converter.ObjectContext;
@@ -43,7 +42,7 @@ import org.apache.abdera.model.Text;
 import org.apache.abdera.util.Constants;
 
 public class EntryConverter 
-  extends BaseConverter<Entry> {
+  extends ExtensionConverter<Entry> {
   
   @Override 
   protected Entry create(
@@ -178,7 +177,16 @@ public class EntryConverter
         org.apache.abdera.model.Content content = c.convert(value, valueContext, context);
         entry.setContentElement(content);
       }
-      
+
+      else {
+        super.process(
+          source, 
+          objectContext, 
+          context, 
+          conventions, 
+          entry, 
+          accessor);
+      }
   }
     
 }

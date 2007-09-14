@@ -41,7 +41,7 @@ public class ConversionTest extends TestCase {
     assertNotNull(converter);
     assertTrue(converter instanceof FooConverter);
     
-    Element fooEl = context.convert(foo);
+    Element fooEl = context.convert(foo,fooContext);
     
     assertNotNull(fooEl);
     

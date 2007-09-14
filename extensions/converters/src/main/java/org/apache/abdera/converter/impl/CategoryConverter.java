@@ -19,7 +19,6 @@ package org.apache.abdera.converter.impl;
 
 import java.lang.reflect.AccessibleObject;
 
-import org.apache.abdera.converter.BaseConverter;
 import org.apache.abdera.converter.Conventions;
 import org.apache.abdera.converter.ConversionContext;
 import org.apache.abdera.converter.ObjectContext;
@@ -29,7 +28,7 @@ import org.apache.abdera.converter.annotation.Term;
 import org.apache.abdera.model.Category;
 
 public class CategoryConverter 
-  extends BaseConverter<Category> {
+  extends ExtensionConverter<Category> {
 
   @Override 
   protected Category create(
@@ -77,7 +76,7 @@ public class CategoryConverter
         if (v != null) dest.setTerm(v.toString());
       }
       
-      if (accessor.isAnnotationPresent(Scheme.class) || 
+      else if (accessor.isAnnotationPresent(Scheme.class) || 
           Scheme.class.equals(conventions.matchConvention(accessor))) {
         Object value = eval(accessor, source);
         ObjectContext valueContext = new ObjectContext(value,source,accessor);
@@ -86,13 +85,23 @@ public class CategoryConverter
         if (v != null) dest.setScheme(v.toString());
       }
       
-      if (accessor.isAnnotationPresent(Label.class) || 
+      else if (accessor.isAnnotationPresent(Label.class) || 
           Label.class.equals(conventions.matchConvention(accessor))) {
         Object value = eval(accessor, source);
         ObjectContext valueContext = new ObjectContext(value,source,accessor);
         StringConverter s = new StringConverter();
         StringBuffer v = s.convert(value, valueContext, context);
         if (v != null) dest.setLabel(v.toString());
+      }
+      
+      else {
+        super.process(
+          source, 
+          objectContext, 
+          context, 
+          conventions, 
+          dest, 
+          accessor);
       }
   }
 

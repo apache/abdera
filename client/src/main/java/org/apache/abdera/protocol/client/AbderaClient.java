@@ -20,6 +20,7 @@ package org.apache.abdera.protocol.client;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,7 @@ import org.apache.abdera.protocol.client.util.SimpleSSLProtocolSocketFactory;
 import org.apache.abdera.protocol.util.CacheControlUtil;
 import org.apache.abdera.util.ServiceUtil;
 import org.apache.abdera.util.Version;
+import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
@@ -565,5 +567,72 @@ public class AbderaClient {
           scheme != null ? scheme : AuthScope.ANY_SCHEME);
       client.getState().setProxyCredentials(
         scope, credentials);
+  }
+  
+  /**
+   * Manually add cookies
+   */
+  public void addCookie(
+    String domain, 
+    String name, 
+    String value) {
+      Cookie cookie = new Cookie(domain,name,value);
+      client.getState().addCookie(cookie);
+  }
+  
+  /**
+   * Manually add cookies
+   */
+  public void addCookie(
+    String domain, 
+    String name, 
+    String value, 
+    String path,
+    Date expires,
+    boolean secure) {
+      Cookie cookie = new Cookie(domain,name,value,path,expires,secure);
+      client.getState().addCookie(cookie);
+  }  
+
+  /**
+   * Manually add cookies
+   */
+  public void addCookie(
+    String domain, 
+    String name, 
+    String value, 
+    String path,
+    int maxAge,
+    boolean secure) {
+      Cookie cookie = new Cookie(domain,name,value,path,maxAge,secure);
+      client.getState().addCookie(cookie);
+  }  
+
+  /**
+   * Manually add cookies
+   */
+  public void addCookies(Cookie cookie) {
+    client.getState().addCookie(cookie);
+  }
+  
+  /**
+   * Manually add cookies
+   */
+  public void addCookies(Cookie... cookies) {
+    client.getState().addCookies(cookies);
+  }
+  
+  /**
+   * Get all the cookies
+   */
+  public Cookie[] getCookies() {
+    return client.getState().getCookies();
+  }
+  
+  /**
+   * Clear the cookies
+   */
+  public void clearCookies() {
+    client.getState().clearCookies();
   }
 }

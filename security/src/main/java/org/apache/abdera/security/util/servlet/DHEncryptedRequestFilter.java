@@ -38,7 +38,7 @@ import org.apache.abdera.security.util.DHContext;
  * Note: this is currently untested.
  */
 public class DHEncryptedRequestFilter 
-  extends BCEncryptedRequestFilter {
+  extends AbstractEncryptedRequestFilter {
   
   @Override
   public void init(FilterConfig config) throws ServletException {

@@ -458,6 +458,8 @@ Working directory: ${work}
         <exclude name="**/${xmlsecurity.jar}" unless="do.security" />
         <exclude name="**/${spring.mock.dir}" unless="do.spring" />
         <exclude name="**/${spring.web.dir}"  unless="do.spring" />
+        <exclude name="**/${bouncycastle.jar}" />
+        <exclude name="**/${bouncycastle.jar.retro}" />
       </fileset>
       <fileset dir="${docs}" includes="**/*" />
       <fileset dir="${basedir}">
@@ -489,6 +491,8 @@ Working directory: ${work}
         <exclude name="**/${xmlsecurity.jar}" unless="do.security" />
         <exclude name="**/${spring.mock.dir}" unless="do.spring" />
         <exclude name="**/${spring.web.dir}"  unless="do.spring" />
+        <exclude name="**/${bouncycastle.jar}" />
+        <exclude name="**/${bouncycastle.jar.retro}" />
       </fileset>
       <fileset dir="${docs}" includes="**/*" />
       <fileset dir="${basedir}">

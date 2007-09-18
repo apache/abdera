@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.examples.security;
 
+import java.security.Provider;
 import java.security.Security;
 
 import javax.crypto.KeyGenerator;
@@ -35,12 +36,17 @@ public class Enc {
   @SuppressWarnings("unchecked")
   public static void main(String[] args) throws Exception {
     
-    // Prepare the crypto provider
+    Abdera abdera = new Abdera();
+    
     try {
-      Class.forName("org.bouncycastle.LICENSE");
-      Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+      String jce = abdera.getConfiguration().getConfigurationOption(
+        "jce.provider",
+        "org.bouncycastle.jce.provider.BouncyCastleProvider");
+      Class provider = Class.forName(jce);
+      Provider p = (Provider)provider.newInstance();
+      Security.addProvider(p);
     } catch (Exception e) {
-      throw new RuntimeException("The Bouncy Castle JCE Provider is not available");
+     // The Configured JCE Provider is not available... try to proceed anyway
     }
     
     // Generate Encryption Key
@@ -51,7 +57,6 @@ public class Enc {
     SecretKey key = keyGenerator.generateKey();
 
     // Create the entry to encrypt
-    Abdera abdera = new Abdera();
     AbderaSecurity absec = new AbderaSecurity(abdera);
     Factory factory = abdera.getFactory();
     

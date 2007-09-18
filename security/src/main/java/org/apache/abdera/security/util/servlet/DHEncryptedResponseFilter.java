@@ -69,7 +69,7 @@ import org.apache.abdera.security.util.DHContext;
  * </pre>
  */
 public class DHEncryptedResponseFilter 
-  extends BCEncryptedResponseFilter {
+  extends AbstractEncryptedResponseFilter {
     
   protected boolean doEncryption(ServletRequest request, Object arg) {
     return arg != null;

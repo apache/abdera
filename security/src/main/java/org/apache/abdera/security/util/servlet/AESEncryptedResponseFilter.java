@@ -43,7 +43,7 @@ import org.apache.xml.security.encryption.XMLCipher;
  * </pre>
  */
 public class AESEncryptedResponseFilter 
-  extends BCEncryptedResponseFilter {
+  extends AbstractEncryptedResponseFilter {
 
   public static final String PUBLICKEY = "X-PublicKey";
   

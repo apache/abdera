@@ -22,7 +22,7 @@ import javax.xml.namespace.QName;
 public interface OpenSearchConstants {
 
   public static final String OPENSEARCH_V10_NS = "http://a9.com/-/spec/opensearchrss/1.0/";
-  public static final String OPENSEARCH_NS = "http://a9.com/-/spec/opensearchrss/1.1/";
+  public static final String OPENSEARCH_NS = "http://a9.com/-/spec/opensearch/1.1/";
 
   public static final String TOTAL_RESULTS_LN  = "totalResults";
   public static final String ITEMS_PER_PAGE_LN = "itemsPerPage";

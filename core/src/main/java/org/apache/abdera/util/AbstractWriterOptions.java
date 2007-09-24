@@ -23,7 +23,7 @@ import org.apache.abdera.writer.WriterOptions;
 public abstract class AbstractWriterOptions 
   implements WriterOptions {
 
-  protected String charset = null;
+  protected String charset = "UTF-8";
   protected CompressionCodec[] codecs = null;
   protected boolean autoclose = false;
   

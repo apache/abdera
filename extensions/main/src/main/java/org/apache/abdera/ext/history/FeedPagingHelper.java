@@ -19,10 +19,10 @@ package org.apache.abdera.ext.history;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.model.Element;
-import org.apache.abdera.model.Feed;
-import org.apache.abdera.model.Link;
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.model.Element;
+import org.apache.abdera.model.Link;
+import org.apache.abdera.model.Source;
 
 /**
  * Initial support for Mark Nottingham's Feed Paging and Archiving draft 
@@ -43,7 +43,7 @@ public final class FeedPagingHelper {
    * in the feed document SHOULD NOT be considered to be part of that feed."
    * @param feed The feed to check
    */
-  public static boolean isComplete(Feed feed) {
+  public static boolean isComplete(Source feed) {
     return (feed.getExtension(COMPLETE) != null);
   }
   
@@ -54,7 +54,7 @@ public final class FeedPagingHelper {
    * @param feed The Feed to mark as complete
    * @param complete True if the feed is complete
    */
-  public static void setComplete(Feed feed, boolean complete) {
+  public static void setComplete(Source feed, boolean complete) {
     if (complete) {
       if (!isComplete(feed)) feed.addExtension(COMPLETE);
     } else {
@@ -70,7 +70,7 @@ public final class FeedPagingHelper {
    * @param feed The Feed to mark as an archive
    * @param archive True if the feed is an archive
    */
-  public static void setArchive(Feed feed, boolean archive) {
+  public static void setArchive(Source feed, boolean archive) {
     if (archive) {
       if (!isArchive(feed)) feed.addExtension(ARCHIVE);
     } else {
@@ -85,7 +85,7 @@ public final class FeedPagingHelper {
    * Return true if the feed has been marked as an archive
    * @param feed The feed to check
    */
-  public static boolean isArchive(Feed feed) {
+  public static boolean isArchive(Source feed) {
     return feed.getExtension(ARCHIVE) != null;
   }
   
@@ -94,7 +94,7 @@ public final class FeedPagingHelper {
    * paging link relations
    * @param feed The feed to check
    */
-  public static boolean isPaged(Feed feed) {
+  public static boolean isPaged(Source feed) {
     return feed.getLink("next") != null ||
            feed.getLink("previous") != null ||
            feed.getLink("first") != null ||
@@ -107,7 +107,7 @@ public final class FeedPagingHelper {
    * @param iri The IRI of the next feed document
    * @return The newly created Link
    */
-  public static Link setNext(Feed feed, String iri) {
+  public static Link setNext(Source feed, String iri) {
     Link link = feed.getLink("next");
     if (link != null) {
       link.setHref(iri);
@@ -123,7 +123,7 @@ public final class FeedPagingHelper {
    * @param iri The IRI of the previous feed document
    * @return The newly created Link
    */
-  public static Link setPrevious(Feed feed, String iri) {
+  public static Link setPrevious(Source feed, String iri) {
     Link link = feed.getLink("previous");
     if (link != null) {
       link.setHref(iri);
@@ -139,7 +139,7 @@ public final class FeedPagingHelper {
    * @param iri The IRI of the first feed document
    * @return The newly created Link
    */
-  public static Link setFirst(Feed feed, String iri) {
+  public static Link setFirst(Source feed, String iri) {
     Link link = feed.getLink("first");
     if (link != null) {
       link.setHref(iri);
@@ -155,7 +155,7 @@ public final class FeedPagingHelper {
    * @param iri The IRI of the last feed document
    * @return The newly created Link
    */
-  public static Link setLast(Feed feed, String iri) {
+  public static Link setLast(Source feed, String iri) {
     Link link = feed.getLink("last");
     if (link != null) {
       link.setHref(iri);
@@ -171,7 +171,7 @@ public final class FeedPagingHelper {
    * @param iri The IRI of the next archive feed document
    * @return The newly created Link
    */
-  public static Link setNextArchive(Feed feed, String iri) {
+  public static Link setNextArchive(Source feed, String iri) {
     Link link = feed.getLink("next-archive");
     if (link == null) { // try the full IANA URI version
       link = feed.getLink(Link.IANA_BASE + "next-archive");
@@ -190,7 +190,7 @@ public final class FeedPagingHelper {
    * @param iri The IRI of the previous archive feed document
    * @return The newly created Link
    */
-  public static Link setPreviousArchive(Feed feed, String iri) {
+  public static Link setPreviousArchive(Source feed, String iri) {
     Link link = feed.getLink("prev-archive");
     if (link == null) { // try the full IANA URI version
       link = feed.getLink(Link.IANA_BASE + "prev-archive");
@@ -209,7 +209,7 @@ public final class FeedPagingHelper {
    * @param iri The IRI of the current feed document
    * @return The newly created Link
    */
-  public static Link setCurrent(Feed feed, String iri) {
+  public static Link setCurrent(Source feed, String iri) {
     Link link = feed.getLink("current");
     if (link == null) { // try the full IANA URI version
       link = feed.getLink(Link.IANA_BASE + "current");
@@ -225,7 +225,7 @@ public final class FeedPagingHelper {
   /**
    * Returns the IRI of the next link relation
    */
-  public static IRI getNext(Feed feed) {
+  public static IRI getNext(Source feed) {
     Link link = feed.getLink("next");
     return (link != null) ? link.getResolvedHref() : null;
   }
@@ -233,7 +233,7 @@ public final class FeedPagingHelper {
   /**
    * Returns the IRI of the previous link relation
    */
-  public static IRI getPrevious(Feed feed) {
+  public static IRI getPrevious(Source feed) {
     Link link = feed.getLink("previous");
     return (link != null) ? link.getResolvedHref() : null;
   }
@@ -241,7 +241,7 @@ public final class FeedPagingHelper {
   /**
    * Returns the IRI of the first link relation
    */
-  public static IRI getFirst(Feed feed) {
+  public static IRI getFirst(Source feed) {
     Link link = feed.getLink("first");
     return (link != null) ? link.getResolvedHref() : null;
   }
@@ -249,7 +249,7 @@ public final class FeedPagingHelper {
   /**
    * Returns the IRI of the last link relation
    */
-  public static IRI getLast(Feed feed) {
+  public static IRI getLast(Source feed) {
     Link link = feed.getLink("last");
     return (link != null) ? link.getResolvedHref() : null;
   }
@@ -257,7 +257,7 @@ public final class FeedPagingHelper {
   /**
    * Returns the IRI of the prev-archive link relation
    */
-  public static IRI getPreviousArchive(Feed feed) {
+  public static IRI getPreviousArchive(Source feed) {
     Link link = feed.getLink("prev-archive");
     if (link == null) { // try the full IANA URI version
       link = feed.getLink(Link.IANA_BASE + "prev-archive");
@@ -268,7 +268,7 @@ public final class FeedPagingHelper {
   /**
    * Returns the IRI of the next-archive link relation
    */
-  public static IRI getNextArchive(Feed feed) {
+  public static IRI getNextArchive(Source feed) {
     Link link = feed.getLink("next-archive");
     if (link == null) { // try the full IANA URI version
       link = feed.getLink(Link.IANA_BASE + "next-archive");
@@ -279,7 +279,7 @@ public final class FeedPagingHelper {
   /**
    * Returns the IRI of the current link relation
    */
-  public static IRI getCurrent(Feed feed) {
+  public static IRI getCurrent(Source feed) {
     Link link = feed.getLink("current");
     if (link == null) { // try the full IANA URI version
       link = feed.getLink(Link.IANA_BASE + "current");

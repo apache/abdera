@@ -18,30 +18,16 @@
 
 package org.apache.abdera.ext.json;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
+import java.io.OutputStreamWriter;
 
 import org.apache.abdera.model.Base;
-import org.apache.abdera.model.Category;
-import org.apache.abdera.model.Collection;
-import org.apache.abdera.model.Content;
-import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Entry;
-import org.apache.abdera.model.Feed;
-import org.apache.abdera.model.Generator;
-import org.apache.abdera.model.Link;
-import org.apache.abdera.model.Person;
-import org.apache.abdera.model.Service;
-import org.apache.abdera.model.Workspace;
-import org.apache.abdera.model.Content.Type;
 import org.apache.abdera.util.AbstractNamedWriter;
 import org.apache.abdera.util.AbstractWriterOptions;
 import org.apache.abdera.writer.NamedWriter;
 import org.apache.abdera.writer.WriterOptions;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class JSONWriter
   extends AbstractNamedWriter
@@ -60,6 +46,11 @@ public class JSONWriter
   public JSONWriter() {
     super(NAME,FORMATS);
   }
+
+  @Override 
+  protected WriterOptions initDefaultWriterOptions() {
+    return new AbstractWriterOptions() {};
+  }
   
   public String getName() {
     return NAME;
@@ -67,232 +58,28 @@ public class JSONWriter
 
   public Object write(Base base, WriterOptions options) throws IOException {
     try {
-      return toJSON(base).toString();
-    } catch (Exception e) {
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      writeTo(base,out,options);
+      return new String(out.toByteArray(),options.getCharset());
+    } catch (IOException i) {
+      throw i;
+    } catch (Exception e) { 
       throw new IOException(e.getMessage());
     }
   }
 
   public void writeTo(Base base, OutputStream out, WriterOptions options) throws IOException {
-    try {
-      Object result = toJSON(base);
-      out.write(result.toString().getBytes());
-      if (options.getAutoClose()) out.close();
-    } catch (Exception e) {
-      throw new IOException(e.getMessage());
-    }
+    writeTo(base,new OutputStreamWriter(out,options.getCharset()),options);
   }
 
   public void writeTo(Base base, java.io.Writer out, WriterOptions options) throws IOException {
     try {
-      Object result = toJSON(base);
-      out.write(result.toString());
+      JSONUtil.toJson(base, out);
       if (options.getAutoClose()) out.close();
     } catch (Exception e) {
+      e.printStackTrace();
       throw new IOException(e.getMessage());
     }
-  }
-
-  public static Object toJSON(Object object) throws Exception {
-    if (object instanceof Feed) {
-      return toJSON((Feed) object);
-    } else if (object instanceof Entry) {
-      return toJSON((Entry) object);
-    } else if (object instanceof Service) {
-      return toJSON((Service) object);
-    } else if (object instanceof Document) {
-      return toJSON(((Document) object).getRoot());
-    }
-    return new IllegalArgumentException("Element is not supported by JSONWriter.");
-  }
-
-  public static JSONObject toJSON(Entry entry) throws Exception {
-    JSONObject jsentry = new JSONObject();
-    if (entry.getTitle() != null)
-      jsentry.put("title", entry.getTitle());
-
-    if (entry.getSummary() != null)
-      jsentry.put("summary", entry.getSummary());
-
-    if (entry.getId() != null)
-      jsentry.put("id", entry.getId().toString());
-
-    if (entry.getUpdated() != null)
-      jsentry.put("updated", entry.getUpdated().toString());
-
-    if (entry.getPublished() != null)
-      jsentry.put("published", entry.getPublished().toString());
-
-    jsentry.put("authors", personsToJSON(entry.getAuthors()));
-
-    jsentry.put("contributors", personsToJSON(entry.getContributors()));
-
-    jsentry.put("categories", categoriesToJSON(entry.getCategories()));
-
-    jsentry.put("links", linksToJSON(entry.getLinks()));
-
-    JSONObject jscontent = new JSONObject();
-    if (entry.getContentElement() != null) {
-
-      Content content = entry.getContentElement();
-      Type type = entry.getContentType();
-      if (type.equals(Content.Type.HTML) || type.equals(Content.Type.XHTML) || type.equals(Content.Type.TEXT)) {
-        jscontent.put("type", type.toString().toLowerCase());
-      } else {
-        jscontent.put("type", content.getMimeType().toString());
-      }
-      jscontent.put("value", content.getValue());;
-      jsentry.put("content", jscontent);
-    }
-
-    return jsentry;
-  }
-
-  public static JSONObject toJSON(Feed feed) throws Exception {
-    JSONObject jsfeed = new JSONObject();
-
-    if (feed.getGenerator() != null) {
-      Generator gen = feed.getGenerator();
-      JSONObject jsgen = new JSONObject();
-      jsgen.put("uri", gen.getUri().toString());
-      jsgen.put("value", gen.getText());
-    }
-
-    if (feed.getTitle() != null) {
-      jsfeed.put("title", feed.getTitle());
-    }
-
-    if (feed.getSubtitle() != null) {
-      jsfeed.put("subtitle", feed.getSubtitle());
-    }
-
-    if (feed.getId() != null) {
-      jsfeed.put("id", feed.getId().toString());
-    }
-
-    if (feed.getRights() != null) {
-      jsfeed.put("rights", feed.getRights());
-    }
-
-    if (feed.getLogo() != null) {
-      jsfeed.put("logo", feed.getLogo().toString());
-    }
-
-    if (feed.getIcon() != null) {
-      jsfeed.put("icon", feed.getIcon().toString());
-    }
-
-    if (feed.getUpdatedString() != null) {
-      jsfeed.put("updated", feed.getUpdatedString());
-    }
-
-    jsfeed.put("authors", personsToJSON(feed.getAuthors()));
-
-    jsfeed.put("contributors", personsToJSON(feed.getContributors()));
-
-    jsfeed.put("categories", categoriesToJSON(feed.getCategories()));
-
-    jsfeed.put("links", linksToJSON(feed.getLinks()));
-
-    JSONArray jsentries = new JSONArray();
-    List<Entry> entries = feed.getEntries();
-    for (Entry entry : entries) {
-      jsentries.put(toJSON(entry));
-    }
-
-    jsfeed.put("entries", jsentries);
-
-    return jsfeed;
-  }
-
-  public static JSONObject toJSON(Service service) throws Exception {
-    JSONObject jssvc = new JSONObject();
-    JSONArray jsworkspaces = new JSONArray();
-    List<Workspace> workspaces = service.getWorkspaces();
-    for (Workspace workspace : workspaces) {
-      JSONObject jsworkspace = new JSONObject();
-      JSONArray jscollections = new JSONArray();
-      jsworkspace.put("title", workspace.getTitle());
-      List<Collection> collections = workspace.getCollections();
-      for (Collection collection : collections) {
-        JSONObject jscollection = new JSONObject();
-        JSONArray jsaccepts = new JSONArray();
-        String[] accepts = collection.getAccept();
-        for (String accept : accepts) {
-          jsaccepts.put(accept);
-        }
-        jscollection.put("href", collection.getHref().toString());
-        jscollection.put("accept", jsaccepts);
-        jscollections.put(jscollection);
-      }
-      jsworkspace.put("collections", jscollections);
-      jsworkspaces.put(jsworkspace);
-    }
-    jssvc.put("workspaces", jsworkspaces);
-
-    return jssvc;
-  }
-
-  private static JSONArray categoriesToJSON(List<Category> categories) throws JSONException {
-    JSONArray jscategories = new JSONArray();
-    for (Category category : categories) {
-      if (category.getScheme() != null || category.getLabel() != null || category.getTerm() != null) {
-        JSONObject jscategory = new JSONObject();
-        if (category.getScheme() != null)
-          jscategory.put("scheme", category.getScheme().toString());
-
-        if (category.getTerm() != null)
-          jscategory.put("term", category.getTerm());
-
-        if (category.getLabel() != null)
-          jscategory.put("label", category.getLabel());
-        jscategories.put(jscategory);
-      }
-    }
-    return jscategories;
-  }
-
-  private static JSONArray personsToJSON(List<Person> persons) throws JSONException {
-    JSONArray jspersons = new JSONArray();
-    for (Person p : persons) {
-      if (p.getName() != null || p.getUri() != null || p.getEmail() != null) {
-        JSONObject jsperson = new JSONObject();
-        if (p.getName() != null)
-          jsperson.put("name", p.getName());
-        if (p.getUri() != null)
-          jsperson.put("uri", p.getUri().toString());
-        if (p.getEmail() != null)
-          jsperson.put("email", p.getEmail());
-        jspersons.put(jsperson);
-      }
-    }
-    return jspersons;
-  }
-
-  private static JSONArray linksToJSON(List<Link> links) throws JSONException {
-    JSONArray jslinks = new JSONArray();
-    for (Link link : links) {
-      JSONObject jslink = new JSONObject();
-      if (link.getHref() != null) {
-        jslink.put("href", link.getHref().toString());
-
-        if (link.getRel() != null)
-          jslink.put("rel", link.getRel());
-
-        if (link.getMimeType() != null)
-          jslink.put("type", link.getMimeType().getBaseType());
-
-        if (link.getHrefLang() != null)
-          jslink.put("hreflang", link.getHrefLang());
-      }
-      jslinks.put(jslink);
-    }
-    return jslinks;
-  }
-
-  @Override
-  protected WriterOptions initDefaultWriterOptions() {
-    return new AbstractWriterOptions() {};
   }
 
 }

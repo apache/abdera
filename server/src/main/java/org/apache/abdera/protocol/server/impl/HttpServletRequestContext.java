@@ -148,8 +148,8 @@ public class HttpServletRequestContext
   }
   
   public List<String> getParameters(String name) {
-    return java.util.Arrays.asList(
-      request.getParameterValues(name));
+    String[] values = request.getParameterValues(name);
+    return values != null ? java.util.Arrays.asList(values) : null;
   }
   
   public Date getDateHeader(String name) {

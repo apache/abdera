@@ -89,7 +89,6 @@ public class JSONUtil {
 
       writeLanguageFields(element, writer);
       
-      writer.write(',');
       writeField("term", category.getTerm(), writer);
       if (category.getScheme() != null) {
         writer.write(',');
@@ -127,7 +126,7 @@ public class JSONUtil {
     } else if (element instanceof Content) {
       Content content = (Content)element;      
       writeLanguageFields(element, writer);
-      writer.write(',');      
+
       if (element.getResolvedBaseUri() != null) {
         writeField("base", element.getResolvedBaseUri().toASCIIString(), writer);
         writer.write(',');
@@ -282,7 +281,6 @@ public class JSONUtil {
       writeLanguageFields(element, writer);
       
       if (generator.getVersion() != null) {
-        writer.write(',');
         writeField("version", generator.getVersion(), writer);
       }    
       if (generator.getResolvedUri() != null) {
@@ -297,11 +295,9 @@ public class JSONUtil {
       Link link = (Link)element;
       
       writeLanguageFields(element, writer);
+
+      writeField("href", link.getResolvedHref().toASCIIString(), writer);
       
-      if (link.getResolvedHref() != null) {
-        writer.write(',');
-        writeField("href", link.getResolvedHref().toASCIIString(), writer);
-      }
       if (link.getRel() != null) {
         writer.write(',');
         writeField("rel", link.getRel(), writer);
@@ -322,7 +318,7 @@ public class JSONUtil {
         writer.write(',');
         writeField("length", link.getLength(), writer);
       }
-      
+
       writer.write(',');
       writeExtensions((ExtensibleElement)element,writer);
     } else if (element instanceof Person) {
@@ -330,7 +326,6 @@ public class JSONUtil {
       
       writeLanguageFields(element, writer);
       
-      writer.write(',');
       writeField("name",person.getName(),writer);
       writer.write(',');
       writeField("email",person.getEmail(),writer);
@@ -413,7 +408,6 @@ public class JSONUtil {
       
       writeLanguageFields(element, writer);
       
-      writer.write(',');
       if (element.getResolvedBaseUri() != null) {
         writeField("base", element.getResolvedBaseUri().toASCIIString(), writer);
         writer.write(',');
@@ -471,7 +465,7 @@ public class JSONUtil {
       writeQName(element.getQName(),writer);
       writer.write(',');
       writeLanguageFields(element, writer);
-      writer.write(',');
+
       if (element.getResolvedBaseUri() != null) {
         writeField("base", element.getResolvedBaseUri().toASCIIString(), writer);
         writer.write(',');
@@ -573,6 +567,7 @@ public class JSONUtil {
   private static void writeLanguageFields(Element element, Writer writer) throws IOException {
     String lang = element.getLanguage();
     boolean whitespace = element.getMustPreserveWhitespace();
+    BidiHelper.Direction dir = BidiHelper.getDirection(element);
     if (lang != null) {
       writeField("language",lang,writer);
     }
@@ -582,11 +577,15 @@ public class JSONUtil {
       writeField("whitespace", "false", writer);
     }
     
-    BidiHelper.Direction dir = BidiHelper.getDirection(element);
     if (dir != null && dir != BidiHelper.Direction.UNSPECIFIED) {
       if (lang != null || !whitespace) writer.write(',');
       writeField("dir", dir.name().toLowerCase(), writer);
     }
+    
+    if (lang != null || 
+        !whitespace || 
+        (dir != null && dir != BidiHelper.Direction.UNSPECIFIED)) 
+      writer.write(',');
   }
   
   private static void writeElement(String name, Element element, Writer writer) throws IOException {

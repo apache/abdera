@@ -29,12 +29,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.protocol.Resolver;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.util.Messages;
-import org.apache.abdera.i18n.iri.IRI;
 
 public class HttpServletRequestContext 
   extends AbstractRequestContext
@@ -148,8 +148,8 @@ public class HttpServletRequestContext
   }
   
   public List<String> getParameters(String name) {
-    return java.util.Arrays.asList(
-      request.getParameterValues(name));
+    String[] values = request.getParameterValues(name);
+    return values != null ? java.util.Arrays.asList(values) : null;
   }
   
   public Date getDateHeader(String name) {

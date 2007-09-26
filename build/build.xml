@@ -520,7 +520,7 @@ Working directory: ${work}
         <exclude name="**/*.md5" />
         <exclude name="**/.project" />
         <exclude name="**/feedvalidator.org/**/*" />
-        <exclude name="**/json/src/**/*" />
+        <exclude name="dependencies/json/src/**/*" />
         <exclude name="dependencies/work/**/*" />
       </fileset>
     </copy>

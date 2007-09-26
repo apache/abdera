@@ -526,7 +526,7 @@ Working directory: ${work}
         <exclude name="**/*.md5" />
         <exclude name="**/.project" />
         <exclude name="**/feedvalidator.org/**/*" />
-        <exclude name="**/json/src/**/*" />
+        <exclude name="dependencies/json/src/**/*" />
         <exclude name="dependencies/work/**/*" />
       </fileset>
     </copy>
@@ -705,7 +705,7 @@ Working directory: ${work}
     <echo>Compiling extension ${ext}...</echo>
     <mkdir dir="${extensions.work}/${ext}" />
     <mkdir dir="${extensions.work}/${ext}/META-INF" />
-    <javac srcdir="${extensions}/${ext}/src/main/java" destdir="${extensions.work}/${ext}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${client.work};${protocol.work}" debug="${debug}" />
+    <javac srcdir="${extensions}/${ext}/src/main/java" destdir="${extensions.work}/${ext}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${client.work};${protocol.work};${extensions.work}/main" debug="${debug}" />
 
     <available file="${extensions}/${ext}/src/test/java" property="is.available.${ext}.test" />
     

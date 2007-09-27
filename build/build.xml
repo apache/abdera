@@ -137,6 +137,14 @@
     <copy todir="${dependencies.work}/i18n">
       <fileset dir="${i18n.src.resources}" includes="**/*" />
     </copy>
+
+    <mkdir dir="${dependencies.work}/i18n/META-INF" />
+    <copy todir="${dependencies.work}/i18n/META-INF">
+      <fileset dir="${basedir}">
+        <include name="LICENSE" />
+        <include name="NOTICE" />
+      </fileset>
+    </copy>
     <jar destfile="${i18n.jar}" basedir="${dependencies.work}/i18n" includes="org/apache/abdera/i18n/**/*" />
 
   </target>

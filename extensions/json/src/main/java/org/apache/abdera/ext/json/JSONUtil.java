@@ -128,11 +128,9 @@ public class JSONUtil {
           jstream.writeField("value",content.getValue());
           break;
         case HTML:
-          jstream.writeField("type","html");
           jstream.writeField("value",content.getValue());
           break;
         case XHTML:
-          jstream.writeField("type","xhtml");
           jstream.writeField("value",content.getValue());
           writeElementValue((Div)content.getValueElement(), jstream);
           break;
@@ -220,11 +218,9 @@ public class JSONUtil {
           jstream.writeField("value",text.getValue());
           break;
         case HTML:
-          jstream.writeField("type","html");
           jstream.writeField("value",text.getValue());
           break;
         case XHTML:
-          jstream.writeField("type","xhtml");
           jstream.writeField("value",text.getValue());
           writeElementValue(text.getValueElement(), jstream);
           break;
@@ -250,7 +246,7 @@ public class JSONUtil {
     Element element, 
     JSONStream jstream) 
       throws IOException {
-    jstream.writeField("valuehash");
+    jstream.writeField("hash");
     writeElementChildren(element, jstream);
   }
 
@@ -412,7 +408,6 @@ public class JSONUtil {
     jstream.writeField("language", document.getLanguage());
     jstream.writeField("slug", document.getSlug());
     jstream.writeField("last-modified", document.getLastModified());
-    jstream.writeField("whitespace", "false");
     
     Element root = document.getRoot();
     if (root != null) {

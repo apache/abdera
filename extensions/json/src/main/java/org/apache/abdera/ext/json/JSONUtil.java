@@ -48,7 +48,6 @@ import org.apache.abdera.model.Source;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.model.TextValue;
 import org.apache.abdera.model.Workspace;
-import org.apache.abdera.util.Constants;
 import org.apache.abdera.xpath.XPath;
 
 @SuppressWarnings("unchecked")
@@ -256,7 +255,7 @@ public class JSONUtil {
     jstream.writeSeparator();
     List<QName> attributes = child.getAttributes();
     jstream.startObject();
-    if (!Constants.XHTML_NS.equals(uri) && !isSameNamespace(childqname, parentqname)) {
+    if (!isSameNamespace(childqname, parentqname)) {
       if (prefix != null && !"".equals(prefix))
         jstream.writeField("xmlns:" + prefix);
       else 

@@ -188,8 +188,10 @@ public class JSONUtil {
       writeElement("rights", source.getRightsElement(),jstream);
       jstream.writeField("updated", source.getUpdated());
       writeElement("generator", source.getGenerator(),jstream);
-      jstream.writeField("icon", source.getIconElement().getResolvedValue());
-      jstream.writeField("logo", source.getLogoElement().getResolvedValue());
+      if (source.getIconElement() != null)
+        jstream.writeField("icon", source.getIconElement().getResolvedValue());
+      if (source.getLogoElement() != null)
+        jstream.writeField("logo", source.getLogoElement().getResolvedValue());
       writeList("authors",source.getAuthors(),jstream);
       writeList("contributors",source.getContributors(),jstream);
       writeList("links",source.getLinks(),jstream);
@@ -244,9 +246,7 @@ public class JSONUtil {
   private static void writeElement(Element child, QName parentqname, JSONStream jstream) throws IOException {
     QName childqname = child.getQName();
     String prefix = childqname.getPrefix();
-    String uri = childqname.getNamespaceURI();
     jstream.startArray();
-    
     if (prefix != null && !"".equals(prefix)) {
       jstream.writeQuoted(childqname.getPrefix() + ":" + childqname.getLocalPart());
     } else {

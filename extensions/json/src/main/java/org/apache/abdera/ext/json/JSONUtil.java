@@ -53,7 +53,10 @@ import org.apache.abdera.xpath.XPath;
 @SuppressWarnings("unchecked")
 public class JSONUtil {
 
-  public static void toJson(Base base, Writer writer) throws IOException {
+  public static void toJson(
+    Base base, 
+    Writer writer) 
+      throws IOException {
     JSONStream jstream = new JSONStream(writer);
     if (base instanceof Document)
       toJson((Document)base,jstream);
@@ -62,18 +65,24 @@ public class JSONUtil {
     writer.flush();
   }
   
-  private static boolean isSameAsParentBase(Element element) {
-    IRI parentbase = null;
-    if (element.getParentElement() != null) {
-      parentbase = element instanceof Document ?
-        ((Document)element).getBaseUri() :
-        ((Element)element).getResolvedBaseUri();
-    }
-    if (parentbase == null && element.getResolvedBaseUri() != null) return false;
-    return parentbase.equals(element.getResolvedBaseUri());
+  private static boolean isSameAsParentBase(
+    Element element) {
+      IRI parentbase = null;
+      if (element.getParentElement() != null) {
+        parentbase = element instanceof Document ?
+          ((Document)element).getBaseUri() :
+          ((Element)element).getResolvedBaseUri();
+      }
+      if (parentbase == null && 
+          element.getResolvedBaseUri() != null)
+            return false;
+      return parentbase.equals(element.getResolvedBaseUri());
   }
   
-  private static void toJson(Element element, JSONStream jstream) throws IOException {
+  private static void toJson(
+    Element element, 
+    JSONStream jstream) 
+      throws IOException {
     jstream.startObject();
 
     writeLanguageFields(element, jstream);
@@ -112,10 +121,10 @@ public class JSONUtil {
       writeExtensions((ExtensibleElement)element,jstream);
     } else if (element instanceof Content) {
       Content content = (Content)element;      
+      writeLanguageFields(content,jstream);
       jstream.writeField("src", content.getResolvedSrc());
       switch(content.getContentType()) {
         case TEXT:
-          jstream.writeField("type","text");
           jstream.writeField("value",content.getValue());
           break;
         case HTML:
@@ -208,7 +217,6 @@ public class JSONUtil {
       Text text = (Text)element;      
       switch(text.getTextType()) {
         case TEXT:
-          jstream.writeField("type","text");
           jstream.writeField("value",text.getValue());
           break;
         case HTML:
@@ -238,17 +246,25 @@ public class JSONUtil {
     jstream.endObject();
   }
     
-  private static void writeElementValue(Element element, JSONStream jstream) throws IOException {
+  private static void writeElementValue(
+    Element element, 
+    JSONStream jstream) 
+      throws IOException {
     jstream.writeField("valuehash");
     writeElementChildren(element, jstream);
   }
 
-  private static void writeElement(Element child, QName parentqname, JSONStream jstream) throws IOException {
+  private static void writeElement(
+    Element child, 
+    QName parentqname, 
+    JSONStream jstream) 
+      throws IOException {
     QName childqname = child.getQName();
     String prefix = childqname.getPrefix();
     jstream.startArray();
     if (prefix != null && !"".equals(prefix)) {
-      jstream.writeQuoted(childqname.getPrefix() + ":" + childqname.getLocalPart());
+      jstream.writeQuoted(
+        childqname.getPrefix() + ":" + childqname.getLocalPart());
     } else {
       jstream.writeQuoted(childqname.getLocalPart());
     } 
@@ -274,7 +290,10 @@ public class JSONUtil {
     jstream.endArray();
   }
   
-  private static void writeElementChildren(Element element, JSONStream jstream) throws IOException {
+  private static void writeElementChildren(
+    Element element, 
+    JSONStream jstream) 
+      throws IOException {
     jstream.startArray();
     Object[] children = getChildren(element);
     QName parentqname = element.getQName();
@@ -300,11 +319,18 @@ public class JSONUtil {
     jstream.endArray();
   }
   
-  private static void writeExtensions(ExtensibleElement element, JSONStream jstream) throws IOException {
+  private static void writeExtensions(
+    ExtensibleElement element, 
+    JSONStream jstream) 
+      throws IOException {
     writeExtensions(element,jstream,true);
   }
   
-  private static void writeExtensions(ExtensibleElement element, JSONStream jstream, boolean startsep) throws IOException {
+  private static void writeExtensions(
+    ExtensibleElement element, 
+    JSONStream jstream, 
+    boolean startsep) 
+      throws IOException {
     List<QName> attributes = element.getExtensionAttributes();
     writeList("extensions",element.getExtensions(),jstream);
     if (attributes.size() > 0) {
@@ -319,7 +345,10 @@ public class JSONUtil {
     }
   }
   
-  private static void writeLanguageFields(Element element, JSONStream jstream) throws IOException {
+  private static void writeLanguageFields(
+    Element element, 
+    JSONStream jstream) 
+      throws IOException {
     String parentlang = null;
     BidiHelper.Direction parentdir = BidiHelper.Direction.UNSPECIFIED;
     if (element.getParentElement() != null) {
@@ -333,22 +362,34 @@ public class JSONUtil {
     }
     String lang = element.getLanguage();
     BidiHelper.Direction dir = BidiHelper.getDirection(element);
-    if (parentlang == null || (parentlang != null && !parentlang.equalsIgnoreCase(lang)))
-      
+    if (parentlang == null || 
+        (parentlang != null && !parentlang.equalsIgnoreCase(lang)))
       jstream.writeField("xml:lang",lang);
-    if (dir != null && dir != BidiHelper.Direction.UNSPECIFIED && !dir.equals(parentdir)) {
+    if (dir != null && 
+        dir != BidiHelper.Direction.UNSPECIFIED && 
+        !dir.equals(parentdir)) {
       jstream.writeField("dir", dir.name().toLowerCase());
     }
   }
   
-  private static void writeElement(String name, Element element, JSONStream jstream) throws IOException {
+  private static void writeElement(
+    String name, 
+    Element element, 
+    JSONStream jstream) 
+      throws IOException {
     if (element != null) {
       jstream.writeField(name);
-      toJson(element,jstream);
+      if (element instanceof Text && ((Text)element).getTextType() == Text.Type.TEXT)
+        jstream.writeQuoted(((Text)element).getValue());  
+      else toJson(element,jstream);
     }
   }
   
-  private static boolean writeList(String name, List list, JSONStream jstream) throws IOException {
+  private static boolean writeList(
+    String name, 
+    List list, 
+    JSONStream jstream) 
+      throws IOException {
     if (list == null || list.size() == 0) return false;
     jstream.writeField(name);
     jstream.startArray();
@@ -360,21 +401,32 @@ public class JSONUtil {
     return true;
   }
   
-  private static void toJson(Document document, JSONStream jstream) throws IOException {
+  private static void toJson(
+    Document document, 
+    JSONStream jstream) 
+      throws IOException {
     jstream.startObject();    
     jstream.writeField("base", document.getBaseUri());
-    jstream.writeField("charset", document.getCharset());
-    jstream.writeField("contenttype", document.getContentType());
+    jstream.writeField("content-type", document.getContentType());
     jstream.writeField("etag", document.getEntityTag());
     jstream.writeField("language", document.getLanguage());
     jstream.writeField("slug", document.getSlug());
-    jstream.writeField("lastmodified", document.getLastModified());
+    jstream.writeField("last-modified", document.getLastModified());
     jstream.writeField("whitespace", "false");
-    writeElement("root",document.getRoot(),jstream);
+    
+    Element root = document.getRoot();
+    if (root != null) {
+      String rootname = root.getQName().getLocalPart();
+      writeElement(rootname,document.getRoot(),jstream);
+    }
     jstream.endObject();
   }
   
-  private static void writeAttribute(QName qname, String value, JSONStream jstream) throws IOException {
+  private static void writeAttribute(
+    QName qname, 
+    String value, 
+    JSONStream jstream) 
+      throws IOException {
     jstream.startArray();
     String prefix = qname.getPrefix();
     String localpart = qname.getLocalPart();
@@ -393,21 +445,28 @@ public class JSONUtil {
     jstream.endArray();
   }
   
-  private static Object[] getChildren(Element element) {
-    Abdera abdera = element.getFactory().getAbdera();
-    XPath xpath = abdera.getXPath();
-    List<Object> nodes = xpath.selectNodes("node()", element);
-    return nodes.toArray(new Object[nodes.size()]);
+  private static Object[] getChildren(
+    Element element) {
+      Abdera abdera = element.getFactory().getAbdera();
+      XPath xpath = abdera.getXPath();
+      List<Object> nodes = xpath.selectNodes("node()", element);
+      return nodes.toArray(new Object[nodes.size()]);
   }
   
-  private static boolean isSameNamespace(QName q1, QName q2) {
-    if (q1 == null && q2 != null) return false;
-    if (q1 != null && q2 == null) return false;
-    String p1 = q1 == null ? "" : q1.getPrefix() != null ? q1.getPrefix() : "";
-    String p2 = q2 == null ? "" : q2.getPrefix() != null ? q2.getPrefix() : "";
-    String n1 = q1 == null ? "" : q1.getNamespaceURI() != null ? q1.getNamespaceURI() : "";
-    String n2 = q2 == null ? "" : q2.getNamespaceURI() != null ? q2.getNamespaceURI() : "";
-    return n1.equals(n2) && p1.equals(p2);
+  private static boolean isSameNamespace(
+    QName q1, 
+    QName q2) {
+      if (q1 == null && q2 != null) return false;
+      if (q1 != null && q2 == null) return false;
+      String p1 = q1 == null ? "" : 
+        q1.getPrefix() != null ? q1.getPrefix() : "";
+      String p2 = q2 == null ? "" : 
+        q2.getPrefix() != null ? q2.getPrefix() : "";
+      String n1 = q1 == null ? "" : 
+        q1.getNamespaceURI() != null ? q1.getNamespaceURI() : "";
+      String n2 = q2 == null ? "" : 
+        q2.getNamespaceURI() != null ? q2.getNamespaceURI() : "";
+      return n1.equals(n2) && p1.equals(p2);
   }
     
 }

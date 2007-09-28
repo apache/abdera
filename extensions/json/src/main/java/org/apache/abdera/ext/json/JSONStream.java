@@ -25,6 +25,7 @@ import java.util.Stack;
 import javax.activation.MimeType;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.util.EntityTag;
 
 public class JSONStream {
@@ -119,7 +120,7 @@ public class JSONStream {
   
   
   public void writeField(String name, Date value) throws IOException {
-    if (value != null) writeField(name, value.getTime());
+    if (value != null) writeField(name, AtomDate.format(value));
   }
   
   public void writeField(String name, IRI value) throws IOException {

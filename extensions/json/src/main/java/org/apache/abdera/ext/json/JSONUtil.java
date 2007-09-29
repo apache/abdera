@@ -125,12 +125,15 @@ public class JSONUtil {
       jstream.writeField("src", content.getResolvedSrc());
       switch(content.getContentType()) {
         case TEXT:
+          jstream.writeField("type","text");
           jstream.writeField("value",content.getValue());
           break;
         case HTML:
+          jstream.writeField("type","html");
           jstream.writeField("value",content.getValue());
           break;
         case XHTML:
+          jstream.writeField("type","xhtml");
           jstream.writeField("value",content.getValue());
           writeElementValue((Div)content.getValueElement(), jstream);
           break;
@@ -215,12 +218,15 @@ public class JSONUtil {
       Text text = (Text)element;      
       switch(text.getTextType()) {
         case TEXT:
+          jstream.writeField("type","text");
           jstream.writeField("value",text.getValue());
           break;
         case HTML:
+          jstream.writeField("type","html");
           jstream.writeField("value",text.getValue());
           break;
         case XHTML:
+          jstream.writeField("type","xhtml");
           jstream.writeField("value",text.getValue());
           writeElementValue(text.getValueElement(), jstream);
           break;
@@ -375,9 +381,7 @@ public class JSONUtil {
       throws IOException {
     if (element != null) {
       jstream.writeField(name);
-      if (element instanceof Text && ((Text)element).getTextType() == Text.Type.TEXT)
-        jstream.writeQuoted(((Text)element).getValue());  
-      else toJson(element,jstream);
+      toJson(element,jstream);
     }
   }
   

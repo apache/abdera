@@ -48,13 +48,13 @@
     <xsd:complexType>
       <xsd:complexContent>
         <xsd:extension base="beans:identifiedType">
-          <xsd:sequence>
+          <xsd:choice maxOccurs="unbounded">
             <xsd:element name="category" type="xsd:anyType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="collection" type="xsd:anyType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="entry" type="xsd:anyType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="media" type="xsd:anyType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="service" type="xsd:anyType" minOccurs="0" maxOccurs="unbounded"/>
-          </xsd:sequence>
+          </xsd:choice>
         </xsd:extension>
       </xsd:complexContent>
     </xsd:complexType>

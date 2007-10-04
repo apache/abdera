@@ -34,7 +34,6 @@ import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Control;
-import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
@@ -84,6 +83,85 @@ public class JSONUtil {
     JSONStream jstream) 
       throws IOException {
     
+if (element instanceof Text) {
+  Text text = (Text)element;
+  Text.Type texttype = text.getTextType();
+  if (texttype.equals(Text.Type.TEXT) && 
+      !needToWriteLanguageFields(text)) {
+    jstream.writeQuoted(text.getValue());
+  } else {
+    jstream.startObject();
+    jstream.writeField("attributes");
+    jstream.startObject();
+    jstream.writeField("type",texttype.name().toLowerCase());
+    writeLanguageFields(element, jstream);
+    if (!isSameAsParentBase(element))
+      jstream.writeField("xml:base", element.getResolvedBaseUri());
+    jstream.endObject();
+    jstream.writeField("children");
+    switch(text.getTextType()) {
+      case TEXT:
+      case HTML:
+        jstream.startArray();
+        jstream.writeQuoted(text.getValue());
+        jstream.endArray();
+        break;
+      case XHTML:
+        writeElementValue(text.getValueElement(), jstream);
+        break;
+    }
+    jstream.endObject();
+  }
+} else if (element instanceof Content) {
+  Content content = (Content)element;
+  Content.Type contenttype = content.getContentType();
+  if (contenttype.equals(Content.Type.TEXT) && 
+      !needToWriteLanguageFields(content)) {
+    jstream.writeQuoted(content.getValue());
+  } else {
+    jstream.startObject();
+    jstream.writeField("attributes");
+    jstream.startObject();    
+    switch(content.getContentType()) {
+      case TEXT:
+      case HTML:
+      case XHTML:
+        jstream.writeField("type",contenttype.name().toLowerCase());
+        break;
+      case MEDIA:
+      case XML:
+        jstream.writeField("type",content.getMimeType());
+    }    
+    writeLanguageFields(element, jstream);
+    if (!isSameAsParentBase(element))
+      jstream.writeField("xml:base", element.getResolvedBaseUri());      
+    writeLanguageFields(content,jstream);
+    jstream.writeField("src", content.getResolvedSrc());
+    jstream.endObject();
+    jstream.writeField("children");
+    switch(content.getContentType()) {
+      case TEXT:
+        jstream.startArray();
+        jstream.writeQuoted(content.getValue());
+        jstream.endArray();
+        break;
+      case HTML:
+        // TODO: eventually we'll parse this out into the hash
+        jstream.startArray();
+        jstream.writeQuoted(content.getValue());
+        jstream.endArray();
+        break;
+      case XHTML:
+        writeElementValue(content.getValueElement(), jstream);
+        break;
+      case MEDIA:
+      case XML:
+        jstream.startArray();
+        jstream.endArray();
+    }
+    jstream.endObject();  
+  }
+} else {
     if (element instanceof Categories) {
       jstream.startObject();
       writeLanguageFields(element, jstream);
@@ -128,36 +206,6 @@ public class JSONUtil {
       if (cats.size() > 0)
         writeList("categories",collection.getCategories(),jstream);
       writeExtensions((ExtensibleElement)element,jstream);
-      jstream.endObject();
-    } else if (element instanceof Content) {
-      jstream.startObject();
-      writeLanguageFields(element, jstream);
-      if (!isSameAsParentBase(element))
-        jstream.writeField("xml:base", element.getResolvedBaseUri());
-      Content content = (Content)element;      
-      writeLanguageFields(content,jstream);
-      jstream.writeField("src", content.getResolvedSrc());
-      switch(content.getContentType()) {
-        case TEXT:
-          jstream.writeField("type","text");
-          jstream.writeField("value",content.getValue());
-          break;
-        case HTML:
-          jstream.writeField("type","html");
-          jstream.writeField("value",content.getValue());
-          break;
-        case XHTML:
-          jstream.writeField("type","xhtml");
-          jstream.writeField("value",content.getValue());
-          writeElementValue((Div)content.getValueElement(), jstream);
-          break;
-        case MEDIA:
-        case XML:
-          jstream.writeField("type",content.getMimeType());
-          if (content.getSrc() == null)
-            jstream.writeField("value",content.getValue());
-          break;
-      }
       jstream.endObject();
     } else if (element instanceof Control) {
       jstream.startObject();
@@ -264,28 +312,6 @@ public class JSONUtil {
       }
       writeExtensions((ExtensibleElement)element,jstream);
       jstream.endObject();
-    } else if (element instanceof Text) {
-      jstream.startObject();
-      writeLanguageFields(element, jstream);
-      if (!isSameAsParentBase(element))
-        jstream.writeField("xml:base", element.getResolvedBaseUri());
-      Text text = (Text)element;      
-      switch(text.getTextType()) {
-        case TEXT:
-          jstream.writeField("type","text");
-          jstream.writeField("value",text.getValue());
-          break;
-        case HTML:
-          jstream.writeField("type","html");
-          jstream.writeField("value",text.getValue());
-          break;
-        case XHTML:
-          jstream.writeField("type","xhtml");
-          jstream.writeField("value",text.getValue());
-          writeElementValue(text.getValueElement(), jstream);
-          break;
-      }
-      jstream.endObject();
     } else if (element instanceof Workspace) {
       jstream.startObject();
       writeLanguageFields(element, jstream);
@@ -310,16 +336,24 @@ public class JSONUtil {
     } else {
       writeElement(element,null,jstream);
     }
+}
   }
     
   private static void writeElementValue(
     Element element, 
     JSONStream jstream) 
       throws IOException {
-    jstream.writeField("hash");
     writeElementChildren(element, jstream);
   }
 
+  private static String getName(QName qname) {
+    String prefix = qname.getPrefix();
+    String name = qname.getLocalPart();
+    return (prefix != null && !"".equals(prefix)) ?
+      prefix + ":" + name :
+      name;
+  }
+  
   private static void writeElement(
     Element child, 
     QName parentqname, 
@@ -327,14 +361,9 @@ public class JSONUtil {
       throws IOException {
     QName childqname = child.getQName();
     String prefix = childqname.getPrefix();
-    jstream.startArray();
-    if (prefix != null && !"".equals(prefix)) {
-      jstream.writeQuoted(
-        childqname.getPrefix() + ":" + childqname.getLocalPart());
-    } else {
-      jstream.writeQuoted(childqname.getLocalPart());
-    } 
-    jstream.writeSeparator();
+    jstream.startObject();
+    jstream.writeField("name", getName(childqname));
+    jstream.writeField("attributes");
     List<QName> attributes = child.getAttributes();
     jstream.startObject();
     if (!isSameNamespace(childqname, parentqname)) {
@@ -348,12 +377,26 @@ public class JSONUtil {
       jstream.writeField("xml:base",child.getResolvedBaseUri());
     writeLanguageFields(child, jstream);
     for (QName attr : attributes) {
-      jstream.writeField(attr.getLocalPart(),child.getAttributeValue(attr));
+      jstream.writeField(getName(attr));
+      if ("".equals(attr.getPrefix())  || 
+          "xml".equals(attr.getPrefix())) {
+        jstream.writeQuoted(child.getAttributeValue(attr));
+      } else {
+        jstream.startObject();
+        jstream.writeField("attributes");
+        jstream.startObject();
+        jstream.writeField("xmlns:" + attr.getPrefix());
+        jstream.writeQuoted(attr.getNamespaceURI());
+        jstream.endObject();
+        jstream.writeField("value");
+        jstream.writeQuoted(child.getAttributeValue(attr));
+        jstream.endObject();
+      }
     }
     jstream.endObject();
-    jstream.writeSeparator();
+    jstream.writeField("children");
     writeElementChildren((Element)child,jstream);
-    jstream.endArray();
+    jstream.endObject();
   }
   
   private static void writeElementChildren(
@@ -401,39 +444,70 @@ public class JSONUtil {
     writeList("extensions",element.getExtensions(),jstream);
     if (attributes.size() > 0) {
       jstream.writeField("attributes");
-      jstream.startArray();
+      
+      jstream.startObject();
       for (int n = 0; n < attributes.size(); n++) {
         QName qname = attributes.get(n);
-        writeAttribute(qname, element.getAttributeValue(qname), jstream);
-        if (n < attributes.size()-1) jstream.writeSeparator();
+        jstream.writeField(getName(qname));
+        if ("".equals(qname.getPrefix())  || 
+            "xml".equals(qname.getPrefix())) {
+          jstream.writeQuoted(element.getAttributeValue(qname));
+        } else {
+          jstream.startObject();
+          jstream.writeField("attributes");
+          jstream.startObject();
+          jstream.writeField("xmlns:" + qname.getPrefix());
+          jstream.writeQuoted(qname.getNamespaceURI());
+          jstream.endObject();
+          jstream.writeField("value");
+          jstream.writeQuoted(element.getAttributeValue(qname));
+          jstream.endObject();
+        }
       }
-      jstream.endArray();
+      jstream.endObject();
     }
+  }
+  
+  private static boolean needToWriteLanguageFields(Element element) {
+    return 
+      needToWriteLang(element) || 
+      needToWriteDir(element);
+  }
+  
+  private static boolean needToWriteLang(Element element) {
+    String parentlang = null;
+    if (element.getParentElement() != null) {
+      Base parent = element.getParentElement();
+      parentlang = parent instanceof Document ?
+        ((Document)parent).getLanguage() :
+        ((Element)parent).getLanguage();      
+    }
+    String lang = element.getLanguage();
+    return (parentlang == null && lang != null) || 
+           (lang != null && parentlang != null && !parentlang.equalsIgnoreCase(lang));
+  }
+
+  private static boolean needToWriteDir(Element element) {
+    BidiHelper.Direction parentdir = BidiHelper.Direction.UNSPECIFIED;
+    BidiHelper.Direction dir = BidiHelper.getDirection(element);
+    if (element.getParentElement() != null) {
+      Base parent = element.getParentElement();
+      if (parent instanceof Element)
+        parentdir = BidiHelper.getDirection((Element)parent);
+    }
+    return dir != BidiHelper.Direction.UNSPECIFIED && !dir.equals(parentdir);
   }
   
   private static void writeLanguageFields(
     Element element, 
     JSONStream jstream) 
       throws IOException {
-    String parentlang = null;
-    BidiHelper.Direction parentdir = BidiHelper.Direction.UNSPECIFIED;
-    if (element.getParentElement() != null) {
-      Base parent = element.getParentElement();
-      parentlang = parent instanceof Document ?
-        ((Document)parent).getLanguage() :
-        ((Element)parent).getLanguage();
-      if (parent instanceof Element) {
-        parentdir = BidiHelper.getDirection((Element)parent);
-      }
-    }
-    String lang = element.getLanguage();
-    BidiHelper.Direction dir = BidiHelper.getDirection(element);
-    if (parentlang == null || 
-        (parentlang != null && !parentlang.equalsIgnoreCase(lang)))
+    if (needToWriteLang(element)) {
+      String lang = element.getLanguage();
       jstream.writeField("xml:lang",lang);
-    if (dir != null && 
-        dir != BidiHelper.Direction.UNSPECIFIED && 
-        !dir.equals(parentdir)) {
+    }
+    if (needToWriteDir(element)) {
+      BidiHelper.Direction dir = BidiHelper.getDirection(element);
       jstream.writeField("dir", dir.name().toLowerCase());
     }
   }
@@ -485,29 +559,7 @@ public class JSONUtil {
     jstream.endObject();
   }
   
-  private static void writeAttribute(
-    QName qname, 
-    String value, 
-    JSONStream jstream) 
-      throws IOException {
-    jstream.startArray();
-    String prefix = qname.getPrefix();
-    String localpart = qname.getLocalPart();
-    String uri = qname.getNamespaceURI();
-    if (prefix != null && !"".equals(prefix)) {
-      jstream.writeQuoted(prefix + ":" + localpart);
-      jstream.writeSeparator();
-      jstream.startObject();
-      jstream.writeField("xmlns:" + prefix, uri);
-      jstream.endObject();
-    } else {
-      jstream.writeQuoted(localpart);
-    }
-    jstream.writeSeparator();
-    jstream.writeQuoted(value);
-    jstream.endArray();
-  }
-  
+
   private static Object[] getChildren(
     Element element) {
       Abdera abdera = element.getFactory().getAbdera();

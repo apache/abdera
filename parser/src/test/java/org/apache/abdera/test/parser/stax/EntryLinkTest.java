@@ -45,6 +45,8 @@ public class EntryLinkTest extends TestCase {
         Parser parser = abdera.getParser();
         Document<Entry> doc = parser.parse(this.getClass().getResourceAsStream("/entry.xml"));
         Entry entry = doc.getRoot();
+        // Workaround for ABDERA-70 suggested by James Snell.
+        // Entry entry = (Entry) doc.getRoot().clone();
         Link link = factory.newLink();
         link.setHref(entry.getId().toString());
         link.setRel(Link.REL_EDIT);

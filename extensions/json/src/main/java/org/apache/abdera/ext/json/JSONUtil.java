@@ -83,25 +83,34 @@ public class JSONUtil {
     Element element, 
     JSONStream jstream) 
       throws IOException {
-    jstream.startObject();
-
-    writeLanguageFields(element, jstream);
-    if (!isSameAsParentBase(element))
-      jstream.writeField("xml:base", element.getResolvedBaseUri());
     
     if (element instanceof Categories) {
+      jstream.startObject();
+      writeLanguageFields(element, jstream);
+      if (!isSameAsParentBase(element))
+        jstream.writeField("xml:base", element.getResolvedBaseUri());
       Categories categories = (Categories) element;
       jstream.writeField("fixed", categories.isFixed()?"true":"false");
       jstream.writeField("scheme", categories.getScheme());
       writeList("categories",categories.getCategories(),jstream);
       writeExtensions((ExtensibleElement)element,jstream);
+      jstream.endObject();
     } else if (element instanceof Category) {
+      jstream.startObject();
+      writeLanguageFields(element, jstream);
+      if (!isSameAsParentBase(element))
+        jstream.writeField("xml:base", element.getResolvedBaseUri());
       Category category = (Category) element;      
       jstream.writeField("term", category.getTerm());
       jstream.writeField("scheme", category.getScheme());
       jstream.writeField("label", category.getLabel());
       writeExtensions((ExtensibleElement)element,jstream);
+      jstream.endObject();
     } else if (element instanceof Collection) {
+      jstream.startObject();
+      writeLanguageFields(element, jstream);
+      if (!isSameAsParentBase(element))
+        jstream.writeField("xml:base", element.getResolvedBaseUri());
       Collection collection = (Collection)element;
       jstream.writeField("href", collection.getResolvedHref());
       writeElement("title",collection.getTitleElement(),jstream);
@@ -119,7 +128,12 @@ public class JSONUtil {
       if (cats.size() > 0)
         writeList("categories",collection.getCategories(),jstream);
       writeExtensions((ExtensibleElement)element,jstream);
+      jstream.endObject();
     } else if (element instanceof Content) {
+      jstream.startObject();
+      writeLanguageFields(element, jstream);
+      if (!isSameAsParentBase(element))
+        jstream.writeField("xml:base", element.getResolvedBaseUri());
       Content content = (Content)element;      
       writeLanguageFields(content,jstream);
       jstream.writeField("src", content.getResolvedSrc());
@@ -144,11 +158,21 @@ public class JSONUtil {
             jstream.writeField("value",content.getValue());
           break;
       }
+      jstream.endObject();
     } else if (element instanceof Control) {
+      jstream.startObject();
+      writeLanguageFields(element, jstream);
+      if (!isSameAsParentBase(element))
+        jstream.writeField("xml:base", element.getResolvedBaseUri());
       Control control = (Control)element;
       jstream.writeField("draft", control.isDraft()?"true":"false");
       writeExtensions((ExtensibleElement)element,jstream);
+      jstream.endObject();
     } else if (element instanceof Entry) {
+      jstream.startObject();
+      writeLanguageFields(element, jstream);
+      if (!isSameAsParentBase(element))
+        jstream.writeField("xml:base", element.getResolvedBaseUri());
       Entry entry = (Entry)element;
       jstream.writeField("id", entry.getId());
       writeElement("title", entry.getTitleElement(),jstream);
@@ -164,13 +188,23 @@ public class JSONUtil {
       writeList("links",entry.getLinks(),jstream);
       writeList("categories",entry.getCategories(),jstream);
       writeList("inreplyto",ThreadHelper.getInReplyTos(entry),jstream);            
-      writeExtensions((ExtensibleElement)element,jstream);      
+      writeExtensions((ExtensibleElement)element,jstream);
+      jstream.endObject();
     } else if (element instanceof Generator) {
+      jstream.startObject();
+      writeLanguageFields(element, jstream);
+      if (!isSameAsParentBase(element))
+        jstream.writeField("xml:base", element.getResolvedBaseUri());
       Generator generator = (Generator)element;
       jstream.writeField("version", generator.getVersion());
       jstream.writeField("uri", generator.getResolvedUri());
       jstream.writeField("value", generator.getText());
+      jstream.endObject();
     } else if (element instanceof Link) {
+      jstream.startObject();
+      writeLanguageFields(element, jstream);
+      if (!isSameAsParentBase(element))
+        jstream.writeField("xml:base", element.getResolvedBaseUri());
       Link link = (Link)element;      
       jstream.writeField("href", link.getResolvedHref());
       jstream.writeField("rel", link.getRel());
@@ -180,17 +214,32 @@ public class JSONUtil {
       if (link.getLength() > -1)
         jstream.writeField("length", link.getLength());
       writeExtensions((ExtensibleElement)element,jstream);
+      jstream.endObject();
     } else if (element instanceof Person) {
+      jstream.startObject();
+      writeLanguageFields(element, jstream);
+      if (!isSameAsParentBase(element))
+        jstream.writeField("xml:base", element.getResolvedBaseUri());
       Person person = (Person)element;      
       jstream.writeField("name",person.getName());
       jstream.writeField("email",person.getEmail());
       jstream.writeField("uri",person.getUriElement().getResolvedValue());
       writeExtensions((ExtensibleElement)element,jstream);
+      jstream.endObject();
     } else if (element instanceof Service) {
+      jstream.startObject();
+      writeLanguageFields(element, jstream);
+      if (!isSameAsParentBase(element))
+        jstream.writeField("xml:base", element.getResolvedBaseUri());
       Service service = (Service)element;
       writeList("workspaces",service.getWorkspaces(),jstream);
       writeExtensions((ExtensibleElement)element,jstream);
+      jstream.endObject();
     } else if (element instanceof Source) {
+      jstream.startObject();
+      writeLanguageFields(element, jstream);
+      if (!isSameAsParentBase(element))
+        jstream.writeField("xml:base", element.getResolvedBaseUri());
       Source source = (Source)element;
       jstream.writeField("id", source.getId());
       writeElement("title", source.getTitleElement(),jstream);
@@ -213,8 +262,13 @@ public class JSONUtil {
       if (source instanceof Feed) {
         writeList("entries",((Feed)source).getEntries(),jstream);
       }
-      writeExtensions((ExtensibleElement)element,jstream);      
+      writeExtensions((ExtensibleElement)element,jstream);
+      jstream.endObject();
     } else if (element instanceof Text) {
+      jstream.startObject();
+      writeLanguageFields(element, jstream);
+      if (!isSameAsParentBase(element))
+        jstream.writeField("xml:base", element.getResolvedBaseUri());
       Text text = (Text)element;      
       switch(text.getTextType()) {
         case TEXT:
@@ -231,21 +285,31 @@ public class JSONUtil {
           writeElementValue(text.getValueElement(), jstream);
           break;
       }
+      jstream.endObject();
     } else if (element instanceof Workspace) {
+      jstream.startObject();
+      writeLanguageFields(element, jstream);
+      if (!isSameAsParentBase(element))
+        jstream.writeField("xml:base", element.getResolvedBaseUri());
       Workspace workspace = (Workspace)element;
       writeElement("title",workspace.getTitleElement(),jstream);
       writeList("collections",workspace.getCollections(),jstream);
       writeExtensions((ExtensibleElement)element,jstream);
+      jstream.endObject();
     } else if (element instanceof InReplyTo) {
+      jstream.startObject();
+      writeLanguageFields(element, jstream);
+      if (!isSameAsParentBase(element))
+        jstream.writeField("xml:base", element.getResolvedBaseUri());
       InReplyTo irt = (InReplyTo)element;      
       jstream.writeField("ref",irt.getRef());
       jstream.writeField("href",irt.getResolvedHref());
       jstream.writeField("type",irt.getMimeType());
       jstream.writeField("source",irt.getResolvedSource());
+      jstream.endObject();
     } else {
       writeElement(element,null,jstream);
     }
-    jstream.endObject();
   }
     
   private static void writeElementValue(

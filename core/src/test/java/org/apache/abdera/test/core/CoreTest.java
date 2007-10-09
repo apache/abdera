@@ -726,6 +726,8 @@ public class CoreTest extends TestCase {
     public <T extends Element> T addExtension(QName qname, QName before) {
       return null;
     }
+
+    public void complete() {}
     
   }
   
@@ -1375,6 +1377,8 @@ public class CoreTest extends TestCase {
     public <T extends Element> T addExtension(QName qname, QName before) {
       return null;
     }
+
+    public void complete() {}
     
   }
 }

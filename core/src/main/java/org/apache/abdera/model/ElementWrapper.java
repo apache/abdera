@@ -264,4 +264,7 @@ public abstract class ElementWrapper
     return internal.getDefaultWriterOptions();
   }
   
+  public void complete() {
+    internal.complete();
+  }
 }

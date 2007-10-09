@@ -811,6 +811,6 @@ public class FOMElement
    * that particular element has been completely parsed.
    */
   public void complete() {
-    toString();
+    if (!isComplete()) toString();
   }
 }

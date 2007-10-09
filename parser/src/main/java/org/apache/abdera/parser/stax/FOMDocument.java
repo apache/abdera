@@ -342,4 +342,15 @@ public class FOMDocument<T extends Element>
   public WriterOptions getDefaultWriterOptions() {
     return new FOMWriter().getDefaultWriterOptions();
   }
+  
+  /**
+   * Ensure that the underlying streams are fully parsed. 
+   * We might eventually need to find a more efficient way
+   * of doing this, but for now, calling toString() will
+   * ensure that this particular object is fully parsed and ready 
+   * to be modified.
+   */
+  public void complete() {
+    toString();
+  }
 }

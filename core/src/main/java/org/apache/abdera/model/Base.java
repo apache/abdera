@@ -100,4 +100,13 @@ public interface Base
    */
   void addComment(String value);
   
+  /**
+   * Ensure that the underlying streams are fully parsed.
+   * 
+   * Calling complete on an Element does not necessarily mean
+   * that the underlying stream is fully consumed, only that
+   * that particular element has been completely parsed.
+   */
+  void complete();
+  
 }

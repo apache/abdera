@@ -351,6 +351,6 @@ public class FOMDocument<T extends Element>
    * to be modified.
    */
   public void complete() {
-    toString();
+    if (!isComplete() && getRoot() != null) getRoot().toString();
   }
 }

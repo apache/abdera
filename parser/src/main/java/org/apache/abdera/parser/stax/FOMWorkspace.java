@@ -96,6 +96,7 @@ public class FOMWorkspace
   }
 
   private Text setTitle(String title, Text.Type type) {
+    complete();
     FOMFactory fomfactory = (FOMFactory) factory;
     Text text = fomfactory.newText(PREFIXED_TITLE,type);
     text.setValue(title);
@@ -138,10 +139,12 @@ public class FOMWorkspace
   }
 
   public void addCollection(Collection collection) {
+    complete();
     addChild((OMElement)collection);
   }
 
   public Collection addCollection(String title, String href) {
+    complete();
     FOMFactory fomfactory = (FOMFactory) factory;
     Collection collection = fomfactory.newCollection(this);
     collection.setTitle(title);

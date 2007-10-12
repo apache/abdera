@@ -19,9 +19,9 @@ package org.apache.abdera.parser.stax;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.util.URIHelper;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -74,6 +74,7 @@ public class FOMIRI
   }
 
   public void setValue(String iri) {
+    complete();
     if (iri != null)
       setText((new IRI(iri)).toString());
     else

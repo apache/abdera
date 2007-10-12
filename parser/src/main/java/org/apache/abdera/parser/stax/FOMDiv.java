@@ -24,9 +24,9 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.util.Constants;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -89,6 +89,7 @@ public class FOMDiv
   }
 
   public void setId(String id) {
+    complete();
     if (id != null)
       setAttributeValue(AID, id);
     else 
@@ -96,6 +97,7 @@ public class FOMDiv
   }
   
   public void setTitle(String title) {
+    complete();
     if (title != null)
       setAttributeValue(ATITLE, title);
     else 
@@ -103,6 +105,7 @@ public class FOMDiv
   }
   
   public void setXhtmlClass(String[] classes) {
+    complete();
     if (classes != null) {
       StringBuffer val = new StringBuffer();
       for (String s : classes) {
@@ -119,6 +122,7 @@ public class FOMDiv
   }
 
   public void setValue(String value) {
+    complete();
     _removeAllChildren();
     if (value != null) {
       IRI baseUri = null;

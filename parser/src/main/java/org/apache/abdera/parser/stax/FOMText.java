@@ -19,11 +19,11 @@ package org.apache.abdera.parser.stax;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.util.Constants;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -92,6 +92,7 @@ public class FOMText
   }
 
   public void setTextType(Type type) {
+    complete();
     init(type);
   }
   
@@ -99,7 +100,8 @@ public class FOMText
     return (Div)this.getFirstChildWithName(Constants.DIV);
   }
 
-  public void setValueElement(Div value) {    
+  public void setValueElement(Div value) {
+    complete();
     if (value != null) {
       if (this.getFirstChildWithName(Constants.DIV) != null)
         this.getFirstChildWithName(Constants.DIV).discard();
@@ -123,11 +125,13 @@ public class FOMText
   }
 
   public void setText(String value) {
+    complete();
     init(Text.Type.TEXT);
     super.setText(value);
   }
   
   public void setValue(String value) {
+    complete();
     if (value != null) {
       if (Type.TEXT.equals(type)) {
         super.setText(value);
@@ -157,6 +161,7 @@ public class FOMText
   }
 
   public void setWrappedValue(String wrappedValue) {
+    complete();
     if (Type.XHTML.equals(type)) {
       IRI baseUri = null;
       Element element = null;

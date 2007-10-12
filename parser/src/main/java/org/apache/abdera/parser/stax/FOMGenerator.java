@@ -19,9 +19,9 @@ package org.apache.abdera.parser.stax;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Generator;
 import org.apache.abdera.util.Constants;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -98,6 +98,7 @@ public class FOMGenerator
   }
 
   public void setUri(String uri) {
+    complete();
     if (uri != null)
       setAttributeValue(AURI, (new IRI(uri)).toString());
     else 
@@ -109,6 +110,7 @@ public class FOMGenerator
   }
 
   public void setVersion(String version) {
+    complete();
     if (version != null)
       setAttributeValue(VERSION, version);
     else

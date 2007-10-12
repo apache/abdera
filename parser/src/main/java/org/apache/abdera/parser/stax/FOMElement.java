@@ -262,6 +262,7 @@ public class FOMElement
   }
   
   public void setBaseUri(IRI base) {
+    complete();
     setAttributeValue(BASE,_getStringValue(base));
   }
   
@@ -424,6 +425,7 @@ public class FOMElement
   }
   
   protected void _setElementValue(QName qname, String value) {
+    complete();
     OMElement element = this.getFirstChildWithName(qname);
     if (element != null && value != null) {
       element.setText(value);
@@ -453,6 +455,7 @@ public class FOMElement
   }
 
   protected <T extends Text>void setTextElement(QName qname, T text, boolean many) {
+    complete();
     if (text != null) {
       _setChild(qname, (OMElement)text);
     } else _removeChildren(qname, false);
@@ -509,6 +512,14 @@ public class FOMElement
     return text;
   }
   
+  public void setText(String text) {
+    complete();
+    if (text != null)
+      super.setText(text);
+    else 
+      _removeAllChildren();
+  }
+
   public String getText() {
     StringBuffer buf = new StringBuffer();
     Iterator i = getChildren();
@@ -577,6 +588,7 @@ public class FOMElement
   }
   
   protected void _removeChildren(QName qname, boolean many) {
+    complete();
     if (many) {
       for (Iterator i = getChildrenWithName(qname); i.hasNext();) {
         OMElement element = (OMElement) i.next();
@@ -589,6 +601,7 @@ public class FOMElement
   }
   
   protected void _removeAllChildren() {
+    complete();
     for (Iterator i = getChildren(); i.hasNext();) {
       OMNode node = (OMNode) i.next();
       node.discard();
@@ -810,6 +823,6 @@ public class FOMElement
    * that particular element has been completely parsed.
    */
   public void complete() {
-    super.build();
+    if (!isComplete() && builder != null) super.build();
   }
 }

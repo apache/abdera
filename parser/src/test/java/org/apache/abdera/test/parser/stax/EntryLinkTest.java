@@ -35,6 +35,9 @@ public class EntryLinkTest extends TestCase {
      * Link in entry disappears after adding entry to a feed.
      * 
      * @see https://issues.apache.org/jira/browse/ABDERA-70
+     * 
+     * FOM Objects should automatically complete the parse 
+     * when modifications are made
      */
     public void testEntryLinkInFeed() throws Exception {
         Abdera abdera = new Abdera();
@@ -45,12 +48,6 @@ public class EntryLinkTest extends TestCase {
         Parser parser = abdera.getParser();
         Document<Entry> doc = parser.parse(this.getClass().getResourceAsStream("/entry.xml"));
         Entry entry = doc.getRoot();
-        
-        // Workaround for ABDERA-70 suggested by James Snell.
-        //entry = (Entry) entry.clone();
-        // End workaround
-        // first step to a better solution that does not require cloning
-        entry.complete();
         
         Link link = factory.newLink();
         link.setHref(entry.getId().toString());

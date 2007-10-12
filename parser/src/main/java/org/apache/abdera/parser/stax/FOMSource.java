@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Category;
@@ -40,7 +41,6 @@ import org.apache.abdera.model.Text;
 import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -110,10 +110,12 @@ public class FOMSource
   }
 
   public void addAuthor(Person person) {
+    complete();
     addChild((OMElement)person);
   }
   
   public Person addAuthor(String name) {
+    complete();
     FOMFactory fomfactory = (FOMFactory) this.factory;
     Person person = fomfactory.newAuthor(this);
     person.setName(name);
@@ -121,6 +123,7 @@ public class FOMSource
   }
 
   public Person addAuthor(String name, String email, String uri) {
+    complete();
     FOMFactory fomfactory = (FOMFactory) this.factory;
     Person person = fomfactory.newAuthor(this);
     person.setName(name);
@@ -138,6 +141,7 @@ public class FOMSource
   }
   
   public void addCategory(Category category) {
+    complete();
     Element el = category.getParentElement();
     if (el != null && el instanceof Categories) {
       Categories cats = category.getParentElement();
@@ -153,6 +157,7 @@ public class FOMSource
   }
 
   public Category addCategory(String term) {
+    complete();
     FOMFactory factory = (FOMFactory) this.factory;
     Category category = factory.newCategory(this);
     category.setTerm(term);
@@ -160,6 +165,7 @@ public class FOMSource
   }
 
   public Category addCategory(String scheme, String term, String label) {
+    complete();
     FOMFactory factory = (FOMFactory) this.factory;
     Category category = factory.newCategory(this);
     category.setTerm(term);
@@ -173,10 +179,12 @@ public class FOMSource
   }
 
   public void addContributor(Person person) {
+    complete();
     addChild((OMElement)person);
   }
 
   public Person addContributor(String name) {
+    complete();
     FOMFactory fomfactory = (FOMFactory) this.factory;
     Person person = fomfactory.newContributor(this);
     person.setName(name);
@@ -184,6 +192,7 @@ public class FOMSource
   }
 
   public Person addContributor(String name, String email, String uri) {
+    complete();
     FOMFactory fomfactory = (FOMFactory) this.factory;
     Person person = fomfactory.newContributor(this);
     person.setName(name);
@@ -197,6 +206,7 @@ public class FOMSource
   }
 
   public void setIdElement(IRIElement id) {
+    complete();
     if (id != null)
       _setChild(ID, (OMElement)id);
     else 
@@ -209,6 +219,7 @@ public class FOMSource
   }
   
   public IRIElement setId(String value) {
+    complete();
     return setId(value, false);
   }
   
@@ -217,6 +228,7 @@ public class FOMSource
   }
     
   public IRIElement setId(String value, boolean normalize) {
+    complete();
     if (value == null) {
       _removeChildren(ID, false);
       return null;
@@ -247,6 +259,7 @@ public class FOMSource
   }
 
   public void addLink(Link link) {
+    complete();
     addChild((OMElement)link);
   }
 
@@ -255,6 +268,7 @@ public class FOMSource
   }
   
   public Link addLink(String href, String rel) {
+    complete();
     FOMFactory fomfactory = (FOMFactory) factory;
     Link link = fomfactory.newLink(this);
     link.setHref(href);
@@ -263,6 +277,7 @@ public class FOMSource
   }
   
   public Link addLink(String href, String rel, String type, String title, String hreflang, long length) {
+    complete();
     FOMFactory fomfactory = (FOMFactory) factory;
     Link link = fomfactory.newLink(this);
     link.setHref(href);
@@ -279,10 +294,12 @@ public class FOMSource
   }
 
   public void setRightsElement(Text text) {
+    complete();
     setTextElement(RIGHTS, text, false);
   }
 
   public Text setRights(String value) {
+    complete();
     FOMFactory factory = (FOMFactory)this.factory;
     Text text = factory.newRights();
     text.setValue(value);
@@ -322,10 +339,12 @@ public class FOMSource
   }
 
   public void setSubtitleElement(Text text) {
+    complete();
     setTextElement(SUBTITLE, text, false);
   }
 
   public Text setSubtitle(String value) {
+    complete();
     FOMFactory factory = (FOMFactory)this.factory;
     Text text = factory.newSubtitle();
     text.setValue(value);
@@ -365,10 +384,12 @@ public class FOMSource
   }
 
   public void setTitleElement(Text text) {
+    complete();
     setTextElement(TITLE, text, false);
   }
 
   public Text setTitle(String value) {
+    complete();
     FOMFactory factory = (FOMFactory)this.factory;
     Text text = factory.newTitle();
     text.setValue(value);
@@ -408,6 +429,7 @@ public class FOMSource
   }
 
   public void setUpdatedElement(DateTime updated) {
+    complete();
     if (updated != null)
       _setChild(UPDATED, (OMElement)updated);
     else 
@@ -425,6 +447,7 @@ public class FOMSource
   }
   
   private DateTime setUpdated(AtomDate value) {
+    complete();
     if (value == null) {
       _removeChildren(UPDATED, false);
       return null;
@@ -454,6 +477,7 @@ public class FOMSource
   }
 
   public void setGenerator(Generator generator) {
+    complete();
     if (generator != null)
       _setChild(GENERATOR, (OMElement) generator);
     else 
@@ -463,8 +487,8 @@ public class FOMSource
   public Generator setGenerator(
     String uri, 
     String version, 
-    String value) 
-      {
+    String value) {
+    complete();
     FOMFactory fomfactory = (FOMFactory) factory;
     Generator generator = fomfactory.newGenerator(this);
     if (uri != null) generator.setUri(uri);
@@ -478,6 +502,7 @@ public class FOMSource
   }
 
   public void setIconElement(IRIElement iri) {
+    complete();
     if (iri != null)
       _setChild(ICON, (OMElement) iri);
     else 
@@ -485,6 +510,7 @@ public class FOMSource
   }
 
   public IRIElement setIcon(String value) {
+    complete();
     if (value == null) {
       _removeChildren(ICON, false);
       return null;
@@ -507,6 +533,7 @@ public class FOMSource
   }
 
   public void setLogoElement(IRIElement iri) {
+    complete();
     if (iri != null)
       _setChild(LOGO, (OMElement)iri);
     else 
@@ -514,6 +541,7 @@ public class FOMSource
   }
 
   public IRIElement setLogo(String value) {
+    complete();
     if (value == null) {
       _removeChildren(LOGO, false);
       return null;
@@ -581,6 +609,7 @@ public class FOMSource
   }
   
   public void setCollection(Collection collection) {
+    complete();
     if (collection != null) {
       _removeChildren(PRE_RFC_COLLECTION, true);
       _setChild(COLLECTION, (OMElement)collection);

@@ -24,6 +24,7 @@ import java.util.List;
 import javax.activation.MimeType;
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
@@ -31,7 +32,6 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -105,6 +105,7 @@ public class FOMCollection
   }
 
   private Text setTitle(String title, Text.Type type) {
+    complete();
     FOMFactory fomfactory = (FOMFactory) factory;
     Text text = fomfactory.newText(PREFIXED_TITLE,type);
     text.setValue(title);
@@ -137,6 +138,7 @@ public class FOMCollection
   }
   
   public void setHref(String href) {
+    complete();
     if (href != null)
       setAttributeValue(HREF, (new IRI(href).toString()));
     else 
@@ -167,6 +169,7 @@ public class FOMCollection
   }
   
   public void setAccept(String... mediaRanges) {
+    complete();
     if (mediaRanges != null && mediaRanges.length > 0) {
       _removeChildren(ACCEPT, true);
       _removeChildren(PRE_RFC_ACCEPT, true);
@@ -197,6 +200,7 @@ public class FOMCollection
   }
   
   public void addAccepts(String... mediaRanges) {
+    complete();
     if (mediaRanges != null) {
       for (String type : mediaRanges) {
         if (!accepts(type)) {
@@ -242,15 +246,18 @@ public class FOMCollection
   }
 
   public Categories addCategories() {
+    complete();
     return ((FOMFactory)factory).newCategories(this);
   }
   
   public void addCategories(Categories categories) {
+    complete();
     addChild((OMElement)categories);
   }
 
   public Categories addCategories(
     String href) {
+    complete();
     Categories cats = ((FOMFactory)factory).newCategories();
     cats.setHref(href);
     addCategories(cats);
@@ -261,6 +268,7 @@ public class FOMCollection
     List<Category> categories, 
     boolean fixed, 
     String scheme) {
+      complete();
       Categories cats = ((FOMFactory)factory).newCategories();
       cats.setFixed(fixed);
       if (scheme != null) cats.setScheme(scheme);

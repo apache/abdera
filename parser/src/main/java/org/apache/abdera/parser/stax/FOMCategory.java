@@ -19,9 +19,9 @@ package org.apache.abdera.parser.stax;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.util.Constants;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -96,6 +96,7 @@ public class FOMCategory
   }
 
   public void setTerm(String term) {
+    complete();
     if (term != null)
       setAttributeValue(TERM, term);
     else
@@ -108,6 +109,7 @@ public class FOMCategory
   }
 
   public void setScheme(String scheme) {
+    complete();
     if (scheme != null)
       setAttributeValue(SCHEME, new IRI(scheme).toString());
     else 
@@ -119,6 +121,7 @@ public class FOMCategory
   }
 
   public void setLabel(String label) {
+    complete();
     if (label != null)
       setAttributeValue(LABEL, label);
     else
@@ -130,6 +133,7 @@ public class FOMCategory
   }
 
   public void setValue(String value) {
+    complete();
     if (value != null)
       setText(value);
     else

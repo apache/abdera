@@ -126,4 +126,12 @@ public interface ParserOptions extends Cloneable {
    * Ignored when parsing a Reader
    */
   void setCompressionCodecs(CompressionCodec... codecs);
+  
+  void registerEntity(String name, String value);
+  
+  String resolveEntity(String name);
+  
+  void setResolveEntities(boolean resolve);
+  
+  boolean getResolveEntities();
 }

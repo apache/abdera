@@ -239,7 +239,11 @@ public class FOMBuilder
                 if (!ignorePI) createPI();
                 break;
             case XMLStreamConstants.ENTITY_REFERENCE:
-                lastNode = createOMText(XMLStreamConstants.ENTITY_REFERENCE);
+                String val = parserOptions.resolveEntity(super.getName());
+                if (val == null)
+                  throw new ParseException("Unresolved undeclared entity: " + super.getName());
+                else 
+                  lastNode = createOMText(val,XMLStreamConstants.CHARACTERS);
                 break;
             default :
                 throw new ParseException();

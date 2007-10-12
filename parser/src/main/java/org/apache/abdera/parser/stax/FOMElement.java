@@ -34,9 +34,10 @@ import javax.activation.DataHandler;
 import javax.activation.MimeType;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
-//import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.abdera.factory.Factory;
+import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.lang.Lang;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Div;
@@ -55,8 +56,6 @@ import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterOptions;
-import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.lang.Lang;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMComment;
 import org.apache.axiom.om.OMContainer;
@@ -811,6 +810,6 @@ public class FOMElement
    * that particular element has been completely parsed.
    */
   public void complete() {
-    if (!isComplete()) toString();
+    super.build();
   }
 }

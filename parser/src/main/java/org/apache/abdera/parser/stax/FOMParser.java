@@ -20,10 +20,13 @@ package org.apache.abdera.parser.stax;
 import java.io.InputStream;
 import java.io.Reader;
 
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.ParseException;
@@ -34,7 +37,6 @@ import org.apache.abdera.parser.stax.util.FOMXmlRestrictedCharReader;
 import org.apache.abdera.util.AbstractParser;
 import org.apache.abdera.util.CompressionUtil;
 import org.apache.abdera.util.Messages;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.util.StAXUtils;
 
@@ -139,12 +141,24 @@ public class FOMParser
         in = new FOMXmlRestrictedCharReader(
           in,options.getFilterRestrictedCharacterReplacement());
       }
-      return parse(StAXUtils.createXMLStreamReader(in), base, options);
+      //return parse(StAXUtils.createXMLStreamReader(in), base, options);
+      return parse(createXMLStreamReader(in), base, options);
     } catch (Exception e) {
       if (!(e instanceof ParseException))
         e = new ParseException(e);
       throw (ParseException)e;
     }
+  }
+  
+  private XMLStreamReader createXMLStreamReader(Reader in) throws XMLStreamException {
+    javax.xml.stream.XMLInputFactory inputFactory = StAXUtils.getXMLInputFactory();
+    try {
+      inputFactory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, Boolean.FALSE);
+      XMLStreamReader reader = inputFactory.createXMLStreamReader(in);
+      return reader;
+    } finally {
+        StAXUtils.releaseXMLInputFactory(inputFactory);
+    }    
   }
   
   private <T extends Element> Document<T> parse(

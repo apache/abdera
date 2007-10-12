@@ -19,10 +19,10 @@ package org.apache.abdera.parser.stax;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.model.Person;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -91,6 +91,7 @@ public class FOMPerson
   }
 
   public void setNameElement(Element element) {
+    complete();
     if (element != null)
       _setChild(NAME, (OMElement)element);
     else 
@@ -98,6 +99,7 @@ public class FOMPerson
   }
 
   public Element setName(String name) {
+    complete();
     if (name != null) {
       FOMFactory fomfactory = (FOMFactory) factory;
       Element el = fomfactory.newName(null);
@@ -120,6 +122,7 @@ public class FOMPerson
   }
 
   public void setEmailElement(Element element) {
+    complete();
     if (element != null)
       _setChild(EMAIL, (OMElement)element);
     else 
@@ -127,6 +130,7 @@ public class FOMPerson
   }
 
   public Element setEmail(String email) {
+    complete();
     if (email != null) {
       FOMFactory fomfactory = (FOMFactory) factory;
       Element el = fomfactory.newEmail(null);
@@ -149,6 +153,7 @@ public class FOMPerson
   }
 
   public void setUriElement(IRIElement uri) {
+    complete();
     if (uri != null) 
       _setChild(URI, (OMElement)uri);
     else 
@@ -156,6 +161,7 @@ public class FOMPerson
   }
 
   public IRIElement setUri(String uri) {
+    complete();
     if (uri != null) {
       FOMFactory fomfactory = (FOMFactory) factory;
       IRIElement el = fomfactory.newUri(null);

@@ -22,10 +22,10 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.parser.stax.util.FOMHelper;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -91,10 +91,12 @@ public class FOMCategories
   }
   
   public void addCategory(Category category) {
+    complete();
     addChild((OMElement)category);
   }
 
   public Category addCategory(String term) {
+    complete();
     FOMFactory factory = (FOMFactory) this.factory;
     Category category = factory.newCategory(this);
     category.setTerm(term);
@@ -105,6 +107,7 @@ public class FOMCategories
     String scheme, 
     String term, 
     String label) {
+    complete();
     FOMFactory factory = (FOMFactory) this.factory;
     Category category = factory.newCategory(this);
     category.setTerm(term);
@@ -154,6 +157,7 @@ public class FOMCategories
   }
 
   public void setFixed(boolean fixed) {
+    complete();
     if (fixed && !isFixed())
       setAttributeValue(FIXED, YES);
     else if (!fixed && isFixed())
@@ -161,6 +165,7 @@ public class FOMCategories
   }
 
   public void setScheme(String scheme) {
+    complete();
     if (scheme != null)
       setAttributeValue(SCHEME, new IRI(scheme).toString());
     else 
@@ -176,6 +181,7 @@ public class FOMCategories
   }
   
   public void setHref(String href) {
+    complete();
     if (href != null)
       setAttributeValue(HREF, (new IRI(href)).toString());
     else 

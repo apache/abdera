@@ -25,11 +25,11 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.util.Constants;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -93,15 +93,18 @@ public class FOMFeed
   }
 
   public void addEntry(Entry entry) {
+    complete();
     addChild((OMElement)entry);
   }
 
   public Entry addEntry() {
+    complete();
     FOMFactory fomfactory = (FOMFactory) factory;
     return fomfactory.newEntry(this);
   }
   
   public void insertEntry(Entry entry) {
+    complete();
     OMElement el = getFirstChildWithName(ENTRY);
     if (el == null) {
       addEntry(entry);
@@ -112,6 +115,7 @@ public class FOMFeed
   }
   
   public Entry insertEntry() {
+    complete();
     FOMFactory fomfactory = (FOMFactory) factory;
     Entry entry = fomfactory.newEntry((Feed)null);
     insertEntry(entry);
@@ -147,14 +151,17 @@ public class FOMFeed
   }
  
   public void sortEntriesByUpdated(boolean new_first) {
+    complete();
     sortEntries(new UpdatedComparator(new_first));
   }
   
   public void sortEntriesByEdited(boolean new_first) {
+    complete();
     sortEntries(new EditedComparator(new_first));
   }
   
   public void sortEntries(Comparator<Entry> comparator) {
+    complete();
     if (comparator == null) return;
     List<Entry> entries = this.getEntries();
     Entry[] a = entries.toArray(new Entry[entries.size()]);

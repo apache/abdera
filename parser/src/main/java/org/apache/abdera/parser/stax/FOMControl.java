@@ -22,7 +22,6 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.model.Control;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
-import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
@@ -84,11 +83,13 @@ public class FOMControl
   }
 
   public void setDraft(boolean draft) {
+    complete();
     _removeChildren(PRE_RFC_DRAFT, true);
     _setElementValue(DRAFT, (draft) ? YES:NO);
   }
   
   public void unsetDraft() {
+    complete();
     _removeChildren(PRE_RFC_DRAFT, true);
     _removeChildren(DRAFT, true);
   }

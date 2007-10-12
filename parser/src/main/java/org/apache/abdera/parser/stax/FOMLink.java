@@ -23,10 +23,10 @@ import java.util.Map;
 import javax.activation.MimeType;
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -109,6 +109,7 @@ public class FOMLink
   }
   
   public void setHref(String href) {
+    complete();
     if (href != null)
       setAttributeValue(HREF, (new IRI(href)).toString());
     else 
@@ -120,6 +121,7 @@ public class FOMLink
   }
 
   public void setRel(String rel) {
+    complete();
     setAttributeValue(REL, rel);
   }
 
@@ -133,10 +135,12 @@ public class FOMLink
   }
   
   public void setMimeType(MimeType type) {
+    complete();
     setAttributeValue(TYPE, (type != null) ? type.toString() : null);
   }
 
   public void setMimeType(String type) {
+    complete();
     try {
       if (type != null) 
         setAttributeValue(TYPE, (new MimeType(type)).toString());
@@ -152,6 +156,7 @@ public class FOMLink
   }
 
   public void setHrefLang(String lang) {
+    complete();
     if (lang != null)
       setAttributeValue(HREFLANG, lang);
     else 
@@ -163,6 +168,7 @@ public class FOMLink
   }
 
   public void setTitle(String title) {
+    complete();
     if (title != null)
       setAttributeValue(ATITLE, title);
     else 
@@ -175,6 +181,7 @@ public class FOMLink
   }
 
   public void setLength(long length) {
+    complete();
     if (length > -1)
       setAttributeValue(LENGTH, (length >= 0) ? String.valueOf(length) : "0");
     else
@@ -213,6 +220,7 @@ public class FOMLink
   }
 
   public void setValue(String value) {
+    complete();
     if (value != null)
       setText(value);
     else

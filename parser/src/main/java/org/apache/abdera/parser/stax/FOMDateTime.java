@@ -103,6 +103,7 @@ public class FOMDateTime
   }
 
   public void setValue(AtomDate dateTime) {
+    complete();
     value = null;
     if (dateTime != null)
       setText(dateTime.getValue());
@@ -111,6 +112,7 @@ public class FOMDateTime
   }
 
   public void setDate(Date date) {
+    complete();
     value = null;
     if (date != null)
       setText(AtomDate.valueOf(date).getValue());
@@ -119,6 +121,7 @@ public class FOMDateTime
   }
 
   public void setCalendar(Calendar date) {
+    complete();
     value = null;
     if (date != null)
       setText(AtomDate.valueOf(date).getValue());
@@ -127,11 +130,13 @@ public class FOMDateTime
   }
 
   public void setTime(long date) {
+    complete();
     value = null;
     setText(AtomDate.valueOf(date).getValue());
   }
 
   public void setString(String date) {
+    complete();
     value = null;
     if (date != null)
       setText(AtomDate.valueOf(date).getValue());

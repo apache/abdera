@@ -59,6 +59,7 @@ public class FOMProcessingInstruction
   }
 
   public void setText(String text) {
+    if (!isComplete() && builder != null) build();
     setValue(text);
   }
 

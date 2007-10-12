@@ -22,13 +22,13 @@ import javax.activation.MimeType;
 import javax.activation.URLDataSource;
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.Messages;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.attachments.utils.DataHandlerUtils;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
@@ -118,6 +118,7 @@ public class FOMContent
   }
 
   public void setContentType(Type type) {
+    complete();
     init(type);
   }
   
@@ -127,6 +128,7 @@ public class FOMContent
   }
 
   public <T extends Element> void setValueElement(T value) {
+    complete();
     if (value != null) {
       if (this.getFirstElement() != null)
         this.getFirstElement().discard();
@@ -166,6 +168,7 @@ public class FOMContent
   }
   
   public void setMimeType(String type) {
+    complete();
     try {
       if (type != null)
         setAttributeValue(TYPE, (new MimeType(type)).toString());
@@ -185,6 +188,7 @@ public class FOMContent
   }
   
   public void setSrc(String src) {
+    complete();
     if (src != null)
       setAttributeValue(SRC, (new IRI(src)).toString());
     else 
@@ -212,6 +216,7 @@ public class FOMContent
   }
   
   public void setDataHandler(DataHandler dataHandler) {
+    complete();
     if (!Type.MEDIA.equals(type)) throw new IllegalArgumentException();
     if (dataHandler.getContentType() != null) {
       try {
@@ -241,11 +246,13 @@ public class FOMContent
   }
 
   public void setText(String value) {
+    complete();
     init(Content.Type.TEXT);
     super.setText(value);
   }
   
   public void setValue(String value) {
+    complete();
     if (value != null) removeAttribute(SRC);
     if (value != null) {
       if (Type.TEXT.equals(type)) {
@@ -299,6 +306,7 @@ public class FOMContent
   }
 
   public void setWrappedValue(String wrappedValue) {
+    complete();
     if (Type.XHTML.equals(type)) {
       IRI baseUri = null;
       Element element = null;

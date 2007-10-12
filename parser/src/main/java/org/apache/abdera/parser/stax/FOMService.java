@@ -113,10 +113,12 @@ public class FOMService
   }
 
   public void addWorkspace(Workspace workspace) {
+    complete();
     addChild((OMElement) workspace);
   }
   
   public Workspace addWorkspace(String title) {
+    complete();
     FOMFactory fomfactory = (FOMFactory) factory;
     Workspace workspace = fomfactory.newWorkspace(this);
     workspace.setTitle(title);

@@ -113,6 +113,8 @@ public class ContentProviderTest extends TestCase {
     org.apache.abdera.model.Document<Entry> entry_doc = res.getDocument();
     entry = entry_doc.getRoot();
 
+    res = client.get(colUri + "/foobar");
+    assertEquals(404, res.getStatus());
   }
 
   private void prettyPrint(Abdera abdera, Base doc) throws IOException {

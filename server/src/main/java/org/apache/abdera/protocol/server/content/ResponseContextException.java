@@ -17,16 +17,31 @@
 */
 package org.apache.abdera.protocol.server.content;
 
-import java.util.Map;
+import org.apache.abdera.protocol.server.impl.AbstractResponseContext;
+import org.apache.abdera.protocol.server.impl.EmptyResponseContext;
 
-public interface WorkspaceInfo<T> {
+public class ResponseContextException extends Exception {
+  private AbstractResponseContext responseContext;
 
-  String getId();
+  public ResponseContextException(AbstractResponseContext responseContext, Throwable t) {
+    super(t);
+    this.responseContext = responseContext;
+  }
 
-  String getName();
+  public ResponseContextException(AbstractResponseContext responseContext) {
+    super();
+    this.responseContext = responseContext;
+  }
 
-  Map<String, CollectionProvider<T>> getCollectionProviders();
+  public ResponseContextException(int responseCode) {
+    this(new EmptyResponseContext(responseCode));
+  }
 
-  CollectionProvider<T> getCollectionProvider(String id) throws ResponseContextException;
+  public ResponseContextException(int responseCode, Throwable t) {
+    this(new EmptyResponseContext(responseCode), t);
+  }
 
+  public AbstractResponseContext getResponseContext() {
+    return responseContext;
+  }
 }

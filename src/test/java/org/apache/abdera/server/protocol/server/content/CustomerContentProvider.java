@@ -12,6 +12,7 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.protocol.server.content.AbstractCollectionProvider;
+import org.apache.abdera.protocol.server.content.ResponseContextException;
 import sun.security.pkcs.ContentInfo;
 
 public class CustomerContentProvider extends AbstractCollectionProvider<Customer> {
@@ -45,7 +46,7 @@ public class CustomerContentProvider extends AbstractCollectionProvider<Customer
     return customer;
   }
 
-  public void deleteEntry(String resourceName) {
+  public void deleteEntry(String resourceName) throws ResponseContextException {
     Integer id = getIdFromResourceName(resourceName);
     customers.remove(id);
   }
@@ -67,15 +68,15 @@ public class CustomerContentProvider extends AbstractCollectionProvider<Customer
     return customers.values();
   }
 
-  public Customer getEntry(String resourceName) {
+  public Customer getEntry(String resourceName) throws ResponseContextException {
     Integer id = getIdFromResourceName(resourceName);
     return customers.get(id);
   }
 
-  private Integer getIdFromResourceName(String resourceName) {
+  private Integer getIdFromResourceName(String resourceName) throws ResponseContextException {
     int idx = resourceName.indexOf("-");
     if (idx == -1) {
-      // TODO: exception handling for 404 Not found
+      throw new ResponseContextException(404);
     }
     Integer id = new Integer(resourceName.substring(0, idx));
     return id;

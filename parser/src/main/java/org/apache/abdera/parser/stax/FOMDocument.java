@@ -29,6 +29,8 @@ import javax.activation.MimeType;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.abdera.factory.Factory;
+import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.lang.Lang;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
@@ -37,8 +39,6 @@ import org.apache.abdera.util.XmlUtil;
 import org.apache.abdera.util.XmlUtil.XMLVersion;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterOptions;
-import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.lang.Lang;
 import org.apache.axiom.om.OMComment;
 import org.apache.axiom.om.OMDocType;
 import org.apache.axiom.om.OMDocument;
@@ -351,6 +351,6 @@ public class FOMDocument<T extends Element>
    * to be modified.
    */
   public void complete() {
-    if (!isComplete() && getRoot() != null) getRoot().toString();
+    if (!isComplete() && getRoot() != null) getRoot().complete();
   }
 }

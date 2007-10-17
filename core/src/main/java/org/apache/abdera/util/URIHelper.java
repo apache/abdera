@@ -28,10 +28,12 @@ public class URIHelper {
 
   private static final Pattern javascript = 
     Pattern.compile(
-      "\\s*j\\s*a\\s*v\\s*a\\s*s\\s*c\\s*r\\s*i\\s*p\\s*t\\s*:.*");
+      "\\s*j\\s*a\\s*v\\s*a\\s*s\\s*c\\s*r\\s*i\\s*p\\s*t\\s*:.*", 
+      Pattern.CASE_INSENSITIVE);
   private static final Pattern mailto = 
     Pattern.compile(
-      "\\s*m\\s*a\\s*i\\s*l\\s*t\\s*o\\s*:.*");
+      "\\s*m\\s*a\\s*i\\s*l\\s*t\\s*o\\s*:.*", 
+      Pattern.CASE_INSENSITIVE);
   
   public static boolean isJavascriptUri(IRI uri) {
     if (uri == null) return false;

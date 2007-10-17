@@ -20,6 +20,7 @@ package org.apache.abdera.parser;
 import java.io.InputStream;
 import java.io.Reader;
 
+import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 
@@ -48,6 +49,21 @@ public interface Parser {
   <T extends Element>Document<T> parse(
     InputStream in, 
     String base) 
+      throws ParseException;
+
+  /**
+   * Parse the input stream using the default character set encoding (UTF-8).
+   * The specified Base URI is used to resolve relative references contained
+   * in the document
+   * @param in The input stream to parse
+   * @param options The Parse options
+   * @return The parsed Abdera Document
+   * @throws ParseException if the parse failed
+   * @throws IRISyntaxException if the Base URI is malformed
+   */
+  <T extends Element>Document<T> parse(
+    InputStream in, 
+    ParserOptions options) 
       throws ParseException;
   
   /**
@@ -91,6 +107,19 @@ public interface Parser {
   <T extends Element>Document<T> parse(
     Reader in, 
     String base) 
+      throws ParseException;
+
+  /**
+   * Parse the reader using the specified Base URI
+   * @param in The Reader to parse
+   * @param options The Parse Options
+   * @return The parsed Abdera Document
+   * @throws ParseException if the parse failed
+   * @throws IRISyntaxException if the Base URI is malformed
+   */
+  <T extends Element>Document<T> parse(
+    Reader in, 
+    ParserOptions options) 
       throws ParseException;
   
   /**

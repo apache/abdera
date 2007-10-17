@@ -30,6 +30,28 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
 
+/**
+ * <p>Provides a base implementation for ExtensionFactory instances. By extending
+ * this, specific extension factories need only to associate a QName with an 
+ * implementation class, e.g.,</p>
+ *  
+ * <pre>
+ *  public class MyExtensionFactory
+ *    extends AbstractExtensionFactory {
+ * 
+ *    private String NS = "http://example.org/foo/ns"; 
+ *    private QName FOO = new QName(NS, "foo");
+ *
+ *    public MyExtensionFactory() {
+ *      super(NS);
+ *      addImpl(FOO, Foo.class);
+ *    }
+ *  }
+ *  
+ *  public class Foo extends ElementWrapper { ... }
+ *  
+ * </pre>
+ */
 public abstract class AbstractExtensionFactory 
   implements ExtensionFactory {
 
@@ -57,10 +79,16 @@ public abstract class AbstractExtensionFactory
     return t != null ? t : (T)internal;
   }
 
+  /**
+   * Associate a MIME media type for the specific QName
+   */
   protected void addMimeType(QName qname, String mimetype) {
     mimetypes.put(qname, mimetype);
   }
   
+  /**
+   * Associate a QName with an implementation class
+   */
   protected void addImpl(QName qname, Class<? extends ElementWrapper> impl) {
     impls.put(qname, impl);
   }

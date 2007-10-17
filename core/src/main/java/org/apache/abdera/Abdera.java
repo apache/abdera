@@ -38,9 +38,35 @@ import org.apache.abdera.xpath.XPath;
  * These instances may be retrieved using the appropriate get___ methods.
  * Alternatively, new instances may be created using the appropriate 
  * new___ methods. 
+ * 
+ * Instances of the Abdera object, and it's direct children (Parser,
+ * Factory, XPath, etc) are Thread safe.  Because of the dynamic configuration
+ * model Abdera uses, creating a new instance of the Abdera object can be
+ * time consuming.  It is, therefore, a good idea for applications to create
+ * only a single static instance of the Abdera object (see the Abdera.getInstance()
+ * method).  
+ * 
+ * Abdera's configuration model depends heavily on the context classloader.
+ * Extension Factories, custom writers, custom parsers, etc are all discovered
+ * automatically by searching the classpath.  This means that care needs to be
+ * taken when using Abdera in environments that utilize multiple classloaders
+ * (such as Web application servers).
  */
 public final class Abdera {
 
+  /** A static instance of Abdera **/
+  private static Abdera instance;
+  
+  /**
+   * Get a static instance of the Abdera object
+   */
+  public static synchronized Abdera getInstance() {
+    if (instance == null) {
+      instance = new Abdera();
+    }
+    return instance;
+  }
+  
   private final AbderaConfiguration config;
   private final Factory factory;
   private final Parser parser;

@@ -65,6 +65,13 @@ public abstract class AbstractParser
       throws ParseException {
     return parse(in, base, getDefaultParserOptions());
   }
+
+  public <T extends Element>Document<T> parse(
+    InputStream in, 
+    ParserOptions options) 
+      throws ParseException {
+    return parse(in, null, options);
+  }
   
   public <T extends Element>Document<T> parse(
     InputStream in, 
@@ -87,6 +94,13 @@ public abstract class AbstractParser
     return parse(in, base, getDefaultParserOptions());
   }
 
+  public <T extends Element>Document<T> parse(
+    Reader in, 
+    ParserOptions options) 
+      throws ParseException {
+    return parse(in, null, options);
+  }
+  
   public synchronized ParserOptions getDefaultParserOptions() {
     if (options == null) options = initDefaultParserOptions();
 

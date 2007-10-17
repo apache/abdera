@@ -26,18 +26,18 @@ import javax.xml.namespace.QName;
  */
 public interface ParseFilter extends Cloneable {
   
-  public Object clone() throws CloneNotSupportedException;
+  Object clone() throws CloneNotSupportedException;
 
   /**
    * Returns true if elements with the given QName are acceptable
    */
-  public boolean acceptable(QName qname);
+  boolean acceptable(QName qname);
   
   /**
    * Returns true if attributes with the given qname appearing on elements
    * with the given qname are acceptable
    */
-  public boolean acceptable(QName qname, QName attribute);
+  boolean acceptable(QName qname, QName attribute);
   
   /**
    * Return true if the parser should ignore comments
@@ -55,14 +55,17 @@ public interface ParseFilter extends Cloneable {
   boolean getIgnoreProcessingInstructions();
   
   /**
-   * Return true if the parser should ignore comments
+   * True if the parser should ignore comments
    */
   void setIgnoreComments(boolean ignore);
   
   /**
-   * Return true if the parser should ignore insignificant whitespace
+   * True if the parser should ignore insignificant whitespace
    */
   void setIgnoreWhitespace(boolean ignore);
   
+  /**
+   * True if the parser should ignore processing instructions
+   */
   void setIgnoreProcessingInstructions(boolean ignore);
 }

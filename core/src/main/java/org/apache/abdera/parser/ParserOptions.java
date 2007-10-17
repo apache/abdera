@@ -127,11 +127,27 @@ public interface ParserOptions extends Cloneable {
    */
   void setCompressionCodecs(CompressionCodec... codecs);
   
+  /**
+   * Register a named entity. This provides an escape clause for when 
+   * feeds use entities that are not supported in XML without a DTD decl.
+   * By default, all of the (X)HTML entities are preregistered
+   */
   void registerEntity(String name, String value);
-  
+
+  /**
+   * Resolves a value for a named entity. This provides an escape clause for when 
+   * feeds use entities that are not supported in XML without a DTD decl.
+   * By default, all of the (X)HTML entities are preregistered
+   */
   String resolveEntity(String name);
   
+  /**
+   * True if undeclared named entities should be resolved.
+   */
   void setResolveEntities(boolean resolve);
-  
+
+  /**
+   * True if undeclared named entities should be resolved.
+   */
   boolean getResolveEntities();
 }

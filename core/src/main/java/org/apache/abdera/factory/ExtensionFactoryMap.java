@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import javax.xml.namespace.QName;
-
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
@@ -69,7 +67,9 @@ public class ExtensionFactoryMap
     synchronized(factories) {
       for (ExtensionFactory factory : factories) {
         String[] namespaces = factory.getNamespaces();
-        for (String uri : namespaces) ns.add(uri);
+        for (String uri : namespaces) {
+          if (!ns.contains(uri)) ns.add(uri);
+        }
       }
     }
     return ns.toArray(new String[ns.size()]);
@@ -82,13 +82,6 @@ public class ExtensionFactoryMap
       }
     }
     return false;
-  }
-
-  public <T extends Element> T newExtensionElement(
-    QName qname, 
-    Base parent, 
-    Factory factory) {
-      return null;
   }
   
   public void addFactory(ExtensionFactory factory) {

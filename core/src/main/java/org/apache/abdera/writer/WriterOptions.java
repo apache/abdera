@@ -32,12 +32,24 @@ public interface WriterOptions extends Cloneable {
   void setCompressionCodecs(CompressionCodec... codecs);
 
   Object clone() throws CloneNotSupportedException;
-  
+
+  /**
+   * The character encoding to use for the output
+   */
   String getCharset();
   
+  /**
+   * The character encoding to use for the output
+   */
   void setCharset(String charset);
-  
+
+  /**
+   * True if the writer should close the output stream or writer when finished
+   */
   boolean getAutoClose();
-  
+
+  /**
+   * True if the writer should close the output stream or writer when finished
+   */
   void setAutoClose(boolean autoclose);
 }

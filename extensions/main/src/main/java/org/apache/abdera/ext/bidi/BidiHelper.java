@@ -19,14 +19,16 @@ package org.apache.abdera.ext.bidi;
 
 import java.text.AttributedString;
 import java.text.Bidi;
+import java.util.Arrays;
 import java.util.Locale;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.model.Base;
-import org.apache.abdera.model.Element;
 import org.apache.abdera.i18n.io.CharUtils;
 import org.apache.abdera.i18n.lang.Lang;
+import org.apache.abdera.model.Base;
+import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Element;
 
 /**
  * <p>This is (hopefully) temporary.  Ideally, this would be wrapped into the 
@@ -181,6 +183,32 @@ public final class BidiHelper {
     return guessDirectionFromLanguage(element, false);
   }
   
+  private static final String[] RTL_LANGS = {
+    "ar","fa","ur","ps","syr","dv","he","yi"};
+  private static final String[] RTL_SCRIPTS = {
+    "arab","avst","hebr","hung","lydi","mand",
+    "mani","mero","mong","nkoo","orkh","phlv",
+    "phnx","samr","syrc","syre","syrj","syrn",
+    "tfng","thaa"
+  };
+  // charset encodings that one may typically expect to be RTL
+  private static final String[] RTL_ENCODINGS = {
+    "iso-8859-6", "iso-8859-6-bidi", 
+    "iso-8859-6-i", "iso-ir-127", 
+    "ecma-114", "asmo-708", "arabic", 
+    "csisolatinarabic", "windows-1256", 
+    "ibm-864", "macarabic", "macfarsi", 
+    "iso-8859-8-i", "iso-8859-8-bidi", 
+    "windows-1255", "iso-8859-8", "ibm-862", 
+    "machebrew", "asmo-449", "iso-9036", 
+    "arabic7", "iso-ir-89", "csiso89asmo449", 
+    "iso-unicode-ibm-1264", "csunicodeibm1264", 
+    "iso_8859-8:1988", "iso-ir-138", "hebrew", 
+    "csisolatinhebrew", "iso-unicode-ibm-1265", 
+    "csunicodeibm1265", "cp862", "862", 
+    "cspc862latinhebrew"
+  };
+  
   /**
    * Attempt to guess the base direction using the in-scope language.  
    * Implements the method used by Internet Explorer 7's feed view
@@ -203,17 +231,43 @@ public final class BidiHelper {
       Locale l = Locale.getDefault();
       lang = new Lang(l.getLanguage());
     }
+    if (lang.getSubtagCount() > 0) {
+      String script = lang.getSubtag(0);
+      if (Arrays.binarySearch(RTL_SCRIPTS, script.toLowerCase()) > -1)
+        return Direction.RTL;
+    }
     String primary = lang.getPrimary();
-    return (primary.equalsIgnoreCase("ar") ||
-            primary.equalsIgnoreCase("fa") ||
-            primary.equalsIgnoreCase("ur") ||
-            primary.equalsIgnoreCase("ps") ||
-            primary.equalsIgnoreCase("syr") ||
-            primary.equalsIgnoreCase("dv") ||
-            primary.equalsIgnoreCase("he") ||
-            primary.equalsIgnoreCase("yi")) ? Direction.RTL : Direction.LTR; 
+    if (Arrays.binarySearch(RTL_LANGS, primary.toLowerCase()) > -1) 
+          return Direction.RTL;
+    return Direction.UNSPECIFIED;
   }
 
+  /**
+   * Attempt to guess the base direction using the charset encoding.  This 
+   * is a bit of a last resort approach
+   */
+  public static <T extends Element>Direction guessDirectionFromEncoding(T element) {
+    return guessDirectionFromEncoding(element,false);
+  }
+
+  /**
+   * Attempt to guess the base direction using the charset encoding.  This 
+   * is a bit of a last resort approach
+   */
+  @SuppressWarnings("unchecked") 
+  public static <T extends Element>Direction guessDirectionFromEncoding(T element, boolean ignoredir) {
+    if (!ignoredir && hasDirection(element)) return getDirection(element);
+    Document doc = element.getDocument();
+    if (doc == null) return Direction.UNSPECIFIED;
+    String charset = doc.getCharset();
+    if (charset == null) return Direction.UNSPECIFIED;
+    charset = charset.replace('_', '-');
+    Arrays.sort(RTL_ENCODINGS);
+    if (Arrays.binarySearch(RTL_ENCODINGS, charset.toLowerCase()) > -1) 
+      return Direction.RTL;
+    return Direction.UNSPECIFIED;
+  }
+  
   /**
    * Attempt to guess the base direction of an element using an analysis of
    * the directional properties of the characters used.  This is a brute-force
@@ -245,7 +299,9 @@ public final class BidiHelper {
     Direction dir = Direction.UNSPECIFIED;
     if (!ignoredir && hasDirection(element)) return getDirection(element);
     String text = element.getText();
-    if (text != null) {
+    if (text != null && text.length() > 0) {
+      if (text.charAt(0) == 0x200F) return Direction.RTL; // if using the unicode right-to-left mark
+      if (text.charAt(0) == 0x200E) return Direction.LTR; // if using the unicode left-to-right mark
       int c = 0;
       for (int n = 0; n < text.length(); n++) {
         char ch = text.charAt(n);

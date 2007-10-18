@@ -30,6 +30,7 @@ import javax.net.ssl.TrustManager;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.protocol.Response.ResponseType;
 import org.apache.abdera.protocol.client.cache.Cache;
 import org.apache.abdera.protocol.client.cache.CacheDisposition;
@@ -39,6 +40,8 @@ import org.apache.abdera.protocol.client.cache.lru.LRUCache;
 import org.apache.abdera.protocol.client.util.BaseRequestEntity;
 import org.apache.abdera.protocol.client.util.MethodHelper;
 import org.apache.abdera.protocol.client.util.SimpleSSLProtocolSocketFactory;
+import org.apache.abdera.protocol.error.Error;
+import org.apache.abdera.protocol.error.ProtocolException;
 import org.apache.abdera.protocol.util.CacheControlUtil;
 import org.apache.abdera.util.ServiceUtil;
 import org.apache.abdera.util.Version;
@@ -424,8 +427,30 @@ public class AbderaClient {
       if (response == null) return;
       ResponseType type = response.getType();
       if ((type.equals(ResponseType.CLIENT_ERROR) && options.is4xxRequestException()) ||
-          (type.equals(ResponseType.SERVER_ERROR) && options.is5xxRequestException()))
-        throw new RequestException(response);
+          (type.equals(ResponseType.SERVER_ERROR) && options.is5xxRequestException())) {
+        try {
+          Document<Element> doc = response.getDocument();
+          org.apache.abdera.protocol.error.Error error = null;
+          if (doc != null) {
+            Element root = doc.getRoot();
+            if (root instanceof Error) {
+              error = (Error) root;
+            }
+          }
+          if (error == null)
+            error = org.apache.abdera.protocol.error.Error.create(
+                abdera, 
+                response.getStatus(), 
+                response.getStatusText());
+          error.throwException();
+        } catch (ProtocolException pe) {
+          throw pe;
+        } catch (RuntimeException e) {
+          throw e;
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      }
   }
   
   public RequestOptions getDefaultRequestOptions() {

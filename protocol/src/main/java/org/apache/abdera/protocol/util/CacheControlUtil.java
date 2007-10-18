@@ -23,8 +23,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Provides parsing and properly handling of the HTTP Cache-Control header.
+ */
 public class CacheControlUtil {
 
+  /**
+   * Idempotent methods are handled differently in caches than other methods
+   */
   public static boolean isIdempotent(String method) {
     return (method.equalsIgnoreCase("GET") ||
             method.equalsIgnoreCase("HEAD") ||
@@ -40,6 +46,9 @@ public class CacheControlUtil {
     buf.append(value);
   }
 
+  /**
+   * Construct the Cache-Control header from info in the request object
+   */
   public static String buildCacheControl(AbstractRequest request) {
     StringBuffer buf = new StringBuffer();
     if (request.isNoCache()) append(buf,"no-cache");
@@ -52,6 +61,9 @@ public class CacheControlUtil {
     return buf.toString();
   }
   
+  /**
+   * Parse the Cache-Control header
+   */
   public static void parseCacheControl(
     String cc, 
     AbstractRequest request) {
@@ -77,6 +89,9 @@ public class CacheControlUtil {
       }
   }
   
+  /**
+   * Parse the Cache-Control header
+   */
   public static void parseCacheControl(
     String cc, 
     AbstractResponse response) {
@@ -114,7 +129,9 @@ public class CacheControlUtil {
       }
   }
 
-  
+  /**
+   * Cache Control Directives
+   */
   public enum Directive {
     MAXAGE, MAXSTALE, MINFRESH, NOCACHE, NOSTORE, NOTRANSFORM, ONLYIFCACHED,
     MUSTREVALIDATE, PRIVATE, PROXYREVALIDATE, PUBLIC, SMAXAGE, UNKNOWN;
@@ -127,7 +144,10 @@ public class CacheControlUtil {
       return UNKNOWN;
     }
   }
-  
+
+  /**
+   * Parser for the Cache-Control header
+   */
   public static class CacheControlParser 
     implements Iterable<Directive> {
         

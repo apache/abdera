@@ -23,7 +23,7 @@ public class ProtocolException
     extends RuntimeException {
 
   private static final long serialVersionUID = 1017447143200419489L;
-  protected final Error error;
+  private final Error error;
   
   public ProtocolException(Error error) {
     super(error.getCode() + "::" + error.getMessage());
@@ -38,25 +38,34 @@ public class ProtocolException
   public Error getError() {
     return error;
   }
-
-  @Override
+  
+  @Override 
   public int hashCode() {
-    final int PRIME = 31;
+    final int prime = 31;
     int result = 1;
-    result = PRIME * result + ((error == null) ? 0 : error.hashCode());
+    String message = error != null ? error.getMessage() : null;
+    int code = error != null ? error.getCode() : 0;
+    result = prime * result + ((message == null) ? 0 : message.hashCode());
+    result = prime * result + code;
     return result;
   }
 
-  @Override
+  @Override 
   public boolean equals(Object obj) {
     if (this == obj) return true;
     if (obj == null) return false;
     if (getClass() != obj.getClass()) return false;
     final ProtocolException other = (ProtocolException) obj;
-    if (error == null) {
-      if (other.error != null) return false;
-    } else if (!error.equals(other.error)) return false;
+    String message = error != null ? error.getMessage() : null;
+    int code = error != null ? error.getCode() : 0;
+    String omessage = other.error != null ? other.error.getMessage() : null;
+    int ocode = other.error != null ? other.error.getCode() : 0;    
+    if (message == null) {
+      if (omessage != null) return false;
+    } else if (!message.equals(omessage)) return false;
+    if (code != ocode) return false;
     return true;
   }
+
   
 }

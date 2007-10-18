@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.abdera.Abdera;
@@ -42,7 +41,7 @@ public class InMemoryCachedResponse
   private int status = 0;
   private String status_text = null;
   private String uri = null;
-  private Map<String,List<Object>> headers = null;
+  private Map<String,Object[]> headers = null;
   private byte[] buf = null;
   
   public InMemoryCachedResponse(
@@ -80,9 +79,9 @@ public class InMemoryCachedResponse
     this.buf = out.toByteArray();
   }
   
-  public Map<String,List<Object>> getHeaders() {
+  public Map<String,Object[]> getHeaders() {
     if (headers == null)
-      headers = new HashMap<String,List<Object>>();
+      headers = new HashMap<String,Object[]>();
     return headers;
   }
   
@@ -91,15 +90,15 @@ public class InMemoryCachedResponse
   }
   
   public String getHeader(String header) {
-    List<Object> values = getHeaders().get(header);
-    return (values != null) ? (String)values.get(0) : null;
+    Object[] values = getHeaders().get(header);
+    return (values != null && values.length > 0) ? (String)values[0] : null;
   }
 
   public String[] getHeaderNames() {
     return getHeaders().keySet().toArray(new String[getHeaders().size()]);
   }
 
-  public List<Object> getHeaders(String header) {
+  public Object[] getHeaders(String header) {
     return getHeaders().get(header);
   }
 

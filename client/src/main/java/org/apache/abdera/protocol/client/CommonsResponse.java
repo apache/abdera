@@ -20,6 +20,7 @@ package org.apache.abdera.protocol.client;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -86,36 +87,34 @@ public class CommonsResponse
    */
   public String getHeader(String header) {
     Header h = method.getResponseHeader(header);
-    if (h != null) 
-      return h.getValue();
-    else return null;
+    return h != null ? h.getValue() : null;
   }
 
   /**
    * Return the values of the named HTTP header
    */
-  public List<Object> getHeaders(String header) {
+  public Object[] getHeaders(String header) {
     Header[] headers = method.getResponseHeaders(header);
     List<Object> values = new ArrayList<Object>();
     for (Header h : headers) {
       values.add(h.getValue());
     }
-    return java.util.Collections.unmodifiableList(values);
+    return values.toArray(new Object[values.size()]);
   }
   
   /**
    * Return all of the HTTP headers
    */
-  public Map<String,List<Object>> getHeaders() {
+  public Map<String,Object[]> getHeaders() {
     Header[] headers = method.getResponseHeaders();
-    Map<String,List<Object>> map = new HashMap<String,List<Object>>();
+    Map<String,Object[]> map = new HashMap<String,Object[]>();
     for (Header header : headers) {
-      List<Object> values = map.get(header.getName());
-      if (values == null) {
-        values = new ArrayList<Object>();
-        map.put(header.getName(),values);
-      }
-      values.add(header.getValue());
+      Object[] values = map.get(header.getName());
+      List<Object> list = values == null ? 
+        new ArrayList<Object>() : 
+        Arrays.asList(values);
+      list.add(header.getValue());
+      map.put(header.getName(), list.toArray(new Object[list.size()]));
     }
     return java.util.Collections.unmodifiableMap(map);
   }
@@ -173,5 +172,5 @@ public class CommonsResponse
       throw new ClientException(e); // server likely returned a bad date format
     }
   }
-  
+
 }

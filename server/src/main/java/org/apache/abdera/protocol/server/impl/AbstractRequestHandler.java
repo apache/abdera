@@ -22,8 +22,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 import javax.activation.MimeType;
 import javax.servlet.ServletException;
@@ -117,20 +115,17 @@ public abstract class AbstractRequestHandler
         MimeType ct = context.getContentType();
         if (ct != null) response.setContentType(ct.toString());
       } catch (Exception e) {}
-      Map<String, List<Object>> headers = context.getHeaders();
-      if (headers != null) {
-        for (Map.Entry<String, List<Object>> entry : headers.entrySet()) {
-          List<Object> values = entry.getValue();
-          if (values == null) 
-            continue;          
-          for (Object value : values) {
-            if (value instanceof Date)
-              response.setDateHeader(entry.getKey(), ((Date)value).getTime());
-            else
-              response.setHeader(entry.getKey(), value.toString());
-          }
+      String[] names = context.getHeaderNames();
+      for (String name : names) {
+        Object[] headers = context.getHeaders(name);
+        for (Object value : headers) {          
+          if (value instanceof Date)
+            response.setDateHeader(name, ((Date)value).getTime());
+          else
+            response.setHeader(name, value.toString());
         }
-      }  
+      }
+      
       if (!request.getMethod().equals("HEAD") && context.hasEntity()) {
         OutputStream out = response.getOutputStream();
         context.writeTo(out);

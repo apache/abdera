@@ -18,11 +18,10 @@
 package org.apache.abdera.protocol.client.cache;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.ClientResponse;
+import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.util.CacheControlUtil;
 
 public abstract class CacheBase 
@@ -44,9 +43,10 @@ public abstract class CacheBase
       CacheKey key = getCacheKey(uri, options);
       CachedResponse response = get(key);
       if (response != null && options != null) {
-        List<String> pragma = options.getHeaders("Pragma");
+        Object[] pragma = options.getHeaders("Pragma");
         if (pragma != null) {
-          for (String s: pragma) {
+          for (Object o: pragma) {
+            String s = (String)o;
             if (s.equalsIgnoreCase("no-cache")) {
               return CacheDisposition.TRANSPARENT;
             }

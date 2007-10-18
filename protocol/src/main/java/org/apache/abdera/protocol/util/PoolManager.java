@@ -25,7 +25,11 @@ import org.apache.abdera.protocol.ItemManager;
  * Implements a simple pool manager.
  * 
  * By default, an upper limit to the pool is set at 25 entries.  
- * New items can always be created. 
+ * New items can always be created, but if more than 25 entries
+ * are released back to the pool, the extras are discarded. 
+ * Items added to the stack should never maintain any kind of 
+ * state as it is entirely possible that different threads will
+ * be grabbing items from the pool
  */
 public abstract class PoolManager<T> 
   implements ItemManager<T> {

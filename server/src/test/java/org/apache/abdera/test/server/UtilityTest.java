@@ -25,6 +25,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import junit.framework.TestCase;
+
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.protocol.server.ServiceManager;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.TargetType;
@@ -33,9 +36,6 @@ import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
 import org.apache.abdera.protocol.server.impl.SimpleSubjectResolver;
 import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.util.EntityTag;
-import org.apache.abdera.i18n.iri.IRI;
-
-import junit.framework.TestCase;
 
 public class UtilityTest extends TestCase {
 
@@ -181,7 +181,7 @@ public class UtilityTest extends TestCase {
       return null;
     }
 
-    public List<String> getHeaders(String name) {
+    public String[] getHeaders(String name) {
       return null;
     }
 

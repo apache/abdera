@@ -18,18 +18,14 @@
 package org.apache.abdera.protocol.util;
 
 import java.util.Date;
-import java.util.List;
 
-import javax.activation.MimeType;
-
-import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.protocol.Request;
 import org.apache.abdera.util.EntityTag;
 
-public abstract class AbstractRequest implements Request {
+public abstract class AbstractRequest
+  extends AbstractMessage 
+  implements Request {
 
-  protected int flags = 0;
-  protected long max_age = -1;
   protected long max_stale = -1;
   protected long min_fresh = -1;
   
@@ -53,23 +49,6 @@ public abstract class AbstractRequest implements Request {
     return getHeader("Authorization");
   }
 
-  public String getCacheControl() {
-    return getHeader("Cache-Control");
-  }
-  
-  public String getSlug() {
-    return Escaping.decode(EncodingUtil.decode(getHeader("Slug")));
-  }
-
-  public MimeType getContentType() {
-    try {
-      String value = getHeader("Content-Type");
-      return (value != null) ? new MimeType(value) : null;
-    } catch (javax.activation.MimeTypeParseException e) {
-      throw new org.apache.abdera.util.MimeTypeParseException(e);
-    }
-  }
-
   public EntityTag[] getIfMatch() {
     return EntityTag.parseTags(getHeader("If-Match"));
   }
@@ -86,28 +65,12 @@ public abstract class AbstractRequest implements Request {
     return getDateHeader("If-Unmodified-Since");
   }
 
-  public long getMaxAge() {
-    return max_age;
-  }
-
   public long getMaxStale() {
     return max_stale;
   }
 
   public long getMinFresh() {
     return min_fresh;
-  }
-
-  public boolean isNoCache() {
-    return check(NOCACHE); 
-  }
-
-  public boolean isNoStore() {
-    return check(NOSTORE);
-  }
-
-  public boolean isNoTransform() {
-    return check(NOTRANSFORM);
   }
 
   public boolean isOnlyIfCached() {
@@ -126,15 +89,6 @@ public abstract class AbstractRequest implements Request {
     this.min_fresh = min_fresh;
   }
 
-  private boolean check(int flag) {
-    return (flags & flag) == flag;
-  }
-  
-  private void toggle(boolean val, int flag) {
-    if (val) flags |= flag;
-    else flags &= ~flag;
-  }
-  
   public void setNoCache(boolean val) {
     toggle(val, NOCACHE);
   }
@@ -151,16 +105,4 @@ public abstract class AbstractRequest implements Request {
     toggle(val, ONLYIFCACHED);
   }
 
-  public String getDecodedHeader(String header) {
-    return EncodingUtil.decode(getHeader(header));
-  }
-  
-  public List<String> getDecodedHeaders(String header) {
-    List<String> headers = getHeaders(header);
-    String[] vals = new String[headers.size()];
-    for (int n = 0; n < headers.size(); n++) {
-      vals[n] = EncodingUtil.decode(headers.get(n));
-    }
-    return java.util.Arrays.asList(vals);
-  }
 }

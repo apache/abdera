@@ -167,9 +167,10 @@ public class HttpServletRequestContext
   }
 
   @SuppressWarnings("unchecked")
-  public List<String> getHeaders(String name) {
-    Enumeration<String> e = request.getHeaders(name);
-    return java.util.Collections.list(e);
+  public Object[] getHeaders(String name) {
+    Enumeration<Object> e = request.getHeaders(name);
+    List<Object> list = java.util.Collections.list(e);
+    return list.toArray(new String[list.size()]);
   }
 
   @SuppressWarnings("unchecked")

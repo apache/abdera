@@ -17,10 +17,20 @@
 */
 package org.apache.abdera.protocol;
 
+/**
+ * ItemManager is an internal utility class that provides a simple get/release
+ * interface.  It is used primarily to control access to pooled resources.
+ */
 public interface ItemManager<T> {
 
+  /**
+   * Get an item based on the specified request
+   */
   T get(Request request);
   
+  /**
+   * Release an item 
+   */
   void release(T item);
   
 }

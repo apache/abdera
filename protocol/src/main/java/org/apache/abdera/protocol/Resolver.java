@@ -17,6 +17,11 @@
 */
 package org.apache.abdera.protocol;
 
+/**
+ * The Resolver interface is a utility class used to resolve objects based on
+ * a request.  It is used internally by Abdera as the basis for Target and Subject 
+ * resolvers.
+ */
 public interface Resolver<T> {
 
   T resolve(Request request);

@@ -95,7 +95,7 @@ public interface ClientResponse extends Response {
   Date getServerDate();
   
   /**
-   * Return the character set encoding specified in the ContentType header, if ant
+   * Return the character set encoding specified in the ContentType header, if any
    */
   String getCharacterEncoding();
   

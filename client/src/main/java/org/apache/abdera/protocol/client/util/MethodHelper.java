@@ -18,11 +18,10 @@
 package org.apache.abdera.protocol.client.util;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.ClientResponse;
+import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.methods.DeleteMethod;
@@ -61,12 +60,12 @@ public class MethodHelper {
     }
   }
 
-  public static Map<String,List<Object>> getCacheableHeaders(ClientResponse response) {
-    Map<String,List<Object>> map = new HashMap<String,List<Object>>();
+  public static Map<String,Object[]> getCacheableHeaders(ClientResponse response) {
+    Map<String,Object[]> map = new HashMap<String,Object[]>();
     String[] headers = response.getHeaderNames();
     for (String header : headers) {
       if (MethodHelper.isCacheableHeader(header, response)) {
-        List<Object> list = response.getHeaders(header);
+        Object[] list = response.getHeaders(header);
         map.put(header, list);
       }
     }
@@ -162,9 +161,9 @@ public class MethodHelper {
   private static void initHeaders(RequestOptions options, HttpMethod method) {
     String[] headers = options.getHeaderNames();
     for (String header : headers) {
-      List<String> values = options.getHeaders(header);
-      for (String value : values) {
-        method.addRequestHeader(header, value);
+      Object[] values = options.getHeaders(header);
+      for (Object value : values) {
+        method.addRequestHeader(header, value.toString());
       }
     }
     String cc = options.getCacheControl();

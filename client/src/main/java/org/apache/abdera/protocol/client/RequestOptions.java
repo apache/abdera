@@ -49,11 +49,9 @@ public class RequestOptions
   private boolean requestException5xx = false;
   private boolean useExpectContinue = true;
   
-  private final Map<String,List<String>> headers;  
+  private final Map<String,String[]> headers = new HashMap<String,String[]>();  
   
-  public RequestOptions() {
-    headers = new HashMap<String,List<String>>();
-  }
+  public RequestOptions() {}
 
   public RequestOptions(Date ifModifiedSince) {
     this();
@@ -87,7 +85,7 @@ public class RequestOptions
     setNoCache(no_cache);
   }
   
-  private Map<String,List<String>> getHeaders() {
+  private Map<String,String[]> getHeaders() {
     return headers;
   }
 
@@ -124,6 +122,10 @@ public class RequestOptions
     setHeader("Content-Type", value);
   }
   
+  public void setContentLocation(String iri) {
+    setHeader("Content-Location", iri);
+  }
+  
   /**
    * Set the value of the HTTP Content-Type header
    */
@@ -153,8 +155,7 @@ public class RequestOptions
       for (int n = 0; n < values.length; n++) {
         values[n] = EncodingUtil.encode(values[n], charset);
       }
-      List<String> list = Arrays.asList(new String[] {combine(values)});
-      getHeaders().put(header, list);
+      getHeaders().put(header, new String[] {combine(values)});
     } else {
       removeHeaders(header);
     }
@@ -175,8 +176,7 @@ public class RequestOptions
    */
   public void setHeader(String header, String... values) {
     if (values != null && values.length > 0) {
-      List<String> list = Arrays.asList(new String[] {combine(values)});
-      getHeaders().put(header, list);
+      getHeaders().put(header, new String[] {combine(values)});
     } else {
       removeHeaders(header);
     }
@@ -209,7 +209,7 @@ public class RequestOptions
     for (int n = 0; n < values.length; n++) {
       values[n] = EncodingUtil.encode(values[n], charset);
     }
-    List<String> list = getHeaders().get(header);
+    List<String> list = Arrays.asList(getHeaders().get(header));
     String value = combine(values);
     if (list != null) {
       if (!list.contains(value)) 
@@ -232,7 +232,7 @@ public class RequestOptions
    */
   public void addHeader(String header, String... values) {
     if (values == null || values.length == 0) return;
-    List<String> list = getHeaders().get(header);
+    List<String> list = Arrays.asList(getHeaders().get(header));
     String value = combine(values);
     if (list != null) {
       if (!list.contains(value)) 
@@ -254,14 +254,14 @@ public class RequestOptions
    * Returns the text value of the specified header
    */
   public String getHeader(String header) {
-    List<String> list = getHeaders().get(header);
-    return (list != null) ? list.get(0) : null;
+    String[] list = getHeaders().get(header);
+    return (list != null && list.length > 0) ? list[0] : null;
   }
   
   /**
    * Return a listing of text values for the specified header
    */
-  public List<String> getHeaders(String header) {
+  public String[] getHeaders(String header) {
     return getHeaders().get(header);
   }
   

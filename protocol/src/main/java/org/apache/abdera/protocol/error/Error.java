@@ -26,7 +26,8 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ExtensibleElementWrapper;
 
 /**
- * Abdera protocol error element
+ * Abdera protocol error element.  The Abdera error document provides a 
+ * simple structure for reporting errors back to Abdera clients.
  */
 public class Error
   extends ExtensibleElementWrapper {
@@ -44,11 +45,19 @@ public class Error
     super(factory, qname);
   }
   
+  /**
+   * The code should typically match the HTTP status code; however, certain
+   * application scenarios may require the use of a different code
+   */
   public int getCode() {
     String code = getSimpleExtension(CODE);
     return code != null ? Integer.parseInt(code) : -1;
   }
-  
+
+  /**
+   * The code should typically match the HTTP status code; however, certain
+   * application scenarios may require the use of a different code
+   */
   public void setCode(int code) {
     if (code > -1) {
       Element element = getExtension(CODE);
@@ -63,10 +72,16 @@ public class Error
     }
   }
  
+  /**
+   * Human-readable, language-sensitive description of the error
+   */
   public String getMessage() {
     return getSimpleExtension(MESSAGE);
   }
-  
+
+  /**
+   * Human-readable, language-sensitive description of the error
+   */
   public void setMessage(String message) {
     if (message != null) {
       Element element = getExtension(MESSAGE);
@@ -81,10 +96,17 @@ public class Error
     }
   }
   
+  /**
+   * Will throw a ProtocolException that wraps this element. This is 
+   * useful on the client side to surface error responses
+   */
   public void throwException() {
     throw new ProtocolException(this);
   }
   
+  /**
+   * Create a new Error object
+   */
   public static Error create(Abdera abdera, int code, String message) {
     Document<Error> doc = abdera.getFactory().newDocument();
     Error error = abdera.getFactory().newElement(ERROR,doc);

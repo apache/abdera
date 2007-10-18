@@ -18,6 +18,7 @@
 package org.apache.abdera.protocol.server.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,10 +46,10 @@ public abstract class AbstractResponseContext
   protected String status_text = null;
   protected Writer writer = null;
   
-  protected Map<String,List<Object>> headers = null;
+  protected Map<String,Object[]> headers = null;
 
   public void removeHeader(String name) {
-    Map<String,List<Object>> headers = getHeaders();
+    Map<String,Object[]> headers = getHeaders();
     headers.remove(name);
   }
   
@@ -57,12 +58,11 @@ public abstract class AbstractResponseContext
   }
   
   public void setEncodedHeader(String name, String charset, String... vals) {
-    Map<String,List<Object>> headers = getHeaders();
-    List<Object> values = new ArrayList<Object>();
-    for (String value : vals) {
-      values.add(EncodingUtil.encode(value, charset));
+    Object[] evals = new Object[vals.length];
+    for (int n = 0; n < vals.length; n++) {
+      evals[n] = EncodingUtil.encode(vals[n], charset);
     }
-    headers.put(name, values);
+    setHeader(name, evals);
   }
   
   public void setEscapedHeader(String name, BitSet mask, String value) {
@@ -70,19 +70,16 @@ public abstract class AbstractResponseContext
   }
   
   public void setHeader(String name, Object value) {
-    Map<String,List<Object>> headers = getHeaders();
-    List<Object> values = new ArrayList<Object>();
-    values.add(value);
-    headers.put(name, values);
+    setHeader(name, new Object[] {value});
   }
   
   public void setHeader(String name, Object... vals) {
-    Map<String,List<Object>> headers = getHeaders();
+    Map<String,Object[]> headers = getHeaders();
     List<Object> values = new ArrayList<Object>();
     for (Object value : vals) {
       values.add(value);
     }
-    headers.put(name, values);
+    headers.put(name, values.toArray(new Object[values.size()]));
   }
   
   public void addEncodedHeader(String name, String charset, String value) {
@@ -90,48 +87,39 @@ public abstract class AbstractResponseContext
   }
   
   public void addEncodedHeaders(String name, String charset, String... vals) {
-    Map<String,List<Object>> headers = getHeaders();
-    List<Object> values = new ArrayList<Object>();
-    if (values == null) {
-      values = new ArrayList<Object>();
-      headers.put(name,values);
-    }
     for (String value : vals) {
-      values.add(EncodingUtil.encode(value, charset));
+      addHeader(name,EncodingUtil.encode(value, charset));
     }
   }
   
   public void addHeader(String name, Object value) {
-    Map<String,List<Object>> headers = getHeaders();
-    List<Object> values = new ArrayList<Object>();
-    if (values == null) {
-      values = new ArrayList<Object>();
-      headers.put(name, values);
-    } 
-    values.add(value);
+    addHeader(name, new Object[] {value});
   }
   
   public void addHeaders(String name, Object... vals) {
-    Map<String,List<Object>> headers = getHeaders();
-    List<Object> values = new ArrayList<Object>();
+    Map<String,Object[]> headers = getHeaders();
+    Object[] values = headers.get(name);
+    List<Object> l = null;
     if (values == null) {
-      values = new ArrayList<Object>();
-      headers.put(name,values);
+      l = new ArrayList<Object>();
+    } else {
+      l = Arrays.asList(values);
     }
     for (Object value : vals) {
-      values.add(value);
+      l.add(value);
     }
+    headers.put(name, l.toArray(new Object[l.size()]));
   }
   
-  public Map<String, List<Object>> getHeaders() {
+  public Map<String, Object[]> getHeaders() {
     if (headers == null)
-      headers = new HashMap<String,List<Object>>();
+      headers = new HashMap<String,Object[]>();
     return headers;
   }
     
   public Date getDateHeader(String name) {
-    Map<String,List<Object>> headers = getHeaders();
-    List<Object> values = headers.get(name);
+    Map<String,Object[]> headers = getHeaders();
+    Object[] values = headers.get(name);
     if (values != null) {
       for (Object value : values) {
         if (value instanceof Date) 
@@ -142,20 +130,20 @@ public abstract class AbstractResponseContext
   }
   
   public String getHeader(String name) {
-    Map<String,List<Object>> headers = getHeaders();
-    List<Object> values = headers.get(name);
-    if (values != null && values.size() > 0) 
-      return values.get(0).toString();
+    Map<String,Object[]> headers = getHeaders();
+    Object[] values = headers.get(name);
+    if (values != null && values.length > 0) 
+      return values[0].toString();
     return null;
   }
 
-  public List<Object> getHeaders(String name) {
-    Map<String,List<Object>> headers = getHeaders();
+  public Object[] getHeaders(String name) {
+    Map<String,Object[]> headers = getHeaders();
     return headers.get(name);
   }
 
   public String[] getHeaderNames() {
-    Map<String,List<Object>> headers = getHeaders();
+    Map<String,Object[]> headers = getHeaders();
     return headers.keySet().toArray(new String[headers.size()]);
   }
   

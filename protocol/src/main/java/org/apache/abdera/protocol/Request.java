@@ -18,63 +18,73 @@
 package org.apache.abdera.protocol;
 
 import java.util.Date;
-import java.util.List;
 
-import javax.activation.MimeType;
-
-import org.apache.abdera.protocol.util.ProtocolConstants;
 import org.apache.abdera.util.EntityTag;
 
-public interface Request extends ProtocolConstants {
 
-  String getHeader(String name);
-  
-  String getDecodedHeader(String name);
-  
-  List<String> getHeaders(String name);
-  
-  List<String> getDecodedHeaders(String name);
-  
-  String[] getHeaderNames();
-  
+/**
+ * A protocol request. This is used as a base for both server and client requests 
+ */
+public interface Request extends Message {
+
+  /**
+   * Get the value of the Accept header
+   */
   String getAccept();
-  
+
+  /**
+   * Get the value of the Accept-Charset header
+   */
   String getAcceptCharset();
-  
+
+  /**
+   * Get the value of the Accept-Encoding header
+   */
   String getAcceptEncoding();
-  
+
+  /**
+   * Get the value of the Accept-Language header
+   */
   String getAcceptLanguage();
-  
+
+  /**
+   * Get the value of the Authorization header
+   */
   String getAuthorization();
-  
-  String getCacheControl();
-  
-  String getSlug();
-  
-  MimeType getContentType();
-  
-  Date getDateHeader(String name);
-  
+
+  /**
+   * Get a listing of Etags from the If-Match header
+   */
   EntityTag[] getIfMatch();
-  
+
+  /**
+   * Get the value of the If-Modified-Since header
+   */
   Date getIfModifiedSince();
-  
+
+  /**
+   * Get a listing of ETags from the If-None-Match header 
+   */
   EntityTag[] getIfNoneMatch();
-  
+
+  /**
+   * Get the value of the If-Unmodified-Since header
+   */
   Date getIfUnmodifiedSince();
-  
-  long getMaxAge();
-  
+
+  /**
+   * Get the max-stale value from the Cache-Control header
+   */
   long getMaxStale();
-  
+
+  /**
+   * Get the min-fresh value from the Cache-Control header
+   */
   long getMinFresh();
-  
-  boolean isNoCache();
-  
-  boolean isNoStore();
-  
-  boolean isNoTransform();
-  
+
+  /**
+   * True if the only-if-cached directive is set in the Cache-Control header
+   */
   boolean isOnlyIfCached();
   
 }

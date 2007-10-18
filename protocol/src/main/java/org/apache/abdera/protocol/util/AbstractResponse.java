@@ -19,17 +19,14 @@ package org.apache.abdera.protocol.util;
 
 import java.util.Date;
 
-import javax.activation.MimeType;
-
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.protocol.Response;
 import org.apache.abdera.util.EntityTag;
-import org.apache.abdera.i18n.iri.Escaping;
-import org.apache.abdera.i18n.iri.IRI;
 
-public abstract class AbstractResponse 
+public abstract class AbstractResponse
+  extends AbstractMessage
   implements Response {
 
-  protected int flags = 0;
   protected String[] nocache_headers = null;
   protected String[] private_headers = null;
   protected long max_age = -1;
@@ -48,37 +45,12 @@ public abstract class AbstractResponse
     return getHeader("Allow");
   }
 
-  public String getCacheControl() {
-    return getHeader("Cache-Control");
-  }
-
-  public String getContentLanguage() {
-    return getHeader("Content-Language");
-  }
-
   public long getContentLength() {
     String value = getHeader("Content-Length");
     try {
       return (value != null) ? Long.parseLong(value) : -1;
     } catch (NumberFormatException e) {
       return -1;
-    }
-  }
-
-  public IRI getContentLocation() {
-    return getUriHeader("Content-Location");
-  }
-  
-  public String getSlug() {
-    return getDecodedHeader("Slug");
-  }
-
-  public MimeType getContentType() {
-    try {
-      String value = getHeader("Content-Type");
-      return (value != null) ? new MimeType(value) : null;
-    } catch (javax.activation.MimeTypeParseException e) {
-      throw new org.apache.abdera.util.MimeTypeParseException(e);
     }
   }
 
@@ -96,11 +68,8 @@ public abstract class AbstractResponse
   }
 
   public IRI getLocation() {
-    return getUriHeader("Location");
-  }
-
-  public long getMaxAge() {
-    return max_age;
+    String l = getHeader("Location");
+    return l != null ? new IRI(l) : null;
   }
 
   public String[] getNoCacheHeaders() {
@@ -119,25 +88,8 @@ public abstract class AbstractResponse
     return ResponseType.select(getStatus());
   }
 
-  public IRI getUriHeader(String name) {
-    String value = getHeader(name);
-    return (value != null) ? new IRI(value) : null;
-  }
-
   public boolean isMustRevalidate() {
     return check(REVALIDATE);
-  }
-
-  public boolean isNoCache() {
-    return check(NOCACHE);
-  }
-
-  public boolean isNoStore() {
-    return check(NOSTORE);
-  }
-
-  public boolean isNoTransform() {
-    return check(NOTRANSFORM);
   }
 
   public boolean isPrivate() {
@@ -193,17 +145,4 @@ public abstract class AbstractResponse
     this.nocache_headers = headers;
   }
 
-  private boolean check(int flag) {
-    return (flags & flag) == flag;
-  }
-  
-  private void toggle(boolean val, int flag) {
-    if (val) flags |= flag;
-    else flags &= ~flag;
-  }
-  
-  public String getDecodedHeader(String header) {
-    return Escaping.decode(EncodingUtil.decode(getHeader(header)));
-  }
-  
 }

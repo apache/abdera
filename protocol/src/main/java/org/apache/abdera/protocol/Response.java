@@ -18,17 +18,12 @@
 package org.apache.abdera.protocol;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
-import javax.activation.MimeType;
-
-import org.apache.abdera.protocol.util.ProtocolConstants;
-import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.util.EntityTag;
 
 public interface Response
-  extends ProtocolConstants {
+  extends Message {
 
   public static enum ResponseType {
     SUCCESS, REDIRECTION, CLIENT_ERROR, SERVER_ERROR, UNKNOWN;
@@ -43,57 +38,29 @@ public interface Response
     
   }
   
-  public EntityTag getEntityTag();
+  EntityTag getEntityTag();
     
-  public ResponseType getType();
+  ResponseType getType();
   
-  public int getStatus();
+  int getStatus();
   
-  public String getStatusText();
+  String getStatusText();
   
-  public Date getLastModified();
+  Date getLastModified();
   
-  public String getContentLanguage();
+  long getContentLength();
   
-  public IRI getContentLocation();
+  String getAllow();
   
-  public long getContentLength();
-  
-  public MimeType getContentType();
-  
-  public String getAllow();
-  
-  public IRI getLocation();
-  
-  public String getSlug();
-  
-  public Date getDateHeader(String name);
-  
-  public IRI getUriHeader(String name);
-  
-  public String getHeader(String name);
-  
-  public List<Object> getHeaders(String name);
-  
-  public Map<String, List<Object>> getHeaders();
-  
-  public String[] getHeaderNames();
+  IRI getLocation();
   
   boolean isPrivate();
   
   boolean isPublic();
   
-  boolean isNoCache();
-  
-  boolean isNoStore();
-  
-  boolean isNoTransform();
-  
   boolean isMustRevalidate();
   
   boolean isProxyRevalidate();
-  
-  long getMaxAge();
   
   long getSMaxAge();
   
@@ -105,7 +72,4 @@ public interface Response
   
   String[] getPrivateHeaders();
   
-  String getCacheControl();
-  
-  String getDecodedHeader(String header);
 }

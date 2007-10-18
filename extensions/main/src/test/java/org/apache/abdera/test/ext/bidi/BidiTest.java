@@ -17,12 +17,13 @@
 */
 package org.apache.abdera.test.ext.bidi;
 
+import junit.framework.TestCase;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.bidi.BidiHelper;
 import org.apache.abdera.ext.bidi.BidiHelper.Direction;
+import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
-
-import junit.framework.TestCase;
 
 public class BidiTest extends TestCase {
 
@@ -42,6 +43,18 @@ public class BidiTest extends TestCase {
     assertEquals(BidiHelper.getBidiElementText(feed.getTitleElement()), BidiHelper.getBidiText(Direction.RTL, "Testing"));
     assertEquals(BidiHelper.getBidiElementText(feed.getSubtitleElement()), BidiHelper.getBidiText(Direction.LTR, "Testing"));
     
+    Entry entry = abdera.newEntry();
+    entry.setLanguage("az-arab");
+    assertEquals(BidiHelper.guessDirectionFromLanguage(entry), Direction.RTL);
+    
+    entry.setLanguage("az-latn");
+    assertEquals(BidiHelper.guessDirectionFromLanguage(entry), Direction.UNSPECIFIED);
+    
+    
+    assertEquals(BidiHelper.guessDirectionFromEncoding(entry), Direction.UNSPECIFIED);
+    
+    entry.getDocument().setCharset("iso-8859-6");
+    assertEquals(BidiHelper.guessDirectionFromEncoding(entry), Direction.RTL);
   }
   
 }

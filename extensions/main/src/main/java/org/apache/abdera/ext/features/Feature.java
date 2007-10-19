@@ -27,14 +27,6 @@ import org.apache.abdera.model.ExtensibleElementWrapper;
 public class Feature 
   extends ExtensibleElementWrapper {
   
-  public enum Status {
-    UNSUPPORTED,
-    UNSPECIFIED,
-    SUPPORTED, 
-    PREFERRED,
-    REQUIRED,  
-  }
-  
   public Feature(Element internal) {
     super(internal);
   }
@@ -46,24 +38,6 @@ public class Feature
   public IRI getRef()  {
       String ref = getAttributeValue("ref");
       return (ref != null) ? new IRI(ref) : null;
-  }
-  
-  public Status getStatus() {
-    String status = getAttributeValue("status");
-    return status != null ? Status.valueOf(status.toUpperCase()) : Status.SUPPORTED;
-  }
-  
-  public void setStatus(Status status) {
-    if (status != null && status != Status.SUPPORTED) {
-      if (status != Status.UNSPECIFIED) {
-        setAttributeValue("status",status.name().toLowerCase());
-      } else {
-        throw new IllegalArgumentException(
-          "Cannot set the status to unspecified");
-      }
-    } else {
-      removeAttribute(new QName("status"));
-    }
   }
   
   public IRI getHref()  {

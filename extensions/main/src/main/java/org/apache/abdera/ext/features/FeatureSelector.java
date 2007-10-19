@@ -20,7 +20,7 @@ package org.apache.abdera.ext.features;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.abdera.ext.features.Feature.Status;
+import org.apache.abdera.ext.features.FeaturesHelper.Status;
 import org.apache.abdera.model.Collection;
 
 public class FeatureSelector
@@ -28,23 +28,16 @@ public class FeatureSelector
   implements Selector {
 
   private static final long serialVersionUID = -8943638085557912175L;
-  private final Status minimumStatus;
   private final List<String> features = new ArrayList<String>();
   
   public FeatureSelector(String... features) {
-    this(Status.SUPPORTED,features);
-  }
-  
-  public FeatureSelector(Status minimumStatus, String... features) {
-    this.minimumStatus = minimumStatus;
     for (String feature : features) this.features.add(feature);
   }
   
   public boolean select(Collection collection) {
     for (String feature : features) {
       Status status = FeaturesHelper.getFeatureStatus(collection, feature);
-      if (status != null && status.ordinal() >= minimumStatus.ordinal()) 
-        return true;
+      if (status == Status.SPECIFIED) return true;
     }
     return false;
   }
@@ -53,16 +46,11 @@ public class FeatureSelector
     return features.toArray(new String[features.size()]);
   }
 
-  public Status getMinimumStatus() {
-    return minimumStatus;
-  }
-
   @Override
   public int hashCode() {
     final int PRIME = 31;
     int result = 1;
     result = PRIME * result + ((features == null) ? 0 : features.hashCode());
-    result = PRIME * result + ((minimumStatus == null) ? 0 : minimumStatus.hashCode());
     return result;
   }
 
@@ -75,10 +63,11 @@ public class FeatureSelector
     if (features == null) {
       if (other.features != null) return false;
     } else if (!features.equals(other.features)) return false;
-    if (minimumStatus == null) {
-      if (other.minimumStatus != null) return false;
-    } else if (!minimumStatus.equals(other.minimumStatus)) return false;
     return true;
   }
 
+  @Override
+  protected Selector copy() {
+    return new FeatureSelector(getFeatures());
+  }  
 }

@@ -40,47 +40,32 @@ public class Features {
     Collection collection = workspace.addCollection("My collection", "foo");
     
     // Specify which features are supported by the collection
-    FeaturesHelper.addFeature(collection, FeaturesHelper.FEATURE_DRAFTS);
-    FeaturesHelper.addFeature(collection, FeaturesHelper.FEATURE_TEXT_TITLE, Feature.Status.REQUIRED);
-    FeaturesHelper.addFeature(collection, FeaturesHelper.FEATURE_SLUG, Feature.Status.UNSUPPORTED);
-    FeaturesHelper.addFeature(collection, FeaturesHelper.ABDERA_FEATURE_BIDI);
+    FeaturesHelper.addFeature(collection, FeaturesHelper.FEATURE_SUPPORTS_DRAFTS);
+    FeaturesHelper.addFeature(collection, FeaturesHelper.FEATURE_REQUIRES_TEXT_TEXT);
+    FeaturesHelper.addFeature(collection, FeaturesHelper.FEATURE_IGNORES_SLUG);
+    FeaturesHelper.addFeature(collection, FeaturesHelper.FEATURE_SUPPORTS_BIDI);
     
     // Get the support status of a specific feature
-    System.out.println(FeaturesHelper.getFeatureStatus(collection, FeaturesHelper.FEATURE_DRAFTS));
-    System.out.println(FeaturesHelper.getFeatureStatus(collection, FeaturesHelper.FEATURE_TEXT_TITLE));
-    System.out.println(FeaturesHelper.getFeatureStatus(collection, FeaturesHelper.FEATURE_SLUG));
-    System.out.println(FeaturesHelper.getFeatureStatus(collection, FeaturesHelper.ABDERA_FEATURE_BIDI));
-    System.out.println(FeaturesHelper.getFeatureStatus(collection, FeaturesHelper.ABDERA_FEATURE_GEO));
+    System.out.println(FeaturesHelper.getFeatureStatus(collection, FeaturesHelper.FEATURE_SUPPORTS_DRAFTS));
+    System.out.println(FeaturesHelper.getFeatureStatus(collection, FeaturesHelper.FEATURE_REQUIRES_TEXT_TEXT));
+    System.out.println(FeaturesHelper.getFeatureStatus(collection, FeaturesHelper.FEATURE_IGNORES_SLUG));
+    System.out.println(FeaturesHelper.getFeatureStatus(collection, FeaturesHelper.FEATURE_SUPPORTS_BIDI));
+    System.out.println(FeaturesHelper.getFeatureStatus(collection, FeaturesHelper.FEATURE_SUPPORTS_GEO));
     
     
-    // Listing features by support status
     Feature[] features = null;
-    features = FeaturesHelper.getRequiredFeatures(collection);
-    System.out.println("Required:");
+    features = FeaturesHelper.getFeatures(collection);
     for (Feature feature : features) {
       System.out.println("\t" + feature.getRef());
     }
     
-    features = FeaturesHelper.getSupportedFeatures(collection);
-    System.out.println("Supported:");
-    for (Feature feature : features) {
-      System.out.println("\t" + feature.getRef());
-    }
-    
-    features = FeaturesHelper.getUnsupportedFeatures(collection);
-    System.out.println("Unsupported:");
-    for (Feature feature : features) {
-      System.out.println("\t" + feature.getRef());
-    }
-    
-    
-    // Select a collection by feature support status
+    // Select a collection by feature
     Collection[] selectedCollections = 
       FeaturesHelper.select(
         service, 
         new FeatureSelector(
-          FeaturesHelper.FEATURE_DRAFTS, 
-          FeaturesHelper.ABDERA_FEATURE_BIDI));
+          FeaturesHelper.FEATURE_SUPPORTS_DRAFTS, 
+          FeaturesHelper.FEATURE_SUPPORTS_BIDI));
     System.out.println("Selected Collections:");
     for (Collection selected : selectedCollections) 
       System.out.println("\t" + selected.getTitle());

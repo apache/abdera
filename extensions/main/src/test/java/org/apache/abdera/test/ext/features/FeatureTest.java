@@ -26,7 +26,7 @@ import org.apache.abdera.ext.features.FeatureSelector;
 import org.apache.abdera.ext.features.FeaturesHelper;
 import org.apache.abdera.ext.features.Selector;
 import org.apache.abdera.ext.features.XPathSelector;
-import org.apache.abdera.ext.features.Feature.Status;
+import org.apache.abdera.ext.features.FeaturesHelper.Status;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
@@ -38,19 +38,16 @@ public class FeatureTest extends TestCase {
     Collection coll = abdera.getFactory().newCollection();
     FeaturesHelper.addFeature(
       coll, "http://example.com/features/foo", 
-      Status.REQUIRED, null, "foo & here");
+      null, "foo & here");
     FeaturesHelper.addFeature(
       coll, "http://example.com/features/bar", 
-      null, null, null);
-    FeaturesHelper.addFeature(
-      coll, "http://example.com/features/baz",
-      Status.UNSUPPORTED);
+      null, null);
     
-    assertEquals(Status.REQUIRED,FeaturesHelper.getFeatureStatus(
+    assertEquals(Status.SPECIFIED,FeaturesHelper.getFeatureStatus(
       coll, "http://example.com/features/foo"));
-    assertEquals(Status.SUPPORTED, FeaturesHelper.getFeatureStatus(
+    assertEquals(Status.SPECIFIED, FeaturesHelper.getFeatureStatus(
       coll, "http://example.com/features/bar"));
-    assertEquals(Status.UNSUPPORTED, FeaturesHelper.getFeatureStatus(
+    assertEquals(Status.UNSPECIFIED, FeaturesHelper.getFeatureStatus(
       coll, "http://example.com/features/baz"));
     assertEquals(Status.UNSPECIFIED,FeaturesHelper.getFeatureStatus(
       coll, "http://example.com/features/pez"));
@@ -64,11 +61,11 @@ public class FeatureTest extends TestCase {
     Workspace workspace = service.addWorkspace("a");
     Collection collection1 = workspace.addCollection("a1","a1");
     collection1.setAcceptsEntry();
-    FeaturesHelper.addFeature(collection1, FeaturesHelper.FEATURE_DRAFTS);
+    FeaturesHelper.addFeature(collection1, FeaturesHelper.FEATURE_SUPPORTS_DRAFTS);
     Collection collection2 = workspace.addCollection("a2","a2");
     collection2.setAccept("image/*");
     
-    Selector s1 = new FeatureSelector(FeaturesHelper.FEATURE_DRAFTS);
+    Selector s1 = new FeatureSelector(FeaturesHelper.FEATURE_SUPPORTS_DRAFTS);
     
     Collection[] collections = FeaturesHelper.select(service, s1);
     

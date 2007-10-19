@@ -24,8 +24,6 @@ import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.ext.features.Feature.Status;
-import org.apache.abdera.ext.thread.ThreadConstants;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Collection;
@@ -40,115 +38,176 @@ import org.apache.abdera.util.MimeTypeHelper;
  */
 public final class FeaturesHelper {
 
+  public enum Status {
+    UNSPECIFIED,
+    SPECIFIED 
+  }
+  
   public static final String FNS = "http://purl.org/atompub/features/1.0";
   public static final QName FEATURE = new QName(FNS, "feature","f");
   public static final QName TYPE = new QName(FNS, "type", "f");
   
-  private static final String FEATURE_BASE                 = "http://www.w3.org/2007/app/";
-  public static final String FEATURE_DRAFTS                = FEATURE_BASE + "drafts";
-  public static final String FEATURE_XHTML_CONTENT         = FEATURE_BASE + "xhtml-content";
-  public static final String FEATURE_HTML_CONTENT          = FEATURE_BASE + "html-content";
-  public static final String FEATURE_TEXT_CONTENT          = FEATURE_BASE + "text-content";
-  public static final String FEATURE_XML_CONTENT           = FEATURE_BASE + "xml-content";
-  public static final String FEATURE_BINARY_CONTENT        = FEATURE_BASE + "binary-content";
-  public static final String FEATURE_REF_CONTENT           = FEATURE_BASE + "ref-content";
-  public static final String FEATURE_XHTML_TITLE           = FEATURE_BASE + "xhtml-title";
-  public static final String FEATURE_HTML_TITLE            = FEATURE_BASE + "html-title";
-  public static final String FEATURE_TEXT_TITLE            = FEATURE_BASE + "text-title";
-  public static final String FEATURE_SUMMARY               = FEATURE_BASE + "summary";
-  public static final String FEATURE_XHTML_SUMMARY         = FEATURE_BASE + "xhtml-summary";
-  public static final String FEATURE_HTML_SUMMARY          = FEATURE_BASE + "html-summary";
-  public static final String FEATURE_TEXT_SUMMARY          = FEATURE_BASE + "text-summary";
-  public static final String FEATURE_AUTO_SUMMARY          = FEATURE_BASE + "auto-summary";
-  public static final String FEATURE_XHTML_RIGHTS          = FEATURE_BASE + "xhtml-rights";
-  public static final String FEATURE_HTML_RIGHTS           = FEATURE_BASE + "html-rights";
-  public static final String FEATURE_TEXT_RIGHTS           = FEATURE_BASE + "text-rights";
-  public static final String FEATURE_AUTH_AUTHOR           = FEATURE_BASE + "auth-author";
-  public static final String FEATURE_SLUG                  = FEATURE_BASE + "slug";
-  public static final String FEATURE_MULTIPLE_CATEGORIES   = FEATURE_BASE + "multiple-categories";
-  public static final String FEATURE_MULTIPLE_AUTHORS      = FEATURE_BASE + "multiple-authors";
-  public static final String FEATURE_MULTIPLE_CONTRIBUTORS = FEATURE_BASE + "multiple-contributors";
-  public static final String FEATURE_PRESERVE_INFOSET      = FEATURE_BASE + "preserve-infoset";
-  public static final String FEATURE_PRESERVE_ID           = FEATURE_BASE + "preserve-id";
-  public static final String FEATURE_PRESERVE_DATES        = FEATURE_BASE + "preserve-dates";
-  public static final String FEATURE_PRESERVE_TITLE        = FEATURE_BASE + "preserve-title";
-  public static final String FEATURE_PRESERVE_EXTENSIONS   = FEATURE_BASE + "preserve-extensions";
-  public static final String FEATURE_PRESERVE_LINKS        = FEATURE_BASE + "preserve-links";
-  public static final String FEATURE_PRESERVE_RIGHTS       = FEATURE_BASE + "preserve-rights";
-  public static final String FEATURE_SCHEDULED_PUBLISHING  = FEATURE_BASE + "scheduled-publishing";
-  public static final String FEATURE_SIGNED_ENTRIES        = FEATURE_BASE + "signed-entries";
-  public static final String FEATURE_PERSON_EMAIL          = FEATURE_BASE + "person-email";
-  public static final String FEATURE_PERSON_URI            = FEATURE_BASE + "person-uri";
-  public static final String FEATURE_PUBLISH_EMAIL         = FEATURE_BASE + "publish-email";
-  public static final String FEATURE_PUBLISH_URI           = FEATURE_BASE + "publish-uri";
-  public static final String FEATURE_XML_LANG              = FEATURE_BASE + "xml-lang";
-  public static final String FEATURE_CONDITIONAL           = FEATURE_BASE + "conditional";
-  public static final String FEATURE_THREADING             = ThreadConstants.THR_NS;
+  private static final String FEATURE_BASE                   = "http://www.w3.org/2007/app/";
+  private static final String ABDERA_FEATURE_BASE            = "http://incubator.apache.org/abdera/features/";
+  public static final String FEATURE_SUPPORTS_DRAFTS         = FEATURE_BASE + "supportsDraft";
+  public static final String FEATURE_IGNORES_DRAFTS          = FEATURE_BASE + "ignoresDraft";
+   
+  public static final String FEATURE_SUPPORTS_XHTML_CONTENT  = ABDERA_FEATURE_BASE + "supportsXhtmlContent";
+  public static final String FEATURE_REQUIRES_XHTML_CONTENT  = ABDERA_FEATURE_BASE + "requiresXhtmlContent";
+  public static final String FEATURE_SUPPORTS_HTML_CONTENT   = ABDERA_FEATURE_BASE + "supportsHtmlContent";
+  public static final String FEATURE_REQUIRES_HTML_CONTENT   = ABDERA_FEATURE_BASE + "requiresHtmlContent";
+  public static final String FEATURE_SUPPORTS_TEXT_CONTENT   = ABDERA_FEATURE_BASE + "supportsTextContent";
+  public static final String FEATURE_REQUIRES_TEXT_CONTENT   = ABDERA_FEATURE_BASE + "requiresTextContent";
+  public static final String FEATURE_SUPPORTS_XML_CONTENT    = ABDERA_FEATURE_BASE + "supportsXmlContent";
+  public static final String FEATURE_REQUIRES_XML_CONTENT    = ABDERA_FEATURE_BASE + "requiresXmlContent";
+  public static final String FEATURE_SUPPORTS_BINARY_CONTENT = ABDERA_FEATURE_BASE + "supportsBinaryContent";
+  public static final String FEATURE_REQUIRES_BINARY_CONTENT = ABDERA_FEATURE_BASE + "requiresBinaryContent";
+  public static final String FEATURE_SUPPORTS_REF_CONTENT    = ABDERA_FEATURE_BASE + "supportsRefContent";
+  public static final String FEATURE_REQUIRES_REF_CONTENT    = ABDERA_FEATURE_BASE + "requiresRefContent";
+  public static final String FEATURE_SUPPORTS_XHTML_TEXT     = ABDERA_FEATURE_BASE + "supportsXhtmlText";
+  public static final String FEATURE_REQUIRES_XHTML_TEXT     = ABDERA_FEATURE_BASE + "requiresXhtmlText";
+  public static final String FEATURE_SUPPORTS_HTML_TEXT      = ABDERA_FEATURE_BASE + "supportsHtmlText";
+  public static final String FEATURE_REQUIRES_HTML_TEXT      = ABDERA_FEATURE_BASE + "requiresHtmlText";
+  public static final String FEATURE_SUPPORTS_TEXT_TEXT      = ABDERA_FEATURE_BASE + "supportsTextText";
+  public static final String FEATURE_REQUIRES_TEXT_TEXT      = ABDERA_FEATURE_BASE + "requiresTextText";
+  public static final String FEATURE_PRESERVES_SUMMARY       = ABDERA_FEATURE_BASE + "preservesSummary";
+  public static final String FEATURE_IGNORES_SUMMARY         = ABDERA_FEATURE_BASE + "ignoresSummary";
+  public static final String FEATURE_PRESERVES_RIGHTS        = ABDERA_FEATURE_BASE + "preservesRights";
+  public static final String FEATURE_IGNORES_RIGHTS          = ABDERA_FEATURE_BASE + "ignoresRights";
+  public static final String FEATURE_PRESERVES_AUTHORS       = ABDERA_FEATURE_BASE + "preservesAuthors";
+  public static final String FEATURE_IGNORES_AUTHORS         = ABDERA_FEATURE_BASE + "ignoresAuthors";
+  public static final String FEATURE_PRESERVES_CONTRIBUTORS  = ABDERA_FEATURE_BASE + "preservesContributors";
+  public static final String FEATURE_IGNORES_CONTRIBUTORS    = ABDERA_FEATURE_BASE + "ignoresContributors";
+  public static final String FEATURE_USES_SLUG               = ABDERA_FEATURE_BASE + "usesSlug";
+  public static final String FEATURE_IGNORES_SLUG            = ABDERA_FEATURE_BASE + "ignoresSlug";
+  public static final String FEATURE_PRESERVES_CATEGORIES    = ABDERA_FEATURE_BASE + "preservesCategories";
+  public static final String FEATURE_MULTIPLE_CATEGORIES     = ABDERA_FEATURE_BASE + "multipleCategories";
+  public static final String FEATURE_IGNORES_CATEGORIES      = ABDERA_FEATURE_BASE + "ignoresCategories";
+  public static final String FEATURE_PRESERVES_LINKS         = ABDERA_FEATURE_BASE + "preservesLinks";
+  public static final String FEATURE_IGNORES_LINKS           = ABDERA_FEATURE_BASE + "ignoresLinks";
+  public static final String FEATURE_PRESERVES_INFOSET       = ABDERA_FEATURE_BASE + "preservesInfoset";
+  public static final String FEATURE_PRESERVES_ID            = ABDERA_FEATURE_BASE + "preservesId";
+  public static final String FEATURE_PRESERVES_DATES         = ABDERA_FEATURE_BASE + "preservesDates";
+  public static final String FEATURE_PRESERVES_EXTENSIONS    = ABDERA_FEATURE_BASE + "preservesExtensions";
+  public static final String FEATURE_SCHEDULED_PUBLISHING    = ABDERA_FEATURE_BASE + "scheduledPublishing";
+  public static final String FEATURE_REQUIRES_PERSON_EMAIL   = ABDERA_FEATURE_BASE + "requiresPersonEmail";
+  public static final String FEATURE_HIDES_PERSON_EMAIL      = ABDERA_FEATURE_BASE + "hidesPersonEmail";
+  public static final String FEATURE_REQUIRES_PERSON_URI     = ABDERA_FEATURE_BASE + "requiresPersonUri";
+  public static final String FEATURE_HIDES_PERSON_URI        = ABDERA_FEATURE_BASE + "hidesPersonUri";
+  public static final String FEATURE_PRESERVES_LANGUAGE      = ABDERA_FEATURE_BASE + "preservesXmlLang";
+  public static final String FEATURE_IGNORES_LANGUAGE        = ABDERA_FEATURE_BASE + "ignoresXmlLang";  
+  public static final String FEATURE_SUPPORTS_CONDITIONALS   = ABDERA_FEATURE_BASE + "supportsConditionalUpdates";
+  public static final String FEATURE_REQUIRES_CONDITIONALS   = ABDERA_FEATURE_BASE + "requiresConditionalUpdates";
+  public static final String FEATURE_PRESERVES_THREADING     = ABDERA_FEATURE_BASE + "preservesThreading";
+  public static final String FEATURE_REQUIRES_THREADING      = ABDERA_FEATURE_BASE + "requiresThreading";
+  public static final String FEATURE_IGNORES_THREADING       = ABDERA_FEATURE_BASE + "ignoresThreading";
   
-  private static final String ABDERA_FEATURE_BASE = "http://incubator.apache.org/abdera/features/";
   
   /**
    * Indicates that the collection will preserve XML digital signatures contained
    * in member resources 
    */
-  public static final String ABDERA_FEATURE_PRESERVE_SIGNATURE = ABDERA_FEATURE_BASE + "preserve-signature";
+  public static final String FEATURE_PRESERVE_SIGNATURE = ABDERA_FEATURE_BASE + "preservesSignature";
+
+  /**
+   * Indicates that the collection will support XML digital signatures contained
+   * in member resources but may not preserve those signatures
+   */
+  public static final String FEATURE_SUPPORTS_SIGNATURE = ABDERA_FEATURE_BASE + "supportsSignature";
   
   /**
-   * Indicates that the collection supports the use of the Atom Bidi Attribute.
-   * If marked as "required", the collection will only accept entries that contain the bidi attribute
+   * Indicates that the collection will ignore XML digital signatures contained
+   * in member resources 
    */
-  public static final String ABDERA_FEATURE_BIDI = ABDERA_FEATURE_BASE + "bidi";
+  public static final String FEATURE_IGNORES_SIGNATURE = ABDERA_FEATURE_BASE + "ignoresSignature";
   
   /**
-   * Indicates that the collection supports the use of Diffie-Hellman key exchange
-   * for XML encrypted requests
+   * Indicates that the collection requires member resources to contain valid XML digital signatures
    */
-  public static final String ABDERA_FEATURE_DHENCREQUEST = ABDERA_FEATURE_BASE + "dhenc-request";
-  
-  /**
-   * Indicates that the collection supports the use of Diffie-Hellman key exchange
-   * for XML encrypted responses
-   */
-  public static final String ABDERA_FEATURE_DHENCRESPONSE = ABDERA_FEATURE_BASE + "dhenc-response";
-  
+  public static final String FEATURE_REQUIRES_SIGNATURE = ABDERA_FEATURE_BASE + "requiresSignature";
+
   /**
    * Indicates that the collection will add it's own digital signature to the 
    * collection feed and member resources
    */
-  public static final String ABDERA_FEATURE_SIGNED_RESPONSE = ABDERA_FEATURE_BASE + "response-signature";
+  public static final String FEATURE_SIGNED_RESPONSE = ABDERA_FEATURE_BASE + "responseSignature";
+
+  
+  /**
+   * Indicates that the collection supports the use of the Atom Bidi Attribute.
+   */
+  public static final String FEATURE_SUPPORTS_BIDI = ABDERA_FEATURE_BASE + "supportsBidi";
+  
+  /**
+   * Indicates that the collection requires the use of the Atom Bidi Attribute.
+   */
+  public static final String FEATURE_REQUIRES_BIDI = ABDERA_FEATURE_BASE + "requiresBidi";
+  
+  /**
+   * Indicates that the collection ignores the use of the Atom Bidi Attribute.
+   */
+  public static final String FEATURE_IGNORES_BIDI = ABDERA_FEATURE_BASE + "ignoresBidi";
+  
   
   /**
    * Indicates that the collection supports the use of Geo extensions (see the
    * org.apache.abdera.ext.geo Package)
    */
-  public static final String ABDERA_FEATURE_GEO = ABDERA_FEATURE_BASE + "geo";
-  
+  public static final String FEATURE_SUPPORTS_GEO = ABDERA_FEATURE_BASE + "supportsGeo";
+
   /**
-   * Indicates that the collection supports the use of the Feed paging standard.
-   * (ftp://ftp.rfc-editor.org/in-notes/internet-drafts/draft-nottingham-atompub-feed-history-11.txt)
-   * See the org.apache.abdera.ext.history Package)
+   * Indicates that the collection requires the use of Geo extensions (see the
+   * org.apache.abdera.ext.geo Package)
    */
-  public static final String ABDERA_FEATURE_PAGING = ABDERA_FEATURE_BASE + "paging";
+  public static final String FEATURE_REQUIRES_GEO = ABDERA_FEATURE_BASE + "requiresGeo";
+
+  /**
+   * Indicates that the collection ignores the use of Geo extensions (see the
+   * org.apache.abdera.ext.geo Package)
+   */
+  public static final String FEATURE_IGNORES_GEO = ABDERA_FEATURE_BASE + "ignoresGeo";
   
   /**
    * Indicates that the collection supports the use of the Simple Sharing Extensions
    * (see the org.apache.abdera.ext.sharing Package)
    */
-  public static final String ABDERA_FEATURE_SHARING = ABDERA_FEATURE_BASE + "sharing";
+  public static final String FEATURE_SUPPORTS_SHARING = ABDERA_FEATURE_BASE + "supportsSharing";
+
+  /**
+   * Indicates that the collection requires the use of the Simple Sharing Extensions
+   * (see the org.apache.abdera.ext.sharing Package)
+   */
+  public static final String FEATURE_REQUIRES_SHARING = ABDERA_FEATURE_BASE + "requiresSharing";
   
+  /**
+   * Indicates that the collection ignores the use of the Simple Sharing Extensions
+   * (see the org.apache.abdera.ext.sharing Package)
+   */
+  public static final String FEATURE_IGNORES_SHARING = ABDERA_FEATURE_BASE + "ignoresSharing";
+  
+  /**
+   * Indicates that the collection requires the GoogleLogin auth scheme
+   * (see the org.apache.abdera.ext.gdata Package)
+   */
+  public static final String FEATURE_REQUIRES_GOOGLELOGIN = ABDERA_FEATURE_BASE + "requiresGoogleLogin";
+
   /**
    * Indicates that the collection supports the GoogleLogin auth scheme
    * (see the org.apache.abdera.ext.gdata Package)
    */
-  public static final String ABDERA_FEATURE_GOOGLELOGIN = ABDERA_FEATURE_BASE + "googlelogin";
+  public static final String FEATURE_SUPPORTS_GOOGLELOGIN = ABDERA_FEATURE_BASE + "supportsGoogleLogin";
+  
+  /**
+   * Indicates that the collection requires the WSSE auth scheme
+   * (see the org.apache.abdera.ext.wsse Package)
+   */
+  public static final String FEATURE_REQUIRES_WSSE = ABDERA_FEATURE_BASE + "requiresWsse";
   
   /**
    * Indicates that the collection supports the WSSE auth scheme
    * (see the org.apache.abdera.ext.wsse Package)
    */
-  public static final String ABDERA_FEATURE_WSSE = ABDERA_FEATURE_BASE + "wsse";
-  
-  
+  public static final String FEATURE_SUPPORTS_WSSE = ABDERA_FEATURE_BASE + "supportsWsse";  
   
   
   private FeaturesHelper() {}
@@ -169,31 +228,12 @@ public final class FeaturesHelper {
   
   public static Status getFeatureStatus(Collection collection, String feature) {
     Feature f = getFeature(collection,feature);
-    return f != null ? f.getStatus() : Status.UNSPECIFIED;
+    return f != null ? Status.SPECIFIED : Status.UNSPECIFIED;
   }
   
-  public static Feature[] getSupportedFeatures(Collection collection) {
-    return getFeatures(collection, Status.SUPPORTED);
-  }
-  
-  public static Feature[] getUnsupportedFeatures(Collection collection) {
-    return getFeatures(collection, Status.UNSUPPORTED);
-  }
-  
-  public static Feature[] getRequiredFeatures(Collection collection) {
-    return getFeatures(collection, Status.REQUIRED);
-  }
-  
-  public static Feature[] getFeatures(Collection collection, Status status) {
-    if (status == null) status = Status.SUPPORTED;
-    List<Feature> list = new ArrayList<Feature>();
+  public static Feature[] getFeatures(Collection collection) {    
     List<Feature> features = collection.getExtensions(FEATURE);
-    for (Feature feature : features) {
-      if (status == feature.getStatus()) {
-        list.add(feature);
-      }
-    }
-    return list.toArray(new Feature[list.size()]);
+    return features.toArray(new Feature[features.size()]);
   }
   
   /**
@@ -209,19 +249,6 @@ public final class FeaturesHelper {
   }
   
   /**
-   * Add the specified features to the collection
-   */
-  public static Feature[] addFeatures(
-    Collection collection,
-    Status status,
-    String... features) {
-      List<Feature> list = new ArrayList<Feature>();
-      for (String feature : features)
-        list.add(addFeature(collection,feature, status));
-      return list.toArray(new Feature[list.size()]);
-  }
-  
-  /**
    * Add the specified feature to the collection
    * @param collection The collection
    * @param feature The IRI of the feature to add 
@@ -232,25 +259,9 @@ public final class FeaturesHelper {
       return addFeature(
         collection, 
         feature, 
-        null, null, null);
-  }
-  
-  /**
-   * Add the specified feature to the collection
-   * @param collection The collection
-   * @param feature The IRI of the feature to add 
-   */
-  public static Feature addFeature(
-    Collection collection, 
-    String feature, 
-    Status status) {
-      return addFeature(
-        collection, 
-        feature, 
-        status, 
         null, null);
   }
-  
+    
   /**
    * Add the specified feature to the collection
    * @param collection The collection
@@ -262,7 +273,6 @@ public final class FeaturesHelper {
   public static Feature addFeature(
     Collection collection, 
     String feature,
-    Status status,
     String href,
     String label) {
     if (getFeature(collection, feature) != null) 
@@ -273,7 +283,6 @@ public final class FeaturesHelper {
         FeaturesHelper.FEATURE, collection);
     collection.declareNS(FNS, "f");
     el.setRef(new IRI(feature).toString());
-    el.setStatus(status);
     if (href != null) el.setHref(new IRI(href).toString());
     if (label != null) el.setLabel(label);
     return el;

@@ -17,11 +17,12 @@
 */
 package org.apache.abdera.model;
 
-import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 
 /**
@@ -213,6 +214,19 @@ public final class AtomDate {
     "yyyy-MM",
     "yyyy"
   };
+  
+  private static final Map<String,SimpleDateFormat> maskmap = new HashMap<String,SimpleDateFormat>();
+  private static SimpleDateFormat getSDF(String mask) {
+    SimpleDateFormat sdf = maskmap.get(mask);
+    if (sdf == null) {
+      synchronized (maskmap) {
+        sdf = new SimpleDateFormat(mask);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        maskmap.put(mask,sdf);
+      }
+    }
+    return sdf;
+  }
    
   /**
    * Parse the serialized string form into a java.util.Date
@@ -233,11 +247,9 @@ public final class AtomDate {
     }
     
     Date d = null;
-    SimpleDateFormat sdf = new SimpleDateFormat();
     for (int n = 0; n < masks.length; n++) {
+      SimpleDateFormat sdf = getSDF(masks[n]);
       try {
-        sdf.applyPattern(masks[n]);
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         sdf.setLenient(true);
         d = sdf.parse(date, new ParsePosition(0));
         if (d != null) break;
@@ -253,12 +265,8 @@ public final class AtomDate {
    * @param d A java.util.Date
    * @return The serialized string form of the date
    */
-  public static String format (Date d) {
-    StringBuffer iso8601 = new StringBuffer();
-    SimpleDateFormat sdf = new SimpleDateFormat(masks[2]);
-    sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-    sdf.format(d, iso8601, new FieldPosition(0));
-    return iso8601.toString();
+  public static String format (Date d) {    
+    return getSDF(masks[2]).format(d);
   }
 
   /**

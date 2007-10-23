@@ -49,6 +49,7 @@ public final class FeaturesHelper {
   
   private static final String FEATURE_BASE                   = "http://www.w3.org/2007/app/";
   private static final String ABDERA_FEATURE_BASE            = "http://incubator.apache.org/abdera/features/";
+  private static final String BLOG_FEATURE_BASE              = "http://incubator.apache.org/abdera/features/blog/";
   public static final String FEATURE_SUPPORTS_DRAFTS         = FEATURE_BASE + "supportsDraft";
   public static final String FEATURE_IGNORES_DRAFTS          = FEATURE_BASE + "ignoresDraft";
    
@@ -208,6 +209,12 @@ public final class FeaturesHelper {
    * (see the org.apache.abdera.ext.wsse Package)
    */
   public static final String FEATURE_SUPPORTS_WSSE = ABDERA_FEATURE_BASE + "supportsWsse";  
+  
+  /**
+   * Indicates that the collection will remove markup that is considered potentially unsafe from the entry
+   * examples of the type of markup that would be removed include scripts and embed 
+   */
+  public static final String FEATURE_FILTERS_MARKUP = BLOG_FEATURE_BASE + "filtersUnsafeMarkup";
   
   
   private FeaturesHelper() {}

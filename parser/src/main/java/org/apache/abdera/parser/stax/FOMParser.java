@@ -116,8 +116,8 @@ public class FOMParser
         return parse(StAXUtils.createXMLStreamReader(rdr), base, options);
       } else {
         XMLStreamReader xmlreader = (charset == null) ? 
-          StAXUtils.createXMLStreamReader(in) : 
-          StAXUtils.createXMLStreamReader(in, charset); 
+          createXMLStreamReader(in) : 
+          createXMLStreamReader(in, charset); 
         return parse(xmlreader, base, options);
       }
     } catch (Exception e) {
@@ -149,15 +149,47 @@ public class FOMParser
       throw (ParseException)e;
     }
   }
+
+  private static XMLInputFactory getXMLInputFactory() {
+    XMLInputFactory inputFactory = StAXUtils.getXMLInputFactory();
+    inputFactory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, Boolean.FALSE);
+    return inputFactory;
+  }
+  
+  private static void releaseXMLInputFactory(XMLInputFactory inputFactory) {
+    StAXUtils.releaseXMLInputFactory(inputFactory);
+  }
+  
+  public static XMLStreamReader createXMLStreamReader(
+    InputStream in, 
+    String encoding)
+      throws XMLStreamException {
+    XMLInputFactory inputFactory = getXMLInputFactory();
+    try {
+      return inputFactory.createXMLStreamReader(in, encoding);
+    } finally {
+      releaseXMLInputFactory(inputFactory);
+    }
+  }
+
+  public static XMLStreamReader createXMLStreamReader(
+    InputStream in)
+      throws XMLStreamException {
+    XMLInputFactory inputFactory = getXMLInputFactory();
+    try {
+      return inputFactory.createXMLStreamReader(in);
+    } finally {
+      releaseXMLInputFactory(inputFactory);
+    }
+  }
   
   private XMLStreamReader createXMLStreamReader(Reader in) throws XMLStreamException {
-    javax.xml.stream.XMLInputFactory inputFactory = StAXUtils.getXMLInputFactory();
-    try {
-      inputFactory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, Boolean.FALSE);
+    XMLInputFactory inputFactory = getXMLInputFactory();
+    try {    
       XMLStreamReader reader = inputFactory.createXMLStreamReader(in);
       return reader;
     } finally {
-        StAXUtils.releaseXMLInputFactory(inputFactory);
+      releaseXMLInputFactory(inputFactory);
     }    
   }
   

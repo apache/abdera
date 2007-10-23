@@ -1,0 +1,7 @@
+
+   nu.validator html parser
+   Copyright (c) 2007 Henri Sivonen
+
+   This product includes software developed at
+     http://about.validator.nu/htmlparser/
+

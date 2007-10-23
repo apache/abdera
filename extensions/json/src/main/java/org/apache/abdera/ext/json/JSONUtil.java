@@ -25,6 +25,7 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.bidi.BidiHelper;
 import org.apache.abdera.ext.history.FeedPagingHelper;
+import org.apache.abdera.ext.html.HtmlHelper;
 import org.apache.abdera.ext.thread.InReplyTo;
 import org.apache.abdera.ext.thread.ThreadHelper;
 import org.apache.abdera.i18n.iri.IRI;
@@ -34,6 +35,7 @@ import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Control;
+import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
@@ -72,9 +74,10 @@ public class JSONUtil {
           ((Document)element).getBaseUri() :
           ((Element)element).getResolvedBaseUri();
       }
-      if (parentbase == null && 
-          element.getResolvedBaseUri() != null)
-            return false;
+      IRI base = element.getResolvedBaseUri();
+      
+      if (parentbase == null && base != null) return false;  
+      if (parentbase == null && base == null) return true;
       return parentbase.equals(element.getResolvedBaseUri());
   }
   
@@ -101,10 +104,13 @@ if (element instanceof Text) {
     jstream.writeField("children");
     switch(text.getTextType()) {
       case TEXT:
-      case HTML:
         jstream.startArray();
         jstream.writeQuoted(text.getValue());
         jstream.endArray();
+        break;
+      case HTML:
+        Div div = HtmlHelper.parse(text.getValue());
+        writeElementValue(div, jstream);
         break;
       case XHTML:
         writeElementValue(text.getValueElement(), jstream);
@@ -146,10 +152,8 @@ if (element instanceof Text) {
         jstream.endArray();
         break;
       case HTML:
-        // TODO: eventually we'll parse this out into the hash
-        jstream.startArray();
-        jstream.writeQuoted(content.getValue());
-        jstream.endArray();
+        Div div = HtmlHelper.parse(content.getValue());
+        writeElementValue(div, jstream);
         break;
       case XHTML:
         writeElementValue(content.getValueElement(), jstream);
@@ -157,6 +161,7 @@ if (element instanceof Text) {
       case MEDIA:
       case XML:
         jstream.startArray();
+        jstream.writeQuoted(content.getValue());
         jstream.endArray();
     }
     jstream.endObject();  
@@ -377,10 +382,18 @@ if (element instanceof Text) {
       jstream.writeField("xml:base",child.getResolvedBaseUri());
     writeLanguageFields(child, jstream);
     for (QName attr : attributes) {
-      jstream.writeField(getName(attr));
+      String name = getName(attr);
+      jstream.writeField(name);
       if ("".equals(attr.getPrefix())  || 
           "xml".equals(attr.getPrefix())) {
-        jstream.writeQuoted(child.getAttributeValue(attr));
+        String val = child.getAttributeValue(attr);
+        if ("href".equalsIgnoreCase(name) || 
+            "src".equalsIgnoreCase(name) || 
+            "action".equalsIgnoreCase(name)) {
+         IRI base = child.getResolvedBaseUri();
+         if (base != null) val = base.resolve(val).toASCIIString();
+        }
+        jstream.writeQuoted(val);
       } else {
         jstream.startObject();
         jstream.writeField("attributes");
@@ -410,7 +423,7 @@ if (element instanceof Text) {
       Object child = children[n];
       if (child instanceof Element) {
         writeElement((Element)child, parentqname, jstream);
-        if (n < children.length-1) jstream.writeSeparator();
+        if (n < children.length-2) jstream.writeSeparator();
       } else if (child instanceof TextValue) {
         TextValue textvalue = (TextValue) child;
         String value = textvalue.getText();
@@ -504,7 +517,7 @@ if (element instanceof Text) {
       throws IOException {
     if (needToWriteLang(element)) {
       String lang = element.getLanguage();
-      jstream.writeField("xml:lang",lang);
+      jstream.writeField("lang",lang);
     }
     if (needToWriteDir(element)) {
       BidiHelper.Direction dir = BidiHelper.getDirection(element);
@@ -532,8 +545,11 @@ if (element instanceof Text) {
     jstream.writeField(name);
     jstream.startArray();
     for (int n = 0; n < list.size(); n++) {
-      toJson((Element)list.get(n),jstream);
-      if (n < list.size()-1) jstream.writeSeparator();
+      Element el = (Element)list.get(n);
+      if (!(el instanceof InReplyTo)) {
+        toJson(el,jstream);
+        if (n < list.size()-1) jstream.writeSeparator();
+      }
     }
     jstream.endArray();
     return true;

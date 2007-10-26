@@ -30,6 +30,7 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.ClientResponse;
+import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.writer.Writer;
 
 @SuppressWarnings("unchecked") 
@@ -58,16 +59,27 @@ public class JSONServlet
       throws ServletException, IOException {
     
     String url = request.getPathInfo();
-    if (url != null) url = URLDecoder.decode(url, "UTF-8");
+    if (url != null && url.length() > 1) url = URLDecoder.decode(url, "UTF-8");
     else {
       response.sendError(400); 
       return;
     }
+    url = url.substring(1);
 
     Abdera abdera = getAbdera();
     AbderaClient client = new AbderaClient(abdera);
     
     Writer json = abdera.getWriterFactory().getWriter("json");
+
+    RequestOptions options = client.getDefaultRequestOptions();
+    if (request.getHeader("If-Match") != null)
+      options.setIfMatch(request.getHeader("If-Match"));
+    if (request.getHeader("If-None-Match") != null)
+      options.setIfNoneMatch(request.getHeader("If-None-Match"));
+    if (request.getHeader("If-Modified-Since") != null)
+      options.setIfNoneMatch(request.getHeader("If-Modified-Since"));
+    if (request.getHeader("If-Unmodified-Since") != null)
+      options.setIfNoneMatch(request.getHeader("If-Unmodified-Since"));
     
     ClientResponse resp = client.get(url);
     switch(resp.getType()) {

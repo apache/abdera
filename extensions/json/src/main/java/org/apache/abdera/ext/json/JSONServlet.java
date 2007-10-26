@@ -93,9 +93,9 @@ public class JSONServlet
           if (doc.getLanguage() != null)
             response.setHeader("Content-Language", doc.getLanguage());
           if (doc.getLastModified() != null)
-            response.setDateHeader("Last-Modified", doc.getLastModified().getTime());          
+            response.setDateHeader("Last-Modified", doc.getLastModified().getTime());
           OutputStream out = response.getOutputStream();
-          json.writeTo(doc, out);
+          json.writeTo(doc.getRoot(), out);
         } catch (Exception e) {
           response.sendError(500);
           return;

@@ -28,6 +28,8 @@ import org.apache.abdera.ext.history.FeedPagingHelper;
 import org.apache.abdera.ext.html.HtmlHelper;
 import org.apache.abdera.ext.thread.InReplyTo;
 import org.apache.abdera.ext.thread.ThreadHelper;
+import org.apache.abdera.i18n.iri.Constants;
+import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Categories;
@@ -389,10 +391,12 @@ if (element instanceof Text) {
       if ("".equals(attr.getPrefix())  || 
           "xml".equals(attr.getPrefix())) {
         String val = child.getAttributeValue(attr);
-        if ("href".equalsIgnoreCase(name) || 
-            "src".equalsIgnoreCase(name) || 
-            "action".equalsIgnoreCase(name)) {
+        if (val != null && 
+            ("href".equalsIgnoreCase(name) || 
+             "src".equalsIgnoreCase(name) || 
+             "action".equalsIgnoreCase(name))) {
          IRI base = child.getResolvedBaseUri();
+         val = Escaping.encode(val.trim(),Constants.IUNRESERVED,Constants.RESERVED,Constants.IPRIVATE);
          if (base != null) val = base.resolve(val).toASCIIString();
         }
         jstream.writeQuoted(val);

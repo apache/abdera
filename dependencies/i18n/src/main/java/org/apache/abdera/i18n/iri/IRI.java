@@ -27,14 +27,6 @@ import java.util.regex.Pattern;
 
 import org.apache.abdera.i18n.io.CharUtils;
 import org.apache.abdera.i18n.io.InvalidCharacterException;
-import org.apache.abdera.i18n.iri.Constants;
-import org.apache.abdera.i18n.iri.Escaping;
-import org.apache.abdera.i18n.iri.HttpScheme;
-import org.apache.abdera.i18n.iri.IDNA;
-import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
-import org.apache.abdera.i18n.iri.Scheme;
-import org.apache.abdera.i18n.iri.SchemeRegistry;
 import org.apache.abdera.i18n.unicode.Normalizer;
 
 public class IRI 
@@ -649,7 +641,7 @@ public class IRI
       buf.append(':');
     }
     buf.append(getSchemeSpecificPart());
-    return buf.toString();
+    return Escaping.encode(buf.toString(),Constants.IUNRESERVED,Constants.RESERVED,Constants.IPRIVATE);
   }
   
   public String toASCIIString() {

@@ -275,8 +275,10 @@ if (element instanceof Text) {
         jstream.writeField("xml:base", element.getResolvedBaseUri());
       Person person = (Person)element;      
       jstream.writeField("name",person.getName());
-      jstream.writeField("email",person.getEmail());
-      jstream.writeField("uri",person.getUriElement().getResolvedValue());
+      if (person.getEmail() != null)
+        jstream.writeField("email",person.getEmail());
+      if (person.getUri() != null)
+        jstream.writeField("uri",person.getUriElement().getResolvedValue());
       writeExtensions((ExtensibleElement)element,jstream);
       jstream.endObject();
     } else if (element instanceof Service) {

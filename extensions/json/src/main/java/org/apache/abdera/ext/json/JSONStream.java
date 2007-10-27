@@ -63,16 +63,19 @@ public class JSONStream {
   private void writeIndent() throws IOException {
     for (int n = 0; n < depth; n++)
       writer.write(' ');
+    writer.flush();
   }
   
   private void writeNewLine() throws IOException {
     writer.write('\n');
+    writer.flush();
   }
   
   public void startObject() throws IOException {
     writer.write('{');
     inc();
     pushStack();
+    writer.flush();
   }
   
   public void endObject() throws IOException {
@@ -81,11 +84,13 @@ public class JSONStream {
     writeNewLine();
     writeIndent();
     writer.write('}');
+    writer.flush();
   }
   
   public void startArray() throws IOException {
     writer.write('[');
     inc();
+    writer.flush();
   }
   
   public void endArray() throws IOException {
@@ -93,20 +98,24 @@ public class JSONStream {
     writeNewLine();
     writeIndent();
     writer.write(']');
+    writer.flush();
   }
 
   public void writeSeparator() throws IOException {
     writer.write(',');
+    writer.flush();
   }
   
   private void writeColon() throws IOException {
     writer.write(':');
+    writer.flush();
   }
   
   public void writeQuoted(String value) throws IOException {
     writer.write('"');
     writer.write(escape(value));
     writer.write('"');
+    writer.flush();
   }
 
   public void writeField(String name) throws IOException {
@@ -114,7 +123,7 @@ public class JSONStream {
     writeNewLine();
     writeIndent();
     writeQuoted(name);
-    writeColon();    
+    writeColon();
   }
 
   
@@ -147,6 +156,7 @@ public class JSONStream {
       writeField(name);
       writer.write(value.toString());
     }
+    writer.flush();
   }
 
   public void writeField(String name, Boolean value) throws IOException {
@@ -154,6 +164,7 @@ public class JSONStream {
       writeField(name);
       writer.write(value.toString());
     }
+    writer.flush();
   }
   
   private static String escape(String value) {

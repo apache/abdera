@@ -62,7 +62,7 @@ public class FOMEntry
   private static final long serialVersionUID = 1L;
 
   public FOMEntry() {
-    super(Constants.ENTRY, new FOMDocument(), new FOMFactory());
+    super(Constants.ENTRY, new FOMDocument<Entry>(), new FOMFactory());
   }
   
   protected FOMEntry(

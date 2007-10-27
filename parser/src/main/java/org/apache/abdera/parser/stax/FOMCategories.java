@@ -40,7 +40,7 @@ public class FOMCategories
   private static final long serialVersionUID = 5480273546375102411L;
 
   public FOMCategories() {
-    super(CATEGORIES, new FOMDocument(), new FOMFactory());
+    super(CATEGORIES, new FOMDocument<Categories>(), new FOMFactory());
     init();
   }
   

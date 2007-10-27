@@ -641,7 +641,7 @@ public class IRI
       buf.append(':');
     }
     buf.append(getSchemeSpecificPart());
-    return Escaping.encode(buf.toString(),Constants.IUNRESERVED,Constants.RESERVED,Constants.IPRIVATE);
+    return Escaping.encode(buf.toString(),Constants.IUNRESERVED,Constants.RESERVED,Constants.IPRIVATE,Constants.PCTENC,Constants.HASH);
   }
   
   public String toASCIIString() {

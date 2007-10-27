@@ -57,4 +57,16 @@ public class URIHelper {
   public static String normalize(String uri) {
     return normalize(new IRI(uri)).toASCIIString();
   }
+  
+  public static IRI resolve(IRI base, IRI value) {
+    if (value == null) return null;
+    if ("".equals(value.toString()) || 
+        "#".equals(value.toString()) ||
+        ".".equals(value.toString()) ||
+        "./".equals(value.toString())) return base;
+    if (base == null) return value;
+    if ("".equals(base.getPath())) base = base.resolve("/");
+    IRI resolved = (base != null) ? base.resolve(value) : value;
+    return resolved;
+  }
 }

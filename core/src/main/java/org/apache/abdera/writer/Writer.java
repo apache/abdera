@@ -19,6 +19,7 @@ package org.apache.abdera.writer;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.channels.WritableByteChannel;
 
 import org.apache.abdera.model.Base;
 
@@ -70,6 +71,15 @@ public interface Writer {
    */
   Object write(
     Base base, 
+    WriterOptions options) 
+      throws IOException;
+  
+  void writeTo(Base base, 
+    WritableByteChannel out) 
+      throws IOException;
+
+  void writeTo(Base base, 
+    WritableByteChannel out,
     WriterOptions options) 
       throws IOException;
   

@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.model;
 
+import java.io.Serializable;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -64,15 +65,24 @@ import java.util.TimeZone;
  *  </pre>
  *  
  */
-public final class AtomDate {
+public final class AtomDate
+  implements Cloneable, 
+             Serializable {
+
+  private static final long serialVersionUID = -7062139688635877771L;
 
   private Date value = null;
   
-  public AtomDate() {}
+  /**
+   * Create an AtomDate using the current date and time
+   */
+  public AtomDate() {
+    this(new Date());
+  }
   
   /**
    * Create an AtomDate using the serialized string format (e.g. 2003-12-13T18:30:02Z).
-   * @param value The serialized date/time value
+   * @param value The serialized RFC3339 date/time value
    */
   public AtomDate(String value) { 
     this(parse(value));
@@ -173,6 +183,13 @@ public final class AtomDate {
     return getValue();
   }
   
+  @Override public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((value == null) ? 0 : value.hashCode());
+    return result;
+  }
+
   @Override
   public boolean equals(Object obj) {
     boolean answer = false;
@@ -190,6 +207,15 @@ public final class AtomDate {
       answer = (this.value.equals(d));
     }
     return answer;
+  }
+  
+  @Override
+  public Object clone() {
+    try {
+      return super.clone();
+    } catch (CloneNotSupportedException e) {
+      throw new RuntimeException(e);
+    }
   }
   
   /**

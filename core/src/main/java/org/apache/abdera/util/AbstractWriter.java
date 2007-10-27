@@ -19,12 +19,17 @@ package org.apache.abdera.util;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.channels.Channels;
+import java.nio.channels.WritableByteChannel;
 import java.util.zip.DeflaterOutputStream;
 
 import org.apache.abdera.model.Base;
+import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterOptions;
 
+@SuppressWarnings("unchecked")
 public abstract class AbstractWriter 
   implements Writer {
 
@@ -95,4 +100,36 @@ public abstract class AbstractWriter
       ((DeflaterOutputStream)out).finish();
     }
   }
+
+  public void writeTo(
+    Base base, 
+    WritableByteChannel out, 
+    WriterOptions options)
+      throws IOException {
+    String charset = options.getCharset();
+    if (charset == null) {
+      Document doc = null;
+      if (base instanceof Document)
+        doc = (Document) base;
+      else if (base instanceof Element) {
+        doc = ((Element)base).getDocument();
+      }
+      charset = doc != null ? doc.getCharset() : null;
+    }
+    writeTo(
+      base,
+      Channels.newWriter(
+        out, charset != null ? 
+          charset : 
+          "utf-8"),
+          options);
+  }
+
+  public void writeTo(
+    Base base, 
+    WritableByteChannel out) 
+      throws IOException {
+    writeTo(base,out,getDefaultWriterOptions());
+  }
+  
 }

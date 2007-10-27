@@ -23,6 +23,10 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.util.Constants;
 
+/**
+ * ElementWrapper implementation that implements the Person interface. Used to
+ * create static extensions based on the Atom Person Construct
+ */
 public abstract class PersonWrapper 
   extends ExtensibleElementWrapper
   implements Person, Constants {

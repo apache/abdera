@@ -25,13 +25,15 @@ import javax.activation.DataHandler;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.abdera.i18n.lang.Lang;
 
 /**
  * Root interface for all elements in the Feed Object Model
  */
 public interface Element 
-  extends Base {
+  extends Base, 
+          Iterable<Element> {
   
   /**
    * Return this Element's parent element or document
@@ -222,11 +224,23 @@ public interface Element
    */
   void declareNS(String uri, String prefix);
   
+  /**
+   * Return a map listing the xml namespaces declared for this element
+   */
   Map<String,String> getNamespaces();
   
+  /**
+   * Return a listing of this elements child elements
+   */
   <T extends Element>List<T> getElements();
   
+  /**
+   * Return true if insignificant whitespace must be preserved
+   */
   boolean getMustPreserveWhitespace();
   
+  /**
+   * Set to true to preserve insignificant whitespace
+   */
   void setMustPreserveWhitespace(boolean preserve);
 }

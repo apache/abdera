@@ -19,6 +19,8 @@ package org.apache.abdera.util;
 
 import java.io.InputStream;
 import java.io.Reader;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
@@ -101,6 +103,42 @@ public abstract class AbstractParser
     return parse(in, null, options);
   }
   
+  
+  
+  public <T extends Element> Document<T> parse(
+    ReadableByteChannel buf,
+    ParserOptions options) 
+      throws ParseException {
+    return parse(buf,null,options);
+  }
+
+  public <T extends Element> Document<T> parse(
+    ReadableByteChannel buf,
+    String base, 
+    ParserOptions options) 
+      throws ParseException {
+    String charset = options.getCharset();
+    return parse(
+      Channels.newReader(
+        buf,
+        charset!=null?
+          charset:"utf-8"),
+        base,options);
+  }
+
+  public <T extends Element> Document<T> parse(
+    ReadableByteChannel buf,
+    String base) 
+      throws ParseException {
+    return parse(buf,base,getDefaultParserOptions());
+  }
+
+  public <T extends Element> Document<T> parse(
+    ReadableByteChannel buf)
+      throws ParseException {
+    return parse(buf,null,getDefaultParserOptions());
+  }
+
   public synchronized ParserOptions getDefaultParserOptions() {
     if (options == null) options = initDefaultParserOptions();
 

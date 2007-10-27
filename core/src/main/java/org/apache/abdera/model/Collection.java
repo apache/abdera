@@ -184,7 +184,6 @@ public interface Collection
    * Add an app:categories element that links to an external Category Document
    * @param href The IRI of the external Category Document
    * @return The newly created app:categories element
-   * @throws IRISyntaxException if the href value is malformed
    */
   Categories addCategories(String href);
   
@@ -200,7 +199,6 @@ public interface Collection
    * @param fixed True if the listing of categories should be fixed
    * @param scheme The default IRI scheme for the categories listing
    * @return The newly created app:categories element
-   * @throws IRISyntaxException if the scheme value if malformed
    */
   Categories addCategories(List<Category> categories, boolean fixed, String scheme);
   

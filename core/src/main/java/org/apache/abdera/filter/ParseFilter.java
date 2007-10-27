@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.filter;
 
+import java.io.Serializable;
+
 import javax.xml.namespace.QName;
 
 /**
@@ -24,8 +26,13 @@ import javax.xml.namespace.QName;
  * within a parsed document.  They are set via the ParserOptions.setParseFilter
  * method.
  */
-public interface ParseFilter extends Cloneable {
+public interface ParseFilter 
+  extends Cloneable, 
+          Serializable {
   
+  /**
+   * Clone this ParseFilter
+   */
   Object clone() throws CloneNotSupportedException;
 
   /**

@@ -20,6 +20,7 @@ package org.apache.abdera.model;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -32,6 +33,9 @@ import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.lang.Lang;
 import org.apache.abdera.writer.WriterOptions;
 
+/**
+ * Base implementation used for static extensions.
+ */
 public abstract class ElementWrapper 
   implements Element {
 
@@ -266,5 +270,9 @@ public abstract class ElementWrapper
   
   public void complete() {
     internal.complete();
+  }
+  
+  public Iterator<Element> iterator() {
+    return internal.iterator();
   }
 }

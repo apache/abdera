@@ -772,7 +772,7 @@ public class FOMElement
       OMContainer parent = current.getParent();
       current = (OMElement) ((parent != null && parent instanceof OMElement) ? parent : null);
     }
-    return namespaces;
+    return Collections.unmodifiableMap(namespaces);
   }
 
   
@@ -824,5 +824,12 @@ public class FOMElement
    */
   public void complete() {
     if (!isComplete() && builder != null) super.build();
+  }
+
+  /**
+   * Iterate over all child elements
+   */
+  public Iterator<Element> iterator() {
+    return getElements().iterator();
   }
 }

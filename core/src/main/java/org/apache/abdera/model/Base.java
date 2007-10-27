@@ -26,7 +26,7 @@ import org.apache.abdera.writer.WriterOptions;
 
 /**
  * The Base interface provides the basis for the Feed Object Model API and 
- * defines the operations common to both the Element and Document APIs.
+ * defines the operations common to both the Element and Document interfaces.
  * 
  * Classes implementing Base MUST NOT be assumed to be thread safe.  Developers
  * wishing to allow multiple threads to perform concurrent modifications to a
@@ -35,39 +35,55 @@ import org.apache.abdera.writer.WriterOptions;
 public interface Base 
   extends Cloneable {
 
+  /**
+   * Get the default WriterOptions for this object
+   */
   WriterOptions getDefaultWriterOptions();
   
   /**
    * Serializes the model component out to the specified stream
+   * @param out The target output stream
+   * @param options The WriterOptions to use
    */
   void writeTo(OutputStream out, WriterOptions options) throws IOException;
   
   /**
    * Serializes the model component out to the specified java.io.Writer
+   * @param out The target output writer
+   * @param options The WriterOptions to use
    */
   void writeTo(Writer out, WriterOptions options) throws IOException;
   
   /**
-   * Serializes the model component out to the specified stream using the 
-   * given abdera writer
+   * Serializes the model component out to the specified stream using the given Abdera writer
+   * @param writer The Abdera writer to use
+   * @param out The target output stream
    */
   void writeTo(org.apache.abdera.writer.Writer writer, OutputStream out) throws IOException;
   
   /**
    * Serializes the model component out to the specified java.io.Writer using the 
-   * given abdera writer
+   * given Abdera writer
+   * @param writer The Abdera writer to use
+   * @param out The target output writer
    */
   void writeTo(org.apache.abdera.writer.Writer writer, Writer out) throws IOException;
   
   /**
    * Serializes the model component out to the specified stream using the 
    * given abdera writer
+   * @param writer The Abdera writer to use
+   * @param out The target output stream
+   * @param options The WriterOptions to use
    */
   void writeTo(org.apache.abdera.writer.Writer writer, OutputStream out, WriterOptions options) throws IOException;
   
   /**
    * Serializes the model component out to the specified java.io.Writer using the 
    * given abdera writer
+   * @param writer The Abdera writer to use
+   * @param out The target output writer
+   * @param options The WriterOptions to use
    */
   void writeTo(org.apache.abdera.writer.Writer writer, Writer out, WriterOptions options) throws IOException;
   
@@ -90,7 +106,7 @@ public interface Base
   
   /**
    * Get the Factory used to create this Base
-   * @return The Factory used to create this Base
+   * @return The Factory used to create this object
    */
   Factory getFactory();
   

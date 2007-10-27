@@ -24,6 +24,10 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
 
+/**
+ * An ElementWrapper implementation that can serve as the basis for 
+ * Atom Date Construct based extensions.
+ */
 public abstract class DateTimeWrapper 
   extends ElementWrapper 
   implements DateTime {

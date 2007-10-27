@@ -31,7 +31,7 @@ import org.apache.commons.codec.net.QCodec;
 
 public class EncodingUtil {
 
-  public static final String SANITIZE_PATTERN = "[^A-Za-z0-9\\%!$&\\\\'()*+,;=]";
+  public static final String SANITIZE_PATTERN = "[^A-Za-z0-9\\%!$&\\\\'()*+,;=]+";
   
   public static String sanitize(String slug) {
     return sanitize(slug, null, false, null, SANITIZE_PATTERN);
@@ -85,8 +85,6 @@ public class EncodingUtil {
               slug, form);          
           slug = value.toString();
         } catch (Exception e) {}
-      } else {
-        slug = Escaping.encode(slug, Constants.PATH);
       }
       if (filler != null) {
         slug = slug.replaceAll(pattern,filler);

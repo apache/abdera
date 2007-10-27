@@ -80,7 +80,7 @@ public class FeatureTest extends TestCase {
     assertEquals(collections[0],collection2);
     
     Selector s3 = new XPathSelector(
-      "f:feature[@ref='http://www.w3.org/2007/app/drafts']");
+      "f:feature[@ref='" + FeaturesHelper.FEATURE_SUPPORTS_DRAFTS + "']");
     
     collections = FeaturesHelper.select(service,s3);
     

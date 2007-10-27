@@ -37,16 +37,20 @@ import org.apache.abdera.model.Element;
  * 
  * <p>
  *   Registering an Extension Factory requires generally nothing more than 
- *   implementing ExtensionFactory and then creating the file 
+ *   implementing ExtensionFactory and then creating a file called 
  *   META-INF/services/org.apache.abdera.factory.ExtensionFactory and listing
  *   the class names of each ExtensionFactory you wish to register.
  * </p>
- * 
+ *
+ * <p>ExtensionFactory implementations are assumed to be threadsafe</p>
  */
 public interface ExtensionFactory {
 
   /**
    * Returns true if this extension factory handles the specified namespace
+   * 
+   * @param namespace The XML namespace of the extension
+   * @return True if the namespace is supported by the ExtensionFactory
    */
   boolean handlesNamespace(String namespace);
 
@@ -58,13 +62,21 @@ public interface ExtensionFactory {
   String[] getNamespaces();
 
   /**
-   * Retrieve an ElementWrapper for the specified Element or return
-   * the parameter itself if a wrapper could not be retrieved
+   * Abdera's support for static extensions is based on a simple delegation
+   * model.  Static extension interfaces wrap the dynamic extension
+   * API. ExtensionFactory's are handed the internal dynamic element 
+   * instance and are expected to hand back an object wrapper.  
+   * 
+   * @param internal The Abdera element that needs to be wrapped
+   * @return The wrapper element
    */
   <T extends  Element>T getElementWrapper(Element internal);
   
   /**
    * Retrieve the mime type for the element
+   * 
+   * @param base An Abdera object
+   * @return A MIME media type for the object
    */
   <T extends Base>String getMimeType(T base);
 }

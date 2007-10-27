@@ -19,8 +19,8 @@ package org.apache.abdera.parser;
 
 import java.io.InputStream;
 import java.io.Reader;
+import java.nio.channels.ReadableByteChannel;
 
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 
@@ -44,7 +44,6 @@ public interface Parser {
    * @param base The Base URI of the document
    * @return The parsed Abdera Document
    * @throws ParseException if the parse failed
-   * @throws IRISyntaxException if the Base URI is malformed
    */
   <T extends Element>Document<T> parse(
     InputStream in, 
@@ -59,7 +58,6 @@ public interface Parser {
    * @param options The Parse options
    * @return The parsed Abdera Document
    * @throws ParseException if the parse failed
-   * @throws IRISyntaxException if the Base URI is malformed
    */
   <T extends Element>Document<T> parse(
     InputStream in, 
@@ -77,7 +75,6 @@ public interface Parser {
    * @param options The Parse Options
    * @return The parsed Abdera Document
    * @throws ParseException if the parse failed
-   * @throws IRISyntaxException if the Base URI is malformed
    */
   <T extends Element>Document<T> parse(
     InputStream in, 
@@ -90,7 +87,6 @@ public interface Parser {
    * @param in The Reader to parse
    * @return The parsed Abdera Document
    * @throws ParseException if the parse failed
-   * @throws IRISyntaxException if the Base URI is malformed
    */
   <T extends Element>Document<T> parse(
       Reader in) 
@@ -102,7 +98,6 @@ public interface Parser {
    * @param base The Base URI
    * @return The parsed Abdera Document
    * @throws ParseException if the parse failed
-   * @throws IRISyntaxException if the Base URI is malformed
    */
   <T extends Element>Document<T> parse(
     Reader in, 
@@ -115,7 +110,6 @@ public interface Parser {
    * @param options The Parse Options
    * @return The parsed Abdera Document
    * @throws ParseException if the parse failed
-   * @throws IRISyntaxException if the Base URI is malformed
    */
   <T extends Element>Document<T> parse(
     Reader in, 
@@ -133,13 +127,64 @@ public interface Parser {
    * @param options The Parse Options
    * @return The parsed Abdera Document
    * @throws ParseException if the parse failed
-   * @throws IRISyntaxException if the Base URI is malformed
    */
   <T extends Element>Document<T> parse(
     Reader in, 
     String base, 
     ParserOptions options) 
       throws ParseException;
+
+  /**
+   * Parse the channel using using the specified Parse options.  The 
+   * parse options can be used to control various aspects of the parsing
+   * process such as the character set encoding to use and whether certain
+   * elements should be ignored.  The specified Base URI is used to resolve
+   * relative references contained in the document.
+   * @param in The ReadableByteChannel to parse
+   * @return The parsed Abdera Document
+   * @throws ParseException if the parse failed
+   */
+  <T extends Element>Document<T> parse(ReadableByteChannel buf) throws ParseException;
+
+  /**
+   * Parse the channel using using the specified Parse options.  The 
+   * parse options can be used to control various aspects of the parsing
+   * process such as the character set encoding to use and whether certain
+   * elements should be ignored.  The specified Base URI is used to resolve
+   * relative references contained in the document.
+   * @param in The ReadableByteChannel to parse
+   * @param base The Base URI of the document
+   * @return The parsed Abdera Document
+   * @throws ParseException if the parse failed
+   */
+  <T extends Element>Document<T> parse(ReadableByteChannel buf, String base) throws ParseException;
+  
+  /**
+   * Parse the channel using using the specified Parse options.  The 
+   * parse options can be used to control various aspects of the parsing
+   * process such as the character set encoding to use and whether certain
+   * elements should be ignored.  The specified Base URI is used to resolve
+   * relative references contained in the document.
+   * @param in The ReadableByteChannel to parse
+   * @param base The Base URI of the document
+   * @param options The Parse Options
+   * @return The parsed Abdera Document
+   * @throws ParseException if the parse failed
+   */
+  <T extends Element>Document<T> parse(ReadableByteChannel buf, String base, ParserOptions options) throws ParseException;
+  
+  /**
+   * Parse the channel using using the specified Parse options.  The 
+   * parse options can be used to control various aspects of the parsing
+   * process such as the character set encoding to use and whether certain
+   * elements should be ignored.  The specified Base URI is used to resolve
+   * relative references contained in the document.
+   * @param in The ReadableByteChannel to parse
+   * @param options The Parse Options
+   * @return The parsed Abdera Document
+   * @throws ParseException if the parse failed
+   */
+  <T extends Element>Document<T> parse(ReadableByteChannel buf, ParserOptions options) throws ParseException;
   
   /**
    * Return the default parser options for this Parser. This method 

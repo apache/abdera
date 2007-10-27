@@ -27,6 +27,11 @@ import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 
+/**
+ * A utility implementation of ExtensionFactory used internally by Abdera.
+ * It maintains the collection ExtensionFactory instances discovered on 
+ * the classpath and a cache of Internal-Wrapper mappings.
+ */
 public class ExtensionFactoryMap 
   implements ExtensionFactory {
 

@@ -23,7 +23,9 @@ import javax.activation.DataHandler;
 
 /**
  * A text value. Returned by the Abdera XPath implementation when querying for
- * text nodes (e.g. xpath.selectNodes("//text()"); ...)
+ * text nodes (e.g. xpath.selectNodes("//text()"); ...). There should be very
+ * little reason why an application would use this.  It is provided to keep
+ * applications from having to deal directly with the underlying parser impl
  */
 public interface TextValue {
 

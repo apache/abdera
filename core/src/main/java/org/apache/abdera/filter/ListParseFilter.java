@@ -19,6 +19,9 @@ package org.apache.abdera.filter;
 
 import javax.xml.namespace.QName;
 
+/**
+ * A ParseFilter that is based on an internal collection of QName's.
+ */
 public interface ListParseFilter 
   extends ParseFilter {
 

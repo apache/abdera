@@ -26,6 +26,7 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -728,6 +729,10 @@ public class CoreTest extends TestCase {
     }
 
     public void complete() {}
+
+    public Iterator<Element> iterator() {
+      return null;
+    }
     
   }
   
@@ -1379,6 +1384,10 @@ public class CoreTest extends TestCase {
     }
 
     public void complete() {}
+
+    public Iterator<Element> iterator() {
+      return null;
+    }
     
   }
 }

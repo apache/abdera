@@ -21,7 +21,10 @@ import org.apache.abdera.factory.Factory;
 
 /**
  * A comment. Returned by the Abdera XPath implementation when querying for
- * comment nodes (e.g. xpath.selectNodes("//comment()"); ...)
+ * comment nodes (e.g. xpath.selectNodes("//comment()"); ...).  Most applications
+ * should never have much of a reason to use this interface.  It is provided
+ * primarily to avoid application from having to deal directly with the underlying
+ * parser implementation
  */
 public interface Comment {
 

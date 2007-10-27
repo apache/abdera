@@ -25,6 +25,7 @@ import org.apache.abdera.model.Base;
 /**
  * Used to execute XPath queries over Feed Object Model instances.
  */
+@SuppressWarnings("unchecked") 
 public interface XPath {
   
   /**

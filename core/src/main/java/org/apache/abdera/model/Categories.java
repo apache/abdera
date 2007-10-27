@@ -31,23 +31,21 @@ public interface Categories
   extends ExtensibleElement {
 
   /**
-   * The app:categories element can have an href attribute whose value MUST 
-   * point to an APP Category Document.
+   * When contained within an app:collection element, the app:categories element 
+   * can have an href attribute whose value MUST point to an Atompub Categories Document.
    * @return The href attribute value
-   * @throws IRISyntaxException if the IRI in the underlying attribute value is malformed
    */
   IRI getHref();
   
   /**
    * Returns the value of the href attribute resolved against the in-scope Base URI
    * @return The fully resolved href attribute value
-   * @throws URISyntaxException if the IRI in the underlying attribute value is malformed
    */
   IRI getResolvedHref();
   
   /**
    * Sets the value of the href attribute.
-   * @throws URISyntaxException if the IRI specified is malformed
+   * @param href The location of an Atompub Categories Document
    */
   void setHref(String href);
   
@@ -71,14 +69,12 @@ public interface Categories
    * The app:categories element may specify a default scheme attribute for listed
    * atom:category elements that do not have their own scheme attribute. 
    * @return The scheme IRI
-   * @throws IRISyntaxException if the IRI in the scheme attribute is malformed
    */
   IRI getScheme();
   
   /**
    * Sets the default scheme for this listing of categories 
    * @param scheme The default scheme used for this listing of categories
-   * @throws IRISyntaxException if the IRI provided is malformed
    */
   void setScheme(String scheme);
 
@@ -92,14 +88,12 @@ public interface Categories
    * Lists the complete set of categories that use the specified scheme
    * @param scheme The IRI of an atom:category scheme
    * @return A listing of atom:category elements that use the specified scheme
-   * @throws IRISyntaxException if the scheme provided is malformed 
    */
   List<Category> getCategories(String scheme);
   
   /**
    * Returns a copy of the complete set of categories with the scheme attribute set
    * @return A listing of atom:category elements using the default scheme specified by the app:categories scheme attribute
-   * @throws IRISyntaxException if the values of the scheme attributes are malformed  
    */
   List<Category> getCategoriesWithScheme();
 
@@ -109,7 +103,6 @@ public interface Categories
    * scheme attribute inherit the scheme attribute of the parent)
    * @param scheme A scheme IRI
    * @return A listing of atom:category elements
-   * @throws IRISyntaxException  if the scheme provided is malformed
    */
   List<Category> getCategoriesWithScheme(String scheme);
   
@@ -132,7 +125,6 @@ public interface Categories
    * @param term The string term
    * @param label The human readable label for the category
    * @return The newly created atom:category
-   * @throws IRISyntaxException if the scheme provided is malformed
    */
   Category addCategory(String scheme, String term, String label);
     
@@ -141,7 +133,6 @@ public interface Categories
    * specified term
    * @param term The term to look for
    * @return True if the term is found
-   * @throws IRISyntaxException if the Scheme IRI of any of the scheme attributes is malformed
    */
   boolean contains(String term);
   
@@ -151,7 +142,6 @@ public interface Categories
    * @param term The term to look for
    * @param scheme The IRI scheme 
    * @return True if the term and scheme are found
-   * @throws IRISyntaxException if the Scheme IRI of any of the scheme attributes is malformed
    */
   boolean contains(String term, String scheme);
   
@@ -159,5 +149,6 @@ public interface Categories
    * Returns true if the href attribute is set
    */
   boolean isOutOfLine();
+  
 }
 

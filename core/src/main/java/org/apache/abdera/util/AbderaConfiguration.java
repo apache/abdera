@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.util;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -34,8 +35,10 @@ import org.apache.abdera.writer.NamedWriter;
  * class should not be accessed by applications directly without very good reason.
  */
 public final class AbderaConfiguration 
-  implements Constants, Cloneable {
+  implements Constants, Cloneable, Serializable {
   
+  private static final long serialVersionUID = 7460203853824337559L;
+
   /**
    * Returns the default configuration. Every call to this method returns
    * a new AbderaConfiguration instance using abdera.properties

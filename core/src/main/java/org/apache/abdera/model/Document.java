@@ -161,8 +161,14 @@ public interface Document<T extends Element>
    */
   void setSlug(String slug);
   
+  /**
+   * Return true if insignificant whitespace must be preserved
+   */
   boolean getMustPreserveWhitespace();
-  
+
+  /**
+   * Set to true to preserve insignificant whitespace
+   */
   void setMustPreserveWhitespace(boolean preserve);
   
   /**

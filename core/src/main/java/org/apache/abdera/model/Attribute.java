@@ -23,22 +23,29 @@ import org.apache.abdera.factory.Factory;
 
 /**
  * An attribute. Returned by the Abdera XPath implementation
- * when querying for Attribute nodes
+ * when querying for Attribute nodes.
  */
 public interface Attribute {
 
   /**
-   * The QName of the attribute
+   * Get the QName of the attribute
+   * 
+   * @return The attribute QName
    */
   QName getQName();
   
   /**
-   * The text value of the attribute
+   * Return the text value of the attribute
+   * 
+   * @return The attribute value
    */
   String getText();
   
   /**
-   * The text value of the attribute
+   * Set the text value of the attribute. The value will be automatically 
+   * escaped for proper serialization to XML
+   * 
+   * @param text The attribute value
    */
   void setText(String text);
   

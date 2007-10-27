@@ -21,7 +21,9 @@ import org.apache.abdera.factory.Factory;
 
 /**
  * A processing instruction. Returned by the Abdera XPath implementation when querying for
- * PI nodes (e.g. xpath.selectNodes("//processing-instruction()"); ...)
+ * PI nodes (e.g. xpath.selectNodes("//processing-instruction()"); ...). There should
+ * be very little reason for applications to use this.  It is provided to keep applications
+ * from having to deal with the underlying parser implementation
  */
 public interface ProcessingInstruction {
 

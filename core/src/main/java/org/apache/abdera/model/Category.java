@@ -63,7 +63,6 @@ public interface Category
    * categorization scheme.  Category elements MAY have a "scheme" 
    * attribute.
    * @return The IRI value of the scheme attribute
-   * @throws IRISyntaxException if the scheme IRI is malformed
    */
   IRI getScheme();
 
@@ -72,7 +71,6 @@ public interface Category
    * categorization scheme.  Category elements MAY have a "scheme" 
    * attribute.
    * @param scheme The IRI of the scheme
-   * @throws URISyntaxException if the scheme provided is malformed
    */
   void setScheme(String scheme);
  

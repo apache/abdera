@@ -32,7 +32,7 @@ import org.apache.abdera.writer.WriterFactory;
 import org.apache.abdera.xpath.XPath;
 
 /**
- * A top level entry point for Abdera that provides access to various
+ * The top level entry point for Abdera that provides access to various
  * subcomponents.  Upon creation, this class will attempt to create 
  * singleton instances of each of the various subcomponents components.
  * These instances may be retrieved using the appropriate get___ methods.
@@ -40,7 +40,7 @@ import org.apache.abdera.xpath.XPath;
  * new___ methods. 
  * 
  * Instances of the Abdera object, and it's direct children (Parser,
- * Factory, XPath, etc) are Thread safe.  Because of the dynamic configuration
+ * Factory, XPath, etc) are Threadsafe.  Because of the dynamic configuration
  * model Abdera uses, creating a new instance of the Abdera object can be
  * time consuming.  It is, therefore, a good idea for applications to create
  * only a single static instance of the Abdera object (see the Abdera.getInstance()
@@ -58,12 +58,10 @@ public final class Abdera {
   private static Abdera instance;
   
   /**
-   * Get a static instance of the Abdera object
+   * Get a static instance of the Abdera object.
    */
   public static synchronized Abdera getInstance() {
-    if (instance == null) {
-      instance = new Abdera();
-    }
+    if (instance == null) instance = new Abdera();
     return instance;
   }
   
@@ -108,6 +106,7 @@ public final class Abdera {
   /**
    * Create a new Entry instance.  This is a convenience shortcut for
    * <code>abdera.getFactory().newEntry()</code>
+   * @return A newly created entry element
    */
   public Entry newEntry() {
     return getFactory().newEntry();
@@ -116,6 +115,7 @@ public final class Abdera {
   /**
    * Create a new Service instance.  This is a convenience shortcut for
    * <code>abdera.getFactory().newService()</code>
+   * @return A newly created service element
    */
   public Service newService() {
     return getFactory().newService();
@@ -124,6 +124,7 @@ public final class Abdera {
   /**
    * Create a new Categories instance.  This is a convenience shortcut
    * for <code>abdera.getFactory().newCategories()</code>
+   * @return A newly created categories element
    */
   public Categories newCategories() {
     return getFactory().newCategories();
@@ -131,6 +132,8 @@ public final class Abdera {
   
   /**
    * Return the Abdera Configuration used to initialize this instance
+   * 
+   * @return The Abdera configuration
    */
   public AbderaConfiguration getConfiguration() {
     return config;
@@ -138,6 +141,8 @@ public final class Abdera {
   
   /**
    * Return the singleton instance of org.apache.abdera.factory.Factory
+   * 
+   * @return The factory instance
    */
   public Factory getFactory() {
     return factory;
@@ -145,6 +150,8 @@ public final class Abdera {
   
   /**
    * Return the singleton instance of org.apache.abdera.parser.Parser
+   * 
+   * @return The parser instance
    */
   public Parser getParser() {
     return parser;
@@ -152,27 +159,40 @@ public final class Abdera {
   
   /**
    * Return the singleton instance of org.apache.abdera.xpath.XPath
+   * 
+   * @return The XPath instance
    */
   public XPath getXPath() {
     return xpath;
   }
   
   /**
-   * Return the singleton instance of org.apache.abdera.parser.ParserFactory
+   * Return the singleton instance of org.apache.abdera.parser.ParserFactory.
+   * The Parser Factory is used to acquire alternative parser implementation
+   * instances.
+   * 
+   * @return The ParserFactory instance
    */
   public ParserFactory getParserFactory() {
     return parserFactory;
   }
   
   /**
-   * Return the singleton instance of org.apache.abdera.writer.WriterFactory
+   * Return the singleton instance of org.apache.abdera.writer.WriterFactory.
+   * The Writer Factory is used to acquire alternative writer implementation
+   * instances.
+   * 
+   * @return The WriterFactory instance
    */
   public WriterFactory getWriterFactory() {
     return writerFactory;
   }
   
   /**
-   * Return the singleton instance of org.apache.abdera.writer.Writer
+   * Return the singleton instance of the default org.apache.abdera.writer.Writer
+   * implementation.
+   * 
+   * @return The default writer implementation
    */
   public Writer getWriter() {
     return writer;
@@ -180,6 +200,8 @@ public final class Abdera {
   
   /**
    * Return a new instance of org.apache.abdera.factory.Factory
+   * 
+   * @return A new factory instance
    */
   private Factory newFactory() {
     return ServiceUtil.newFactoryInstance(this);
@@ -187,6 +209,8 @@ public final class Abdera {
     
   /**
    * Return a new instance of org.apache.abdera.parser.Parser
+   * 
+   * @return A new parser instance
    */
   private Parser newParser() {
     return ServiceUtil.newParserInstance(this);
@@ -194,6 +218,8 @@ public final class Abdera {
     
   /**
    * Return a new instance of org.apache.abdera.xpath.XPath
+   * 
+   * @return A new XPath instance
    */
   private XPath newXPath() {
     try {
@@ -205,6 +231,8 @@ public final class Abdera {
     
   /**
    * Return a new instance of org.apache.abdera.parser.ParserFactory
+   * 
+   * @return A new ParserFactory instance
    */
   private ParserFactory newParserFactory() {
     try {
@@ -216,6 +244,8 @@ public final class Abdera {
     
   /**
    * Return a new instance of org.apache.abdera.writer.WriterFactory
+   * 
+   * @return A new WriterFactory instance
    */
   private WriterFactory newWriterFactory() {
     try {
@@ -226,7 +256,9 @@ public final class Abdera {
   }
     
   /**
-   * Return a new instance of org.apache.abdera.writer.Writer
+   * Return a new instance of the default org.apache.abdera.writer.Writer
+   * 
+   * @return A new default writer implementation instance
    */
   private Writer newWriter() {
     try {
@@ -240,6 +272,8 @@ public final class Abdera {
   
   /**
    * Return a new Factory instance using a non-shared Abdera object
+   * 
+   * @return A new factory instance
    */
   public static Factory getNewFactory() {
     return (new Abdera()).newFactory();
@@ -247,6 +281,8 @@ public final class Abdera {
 
   /**
    * Return a new Parser instance using a non-shared Abdera object
+   * 
+   * @return A new parser instance
    */
   public static Parser getNewParser() {
     return (new Abdera()).newParser();
@@ -254,6 +290,8 @@ public final class Abdera {
   
   /**
    * Return a new XPath instance using a non-shared Abdera object
+   * 
+   * @return A new XPath instance
    */
   public static XPath getNewXPath() {
     return (new Abdera()).newXPath();
@@ -261,6 +299,8 @@ public final class Abdera {
 
   /**
    * Return a new ParserFactory instance using a non-shared Abdera object
+   * 
+   * @return A new ParserFactory instance
    */
   public static ParserFactory getNewParserFactory() {
     return (new Abdera()).newParserFactory();
@@ -268,13 +308,17 @@ public final class Abdera {
   
   /**
    * Return a new WriterFactory instance using a non-shared Abdera object
+   * 
+   * @return A new WriterFactory instance
    */
   public static WriterFactory getNewWriterFactory() {
     return (new Abdera()).newWriterFactory();
   }
 
   /**
-   * Return a new instance of the default Writer using a non-shared Abdera object 
+   * Return a new instance of the default Writer using a non-shared Abdera object
+   * 
+   *  @return A new default writer implementation instance
    */
   public static Writer getNewWriter() {
     return (new Abdera()).newWriter();

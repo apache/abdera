@@ -23,6 +23,10 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
 
+/**
+ * ElementWrapper implementation that implements the ExtensibleElement interface.
+ * This should be used to create static extension elements that support extensions
+ */
 public abstract class ExtensibleElementWrapper 
   extends ElementWrapper 
   implements ExtensibleElement {

@@ -38,6 +38,7 @@ import org.apache.abdera.model.Element;
  * 
  * Only use this once per transform!!!
  */
+@SuppressWarnings("unchecked")
 public final class AbderaResult 
   extends StreamResult 
   implements Result {
@@ -90,6 +91,4 @@ public final class AbderaResult
     throw new UnsupportedOperationException();
   }
 
-  
-  
 }

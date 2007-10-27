@@ -209,6 +209,8 @@ public abstract class ElementWrapper
   }
   
   public boolean equals(Object other) {
+    if (other instanceof ElementWrapper)
+      other = ((ElementWrapper)other).getInternal();
     return internal.equals(other);
   }
   

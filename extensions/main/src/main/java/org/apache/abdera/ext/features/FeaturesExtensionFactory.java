@@ -25,6 +25,7 @@ public final class FeaturesExtensionFactory
   public FeaturesExtensionFactory() {
     super(FeaturesHelper.FNS);
     addImpl(FeaturesHelper.FEATURE,Feature.class);
+    addImpl(FeaturesHelper.FEATURES,Features.class);
   }
   
 }

@@ -18,19 +18,23 @@
 package org.apache.abdera.ext.features;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
-import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Collection;
+import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
-import org.apache.abdera.util.MimeTypeHelper;
+import org.apache.abdera.protocol.Response.ResponseType;
+import org.apache.abdera.protocol.client.AbderaClient;
+import org.apache.abdera.protocol.client.ClientResponse;
 
 /**
  * Implementation of the current APP Features Draft
@@ -45,6 +49,7 @@ public final class FeaturesHelper {
   
   public static final String FNS = "http://purl.org/atompub/features/1.0";
   public static final QName FEATURE = new QName(FNS, "feature","f");
+  public static final QName FEATURES = new QName(FNS, "features","f");
   public static final QName TYPE = new QName(FNS, "type", "f");
   
   private static final String FEATURE_BASE                   = "http://www.w3.org/2007/app/";
@@ -215,17 +220,73 @@ public final class FeaturesHelper {
    * examples of the type of markup that would be removed include scripts and embed 
    */
   public static final String FEATURE_FILTERS_MARKUP = BLOG_FEATURE_BASE + "filtersUnsafeMarkup";
-  
-  
+    
   private FeaturesHelper() {}
+  
+  private static Map<String,Features> featuresCache = 
+    Collections.synchronizedMap(new WeakHashMap<String,Features>());
+  
+  private static Features getCachedFeatures(String iri) {
+    return featuresCache.get(iri);
+  }
+  
+  private static void setCachedFeatures(String iri, Features features) {
+    featuresCache.put(iri,features);
+  }
+  
+  public static void flushCachedFeatures() {
+    featuresCache.clear();
+  }
+  
+  public static Features newFeatures(Abdera abdera) {
+    Factory factory = abdera.getFactory();
+    Document<Features> doc = factory.newDocument();
+    Features features = factory.newElement(FEATURES,doc);
+    doc.setRoot(features);
+    return features;
+  }
+  
+  public static Features getFeaturesElement(Collection collection) {
+    return getFeaturesElement(collection,true);
+  }
+  
+  public static Features getFeaturesElement(Collection collection, boolean outofline) {
+    Features features = collection.getExtension(FEATURES);
+    if (features != null && outofline) {
+      if (features.getHref() != null) {
+        String iri = features.getResolvedHref().toASCIIString();
+        features = getCachedFeatures(iri);
+        if (features == null) {
+          Abdera abdera = collection.getFactory().getAbdera();
+          AbderaClient client = new AbderaClient(abdera);
+          ClientResponse resp = client.get(iri);
+          if(resp.getType() == ResponseType.SUCCESS) {
+            Document<Features> doc = resp.getDocument();
+            features = doc.getRoot();
+            setCachedFeatures(iri,features);
+          } else {
+            features = null;
+          }
+        }
+      }
+    }
+    return features;
+  }
+  
+  public static Feature getFeature(
+    Collection collection,
+    String feature) {
+      return getFeature(getFeaturesElement(collection), feature);
+  }
   
   /**
    * Returns the specified feature element or null
    */
   public static Feature getFeature(
-    Collection collection,
+    Features features,
     String feature) {
-      List<Element> list = collection.getExtensions(FEATURE);
+      if (features == null) return null;
+      List<Element> list = features.getExtensions(FEATURE);
       for (Element el : list) {
         if (el.getAttributeValue("ref").equals(feature))
           return (Feature) el;
@@ -234,66 +295,28 @@ public final class FeaturesHelper {
   }
   
   public static Status getFeatureStatus(Collection collection, String feature) {
-    Feature f = getFeature(collection,feature);
+    return getFeatureStatus(getFeaturesElement(collection), feature);
+  }
+  
+  public static Status getFeatureStatus(Features features, String feature) {
+    if (features == null) return Status.UNSPECIFIED;
+    Feature f = getFeature(features,feature);
     return f != null ? Status.SPECIFIED : Status.UNSPECIFIED;
   }
   
-  public static Feature[] getFeatures(Collection collection) {    
-    List<Feature> features = collection.getExtensions(FEATURE);
-    return features.toArray(new Feature[features.size()]);
+  public static Feature[] getFeatures(Collection collection) {
+    Features features = getFeaturesElement(collection);
+    if (features == null) return null;
+    List<Feature> list = features.getExtensions(FEATURE);
+    return list.toArray(new Feature[list.size()]);
   }
   
-  /**
-   * Add the specified features to the collection
-   */
-  public static Feature[] addFeatures(
-    Collection collection, 
-    String... features) {
-      List<Feature> list = new ArrayList<Feature>();
-      for (String feature : features)
-        list.add(addFeature(collection,feature));
-      return list.toArray(new Feature[list.size()]);
-  }
-  
-  /**
-   * Add the specified feature to the collection
-   * @param collection The collection
-   * @param feature The IRI of the feature to add 
-   */
-  public static Feature addFeature(
-    Collection collection, 
-    String feature) {
-      return addFeature(
-        collection, 
-        feature, 
-        null, null);
-  }
-    
-  /**
-   * Add the specified feature to the collection
-   * @param collection The collection
-   * @param feature The IRI of the feature to add 
-   * @param required True if the feature is required
-   * @param href An IRI pointing to a human readable resource describing the feature
-   * @param label A human readable label for the feature
-   */
-  public static Feature addFeature(
-    Collection collection, 
-    String feature,
-    String href,
-    String label) {
-    if (getFeature(collection, feature) != null) 
-      throw new IllegalArgumentException("Feature already specified");
-    Factory factory = collection.getFactory();
-    Feature el = 
-      (Feature)factory.newExtensionElement(
-        FeaturesHelper.FEATURE, collection);
-    collection.declareNS(FNS, "f");
-    el.setRef(new IRI(feature).toString());
-    if (href != null) el.setHref(new IRI(href).toString());
-    if (label != null) el.setLabel(label);
-    return el;
-  }
+  public static Features addFeaturesElement(Collection collection) {
+    if (getFeaturesElement(collection,false) != null) 
+      throw new IllegalArgumentException(
+        "A collection element can only contain one features element");
+    return collection.addExtension(FEATURES);
+  }  
   
   /**
    * Select a Collection from the service document
@@ -339,32 +362,5 @@ public final class FeaturesHelper {
     }
     return list.toArray(new Collection[list.size()]);
   }
-  
-  public static void addType(Feature feature, String mediaRange) {
-    addType(feature, new String[] {mediaRange});
-  }
-  
-  public static void addType(Feature feature, String... mediaRanges) {
-    mediaRanges = MimeTypeHelper.condense(mediaRanges);
-    for (String mediaRange : mediaRanges) {
-      try {
-        feature.addSimpleExtension(TYPE, new MimeType(mediaRange).toString());
-      } catch (MimeTypeParseException e) {}
-    }
-  }
-  
-  public static String[] getTypes(Feature feature) {
-    List<String> list = new ArrayList<String>();
-    for (Element type : feature.getExtensions(TYPE)) {
-      String value = type.getText();
-      if (value != null) {
-        value = value.trim();
-        try {
-          list.add(new MimeType(value).toString());
-        } catch (MimeTypeParseException e) {}
-      }
-    }
-    return list.toArray(new String[list.size()]);
-  }
-  
+   
 }

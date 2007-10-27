@@ -40,10 +40,11 @@ public class Features {
     Collection collection = workspace.addCollection("My collection", "foo");
     
     // Specify which features are supported by the collection
-    FeaturesHelper.addFeature(collection, FeaturesHelper.FEATURE_SUPPORTS_DRAFTS);
-    FeaturesHelper.addFeature(collection, FeaturesHelper.FEATURE_REQUIRES_TEXT_TEXT);
-    FeaturesHelper.addFeature(collection, FeaturesHelper.FEATURE_IGNORES_SLUG);
-    FeaturesHelper.addFeature(collection, FeaturesHelper.FEATURE_SUPPORTS_BIDI);
+    org.apache.abdera.ext.features.Features features = FeaturesHelper.addFeaturesElement(collection);
+    features.addFeature(FeaturesHelper.FEATURE_SUPPORTS_DRAFTS);
+    features.addFeature(FeaturesHelper.FEATURE_REQUIRES_TEXT_TEXT);
+    features.addFeature(FeaturesHelper.FEATURE_IGNORES_SLUG);
+    features.addFeature(FeaturesHelper.FEATURE_SUPPORTS_BIDI);
     
     // Get the support status of a specific feature
     System.out.println(FeaturesHelper.getFeatureStatus(collection, FeaturesHelper.FEATURE_SUPPORTS_DRAFTS));
@@ -53,9 +54,8 @@ public class Features {
     System.out.println(FeaturesHelper.getFeatureStatus(collection, FeaturesHelper.FEATURE_SUPPORTS_GEO));
     
     
-    Feature[] features = null;
-    features = FeaturesHelper.getFeatures(collection);
-    for (Feature feature : features) {
+    Feature[] fs = FeaturesHelper.getFeatures(collection);
+    for (Feature feature : fs) {
       System.out.println("\t" + feature.getRef());
     }
     
@@ -73,3 +73,4 @@ public class Features {
   }
   
 }
+

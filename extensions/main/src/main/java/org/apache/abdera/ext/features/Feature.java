@@ -17,12 +17,18 @@
 */
 package org.apache.abdera.ext.features;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ExtensibleElementWrapper;
+import org.apache.abdera.util.MimeTypeHelper;
 
 public class Feature 
   extends ExtensibleElementWrapper {
@@ -68,4 +74,32 @@ public class Feature
       removeAttribute(new QName("label"));
   }
   
+  
+  public void addType(String mediaRange) {
+    addType(new String[] {mediaRange});
+  }
+  
+  public void addType(String... mediaRanges) {
+    mediaRanges = MimeTypeHelper.condense(mediaRanges);
+    for (String mediaRange : mediaRanges) {
+      try {
+        addSimpleExtension(FeaturesHelper.TYPE, new MimeType(mediaRange).toString());
+      } catch (MimeTypeParseException e) {}
+    }
+  }
+  
+  public String[] getTypes() {
+    List<String> list = new ArrayList<String>();
+    for (Element type : getExtensions(FeaturesHelper.TYPE)) {
+      String value = type.getText();
+      if (value != null) {
+        value = value.trim();
+        try {
+          list.add(new MimeType(value).toString());
+        } catch (MimeTypeParseException e) {}
+      }
+    }
+    return list.toArray(new String[list.size()]);
+  }
+
 }

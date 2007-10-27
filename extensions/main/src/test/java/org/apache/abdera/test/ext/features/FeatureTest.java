@@ -23,24 +23,36 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.features.AcceptSelector;
 import org.apache.abdera.ext.features.Feature;
 import org.apache.abdera.ext.features.FeatureSelector;
+import org.apache.abdera.ext.features.Features;
 import org.apache.abdera.ext.features.FeaturesHelper;
 import org.apache.abdera.ext.features.Selector;
 import org.apache.abdera.ext.features.XPathSelector;
 import org.apache.abdera.ext.features.FeaturesHelper.Status;
 import org.apache.abdera.model.Collection;
+import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
 
 public class FeatureTest extends TestCase {
 
+  public static void testFeaturesDocument() throws Exception {
+    Abdera abdera = Abdera.getInstance();
+    Features features = FeaturesHelper.newFeatures(abdera);
+    assertNotNull(features);
+    assertNotNull(features.getDocument());
+    Document<Features> doc = features.getDocument();
+    assertTrue(doc.getRoot() instanceof Features);
+  }
+  
   public static void testFeatures() throws Exception {
-    Abdera abdera = new Abdera();
+    Abdera abdera = Abdera.getInstance();
     Collection coll = abdera.getFactory().newCollection();
-    FeaturesHelper.addFeature(
-      coll, "http://example.com/features/foo", 
+    Features features = FeaturesHelper.addFeaturesElement(coll);
+    features.addFeature(
+      "http://example.com/features/foo", 
       null, "foo & here");
-    FeaturesHelper.addFeature(
-      coll, "http://example.com/features/bar", 
+    features.addFeature(
+      "http://example.com/features/bar", 
       null, null);
     
     assertEquals(Status.SPECIFIED,FeaturesHelper.getFeatureStatus(
@@ -56,12 +68,13 @@ public class FeatureTest extends TestCase {
   
   public static void testSelectors() throws Exception {
     
-    Abdera abdera = new Abdera();
+    Abdera abdera = Abdera.getInstance();
     Service service = abdera.newService();
     Workspace workspace = service.addWorkspace("a");
     Collection collection1 = workspace.addCollection("a1","a1");
     collection1.setAcceptsEntry();
-    FeaturesHelper.addFeature(collection1, FeaturesHelper.FEATURE_SUPPORTS_DRAFTS);
+    Features features = FeaturesHelper.addFeaturesElement(collection1);
+    features.addFeature(FeaturesHelper.FEATURE_SUPPORTS_DRAFTS);
     Collection collection2 = workspace.addCollection("a2","a2");
     collection2.setAccept("image/*");
     
@@ -80,7 +93,7 @@ public class FeatureTest extends TestCase {
     assertEquals(collections[0],collection2);
     
     Selector s3 = new XPathSelector(
-      "f:feature[@ref='" + FeaturesHelper.FEATURE_SUPPORTS_DRAFTS + "']");
+      "f:features/f:feature[@ref='" + FeaturesHelper.FEATURE_SUPPORTS_DRAFTS + "']");
     
     collections = FeaturesHelper.select(service,s3);
     
@@ -90,10 +103,10 @@ public class FeatureTest extends TestCase {
   
 
   public static void testType() throws Exception {
-     Abdera abdera = new Abdera();
+    Abdera abdera = Abdera.getInstance();
      Feature feature = abdera.getFactory().newElement(FeaturesHelper.FEATURE);
-     FeaturesHelper.addType(feature, "image/jpg","image/gif","image/png","image/*");
-     String[] types = FeaturesHelper.getTypes(feature);
+     feature.addType("image/jpg","image/gif","image/png","image/*");
+     String[] types = feature.getTypes();
      assertEquals(1,types.length);
      assertEquals("image/*", types[0]);
   }

@@ -29,7 +29,6 @@ public abstract class AbstractResponse
 
   protected String[] nocache_headers = null;
   protected String[] private_headers = null;
-  protected long max_age = -1;
   protected long smax_age = -1;
   
   public long getAge() {

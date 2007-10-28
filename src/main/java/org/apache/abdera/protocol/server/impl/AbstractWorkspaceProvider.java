@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.content;
+package org.apache.abdera.protocol.server.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
@@ -30,12 +30,10 @@ import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
+import org.apache.abdera.protocol.server.CollectionProvider;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
-import org.apache.abdera.protocol.server.impl.AbstractProvider;
-import org.apache.abdera.protocol.server.impl.AbstractResponseContext;
-import org.apache.abdera.protocol.server.impl.BaseResponseContext;
-import org.apache.abdera.protocol.server.impl.EmptyResponseContext;
+import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.util.EntityTag;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -74,7 +72,7 @@ public abstract class AbstractWorkspaceProvider extends AbstractProvider {
         Set<Map.Entry<String, CollectionProvider>> entrySet = 
           (Set<Map.Entry<String, CollectionProvider>>) (wp.getCollectionProviders().entrySet());
         for (Map.Entry<String, CollectionProvider> entry : entrySet) {
-          CollectionProvider<?> cp = entry.getValue();
+          CollectionProvider cp = entry.getValue();
 
           String id;
           String workspaceKey;
@@ -106,8 +104,8 @@ public abstract class AbstractWorkspaceProvider extends AbstractProvider {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> CollectionProvider<T> getCollectionProvider(IRI resolveBase, 
-                                                            RequestContext request) throws ResponseContextException {
+    private CollectionProvider getCollectionProvider(IRI resolveBase, 
+                                                     RequestContext request) throws ResponseContextException {
       String path = resolveBase.getPath();
       String[] paths = path.split("/");
       if (paths.length < 1) {
@@ -146,7 +144,7 @@ public abstract class AbstractWorkspaceProvider extends AbstractProvider {
       
       return e.getResponseContext();
     }
-    protected abstract WorkspaceInfo<?> getWorkspaceInfo(String string);
+    protected abstract WorkspaceInfo getWorkspaceInfo(String string);
 
     public ResponseContext createEntry(RequestContext request) {
       try {
@@ -179,7 +177,7 @@ public abstract class AbstractWorkspaceProvider extends AbstractProvider {
 
     public ResponseContext deleteEntry(RequestContext request) {
       try {
-        CollectionProvider<?> provider = getCollectionProvider(resolveBase(request).resolve("./"), request);
+        CollectionProvider provider = getCollectionProvider(resolveBase(request).resolve("./"), request);
       
         return provider.deleteEntry(request);
       } catch (ResponseContextException e) {

@@ -1,7 +1,8 @@
-package org.apache.abdera.server.protocol.server.content;
+package org.apache.abdera.protocol.server;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -9,10 +10,12 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Element;
-import org.apache.abdera.protocol.server.content.AbstractCollectionProvider;
-import org.apache.abdera.protocol.server.content.ResponseContextException;
+import org.apache.abdera.model.Person;
+import org.apache.abdera.protocol.server.impl.AbstractCollectionProvider;
+import org.apache.abdera.protocol.server.impl.ResponseContextException;
 import sun.security.pkcs.ContentInfo;
 
 public class CustomerContentProvider extends AbstractCollectionProvider<Customer> {
@@ -23,10 +26,12 @@ public class CustomerContentProvider extends AbstractCollectionProvider<Customer
   private Factory factory = new Abdera().getFactory();
   
   public String getId() {
-    return "tag:example.org,2006:feed";
+    return "tag:example.org,2007:feed";
   }
 
-  public Customer createEntry(String title, String summary, Content content) {
+  @Override
+  public Customer createEntry(String title, IRI id, String summary, Date updated, List<Person> authors,
+                              Content content) throws ResponseContextException {
     Customer customer = contentToCustomer(content);
     customers.put(customer.getId(), customer);
     

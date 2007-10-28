@@ -21,6 +21,8 @@ import java.io.StringReader;
 import java.util.Date;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.sharing.Conflicts;
 import org.apache.abdera.ext.sharing.History;
@@ -35,8 +37,6 @@ import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
-
-import junit.framework.TestCase;
 
 public class SharingTest
     extends TestCase {

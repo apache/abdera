@@ -15,11 +15,12 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.content;
+package org.apache.abdera.protocol.server.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.List;
 
 import javax.activation.MimeType;
 
@@ -31,23 +32,20 @@ import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
+import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
+import org.apache.abdera.protocol.server.CollectionProvider;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
-import org.apache.abdera.protocol.server.impl.AbstractResponseContext;
-import org.apache.abdera.protocol.server.impl.BaseResponseContext;
-import org.apache.abdera.protocol.server.impl.EmptyResponseContext;
-import org.apache.abdera.protocol.server.impl.MediaResponseContext;
-import org.apache.abdera.protocol.server.impl.ProviderSupport;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public abstract class AbstractCollectionProvider<T> extends ProviderSupport
-  implements CollectionProvider<T> {
+  implements CollectionProvider {
   private final static Log log = LogFactory.getLog(AbstractCollectionProvider.class);
   
   private String baseMediaIri = "media/";
@@ -74,7 +72,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     return ctype != null && !MimeTypeHelper.isAtom(ctype) /*&& !MimeTypeHelper.isXml(ctype)*/;
   }
   
-  public abstract T createEntry(String title, String summary, Content content) throws ResponseContextException;
+  public abstract T createEntry(String title, IRI id, String summary, Date updated, List<Person> authors, Content content) throws ResponseContextException;
   
   public T createMediaEntry(MimeType mimeType, String slug, InputStream inputStream) throws ResponseContextException {
     throw new UnsupportedOperationException();
@@ -313,7 +311,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
   protected void addEntryDetails(RequestContext request, Entry e, 
                                IRI entryBaseIri, T entryObj) throws ResponseContextException {
     IRI entryIri = entryBaseIri.resolve(getName(entryObj));
-    e.addLink(entryIri.toASCIIString(), "edit");
+    e.addLink(entryIri.toString(), "edit");
     e.setId(getId(entryObj));
     e.setTitle(getTitle(entryObj));
     e.setUpdated(getUpdated(entryObj));
@@ -333,7 +331,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     mediaIri = entryBaseIri.resolve(mediaIri);
 
     entry.setContent(mediaIri, getContentType(doc));
-    entry.addLink(mediaIri.toASCIIString(), "edit-media");
+    entry.addLink(mediaIri.toString(), "edit-media");
   }
 
   protected EntityTag calculateEntityTag(Base base) {
@@ -398,14 +396,18 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
       entry.setUpdated(new Date());
       
       try {
-        T entryObj = createEntry(entry.getTitle(), entry.getSummary(), 
-                                          entry.getContentElement());
+        T entryObj = createEntry(entry.getTitle(),
+                                 entry.getId(),
+                                 entry.getSummary(),
+                                 entry.getUpdated(),
+                                 entry.getAuthors(),
+                                 entry.getContentElement());
         entry.getIdElement().setValue(getId(entryObj));
       
         IRI entryBaseUri = getEntryBaseFromFeedIRI(resolveBase(request));
         
         IRI entryIri = entryBaseUri.resolve(getName(entryObj));
-        entry.addLink(entryIri.toASCIIString(), "edit");
+        entry.addLink(entryIri.toString(), "edit");
   
         BaseResponseContext<Entry> rc = new BaseResponseContext<Entry>(entry);
         rc.setLocation(entryIri.resolve(entry.getEditLinkResolvedHref()).toString());
@@ -422,7 +424,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
   }
 
   protected IRI getEntryBaseFromFeedIRI(IRI baseIri) {
-    return new IRI(baseIri.toASCIIString() + "/");
+    return new IRI(baseIri.toString() + "/");
   }
 
   protected Entry getEntryFromCollectionProvider(IRI feedIri, RequestContext request) throws ResponseContextException {

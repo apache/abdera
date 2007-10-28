@@ -15,33 +15,31 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.content;
+package org.apache.abdera.protocol.server.impl;
 
-import java.util.Collection;
 
-public class WorkspaceProvider extends AbstractWorkspaceProvider {
+public class ResponseContextException extends Exception {
+  private AbstractResponseContext responseContext;
 
-  private Collection<WorkspaceInfo> workspaces;
-  
-  public WorkspaceProvider() {
-    super(10);
-  }
-  
-  public WorkspaceInfo<?> getWorkspaceInfo(String id) {
-    for (WorkspaceInfo wp : workspaces) {
-      if (wp.getId().equals(id)) {
-        return wp;
-      }
-    }
-    return null;
+  public ResponseContextException(AbstractResponseContext responseContext, Throwable t) {
+    super(t);
+    this.responseContext = responseContext;
   }
 
-  public Collection<WorkspaceInfo> getWorkspaces() {
-    return workspaces;
+  public ResponseContextException(AbstractResponseContext responseContext) {
+    super();
+    this.responseContext = responseContext;
   }
 
-  public void setWorkspaces(Collection<WorkspaceInfo> workspaces) {
-    this.workspaces = workspaces;
+  public ResponseContextException(int responseCode) {
+    this(new EmptyResponseContext(responseCode));
   }
 
+  public ResponseContextException(int responseCode, Throwable t) {
+    this(new EmptyResponseContext(responseCode), t);
+  }
+
+  public AbstractResponseContext getResponseContext() {
+    return responseContext;
+  }
 }

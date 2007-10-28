@@ -15,10 +15,13 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.content;
+package org.apache.abdera.protocol.server.impl;
 
 import java.util.Collection;
 import java.util.Map;
+
+import org.apache.abdera.protocol.server.CollectionProvider;
+import org.apache.abdera.protocol.server.WorkspaceInfo;
 
 public class SimpleWorkspaceInfo implements WorkspaceInfo {
     private Map<String, CollectionProvider> collectionProviders;

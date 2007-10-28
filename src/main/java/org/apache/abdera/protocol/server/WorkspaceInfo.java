@@ -15,18 +15,20 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.content;
+package org.apache.abdera.protocol.server;
 
 import java.util.Map;
 
-public interface WorkspaceInfo<T> {
+import org.apache.abdera.protocol.server.impl.ResponseContextException;
+
+public interface WorkspaceInfo {
 
   String getId();
 
   String getName();
 
-  Map<String, CollectionProvider<T>> getCollectionProviders();
+  Map<String, CollectionProvider> getCollectionProviders();
 
-  CollectionProvider<T> getCollectionProvider(String id) throws ResponseContextException;
+  CollectionProvider getCollectionProvider(String id) throws ResponseContextException;
 
 }

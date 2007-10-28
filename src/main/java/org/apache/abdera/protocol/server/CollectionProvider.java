@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.content;
+package org.apache.abdera.protocol.server;
 
 import java.io.InputStream;
 import java.util.Date;
@@ -25,10 +25,8 @@ import javax.activation.MimeType;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Feed;
-import org.apache.abdera.protocol.server.RequestContext;
-import org.apache.abdera.protocol.server.ResponseContext;
 
-public interface CollectionProvider<T> {
+public interface CollectionProvider {
     
     String getTitle();
     

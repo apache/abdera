@@ -1,4 +1,4 @@
-package org.apache.abdera.server.protocol.server.content;
+package org.apache.abdera.protocol.server;
 
 import java.util.Date;
 

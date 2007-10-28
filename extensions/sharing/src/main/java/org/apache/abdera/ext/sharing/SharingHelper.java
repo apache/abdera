@@ -280,7 +280,9 @@ public class SharingHelper {
     for (Entry x : conflicts) {
       Sync xsync = getSync(x,false);
       if (xsync != null) {
-        for (History h1 : xsync.getHistory()) {
+        List<History> list = xsync.getHistory();
+        History[] history = list.toArray(new History[list.size()]);
+        for (History h1 : history) {
           boolean ok = true;
           for (History h2 : sync.getHistory()) {
             if (isSubsumed(h1,h2)) {
@@ -288,7 +290,8 @@ public class SharingHelper {
               break;
             }
           }
-          if (ok) sync.addHistory(h1);
+          if (h1.getParentElement() != sync && ok) 
+            sync.addHistory((History) h1.clone());
         }
       }
     }

@@ -28,6 +28,8 @@ import javax.xml.namespace.QName;
  */
 public class BlackListParseFilter extends AbstractListParseFilter {
 
+  private static final long serialVersionUID = -8428373486568649179L;
+
   public boolean acceptable(QName qname) {
     return !contains(qname);
   }

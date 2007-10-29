@@ -94,12 +94,20 @@ public abstract class AbstractWorkspaceProvider extends AbstractProvider {
     public abstract java.util.Collection<WorkspaceInfo> getWorkspaces();
 
     public ResponseContext getFeed(RequestContext request) {
+      CollectionProvider provider = null;
+      ResponseContext res = null;
       try {
-        CollectionProvider provider = getCollectionProvider(resolveBase(request), request);
+        provider = getCollectionProvider(resolveBase(request), request);
         
-        return provider.getFeed(request);
+        provider.begin(request);
+        
+        res = provider.getFeed(request);
+        return res;
       } catch (ResponseContextException e) {
-        return createErrorResponse(e);
+        res = createErrorResponse(e);
+        return res;
+      } finally {
+        end(provider, request, res);
       }
     }
 
@@ -147,24 +155,45 @@ public abstract class AbstractWorkspaceProvider extends AbstractProvider {
     protected abstract WorkspaceInfo getWorkspaceInfo(String string);
 
     public ResponseContext createEntry(RequestContext request) {
+      CollectionProvider provider = null;
+      ResponseContext response = null;
       try {
-        CollectionProvider provider = getCollectionProvider(request.getUri(), request);
+        provider = getCollectionProvider(request.getUri(), request);
+        provider.begin(request);
         
         return provider.createEntry(request);
       } catch (ResponseContextException e) {
-        return createErrorResponse(e);
+        response = createErrorResponse(e);
+        return response;
+      } finally {
+        end(provider, request, response);
+      }
+    }
+
+    protected void end(CollectionProvider provider, RequestContext request, ResponseContext response) {
+      if (provider != null) {
+        try {
+          provider.end(request, response);
+        } catch (Throwable t) {
+          log.warn("Could not end() CollectionProvider.", t);
+        }
       }
     }
 
     @Override
     public ResponseContext getMedia(RequestContext request) {
+      CollectionProvider provider = null;
+      ResponseContext response = null;
       try {
         IRI entryBaseIri = resolveBase(request).resolve("../");
-        CollectionProvider provider = getCollectionProvider(entryBaseIri, request);
+        provider = getCollectionProvider(entryBaseIri, request);
   
         return provider.getMedia(request);
       } catch (ResponseContextException e) {
-        return createErrorResponse(e);
+        response = createErrorResponse(e);
+        return response;
+      } finally {
+        end(provider, request, response);
       }
     }
 
@@ -176,36 +205,53 @@ public abstract class AbstractWorkspaceProvider extends AbstractProvider {
     }
 
     public ResponseContext deleteEntry(RequestContext request) {
+      CollectionProvider provider = null;
+      ResponseContext response = null;
       try {
-        CollectionProvider provider = getCollectionProvider(resolveBase(request).resolve("./"), request);
+        provider = getCollectionProvider(resolveBase(request).resolve("./"), request);
       
         return provider.deleteEntry(request);
       } catch (ResponseContextException e) {
-        return createErrorResponse(e);
+        response = createErrorResponse(e);
+        return response;
+      } finally {
+        end(provider, request, response);
       }
     }
 
     
     public ResponseContext getEntry(RequestContext request) {
+      CollectionProvider provider = null;
+      ResponseContext response = null;
       try {
         IRI entryBaseIri = resolveBase(request).resolve("./");
-        CollectionProvider provider = getCollectionProvider(entryBaseIri, request);
-  
+        provider = getCollectionProvider(entryBaseIri, request);
+        provider.begin(request);
+        
         return provider.getEntry(request, entryBaseIri);
       } catch (ResponseContextException e) {
-        return createErrorResponse(e);
+        response = createErrorResponse(e);
+        return response;
+      } finally {
+        end(provider, request, response);
       }
     }
 
     @SuppressWarnings("unchecked")
     public ResponseContext updateEntry(RequestContext request) {
+      CollectionProvider provider = null;
+      ResponseContext response = null;
       try {
         IRI entryBaseIri = resolveBase(request).resolve("./");
-        CollectionProvider provider = getCollectionProvider(entryBaseIri, request);
-  
+        provider = getCollectionProvider(entryBaseIri, request);
+        provider.begin(request);
+        
         return provider.updateEntry(request, entryBaseIri);
       } catch (ResponseContextException e) {
-        return createErrorResponse(e);
+        response = createErrorResponse(e);
+        return response;
+      } finally {
+        end(provider, request, response);
       }
     }
 

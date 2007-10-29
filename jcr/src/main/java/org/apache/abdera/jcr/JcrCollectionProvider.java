@@ -221,8 +221,6 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
     StringBuffer qStr = new StringBuffer();
     qStr.append("//*[@jcr:uuid='").append(collectionNodeId).append("']/entry[@").append(RESOURCE_NAME)
       .append("='").append(resourceName).append("']");
-
-    System.out.println("QUery" + qStr.toString());
     
     Query query = qm.createQuery(qStr.toString(), Query.XPATH);
 

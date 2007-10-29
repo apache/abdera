@@ -22,6 +22,8 @@ import javax.xml.namespace.QName;
 public class NonOpParseFilter 
   extends AbstractParseFilter {
 
+  private static final long serialVersionUID = -1895875728388522456L;
+
   public boolean acceptable(QName qname) {
     return true;
   }

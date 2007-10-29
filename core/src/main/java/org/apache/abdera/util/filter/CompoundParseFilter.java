@@ -40,6 +40,8 @@ public class CompoundParseFilter
   extends AbstractParseFilter
   implements ParseFilter {
 
+  private static final long serialVersionUID = -7871289035422204698L;
+
   public enum Condition {
     ACCEPTABLE_TO_ALL,
     ACCEPTABLE_TO_ANY,

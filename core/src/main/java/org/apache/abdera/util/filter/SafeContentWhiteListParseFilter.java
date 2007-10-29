@@ -26,6 +26,8 @@ public class SafeContentWhiteListParseFilter
   extends AbstractParseFilter
   implements ParseFilter {
 
+  private static final long serialVersionUID = -4802312485715572721L;
+
   private static enum xhtml_elements {
     a, abbr, acronym, address, area, b, bdo, big, blockquote, 
     br, button, caption, center, cite, code, col, colgroup, 
@@ -72,7 +74,7 @@ public class SafeContentWhiteListParseFilter
       try {
         xhtml_attributes.valueOf(
           xhtml_attributes.fix(
-            attribute.getLocalPart()));
+            attribute.getLocalPart().toLowerCase()));
         return true;
       } catch (Exception e) {}
       return false;

@@ -27,6 +27,7 @@ import javax.xml.namespace.QName;
 public class WhiteListParseFilter 
   extends AbstractListParseFilter {
 
+  private static final long serialVersionUID = -2126524829459798481L;
   private final boolean listAttributesExplicitly;
   
   public WhiteListParseFilter() {

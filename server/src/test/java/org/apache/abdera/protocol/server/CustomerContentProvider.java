@@ -1,5 +1,6 @@
 package org.apache.abdera.protocol.server;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,8 +31,11 @@ public class CustomerContentProvider extends AbstractCollectionProvider<Customer
   }
 
   @Override
-  public Customer createEntry(String title, IRI id, String summary, Date updated, List<Person> authors,
-                              Content content) throws ResponseContextException {
+  public Customer createEntry(String title, IRI id, 
+                              String summary, 
+                              Date updated, 
+                              List<Person> authors,
+                              Content content, RequestContext request) throws ResponseContextException {
     Customer customer = contentToCustomer(content);
     customers.put(customer.getId(), customer);
     
@@ -51,13 +55,27 @@ public class CustomerContentProvider extends AbstractCollectionProvider<Customer
     return customer;
   }
 
-  public void deleteEntry(String resourceName) throws ResponseContextException {
+  public void deleteEntry(String resourceName, RequestContext request) throws ResponseContextException {
     Integer id = getIdFromResourceName(resourceName);
     customers.remove(id);
   }
 
   public String getAuthor() {
     return "Acme Industries";
+  }
+
+  @Override
+  public List<Person> getAuthors(Customer entry, RequestContext request) throws ResponseContextException {
+    Person author = request.getAbdera().getFactory().newAuthor();
+    author.setName("Acme Industries");
+    return Arrays.asList(author);
+  }
+
+  @Override
+  public void updateEntry(Customer entry, String title, Date updated, List<Person> authors, String summary,
+                          Content content, RequestContext request) throws ResponseContextException {
+    // TODO Auto-generated method stub
+    
   }
 
   public Object getContent(Customer entry) {
@@ -69,11 +87,11 @@ public class CustomerContentProvider extends AbstractCollectionProvider<Customer
     return content;
   }
 
-  public Iterable<Customer> getEntries() {
+  public Iterable<Customer> getEntries(RequestContext request) {
     return customers.values();
   }
 
-  public Customer getEntry(String resourceName) throws ResponseContextException {
+  public Customer getEntry(String resourceName, RequestContext request) throws ResponseContextException {
     Integer id = getIdFromResourceName(resourceName);
     return customers.get(id);
   }
@@ -87,7 +105,7 @@ public class CustomerContentProvider extends AbstractCollectionProvider<Customer
     return id;
   }
 
-  public Customer getEntryFromId(String id) {
+  public Customer getEntryFromId(String id, RequestContext request) {
     return customers.get(new Integer(id));
   }
 
@@ -112,7 +130,7 @@ public class CustomerContentProvider extends AbstractCollectionProvider<Customer
     return new Date();
   }
 
-  public Customer updateEntry(Customer entry, Content content) {
+  public Customer updateEntry(Customer entry, String title, List<Person> authors, Content content, RequestContext request) {
     contentToCustomer(content, entry);
     
     return entry;

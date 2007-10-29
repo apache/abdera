@@ -62,7 +62,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     } catch (ClassCastException cce) {
       return new EmptyResponseContext(415);
     } catch (IOException e) {
-      e.printStackTrace();
+      log.warn(e.getMessage(), e);
       return new EmptyResponseContext(500);
     }
   }
@@ -72,7 +72,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     return ctype != null && !MimeTypeHelper.isAtom(ctype) /*&& !MimeTypeHelper.isXml(ctype)*/;
   }
   
-  public abstract T createEntry(String title, IRI id, String summary, Date updated, List<Person> authors, Content content) throws ResponseContextException;
+  public abstract T createEntry(String title, IRI id, String summary, Date updated, List<Person> authors, Content content, RequestContext request) throws ResponseContextException;
   
   public T createMediaEntry(MimeType mimeType, String slug, InputStream inputStream) throws ResponseContextException {
     throw new UnsupportedOperationException();
@@ -83,7 +83,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     if (id != null) {
 
       try {
-        deleteEntry(id);
+        deleteEntry(id, request);
       } catch (ResponseContextException e) {
         return createErrorResponse(e);
       }
@@ -95,10 +95,12 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     }
   }
 
-  public abstract void deleteEntry(String resourceName) throws ResponseContextException;
+  public abstract void deleteEntry(String resourceName, RequestContext request) throws ResponseContextException;
 
   public abstract String getAuthor() throws ResponseContextException;
 
+  public abstract List<Person> getAuthors(T entry, RequestContext request) throws ResponseContextException;
+  
   public String getBaseMediaIri() {
     return baseMediaIri;
   }
@@ -111,19 +113,14 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     throw new UnsupportedOperationException();
   }
   
-  public abstract Iterable<T> getEntries() throws ResponseContextException;
+  public abstract Iterable<T> getEntries(RequestContext request) throws ResponseContextException;
   
   public ResponseContext getEntry(RequestContext request, IRI entryBaseIri) {
     try {
       Entry entry = getEntryFromCollectionProvider(entryBaseIri,
                                                    request);
       if (entry != null) {
-        Feed feed = createFeed(request.getAbdera());
-        entry.setSource(feed.getAsSource());
-        Document<Entry> entry_doc = entry.getDocument();
-        AbstractResponseContext rc = new BaseResponseContext<Document<Entry>>(entry_doc);
-        rc.setEntityTag(calculateEntityTag(entry));
-        return rc;
+        return buildGetEntryResponse(request, entry);
       } else {
         return new EmptyResponseContext(404);
       }
@@ -131,10 +128,19 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
       return createErrorResponse(e);
     }
   }
+
+  protected ResponseContext buildGetEntryResponse(RequestContext request, Entry entry) {
+    Feed feed = createFeed(request.getAbdera());
+    entry.setSource(feed.getAsSource());
+    Document<Entry> entry_doc = entry.getDocument();
+    AbstractResponseContext rc = new BaseResponseContext<Document<Entry>>(entry_doc);
+    rc.setEntityTag(calculateEntityTag(entry));
+    return rc;
+  }
   
-  public abstract T getEntry(String resourceName) throws ResponseContextException;
+  public abstract T getEntry(String resourceName, RequestContext request) throws ResponseContextException;
   
-  public abstract T getEntryFromId(String id) throws ResponseContextException;
+  public abstract T getEntryFromId(String id, RequestContext request) throws ResponseContextException;
 
 
   public ResponseContext getFeed(RequestContext request) {
@@ -151,7 +157,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     IRI entryIri = getEntryBaseFromFeedIRI(baseIri);
     
     try {
-      Iterable<T> entries = getEntries();
+      Iterable<T> entries = getEntries(request);
       if (entries != null) {
         for (T entryObj : entries) {
           Entry e = feed.addEntry();
@@ -166,14 +172,18 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
         }
       }
   
-      Document<Feed> document = feed.getDocument();
-      AbstractResponseContext rc = new BaseResponseContext<Document<Feed>>(document);
-      rc.setEntityTag(calculateEntityTag(document.getRoot()));
-      return rc;
+      return buildGetFeedResponse(feed);
     } catch (ResponseContextException e) {
       return createErrorResponse(e);
     }
     
+  }
+
+  protected ResponseContext buildGetFeedResponse(Feed feed) {
+    Document<Feed> document = feed.getDocument();
+    AbstractResponseContext rc = new BaseResponseContext<Document<Feed>>(document);
+    rc.setEntityTag(calculateEntityTag(document.getRoot()));
+    return rc;
   }
 
   /**
@@ -205,25 +215,30 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
   public ResponseContext getMedia(RequestContext request) {
     try {
       String id = getEntryID(request);
-      T entryObj = getEntry(id);
+      T entryObj = getEntry(id, request);
 
       if (entryObj == null) {
         return new EmptyResponseContext(404);
       }
 
-      MediaResponseContext ctx = new MediaResponseContext(getMediaStream(entryObj), 
-                                                          getUpdated(entryObj), 
-                                                          200);
-      ctx.setContentType(getContentType(entryObj));
-
-      return ctx;
+      return buildGetMediaResponse(entryObj);
     } catch (ParseException pe) {
       return new EmptyResponseContext(415);
     } catch (ClassCastException cce) {
       return new EmptyResponseContext(415);
     } catch (Exception e) {
+      log.warn(e.getMessage(), e);
       return new EmptyResponseContext(400);
     }
+  }
+
+  protected ResponseContext buildGetMediaResponse(T entryObj) throws ResponseContextException {
+    MediaResponseContext ctx = new MediaResponseContext(getMediaStream(entryObj), 
+                                                        getUpdated(entryObj), 
+                                                        200);
+    ctx.setContentType(getContentType(entryObj));
+
+    return ctx;
   }
   public String getMediaName(T entry) {
     throw new UnsupportedOperationException();
@@ -249,10 +264,16 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     this.baseMediaIri = baseMediaIri;
   }
 
-  public ResponseContext updateEntry(RequestContext request, IRI feedUri) {
-    Abdera abdera = request.getAbdera();
+  public ResponseContext updateEntry(RequestContext request, IRI feedIri) {
     try {
-      Entry orig_entry = getEntryFromCollectionProvider(feedUri, request);
+      String id = getEntryID(request);
+      T entryObj = getEntry(id, request);
+      
+      if (entryObj == null) {
+        return new EmptyResponseContext(404);
+      }
+      
+      Entry orig_entry = getEntryFromCollectionProvider(entryObj, feedIri, request);
       if (orig_entry != null) {
 
         MimeType contentType = request.getContentType();
@@ -267,16 +288,8 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
           if (!isValidEntry(entry))
             return new EmptyResponseContext(400);
 
-          entry.setUpdated(new Date());
-          // TODO: is this really necessary?
-          // entry.getIdElement().setValue(factory.newUuidUri());
-          entry.addLink(feedUri.resolve(entry.getId().toString()).toString(), "edit");
-
-          // entryObjProvider.updateEntry(entry)
-
-          Feed feed = createFeed(abdera);
-          feed.insertEntry(entry);
-          feed.setUpdated(new Date());
+          updateEntry(entryObj, entry.getTitle(), new Date(), entry.getAuthors(), 
+                      entry.getSummary(), entry.getContentElement(), request);
           return new EmptyResponseContext(204);
         } else {
           return new EmptyResponseContext(400);
@@ -291,12 +304,15 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     } catch (ClassCastException cce) {
       return new EmptyResponseContext(415);
     } catch (Exception e) {
+      log.warn(e.getMessage(), e);
       return new EmptyResponseContext(400);
     }
     
   }
 
-  public abstract T updateEntry(T entry, Content content);
+  public abstract void updateEntry(T entry, String title, Date updated, 
+                                   List<Person> authors, String summary, 
+                                   Content content, RequestContext request) throws ResponseContextException;
 
   protected void addContent(Entry e, T doc) throws ResponseContextException {
     Object content = getContent(doc);
@@ -315,13 +331,24 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     e.setId(getId(entryObj));
     e.setTitle(getTitle(entryObj));
     e.setUpdated(getUpdated(entryObj));
-    Text t = getSummary(entryObj);
-    if (t != null) {
-      e.setSummaryElement(t);
+    
+    List<Person> authors = getAuthors(entryObj, request);
+    if (authors == null || authors.size() == 0) {
+      log.warn("You must specify at least one author for the entry!");
+      throw new ResponseContextException(500);
+    }
+    
+    for (Person a : authors) {
+      e.addAuthor(a);
+    }
+    
+    String s = getSummary(entryObj);
+    if (s != null) {
+      e.setSummary(s);
     }
   }
 
-  public Text getSummary(T entry) {
+  public String getSummary(T entry) {
     return null;
   }
 
@@ -373,17 +400,25 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
 
       addMediaContent(entryIri, entry, doc);
 
-      BaseResponseContext<Entry> rc = new BaseResponseContext<Entry>(entry);
-      rc.setLocation(entryIri.resolve(entry.getEditLinkResolvedHref()).toString());
-      rc.setContentLocation(rc.getLocation().toString());
-      rc.setEntityTag(calculateEntityTag(entry));
-      rc.setStatus(201);
-      return rc;
+      return buildCreateMediaEntryResponse(entryIri, entry);
     } catch (IOException e) {
       return new EmptyResponseContext(500);
     } catch (ResponseContextException e) {
       return createErrorResponse(e);
     }
+  }
+
+  protected ResponseContext buildCreateMediaEntryResponse(IRI entryIri, Entry entry) {
+    return buildCreateEntryResponse(entryIri, entry);
+  }
+
+  protected ResponseContext buildCreateEntryResponse(IRI entryIri, Entry entry) {
+    BaseResponseContext<Entry> rc = new BaseResponseContext<Entry>(entry);
+    rc.setLocation(entryIri.resolve(entry.getEditLinkResolvedHref()).toString());
+    rc.setContentLocation(rc.getLocation().toString());
+    rc.setEntityTag(calculateEntityTag(entry));
+    rc.setStatus(201);
+    return rc;
   }
 
   protected ResponseContext createNonMediaEntry(RequestContext request)
@@ -401,7 +436,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
                                  entry.getSummary(),
                                  entry.getUpdated(),
                                  entry.getAuthors(),
-                                 entry.getContentElement());
+                                 entry.getContentElement(), request);
         entry.getIdElement().setValue(getId(entryObj));
       
         IRI entryBaseUri = getEntryBaseFromFeedIRI(resolveBase(request));
@@ -409,12 +444,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
         IRI entryIri = entryBaseUri.resolve(getName(entryObj));
         entry.addLink(entryIri.toString(), "edit");
   
-        BaseResponseContext<Entry> rc = new BaseResponseContext<Entry>(entry);
-        rc.setLocation(entryIri.resolve(entry.getEditLinkResolvedHref()).toString());
-        rc.setContentLocation(rc.getLocation().toString());
-        rc.setEntityTag(calculateEntityTag(entry));
-        rc.setStatus(201);
-        return rc;
+        return buildCreateEntryResponse(entryIri, entry);
       } catch (ResponseContextException e) {
         return createErrorResponse(e);
       }
@@ -430,16 +460,26 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
   protected Entry getEntryFromCollectionProvider(IRI feedIri, RequestContext request) throws ResponseContextException {
 
     String id = getEntryID(request);
-    T entryObj = getEntry(id);
+    T entryObj = getEntry(id, request);
 
     if (entryObj == null) {
       return null;
     }
 
+    return getEntryFromCollectionProvider(entryObj, feedIri, request);
+  }
+
+  private Entry getEntryFromCollectionProvider(T entryObj, IRI feedIri, RequestContext request)
+    throws ResponseContextException {
     Abdera abdera = request.getAbdera();
     Factory factory = abdera.getFactory();
     Entry entry = factory.newEntry();
 
+    return buildEntry(entryObj, entry, feedIri, request);
+  }
+
+  private Entry buildEntry(T entryObj, Entry entry, IRI feedIri, RequestContext request)
+    throws ResponseContextException {
     addEntryDetails(request, entry, feedIri, entryObj);
 
     if (isMediaEntry(entryObj)) {
@@ -476,5 +516,15 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
   @Override
   protected IRI resolveBase(RequestContext request) {
     return request.getBaseUri().resolve(request.getUri());
+  }
+
+  public void begin(RequestContext request) throws ResponseContextException {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void end(RequestContext request, ResponseContext response) {
+    // TODO Auto-generated method stub
+    
   }
 }

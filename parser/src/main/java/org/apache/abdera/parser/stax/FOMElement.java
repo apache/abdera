@@ -825,4 +825,33 @@ public class FOMElement
     return getElements().iterator();
   }
 
+  public void writeTo(
+    String writer, 
+    OutputStream out) 
+      throws IOException {
+    writeTo(getFactory().getAbdera().getWriterFactory().getWriter(writer),out);
+  }
+
+  public void writeTo(
+    String writer, 
+    java.io.Writer out) 
+      throws IOException {
+    writeTo(getFactory().getAbdera().getWriterFactory().getWriter(writer),out);
+  }
+
+  public void writeTo(
+    String writer, 
+    OutputStream out, 
+    WriterOptions options)
+      throws IOException {
+    writeTo(getFactory().getAbdera().getWriterFactory().getWriter(writer),out,options);
+  }
+
+  public void writeTo(
+    String writer, 
+    java.io.Writer out, 
+    WriterOptions options)
+      throws IOException {
+    writeTo(getFactory().getAbdera().getWriterFactory().getWriter(writer),out,options);
+  }
 }

@@ -68,6 +68,21 @@ public interface Base
    * @param out The target output writer
    */
   void writeTo(org.apache.abdera.writer.Writer writer, Writer out) throws IOException;
+
+  /**
+   * Serializes the model component out to the specified stream using the given Abdera writer
+   * @param writer The Abdera writer to use
+   * @param out The target output stream
+   */
+  void writeTo(String writer, OutputStream out) throws IOException;
+  
+  /**
+   * Serializes the model component out to the specified java.io.Writer using the 
+   * given Abdera writer
+   * @param writer The Abdera writer to use
+   * @param out The target output writer
+   */
+  void writeTo(String writer, Writer out) throws IOException;
   
   /**
    * Serializes the model component out to the specified stream using the 
@@ -86,6 +101,24 @@ public interface Base
    * @param options The WriterOptions to use
    */
   void writeTo(org.apache.abdera.writer.Writer writer, Writer out, WriterOptions options) throws IOException;
+
+  /**
+   * Serializes the model component out to the specified stream using the 
+   * given abdera writer
+   * @param writer The name of the Abdera writer to use
+   * @param out The target output stream
+   * @param options The WriterOptions to use
+   */
+  void writeTo(String writer, OutputStream out, WriterOptions options) throws IOException;
+  
+  /**
+   * Serializes the model component out to the specified java.io.Writer using the 
+   * given abdera writer
+   * @param writer The name of the Abdera writer to use
+   * @param out The target output writer
+   * @param options The WriterOptions to use
+   */
+  void writeTo(String writer, Writer out, WriterOptions options) throws IOException;
   
   /**
    * Serializes the model component out to the specified stream

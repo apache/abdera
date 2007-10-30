@@ -262,6 +262,22 @@ public abstract class ElementWrapper
     internal.writeTo(writer,out);
   }
 
+  public void writeTo(String writer, OutputStream out, WriterOptions options) throws IOException {
+    internal.writeTo(writer,out,options);
+  }
+
+  public void writeTo(String writer, OutputStream out) throws IOException {
+    internal.writeTo(writer,out);
+  }
+
+  public void writeTo(String writer, Writer out, WriterOptions options) throws IOException {
+    internal.writeTo(writer,out,options);
+  }
+
+  public void writeTo(String writer, Writer out) throws IOException {
+    internal.writeTo(writer,out);
+  }
+  
   public void writeTo(Writer out, WriterOptions options) throws IOException {
     internal.writeTo(out,options);
   }

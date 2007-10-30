@@ -733,6 +733,16 @@ public class CoreTest extends TestCase {
     public Iterator<Element> iterator() {
       return null;
     }
+
+    public void writeTo(String writer, OutputStream out) throws IOException {}
+
+    public void writeTo(String writer, Writer out) throws IOException {}
+
+    public void writeTo(String writer, OutputStream out, WriterOptions options)
+        throws IOException {}
+
+    public void writeTo(String writer, Writer out, WriterOptions options)
+        throws IOException {}
     
   }
   
@@ -1388,6 +1398,16 @@ public class CoreTest extends TestCase {
     public Iterator<Element> iterator() {
       return null;
     }
+
+    public void writeTo(String writer, OutputStream out) throws IOException {}
+
+    public void writeTo(String writer, Writer out) throws IOException {}
+
+    public void writeTo(String writer, OutputStream out, WriterOptions options)
+        throws IOException {}
+
+    public void writeTo(String writer, Writer out, WriterOptions options)
+        throws IOException {}
     
   }
 }

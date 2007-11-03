@@ -143,8 +143,8 @@ public abstract class AbstractWorkspaceProvider extends AbstractProvider {
      * @return
      */
     protected ResponseContext createErrorResponse(ResponseContextException e) {
-      if (log.isDebugEnabled()) {
-        log.debug("A ResponseException was thrown.", e);
+      if (log.isInfoEnabled()) {
+        log.info("A ResponseException was thrown.", e);
       } else if (e.getResponseContext() instanceof EmptyResponseContext 
         && ((EmptyResponseContext) e.getResponseContext()).getStatus() >= 500) {
         log.warn("A ResponseException was thrown.", e);
@@ -187,7 +187,8 @@ public abstract class AbstractWorkspaceProvider extends AbstractProvider {
       try {
         IRI entryBaseIri = resolveBase(request).resolve("../");
         provider = getCollectionProvider(entryBaseIri, request);
-  
+        provider.begin(request);
+        
         return provider.getMedia(request);
       } catch (ResponseContextException e) {
         response = createErrorResponse(e);

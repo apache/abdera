@@ -18,6 +18,8 @@
 package org.apache.abdera.util;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +31,7 @@ import org.apache.abdera.converter.ConverterProvider;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.parser.NamedParser;
 import org.apache.abdera.writer.NamedWriter;
+import org.apache.abdera.writer.StreamWriter;
 
 /**
  * Provides the basic configuration for the Abdera default implementation.  This
@@ -77,9 +80,11 @@ public final class AbderaConfiguration
   private final String parserFactory;
   private final String writerFactory;
   private final String writer;
+  private final String streamwriter;
   private final List<ExtensionFactory> factories;
   private final List<ConverterProvider> providers;
   private final Map<String,NamedWriter> writers;
+  private final Map<String,Class<? extends StreamWriter>> streamwriters;
   private final Map<String,NamedParser> parsers;
   
   public AbderaConfiguration() {
@@ -97,10 +102,12 @@ public final class AbderaConfiguration
     parserFactory = getConfigurationOption(CONFIG_PARSERFACTORY, DEFAULT_PARSERFACTORY);
     writerFactory = getConfigurationOption(CONFIG_WRITERFACTORY, DEFAULT_WRITERFACTORY);
     writer = getConfigurationOption(CONFIG_WRITER, DEFAULT_WRITER);
+    streamwriter = getConfigurationOption(CONFIG_STREAMWRITER, DEFAULT_STREAMWRITER);
     factories = ServiceUtil.loadExtensionFactories();
     providers = ServiceUtil.loadConverterProviders();
     writers = initNamedWriters();
     parsers = initNamedParsers();
+    streamwriters = initStreamWriters();
   }  
   
   private ResourceBundle getBundle() {
@@ -175,6 +182,13 @@ public final class AbderaConfiguration
   public String getDefaultWriter() {
     return writer;
   }
+
+  /**
+   * Returns the Java classname of the default StreamWriter implementation
+   */
+  public String getDefaultStreamWriter() {
+    return streamwriter;
+  }
   
   /**
    * Registers an ExtensionFactory implementation.
@@ -221,12 +235,41 @@ public final class AbderaConfiguration
     }
     return writers;
   }
+
+  /**
+   * Registers StreamWriter implementations using 
+   * the /META-INF/services/org.apache.abdera.writer.StreamWriter file
+   */
+  private Map<String,Class<? extends StreamWriter>> initStreamWriters() {
+    Map<String,Class<? extends StreamWriter>> writers = null;
+    List<Class<? extends StreamWriter>> _writers = 
+      ServiceUtil._loadimpls(STREAM_WRITER,true);
+    writers = Collections.synchronizedMap(new HashMap<String,Class<? extends StreamWriter>>());
+    for (Class<? extends StreamWriter> writer : _writers) {
+      try {
+        Field field = writer.getField("NAME");
+        if (Modifier.isStatic(field.getModifiers())) {
+          String name = (String)field.get(null);
+          if (name != null)
+            writers.put(name.toLowerCase(), writer);
+        }
+      } catch (Exception e) {}
+    }
+    return writers;
+  }
   
   /**
    * Returns the collection of NamedWriters
    */
   public Map<String,NamedWriter> getNamedWriters() {
     return writers;
+  }
+
+  /**
+   * Returns the collection of NamedWriters
+   */
+  public Map<String,Class<? extends StreamWriter>> getStreamWriters() {
+    return streamwriters;
   }
   
   /**

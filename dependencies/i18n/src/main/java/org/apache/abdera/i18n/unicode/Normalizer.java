@@ -21,8 +21,6 @@ import java.io.IOException;
 
 import org.apache.abdera.i18n.io.CharUtils;
 import org.apache.abdera.i18n.io.CodepointIterator;
-import org.apache.abdera.i18n.unicode.UnicodeCharacterDatabase;
-
 
 /**
  * Performs Unicode Normalization (Form D,C,KD and KC)
@@ -89,16 +87,14 @@ public final class Normalizer {
     Form form, 
     StringBuffer buf) 
       throws IOException {
-      UnicodeCharacterDatabase ucd = UnicodeCharacterDatabase.getInstance();
-      if (source.length() != 0 && ucd != null) {
-        decompose(ucd, source, form, buf);
-        compose(ucd, form, buf);
+      if (source.length() != 0) {
+        decompose(source, form, buf);
+        compose(form, buf);
       }
       return buf;
   }
   
   private static void decompose(
-    UnicodeCharacterDatabase ucd,
     String source, 
     Form form, 
     StringBuffer buf) 
@@ -109,34 +105,32 @@ public final class Normalizer {
       while (ci.hasNext()) {
         int c = ci.next();
         internal.setLength(0);
-        ucd.decompose(c, canonical, internal);
+        UnicodeCharacterDatabase.decompose(c, canonical, internal);
         CodepointIterator ii = CodepointIterator.forCharSequence(internal);
         while(ii.hasNext()) {
           int ch = ii.next();
-          int i = findInsertionPoint(ucd, buf, ch);
+          int i = findInsertionPoint(buf, ch);
           buf.insert(i,CharUtils.toString(ch));
         }
       }
     
   }
   
-  private static int findInsertionPoint(
-    UnicodeCharacterDatabase ucd, 
+  private static int findInsertionPoint( 
     StringBuffer buf, int c) {
-    int cc = ucd.getCanonicalClass(c);
+    int cc = UnicodeCharacterDatabase.getCanonicalClass(c);
     int i = buf.length();
     if (cc != 0) {
       int ch;
       for (; i > 0; i -= CharUtils.size(c)) {
         ch = CharUtils.charAt(buf, i-1);
-        if (ucd.getCanonicalClass(ch) <= cc) break;
+        if (UnicodeCharacterDatabase.getCanonicalClass(ch) <= cc) break;
       }
     }
     return i;
   }
   
   private static void compose(
-    UnicodeCharacterDatabase ucd,
     Form form, 
     StringBuffer buf) 
       throws IOException {
@@ -144,14 +138,14 @@ public final class Normalizer {
     int pos = 0;
     int lc = CharUtils.charAt(buf, pos);
     int cpos = CharUtils.size(lc);    
-    int lcc = ucd.getCanonicalClass(lc);
+    int lcc = UnicodeCharacterDatabase.getCanonicalClass(lc);
     if (lcc != 0) lcc = 256;
     int len = buf.length();
     int c;
     for (int dpos = cpos; dpos < buf.length(); dpos += CharUtils.size(c)) {
       c = CharUtils.charAt(buf,dpos);
-      int cc = ucd.getCanonicalClass(c);
-      int composite = ucd.getPairComposition(lc, c);
+      int cc = UnicodeCharacterDatabase.getCanonicalClass(c);
+      int composite = UnicodeCharacterDatabase.getPairComposition(lc, c);
       if (composite != '\uFFFF' && (lcc < cc || lcc == 0)) {
         CharUtils.setChar(buf, pos, composite);
         lc = composite;
@@ -172,9 +166,4 @@ public final class Normalizer {
     buf.setLength(cpos);
   }
   
-  public static void main(String... args) throws Exception {
-    
-    UnicodeCharacterDatabase.main("i18n/src/main/resources/org/apache/abdera/i18n/unicode/data/ucd.res");
-    
-  }
 }

@@ -44,4 +44,19 @@ public interface WriterFactory {
    * @return A matching writer
    */
   <T extends Writer>T getWriterByMediaType(String mediatype);
+  
+  
+  /**
+   * Get the default StreamWriter. This is equivalent to calling 
+   * abdera.getStreamWriter();
+   * @return The default stream writer
+   */
+  <T extends StreamWriter>T newStreamWriter();
+  
+  /**
+   * Get the named StreamWriter.
+   * @param name The name of the StreamWriter
+   * @return The specified StreamWriter
+   */
+  <T extends StreamWriter>T newStreamWriter(String name);
 }

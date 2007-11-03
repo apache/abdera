@@ -27,6 +27,7 @@ import org.apache.abdera.parser.ParserFactory;
 import org.apache.abdera.util.AbderaConfiguration;
 import org.apache.abdera.util.Messages;
 import org.apache.abdera.util.ServiceUtil;
+import org.apache.abdera.writer.StreamWriter;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
 import org.apache.abdera.xpath.XPath;
@@ -268,6 +269,19 @@ public final class Abdera {
     }
   }
   
+  /**
+   * Return a new instance of the default org.apache.abdera.writer.Writer
+   * 
+   * @return A new default writer implementation instance
+   */
+  public StreamWriter newStreamWriter() {
+    try {
+      return ServiceUtil.newStreamWriterInstance(this);
+    } catch (NoClassDefFoundError n) {
+      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","StreamWriter"),n);
+    }
+  }  
+  
   // Static convenience methods //
   
   /**
@@ -322,5 +336,14 @@ public final class Abdera {
    */
   public static Writer getNewWriter() {
     return (new Abdera()).newWriter();
+  }
+  
+  /**
+   * Return a new instance of the default StreamWriter using a non-shared Abdera object
+   * 
+   *  @return A new default stream writer implementation instance
+   */
+  public static StreamWriter getNewStreamWriter() {
+    return (new Abdera()).newStreamWriter();
   }
 }

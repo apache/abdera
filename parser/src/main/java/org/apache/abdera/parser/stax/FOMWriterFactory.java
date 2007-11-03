@@ -21,7 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.util.Messages;
 import org.apache.abdera.writer.NamedWriter;
+import org.apache.abdera.writer.StreamWriter;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
 
@@ -31,6 +33,7 @@ public class FOMWriterFactory
 
   private final Abdera abdera;
   private final Map<String,NamedWriter> writers;
+  private final Map<String,Class<? extends StreamWriter>> streamwriters;
   
   public FOMWriterFactory() {
     this(new Abdera());
@@ -40,6 +43,9 @@ public class FOMWriterFactory
     this.abdera = abdera;
     Map<String,NamedWriter>  w = getAbdera().getConfiguration().getNamedWriters();
     writers = (w != null) ? w : new HashMap<String,NamedWriter>();
+    
+    Map<String,Class<? extends StreamWriter>> s = getAbdera().getConfiguration().getStreamWriters();
+    streamwriters = (s != null) ? s : new HashMap<String,Class<? extends StreamWriter>>();
   }
   
   protected Abdera getAbdera() {
@@ -65,6 +71,30 @@ public class FOMWriterFactory
   
   private Map<String,NamedWriter> getWriters() {
     return writers;
+  }
+
+  private Map<String,Class<? extends StreamWriter>> getStreamWriters() {
+    return streamwriters;
+  }
+  
+  public <T extends StreamWriter> T newStreamWriter() {
+    return (T)getAbdera().newStreamWriter();
+  }
+
+  public <T extends StreamWriter> T newStreamWriter(String name) {
+    Class<? extends StreamWriter> _class = getStreamWriters().get(name);
+    StreamWriter sw = null;
+    if (_class != null) {
+      try {
+        sw = _class.newInstance();
+      } catch (Exception e) {
+        throw new RuntimeException(
+          Messages.format(
+            "IMPLEMENTATION.NOT.AVAILABLE",
+            "StreamWriter"),e);
+      }
+    }
+    return (T)sw;
   }
   
 }

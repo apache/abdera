@@ -18,9 +18,9 @@
 package org.apache.abdera.util;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
@@ -34,6 +34,7 @@ import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserFactory;
+import org.apache.abdera.writer.StreamWriter;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
 import org.apache.abdera.xpath.XPath;
@@ -119,6 +120,13 @@ public final class ServiceUtil
       CONFIG_WRITER,
       abdera.getConfiguration().getDefaultWriter(),
       abdera);
+  }
+  
+  public static StreamWriter newStreamWriterInstance(Abdera abdera) {
+    return (StreamWriter) newInstance(
+      CONFIG_STREAMWRITER,
+      abdera.getConfiguration().getDefaultStreamWriter(),
+      abdera);    
   }
   
   /**
@@ -211,17 +219,21 @@ public final class ServiceUtil
     return null;
   }
   
-  @SuppressWarnings("unchecked")
   public static Object locateInstance(ClassLoader loader, String id, Abdera abdera) {
+    return locateInstance(loader,id,abdera,false);
+  }
+  
+  @SuppressWarnings("unchecked")
+  public static Object locateInstance(ClassLoader loader, String id, Abdera abdera, boolean classesonly) {
     try {
       Class _class = loader.loadClass(id);
-      return _create(_class, abdera);
+      return classesonly ? _class : _create(_class, abdera);
     } catch (Exception e) {
       // Nothing
     }
     try {
       Class _class = ClassLoader.getSystemClassLoader().loadClass(id);
-      return _create(_class, abdera);
+      return classesonly ? _class : _create(_class, abdera);
     } catch (Exception e) {
       // Nothing
     }
@@ -314,7 +326,7 @@ public final class ServiceUtil
   }
   
   @SuppressWarnings("unchecked")
-  protected static <T>List<T> _loadimpls(String sid) {
+  protected static <T>List<T> _loadimpls(String sid, boolean classesonly) {
     List<T> impls = Collections.synchronizedList(new ArrayList<T>());
     ClassLoader loader = getClassLoader();
     try {
@@ -353,5 +365,10 @@ public final class ServiceUtil
     }
     
     return impls;
+  }
+ 
+  @SuppressWarnings("unchecked")
+  protected static <T>List<T> _loadimpls(String sid) {
+    return _loadimpls(sid,false);
   }
 }

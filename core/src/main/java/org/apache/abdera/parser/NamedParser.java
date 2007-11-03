@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.parser;
 
+import org.apache.abdera.NamedItem;
+
 /**
  * Abdera's abstract parsing model allows developers to implement parsers 
  * capable of translating non-Atom formats into Abdera objects.  For instance,
@@ -32,14 +34,8 @@ package org.apache.abdera.parser;
  *   Document&lt;Feed> doc = parser.parse(...);
  * </pre>
  */
-public interface NamedParser extends Parser {
+public interface NamedParser extends Parser, NamedItem {
 
-  /**
-   * Returns the name used to retrieve this parser (case insensitive)
-   * @return The name of this parser
-   */
-  String getName();
-  
   /**
    * Returns a listing of media type of the format consumed by this parser
    * @return An array of MIME Media Types

@@ -15,24 +15,10 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.writer;
+package org.apache.abdera;
 
-import org.apache.abdera.NamedItem;
+public interface NamedItem {
 
-/**
- * Named Writers provide a means of extending Abdera's built in serialization.
- */
-public interface NamedWriter extends Writer, NamedItem {
-
-  /**
-   * Return a listing of MIME Media formats this NamedWriter is capable 
-   * of outputting.
-   */
-  String[] getOutputFormats();
+  String getName();
   
-  /**
-   * Returns true if the format produced by this writer matches the specified
-   * media type
-   */
-  boolean outputsFormat(String mediatype);
 }

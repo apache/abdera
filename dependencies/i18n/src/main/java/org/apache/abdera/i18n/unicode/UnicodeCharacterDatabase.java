@@ -24,6 +24,8 @@ import org.apache.abdera.i18n.io.CharUtils;
 
 
 public class UnicodeCharacterDatabase {
+
+  public static final String UNICODE_VERSION = "5.0";
   
   private static final int[] compat = getCompat();
   private static final int[] decomp_idx = getDecompIdx();

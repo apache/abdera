@@ -74,7 +74,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
   
   public abstract T createEntry(String title, IRI id, String summary, Date updated, List<Person> authors, Content content, RequestContext request) throws ResponseContextException;
   
-  public T createMediaEntry(MimeType mimeType, String slug, InputStream inputStream) throws ResponseContextException {
+  public T createMediaEntry(MimeType mimeType, String slug, InputStream inputStream, RequestContext request) throws ResponseContextException {
     throw new UnsupportedOperationException();
   }
   
@@ -99,13 +99,15 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
 
   public abstract String getAuthor() throws ResponseContextException;
 
-  public abstract List<Person> getAuthors(T entry, RequestContext request) throws ResponseContextException;
+  public List<Person> getAuthors(T entry, RequestContext request) throws ResponseContextException {
+    return null;
+  }
   
   public String getBaseMediaIri() {
     return baseMediaIri;
   }
   
-  public abstract Object getContent(T entry) throws ResponseContextException;
+  public abstract Object getContent(T entry, RequestContext request) throws ResponseContextException;
   
   // GET, POST, PUT, DELETE
   
@@ -167,7 +169,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
           if (isMediaEntry(entryObj)) {
             addMediaContent(entryIri, e, entryObj);
           } else {
-            addContent(e, entryObj);
+            addContent(e, entryObj, request);
           }
         }
       }
@@ -193,8 +195,8 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
    * @return
    */
   protected ResponseContext createErrorResponse(ResponseContextException e) {
-    if (log.isDebugEnabled()) {
-      log.debug("A ResponseException was thrown.", e);
+    if (log.isInfoEnabled()) {
+      log.info("A ResponseException was thrown.", e);
     } else if (e.getResponseContext() instanceof EmptyResponseContext 
       && ((EmptyResponseContext) e.getResponseContext()).getStatus() >= 500) {
       log.warn("A ResponseException was thrown.", e);
@@ -240,11 +242,11 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
 
     return ctx;
   }
-  public String getMediaName(T entry) {
+  public String getMediaName(T entry) throws ResponseContextException {
     throw new UnsupportedOperationException();
   }
 
-  public InputStream getMediaStream(T gdoc) {
+  public InputStream getMediaStream(T entry) throws ResponseContextException {
     throw new UnsupportedOperationException();
   }
   
@@ -256,7 +258,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
 
   public abstract Date getUpdated(T entry) throws ResponseContextException;
 
-  public boolean isMediaEntry(T entry) {
+  public boolean isMediaEntry(T entry) throws ResponseContextException {
     return false;
   }
 
@@ -314,8 +316,8 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
                                    List<Person> authors, String summary, 
                                    Content content, RequestContext request) throws ResponseContextException;
 
-  protected void addContent(Entry e, T doc) throws ResponseContextException {
-    Object content = getContent(doc);
+  protected void addContent(Entry e, T doc, RequestContext request) throws ResponseContextException {
+    Object content = getContent(doc, request);
 
     if (content instanceof Content) {
       e.setContentElement((Content)content);
@@ -333,26 +335,23 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     e.setUpdated(getUpdated(entryObj));
     
     List<Person> authors = getAuthors(entryObj, request);
-    if (authors == null || authors.size() == 0) {
-      log.warn("You must specify at least one author for the entry!");
-      throw new ResponseContextException(500);
+    if (authors != null) {
+      for (Person a : authors) {
+        e.addAuthor(a);
+      }
     }
     
-    for (Person a : authors) {
-      e.addAuthor(a);
-    }
-    
-    String s = getSummary(entryObj);
-    if (s != null) {
-      e.setSummary(s);
+    Text t = getSummary(entryObj, request);
+    if (t != null) {
+      e.setSummaryElement(t);
     }
   }
 
-  public String getSummary(T entry) {
+  public Text getSummary(T entry, RequestContext request) throws ResponseContextException {
     return null;
   }
 
-  protected void addMediaContent(IRI entryBaseIri, Entry entry, T doc) {
+  protected void addMediaContent(IRI entryBaseIri, Entry entry, T doc) throws ResponseContextException {
     String name = getMediaName(doc);
     IRI mediaIri = getMediaIRI(entryBaseIri, name);
     mediaIri = entryBaseIri.resolve(mediaIri);
@@ -389,7 +388,8 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
 
   protected ResponseContext createMediaEntry(RequestContext request) {
     try {
-      T doc = createMediaEntry(request.getContentType(), request.getSlug(), request.getInputStream());
+      T doc = createMediaEntry(request.getContentType(), request.getSlug(), 
+                               request.getInputStream(), request);
 
       IRI baseIri = resolveBase(request);
       IRI entryIri = getEntryBaseFromFeedIRI(baseIri);
@@ -485,7 +485,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     if (isMediaEntry(entryObj)) {
       addMediaContent(feedIri, entry, entryObj);
     } else {
-      addContent(entry, entryObj);
+      addContent(entry, entryObj, request);
     }
 
     return entry;

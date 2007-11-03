@@ -17,7 +17,6 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.protocol.server.impl.AbstractCollectionProvider;
 import org.apache.abdera.protocol.server.impl.ResponseContextException;
-import sun.security.pkcs.ContentInfo;
 
 public class CustomerContentProvider extends AbstractCollectionProvider<Customer> {
   private static final String ID_PREFIX = "urn:acme:customer:";
@@ -78,7 +77,7 @@ public class CustomerContentProvider extends AbstractCollectionProvider<Customer
     
   }
 
-  public Object getContent(Customer entry) {
+  public Object getContent(Customer entry, RequestContext request) {
     Content content = factory.newContent();
     Element customerEl = factory.newElement(new QName("customer"));
     customerEl.setAttributeValue(new QName("name"), entry.getName());

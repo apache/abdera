@@ -39,7 +39,18 @@ public class ResponseContextException extends Exception {
     this(new EmptyResponseContext(responseCode), t);
   }
 
+  public ResponseContextException(String msg, int responseCode) {
+    this.responseContext = new EmptyResponseContext(responseCode);
+    this.responseContext.setStatusText(msg);
+  }
+
   public AbstractResponseContext getResponseContext() {
     return responseContext;
   }
+
+  @Override
+  public String getMessage() {
+    return responseContext.getStatusText();
+  }
+  
 }

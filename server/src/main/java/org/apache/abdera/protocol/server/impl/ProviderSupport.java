@@ -312,7 +312,6 @@ public class ProviderSupport {
           id.toString().trim().length() == 0 ||
           !id.isAbsolute()) return false;
       if (entry.getTitle() == null) return false;
-      if (entry.getAuthor() == null) return false;
       if (entry.getUpdated() == null) return false;
       Content content = entry.getContentElement();
       if (content == null) {

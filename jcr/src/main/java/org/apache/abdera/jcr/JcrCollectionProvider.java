@@ -1,12 +1,15 @@
 package org.apache.abdera.jcr;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
+import javax.activation.MimeType;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Credentials;
 import javax.jcr.InvalidItemStateException;
@@ -41,9 +44,13 @@ import org.apache.abdera.protocol.server.impl.AbstractCollectionProvider;
 import org.apache.abdera.protocol.server.impl.EmptyResponseContext;
 import org.apache.abdera.protocol.server.impl.ResponseContextException;
 import org.apache.abdera.protocol.util.EncodingUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
 
+  private final static Log log = LogFactory.getLog(JcrCollectionProvider.class);
+  
   private static final String TITLE = "title";
 
   private static final String SUMMARY = "summary";
@@ -65,6 +72,10 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
   private static final String RESOURCE_NAME = "resourceName";
 
   private static final String SESSION = "jcrSession";
+
+  private static final String MEDIA = "media";
+
+  private static final String CONTENT_TYPE = "contentType";
 
   private Repository repository;
 
@@ -136,18 +147,88 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
     return repository.login(credentials);
   }
 
+
+  @Override
+  public String getContentType(Node entry) {
+    return getStringOrNull(entry, CONTENT_TYPE);
+  }
+
+  @Override
+  public boolean isMediaEntry(Node entry) throws ResponseContextException {
+    try {
+      return entry.hasProperty(MEDIA);
+    } catch (RepositoryException e) {
+      throw new ResponseContextException(500, e);
+    }
+  }
+
+  @Override
+  public Node createMediaEntry(MimeType mimeType, String slug, 
+                               InputStream inputStream, RequestContext request)
+    throws ResponseContextException {
+    if (slug == null) {
+      throw new ResponseContextException("A slug header must be supplied.", 500);
+    }
+    Node n = createEntry(slug, null, null, new Date(), null, null, request);
+    
+    try {
+      n.setProperty(MEDIA, inputStream);
+      n.setProperty(CONTENT_TYPE, mimeType.toString());
+
+      String summary = createSummaryForEntry(n);
+      if (summary != null) {
+        n.setProperty(SUMMARY, summary);
+      }
+
+      getSession(request).save();
+      
+      return n;
+    } catch (RepositoryException e) {
+      try {
+        n.remove();
+      } catch (Throwable t) {
+        log.warn(t);
+      }
+      throw new ResponseContextException(500, e);
+    }
+  }
+  
+  /**
+   * Create a summary for an entry. Used when a media entry is created
+   * so you have the chance to create a meaningful summary for consumers
+   * of the feed.
+   * 
+   * @param n
+   * @return
+   */
+  protected String createSummaryForEntry(Node n) {
+    return null;
+  }
+
   @Override
   public Node createEntry(String title, IRI id, String summary, Date updated, List<Person> authors,
                           Content content, RequestContext request) throws ResponseContextException {
+    
+    Node entry = null;
     try {
       Session session = getSession(request);
 
       Node collectionNode = session.getNodeByUUID(collectionNodeId);
-      Node entry = collectionNode.addNode(ENTRY);
+      entry = collectionNode.addNode(ENTRY);
       entry.addMixin("mix:referenceable");
 
-      return mapEntryToNode(entry, title, summary, updated, authors, content, session);
+      mapEntryToNode(entry, title, summary, updated, authors, content, session);
+      
+      session.save();
+      
+      return entry;
     } catch (RepositoryException e) {
+      try {
+        if (entry != null) entry.remove();
+      } catch (Throwable t) {
+        log.warn(t);
+      }
+      
       throw new ResponseContextException(500, e);
     }
   }
@@ -170,17 +251,21 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
     String resourceName = EncodingUtil.sanitize(title);
     entry.setProperty(RESOURCE_NAME, resourceName);
 
-    entry.setProperty(SUMMARY, summary);
-
+    if (summary != null) {
+      entry.setProperty(SUMMARY, summary);
+    }
+    
     Calendar upCal = Calendar.getInstance();
     upCal.setTime(updated);
     entry.setProperty(UPDATED, upCal);
 
-    for (Person p : authors) {
-      Node addNode = entry.addNode(AUTHOR);
-      addNode.setProperty(AUTHOR_EMAIL, p.getEmail());
-      addNode.setProperty(AUTHOR_LANGUAGE, p.getLanguage());
-      addNode.setProperty(AUTHOR_NAME, p.getName());
+    if (authors != null) {
+      for (Person p : authors) {
+        Node addNode = entry.addNode(AUTHOR);
+        addNode.setProperty(AUTHOR_EMAIL, p.getEmail());
+        addNode.setProperty(AUTHOR_LANGUAGE, p.getLanguage());
+        addNode.setProperty(AUTHOR_NAME, p.getName());
+      }
     }
 
     if (content != null) {
@@ -190,8 +275,6 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
     if (summary != null) {
       entry.setProperty(SUMMARY, summary);
     }
-    
-    session.save();
     
     return entry;
   }
@@ -295,7 +378,7 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
   }
 
   @Override
-  public Object getContent(Node entry) throws ResponseContextException {
+  public Object getContent(Node entry, RequestContext request) throws ResponseContextException {
     return getStringOrNull(entry, CONTENT);
   }
 
@@ -355,15 +438,36 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
       throw new ResponseContextException(500, e);
     }
   }
+  
+  public String getMediaName(Node entry) throws ResponseContextException {
+    return getName(entry);
+  }
 
+  public InputStream getMediaStream(Node entry) throws ResponseContextException {
+    try {
+      Value value = getValueOrNull(entry, MEDIA);
+      
+      if (value == null) return null;
+      
+      return value.getStream();
+    } catch (PathNotFoundException e) {
+      return null;
+    } catch (RepositoryException e) {
+      throw new ResponseContextException(500, e);
+    }
+    
+  }
+  
   @Override
   public String getName(Node entry) throws ResponseContextException {
     return getStringOrNull(entry, RESOURCE_NAME);
   }
 
   @Override
-  public String getSummary(Node entry) {
-    return getStringOrNull(entry, SUMMARY);
+  public Text getSummary(Node entry, RequestContext request) {
+    Text summary = request.getAbdera().getFactory().newSummary();
+    summary.setText(getStringOrNull(entry, SUMMARY));
+    return summary;
   }
 
   @Override

@@ -667,7 +667,7 @@ Working directory: ${work}
   <target name="download_feedvalidator_tests" depends="init" if="do.download.feedvalidator.tests">
     <mkdir dir="${parser.test.resources}/feedvalidator.org" />
     <exec failifexecutionfails="false" dir="${parser.test.resources}/feedvalidator.org" executable="svn">
-      <arg line="co https://svn.sourceforge.net/svnroot/feedvalidator/trunk/feedvalidator/testcases/atom testcases/atom" />
+      <arg line="co http://feedvalidator.googlecode.com/svn/trunk/feedvalidator/testcases/atom testcases/atom" />
     </exec>
   </target>
   

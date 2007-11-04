@@ -20,12 +20,6 @@ package org.apache.abdera.i18n.iri;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.abdera.i18n.iri.DefaultScheme;
-import org.apache.abdera.i18n.iri.HttpScheme;
-import org.apache.abdera.i18n.iri.HttpsScheme;
-import org.apache.abdera.i18n.iri.Scheme;
-import org.apache.abdera.i18n.iri.SchemeRegistry;
-
 /**
  * Static registry of custom IRI schemes.
  */
@@ -44,6 +38,7 @@ public final class SchemeRegistry {
     schemes = new HashMap<String,Scheme>();
     schemes.put(HttpScheme.NAME, new HttpScheme());
     schemes.put(HttpsScheme.NAME, new HttpsScheme());
+    schemes.put(FtpScheme.NAME, new FtpScheme());
   }
   
   @SuppressWarnings("unchecked")

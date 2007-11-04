@@ -23,7 +23,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.BitSet;
 
 import org.apache.abdera.i18n.io.CharUtils;
-import org.apache.abdera.i18n.iri.Constants;
 
 
 /**
@@ -31,14 +30,23 @@ import org.apache.abdera.i18n.iri.Constants;
  */
 public final class Escaping {
 
+  public final static char[] HEX = {
+    '0','1','2','3','4','5','6','7',
+    '8','9','A','B','C','D','E','F'
+  };
+  
   private Escaping() {}
   
   private static void encode(StringBuffer sb, byte... bytes) {
     for (byte c : bytes) {
       sb.append("%");
-      sb.append(Constants.hex[(c >> 4) & 0x0f]);
-      sb.append(Constants.hex[(c >> 0) & 0x0f]);
+      sb.append(HEX[(c >> 4) & 0x0f]);
+      sb.append(HEX[(c >> 0) & 0x0f]);
     }
+  }
+  
+  public static String encode(String s) {
+    return encode(s,(BitSet)null);
   }
   
   public static String encode(String s, BitSet... maps) {

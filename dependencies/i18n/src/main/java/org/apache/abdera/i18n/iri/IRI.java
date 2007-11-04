@@ -85,8 +85,7 @@ public class IRI
   }
   
   public IRI(String iri) {
-    Builder b = new Builder();
-    parse(CharUtils.stripBidi(iri), b);
+    Builder b = parse(CharUtils.stripBidi(iri));
     init(
       b.schemeobj,
       b.scheme,
@@ -127,7 +126,8 @@ public class IRI
     String query,
     String fragment) {
     Builder builder = new Builder();
-    Parser.parseAuthority(authority, builder);
+    builder.authority = authority;
+    Parser.parseAuthority(builder);
     SchemeRegistry reg = SchemeRegistry.getInstance();
     Scheme _scheme = reg.getScheme(scheme);
     init(_scheme,scheme,authority,builder.userinfo,
@@ -188,7 +188,7 @@ public class IRI
     a_fragment = Escaping.encode(getFragment(),Constants.FRAGMENT);
     a_path = Escaping.encode(getPath(), Constants.PATH);
     a_query = Escaping.encode(getQuery(),Constants.QUERY, Constants.PATH);
-    a_userinfo = Escaping.encode(getUserInfo(),Constants.USERINFO);
+    a_userinfo = Escaping.encode(getUserInfo(),Constants.USERINFO,Constants.COLON);
     a_authority = buildASCIIAuthority();
   }
     
@@ -672,11 +672,10 @@ public class IRI
   
   ////////// parse implementation
   
-  private static void parse(
-    String uri,
-    Builder builder) {
+  private static Builder parse(
+    String uri) {
     try {
-      Parser.parse(uri, builder, SchemeRegistry.getInstance());
+      return Parser.parse(uri, SchemeRegistry.getInstance());
     } catch (IOException e) {
       throw new IRISyntaxException(e);
     }
@@ -704,34 +703,25 @@ public class IRI
     private String path;
     private String query;
     private String fragment;
-    
-    public IRI getAtomURI() {
-      return new IRI(
-        schemeobj,
-        scheme,authority,userinfo,
-        host,port,path,query,fragment);
-    }
   }
   
   static class Parser {
     
     static final Pattern p = 
       Pattern.compile(
-        "^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?");
+        "^(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*)(?:\\?([^#]*))?(?:#(.*))?");
     
     static final Pattern a =
-      Pattern.compile("^((.*)?@)?(\\[.*\\])?([^:]*)?(:(\\d*))?");
+      Pattern.compile("^(?:(.*)?@)?((?:\\[.*\\])|(?:[^:]*))?(?::(\\d*))?");
     
-    static void parseAuthority(String authority, Builder builder) {
-      if (authority != null) {
-        Matcher auth = a.matcher(authority);
+    static void parseAuthority(Builder builder) {
+      if (builder.authority != null) {
+        Matcher auth = a.matcher(builder.authority);
         if (auth.find()) {
-          if (auth.group(2) != null) builder.userinfo = auth.group(2);
-          if (auth.group(3) != null) builder.host = auth.group(3);
-          else builder.host = auth.group(4);
-          try {
-            if (auth.group(6) != null) builder.port = Integer.parseInt(auth.group(6));
-          } catch (NumberFormatException e) {}
+          builder.userinfo = auth.group(1);
+          builder.host = auth.group(2);
+          if (auth.group(3) != null)
+            builder.port = Integer.parseInt(auth.group(3));
         }
         try {
           CharUtils.verify(builder.userinfo, Constants.IUSERINFO);
@@ -742,20 +732,18 @@ public class IRI
       }
     }
     
-    static void parse(String iri, Builder builder, SchemeRegistry reg) 
+    static Builder parse(String iri, SchemeRegistry reg) 
       throws IOException {
       Matcher irim = p.matcher(iri);
+      Builder builder = new Builder();
       if (irim.find()) {
-        
-        builder.scheme = irim.group(2);
+        builder.scheme = irim.group(1);
         builder.schemeobj = reg.getScheme(builder.scheme);
-        builder.authority = irim.group(4);
-        builder.path = irim.group(5);
-        builder.query = irim.group(7);
-        builder.fragment = irim.group(9);
-        
-        parseAuthority(builder.authority, builder);
-        
+        builder.authority = irim.group(2);
+        builder.path = irim.group(3);
+        builder.query = irim.group(4);
+        builder.fragment = irim.group(5);
+        parseAuthority(builder);        
         try {
           CharUtils.verify(builder.scheme, Constants.SCHEME);
           CharUtils.verify(builder.path, Constants.IPATH);
@@ -764,6 +752,7 @@ public class IRI
         } catch (InvalidCharacterException e) {
           throw new IRISyntaxException(e);
         }
+        return builder;
       } else {
         throw new IRISyntaxException("Invalid Syntax");
       }

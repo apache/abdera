@@ -637,11 +637,6 @@ public interface Factory {
   String newUuidUri();
   
   /**
-   * Set an element wrapper
-   */
-  void setElementWrapper(Element element, Element wrapper);
-  
-  /**
    * Get the Abdera instance for this factory
    */
   Abdera getAbdera();

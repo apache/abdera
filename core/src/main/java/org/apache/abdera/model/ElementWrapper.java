@@ -50,7 +50,6 @@ public abstract class ElementWrapper
     Element el = factory.newElement(qname);
     internal = (el instanceof ElementWrapper) ?
       ((ElementWrapper)el).getInternal() : el;
-    factory.setElementWrapper(internal, this);
   }
 
   public void addComment(

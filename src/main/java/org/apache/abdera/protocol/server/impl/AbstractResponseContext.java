@@ -19,7 +19,6 @@ package org.apache.abdera.protocol.server.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +26,7 @@ import java.util.Map;
 
 import javax.activation.MimeType;
 
-import org.apache.abdera.i18n.iri.Constants;
+import org.apache.abdera.i18n.io.CharUtils.Profile;
 import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.util.AbstractResponse;
@@ -65,8 +64,8 @@ public abstract class AbstractResponseContext
     setHeader(name, evals);
   }
   
-  public void setEscapedHeader(String name, BitSet mask, String value) {
-    setHeader(name,Escaping.encode(value, mask));
+  public void setEscapedHeader(String name, Profile profile, String value) {
+    setHeader(name,Escaping.encode(value, profile));
   }
   
   public void setHeader(String name, Object value) {
@@ -220,7 +219,7 @@ public abstract class AbstractResponseContext
         slug.indexOf((char)13) > -1)
       throw new IllegalArgumentException(
         Messages.get("SLUG.BAD.CHARACTERS"));
-    setEscapedHeader("Slug", Constants.ASCIISANSCRLF, slug);
+    setEscapedHeader("Slug", Profile.ASCIISANSCRLF, slug);
   }
   
   public void setContentType(String type) {

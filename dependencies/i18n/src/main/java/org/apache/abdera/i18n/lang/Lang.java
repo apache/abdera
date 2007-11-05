@@ -23,9 +23,7 @@ import java.util.Locale;
 
 import org.apache.abdera.i18n.io.CharUtils;
 import org.apache.abdera.i18n.io.InvalidCharacterException;
-import org.apache.abdera.i18n.iri.Constants;
-import org.apache.abdera.i18n.lang.InvalidLangTagSyntax;
-import org.apache.abdera.i18n.lang.Lang;
+import org.apache.abdera.i18n.io.CharUtils.Profile;
 
 
 /**
@@ -162,13 +160,13 @@ public class Lang
     if (tags.length == 0) throw new InvalidLangTagSyntax();
     String primary = tags[0];
     try {
-      CharUtils.verify(primary,Constants.ALPHA);
+      CharUtils.verify(primary,Profile.ALPHA);
     } catch (InvalidCharacterException e) {
       throw new InvalidLangTagSyntax();
     }
     for (int n = 1; n < tags.length; n++) {
       try {
-        CharUtils.verify(tags[n],Constants.ALPHANUM);
+        CharUtils.verify(tags[n],Profile.ALPHANUM);
       } catch (InvalidCharacterException e) {
         throw new InvalidLangTagSyntax();
       }

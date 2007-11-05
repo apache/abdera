@@ -19,11 +19,10 @@ package org.apache.abdera.i18n.test.iri;
 
 import java.net.URI;
 
+import junit.framework.TestCase;
+
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.unicode.Normalizer;
-
-
-import junit.framework.TestCase;
 
 public class TestIRI extends TestCase {
 
@@ -49,24 +48,6 @@ public class TestIRI extends TestCase {
     assertEquals(iri.toURI().toString(),"http://example.com/%F0%90%8C%80%F0%90%8C%81%F0%90%8C%82");
   }
     
-  public static void testURItoIRI() throws Exception {
-    URI uri = new URI("http://www.example.org/D%C3%BCrst");
-    IRI iri = new IRI(uri);
-    assertEquals(iri.toString(),"http://www.example.org/D\u00FCrst");
-  }
-  
-  public static void testURItoIRI2() throws Exception {
-    URI uri = new URI("http://www.example.org/D%FCrst");
-    IRI iri = new IRI(uri, "windows-1252");
-    assertEquals(iri.toString(),"http://www.example.org/D\u00FCrst");
-  }
-
-  public static void testURItoIRI3() throws Exception {
-    URI uri = new URI("http://xn--99zt52a.example.org/%e2%80%ae");
-    IRI iri = new IRI(uri);
-    assertEquals(iri.toString(),"http://xn--99zt52a.example.org/%E2%80%AE");
-  }
-
   public static void testIRItoURI() throws Exception {
     IRI iri = new IRI("http://\u7D0D\u8C46.example.org/%E2%80%AE");
     URI uri = iri.toURI();
@@ -94,12 +75,6 @@ public class TestIRI extends TestCase {
     assertTrue(iri3.normalize().equals(iri1.normalize()));
     assertTrue(iri3.normalize().equals(iri2.normalize()));
     
-    assertTrue(iri1.equivalent(iri2));
-    assertTrue(iri1.equivalent(iri3));
-    assertTrue(iri2.equivalent(iri1));
-    assertTrue(iri2.equivalent(iri3));
-    assertTrue(iri3.equivalent(iri1));
-    assertTrue(iri3.equivalent(iri2));
   }
   
   
@@ -110,17 +85,14 @@ public class TestIRI extends TestCase {
   }
   
   public static void testPercent() throws Exception {
-      IRI iri1 = new IRI("http://example.org/~user");
-      IRI iri2 = new IRI("http://example.org/%7euser");
-      IRI iri3 = new IRI("http://example.org/%7Euser");
+      IRI iri1 = new IRI("http://example.org/%7e%2Fuser?%2f");
+      IRI iri2 = new IRI("http://example.org/%7E%2fuser?/");
       assertTrue(iri1.normalize().equals(iri2.normalize()));
-      assertTrue(iri1.normalize().equals(iri3.normalize()));
   }
   
   public static void testIDN() throws Exception {
     IRI iri1 = new IRI("http://r\u00E9sum\u00E9.example.org");
-    IRI iri2 = new IRI("http://xn--rsum-bpad.example.org");
-    assertTrue(iri1.equivalent(iri2));
+    assertEquals(iri1.getASCIIHost(),"xn--rsum-bpad.example.org");
   }
   
   public static void testRelative() throws Exception{

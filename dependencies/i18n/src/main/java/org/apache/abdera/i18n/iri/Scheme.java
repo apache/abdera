@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.i18n.iri;
 
-import org.apache.abdera.i18n.iri.IRI;
 
 /**
  * Interface implemented by custom IRI scheme parsers
@@ -26,10 +25,9 @@ public interface Scheme {
 
   String getName();
   
-  boolean equivalent(IRI iri1, IRI iri2);
-  
   IRI normalize(IRI iri); 
   
   String normalizePath(String path);
-  
+ 
+  int getDefaultPort();
 }

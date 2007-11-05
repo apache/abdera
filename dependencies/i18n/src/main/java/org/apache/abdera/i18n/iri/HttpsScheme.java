@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.i18n.iri;
 
-import org.apache.abdera.i18n.iri.HttpScheme;
-import org.apache.abdera.i18n.iri.HttpsScheme;
 
 class HttpsScheme 
   extends HttpScheme {
@@ -27,10 +25,7 @@ class HttpsScheme
   static final int DEFAULT_PORT = 443;
   
   public HttpsScheme() {
-    super(NAME);
+    super(NAME, DEFAULT_PORT);
   }
   
-  protected int getDefaultPort() {
-    return HttpsScheme.DEFAULT_PORT;
-  }
 }

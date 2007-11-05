@@ -31,7 +31,7 @@ public class InvalidCharacterException
 
   @Override
   public String getMessage() {
-    return "Invalid Character 0x" + Integer.toHexString(input);
+    return "Invalid Character 0x" + Integer.toHexString(input) + "(" + (char)input + ")";
   }
 
   

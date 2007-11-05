@@ -22,10 +22,7 @@ import java.io.Serializable;
 import java.net.UnknownHostException;
 
 import org.apache.abdera.i18n.io.CharUtils;
-import org.apache.abdera.i18n.iri.Constants;
-import org.apache.abdera.i18n.iri.IDNA;
-import org.apache.abdera.i18n.iri.Nameprep;
-import org.apache.abdera.i18n.iri.Punycode;
+import org.apache.abdera.i18n.io.CharUtils.Profile;
 
 
 /**
@@ -37,7 +34,7 @@ public final class IDNA
 
   private static final long serialVersionUID = -617056657751424334L;
   private final String regname;
-  
+    
   public IDNA(java.net.InetAddress addr) {
     this(addr.getHostName());
   }
@@ -102,10 +99,10 @@ public final class IDNA
       if (regname.length() == 0) return regname;
       String[] labels = regname.split("\\\u002E");
       StringBuffer buf = new StringBuffer();
-      for (String label : labels) {
+      for (String label : labels) {        
         label = Nameprep.prep(label);
         char[] chars = label.toCharArray();
-        CharUtils.verifyNot(chars, Constants.STD3ASCIIRULES);
+        CharUtils.verifyNot(chars, Profile.STD3ASCIIRULES);
         if (chars[0] == '\u002D' || 
             chars[chars.length-1] == '\u002D')
               throw new IOException("ToASCII violation");

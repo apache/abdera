@@ -21,7 +21,6 @@ import org.apache.abdera.i18n.ChainableBitSet;
 import org.apache.abdera.i18n.io.CodepointIterator;
 import org.apache.abdera.i18n.io.FilterCodepointIterator;
 import org.apache.abdera.i18n.io.InvalidCharacterException;
-import org.apache.abdera.i18n.iri.Nameprep;
 
 
 /**
@@ -61,8 +60,7 @@ class NameprepCodepointIterator extends FilterCodepointIterator {
     super(internal);
     PROHIBITED = (!allowunassigned) ? 
         Nameprep.PROHIBITED : 
-        ((ChainableBitSet)Nameprep.PROHIBITED.clone()).set2(
-            Nameprep.UNASSIGNED,false);
+        Nameprep.PROHIBITED_ALLOWUNASSIGNED;
   }
 
   @Override

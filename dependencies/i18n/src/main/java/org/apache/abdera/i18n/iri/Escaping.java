@@ -20,9 +20,9 @@ package org.apache.abdera.i18n.iri;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.BitSet;
 
 import org.apache.abdera.i18n.io.CharUtils;
+import org.apache.abdera.i18n.io.CharUtils.Profile;
 
 
 /**
@@ -46,32 +46,43 @@ public final class Escaping {
   }
   
   public static String encode(String s) {
-    return encode(s,(BitSet)null);
+    return encode(s,Profile.NONE);
   }
   
-  public static String encode(String s, BitSet... maps) {
+  public static String encode(String s, Profile profile) {
+    return encode(s, new Profile[] {profile});
+  }
+  
+  public static String encode(String s, Profile... profiles) {
     try {
       if (s == null) return null;
-      return encode(s,"utf-8",maps);
+      return encode(s,"utf-8",profiles);
     } catch (UnsupportedEncodingException e) {
       return null; // shouldn't happen
     }
   }
   
+  private static boolean check(int codepoint, Profile... profiles) {
+    for (Profile profile : profiles) {
+      if (profile.check(codepoint)) return true;
+    }
+    return false;
+  }
+  
   public static String encode(
     String s, 
     String enc, 
-    BitSet... maps) 
+    Profile... profiles) 
       throws UnsupportedEncodingException {
     if (s == null) return s;
     StringBuffer sb = new StringBuffer();
     char[] chars = s.toCharArray();
     for (int n = 0; n < chars.length; n++) {
       char c = (char) chars[n];
-      if (!CharUtils.isSet(c,maps) && !CharUtils.isHighSurrogate(c)) {
+      if (!CharUtils.isHighSurrogate(c) && check(c,profiles)) {
         encode(sb,String.valueOf(c).getBytes(enc));
       } else if (CharUtils.isHighSurrogate(c)) {
-        if (!CharUtils.isSet(c,maps)) {
+        if (check(c,profiles)) {
           StringBuffer buf = new StringBuffer();
           buf.append(c);
           buf.append(chars[++n]);

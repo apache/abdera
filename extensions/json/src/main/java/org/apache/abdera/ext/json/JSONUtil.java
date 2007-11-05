@@ -28,7 +28,7 @@ import org.apache.abdera.ext.history.FeedPagingHelper;
 import org.apache.abdera.ext.html.HtmlHelper;
 import org.apache.abdera.ext.thread.InReplyTo;
 import org.apache.abdera.ext.thread.ThreadHelper;
-import org.apache.abdera.i18n.iri.Constants;
+import org.apache.abdera.i18n.io.CharUtils.Profile;
 import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Base;
@@ -396,7 +396,7 @@ if (element instanceof Text) {
              "src".equalsIgnoreCase(name) || 
              "action".equalsIgnoreCase(name))) {
          IRI base = child.getResolvedBaseUri();
-         val = Escaping.encode(val.trim(),Constants.IUNRESERVED,Constants.RESERVED,Constants.IPRIVATE);
+         val = Escaping.encode(val.trim(),Profile.IUNRESERVED,Profile.RESERVED,Profile.IPRIVATE);
          if (base != null) val = base.resolve(val).toASCIIString();
         }
         jstream.writeQuoted(val);

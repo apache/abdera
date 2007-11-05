@@ -19,7 +19,6 @@ package org.apache.abdera.i18n.iri;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.regex.Matcher;
@@ -27,19 +26,21 @@ import java.util.regex.Pattern;
 
 import org.apache.abdera.i18n.io.CharUtils;
 import org.apache.abdera.i18n.io.InvalidCharacterException;
+import org.apache.abdera.i18n.io.CharUtils.Profile;
 import org.apache.abdera.i18n.unicode.Normalizer;
+import org.apache.abdera.i18n.unicode.UnicodeCharacterDatabase;
 
-public class IRI 
+public final class IRI 
   implements Serializable, 
              Cloneable {
   
   private static final long serialVersionUID = -4530530782760282284L;
-  Scheme _scheme;
+  protected Scheme _scheme;
   private String scheme;
   private String authority;
   private String userinfo;
   private String host;
-  private int port;
+  private int port = -1;
   private String path;
   private String query;
   private String fragment;
@@ -51,51 +52,17 @@ public class IRI
   private String a_userinfo;
   private String a_authority;
   
-  private String d_authority;
-  private String d_userinfo;
-  private String d_host;
-  private String d_path;
-  private String d_query;
-  private String d_fragment;
-  
   public IRI(java.net.URL url) {
-    this(Escaping.encode(
-        Escaping.decode(url.toString()), 
-        Constants.IUNRESERVED, 
-        Constants.RESERVED, 
-        Constants.PCTENC));
+    this(url.toString());
   }
   
   public IRI(java.net.URI uri) {
-    this(Escaping.encode(
-      Escaping.decode(uri.toString()), 
-      Constants.IUNRESERVED, 
-      Constants.RESERVED, 
-      Constants.PCTENC,
-      Constants.GENDELIMS));
-  }
-  
-  public IRI(java.net.URI uri, String enc) throws UnsupportedEncodingException {
-    this(Escaping.encode(
-        Escaping.decode(uri.toString(),enc), enc,
-        Constants.IUNRESERVED, 
-        Constants.RESERVED, 
-        Constants.PCTENC,
-        Constants.GENDELIMS));
+    this(uri.toString());
   }
   
   public IRI(String iri) {
-    Builder b = parse(CharUtils.stripBidi(iri));
-    init(
-      b.schemeobj,
-      b.scheme,
-      b.authority,
-      b.userinfo,
-      b.host,
-      b.port,
-      b.path,
-      b.query,
-      b.fragment);
+    parse(CharUtils.stripBidi(iri));
+    init();
   }
   
   public IRI(String iri, Normalizer.Form nf) throws IOException {
@@ -110,13 +77,18 @@ public class IRI
     String path, 
     String query, 
     String fragment) {
-      SchemeRegistry reg = SchemeRegistry.getInstance();
-      Scheme _scheme = reg.getScheme(scheme);
+      this.scheme = scheme;
+      this._scheme = SchemeRegistry.getInstance().getScheme(scheme);
+      this.userinfo = userinfo;
+      this.host = host;
+      this.port = port;
+      this.path = path;
+      this.query = query;
+      this.fragment = fragment;
       StringBuffer buf = new StringBuffer();
       buildAuthority(buf,userinfo, host, port);
-      String authority = (buf.length()!=0)?buf.toString():null;
-      init(_scheme,scheme,authority,userinfo,
-        host,port,path,query,fragment);
+      this.authority = (buf.length()!=0)?buf.toString():null;
+      init();
   }
   
   public IRI(
@@ -125,14 +97,14 @@ public class IRI
     String path,
     String query,
     String fragment) {
-    Builder builder = new Builder();
-    builder.authority = authority;
-    Parser.parseAuthority(builder);
-    SchemeRegistry reg = SchemeRegistry.getInstance();
-    Scheme _scheme = reg.getScheme(scheme);
-    init(_scheme,scheme,authority,builder.userinfo,
-      builder.host,builder.port,path,query,
-      fragment);
+      this.scheme = scheme;
+      this._scheme = SchemeRegistry.getInstance().getScheme(scheme);
+      this.authority = authority;
+      this.path = path;
+      this.query = query;
+      this.fragment = fragment;
+      parseAuthority();
+      init();
   }
   
   public IRI(
@@ -153,42 +125,24 @@ public class IRI
     String path,
     String query,
     String fragment) {
-      init(_scheme,scheme,authority,userinfo,
-         host,port,path,query,fragment);
+      this._scheme = _scheme;
+      this.scheme = scheme;
+      this.authority = authority;
+      this.userinfo = userinfo;
+      this.host = host;
+      this.port = port;
+      this.path = path;
+      this.query = query;
+      this.fragment = fragment;
+      init();
   }
   
-  private void init(
-      Scheme _scheme,
-      String scheme,
-      String authority,
-      String userinfo,
-      String host,
-      int port,
-      String path,
-      String query,
-      String fragment) {
-    this._scheme = _scheme;
-    this.scheme = scheme;
-    this.authority = authority;
-    this.userinfo = userinfo;
-    this.host = host; 
-    this.port = port;
-    this.path = (path != null) ? path : "";
-    this.query = query;
-    this.fragment = fragment;
-
-    d_authority = Escaping.decode(this.authority);
-    d_userinfo = Escaping.decode(userinfo);
-    d_path = Escaping.decode(path);
-    d_query = query; //Escaping.decode(query);
-    d_fragment = Escaping.decode(fragment);
-    d_host = IDNA.toUnicode(Escaping.decode(this.host));
-
-    a_host = IDNA.toASCII(d_host);
-    a_fragment = Escaping.encode(getFragment(),Constants.FRAGMENT);
-    a_path = Escaping.encode(getPath(), Constants.PATH);
-    a_query = Escaping.encode(getQuery(),Constants.QUERY, Constants.PATH);
-    a_userinfo = Escaping.encode(getUserInfo(),Constants.USERINFO,Constants.COLON);
+  private void init() {    
+    a_host = IDNA.toASCII(host);
+    a_fragment = Escaping.encode(fragment,Profile.FRAGMENT);
+    a_path = Escaping.encode(path, Profile.PATH);
+    a_query = Escaping.encode(query,Profile.QUERY, Profile.PATH);
+    a_userinfo = Escaping.encode(userinfo,Profile.USERINFO);
     a_authority = buildASCIIAuthority();
   }
     
@@ -255,30 +209,21 @@ public class IRI
       return false;
     return true;
   }
-
-  public boolean equivalent(IRI uri) {
-    if (_scheme != null) return _scheme.equivalent(this, uri);
-    else {
-      String s2 = uri.normalize().toASCIIString();
-      String s1 = this.normalize().toASCIIString();
-      return s1.compareTo(s2) == 0;
-    }
-  }
   
   public String getAuthority() {
-    return (d_authority != null && d_authority.length() > 0) ? d_authority : null;
+    return (authority != null && authority.length() > 0) ? authority : null;
   }
   
   public String getFragment() {
-    return d_fragment;
+    return fragment;
   }
   
   public String getHost() {
-    return (d_host != null && d_host.length() > 0) ? d_host : null;
+    return (host != null && host.length() > 0) ? host : null;
   }
   
   public IDNA getIDN() {
-    return new IDNA(d_host);
+    return new IDNA(host);
   }
   
   public String getASCIIHost() {
@@ -286,7 +231,7 @@ public class IRI
   }
   
   public String getPath() {
-    return d_path;
+    return path;
   }
   
   public int getPort() {
@@ -294,7 +239,7 @@ public class IRI
   }
   
   public String getQuery() {
-    return d_query;
+    return query;
   }
   
   public String getScheme() {
@@ -310,38 +255,6 @@ public class IRI
   }
   
   public String getUserInfo() {
-    return d_userinfo;
-  }
-  
-  public String getRawHost() {
-    return (host != null && host.length() > 0) ? host : null;
-  }
-  
-  public String getRawAuthority() {
-    return (authority != null && authority.length() > 0) ? authority : null;
-  }
-  
-  public String getRawFragment() {
-    return fragment;
-  }
-  
-  public String getRawPath() {
-    return path;
-  }
-  
-  public String getRawQuery() {
-    return query;
-  }
-  
-  public String getRawSchemeSpecificPart() {
-    return buildSchemeSpecificPart(
-      authority,
-      path, 
-      query, 
-      fragment);
-  }
-  
-  public String getRawUserInfo() {
     return userinfo;
   }
   
@@ -374,9 +287,7 @@ public class IRI
     } else {
       return Escaping.encode(
         authority, 
-        Constants.USERINFO, 
-        Constants.REGNAME, 
-        Constants.GENDELIMS);
+        Profile.AUTHORITY);
     }
   }
   
@@ -432,8 +343,12 @@ public class IRI
       return buf.toString();
   }
   
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
+  public Object clone() {
+    try {
+      return super.clone();
+    } catch (CloneNotSupportedException e) {
+      return new IRI(toString());  // not going to happen, but we have to catch it
+    }
   }
   
   public boolean isAbsolute() {
@@ -450,8 +365,8 @@ public class IRI
         (b.scheme != null && c.scheme == null) ||
         (b.scheme != null && c.scheme != null && 
           !b.scheme.equalsIgnoreCase(c.scheme))) return c;
-    String bpath = normalize(b._scheme,b.getPath());
-    String cpath = normalize(c._scheme,c.getPath());
+    String bpath = normalize(b.getPath());
+    String cpath = normalize(c.getPath());
     bpath = (bpath != null) ? bpath : "/";
     cpath = (cpath != null) ? cpath : "/";
     if (!bpath.equals(cpath)) {
@@ -461,7 +376,7 @@ public class IRI
     IRI iri = new IRI(
       null,
       null,null,null,null,-1,
-      normalize(b._scheme,cpath.substring(bpath.length())), 
+      normalize(cpath.substring(bpath.length())), 
       c.getQuery(), 
       c.getFragment());
     return iri;
@@ -489,7 +404,7 @@ public class IRI
     IRI b, 
     String c) 
       throws IOException {
-    return resolve(b, IRI.create(c));
+    return resolve(b, new IRI(c));
   }
   
   public static IRI resolve(IRI b, IRI c) {
@@ -499,11 +414,7 @@ public class IRI
       String bfragment = b.getFragment();
       if ((cfragment == null && bfragment == null) ||
           (cfragment != null && cfragment.equals(bfragment))) {
-          try {
-            return (IRI) b.clone();
-          } catch (Exception e) {
-            return null; // Not going to happen
-          } 
+          return (IRI) b.clone(); 
       } else {
         return new IRI(
           b._scheme,
@@ -512,7 +423,7 @@ public class IRI
           b.getUserInfo(),
           b.getHost(),
           b.getPort(),
-          normalize(b._scheme,b.getPath()),
+          normalize(b.getPath()),
           b.getQuery(),
           cfragment
         );
@@ -535,14 +446,14 @@ public class IRI
       host = b.getHost();
       port = b.getPort();
       path = c.isPathAbsolute() ? 
-          normalize(b._scheme,c.getPath()) : 
+          normalize(c.getPath()) : 
           resolve(b.getPath(),c.getPath());
     } else {
       authority = c.getAuthority();
       userinfo = c.getUserInfo();
       host = c.getHost();
       port = c.getPort();
-      path = normalize(b._scheme,c.getPath());
+      path = normalize(c.getPath());
     }
     return new IRI(
       _scheme,
@@ -573,17 +484,13 @@ public class IRI
         iri.getUserInfo(),
         iri.getHost(),
         iri.getPort(),
-        normalize(iri._scheme,iri.getPath()),
-        iri.getQuery(),
-        iri.getFragment()
+        normalize(iri.getPath()),
+        Escaping.encode(Escaping.decode(iri.getQuery()),Profile.IQUERY),
+        Escaping.encode(Escaping.decode(iri.getFragment()),Profile.IFRAGMENT)
       );
   }
 
-  static String normalize(Scheme scheme, String path) {
-    if (scheme != null) {
-      String n = scheme.normalizePath(path);
-      if (n != null) return n;
-    }
+  protected static String normalize(String path) {
     if (path == null || path.length() == 0) return "/";
     String[] segments = path.split("/");
     if (segments.length < 2) return path;
@@ -604,7 +511,11 @@ public class IRI
     for (int n = 0; n < segments.length; n++) {
       if (segments[n] != null) {
         if (buf.length() > 1) buf.append('/');
-        buf.append(segments[n]);
+        buf.append(
+          Escaping.encode(
+            Escaping.decode(
+              segments[n]),
+              Profile.IPATHNODELIMS));
       }
     }
     if (path.endsWith("/") || path.endsWith("/.")) 
@@ -622,7 +533,7 @@ public class IRI
     int n = bpath.lastIndexOf('/');
     if (n > -1) buf.append(bpath.substring(0,n+1));
     if (cpath.length() != 0) buf.append(cpath);
-    return normalize(new HttpScheme(),buf.toString());
+    return normalize(buf.toString());
   }
   
   public IRI resolve(IRI iri) {
@@ -630,7 +541,7 @@ public class IRI
   }
   
   public IRI resolve(String iri) {
-    return resolve(this,IRI.create(iri));
+    return resolve(this,new IRI(iri));
   }
   
   public String toString() {
@@ -641,7 +552,8 @@ public class IRI
       buf.append(':');
     }
     buf.append(getSchemeSpecificPart());
-    return Escaping.encode(buf.toString(),Constants.IUNRESERVED,Constants.RESERVED,Constants.IPRIVATE,Constants.PCTENC,Constants.HASH);
+    return Escaping.encode(buf.toString(),
+      Profile.SCHEMESPECIFICPART);
   }
   
   public String toASCIIString() {
@@ -670,93 +582,66 @@ public class IRI
     return toURI().toURL();
   }
   
-  ////////// parse implementation
   
-  private static Builder parse(
-    String uri) {
+  
+  private void parseAuthority() {
+    if (authority != null) {
+      Matcher auth = AUTHORITYPATTERN.matcher(authority);
+      if (auth.find()) {
+        userinfo = auth.group(1);
+        host = auth.group(2);
+        if (auth.group(3) != null)
+          port = Integer.parseInt(auth.group(3));
+        else port = -1;
+      }
+      try {
+        CharUtils.verify(userinfo, Profile.IUSERINFO);
+        CharUtils.verify(host, Profile.IREGNAME);
+      } catch (InvalidCharacterException e) {
+        throw new IRISyntaxException(e);
+      }
+    }
+  }
+  
+  private void parse(String iri) {
     try {
-      return Parser.parse(uri, SchemeRegistry.getInstance());
-    } catch (IOException e) {
+      SchemeRegistry reg = SchemeRegistry.getInstance();
+      Matcher irim = IRIPATTERN.matcher(iri);
+      if (irim.find()) {
+        scheme = irim.group(1);
+        _scheme= reg.getScheme(scheme);
+        authority = irim.group(2);
+        path = irim.group(3);
+        query = irim.group(4);
+        fragment = irim.group(5);
+        parseAuthority();        
+        try {
+          CharUtils.verify(scheme, Profile.SCHEME);
+          CharUtils.verify(path, Profile.IPATH);
+          CharUtils.verify(query, Profile.IQUERY);
+          CharUtils.verify(fragment, Profile.IFRAGMENT);
+        } catch (InvalidCharacterException e) {     
+          throw new IRISyntaxException(e);
+        }
+      } else {
+        throw new IRISyntaxException("Invalid Syntax");
+      }
+    } catch (IRISyntaxException e) {
+      throw e;
+    } catch (Exception e) {
       throw new IRISyntaxException(e);
     }
   }
   
-  public static IRI create(
-    String iri) {
-    return new IRI(iri);
-  }
+  private static final Pattern IRIPATTERN = 
+    Pattern.compile(
+      "^(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*)(?:\\?([^#]*))?(?:#(.*))?");
   
-  public static IRI create(
-    String iri, 
-    Normalizer.Form nf) 
-      throws IOException {
-    return new IRI(iri,nf);
-  }
+  private static final Pattern AUTHORITYPATTERN =
+    Pattern.compile("^(?:(.*)?@)?((?:\\[.*\\])|(?:[^:]*))?(?::(\\d*))?");
   
-  static class Builder {
-    private Scheme schemeobj;
-    private String scheme;
-    private String authority;
-    private String userinfo;
-    private String host;
-    private int port = -1;
-    private String path;
-    private String query;
-    private String fragment;
+  public static void preinit() {
+    UnicodeCharacterDatabase.getCanonicalClass(1);
+    Nameprep.prep("");
   }
-  
-  static class Parser {
-    
-    static final Pattern p = 
-      Pattern.compile(
-        "^(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*)(?:\\?([^#]*))?(?:#(.*))?");
-    
-    static final Pattern a =
-      Pattern.compile("^(?:(.*)?@)?((?:\\[.*\\])|(?:[^:]*))?(?::(\\d*))?");
-    
-    static void parseAuthority(Builder builder) {
-      if (builder.authority != null) {
-        Matcher auth = a.matcher(builder.authority);
-        if (auth.find()) {
-          builder.userinfo = auth.group(1);
-          builder.host = auth.group(2);
-          if (auth.group(3) != null)
-            builder.port = Integer.parseInt(auth.group(3));
-        }
-        try {
-          CharUtils.verify(builder.userinfo, Constants.IUSERINFO);
-          CharUtils.verify(builder.host, Constants.IREGNAME);
-        } catch (InvalidCharacterException e) {
-          throw new IRISyntaxException(e);
-        }
-      }
-    }
-    
-    static Builder parse(String iri, SchemeRegistry reg) 
-      throws IOException {
-      Matcher irim = p.matcher(iri);
-      Builder builder = new Builder();
-      if (irim.find()) {
-        builder.scheme = irim.group(1);
-        builder.schemeobj = reg.getScheme(builder.scheme);
-        builder.authority = irim.group(2);
-        builder.path = irim.group(3);
-        builder.query = irim.group(4);
-        builder.fragment = irim.group(5);
-        parseAuthority(builder);        
-        try {
-          CharUtils.verify(builder.scheme, Constants.SCHEME);
-          CharUtils.verify(builder.path, Constants.IPATH);
-          CharUtils.verify(builder.query, Constants.IQUERY);
-          CharUtils.verify(builder.fragment, Constants.IFRAGMENT);
-        } catch (InvalidCharacterException e) {
-          throw new IRISyntaxException(e);
-        }
-        return builder;
-      } else {
-        throw new IRISyntaxException("Invalid Syntax");
-      }
-    }
-  }
-  
 }

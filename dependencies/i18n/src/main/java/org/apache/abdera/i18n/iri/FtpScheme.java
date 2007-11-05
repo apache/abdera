@@ -25,10 +25,7 @@ class FtpScheme
   static final int DEFAULT_PORT = 21;
   
   public FtpScheme() {
-    super(NAME);
+    super(NAME,DEFAULT_PORT);
   }
   
-  protected int getDefaultPort() {
-    return FtpScheme.DEFAULT_PORT;
-  }
 }

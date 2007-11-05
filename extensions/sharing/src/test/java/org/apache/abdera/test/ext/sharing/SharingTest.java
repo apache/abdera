@@ -223,15 +223,12 @@ public class SharingTest
       }
     };
     
-    entry.writeTo("prettyxml",System.out);
-    
     entry = SharingHelper.resolveConflicts(entry, r, "jms");
     sync = SharingHelper.getSync(entry);
     conflicts = sync.getConflicts();
     assertNull(conflicts);
     assertEquals(sync.getHistory().size(),4);
-    System.out.println();
-    entry.writeTo("prettyxml",System.out);
+    
   }
   
   public void testUnpublish() throws Exception {

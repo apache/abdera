@@ -20,8 +20,6 @@ package org.apache.abdera.factory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
@@ -32,41 +30,31 @@ import org.apache.abdera.model.Element;
  * It maintains the collection ExtensionFactory instances discovered on 
  * the classpath and a cache of Internal-Wrapper mappings.
  */
+@SuppressWarnings("unchecked") 
 public class ExtensionFactoryMap 
   implements ExtensionFactory {
 
   private final List<ExtensionFactory> factories;
-  private final Map<Element,Element> wrappers;
   
   public ExtensionFactoryMap(List<ExtensionFactory> factories) {
     this.factories = Collections.synchronizedList(factories);
-    this.wrappers = Collections.synchronizedMap(
-      new WeakHashMap<Element,Element>());
   }
 
   @SuppressWarnings("unchecked")
   public <T extends Element> T getElementWrapper(Element internal) {
     if (internal == null) return null;
-    T t = (T)wrappers.get(internal);
-    if (t == null) {
-      synchronized(factories) {
-        for (ExtensionFactory factory : factories) {
-          t = (T) factory.getElementWrapper(internal);
-          if (t != null && t != internal) {
-            setElementWrapper(internal,t);
-            return t;
-          }
+    T t = null;
+    synchronized(factories) {
+      for (ExtensionFactory factory : factories) {
+        t = (T) factory.getElementWrapper(internal);
+        if (t != null && t != internal) {
+          return t;
         }
       }
-      t = (T) internal;
     }
     return (t != null) ? t : (T)internal;
   }
   
-  public void setElementWrapper(Element internal, Element wrapper) {
-    wrappers.put(internal, wrapper);
-  }
-
   public String[] getNamespaces() {
     List<String> ns = new ArrayList<String>();
     synchronized(factories) {

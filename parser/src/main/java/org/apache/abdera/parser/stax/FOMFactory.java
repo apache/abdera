@@ -803,10 +803,10 @@ public class FOMFactory
     return FOMHelper.generateUuid();
   }
 
-  public void setElementWrapper(Element internal, Element wrapper) {
-    factoriesMap.setElementWrapper(internal, wrapper);
-  }
-  
+//  public void setElementWrapper(Element internal, Element wrapper) {
+//    factoriesMap.setElementWrapper(internal, wrapper);
+//  }
+//  
   
   public <T extends Element> T getElementWrapper(Element internal) {
     if (internal == null) return null;

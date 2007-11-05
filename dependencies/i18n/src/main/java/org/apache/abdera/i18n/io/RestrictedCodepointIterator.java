@@ -17,14 +17,8 @@
 */
 package org.apache.abdera.i18n.io;
 
-import java.util.BitSet;
+import org.apache.abdera.i18n.io.CharUtils.Profile;
 
-import org.apache.abdera.i18n.ChainableBitSet;
-import org.apache.abdera.i18n.io.CharUtils;
-import org.apache.abdera.i18n.io.CodepointIterator;
-import org.apache.abdera.i18n.io.FilterCodepointIterator;
-import org.apache.abdera.i18n.io.InvalidCharacterException;
-import org.apache.abdera.i18n.io.RestrictedCodepointIterator;
 
 
 /**
@@ -36,33 +30,33 @@ import org.apache.abdera.i18n.io.RestrictedCodepointIterator;
 public class RestrictedCodepointIterator 
   extends FilterCodepointIterator {
 
-  private BitSet bitset;
+  private final Profile profile;
   private boolean scanningOnly = false;
   private boolean notset = false;
 
   protected RestrictedCodepointIterator(
     CodepointIterator internal, 
-    BitSet bitset) {
-      this(internal,bitset,false);
+    Profile profile) {
+      this(internal,profile,false);
   }
 
   protected RestrictedCodepointIterator(
     CodepointIterator internal, 
-    BitSet bitset,
+    Profile profile,
     boolean scanningOnly) {
-      this(internal, bitset, scanningOnly, false);
+      this(internal, profile, scanningOnly, false);
   }
   
   protected RestrictedCodepointIterator(
-      CodepointIterator internal, 
-      BitSet bitset,
-      boolean scanningOnly,
-      boolean notset) {
+    CodepointIterator internal, 
+    Profile profile,
+    boolean scanningOnly,
+    boolean notset) {
       super(internal);
-      this.bitset = bitset;
+      this.profile = profile;
       this.scanningOnly = scanningOnly;
       this.notset = notset;
-    }
+  }
 
   public boolean hasNext() {
     boolean b = super.hasNext();
@@ -89,7 +83,8 @@ public class RestrictedCodepointIterator
   }
 
   private boolean check(int cp) {
-    return (!notset) ? !bitset.get(cp) : bitset.get(cp);
+    boolean answer = !profile.check(cp);
+    return (!notset) ? !answer : answer;
   }
   
   @Override
@@ -116,13 +111,4 @@ public class RestrictedCodepointIterator
     return chars;
   }
  
-  public static void main(String... args) throws Exception {
-    
-    ChainableBitSet set = new ChainableBitSet().set2('a','b','c');
-    char[] c = {'a','b','c',CharUtils.getHighSurrogate(0x10000),CharUtils.getLowSurrogate(0x10000)};
-    
-    CodepointIterator ci = CodepointIterator.forCharArray(c);
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,set,false,true);
-    while(rci.hasNext()) System.out.println(rci.next());
-  }
 }

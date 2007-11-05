@@ -26,7 +26,7 @@ import java.util.Set;
 
 import javax.activation.MimeType;
 
-import org.apache.abdera.i18n.iri.Constants;
+import org.apache.abdera.i18n.io.CharUtils.Profile;
 import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.protocol.Request;
 import org.apache.abdera.protocol.util.AbstractRequest;
@@ -419,7 +419,7 @@ public class RequestOptions
         slug.indexOf((char)13) > -1)
       throw new IllegalArgumentException(
         Messages.get("SLUG.BAD.CHARACTERS"));
-    setHeader("Slug", Escaping.encode(slug,Constants.ASCIISANSCRLF));
+    setHeader("Slug", Escaping.encode(slug,Profile.ASCIISANSCRLF));
   }
   
   /**

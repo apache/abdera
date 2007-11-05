@@ -23,7 +23,7 @@ import java.util.Set;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
-import org.apache.abdera.i18n.iri.Constants;
+import org.apache.abdera.i18n.io.CharUtils.Profile;
 import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Collection;
@@ -77,8 +77,8 @@ public abstract class AbstractWorkspaceProvider extends AbstractProvider {
           String id;
           String workspaceKey;
           try {
-            id = Escaping.encode(wp.getId(), enc, Constants.PATH);
-            workspaceKey = Escaping.encode(entry.getKey(), enc, Constants.PATH);
+            id = Escaping.encode(wp.getId(), enc, Profile.PATH);
+            workspaceKey = Escaping.encode(entry.getKey(), enc, Profile.PATH);
           } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
           }

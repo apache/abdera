@@ -18,6 +18,7 @@
 package org.apache.abdera;
 
 import org.apache.abdera.factory.Factory;
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
@@ -93,6 +94,7 @@ public final class Abdera {
     parserFactory = newParserFactory();
     writerFactory = newWriterFactory();
     writer = newWriter();
+    IRI.preinit();  // initializes the IRI stuff to improve performance later
   }
   
   /**

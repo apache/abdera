@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.i18n.iri;
 
-import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.Scheme;
 
 /**
  * Base implementation for IRI scheme providers
@@ -27,24 +25,21 @@ public abstract class AbstractScheme
   implements Scheme {
 
   protected final String name;
+  protected final int port;
   
-  protected AbstractScheme(String name) {
+  protected AbstractScheme(String name, int port) {
     this.name = name;
+    this.port = port;
+  }
+  
+  public int getDefaultPort() {
+    return port;
   }
   
   public String getName() {
     return name;
   }
 
-  /**
-   * Default to use normalization-based comparison
-   */
-  public boolean equivalent(IRI iri1, IRI iri2) {
-    String s2 = iri2.normalize().toASCIIString();
-    String s1 = iri1.normalize().toASCIIString();
-    return s1.compareTo(s2) == 0;
-  }
-  
   /**
    * Default return unmodified
    */

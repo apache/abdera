@@ -17,9 +17,8 @@
 */
 package org.apache.abdera.i18n.iri;
 
-import org.apache.abdera.i18n.iri.AbstractScheme;
-import org.apache.abdera.i18n.iri.HttpScheme;
-import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.io.CharUtils.Profile;
+
 
 class HttpScheme extends AbstractScheme {
 
@@ -27,41 +26,11 @@ class HttpScheme extends AbstractScheme {
   static final int DEFAULT_PORT = 80;
   
   public HttpScheme() {
-    super(NAME);
+    super(NAME,DEFAULT_PORT);
   }
   
-  protected HttpScheme(String name) {
-    super(name);
-  }
-
-  protected int getDefaultPort() {
-    return HttpScheme.DEFAULT_PORT;
-  }
-
-  private boolean equal(String s1, String s2) {
-    return ((s1 != null && s1.equals(s2)) ||
-           ((s2 != null && s2.equals(s1)) ||
-             s1 == null && s2 == null));
-  }
-  
-  @Override
-  public boolean equivalent(IRI iri1, IRI iri2) {
-    if (super.equivalent(iri1, iri2)) 
-      return true;
-    if (!iri1.getScheme().equals(iri2.getScheme()))
-      return false;
-    iri1 = iri1.normalize();
-    iri2 = iri2.normalize();
-    int port1 = (iri1.getPort() != -1) ? iri1.getPort() : getDefaultPort();
-    int port2 = (iri2.getPort() != -1) ? iri2.getPort() : getDefaultPort();
-    return
-        equal(iri1.getUserInfo(),iri2.getUserInfo()) &&
-        equal(iri1.getASCIIHost(),iri2.getASCIIHost()) &&
-        port1 == port2 &&
-        equal(iri1.getASCIIPath(),iri2.getASCIIPath()) &&
-        equal(iri1.getQuery(),iri2.getQuery()) &&
-        equal(iri1.getFragment(),iri2.getFragment());
-    
+  protected HttpScheme(String name, int port) {
+    super(name,port);
   }
 
   @Override
@@ -84,9 +53,9 @@ class HttpScheme extends AbstractScheme {
         ui,
         host,
         port,
-        IRI.normalize(this,iri.getPath()),
-        iri.getQuery(),
-        iri.getFragment()
+        IRI.normalize(iri.getPath()),
+        Escaping.encode(Escaping.decode(iri.getQuery()),Profile.IQUERY),
+        Escaping.encode(Escaping.decode(iri.getFragment()),Profile.IFRAGMENT)
       );
   }
   

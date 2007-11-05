@@ -25,8 +25,6 @@ import java.util.BitSet;
 
 import org.apache.abdera.i18n.ChainableBitSet;
 import org.apache.abdera.i18n.io.CodepointIterator;
-import org.apache.abdera.i18n.iri.Nameprep;
-import org.apache.abdera.i18n.iri.NameprepCodepointIterator;
 import org.apache.abdera.i18n.unicode.Normalizer;
 
 
@@ -99,7 +97,7 @@ public class Nameprep {
     }
     return map;
   }
-  
+    
   public static final BitSet UNASSIGNED = new ChainableBitSet()  
   .set2('\u0221')
   .set2('\u0234','\u024F')
@@ -921,4 +919,6 @@ public class Nameprep {
     .set2(0x2F800,0x2FA1D)
     .set2(0xF0000,0xFFFFD)
     .set2(0x100000,0x10FFFD);
+  
+  public static final ChainableBitSet PROHIBITED_ALLOWUNASSIGNED = new ChainableBitSet().set2(PROHIBITED).addNot2(UNASSIGNED);
 }

@@ -20,7 +20,7 @@ package org.apache.abdera.protocol.util;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.abdera.i18n.iri.Constants;
+import org.apache.abdera.i18n.io.CharUtils.Profile;
 import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.i18n.unicode.Normalizer;
 import org.apache.abdera.util.CompressionUtil;
@@ -89,7 +89,7 @@ public class EncodingUtil {
       if (filler != null) {
         slug = slug.replaceAll(pattern,filler);
       } else { 
-        slug = Escaping.encode(slug, Constants.PATHNODELIMS);
+        slug = Escaping.encode(slug, Profile.PATHNODELIMS);
       }
       return slug;
   }

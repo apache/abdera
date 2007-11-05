@@ -17,11 +17,7 @@
 */
 package org.apache.abdera.i18n.io;
 
-import java.util.BitSet;
-
-import org.apache.abdera.i18n.io.CodepointIterator;
-import org.apache.abdera.i18n.io.InvalidCharacterException;
-import org.apache.abdera.i18n.io.RestrictedCodepointIterator;
+import java.util.Arrays;
 
 /**
  * General utilities for dealing with Unicode characters
@@ -34,65 +30,65 @@ public final class CharUtils {
     return d >= 0x000000 && d <= 0x10ffff;
   }
   
-  public static int scanNot(CodepointIterator ci, BitSet set) throws InvalidCharacterException {
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,set,true,true);
+  public static int scanNot(CodepointIterator ci, Profile profile) throws InvalidCharacterException {
+    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,true,true);
     while (rci.hasNext()) rci.next();
     return rci.position;
   }
   
-  public static int scanNot(char[] array, BitSet set) throws InvalidCharacterException {
+  public static int scanNot(char[] array, Profile profile) throws InvalidCharacterException {
     CodepointIterator ci = CodepointIterator.forCharArray(array);
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,set,true,true);
+    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,true,true);
     while (rci.hasNext()) rci.next();
     return rci.position;
   }
   
-  public static int scan(CodepointIterator ci, BitSet set) throws InvalidCharacterException {
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,set,true);
+  public static int scan(CodepointIterator ci, Profile profile) throws InvalidCharacterException {
+    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,true);
     while (rci.hasNext()) rci.next();
     return rci.position();
   }
   
-  public static int scan(char[] array, BitSet set) throws InvalidCharacterException {
+  public static int scan(char[] array, Profile profile) throws InvalidCharacterException {
     CodepointIterator ci = CodepointIterator.forCharArray(array);
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,set,true);
+    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,true);
     while (rci.hasNext()) rci.next();
     return rci.position();
   }
   
-  public static int scan(String s, BitSet set) throws InvalidCharacterException {
+  public static int scan(String s, Profile profile) throws InvalidCharacterException {
     CodepointIterator ci = CodepointIterator.forCharSequence(s);
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,set,true);
+    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,true);
     while (rci.hasNext()) rci.next();
     return rci.position;
   }
   
-  public static void verifyNot(CodepointIterator ci, BitSet set) throws InvalidCharacterException {
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,set,false,true);
+  public static void verifyNot(CodepointIterator ci, Profile profile) throws InvalidCharacterException {
+    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,false,true);
     while (rci.hasNext()) rci.next();
   }
   
-  public static void verifyNot(char[] array, BitSet set) throws InvalidCharacterException {
+  public static void verifyNot(char[] array, Profile profile) throws InvalidCharacterException {
     CodepointIterator ci = CodepointIterator.forCharArray(array);
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,set,false,true);
+    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,false,true);
     while (rci.hasNext()) rci.next();
   }
   
-  public static void verify(CodepointIterator ci, BitSet set) throws InvalidCharacterException {
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,set,false);
+  public static void verify(CodepointIterator ci, Profile profile) throws InvalidCharacterException {
+    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,false);
     while (rci.hasNext()) rci.next();
   }
   
-  public static void verify(char[] array, BitSet set) throws InvalidCharacterException {
+  public static void verify(char[] array, Profile profile) throws InvalidCharacterException {
     CodepointIterator ci = CodepointIterator.forCharArray(array);
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,set,false);
+    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,false);
     while (rci.hasNext()) rci.next();
   }
   
-  public static void verify(String s, BitSet set) throws InvalidCharacterException {
+  public static void verify(String s, Profile profile) throws InvalidCharacterException {
     if (s == null) return;
     CodepointIterator ci = CodepointIterator.forCharSequence(s);
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,set,false);
+    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,false);
     while (rci.hasNext()) rci.next();
   }
   
@@ -113,11 +109,13 @@ public final class CharUtils {
     return true;
   }
   
-  public static boolean isSet(int n, BitSet... sets) {
+  public static boolean inRange(int codepoint, int low, int high) {
+    return codepoint >= low && codepoint <= high;
+  }
+  
+  public static boolean isSet(int n, int[]... sets) {
     if (n == -1) return false;
-    BitSet set = new BitSet();
-    for (BitSet s : sets) set.or(s);
-    return set.get(n);
+    return contains(n,sets);
   }
   
   public static void append(StringBuffer buf, int c) {
@@ -327,4 +325,458 @@ public final class CharUtils {
   public static String bidiLRM(String s) {
     return wrap(s,LRM,LRM);
   }
+  
+  public static boolean contains(int v, int[]... ranges) {
+    for (int[] range : ranges) 
+      if (Arrays.binarySearch(range, v) > -1) return true;
+    return false;
+  }
+  
+  public static interface Check {
+    boolean escape(int codepoint);
+  }
+  
+  public static enum Profile {
+    NONE(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return true;
+        }
+      }
+    ),
+    ALPHA(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !isAlpha(codepoint);
+        }
+      }
+    ),
+    ALPHANUM(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !isAlphaNum(codepoint);
+        }
+      }
+    ),
+    FRAGMENT(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !isFragment(codepoint);
+        }
+      }
+    ),
+    IFRAGMENT(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !is_ifragment(codepoint);
+        }
+      }
+    ),
+    PATH(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !isPath(codepoint);
+        }
+      }
+    ),
+    IPATH(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !is_ipath(codepoint);
+        }
+      }
+    ),
+    IUSERINFO(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !is_iuserinfo(codepoint);
+        }
+      }
+    ),
+    USERINFO(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !isUserInfo(codepoint);
+        }
+      }
+    ),
+    QUERY(
+        new Check() {
+        public boolean escape(int codepoint) {
+          return !isQuery(codepoint);
+        }
+      }
+    ),
+    IQUERY(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !is_iquery(codepoint);
+        }
+      }
+    ),
+    SCHEME(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !isScheme(codepoint);
+        }
+      }
+    ),
+    PATHNODELIMS(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !isPathNoDelims(codepoint);
+        }
+      }
+    ),
+    IPATHNODELIMS(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !is_ipathnodelims(codepoint);
+        }
+      }
+    ),
+    IREGNAME(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !is_iregname(codepoint);
+        }
+      }
+    ),
+    IPRIVATE(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !is_iprivate(codepoint);
+        }
+      }
+    ),
+    RESERVED(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !isReserved(codepoint);
+        }
+      }
+    ),
+    IUNRESERVED(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !is_iunreserved(codepoint);
+        }
+      }
+    ),
+    SCHEMESPECIFICPART(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !is_iunreserved(codepoint) && 
+                 !isReserved(codepoint) && 
+                 !is_iprivate(codepoint) && 
+                 !isPctEnc(codepoint) && 
+                 codepoint != '#';
+        }
+      }
+    ),
+    AUTHORITY(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !is_regname(codepoint) &&
+                 !isUserInfo(codepoint) && 
+                 !isGenDelim(codepoint);
+        }
+      }
+    ),
+    ASCIISANSCRLF(
+      new Check() {
+        public boolean escape(int codepoint) {  
+          return !CharUtils.inRange(codepoint,1,9) &&   
+                 !CharUtils.inRange(codepoint,14,127);
+        }        
+      }
+    ),
+    STD3ASCIIRULES(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !CharUtils.inRange(codepoint,0x0000,0x002C) &&
+                 !CharUtils.inRange(codepoint,0x002E,0x002F) &&
+                 !CharUtils.inRange(codepoint,0x003A,0x0040) &&
+                 !CharUtils.inRange(codepoint,0x005B,0x0060) &&
+                 !CharUtils.inRange(codepoint,0x007B,0x007F);          
+        }
+      }
+    )
+    ;
+    private final Check check;
+    Profile(Check check) {
+      this.check = check;
+    }
+    public boolean check(int codepoint) {
+      return check.escape(codepoint);
+    }
+  }
+  
+  public static boolean isDigit(int codepoint) {
+    return CharUtils.inRange(codepoint, '0', '9');
+  }
+  
+  public static boolean isAlpha(int codepoint) {
+    return CharUtils.inRange(codepoint, 'A', 'Z') ||
+           CharUtils.inRange(codepoint, 'a', 'z');
+  }
+
+  public static boolean isAlphaNum(int codepoint) {
+    return isDigit(codepoint) || isAlpha(codepoint);
+  }
+
+  public static boolean isPctEnc(int codepoint) {
+    return codepoint == '%' ||
+           isDigit(codepoint) ||
+           CharUtils.inRange(codepoint,'A','F') ||
+           CharUtils.inRange(codepoint,'a','f');
+  }
+  
+  public static boolean isMark(int codepoint) {
+    return codepoint == '-'  ||
+           codepoint == '_'  ||
+           codepoint == '.'  ||
+           codepoint == '!'  ||
+           codepoint == '~'  ||
+           codepoint == '*'  ||
+           codepoint == '\\' ||
+           codepoint == '\'' ||
+           codepoint == '('  ||
+           codepoint == ')';
+  }
+  
+  public static boolean isUnreserved(int codepoint) {
+    return isAlphaNum(codepoint) || isMark(codepoint);
+  }
+
+  public static boolean isReserved(int codepoint) {
+    return codepoint == '$' ||
+           codepoint == '&' ||
+           codepoint == '+' ||
+           codepoint == ',' ||
+           codepoint == '/' ||
+           codepoint == ':' ||
+           codepoint == ';' ||
+           codepoint == '=' ||
+           codepoint == '?' ||
+           codepoint == '@' ||
+           codepoint == '[' ||
+           codepoint == ']';
+  }
+  
+  public static boolean isGenDelim(int codepoint) {
+    return codepoint == '#' ||
+           codepoint == '/' ||
+           codepoint == ':' ||
+           codepoint == '?' ||
+           codepoint == '@' ||
+           codepoint == '[' ||
+           codepoint == ']';
+  }
+  
+  public static boolean isSubDelim(int codepoint) {
+    return codepoint == '!' || 
+           codepoint == '$' || 
+           codepoint == '&' || 
+           codepoint == '\'' || 
+           codepoint == '(' || 
+           codepoint == ')' || 
+           codepoint == '*' || 
+           codepoint == '+' || 
+           codepoint == ',' || 
+           codepoint == ';' || 
+           codepoint == '=' || 
+           codepoint == '\\';
+  }
+  
+  public static boolean isPchar(int codepoint) {
+    return isUnreserved(codepoint) ||  
+           codepoint == ':' || 
+           codepoint == '@' || 
+           codepoint == '&' || 
+           codepoint == '=' || 
+           codepoint == '+' || 
+           codepoint == '$' || 
+           codepoint == ',';
+  }
+
+  public static boolean isPath(int codepoint) {
+    return isPchar(codepoint) || 
+           codepoint == ';' ||
+           codepoint == '/' ||
+           codepoint == '%' || 
+           codepoint == ',';
+  }
+  
+  public static boolean isPathNoDelims(int codepoint) {
+    return isPath(codepoint) && !isGenDelim(codepoint);
+  }
+
+  public static boolean isScheme(int codepoint) {
+    return isAlphaNum(codepoint) || 
+           codepoint == '+' || 
+           codepoint == '-' ||
+           codepoint == '.';
+  }
+  
+
+  public static boolean isUserInfo(int codepoint) {
+    return isUnreserved(codepoint) || 
+           isSubDelim(codepoint) ||
+           isPctEnc(codepoint);
+  }
+  
+  public static boolean isQuery(int codepoint) {
+    return isPchar(codepoint) ||
+           codepoint == ';' || 
+           codepoint == '/' ||
+           codepoint == '?' ||
+           codepoint == '%';
+  }
+
+  public static boolean isFragment(int codepoint) {
+    return isPchar(codepoint) ||
+           codepoint == '/' ||
+           codepoint == '?' ||
+           codepoint == '%';
+  }
+  
+  public static boolean isBidi(int codepoint) {
+    return  codepoint == '\u200E' || // Left-to-right mark
+            codepoint == '\u200F' || // Right-to-left mark
+            codepoint == '\u202A' || // Left-to-right embedding
+            codepoint == '\u202B' || // Right-to-left embedding
+            codepoint == '\u202D' || // Left-to-right override
+            codepoint == '\u202E' || // Right-to-left override
+            codepoint == '\u202C';   // Pop directional formatting
+  }
+  
+  public static boolean is_ucschar(int codepoint) {    
+    return 
+        CharUtils.inRange(codepoint,'\u00A0', '\uD7FF') ||
+        CharUtils.inRange(codepoint,'\uF900','\uFDCF') ||
+        CharUtils.inRange(codepoint,'\uFDF0','\uFFEF') ||
+        CharUtils.inRange(codepoint,0x10000,0x1FFFD) ||
+        CharUtils.inRange(codepoint,0x20000,0x2FFFD) ||
+        CharUtils.inRange(codepoint,0x30000,0x3FFFD) ||
+        CharUtils.inRange(codepoint,0x40000,0x4FFFD) ||
+        CharUtils.inRange(codepoint,0x50000,0x5FFFD) ||
+        CharUtils.inRange(codepoint,0x60000,0x6FFFD) ||
+        CharUtils.inRange(codepoint,0x70000,0x7FFFD) ||
+        CharUtils.inRange(codepoint,0x80000,0x8FFFD) ||
+        CharUtils.inRange(codepoint,0x90000,0x9FFFD) ||
+        CharUtils.inRange(codepoint,0xA0000,0xAFFFD) ||
+        CharUtils.inRange(codepoint,0xB0000,0xBFFFD) ||
+        CharUtils.inRange(codepoint,0xC0000,0xCFFFD) ||
+        CharUtils.inRange(codepoint,0xD0000,0xDFFFD) ||
+        CharUtils.inRange(codepoint,0xE1000,0xEFFFD);
+  }
+
+  public static boolean is_iprivate(int codepoint) {
+    return
+      CharUtils.inRange(codepoint,'\uE000', '\uF8FF') ||
+      CharUtils.inRange(codepoint, 0xF0000,0xFFFFD) ||
+      CharUtils.inRange(codepoint, 0x100000,0x10FFFD);
+  }
+  
+  public static boolean is_iunreserved(int codepoint) {
+    return isAlphaNum(codepoint) || isMark(codepoint) || is_ucschar(codepoint);
+  }
+
+  public static boolean is_ipchar(int codepoint) {
+    return is_iunreserved(codepoint) || 
+           codepoint == ':' || 
+           codepoint == '@' || 
+           codepoint == '&' || 
+           codepoint == '=' || 
+           codepoint == '+' || 
+           codepoint == '$';
+  }
+
+  public static boolean is_ipath(int codepoint) {
+    return is_ipchar(codepoint) || 
+           codepoint == ';' ||
+           codepoint == '/' ||
+           codepoint == '%' || 
+           codepoint == ',';
+  }
+  
+  public static boolean is_ipathnodelims(int codepoint) {
+    return is_ipath(codepoint) && !isGenDelim(codepoint);
+  }
+
+  public static boolean is_iquery(int codepoint) {
+    return is_ipchar(codepoint) || 
+           is_iprivate(codepoint) || 
+           codepoint == ';' ||
+           codepoint == '/' ||
+           codepoint == '?' ||
+           codepoint == '%';
+  }
+
+  public static boolean is_ifragment(int codepoint) {
+    return is_ipchar(codepoint) || 
+           is_iprivate(codepoint) || 
+           codepoint == '/' ||
+           codepoint == '?' ||
+           codepoint == '%';
+  }  
+  
+  public static boolean is_iregname(int codepoint) {
+    return is_iunreserved(codepoint) || 
+           codepoint == '!'  || 
+           codepoint == '$'  || 
+           codepoint == '&'  || 
+           codepoint == '\'' || 
+           codepoint == '('  || 
+           codepoint == ')'  || 
+           codepoint == '*'  || 
+           codepoint == '+'  || 
+           codepoint == ','  || 
+           codepoint == ';'  || 
+           codepoint == '='  || 
+           codepoint == '"';
+  }
+  
+  public static boolean is_regname(int codepoint) {
+    return isUnreserved(codepoint) || 
+           codepoint == '!'  || 
+           codepoint == '$'  || 
+           codepoint == '&'  || 
+           codepoint == '\'' || 
+           codepoint == '('  || 
+           codepoint == ')'  || 
+           codepoint == '*'  || 
+           codepoint == '+'  || 
+           codepoint == ','  || 
+           codepoint == ';'  || 
+           codepoint == '='  || 
+           codepoint == '"';
+  }
+  
+  public static boolean is_iuserinfo(int codepoint) {
+    return is_iunreserved(codepoint) || 
+           codepoint == ';' || 
+           codepoint == ':' || 
+           codepoint == '&' || 
+           codepoint == '=' || 
+           codepoint == '+' || 
+           codepoint == '$' || 
+           codepoint == ',';
+  }
+  
+  public static boolean is_iserver(int codepoint) {
+    return is_iuserinfo(codepoint) || 
+           is_iregname(codepoint) || 
+           isAlphaNum(codepoint) || 
+           codepoint == '.' || 
+           codepoint == ':' || 
+           codepoint == '@' || 
+           codepoint == '[' || 
+           codepoint == ']' || 
+           codepoint == '%' || 
+           codepoint == '-';
+  }
+
 }
+

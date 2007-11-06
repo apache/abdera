@@ -54,6 +54,7 @@ public abstract class AbstractXPath
     return new HashMap<String,String>(namespaces);
   }
   
+  @SuppressWarnings("unchecked") 
   public List selectNodes(String path, Base base) throws XPathException {
     return selectNodes(path, base, getDefaultNamespaces());
   }

@@ -29,6 +29,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.AbstractStreamWriter;
+import org.apache.abdera.writer.StreamWriter;
 import org.apache.axiom.om.util.StAXUtils;
 
 public class StaxStreamWriter 
@@ -61,59 +62,66 @@ public class StaxStreamWriter
     setOutputStream(out,charset);
   }
 
-  public void setWriter(java.io.Writer writer) {
+  public StreamWriter setWriter(java.io.Writer writer) {
     try {
       this.writer = StAXUtils.createXMLStreamWriter(writer);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+    return this;
   }
-  public void setOutputStream(java.io.OutputStream out) {
+  public StreamWriter setOutputStream(java.io.OutputStream out) {
     try {
       this.writer = StAXUtils.createXMLStreamWriter(out,"UTF-8");
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+    return this;
   }
-  public void setOutputStream(java.io.OutputStream out, String charset) {
+  public StreamWriter setOutputStream(java.io.OutputStream out, String charset) {
     try {
       this.writer = StAXUtils.createXMLStreamWriter(out,charset);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+    return this;
   }
   
-  public void startDocument(String xmlversion, String charset) {
+  public StreamWriter startDocument(String xmlversion, String charset) {
     try {
       writer.writeStartDocument(xmlversion,charset);
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }    
+    return this;
   }
   
-  public void startDocument(String xmlversion) {
+  public StreamWriter startDocument(String xmlversion) {
     try {
       writer.writeStartDocument(xmlversion);
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }
+    return this;
   }
   
-  public void endDocument() {
+  public StreamWriter endDocument() {
     try {
       writer.writeEndDocument();
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }
+    return this;
   }
  
-  public void endElement() {
+  public StreamWriter endElement() {
     try {
       pop();
       writer.writeEndElement();
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }
+    return this;
   }
   
   private void writeNamespace(QName qname, boolean attr) throws XMLStreamException {
@@ -130,7 +138,7 @@ public class StaxStreamWriter
     }
   }
   
-  public void startElement(QName qname, Map<QName, String> attributes) {
+  public StreamWriter startElement(QName qname, Map<QName, String> attributes) {
     try {
       push();
       writer.writeStartElement(qname.getPrefix(),qname.getLocalPart(),qname.getNamespaceURI());
@@ -149,38 +157,43 @@ public class StaxStreamWriter
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }
+    return this;
   }
   
-  public void writeElementText(String value) {
+  public StreamWriter writeElementText(String value) {
     try {
       writer.writeCharacters(value);
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }
+    return this;
   }
 
-  public void writeComment(String value) {
+  public StreamWriter writeComment(String value) {
     try {
       writer.writeComment(value);
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }
+    return this;
   }
 
-  public void writePI(String value) {
+  public StreamWriter writePI(String value) {
     try {
       writer.writeProcessingInstruction(value);
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }
+    return this;
   }
 
-  public void writePI(String value, String target) {
+  public StreamWriter writePI(String value, String target) {
     try {
       writer.writeProcessingInstruction(value,target);
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }
+    return this;
   }
   
   private final Stack<Map<String,String>> namespaces = new Stack<Map<String,String>>();
@@ -211,8 +224,9 @@ public class StaxStreamWriter
     frame.put(prefix, namespace);
   }
 
-  public void writeId(Map<QName,String> attributes) {
+  public StreamWriter writeId(Map<QName,String> attributes) {
     writeId(FOMHelper.generateUuid(),attributes);
+    return this;
   }
     
 }

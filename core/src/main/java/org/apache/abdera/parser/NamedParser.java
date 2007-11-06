@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.parser;
 
-import org.apache.abdera.NamedItem;
+import org.apache.abdera.util.NamedItem;
 
 /**
  * Abdera's abstract parsing model allows developers to implement parsers 

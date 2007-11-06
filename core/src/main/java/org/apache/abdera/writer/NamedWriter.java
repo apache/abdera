@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.writer;
 
-import org.apache.abdera.NamedItem;
+import org.apache.abdera.util.NamedItem;
 
 /**
  * Named Writers provide a means of extending Abdera's built in serialization.

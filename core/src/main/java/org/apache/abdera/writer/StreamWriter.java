@@ -25,10 +25,10 @@ import java.util.Map;
 import javax.activation.DataHandler;
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.NamedItem;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Text;
+import org.apache.abdera.util.NamedItem;
 
 /**
  * The StreamWriter interface provides a for producing Atom documents 

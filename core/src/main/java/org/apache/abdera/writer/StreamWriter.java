@@ -41,6 +41,16 @@ public interface StreamWriter
   extends NamedItem {
 
   /**
+   * True if the StreamWriter should autoclose the buffer after calling endDocument
+   */
+  StreamWriter setAutoclose(boolean auto);
+  
+  /**
+   * True if the StreamWriter should autoflush the buffer
+   */
+  StreamWriter setAutoflush(boolean auto);
+  
+  /**
    * Set the target java.io.Writer
    */
   StreamWriter setWriter(java.io.Writer writer);
@@ -54,6 +64,16 @@ public interface StreamWriter
    * Set the target java.io.OutputStream
    */
   StreamWriter setOutputStream(java.io.OutputStream out, String charset);
+  
+  /**
+   * Set the target WritableByteChannel
+   */
+  StreamWriter setChannel(java.nio.channels.WritableByteChannel channel);
+
+  /**
+   * Set the target WritableByteChannel
+   */
+  StreamWriter setChannel(java.nio.channels.WritableByteChannel channel, String charset);
   
   /**
    * Start the document

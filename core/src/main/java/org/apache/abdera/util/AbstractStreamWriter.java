@@ -20,6 +20,8 @@ package org.apache.abdera.util;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.Channels;
+import java.nio.channels.WritableByteChannel;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,9 +40,29 @@ public abstract class AbstractStreamWriter
   implements StreamWriter {
   
   protected final String name;
+  protected boolean autoflush = false;
+  protected boolean autoclose = false;
   
   protected AbstractStreamWriter(String name) {
     this.name = name;
+  }
+  
+  public StreamWriter setAutoflush(boolean auto) {
+    this.autoflush = auto;
+    return this;
+  }
+  
+  public StreamWriter setAutoclose(boolean auto) {
+    this.autoclose = auto;
+    return this;
+  }
+  
+  public StreamWriter setChannel(WritableByteChannel channel) {
+    return setOutputStream(Channels.newOutputStream(channel));
+  }
+
+  public StreamWriter setChannel(WritableByteChannel channel, String charset) {
+    return setWriter(Channels.newWriter(channel, charset));
   }
   
   public String getName() {

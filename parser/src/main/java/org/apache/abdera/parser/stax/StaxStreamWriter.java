@@ -108,6 +108,7 @@ public class StaxStreamWriter
   public StreamWriter endDocument() {
     try {
       writer.writeEndDocument();
+      if (autoclose) writer.close();
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }
@@ -118,6 +119,7 @@ public class StaxStreamWriter
     try {
       pop();
       writer.writeEndElement();
+      if (autoflush) writer.flush();
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }
@@ -154,6 +156,7 @@ public class StaxStreamWriter
             attributes.get(attr));
         }
       }
+      if (autoflush) writer.flush();
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }
@@ -163,6 +166,7 @@ public class StaxStreamWriter
   public StreamWriter writeElementText(String value) {
     try {
       writer.writeCharacters(value);
+      if (autoflush) writer.flush();
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }
@@ -172,6 +176,7 @@ public class StaxStreamWriter
   public StreamWriter writeComment(String value) {
     try {
       writer.writeComment(value);
+      if (autoflush) writer.flush();
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }
@@ -181,6 +186,7 @@ public class StaxStreamWriter
   public StreamWriter writePI(String value) {
     try {
       writer.writeProcessingInstruction(value);
+      if (autoflush) writer.flush();
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }
@@ -190,6 +196,7 @@ public class StaxStreamWriter
   public StreamWriter writePI(String value, String target) {
     try {
       writer.writeProcessingInstruction(value,target);
+      if (autoflush) writer.flush();
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
     }

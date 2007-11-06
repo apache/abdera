@@ -17,6 +17,10 @@
 */
 package org.apache.abdera.parser;
 
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.filter.ParseFilter;
 import org.apache.abdera.util.CompressionUtil.CompressionCodec;
@@ -150,4 +154,25 @@ public interface ParserOptions extends Cloneable {
    * True if undeclared named entities should be resolved.
    */
   boolean getResolveEntities();
+  
+  /**
+   * True if QName-Alias mapping is enabled
+   */
+  void setQNameAliasMappingEnabled(boolean enabled);
+  
+  /**
+   * True if QName-Alias mapping is enabled (default is false)
+   */
+  boolean isQNameAliasMappingEnabled();
+
+  /**
+   * Get the QName-Alias Mapping (default null)
+   */
+  Map<QName,QName> getQNameAliasMap();
+  
+  /**
+   * Set the QName-Alias Mapping
+   */
+  void setQNameAliasMap(Map<QName,QName> map);
+  
 }

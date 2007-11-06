@@ -20,6 +20,8 @@ package org.apache.abdera.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.namespace.QName;
+
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.filter.ParseFilter;
 import org.apache.abdera.parser.ParserOptions;
@@ -41,6 +43,9 @@ public abstract class AbstractParserOptions
   protected CompressionCodec[] codecs = null;
   protected boolean resolveentities = true;
   protected Map<String,String> entities = new HashMap<String,String>();
+  
+  protected boolean qnamealiasing = false;
+  protected Map<QName,QName> aliases = null;
 
   protected abstract void initFactory();
   protected abstract void checkFactory(Factory factory);
@@ -396,5 +401,21 @@ public abstract class AbstractParserOptions
   
   public boolean getResolveEntities() {
     return this.resolveentities;
+  }
+  
+  public Map<QName,QName> getQNameAliasMap() {
+    return aliases;
+  }
+  
+  public void setQNameAliasMap(Map<QName,QName> map) {
+    this.aliases = map;
+  }
+  
+  public boolean isQNameAliasMappingEnabled() {
+    return qnamealiasing;
+  }
+  
+  public void setQNameAliasMappingEnabled(boolean enabled) {
+    this.qnamealiasing = enabled;
   }
 }

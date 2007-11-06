@@ -26,6 +26,7 @@ import org.apache.abdera.model.Service;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserFactory;
 import org.apache.abdera.util.AbderaConfiguration;
+import org.apache.abdera.util.Configuration;
 import org.apache.abdera.util.Messages;
 import org.apache.abdera.util.ServiceUtil;
 import org.apache.abdera.writer.StreamWriter;
@@ -67,7 +68,7 @@ public final class Abdera {
     return instance;
   }
   
-  private final AbderaConfiguration config;
+  private final Configuration config;
   private final Factory factory;
   private final Parser parser;
   private final XPath xpath;
@@ -86,7 +87,7 @@ public final class Abdera {
    * Initialize using the specified Abdera Configuration
    * @param config The Abdera Configuration to use
    */
-  public Abdera(AbderaConfiguration config) {
+  public Abdera(Configuration config) {
     this.config = config;
     factory = newFactory();
     parser = newParser();
@@ -138,8 +139,9 @@ public final class Abdera {
    * 
    * @return The Abdera configuration
    */
-  public AbderaConfiguration getConfiguration() {
-    return config;
+  @SuppressWarnings("unchecked") 
+  public <T extends Configuration>T getConfiguration() {
+    return (T)config;
   }
   
   /**

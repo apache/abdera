@@ -18,7 +18,7 @@
 package org.apache.abdera.security;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.util.AbderaConfiguration;
+import org.apache.abdera.util.Configuration;
 import org.apache.abdera.util.ServiceUtil;
 
 /**
@@ -41,7 +41,7 @@ public class AbderaSecurity {
     this.signature = newSignature();
   }
   
-  public AbderaSecurity(AbderaConfiguration config) {
+  public AbderaSecurity(Configuration config) {
     this(new Abdera(config));
   }
   

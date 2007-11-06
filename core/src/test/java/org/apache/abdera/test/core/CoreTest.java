@@ -61,6 +61,7 @@ import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Content.Type;
 import org.apache.abdera.util.AbderaConfiguration;
 import org.apache.abdera.util.CompressionUtil;
+import org.apache.abdera.util.Configuration;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.util.XmlRestrictedCharReader;
@@ -69,7 +70,7 @@ import org.apache.abdera.writer.WriterOptions;
 public class CoreTest extends TestCase {
 
   public static void testDefaultConfigurationProperties() {
-    AbderaConfiguration config = new AbderaConfiguration();
+    Configuration config = new AbderaConfiguration();
     assertEquals(
       config.getDefaultFactory(), 
       "org.apache.abdera.parser.stax.FOMFactory");

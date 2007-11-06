@@ -18,13 +18,11 @@
 package org.apache.abdera.model;
 
 import java.io.Serializable;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <p>Provides an implementation of the Atom Date Construct, 
@@ -218,41 +216,8 @@ public final class AtomDate
     }
   }
   
-  /**
-   * The masks used to validate and parse the input to this Atom date.
-   * These are a lot more forgiving than what the Atom spec allows.  
-   * The forms that are invalid according to the spec are indicated.
-   */
-  private static final String[] masks = {
-    "yyyy-MM-dd'T'HH:mm:ss.SSSz",
-    "yyyy-MM-dd't'HH:mm:ss.SSSz",                         // invalid
-    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-    "yyyy-MM-dd't'HH:mm:ss.SSS'z'",                       // invalid
-    "yyyy-MM-dd'T'HH:mm:ssz",
-    "yyyy-MM-dd't'HH:mm:ssz",                             // invalid
-    "yyyy-MM-dd'T'HH:mm:ss'Z'",
-    "yyyy-MM-dd't'HH:mm:ss'z'",                           // invalid
-    "yyyy-MM-dd'T'HH:mmz",                                // invalid
-    "yyyy-MM-dd't'HH:mmz",                                // invalid
-    "yyyy-MM-dd'T'HH:mm'Z'",                              // invalid
-    "yyyy-MM-dd't'HH:mm'z'",                              // invalid
-    "yyyy-MM-dd",
-    "yyyy-MM",
-    "yyyy"
-  };
-  
-  private static final Map<String,SimpleDateFormat> maskmap = new HashMap<String,SimpleDateFormat>();
-  private static SimpleDateFormat getSDF(String mask) {
-    SimpleDateFormat sdf = maskmap.get(mask);
-    if (sdf == null) {
-      synchronized (maskmap) {
-        sdf = new SimpleDateFormat(mask);
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        maskmap.put(mask,sdf);
-      }
-    }
-    return sdf;
-  }
+  private static final Pattern PATTERN = Pattern.compile(
+    "(\\d{4})(?:-(\\d{2}))?(?:-(\\d{2}))?(?:[Tt](?:(\\d{2}))?(?::(\\d{2}))?(?::(\\d{2}))?(?:\\.(\\d{3}))?)?([Zz])?(?:([+-])(\\d{2}):(\\d{2}))?");
    
   /**
    * Parse the serialized string form into a java.util.Date
@@ -260,30 +225,26 @@ public final class AtomDate
    * @return The created java.util.Date
    */
   public static Date parse(String date) {
-    int ndx = date.indexOf('T');
-    if (ndx == -1) ndx = date.indexOf('t');
-    if (ndx > -1 && !date.endsWith("Z") && !date.endsWith("z")) {
-      int off = date.indexOf('+', ndx);
-      if (off == -1) off = date.indexOf('-', ndx);
-      if (off > -1) {
-        String s = date.substring(0,off);
-        String e = date.substring(off);
-        date = s + "GMT" + e;
+    Matcher m = PATTERN.matcher(date);
+    if (m.find()) {
+      Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+      int hoff = 0, moff = 0, doff = -1;
+      if (m.group(9) != null) {
+        doff = m.group(9).equals("-") ? 1 : -1;
+        hoff = doff * (m.group(10) != null ? Integer.parseInt(m.group(10)) : 0);
+        moff = doff * (m.group(11) != null ? Integer.parseInt(m.group(11)) : 0);
       }
+      c.set(Calendar.YEAR,        Integer.parseInt(m.group(1)));
+      c.set(Calendar.MONTH,       m.group(2) != null ? Integer.parseInt(m.group(2))-1 : 0);
+      c.set(Calendar.DATE,        m.group(3) != null ? Integer.parseInt(m.group(3)) : 1);
+      c.set(Calendar.HOUR_OF_DAY, m.group(4) != null ? Integer.parseInt(m.group(4)) + hoff: 0);
+      c.set(Calendar.MINUTE,      m.group(5) != null ? Integer.parseInt(m.group(5)) + moff: 0);
+      c.set(Calendar.SECOND,      m.group(6) != null ? Integer.parseInt(m.group(6)) : 0);
+      c.set(Calendar.MILLISECOND, m.group(7) != null ? Integer.parseInt(m.group(7)) : 0);
+      return c.getTime();
+    } else {
+      throw new IllegalArgumentException("Invalid Date Format");
     }
-    
-    Date d = null;
-    for (int n = 0; n < masks.length; n++) {
-      SimpleDateFormat sdf = getSDF(masks[n]);
-      try {
-        sdf.setLenient(true);
-        d = sdf.parse(date, new ParsePosition(0));
-        if (d != null) break;
-      } catch (Exception e) {}
-    }
-    if (d == null) 
-      throw new IllegalArgumentException();
-    return d;
   }
   
   /**
@@ -291,8 +252,38 @@ public final class AtomDate
    * @param d A java.util.Date
    * @return The serialized string form of the date
    */
-  public static String format (Date d) {    
-    return getSDF(masks[2]).format(d);
+  public static String format(Date date) {
+    StringBuilder sb = new StringBuilder();
+    Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+    c.setTime(date);
+    sb.append(c.get(Calendar.YEAR));
+    sb.append('-');
+    int f = c.get(Calendar.MONTH);
+    if (f < 10) sb.append('0');
+    sb.append(f+1);
+    sb.append('-');
+    f = c.get(Calendar.DATE);
+    if (f < 10) sb.append('0');
+    sb.append(f);
+    sb.append('T');
+    f = c.get(Calendar.HOUR_OF_DAY);
+    if (f < 10) sb.append('0');
+    sb.append(f);
+    sb.append(':');
+    f = c.get(Calendar.MINUTE);
+    if (f < 10) sb.append('0');
+    sb.append(f);
+    sb.append(':');
+    f = c.get(Calendar.SECOND);
+    if (f < 10) sb.append('0');
+    sb.append(f);
+    sb.append('.');
+    f = c.get(Calendar.MILLISECOND);
+    if (f < 100) sb.append('0');
+    if (f < 10) sb.append('0');
+    sb.append(f);
+    sb.append('Z');
+    return sb.toString();
   }
 
   /**

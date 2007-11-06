@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.util;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collections;
@@ -38,7 +37,7 @@ import org.apache.abdera.writer.StreamWriter;
  * class should not be accessed by applications directly without very good reason.
  */
 public final class AbderaConfiguration 
-  implements Constants, Cloneable, Serializable {
+  implements Constants, Configuration {
   
   private static final long serialVersionUID = 7460203853824337559L;
 
@@ -46,8 +45,8 @@ public final class AbderaConfiguration
    * Returns the default configuration. Every call to this method returns
    * a new AbderaConfiguration instance using abdera.properties
    */
-  public static synchronized AbderaConfiguration getDefault() {
-    AbderaConfiguration instance = null;
+  public static synchronized Configuration getDefault() {
+    Configuration instance = null;
     try {
       ResourceBundle bundle = ResourceBundle.getBundle("abdera");
       instance = new AbderaConfiguration(bundle);
@@ -302,8 +301,12 @@ public final class AbderaConfiguration
     return parsers;
   }
   
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
+  public Object clone() {
+    try {
+      return super.clone();
+    } catch (CloneNotSupportedException e) {
+      throw new RuntimeException(e);
+    }
   }
   
 }

@@ -26,11 +26,18 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.converter.ConverterProvider;
 import org.apache.abdera.factory.ExtensionFactory;
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.parser.NamedParser;
+import org.apache.abdera.parser.Parser;
+import org.apache.abdera.parser.ParserFactory;
 import org.apache.abdera.writer.NamedWriter;
 import org.apache.abdera.writer.StreamWriter;
+import org.apache.abdera.writer.Writer;
+import org.apache.abdera.writer.WriterFactory;
+import org.apache.abdera.xpath.XPath;
 
 /**
  * Provides the basic configuration for the Abdera default implementation.  This
@@ -73,13 +80,6 @@ public final class AbderaConfiguration
   }
   
   private final ResourceBundle bundle;
-  private final String xpath;
-  private final String parser;
-  private final String factory;
-  private final String parserFactory;
-  private final String writerFactory;
-  private final String writer;
-  private final String streamwriter;
   private final List<ExtensionFactory> factories;
   private final List<ConverterProvider> providers;
   private final Map<String,NamedWriter> writers;
@@ -95,13 +95,6 @@ public final class AbderaConfiguration
       AbderaConfiguration.getBundle(
         ServiceUtil.getClassLoader(), 
         Locale.getDefault());
-    xpath = getConfigurationOption(CONFIG_XPATH, DEFAULT_XPATH);
-    parser = getConfigurationOption(CONFIG_PARSER, DEFAULT_PARSER);
-    factory = getConfigurationOption(CONFIG_FACTORY, DEFAULT_FACTORY);
-    parserFactory = getConfigurationOption(CONFIG_PARSERFACTORY, DEFAULT_PARSERFACTORY);
-    writerFactory = getConfigurationOption(CONFIG_WRITERFACTORY, DEFAULT_WRITERFACTORY);
-    writer = getConfigurationOption(CONFIG_WRITER, DEFAULT_WRITER);
-    streamwriter = getConfigurationOption(CONFIG_STREAMWRITER, DEFAULT_STREAMWRITER);
     factories = ServiceUtil.loadExtensionFactories();
     providers = ServiceUtil.loadConverterProviders();
     writers = initNamedWriters();
@@ -140,55 +133,7 @@ public final class AbderaConfiguration
     return (value != null) ? value : _default;
   }
   
-  /**
-   * Returns the Java classname of the default Abdera XPath implementation
-   */
-  public String getDefaultXPath() {
-    return xpath;
-  }
-  
-  /**
-   * Returns the Java classname of the default Abdera Parser implementation
-   */
-  public String getDefaultParser() {
-    return parser;
-  }
-  
-  /**
-   * Returns the Java classname of the default Abdera Factory implementation
-   */
-  public String getDefaultFactory() {
-    return factory;
-  }
-  
-  /**
-   * Returns the Java classname of the default ParserFactory implementation
-   */
-  public String getDefaultParserFactory() {
-    return parserFactory; 
-  }
-  
-  /**
-   * Returns the Java classname of the default WriterFactory implementation
-   */
-  public String getDefaultWriterFactory() {
-    return writerFactory;
-  }
-  
-  /**
-   * Returns the Java classname of the default Writer implementation
-   */
-  public String getDefaultWriter() {
-    return writer;
-  }
-
-  /**
-   * Returns the Java classname of the default StreamWriter implementation
-   */
-  public String getDefaultStreamWriter() {
-    return streamwriter;
-  }
-  
+ 
   /**
    * Registers an ExtensionFactory implementation.
    */
@@ -208,8 +153,11 @@ public final class AbderaConfiguration
   /**
    * Returns the listing of registered ConverterProvider implementations
    */
-  public List<ConverterProvider> getConverterProviders() {
-    return providers;
+  public ConverterProvider[] getConverterProviders() {
+    return providers != null ? 
+      providers.toArray(
+        new ConverterProvider[providers.size()]) : 
+          new ConverterProvider[0];
   }
   
   /**
@@ -245,16 +193,22 @@ public final class AbderaConfiguration
       ServiceUtil._loadimpls(STREAM_WRITER,true);
     writers = Collections.synchronizedMap(new HashMap<String,Class<? extends StreamWriter>>());
     for (Class<? extends StreamWriter> writer : _writers) {
-      try {
-        Field field = writer.getField("NAME");
-        if (Modifier.isStatic(field.getModifiers())) {
-          String name = (String)field.get(null);
-          if (name != null)
-            writers.put(name.toLowerCase(), writer);
-        }
-      } catch (Exception e) {}
+      String name = getName(writer);
+      if (name != null)
+        writers.put(name.toLowerCase(), writer);
     }
     return writers;
+  }
+  
+  private static String getName(Class<? extends StreamWriter> sw) {
+    String name = null;
+    try {
+      Field field = sw.getField("NAME");
+      if (Modifier.isStatic(field.getModifiers())) {
+        name = (String)field.get(null);
+      }
+    } catch (Exception e) {}
+    return name;
   }
   
   /**
@@ -277,6 +231,13 @@ public final class AbderaConfiguration
   public void addNamedParser(NamedParser parser) {
     Map<String,NamedParser> parsers = getNamedParsers();
     parsers.put(parser.getName(), parser);
+  }
+
+  /**
+   * Registers a StreamWriter implementation
+   */
+  public void addStreamWriter(Class<? extends StreamWriter> sw) {
+    getStreamWriters().put(getName(sw), sw);
   }
   
   /**
@@ -309,4 +270,88 @@ public final class AbderaConfiguration
     }
   }
   
+  
+  /**
+   * Return a new instance of org.apache.abdera.factory.Factory
+   * 
+   * @return A new factory instance
+   */
+  public Factory newFactoryInstance(Abdera abdera) {
+    return ServiceUtil.newFactoryInstance(abdera);
+  }
+    
+  /**
+   * Return a new instance of org.apache.abdera.parser.Parser
+   * 
+   * @return A new parser instance
+   */
+  public Parser newParserInstance(Abdera abdera) {
+    return ServiceUtil.newParserInstance(abdera);
+  }
+    
+  /**
+   * Return a new instance of org.apache.abdera.xpath.XPath
+   * 
+   * @return A new XPath instance
+   */
+  public XPath newXPathInstance(Abdera abdera) {
+    try {
+      return ServiceUtil.newXPathInstance(abdera);
+    } catch (NoClassDefFoundError n) {
+      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","XPath"),n);
+    }
+  }
+    
+  /**
+   * Return a new instance of org.apache.abdera.parser.ParserFactory
+   * 
+   * @return A new ParserFactory instance
+   */
+  public ParserFactory newParserFactoryInstance(Abdera abdera) {
+    try {
+      return ServiceUtil.newParserFactoryInstance(abdera);
+    } catch (NoClassDefFoundError n) {
+      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","Parser"),n);
+    }
+  }
+    
+  /**
+   * Return a new instance of org.apache.abdera.writer.WriterFactory
+   * 
+   * @return A new WriterFactory instance
+   */
+  public WriterFactory newWriterFactoryInstance(Abdera abdera) {
+    try {
+      return ServiceUtil.newWriterFactoryInstance(abdera);
+    } catch (NoClassDefFoundError n) {
+      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","WriterFactory"),n);
+    }
+  }
+    
+  /**
+   * Return a new instance of the default org.apache.abdera.writer.Writer
+   * 
+   * @return A new default writer implementation instance
+   */
+  public Writer newWriterInstance(Abdera abdera) {
+    try {
+      return ServiceUtil.newWriterInstance(abdera);
+    } catch (NoClassDefFoundError n) {
+      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","Writer"),n);
+    }
+  }
+  
+  /**
+   * Return a new instance of the default org.apache.abdera.writer.Writer
+   * 
+   * @return A new default writer implementation instance
+   */
+  public StreamWriter newStreamWriterInstance(Abdera abdera) {
+    try {
+      return ServiceUtil.newStreamWriterInstance(abdera);
+    } catch (NoClassDefFoundError n) {
+      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","StreamWriter"),n);
+    }
+  }  
+
 }

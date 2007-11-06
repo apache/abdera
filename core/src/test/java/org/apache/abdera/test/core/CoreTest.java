@@ -62,23 +62,24 @@ import org.apache.abdera.model.Content.Type;
 import org.apache.abdera.util.AbderaConfiguration;
 import org.apache.abdera.util.CompressionUtil;
 import org.apache.abdera.util.Configuration;
+import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.util.XmlRestrictedCharReader;
 import org.apache.abdera.writer.WriterOptions;
 
-public class CoreTest extends TestCase {
+public class CoreTest extends TestCase implements Constants {
 
   public static void testDefaultConfigurationProperties() {
     Configuration config = new AbderaConfiguration();
     assertEquals(
-      config.getDefaultFactory(), 
+      config.getConfigurationOption(CONFIG_FACTORY, DEFAULT_FACTORY), 
       "org.apache.abdera.parser.stax.FOMFactory");
     assertEquals(
-      config.getDefaultParser(),
+      config.getConfigurationOption(CONFIG_PARSER, DEFAULT_PARSER),
       "org.apache.abdera.parser.stax.FOMParser");
     assertEquals(
-      config.getDefaultXPath(),
+      config.getConfigurationOption(CONFIG_XPATH, DEFAULT_XPATH),
       "org.apache.abdera.parser.stax.FOMXPath");
   }
   

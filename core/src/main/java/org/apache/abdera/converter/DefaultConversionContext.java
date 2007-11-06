@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.converter;
 
-import java.util.List;
 import java.util.Map;
 
 import org.apache.abdera.Abdera;
@@ -38,7 +37,7 @@ public class DefaultConversionContext
   }
   
   private void initConverters() {
-    List<ConverterProvider> providers = 
+    ConverterProvider[] providers = 
       getAbdera().getConfiguration().getConverterProviders();
     for (ConverterProvider provider : providers) {
       for (Map.Entry<Class<?>,Converter<?>> entry : provider) {

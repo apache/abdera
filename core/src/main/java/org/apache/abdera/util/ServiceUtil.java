@@ -77,7 +77,7 @@ public final class ServiceUtil
   public static XPath newXPathInstance(Abdera abdera) {
     return (XPath) newInstance(
       CONFIG_XPATH,
-      abdera.getConfiguration().getDefaultXPath(), 
+      abdera.getConfiguration().getConfigurationOption(CONFIG_XPATH, DEFAULT_XPATH), 
       abdera);
   }
   
@@ -87,7 +87,7 @@ public final class ServiceUtil
   public static Parser newParserInstance(Abdera abdera) {
     return (Parser) newInstance(
       CONFIG_PARSER, 
-      abdera.getConfiguration().getDefaultParser(),
+      abdera.getConfiguration().getConfigurationOption(CONFIG_PARSER, DEFAULT_PARSER),
       abdera);
   }
 
@@ -97,35 +97,35 @@ public final class ServiceUtil
   public static Factory newFactoryInstance(Abdera abdera) {
     return (Factory) newInstance(
       CONFIG_FACTORY, 
-      abdera.getConfiguration().getDefaultFactory(),
+      abdera.getConfiguration().getConfigurationOption(CONFIG_FACTORY, DEFAULT_FACTORY),
       abdera);
   }
   
   public static ParserFactory newParserFactoryInstance(Abdera abdera) {
     return (ParserFactory) newInstance(
       CONFIG_PARSERFACTORY,
-      abdera.getConfiguration().getDefaultParserFactory(),
+      abdera.getConfiguration().getConfigurationOption(CONFIG_PARSERFACTORY, DEFAULT_PARSERFACTORY),
       abdera);
   }
   
   public static WriterFactory newWriterFactoryInstance(Abdera abdera) {
     return (WriterFactory) newInstance(
       CONFIG_WRITERFACTORY,
-      abdera.getConfiguration().getDefaultWriterFactory(),
+      abdera.getConfiguration().getConfigurationOption(CONFIG_WRITERFACTORY, DEFAULT_WRITERFACTORY),
       abdera) ;
   }
   
   public static Writer newWriterInstance(Abdera abdera) {
     return (Writer) newInstance(
       CONFIG_WRITER,
-      abdera.getConfiguration().getDefaultWriter(),
+      abdera.getConfiguration().getConfigurationOption(CONFIG_WRITER, DEFAULT_WRITER),
       abdera);
   }
   
   public static StreamWriter newStreamWriterInstance(Abdera abdera) {
     return (StreamWriter) newInstance(
       CONFIG_STREAMWRITER,
-      abdera.getConfiguration().getDefaultStreamWriter(),
+      abdera.getConfiguration().getConfigurationOption(CONFIG_STREAMWRITER, DEFAULT_STREAMWRITER),
       abdera);    
   }
   

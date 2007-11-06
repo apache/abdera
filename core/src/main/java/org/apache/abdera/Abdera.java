@@ -27,8 +27,6 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserFactory;
 import org.apache.abdera.util.AbderaConfiguration;
 import org.apache.abdera.util.Configuration;
-import org.apache.abdera.util.Messages;
-import org.apache.abdera.util.ServiceUtil;
 import org.apache.abdera.writer.StreamWriter;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
@@ -209,7 +207,7 @@ public final class Abdera {
    * @return A new factory instance
    */
   private Factory newFactory() {
-    return ServiceUtil.newFactoryInstance(this);
+    return config.newFactoryInstance(this);
   }
     
   /**
@@ -218,7 +216,7 @@ public final class Abdera {
    * @return A new parser instance
    */
   private Parser newParser() {
-    return ServiceUtil.newParserInstance(this);
+    return config.newParserInstance(this);
   }
     
   /**
@@ -227,11 +225,7 @@ public final class Abdera {
    * @return A new XPath instance
    */
   private XPath newXPath() {
-    try {
-      return ServiceUtil.newXPathInstance(this);
-    } catch (NoClassDefFoundError n) {
-      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","XPath"),n);
-    }
+    return config.newXPathInstance(this);
   }
     
   /**
@@ -240,11 +234,7 @@ public final class Abdera {
    * @return A new ParserFactory instance
    */
   private ParserFactory newParserFactory() {
-    try {
-      return ServiceUtil.newParserFactoryInstance(this);
-    } catch (NoClassDefFoundError n) {
-      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","Parser"),n);
-    }
+    return config.newParserFactoryInstance(this);
   }
     
   /**
@@ -253,11 +243,7 @@ public final class Abdera {
    * @return A new WriterFactory instance
    */
   private WriterFactory newWriterFactory() {
-    try {
-      return ServiceUtil.newWriterFactoryInstance(this);
-    } catch (NoClassDefFoundError n) {
-      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","WriterFactory"),n);
-    }
+    return config.newWriterFactoryInstance(this);
   }
     
   /**
@@ -266,11 +252,7 @@ public final class Abdera {
    * @return A new default writer implementation instance
    */
   private Writer newWriter() {
-    try {
-      return ServiceUtil.newWriterInstance(this);
-    } catch (NoClassDefFoundError n) {
-      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","Writer"),n);
-    }
+    return config.newWriterInstance(this);
   }
   
   /**
@@ -279,11 +261,7 @@ public final class Abdera {
    * @return A new default writer implementation instance
    */
   public StreamWriter newStreamWriter() {
-    try {
-      return ServiceUtil.newStreamWriterInstance(this);
-    } catch (NoClassDefFoundError n) {
-      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","StreamWriter"),n);
-    }
+    return config.newStreamWriterInstance(this);
   }  
   
   // Static convenience methods //

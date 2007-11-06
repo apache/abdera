@@ -21,11 +21,18 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.converter.ConverterProvider;
 import org.apache.abdera.factory.ExtensionFactory;
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.parser.NamedParser;
+import org.apache.abdera.parser.Parser;
+import org.apache.abdera.parser.ParserFactory;
 import org.apache.abdera.writer.NamedWriter;
 import org.apache.abdera.writer.StreamWriter;
+import org.apache.abdera.writer.Writer;
+import org.apache.abdera.writer.WriterFactory;
+import org.apache.abdera.xpath.XPath;
 
 public interface Configuration 
   extends Cloneable, Serializable {
@@ -42,82 +49,67 @@ public interface Configuration
    * @return The configuration option value of _default
    */
   public abstract String getConfigurationOption(String id, String _default);
+    
+  /**
+   * Get a new instance of the default Factory impl
+   */
+  public Factory newFactoryInstance(Abdera abdera);
   
   /**
-   * Returns the Java classname of the default Abdera XPath implementation
+   * Get a new instance of the default Parser impl
    */
-  public abstract String getDefaultXPath();
+  public Parser newParserInstance(Abdera abdera);
   
   /**
-   * Returns the Java classname of the default Abdera Parser implementation
+   * Get a new instance of the default XPath impl
    */
-  public abstract String getDefaultParser();
+  public XPath newXPathInstance(Abdera abdera);
   
   /**
-   * Returns the Java classname of the default Abdera Factory implementation
+   * Get a new instance of the default ParserFactory impl
    */
-  public abstract String getDefaultFactory();
+  public ParserFactory newParserFactoryInstance(Abdera abdera);
   
   /**
-   * Returns the Java classname of the default ParserFactory implementation
+   * Get a new instance of the default WriterFactory impl
    */
-  public abstract String getDefaultParserFactory();
+  public WriterFactory newWriterFactoryInstance(Abdera abdera);
   
   /**
-   * Returns the Java classname of the default WriterFactory implementation
+   * Get a new instance of the default Writer impl
    */
-  public abstract String getDefaultWriterFactory();
+  public Writer newWriterInstance(Abdera abdera);
   
   /**
-   * Returns the Java classname of the default Writer implementation
+   * Get a new instance of the default StreamWriter impl
    */
-  public abstract String getDefaultWriter();
+  public StreamWriter newStreamWriterInstance(Abdera abdera);
   
   /**
-   * Returns the Java classname of the default StreamWriter implementation
+   * Get a listing of ConverterProviders
    */
-  public abstract String getDefaultStreamWriter();
+  public ConverterProvider[] getConverterProviders();
   
   /**
-   * Registers an ExtensionFactory implementation.
+   * Get the collection of NamedParsers;
    */
-  public abstract void addExtensionFactory(ExtensionFactory factory);
+  public Map<String,NamedParser> getNamedParsers();
   
   /**
-   * Returns the listing of registered ExtensionFactory implementations
+   * Get the collection of NamedWriters
    */
-  public abstract List<ExtensionFactory> getExtensionFactories();
+  public Map<String,NamedWriter> getNamedWriters();
   
   /**
-   * Returns the listing of registered ConverterProvider implementations
+   * Get the collection of Named StreamWriters
    */
-  public abstract List<ConverterProvider> getConverterProviders();
+  public Map<String,Class<? extends StreamWriter>> getStreamWriters();
   
   /**
-   * Registers a NamedWriter implementation
+   * Get the collection of ExtensionFactory impls
    */
-  public abstract void addNamedWriter(NamedWriter writer);
+  public List<ExtensionFactory> getExtensionFactories();
   
-  /**
-   * Returns the collection of NamedWriters
-   */
-  public abstract Map<String, NamedWriter> getNamedWriters();
-  
-  /**
-   * Returns the collection of NamedWriters
-   */
-  public abstract Map<String, Class<? extends StreamWriter>> getStreamWriters();
-  
-  /**
-   * Registers a NamedParser implementation
-   */
-  public abstract void addNamedParser(NamedParser parser);
-  
-  /**
-   * Returns the collection of Named Parsers
-   */
-  public abstract Map<String, NamedParser> getNamedParsers();
   
   public abstract Object clone();
-  
 }

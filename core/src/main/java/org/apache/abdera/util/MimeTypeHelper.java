@@ -72,6 +72,7 @@ public class MimeTypeHelper {
   /**
    * Returns true if media type a matches media type b
    */
+  @SuppressWarnings("unchecked") 
   public static boolean isMatch(MimeType a, MimeType b, boolean includeparams) {
     try {
       if (a == null || b == null) return true;
@@ -195,6 +196,7 @@ public class MimeTypeHelper {
   /**
    * Returns the appropriate media type for the given Abdera base
    */
+  @SuppressWarnings("unchecked") 
   public static <T extends Base>String getMimeType(T base) {
     String type = null;
     if (base instanceof Document) {

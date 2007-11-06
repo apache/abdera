@@ -93,6 +93,7 @@ public abstract class AbstractExtensionFactory
     impls.put(qname, impl);
   }
   
+  @SuppressWarnings("unchecked") 
   public <T extends Base> String getMimeType(T base) {
     Element element = base instanceof Element ? (Element)base : 
                       base instanceof Document ? ((Document)base).getRoot() : 

@@ -52,7 +52,7 @@ public class FOMBuilder
 
   private final FOMFactory fomfactory;
   private final ParserOptions parserOptions;
-  private Document fomDocument = null;
+  private boolean indoc = false;
   private int depth = 0;
   private int depthInSkipElement = 0;
   private boolean ignoreWhitespace = false;
@@ -269,9 +269,9 @@ public class FOMBuilder
   
   protected OMElement constructNode(OMContainer parent, String name) {
     OMElement element = null;
-    if (fomDocument == null) {
-      fomDocument = (Document) document;
-      parent = (OMContainer) fomDocument;
+    if (!indoc) {
+      parent = document;
+      indoc = true;
     }
     QName qname = parser.getName();
     if (parserOptions.isQNameAliasMappingEnabled()) {
@@ -328,10 +328,10 @@ public class FOMBuilder
   }
 
   public <T extends Element>Document<T> getFomDocument() {
-    while ((fomDocument == null) && !done) {
+    while (!indoc && !done) {
       next();
     }
-    return fomDocument;
+    return (Document<T>) document;
   }
   
   public OMDocument getDocument() {

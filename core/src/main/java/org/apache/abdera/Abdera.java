@@ -138,8 +138,8 @@ public final class Abdera {
    * @return The Abdera configuration
    */
   @SuppressWarnings("unchecked") 
-  public <T extends Configuration>T getConfiguration() {
-    return (T)config;
+  public Configuration getConfiguration() {
+    return config;
   }
   
   /**

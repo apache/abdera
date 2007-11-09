@@ -20,7 +20,6 @@ package org.apache.abdera.writer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.Map;
 
 import javax.activation.DataHandler;
 import javax.xml.namespace.QName;
@@ -40,6 +39,8 @@ import org.apache.abdera.util.NamedItem;
 public interface StreamWriter 
   extends NamedItem {
 
+  StreamWriter flush();
+  
   /**
    * True if the StreamWriter should autoclose the buffer after calling endDocument
    */
@@ -104,12 +105,6 @@ public interface StreamWriter
   StreamWriter startFeed();
 
   /**
-   * Start an atom:feed element
-   * @param attribute Extension attributes
-   */
-  StreamWriter startFeed(Map<QName,String> attributes);
-  
-  /**
    * End the atom:feed element
    */
   StreamWriter endFeed();
@@ -120,71 +115,9 @@ public interface StreamWriter
   StreamWriter startEntry();
   
   /**
-   * Start an atom:entry element
-   * @param attribute Extension attributes
-   */
-  StreamWriter startEntry(Map<QName,String> attributes);
-  
-  /**
    * End the atom:entry element
    */
   StreamWriter endEntry();
-  
-  /**
-   * Write an atom:id element
-   * @param iri The value
-   * @param attribute Extension attributes
-   */
-  StreamWriter writeId(String iri, Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:icon element
-   * @param iri The value
-   * @param attribute Extension attributes
-   */
-  StreamWriter writeIcon(String iri, Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:logo element
-   * @param iri The value
-   * @param attribute Extension attributes
-   */
-  StreamWriter writeLogo(String iri, Map<QName,String> attributes);
-  
-  /**
-   * Write an IRI element element
-   * @param iri The value
-   * @param attribute Extension attributes
-   */
-  StreamWriter writeIRIElement(QName qname, String iri, Map<QName,String> attributes);
-
-  /**
-   * Write an atom:id element
-   * @param iri The value
-   * @param attribute Extension attributes
-   */
-  StreamWriter writeId(IRI iri, Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:icon element
-   * @param iri The value
-   * @param attribute Extension attributes
-   */
-  StreamWriter writeIcon(IRI iri, Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:logo element
-   * @param iri The value
-   * @param attribute Extension attributes
-   */
-  StreamWriter writeLogo(IRI iri, Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:iri element
-   * @param iri The value
-   * @param attribute Extension attributes
-   */
-  StreamWriter writeIRIElement(QName qname, IRI iri, Map<QName,String> attributes);
   
   /**
    * Write an atom:id element
@@ -241,70 +174,6 @@ public interface StreamWriter
   StreamWriter writeId();
 
   /**
-   * Write an atom:id element with a new IRI value
-   * @param iri The value
-   * @param attribute Extension attributes
-   */
-  StreamWriter writeId(Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:updated element
-   * @param date The date value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeUpdated(Date date, Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:published element
-   * @param date The date value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writePublished(Date date, Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:edited element
-   * @param date The date value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeEdited(Date date, Map<QName,String> attributes);
-  
-  /**
-   * Write a Date element
-   * @param date The date value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeDate(QName qname, Date date, Map<QName,String> attributes);
-
-  /**
-   * Write an atom:updated element
-   * @param date The date value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeUpdated(String date, Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:published element
-   * @param date The date value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writePublished(String date, Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:edited element
-   * @param date The date value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeEdited(String date, Map<QName,String> attributes);
-  
-  /**
-   * Write a Date element
-   * @param qname The element qname
-   * @param date The date value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeDate(QName qname, String date, Map<QName,String> attributes);
-  
-  /**
    * Write an atom:updated element
    * @param date The date value
    */
@@ -355,123 +224,10 @@ public interface StreamWriter
   StreamWriter writeDate(QName qname, String date);
   
   /**
-   * Write a person element
-   * @param qname The element qname
-   * @param name The person name
-   * @param email The person email
-   * @param uri The person uri
-   * @param attributes Extension attributes
-   */  
-  StreamWriter writePerson(QName qname, String name, String email, String uri, Map<QName,String> attributes);
-  
-  /**
-   * Start a person element
-   * @param qname The element qname
-   * @param name The person name
-   * @param email The person email
-   * @param uri The person uri
-   * @param attributes Extension attributes
-   */  
-  StreamWriter startPerson(QName qname, Map<QName,String> attributes);
-  
-  /**
-   * Write a person name element
-   * @param name The person name
-   * @param attributes Extension attributes
-   */
-  StreamWriter writePersonName(String name,Map<QName,String> attributes);
-  
-  /**
-   * Write a person email element
-   * @param email The person email
-   * @param attributes Extension attributes
-   */
-  StreamWriter writePersonEmail(String email,Map<QName,String> attributes);
-  
-  /**
-   * Write a person uri element
-   * @param uri The person uri
-   * @param attributes Extension attributes
-   */
-  StreamWriter writePersonUri(String uri,Map<QName,String> attributes);
-  
-  /**
    * End the person element
    */
   StreamWriter endPerson();
   
-  
-  /**
-   * Write an atom:link element
-   * @param iri The href value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeLink(String iri,Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:link element
-   * @param iri The href value
-   * @param rel The rel value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeLink(String iri, String rel,Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:link element
-   * @param iri The href value
-   * @param rel The rel value
-   * @param type The type value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeLink(String iri, String rel, String type,Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:link element
-   * @param iri The href value
-   * @param rel The rel value
-   * @param type The type value
-   * @param title The title value
-   * @param hreflang The hreflang value
-   * @param length The link length
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeLink(String iri, String rel, String type, String title, String hreflang, int length,Map<QName,String> attributes);
-
-  /**
-   * Start a atom:link element
-   * @param iri The href value
-   * @param attributes Extension attributes
-   */
-  StreamWriter startLink(String iri,Map<QName,String> attributes);
-
-  /**
-   * Start an atom:link element
-   * @param iri The href value
-   * @param rel The rel value
-   * @param attributes Extension attributes
-   */
-  StreamWriter startLink(String iri, String rel,Map<QName,String> attributes);
-
-  /**
-   * Start an atom:link element
-   * @param iri The href value
-   * @param rel The rel value
-   * @param type The type value
-   * @param attributes Extension attributes
-   */
-  StreamWriter startLink(String iri, String rel, String type,Map<QName,String> attributes);
-
-  /**
-   * Start an atom:link element
-   * @param iri The href value
-   * @param rel The rel value
-   * @param type The type value
-   * @param title The title value
-   * @param hreflang The hreflang value
-   * @param length The link length
-   * @param attributes Extension attributes
-   */
-  StreamWriter startLink(String iri, String rel, String type, String title, String hreflang, int length,Map<QName,String> attributes);
   
   /**
    * End the atom:link
@@ -543,54 +299,6 @@ public interface StreamWriter
   StreamWriter startLink(String iri, String rel, String type, String title, String hreflang, int length);
   
   /**
-   * Write an atom:category element
-   * @param term The term value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeCategory(String term,Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:category element
-   * @param term The term value
-   * @param scheme The term value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeCategory(String term, String scheme,Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:category element
-   * @param term The term value
-   * @param scheme The term value
-   * @param label The term value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeCategory(String term, String scheme, String label,Map<QName,String> attributes);
-  
-  /**
-   * Start an atom:category element
-   * @param term The term value
-   * @param attributes Extension attributes
-   */
-  StreamWriter startCategory(String term,Map<QName,String> attributes);
-
-  /**
-   * Start an atom:category element
-   * @param term The term value
-   * @param scheme The term value
-   * @param attributes Extension attributes
-   */
-  StreamWriter startCategory(String term, String scheme,Map<QName,String> attributes);
-  
-  /**
-   * Start an atom:category element
-   * @param term The term value
-   * @param scheme The term value
-   * @param label The term value
-   * @param attributes Extension attributes
-   */
-  StreamWriter startCategory(String term, String scheme, String label,Map<QName,String> attributes);
-  
-  /**
    * End the atom:category
    */
   StreamWriter endCategory();
@@ -640,12 +348,6 @@ public interface StreamWriter
   
   /**
    * Start an atom:source element
-   * @param attributes Extension attributes
-   */
-  StreamWriter startSource(Map<QName,String> attributes);
-  
-  /**
-   * Start an atom:source element
    */
   StreamWriter startSource();
   
@@ -654,23 +356,6 @@ public interface StreamWriter
    */
   StreamWriter endSource();
   
-  /**
-   * Write a Text element
-   * @param qname The element qname
-   * @param type The text type
-   * @param value The text value
-   * @param attribute Extension attributes
-   */
-  StreamWriter writeText(QName qname, Text.Type type, String value,Map<QName,String> attributes);
-  
-  /**
-   * Start a Text element
-   * @param qname The element qname
-   * @param type The text type
-   * @param attribute Extension attributes
-   */
-  StreamWriter startText(QName qname, Text.Type type,Map<QName,String> attributes);
-
   /**
    * Write a Text element
    * @param qname The element qname
@@ -686,69 +371,6 @@ public interface StreamWriter
    */
   StreamWriter startText(QName qname, Text.Type type);
   
-  /**
-   * Write an atom:content element
-   * @param type The text type
-   * @param value The text value
-   * @param attribute Extension attributes
-   */
-  StreamWriter writeContent(Content.Type type, String value,Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:content element
-   * @param type The text type
-   * @param value The text value
-   * @param attribute Extension attributes
-   */
-  StreamWriter writeContent(Content.Type type, InputStream value,Map<QName,String> attributes) throws IOException;
-  
-  /**
-   * Write an atom:content element
-   * @param type The text type
-   * @param value The text value
-   * @param attribute Extension attributes
-   */
-  StreamWriter writeContent(Content.Type type, DataHandler value,Map<QName,String> attributes) throws IOException;
-  
-  /**
-   * Write an atom:content element
-   * @param type The text type
-   * @param value The text value
-   * @param attribute Extension attributes
-   */
-  StreamWriter writeContent(String type, String value,Map<QName,String> attributes);
-  
-  /**
-   * Start an atom:content element
-   * @param type The text type
-   * @param value The text value
-   * @param attribute Extension attributes
-   */
-  StreamWriter startContent(Content.Type type,Map<QName,String> attributes);
-  
-  /**
-   * Start an atom:content element
-   * @param type The text type
-   * @param attribute Extension attributes
-   */
-  StreamWriter startContent(String type,Map<QName,String> attributes);
-  
-  /**
-   * Start an atom:content element
-   * @param type The text type
-   * @param src The src value
-   * @param attribute Extension attributes
-   */
-  StreamWriter startContent(Content.Type type, String src,Map<QName,String> attributes);
-
-  /**
-   * Start an atom:content element
-   * @param type The text type
-   * @param src The text value
-   * @param attribute Extension attributes
-   */
-  StreamWriter startContent(String type, String src,Map<QName,String> attributes);
-    
   /**
    * End the atom:content element
    */
@@ -811,15 +433,23 @@ public interface StreamWriter
   /**
    * Start an element
    * @param qname Element qname
-   * @param attributes Extension attributes
    */  
-  StreamWriter startElement(QName qname,Map<QName,String> attributes);
+  StreamWriter startElement(QName qname);
   
   /**
    * Start an element
-   * @param qname Element qname
-   */  
-  StreamWriter startElement(QName qname);
+   */
+  StreamWriter startElement(String name);
+  
+  /**
+   * Start an element
+   */
+  StreamWriter startElement(String name, String namespace);
+  
+  /**
+   * Start an element
+   */
+  StreamWriter startElement(String name, String namespace, String prefix);
   
   /**
    * Write element text
@@ -897,67 +527,6 @@ public interface StreamWriter
   StreamWriter writeRights(Text.Type type, String value);
   
   /**
-   * Write an atom:title element
-   * @param value The text value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeTitle(String value,Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:title element
-   * @param type The text type
-   * @param value The text value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeTitle(Text.Type type, String value,Map<QName,String> attributes);
-
-  /**
-   * Write an atom:subtitle element
-   * @param value The text value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeSubtitle(String value,Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:subtitle element
-   * @param type The text type
-   * @param value The text value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeSubtitle(Text.Type type, String value,Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:summary element
-   * @param value The text value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeSummary(String value,Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:summary element
-   * @param type The text type
-   * @param value The text value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeSummary(Text.Type type, String value,Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:rights element
-   * @param value The text value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeRights(String value,Map<QName,String> attributes);
-  
-  /**
-   * Write an atom:rights element
-   * @param type The text type
-   * @param value The text value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeRights(Text.Type type, String value,Map<QName,String> attributes);
-  
-  
-  /**
    * Write a person element
    * @param qname the element qname
    * @param name The person name
@@ -999,24 +568,9 @@ public interface StreamWriter
   StreamWriter writeAuthor(String name, String email, String uri);
   
   /**
-   * Write an atom:author element
-   * @param name The person name
-   * @param email The person email
-   * @param uri The person uri
-   * @param attribute ExtensionAttributes
-   */
-  StreamWriter writeAuthor(String name, String email, String uri, Map<QName,String> attributes);
-  
-  /**
    * Start an atom:author element
    */
   StreamWriter startAuthor();
-  
-  /**
-   * Start an atom:author element
-   * @params attributes ExtensionAttributes
-   */
-  StreamWriter startAuthor(Map<QName,String> attributes);
   
   /**
    * End the atom:author element
@@ -1032,24 +586,9 @@ public interface StreamWriter
   StreamWriter writeContributor(String name, String email, String uri);
   
   /**
-   * Write an atom:contributor element
-   * @param name The person name
-   * @param email The person email
-   * @param uri The person uri
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeContributor(String name, String email, String uri, Map<QName,String> attributes);
-  
-  /**
    * Start an atom:contributor element
    */
   StreamWriter startContributor();
-  
-  /**
-   * Start an atom:contributor element
-   * @param attributes Extension attributes
-   */
-  StreamWriter startContributor(Map<QName,String> attributes);
   
   /**
    * End an atom:contributor element
@@ -1065,28 +604,11 @@ public interface StreamWriter
   StreamWriter writeGenerator(String version, String uri, String value);
 
   /**
-   * Write an atom:generator element
-   * @param version The version value
-   * @param uri The uri value
-   * @param value The text value
-   * @param attributes Extension attributes
-   */
-  StreamWriter writeGenerator(String version, String uri, String value, Map<QName,String> attributes);
-
-  /**
    * Start an atom:generator element
    * @param version The version value
    * @param uri The uri value
    */
   StreamWriter startGenerator(String version, String uri);
-  
-  /**
-   * Start an atom:generator element
-   * @param version The version value
-   * @param uri The uri value
-   * @param attributes Extension attributes
-   */
-  StreamWriter startGenerator(String version, String uri, Map<QName,String> attributes);
   
   /**
    * End the atom:generator element
@@ -1115,12 +637,6 @@ public interface StreamWriter
   StreamWriter startService();
   
   /**
-   * Start an app:service element
-   * @param attributes Extension attributes
-   */
-  StreamWriter startService(Map<QName,String> attributes);
-  
-  /**
    * End an app:service element
    */
   StreamWriter endService();
@@ -1129,12 +645,6 @@ public interface StreamWriter
    * Start an app:workspace element
    */
   StreamWriter startWorkspace();
-  
-  /**
-   * Start an app:workspace element
-   * @param attributes Extension attributes
-   */
-  StreamWriter startWorkspace(Map<QName,String> attributes);
   
   /**
    * End an app:workspace element
@@ -1146,13 +656,6 @@ public interface StreamWriter
    * @param href The href value
    */
   StreamWriter startCollection(String href);
-  
-  /**
-   * Start an app:collection element
-   * @param href The href value
-   * @param attributes Extension attributes
-   */
-  StreamWriter startCollection(String href, Map<QName,String> attributes);
   
   /**
    * End an app:collection element
@@ -1184,27 +687,6 @@ public interface StreamWriter
   StreamWriter startCategories(boolean fixed, String scheme);
   
   /**
-  * Start an app:categories element
-  * @param attributes Extension attributes
-  */
-  StreamWriter startCategories(Map<QName,String> attributes);
-  
-  /**
-  * Start an app:categories element
-  * @param fixed True if the app:categories element is fixed
-  * @param attributes Extension attributes
-  */
-  StreamWriter startCategories(boolean fixed, Map<QName,String> attributes);
-  
-  /**
-   * Start an app:categories element
-   * @param fixed True if the app:categories element is fixed
-   * @param scheme The scheme value
-   * @param attributes Extension attributes
-   */
-  StreamWriter startCategories(boolean fixed, String scheme, Map<QName,String> attributes);
-  
-  /**
    * End the app:categories element
    */
   StreamWriter endCategories();
@@ -1213,12 +695,6 @@ public interface StreamWriter
    * Start the app:control element
    */
   StreamWriter startControl();
-  
-  /**
-   * Start the app:control element
-   * @param attributes Extension attributes
-   */
-  StreamWriter startControl(Map<QName,String> attributes);
   
   /**
    * End the app:control element
@@ -1230,6 +706,26 @@ public interface StreamWriter
    * @param draft true if app:draft=yes
    */
   StreamWriter writeDraft(boolean draft);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(String name, String value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(String name, String namespace, String value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(String name, String namespace, String prefix, String value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(QName qname, String value);
   
 }
 

@@ -23,8 +23,6 @@ import java.io.InputStream;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.activation.DataHandler;
 import javax.xml.namespace.QName;
@@ -70,8 +68,7 @@ public abstract class AbstractStreamWriter
   }
   
   public StreamWriter startDocument() {
-    startDocument("1.0");
-    return this;
+    return startDocument("1.0");
   }
  
   public StreamWriter endDocument() {
@@ -79,361 +76,262 @@ public abstract class AbstractStreamWriter
   }
   
   public StreamWriter startFeed() {
-    startFeed(null);
-    return this;
+    return startElement(Constants.FEED);
   }
   
-  public StreamWriter startFeed(Map<QName,String> attributes) {
-    startElement(Constants.FEED, attributes);
-    return this;
-  }
-
   public StreamWriter endFeed() {
-    endElement();
-    return this;
-  }
-  
-  public StreamWriter startEntry(Map<QName,String> attributes) {
-    startElement(Constants.ENTRY, attributes);
-    return this;
+    return endElement();
   }
   
   public StreamWriter startEntry() {
-    startEntry(null);
-    return this;
+    return startElement(Constants.ENTRY);
   }
   
   public StreamWriter endEntry() {
-    endElement();
-    return this;
+    return endElement();
   }
   
   public StreamWriter endCategory() {
-    endElement();
-    return this;
+    return endElement();
   }
   
   public StreamWriter endContent() {
-    endElement();
-    return this;
+    return endElement();
   }
   
   public StreamWriter endLink() {
-    endElement();
-    return this;
+    return endElement();
   }
   
   public StreamWriter endPerson() {
-    endElement();
-    return this;
+    return endElement();
   }
   
   public StreamWriter endSource() {
-    endElement();
-    return this;
+    return endElement();
   }
   
   public StreamWriter endText() {
-    endElement();
-    return this;
+    return endElement();
   }
   
   
-  public StreamWriter startCategory(
-    String term, 
-    Map<QName, String> attributes) {
-      startCategory(term,null,null,attributes);
-      return this;
-  }
-  
-  public StreamWriter startCategory(
-    String term, 
-    String scheme,
-    Map<QName, String> attributes) {
-      startCategory(term,scheme,null,attributes);
-      return this;
-  }
-  
-  public StreamWriter startCategory(
-    String term, 
-    String scheme, 
-    String label,
-    Map<QName, String> attributes) {
-      if (attributes == null) attributes = new HashMap<QName,String>();
-      attributes.put(new QName("term"),term);
-      if (scheme != null) attributes.put(new QName("scheme"),term);
-      if (label != null) attributes.put(new QName("label"),term);
-      startElement(Constants.CATEGORY,attributes);
-      return this;
-  }
-
   public StreamWriter startLink(
     String iri, 
     String rel, 
     String type, 
     String title,
     String hreflang, 
-    int length, 
-    Map<QName, String> attributes) {
-      if (attributes == null) attributes = new HashMap<QName,String>();
-      attributes.put(new QName("href"),iri);
-      if (rel != null) attributes.put(new QName("rel"),rel);
-      if (type != null) attributes.put(new QName("type"),type);
-      if (title != null) attributes.put(new QName("title"),title);
-      if (hreflang != null) attributes.put(new QName("hreflang"),hreflang);
-      if (length > -1) attributes.put(new QName("length"),String.valueOf(length));
-      startElement(Constants.LINK,attributes);
-      return this;
+    int length) {
+      return 
+        startElement(Constants.LINK).
+        writeAttribute("href",iri).
+        writeAttribute("rel",rel).
+        writeAttribute("type",type).
+        writeAttribute("title",title).
+        writeAttribute("hreflang",hreflang).
+        writeAttribute("length",length > -1 ? String.valueOf(length) : null);
   }
 
   public StreamWriter startPerson(
-    QName qname, 
-    Map<QName, String> attributes) {
-      startElement(qname, attributes);
-      return this;
+    QName qname) {
+      return startElement(qname);
   }
   
-  public StreamWriter startSource(
-    Map<QName, String> attributes) {
-      startElement(Constants.SOURCE,attributes);
-      return this;
+  public StreamWriter startSource() {
+    return startElement(Constants.SOURCE);
   }
   
   public StreamWriter startText(
     QName qname, 
-    Text.Type type,
-    Map<QName, String> attributes) {
-    if (attributes == null) attributes = new HashMap<QName,String>();
-    attributes.put(new QName("type"),type!=null?type.name().toLowerCase():"text");
-    startElement(qname,attributes);
-    return this;
+    Text.Type type) {
+      return 
+        startElement(qname).
+        writeAttribute("type",type!=null?type.name().toLowerCase():"text");
   }
   
   public StreamWriter writeDate(
     QName qname, 
-    String date, 
-    Map<QName, String> attributes) {
-      startElement(qname,attributes);
-      writeElementText(date);
-      endElement();
-      return this;
+    String date) {
+      return
+        startElement(qname).
+        writeElementText(date).
+        endElement();
   }
   
   public StreamWriter writeIRIElement(
     QName qname, 
-    String iri,
-    Map<QName, String> attributes) {
-      startElement(qname,attributes);
-      writeElementText(iri);
-      endElement();
-      return this;
+    String iri) {
+      return 
+        startElement(qname).
+        writeElementText(iri).
+        endElement();
   }
   
   public StreamWriter writePersonEmail(
-    String email, 
-    Map<QName, String> attributes) {
-      startElement(Constants.EMAIL,attributes);
-      writeElementText(email);
-      endElement();
-      return this;
+    String email) {
+      if (email == null) return this;
+      return 
+        startElement(Constants.EMAIL).
+        writeElementText(email).
+        endElement();
   }
   
   public StreamWriter writePersonName(
-    String name, 
-    Map<QName, String> attributes) {
-      startElement(Constants.NAME,attributes);
-      writeElementText(name);
-      endElement();
-      return this;
+    String name) {
+      if (name == null) return this;
+      return 
+        startElement(Constants.NAME).
+        writeElementText(name).
+        endElement();
   }
   
   public StreamWriter writePersonUri(
-    String uri, 
-    Map<QName, String> attributes) {
-      startElement(Constants.URI,attributes);
-      writeElementText(uri);
-      endElement();
-      return this;
+    String uri) {
+      if (uri == null) return this;
+      return 
+        startElement(Constants.URI).
+        writeElementText(uri).
+        endElement();
   }
 
   public StreamWriter startContent(
     Content.Type type, 
-    String src, 
-    Map<QName, String> attributes) {
-      startContent(type.name().toLowerCase(),src,attributes);
-      return this;
+    String src) {
+      return startContent(type.name().toLowerCase(),src);
   }
-  
+
   public StreamWriter startContent(
     String type, 
-    String src,
-    Map<QName, String> attributes) {
-      if (attributes == null) attributes = new HashMap<QName,String>();
-      attributes.put(new QName("type"),type);
-      if (src != null) attributes.put(new QName("src"),src);
-      startElement(Constants.CONTENT,attributes);
-      return this;
+    String src) {
+      return startElement(Constants.CONTENT).
+        writeAttribute("type",type).
+        writeAttribute("src",src);
   }
   
   public StreamWriter startContent(
-    Content.Type type, 
-    Map<QName, String> attributes) {
-      startContent(type,null,attributes);
-      return this;
+    Content.Type type) {
+      return startContent(type,null);
   }
   
   public StreamWriter startContent(
-    String type, 
-    Map<QName, String> attributes) {
-      startContent(type,null,attributes);
-      return this;
+    String type) {
+      return startContent(type,null);
+  }
+  
+  public StreamWriter startLink(
+    String iri) {
+      return startLink(iri,null,null,null,null,-1);
   }
   
   public StreamWriter startLink(
     String iri, 
-    Map<QName, String> attributes) {
-      startLink(iri,null,null,null,null,-1,attributes);
-      return this;
+    String rel) {
+      return startLink(iri,rel,null,null,null,-1);
   }
   
   public StreamWriter startLink(
     String iri, 
     String rel, 
-    Map<QName, String> attributes) {
-      startLink(iri,rel,null,null,null,-1,attributes);
-      return this;
-  }
-  
-  public StreamWriter startLink(
-    String iri, 
-    String rel, 
-    String type,
-    Map<QName, String> attributes) {
-      startLink(iri,rel,type,null,null,-1,attributes);
-      return this;
+    String type) {
+      return startLink(iri,rel,type,null,null,-1);
   }
   
   public StreamWriter writeCategory(
-    String term, Map<QName, 
-    String> attributes) {
-      startCategory(term, attributes);
-      endCategory();
-      return this;
+    String term) {
+      return writeCategory(term,null,null);
   }
   
   public StreamWriter writeCategory(
     String term, 
-    String scheme,
-    Map<QName, String> attributes) {
-      startCategory(term,scheme,attributes);
-      endCategory();
-      return this;
+    String scheme) {
+      return writeCategory(term,scheme,null);
   }
   
   public StreamWriter writeCategory(
     String term, 
     String scheme, 
-    String label,
-    Map<QName, String> attributes) {
-      startCategory(term,scheme,label,attributes);
-      endCategory();
-      return this;
+    String label) {
+      return 
+        startElement(Constants.CATEGORY).
+        writeAttribute("term",term).
+        writeAttribute("scheme",scheme).
+        writeAttribute("label",label).
+        endElement();
   }
   
   public StreamWriter writeContent(
     Content.Type type, 
-    String value,
-    Map<QName, String> attributes) {
-      startContent(type,attributes);
-      writeElementText(value);
-      endContent();
-      return this;
+    String value) {
+      return startContent(type).
+        writeElementText(value).
+        endContent();
   }
   
   public StreamWriter writeContent(
     Content.Type type, 
-    InputStream value,
-    Map<QName, String> attributes) throws IOException {
-      startContent(type,attributes);
-      writeElementText(value);
-      endContent();
-      return this;
+    InputStream value) throws IOException {
+      return startContent(type).
+        writeElementText(value).
+        endContent();
   }
   
   public StreamWriter writeContent(
     Content.Type type, 
-    DataHandler value,
-    Map<QName, String> attributes) throws IOException {
-      startContent(type,attributes);
-      writeElementText(value);
-      endContent();
-      return this;
+    DataHandler value) throws IOException {
+      return 
+        startContent(type).
+        writeElementText(value).
+        endContent();
   }
   
   public StreamWriter writeContent(
     String type, 
-    String value,
-    Map<QName, String> attributes) {
-      startContent(type,attributes);
-      writeElementText(value);
-      endContent();
-      return this;
+    String value) {
+      return 
+        startContent(type).
+        writeElementText(value).
+        endContent();
   }
   
   public StreamWriter writeEdited(
-    Date date, 
-    Map<QName, String> attributes) {
-      writeDate(Constants.EDITED, date, attributes);
+    Date date) {
+      writeDate(Constants.EDITED, date);
       return this;
   }
   
   public StreamWriter writeId(
-    String iri, 
-    Map<QName, String> attributes) {
-      writeIRIElement(Constants.ID, iri, attributes);
-      return this;
+    String iri) {
+      return writeIRIElement(Constants.ID, iri);
   }
   
   public StreamWriter writeIcon(
-    String iri, 
-    Map<QName,String> attributes) {
-      writeIRIElement(Constants.ICON, iri, attributes);
-      return this;
+    String iri) {
+      return writeIRIElement(Constants.ICON, iri);
   }
   
   public StreamWriter writeLogo(
-    String iri, 
-    Map<QName,String> attributes) {
-      writeIRIElement(Constants.LOGO, iri, attributes);
-      return this;
+    String iri) {
+      return writeIRIElement(Constants.LOGO, iri);
   }
   
   
   public StreamWriter writeLink(
-    String iri, 
-    Map<QName, String> attributes) {
-      startLink(iri, attributes);
-      endLink();
-      return this;
+    String iri) {
+      return writeLink(iri,null,null,null,null,-1);
   }
   
   public StreamWriter writeLink(
     String iri, 
-    String rel, 
-    Map<QName, String> attributes) {
-      startLink(iri, rel, attributes);
-      endLink();
-      return this;
+    String rel) {
+      return writeLink(iri,rel,null,null,null,-1);
   }
   
   public StreamWriter writeLink(
     String iri, 
     String rel, 
-    String type,
-    Map<QName, String> attributes) {
-    startLink(iri, rel, type, attributes);
-    endLink();
-    return this;
+    String type) {
+      return writeLink(iri,rel,type,null,null,-1);
   }
   
   public StreamWriter writeLink(
@@ -442,90 +340,75 @@ public abstract class AbstractStreamWriter
     String type, 
     String title,
     String hreflang, 
-    int length, 
-    Map<QName, String> attributes) {
-      startLink(iri, rel, type, title, hreflang, length, attributes);
-      endLink();
-      return this;
+    int length) {
+      return 
+        startLink(iri, rel, type, title, hreflang, length).
+        endLink();
   }
   
   public StreamWriter writePerson(
     QName qname, 
     String name, 
     String email, 
-    String uri,
-    Map<QName, String> attributes) {
-      startPerson(qname,attributes);
-      writePersonName(name,null);
-      if (email != null) writePersonEmail(email,null);
-      if (uri != null) writePersonUri(uri,null);
-      endPerson();
-      return this;
+    String uri) {
+      return 
+        startPerson(qname).
+        writePersonName(name).
+        writePersonEmail(email).
+        writePersonUri(uri).
+        endPerson();
   }
   
   public StreamWriter writePublished(
-    Date date, 
-    Map<QName, String> attributes) {
-      writeDate(Constants.PUBLISHED,date,attributes);
-      return this;
+    Date date) {
+      return writeDate(Constants.PUBLISHED,date);
   }
   
   public StreamWriter writeText(
     QName qname, 
     Text.Type type,
-    String value, 
-    Map<QName, String> attributes) {
-      startText(qname,type,attributes);
-      writeElementText(value);
-      endText();
-      return this;
+    String value) {
+      return 
+        startText(qname,type).
+        writeElementText(value).
+        endElement();
   }
   
   public StreamWriter writeUpdated(
-    Date date, 
-    Map<QName, String> attributes) {
-      writeDate(Constants.UPDATED,date,attributes);
-      return this;
+    Date date) {
+      return writeDate(Constants.UPDATED,date);
   }
   
-  public StreamWriter writeUpdated(String date, Map<QName,String> attributes) {
-    writeDate(Constants.UPDATED, date, attributes);
-    return this;
+  public StreamWriter writeUpdated(String date) {
+    return writeDate(Constants.UPDATED, date);
   }
   
-  public StreamWriter writePublished(String date, Map<QName,String> attributes) {
-    writeDate(Constants.PUBLISHED, date, attributes);
-    return this;
+  public StreamWriter writePublished(String date) {
+    return writeDate(Constants.PUBLISHED, date);
   }
   
-  public StreamWriter writeEdited(String date, Map<QName,String> attributes) {
-    writeDate(Constants.EDITED, date, attributes);
-    return this;
+  public StreamWriter writeEdited(String date) {
+    return writeDate(Constants.EDITED, date);
   }
   
-  public StreamWriter writeDate(QName qname, Date date, Map<QName,String> attributes) {
-    writeDate(qname, AtomDate.format(date), attributes);
-    return this;
+  public StreamWriter writeDate(QName qname, Date date) {
+    return writeDate(qname, AtomDate.format(date));
   }
   
-  public StreamWriter writeId(IRI iri, Map<QName,String> attributes) {
-    writeIRIElement(Constants.ID, iri, attributes);
-    return this;
+  public StreamWriter writeId(IRI iri) {
+    return writeIRIElement(Constants.ID, iri);
   }
   
-  public StreamWriter writeIcon(IRI iri, Map<QName,String> attributes) {
-    writeIRIElement(Constants.ICON, iri, attributes);
-    return this;
+  public StreamWriter writeIcon(IRI iri) {
+    return writeIRIElement(Constants.ICON, iri);
   }
   
-  public StreamWriter writeLogo(IRI iri, Map<QName,String> attributes) {
-    writeIRIElement(Constants.LOGO, iri, attributes);
-    return this;
+  public StreamWriter writeLogo(IRI iri) {
+    return writeIRIElement(Constants.LOGO, iri);
   }
   
-  public StreamWriter writeIRIElement(QName qname, IRI iri, Map<QName,String> attributes) {
-    writeIRIElement(qname, iri.toString(), attributes);
-    return this;
+  public StreamWriter writeIRIElement(QName qname, IRI iri) {
+    return writeIRIElement(qname, iri.toString());
   }
   
   public StreamWriter writeElementText(InputStream value) throws IOException {
@@ -544,458 +427,118 @@ public abstract class AbstractStreamWriter
   }
   
   public StreamWriter writeTitle(String value) {
-    writeText(Constants.TITLE, Text.Type.TEXT, value, null);
-    return this;
+    return writeText(Constants.TITLE, Text.Type.TEXT, value);
   }
   
   public StreamWriter writeTitle(Text.Type type, String value) {
-    writeText(Constants.TITLE, type, value, null);
-    return this;
+    return writeText(Constants.TITLE, type, value);
   }
 
   public StreamWriter writeSubtitle(String value) {
-    writeText(Constants.SUBTITLE, Text.Type.TEXT, value, null);
-    return this;
+    return writeText(Constants.SUBTITLE, Text.Type.TEXT, value);
   }
   
   public StreamWriter writeSubtitle(Text.Type type, String value) {
-    writeText(Constants.SUBTITLE, type, value, null);
-    return this;
+    return writeText(Constants.SUBTITLE, type, value);
   }
   
   public StreamWriter writeSummary(String value) {
-    writeText(Constants.SUMMARY, Text.Type.TEXT, value, null);
-    return this;
+    return writeText(Constants.SUMMARY, Text.Type.TEXT, value);
   }
   
   public StreamWriter writeSummary(Text.Type type, String value) {
-    writeText(Constants.SUMMARY, type, value, null);
-    return this;
+    return writeText(Constants.SUMMARY, type, value);
   }
   
   public StreamWriter writeRights(String value) {
-    writeText(Constants.RIGHTS, Text.Type.TEXT, value, null);
-    return this;
+    return writeText(Constants.RIGHTS, Text.Type.TEXT, value);
   }
   
   public StreamWriter writeRights(Text.Type type, String value) {
-    writeText(Constants.RIGHTS, type, value, null);
-    return this;
+    return writeText(Constants.RIGHTS, type, value);
   }
 
-
-  
-  public StreamWriter writeTitle(String value, Map<QName,String> attributes) {
-    writeText(Constants.TITLE, Text.Type.TEXT, value, attributes);
-    return this;
-  }
-  
-  public StreamWriter writeTitle(Text.Type type, String value, Map<QName,String> attributes) {
-    writeText(Constants.TITLE, type, value, attributes);
-    return this;
-  }
-
-  public StreamWriter writeSubtitle(String value, Map<QName,String> attributes) {
-    writeText(Constants.SUBTITLE, Text.Type.TEXT, value, attributes);
-    return this;
-  }
-  
-  public StreamWriter writeSubtitle(Text.Type type, String value, Map<QName,String> attributes) {
-    writeText(Constants.SUBTITLE, type, value, attributes);
-    return this;
-  }
-  
-  public StreamWriter writeSummary(String value, Map<QName,String> attributes) {
-    writeText(Constants.SUMMARY, Text.Type.TEXT, value, attributes);
-    return this;
-  }
-  
-  public StreamWriter writeSummary(Text.Type type, String value, Map<QName,String> attributes) {
-    writeText(Constants.SUMMARY, type, value, attributes);
-    return this;
-  }
-  
-  public StreamWriter writeRights(String value, Map<QName,String> attributes) {
-    writeText(Constants.RIGHTS, Text.Type.TEXT, value, attributes);
-    return this;
-  }
-  
-  public StreamWriter writeRights(Text.Type type, String value, Map<QName,String> attributes) {
-    writeText(Constants.RIGHTS, type, value, attributes);
-    return this;
-  }
-  
-  public StreamWriter writeId(String iri) {
-    writeIRIElement(Constants.ID, iri, null);
-    return this;
-  }
-  
-  public StreamWriter writeIcon(String iri) {
-    writeIRIElement(Constants.ICON, iri, null);
-    return this;
-  }
-  
-  public StreamWriter writeLogo(String iri) {
-    writeIRIElement(Constants.LOGO, iri, null);
-    return this;
-  }
-  
-  public StreamWriter writeIRIElement(QName qname, String iri) {
-    writeIRIElement(qname, iri, null);
-    return this;
-  }
-
-  public StreamWriter writeId(IRI iri) {
-    writeIRIElement(Constants.ID, iri, null);
-    return this;
-  }
-  
-  public StreamWriter writeIcon(IRI iri) {
-    writeIRIElement(Constants.ICON, iri, null);
-    return this;
-  }
-  
-  public StreamWriter writeLogo(IRI iri) {
-    writeIRIElement(Constants.LOGO, iri, null);
-    return this;
-  }
-  
-  public StreamWriter writeIRIElement(QName qname, IRI iri) {
-    writeIRIElement(qname, iri, null);
-    return this;
-  }
-  
-  public StreamWriter writeId() {
-    writeId((Map<QName,String>)null);
-    return this;
-  }
    
-  public StreamWriter writePerson(QName qname, String name, String email, String uri) {
-    writePerson(qname,name,email,uri,null);
-    return this;
-  }
-  
-  public StreamWriter startPerson(QName qname) {
-    startPerson(qname,null);
-    return this;
-  }
-  
-  public StreamWriter writePersonName(String name) {
-    writePersonName(name,null);
-    return this;
-  }
-  
-  public StreamWriter writePersonEmail(String email) {
-    writePersonEmail(email,null);
-    return this;
-  }
-  
-  public StreamWriter writePersonUri(String uri) {
-    writePersonUri(uri,null);
-    return this;
-  }
- 
   public StreamWriter writeAuthor(String name, String email, String uri) {
-    writePerson(Constants.AUTHOR,name,email,uri,null);
-    return this;
+    return writePerson(Constants.AUTHOR,name,email,uri);
   }
 
-  public StreamWriter writeAuthor(String name, String email, String uri, Map<QName,String> attributes) {
-    writePerson(Constants.AUTHOR,name,email,uri,attributes);
-    return this;
-  }
-  
   public StreamWriter startAuthor() {
-    startElement(Constants.AUTHOR,null);
-    return this;
+    return startElement(Constants.AUTHOR);
   }
 
-  public StreamWriter startAuthor(Map<QName,String> attributes) {
-    startElement(Constants.AUTHOR,attributes);
-    return this;
-  }
-  
   public StreamWriter endAuthor() {
-    endElement();
-    return this;
+    return endElement();
   }
   
-
   public StreamWriter writeContributor(String name, String email, String uri) {
-    writePerson(Constants.CONTRIBUTOR,name,email,uri,null);
-    return this;
+    return writePerson(Constants.CONTRIBUTOR,name,email,uri);
   }
 
-  public StreamWriter writeContributor(String name, String email, String uri, Map<QName,String> attributes) {
-    writePerson(Constants.CONTRIBUTOR,name,email,uri,attributes);
-    return this;
-  }
-  
   public StreamWriter startContributor() {
-    startElement(Constants.CONTRIBUTOR,null);
-    return this;
+    return startElement(Constants.CONTRIBUTOR);
   }
 
-  public StreamWriter startContributor(Map<QName,String> attributes) {
-    startElement(Constants.CONTRIBUTOR,attributes);
-    return this;
-  }
-  
   public StreamWriter endContributor() {
-    endElement();
-    return this;
+    return endElement();
   }
   
   public StreamWriter writeGenerator(String version, String uri, String value) {
-    writeGenerator(version,uri,value,null);
-    return this;
-  }
-  
-  public StreamWriter writeGenerator(String version, String uri, String value, Map<QName,String> attributes) {
-    if (attributes == null) attributes = new HashMap<QName,String>();
-    if (version != null) attributes.put(new QName("version"),version);
-    if (uri != null) attributes.put(new QName("uri"),uri);
-    startElement(Constants.GENERATOR,attributes);
-    writeElementText(value);
-    endElement();
-    return this;
+    return 
+      startElement(Constants.GENERATOR).
+      writeAttribute("version",version).
+      writeAttribute("uri",uri).
+      writeElementText(value).
+      endElement();
   }
 
   public StreamWriter startGenerator(String version, String uri) {
-    startGenerator(version,uri,null);
-    return this;
-  }
-  
-  public StreamWriter startGenerator(String version, String uri, Map<QName,String> attributes) {
-    if (attributes == null) attributes = new HashMap<QName,String>();
-    if (version != null) attributes.put(new QName("version"),version);
-    if (uri != null) attributes.put(new QName("uri"),uri);
-    startElement(Constants.GENERATOR,attributes);
-    return this;
+    return 
+      startElement(Constants.GENERATOR).
+      writeAttribute("version",version).
+      writeAttribute("uri",uri);
   }
   
   public StreamWriter endGenerator() {
-    endElement();
-    return this;
+    return endElement();
   }
-  
-  
-  public StreamWriter writeUpdated(Date date) {
-    writeUpdated(date,null);
-    return this;
-  }
-  
-  public StreamWriter writePublished(Date date) {
-    writePublished(date,null);
-    return this;
-  }
-  
-  public StreamWriter writeEdited(Date date) {
-    writeEdited(date,null);
-    return this;
-  }
-  
-  public StreamWriter writeDate(QName qname, Date date) {
-    writeDate(qname,date,null);
-    return this;
-  }
-
-  public StreamWriter writeUpdated(String date) {
-    writeUpdated(date,null);
-    return this;
-  }
-  
-  public StreamWriter writePublished(String date) {
-    writePublished(date,null);
-    return this;
-  }
-  
-  public StreamWriter writeEdited(String date) {
-    writeEdited(date,null);
-    return this;
-  }
-  
-  public StreamWriter writeDate(QName qname, String date) {
-    writeDate(qname, date,null);
-    return this;
-  }
-  
-  
-  public StreamWriter writeLink(String iri) {
-    writeLink(iri,(Map<QName,String>)null);
-    return this;
-  }
-  
-  public StreamWriter writeLink(String iri, String rel) {
-    writeLink(iri,rel,(Map<QName,String>)null);
-    return this;
-  }
-  
-  public StreamWriter writeLink(String iri, String rel, String type) {
-    writeLink(iri,rel,type,(Map<QName,String>)null);
-    return this;
-  }
-  
-  public StreamWriter writeLink(String iri, String rel, String type, String title, String hreflang, int length) {
-    writeLink(iri,rel,type,title,hreflang,length,(Map<QName,String>)null);
-    return this;
-  }
-  
-  public StreamWriter startLink(String iri) {
-    startLink(iri,(Map<QName,String>)null);
-    return this;
-  }
-
-  public StreamWriter startLink(String iri, String rel) {
-    startLink(iri,rel,(Map<QName,String>)null);
-    return this;
-  }
-  
-  public StreamWriter startLink(String iri, String rel, String type) {
-    startLink(iri,rel,type,(Map<QName,String>)null);
-    return this;
-  }
-  
-  public StreamWriter startLink(String iri, String rel, String type, String title, String hreflang, int length) {
-    startLink(iri,rel,type,title,hreflang,length,(Map<QName,String>)null);
-    return this;
-  }
-  
-  
-  public StreamWriter writeCategory(String term) {
-   writeCategory(term,(Map<QName,String>)null);
-   return this;
-  }
-  
-  public StreamWriter writeCategory(String term, String scheme) {
-   writeCategory(term,scheme,(Map<QName,String>)null);
-   return this;
-  }
-  
-  public StreamWriter writeCategory(String term, String scheme, String label) {
-   writeCategory(term,scheme,label,(Map<QName,String>)null);
-   return this;
-  }
-  
+        
   public StreamWriter startCategory(String term) {
-   startCategory(term,(Map<QName,String>)null);
-   return this;
+   return startCategory(term,null,null);
   }
   
   public StreamWriter startCategory(String term, String scheme) {
-   startCategory(term,scheme,(Map<QName,String>)null);
-   return this;
+   return startCategory(term,scheme,null);
   }
   
   public StreamWriter startCategory(String term, String scheme, String label) {
-   startCategory(term,scheme,label,(Map<QName,String>)null);
-   return this;
+     return 
+       startElement(Constants.CATEGORY).
+       writeAttribute("term",term).
+       writeAttribute("scheme",scheme).
+       writeAttribute("label",label);
   }
-  
-  public StreamWriter startSource() {
-    startElement(Constants.SOURCE,null);
-    return this;
-  }
-  
-  public StreamWriter writeText(QName qname, Text.Type type, String value) {
-    writeText(qname,type,value,null);
-    return this;
-  }
-  
-  public StreamWriter startText(QName qname, Text.Type type) {
-    startText(qname,type,null);
-    return this;
-  }
-  
-  
-  public StreamWriter writeContent(Content.Type type, String value) {
-    writeContent(type,value,null);
-    return this;
-  }
-  
-  public StreamWriter writeContent(Content.Type type, InputStream value) throws IOException {
-    writeContent(type,value,null);
-    return this;
-  }
-  
-  public StreamWriter writeContent(Content.Type type, DataHandler value) throws IOException {
-    writeContent(type,value,null);
-    return this;
-  }
-  
-  public StreamWriter writeContent(String type, String value) {
-    writeContent(type,value,null);
-    return this;
-  }
-  
-  
-  public StreamWriter startContent(Content.Type type) {
-    startContent(type,(Map<QName,String>)null);
-    return this;
-  }
-  
-  public StreamWriter startContent(String type) {
-    startContent(type,(Map<QName,String>)null);
-    return this;
-  }
-  
-  public StreamWriter startContent(Content.Type type, String src) {
-    startContent(type,(Map<QName,String>)null);
-    return this;
-  }
-  
-  public StreamWriter startContent(String type, String src) {
-    startContent(type,(Map<QName,String>)null);
-    return this;
-  }
-  
-  public StreamWriter startElement(QName qname) {
-    startElement(qname,null);
-    return this;
-  }
-  
-  
-  
+    
   public StreamWriter startService() {
-    startElement(Constants.SERVICE);
-    return this;
-  }
-  
-  public StreamWriter startService(Map<QName,String> attributes) {
-    startElement(Constants.SERVICE,attributes);
-    return this;
+    return startElement(Constants.SERVICE);
   }
   
   public StreamWriter endService() {
-    endElement();
-    return this;
+    return endElement();
   }
   
   public StreamWriter startWorkspace() {
-    startElement(Constants.WORKSPACE, null);
-    return this;
-  }
-  
-  public StreamWriter startWorkspace(Map<QName,String> attributes) {
-    startElement(Constants.WORKSPACE, attributes);
-    return this;
+    return startElement(Constants.WORKSPACE);
   }
   
   public StreamWriter endWorkspace() {
-    endElement();
-    return this;
+    return endElement();
   }
   
   public StreamWriter startCollection(String href) {
-    startCollection(href, null);
-    return this;
-  }
-  
-  public StreamWriter startCollection(String href, Map<QName,String> attributes) {
-    if (attributes == null) attributes = new HashMap<QName,String>();
-    attributes.put(new QName("href"),href);
-    startElement(Constants.COLLECTION, attributes);
-    return this;
+    return 
+      startElement(Constants.COLLECTION).
+      writeAttribute("href",href);
   }
   
   public StreamWriter endCollection() {
@@ -1005,72 +548,94 @@ public abstract class AbstractStreamWriter
   
   public StreamWriter writeAccepts(String... accepts) {
     for (String accept : accepts) {
-      startElement(Constants.ACCEPT,null);
-      writeElementText(accept);
-      endElement();
+      startElement(Constants.ACCEPT).
+        writeElementText(accept).
+        endElement();
     }
     return this;
   }
   
   public StreamWriter startCategories() {
-    startCategories(false,null,null);
-    return this;
+    return startCategories(false,null);
   }
   
   public StreamWriter startCategories(boolean fixed) {
-    startCategories(fixed,null,null);
-    return this;
+    return startCategories(fixed,null);
   }
   
   public StreamWriter startCategories(boolean fixed, String scheme) {
-    startCategories(fixed,scheme,null);
-    return this;
-  }
-  
-  public StreamWriter startCategories(Map<QName,String> attributes) {
-    startCategories(false,null,attributes);
-    return this;
-  }
-  
-  public StreamWriter startCategories(boolean fixed, Map<QName,String> attributes) {
-    startCategories(fixed,null,attributes);
-    return this;
-  }
-  
-  public StreamWriter startCategories(boolean fixed, String scheme, Map<QName,String> attributes) {
-    if (attributes == null) attributes = new HashMap<QName,String>();
-    if (fixed) attributes.put(new QName("fixed"),"true");
-    else attributes.remove("fixed");
-    if (scheme != null) attributes.put(new QName("scheme"),scheme);
-    startElement(Constants.CATEGORIES, attributes);
-    return this;
+    return startElement(Constants.CATEGORIES).
+      writeAttribute("fixed",fixed?"yes":"no").
+      writeAttribute("scheme",scheme);
   }
   
   public StreamWriter endCategories() {
-    endElement();
-    return this;
+    return endElement();
   }
 
   public StreamWriter startControl() {
-    startElement(Constants.CONTROL,null);
-    return this;
-  }
-  
-  public StreamWriter startControl(Map<QName,String> attributes) {
-    startElement(Constants.CONTROL, attributes);
-    return this;
+    return startElement(Constants.CONTROL);
   }
   
   public StreamWriter endControl() {
-    endElement();
-    return this;
+    return endElement();
   }
   
   public StreamWriter writeDraft(boolean draft) {
-    startElement(Constants.DRAFT);
-    writeElementText(draft?"yes":"no");
-    endElement();
-    return this;
+    return 
+      startElement(Constants.DRAFT).
+      writeElementText(draft?"yes":"no").
+      endElement();
+  }
+  
+  public StreamWriter writeAttribute(
+    String name, 
+    String value) {
+      if (value == null) return this;
+      return writeAttribute(
+        name, 
+        null, 
+        null, 
+        value);
+  }
+  
+  public StreamWriter writeAttribute(
+    String name, 
+    String namespace, 
+    String value) {
+      if (value == null) return this;
+      return writeAttribute(
+        name, 
+        namespace, 
+        null, 
+        value);
+  }
+  
+  public StreamWriter writeAttribute(
+    QName qname, 
+    String value) {
+       if (value == null) return this;
+      return writeAttribute(
+        qname.getLocalPart(), 
+        qname.getNamespaceURI(), 
+        qname.getPrefix(), value);
+  }
+  
+  public StreamWriter startElement(QName qname) {
+    return startElement(
+      qname.getLocalPart(),
+      qname.getNamespaceURI(),
+      qname.getPrefix());
+  }
+  
+  public StreamWriter startElement(String name) {
+    return startElement(name,null,null);
+  }
+  
+  public StreamWriter startElement(
+    String name, 
+    String namespace) {
+      return startElement(name,namespace,null);
   }
   
 }

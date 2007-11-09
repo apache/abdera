@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -126,9 +125,11 @@ public class StaxStreamWriter
     return this;
   }
   
-  private void writeNamespace(QName qname, boolean attr) throws XMLStreamException {
-    String prefix = qname.getPrefix();
-    String namespace = qname.getNamespaceURI();
+  private void writeNamespace(
+    String prefix, 
+    String namespace, 
+    boolean attr) 
+      throws XMLStreamException {
     prefix = prefix != null ? prefix : "";
     if (!declared(prefix,namespace)) {
       if (attr && (namespace == null || "".equals(namespace))) return;
@@ -137,25 +138,21 @@ public class StaxStreamWriter
       else
         writer.writeDefaultNamespace(namespace);
       declare(prefix,namespace);
+      if (autoflush) writer.flush();
     }
   }
   
-  public StreamWriter startElement(QName qname, Map<QName, String> attributes) {
+  public StreamWriter startElement(
+    String name, 
+    String namespace, 
+    String prefix) {
     try {
       push();
-      writer.writeStartElement(qname.getPrefix(),qname.getLocalPart(),qname.getNamespaceURI());
-      writeNamespace(qname,false);
-      if (attributes != null) {
-        for (QName attr : attributes.keySet()) 
-          writeNamespace(attr,true);
-        for (QName attr : attributes.keySet()) {
-          writer.writeAttribute(
-            attr.getPrefix(), 
-            attr.getNamespaceURI(),
-            attr.getLocalPart(),
-            attributes.get(attr));
-        }
-      }
+      writer.writeStartElement(
+        prefix,
+        name,
+        namespace);
+      writeNamespace(prefix,namespace,false);
       if (autoflush) writer.flush();
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
@@ -203,6 +200,34 @@ public class StaxStreamWriter
     return this;
   }
   
+  public StreamWriter writeId() {
+    return writeId(FOMHelper.generateUuid());
+  }
+
+  public StreamWriter writeAttribute(
+    String name, 
+    String namespace,
+    String prefix, 
+    String value) {
+      if (value == null) return this;
+      try {
+        if (prefix != null) {
+          writeNamespace(prefix,namespace,true);
+          writer.writeAttribute(prefix, namespace, name, value);
+        } else if (namespace != null) {
+          writeNamespace(prefix,namespace,true);
+          writer.writeAttribute(namespace, name, value);
+        } else { 
+          writer.writeAttribute(name,value);
+        }
+        if (autoflush) writer.flush();
+      } catch(XMLStreamException e) {
+        throw new RuntimeException(e);
+      }
+      return this;
+  }
+
+  
   private final Stack<Map<String,String>> namespaces = new Stack<Map<String,String>>();
   
   private void push() {
@@ -211,6 +236,12 @@ public class StaxStreamWriter
   
   private void pop() {
     if (!namespaces.isEmpty()) namespaces.pop();
+  }
+   
+  private void declare(String prefix, String namespace) {
+    if (namespaces.isEmpty()) return;
+    Map<String,String> frame = namespaces.peek();
+    frame.put(prefix, namespace);
   }
   
   private boolean declared(String prefix, String namespace) {
@@ -225,15 +256,12 @@ public class StaxStreamWriter
     return false;
   }
   
-  private void declare(String prefix, String namespace) {
-    if (namespaces.isEmpty()) return;
-    Map<String,String> frame = namespaces.peek();
-    frame.put(prefix, namespace);
-  }
-
-  public StreamWriter writeId(Map<QName,String> attributes) {
-    writeId(FOMHelper.generateUuid(),attributes);
+  public StreamWriter flush() {
+    try {
+      writer.flush();
+    } catch (XMLStreamException e) {
+      throw new RuntimeException(e);
+    }
     return this;
   }
-    
 }

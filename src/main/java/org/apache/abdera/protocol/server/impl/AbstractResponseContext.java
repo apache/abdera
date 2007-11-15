@@ -92,7 +92,7 @@ public abstract class AbstractResponseContext
   }
   
   public void addHeader(String name, Object value) {
-    addHeader(name, new Object[] {value});
+    addHeaders(name, new Object[] {value});
   }
   
   public void addHeaders(String name, Object... vals) {

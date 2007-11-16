@@ -40,6 +40,7 @@ public abstract class AbstractStreamWriter
   protected final String name;
   protected boolean autoflush = false;
   protected boolean autoclose = false;
+  protected boolean autoindent = false;
   
   protected AbstractStreamWriter(String name) {
     this.name = name;
@@ -638,4 +639,8 @@ public abstract class AbstractStreamWriter
       return startElement(name,namespace,null);
   }
   
+  public StreamWriter setAutoIndent(boolean indent) {
+    this.autoindent = indent;
+    return this;
+  }
 }

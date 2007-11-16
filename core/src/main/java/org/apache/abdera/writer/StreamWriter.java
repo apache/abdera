@@ -727,5 +727,15 @@ public interface StreamWriter
    */
   StreamWriter writeAttribute(QName qname, String value);
   
+  /**
+   * Write a new line and indent
+   */
+  StreamWriter indent();
+  
+  /**
+   * True to enable automatic indenting
+   */
+  StreamWriter setAutoIndent(boolean indent);
+  
 }
 

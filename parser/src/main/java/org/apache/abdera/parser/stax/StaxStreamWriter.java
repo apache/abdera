@@ -19,6 +19,7 @@ package org.apache.abdera.parser.stax;
 
 import java.io.OutputStream;
 import java.io.Writer;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -37,6 +38,8 @@ public class StaxStreamWriter
   private static final String NAME = "default";
   
   private XMLStreamWriter writer;
+  private int depth = 0;
+  private int textwritten = 0;
   
   public StaxStreamWriter() {
     super(NAME);
@@ -116,7 +119,10 @@ public class StaxStreamWriter
  
   public StreamWriter endElement() {
     try {
-      pop();
+      if (autoindent && textwritten == 0) {
+        pop();
+        indent();
+      } else pop();
       writer.writeEndElement();
       if (autoflush) writer.flush();
     } catch(XMLStreamException e) {
@@ -147,11 +153,21 @@ public class StaxStreamWriter
     String namespace, 
     String prefix) {
     try {
+      if (autoindent && textwritten == 0) indent();
       push();
-      writer.writeStartElement(
-        prefix,
-        name,
-        namespace);
+      if (prefix != null) {
+        writer.writeStartElement(
+          prefix,
+          name,
+          namespace);
+      } else if (namespace != null) {
+        writer.writeStartElement(
+          name, 
+          namespace);
+      } else {
+        writer.writeStartElement(
+          name);
+      }
       writeNamespace(prefix,namespace,false);
       if (autoflush) writer.flush();
     } catch(XMLStreamException e) {
@@ -162,6 +178,7 @@ public class StaxStreamWriter
   
   public StreamWriter writeElementText(String value) {
     try {
+      textwritten++;
       writer.writeCharacters(value);
       if (autoflush) writer.flush();
     } catch(XMLStreamException e) {
@@ -172,6 +189,7 @@ public class StaxStreamWriter
 
   public StreamWriter writeComment(String value) {
     try {
+      if (autoindent) indent();
       writer.writeComment(value);
       if (autoflush) writer.flush();
     } catch(XMLStreamException e) {
@@ -182,6 +200,7 @@ public class StaxStreamWriter
 
   public StreamWriter writePI(String value) {
     try {
+      if (autoindent) indent();
       writer.writeProcessingInstruction(value);
       if (autoflush) writer.flush();
     } catch(XMLStreamException e) {
@@ -192,6 +211,7 @@ public class StaxStreamWriter
 
   public StreamWriter writePI(String value, String target) {
     try {
+      if (autoindent) indent();
       writer.writeProcessingInstruction(value,target);
       if (autoflush) writer.flush();
     } catch(XMLStreamException e) {
@@ -232,9 +252,12 @@ public class StaxStreamWriter
   
   private void push() {
     namespaces.push(new HashMap<String,String>());
+    depth++;
   }
   
   private void pop() {
+    depth--;
+    if (textwritten > 0) textwritten--;
     if (!namespaces.isEmpty()) namespaces.pop();
   }
    
@@ -259,6 +282,18 @@ public class StaxStreamWriter
   public StreamWriter flush() {
     try {
       writer.flush();
+    } catch (XMLStreamException e) {
+      throw new RuntimeException(e);
+    }
+    return this;
+  }
+  
+  public StreamWriter indent() {
+    try {
+      char[] indent = new char[depth*2];
+      Arrays.fill(indent, ' ');
+      writer.writeCharacters("\n");
+      writer.writeCharacters(indent,0,indent.length);
     } catch (XMLStreamException e) {
       throw new RuntimeException(e);
     }

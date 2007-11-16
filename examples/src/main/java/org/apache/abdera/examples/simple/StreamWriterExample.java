@@ -33,53 +33,50 @@ public class StreamWriterExample {
     
     Abdera abdera = Abdera.getInstance();
     
-    StreamWriter out = abdera.newStreamWriter();
-    
-    out.setOutputStream(System.out,"UTF-8");
-    
-    out.startDocument();
-    out.startFeed();
-    
-    out.writeId("http://example.org");
-    out.writeTitle("<Testing 123>");
-    out.writeSubtitle("Foo");
-    out.writeAuthor("James", null, null);
-    out.writeUpdated(new Date());
-      
-    out.writeLink("http://example.org/foo");
-    out.writeLink("http://example.org/bar","self");
-      
-    out.writeCategory("foo");
-    out.writeCategory("bar");
-      
-    out.writeLogo("logo");
-    out.writeIcon("icon");
-    out.writeGenerator("1.0", "http://example.org", "foo");
+    StreamWriter out = 
+      abdera.newStreamWriter()
+        .setOutputStream(System.out,"UTF-8")
+        .setAutoflush(false)
+        .startDocument()
+          .startFeed()
+            .writeId("http://example.org")
+            .writeTitle("<Testing 123>")
+            .writeSubtitle("Foo")
+            .writeAuthor("James", null, null)
+            .writeUpdated(new Date())
+            .writeLink("http://example.org/foo")
+            .writeLink("http://example.org/bar","self")
+            .writeCategory("foo")
+            .writeCategory("bar")
+            .writeLogo("logo")
+            .writeIcon("icon")
+            .writeGenerator("1.0", "http://example.org", "foo")
+            .flush();
       
     for (int n = 0; n < 100; n++) {
-      out.startEntry();
-      
-      out.writeId("http://example.org/" + n);
-      out.writeTitle("Entry #" + n);
-      out.writeUpdated(new Date());
-      out.writePublished(new Date());
-      out.writeEdited(new Date());
-      out.writeSummary("This is text summary");
-      out.writeAuthor("James", null, null);
-      out.writeContributor("Joe", null, null);
-      out.startContent("application/xml");
-        out.startElement(new QName("a","b","c"));
-          out.startElement(new QName("x","y","z"));
-            out.writeElementText("This is a test");
-          out.endElement();
-        out.endElement();
-      out.endContent();
-      out.endEntry();
+      out.startEntry()      
+        .writeId("http://example.org/" + n)
+        .writeTitle("Entry #" + n)
+        .writeUpdated(new Date())
+        .writePublished(new Date())
+        .writeEdited(new Date())
+        .writeSummary("This is text summary")
+        .writeAuthor("James", null, null)
+        .writeContributor("Joe", null, null)
+        .startContent("application/xml")
+          .startElement(new QName("a","b","c"))
+            .startElement(new QName("x","y","z"))
+              .writeElementText("This is a test")
+            .endElement()
+          .endElement()
+        .endContent()
+        .endEntry()
+        .flush();
     }
       
-    out.endFeed();
-    out.endDocument();
-
+    out.endFeed()
+      .endDocument()
+      .flush();
     
   }
   

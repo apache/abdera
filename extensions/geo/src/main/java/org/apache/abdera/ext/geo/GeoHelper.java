@@ -24,7 +24,6 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Element;
-import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.ExtensibleElement;
 import org.apache.abdera.util.Constants;
 
@@ -33,28 +32,28 @@ import org.apache.abdera.util.Constants;
  */
 public class GeoHelper {
 
-  public static final String W3C_GEO_NS = "http://www.w3.org/2003/01/geo/wgs84_pos#";
-  public static final String SIMPLE_GEO_NS = "http://www.georss.org/georss/10";
-  public static final String GML_NS = "http://www.opengis.net/gml";
+  public static final String W3C_GEO_NS           = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+  public static final String SIMPLE_GEO_NS        = "http://www.georss.org/georss/10";
+  public static final String GML_NS               = "http://www.opengis.net/gml";
   
-  public static final QName QNAME_W3C_POINT = new QName(W3C_GEO_NS, "Point", "geo");
-  public static final QName QNAME_W3C_LAT = new QName(W3C_GEO_NS, "lat", "geo");
-  public static final QName QNAME_W3C_LONG = new QName(W3C_GEO_NS, "long", "geo");
+  public static final QName QNAME_W3C_POINT       = new QName(W3C_GEO_NS, "Point", "geo");
+  public static final QName QNAME_W3C_LAT         = new QName(W3C_GEO_NS, "lat", "geo");
+  public static final QName QNAME_W3C_LONG        = new QName(W3C_GEO_NS, "long", "geo");
   
-  public static final QName QNAME_SIMPLE_POINT = new QName(SIMPLE_GEO_NS, "point", "georss");
-  public static final QName QNAME_SIMPLE_LINE = new QName(SIMPLE_GEO_NS, "line", "georss");
-  public static final QName QNAME_SIMPLE_POLYGON = new QName(SIMPLE_GEO_NS, "polygon", "georss");
-  public static final QName QNAME_SIMPLE_BOX = new QName(SIMPLE_GEO_NS, "box", "georss");
-  public static final QName QNAME_WHERE = new QName(SIMPLE_GEO_NS, "where", "georss");
+  public static final QName QNAME_SIMPLE_POINT    = new QName(SIMPLE_GEO_NS, "point", "georss");
+  public static final QName QNAME_SIMPLE_LINE     = new QName(SIMPLE_GEO_NS, "line", "georss");
+  public static final QName QNAME_SIMPLE_POLYGON  = new QName(SIMPLE_GEO_NS, "polygon", "georss");
+  public static final QName QNAME_SIMPLE_BOX      = new QName(SIMPLE_GEO_NS, "box", "georss");
+  public static final QName QNAME_WHERE           = new QName(SIMPLE_GEO_NS, "where", "georss");
   
-  public static final QName QNAME_GML_POINT = new QName(GML_NS, "Point", "gml");
-  public static final QName QNAME_GML_POS = new QName(GML_NS, "pos", "gml");
+  public static final QName QNAME_GML_POINT       = new QName(GML_NS, "Point", "gml");
+  public static final QName QNAME_GML_POS         = new QName(GML_NS, "pos", "gml");
   public static final QName QNAME_GML_LINESTRING  = new QName(GML_NS, "LineString", "gml");
-  public static final QName QNAME_GML_POSLIST = new QName(GML_NS, "posList", "gml");
-  public static final QName QNAME_GML_POLYGON = new QName(GML_NS, "Polygon", "gml");
-  public static final QName QNAME_GML_EXTERIOR = new QName(GML_NS, "exterior", "gml");
-  public static final QName QNAME_GML_LINEARRING = new QName(GML_NS, "LinearRing", "gml");
-  public static final QName QNAME_GML_ENVELOPE = new QName(GML_NS, "Envelope", "gml");
+  public static final QName QNAME_GML_POSLIST     = new QName(GML_NS, "posList", "gml");
+  public static final QName QNAME_GML_POLYGON     = new QName(GML_NS, "Polygon", "gml");
+  public static final QName QNAME_GML_EXTERIOR    = new QName(GML_NS, "exterior", "gml");
+  public static final QName QNAME_GML_LINEARRING  = new QName(GML_NS, "LinearRing", "gml");
+  public static final QName QNAME_GML_ENVELOPE    = new QName(GML_NS, "Envelope", "gml");
   public static final QName QNAME_GML_LOWERCORNER = new QName(GML_NS, "lowerCorner", "gml");
   public static final QName QNAME_GML_UPPERCORNER = new QName(GML_NS, "upperCorner", "gml");
   
@@ -63,24 +62,24 @@ public class GeoHelper {
   }
   
   public static void addPosition(
-    Entry entry, 
+    ExtensibleElement element, 
     Position position) {
-      addPosition(entry,position,Encoding.SIMPLE);
+      addPosition(element,position,Encoding.SIMPLE);
   }
   
   public static void addPosition(
-    Entry entry, 
+    ExtensibleElement element, 
     Position position, 
     Encoding encoding) {
       switch(encoding) {
         case SIMPLE:
-          addSimplePosition(entry, position);
+          addSimplePosition(element, position);
           break;
         case GML:
-          addGmlPosition(entry, position);
+          addGmlPosition(element, position);
           break;
         case W3C: {
-          addW3CPosition(entry, position); 
+          addW3CPosition(element, position); 
           break;
         }
       }
@@ -101,8 +100,8 @@ public class GeoHelper {
     }
   }
   
-  private static void addGmlPosition(Entry entry, Position position) {
-    ExtensibleElement pos = entry.addExtension(QNAME_WHERE);
+  private static void addGmlPosition(ExtensibleElement element, Position position) {
+    ExtensibleElement pos = element.addExtension(QNAME_WHERE);
     if (position instanceof Point) {
       Point point = (Point) position;
       ExtensibleElement p = pos.addExtension(QNAME_GML_POINT);
@@ -128,12 +127,12 @@ public class GeoHelper {
     setPositionAttributes(pos,position);
   }
   
-  private static void addSimplePosition(Entry entry, Position position) {
+  private static void addSimplePosition(ExtensibleElement element, Position position) {
     Element pos = null;
     if (position instanceof Point) {
       Point point = (Point) position;
       pos = 
-        entry.addSimpleExtension(
+        element.addSimpleExtension(
           QNAME_SIMPLE_POINT, 
           point.getCoordinate().toString());
     } else if (position instanceof Multiple) {
@@ -143,7 +142,7 @@ public class GeoHelper {
                     position instanceof Polygon ? QNAME_SIMPLE_POLYGON : null;
       if (qname != null) {
         pos = 
-          entry.addSimpleExtension(
+          element.addSimpleExtension(
             qname, 
             line.getCoordinates().toString());
       }
@@ -151,43 +150,43 @@ public class GeoHelper {
     setPositionAttributes(pos, position);
   }
   
-  private static void addW3CPosition(Entry entry, Position position) {
+  private static void addW3CPosition(ExtensibleElement element, Position position) {
     if (!(position instanceof Point)) 
       throw new IllegalArgumentException("The W3C Encoding only supports Points");
-    Element el = entry.getExtension(QNAME_W3C_LAT);
+    Element el = element.getExtension(QNAME_W3C_LAT);
     if (el != null) el.discard();
-    el = entry.getExtension(QNAME_W3C_LONG);
+    el = element.getExtension(QNAME_W3C_LONG);
     if (el != null) el.discard();    
     Point point = (Point) position;
     
-    ExtensibleElement p = entry.addExtension(QNAME_W3C_POINT);
+    ExtensibleElement p = element.addExtension(QNAME_W3C_POINT);
     p.addSimpleExtension(QNAME_W3C_LAT, Double.toString(point.getCoordinate().getLatitude()));
     p.addSimpleExtension(QNAME_W3C_LONG, Double.toString(point.getCoordinate().getLongitude()));
     
   }
   
-  private static List<Position> _getPositions(Entry entry) {
+  private static List<Position> _getPositions(ExtensibleElement element) {
     List<Position> list = new ArrayList<Position>();
-    getW3CPosition(entry,list);
-    getSimplePosition(entry,list);
-    getGMLPosition(entry, list);
+    getW3CPosition(element,list);
+    getSimplePosition(element,list);
+    getGMLPosition(element, list);
     return list;
   }
   
-  public static boolean isGeotagged(Entry entry) {
-    if (entry.getExtensions(QNAME_SIMPLE_POINT).size() > 0) return true;
-    if (entry.getExtensions(QNAME_SIMPLE_LINE).size() > 0) return true;
-    if (entry.getExtensions(QNAME_SIMPLE_BOX).size() > 0) return true;
-    if (entry.getExtensions(QNAME_SIMPLE_POLYGON).size() > 0) return true;
-    if (entry.getExtensions(QNAME_WHERE).size() > 0) return true;
-    if (entry.getExtensions(QNAME_W3C_POINT).size() > 0) return true;
-    if (entry.getExtensions(QNAME_W3C_LAT).size() > 0 && 
-        entry.getExtensions(QNAME_W3C_LONG).size() > 0) return true;
+  public static boolean isGeotagged(ExtensibleElement element) {
+    if (element.getExtensions(QNAME_SIMPLE_POINT).size() > 0) return true;
+    if (element.getExtensions(QNAME_SIMPLE_LINE).size() > 0) return true;
+    if (element.getExtensions(QNAME_SIMPLE_BOX).size() > 0) return true;
+    if (element.getExtensions(QNAME_SIMPLE_POLYGON).size() > 0) return true;
+    if (element.getExtensions(QNAME_WHERE).size() > 0) return true;
+    if (element.getExtensions(QNAME_W3C_POINT).size() > 0) return true;
+    if (element.getExtensions(QNAME_W3C_LAT).size() > 0 && 
+        element.getExtensions(QNAME_W3C_LONG).size() > 0) return true;
     return false;
   }
   
-  public static Iterator<Position> listPositions(Entry entry) {
-    return _getPositions(entry).iterator();
+  public static Iterator<Position> listPositions(ExtensibleElement element) {
+    return _getPositions(element).iterator();
   }
   
   public static Position getAsPosition(Element element) {
@@ -242,31 +241,31 @@ public class GeoHelper {
     return pos;
   }
   
-  public static Position[] getPositions(Entry entry) {
-    List<Position> positions = _getPositions(entry);
+  public static Position[] getPositions(ExtensibleElement element) {
+    List<Position> positions = _getPositions(element);
     return positions.toArray(new Position[positions.size()]);
   }
   
-  private static void getSimplePosition(Entry entry, List<Position> list) {
-    List<Element> elements = entry.getExtensions(SIMPLE_GEO_NS);
-    for (Element element : elements) {
-      Position pos = getAsPosition(element);
+  private static void getSimplePosition(ExtensibleElement element, List<Position> list) {
+    List<Element> elements = element.getExtensions(SIMPLE_GEO_NS);
+    for (Element el : elements) {
+      Position pos = getAsPosition(el);
       if (pos != null) {
-        getPositionAttributes(element, pos);
+        getPositionAttributes(el, pos);
         list.add(pos);
       }
     }
   }
   
-  private static void getGMLPosition(Entry entry, List<Position> list) {
-    List<ExtensibleElement> elements = entry.getExtensions(QNAME_WHERE);
+  private static void getGMLPosition(ExtensibleElement element, List<Position> list) {
+    List<ExtensibleElement> elements = element.getExtensions(QNAME_WHERE);
     for (ExtensibleElement where : elements) {
       Position pos = null;
       List<ExtensibleElement> children = where.getElements();
-      for (ExtensibleElement element : children) {
-        pos = getAsPosition(element);
+      for (ExtensibleElement el : children) {
+        pos = getAsPosition(el);
         if (pos != null) {
-          getPositionAttributes(element, pos);
+          getPositionAttributes(el, pos);
           list.add(pos);
         }
       }
@@ -301,13 +300,13 @@ public class GeoHelper {
     }
   }
   
-  private static void getW3CPosition(Entry entry, List<Position> list) {
-    getW3CPosition((ExtensibleElement)entry, list);
-    List<ExtensibleElement> points = entry.getExtensions(QNAME_W3C_POINT);
-    for (ExtensibleElement point : points) getW3CPosition(point, list);
+  private static void getW3CPosition(ExtensibleElement element, List<Position> list) {
+    getSimpleW3CPosition(element,list);
+    List<ExtensibleElement> points = element.getExtensions(QNAME_W3C_POINT);
+    for (ExtensibleElement point : points) getSimpleW3CPosition(point, list);
   }
   
-  private static void getW3CPosition(ExtensibleElement el, List<Position> list) {
+  private static void getSimpleW3CPosition(ExtensibleElement el, List<Position> list) {
     String slat = el.getSimpleExtension(QNAME_W3C_LAT);
     String slong = el.getSimpleExtension(QNAME_W3C_LONG);
     if (slat != null && slong != null) {

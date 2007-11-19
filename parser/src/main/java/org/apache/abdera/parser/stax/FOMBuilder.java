@@ -37,6 +37,7 @@ import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
+import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMText;
@@ -377,14 +378,14 @@ public class FOMBuilder
           //if (isDataHandlerAware && Boolean.TRUE == parser.getProperty(OMConstants.IS_BINARY)) {
           if (Boolean.TRUE == parser.getProperty(OMConstants.IS_BINARY)) {
               Object dataHandler = parser.getProperty(OMConstants.DATA_HANDLER);
-              OMText text = omfactory.createOMText(dataHandler, true);
+              OMText text = new FOMTextValue(dataHandler,true,(OMFactory)this);
               omElement.addChild(text);
               return text;
           } else {
-              return omfactory.createOMText(omElement, value, textType);
+              return new FOMTextValue(omElement, value, textType, (OMFactory)this);
           }
       } catch (IllegalArgumentException e) {
-          return omfactory.createOMText(omElement, value, textType);
+          return new FOMTextValue(omElement, value, textType, (OMFactory)this);
       }
   }
 }

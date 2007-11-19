@@ -282,26 +282,25 @@ public class FOMElement
       attr.setAttributeValue(value);
     } else {
       if (value != null) {
-        if (qname.getNamespaceURI() != null) {
+        String uri = qname.getNamespaceURI();
+        String prefix = qname.getPrefix();
+        if (uri != null) {
+          OMNamespace ns = findNamespace(uri, prefix);
+          if (ns == null) ns = factory.createOMNamespace(uri, prefix);
           attr = factory.createOMAttribute(
-            qname.getLocalPart(), 
-            factory.createOMNamespace(
-              qname.getNamespaceURI(), 
-              qname.getPrefix()), 
-            value);
+            qname.getLocalPart(), ns, value);
         } else {
           attr = factory.createOMAttribute(
             qname.getLocalPart(), 
             null, 
             value);
         }
-        addAttribute(attr);
+        if (attr != null) addAttribute(attr);
       } else {
         removeAttribute(attr);
       }
     }
   }
-  
   
   protected <E extends Element>List<E> _getChildrenAsSet(QName qname) {
     FOMFactory factory = (FOMFactory) getFactory();
@@ -506,9 +505,16 @@ public class FOMElement
   
   public void setText(String text) {
     complete();
-    if (text != null)
-      super.setText(text);
-    else 
+    if (text != null) {
+      OMNode child = this.getFirstOMChild();
+      while (child != null) {
+          if (child.getType() == OMNode.TEXT_NODE) {
+              child.detach();
+          }
+          child = child.getNextOMSibling();
+      }
+      getOMFactory().createOMText(this, text);
+    } else 
       _removeAllChildren();
   }
 
@@ -854,4 +860,5 @@ public class FOMElement
       throws IOException {
     writeTo(getFactory().getAbdera().getWriterFactory().getWriter(writer),out,options);
   }
+
 }

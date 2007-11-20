@@ -17,19 +17,18 @@
 */
 package org.apache.abdera.examples.appserver;
 
+import java.io.IOException;
 import java.util.Date;
 
 import javax.activation.MimeType;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Base;
-import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
-import org.apache.abdera.model.Service;
-import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.protocol.server.Provider;
@@ -40,32 +39,20 @@ import org.apache.abdera.protocol.server.impl.AbstractProvider;
 import org.apache.abdera.protocol.server.impl.AbstractResponseContext;
 import org.apache.abdera.protocol.server.impl.BaseResponseContext;
 import org.apache.abdera.protocol.server.impl.EmptyResponseContext;
+import org.apache.abdera.protocol.server.impl.StreamWriterResponseContext;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.util.MimeTypeHelper;
-import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.writer.StreamWriter;
 
 public class SimpleProvider 
   extends AbstractProvider
   implements Provider {
 
   private EntityTag service_etag = new EntityTag("simple");
-  private Document<Service> service_doc;
   private Document<Feed> feed_doc;
   
   public SimpleProvider() {
     super(10);
-  }
-  
-  private Document<Service> init_service_doc(Abdera abdera) {
-    Factory factory = abdera.getFactory();
-    Service service = factory.newService();
-    Workspace workspace = service.addWorkspace("Simple");
-    try {
-      Collection collection = workspace.addCollection("Simple", "atom/feed");
-      collection.setAccept("entry");
-      collection.addCategories().setFixed(false);
-    } catch (Exception e) {}
-    return service.getDocument();
   }
   
   private Document<Feed> init_feed_doc(Abdera abdera) {
@@ -82,13 +69,6 @@ public class SimpleProvider
     return feed.getDocument();
   }
   
-  private synchronized Document<Service> get_service_doc(Abdera abdera) {
-    if (service_doc == null) {
-      service_doc = init_service_doc(abdera);
-    }
-    return service_doc;
-  }
-  
   private synchronized Document<Feed> get_feed_doc(Abdera abdera) {
     if (feed_doc == null) {
       feed_doc = init_feed_doc(abdera);
@@ -96,16 +76,42 @@ public class SimpleProvider
     return feed_doc;
   }
   
+  /**
+   * Demonstrates how to use the StreamWriterResponseContext to serialize
+   * a response document.  The alternative is to use the BaseResponseContext
+   * which uses a FOM Object Model.  The StreamWriterResponseContext is faster
+   * and requires less memory since it streams directly to the outputstream
+   * or writer
+   */
   public ResponseContext getService(
     RequestContext request) {
       Abdera abdera = request.getAbdera();
-      Document<Service> service = get_service_doc(abdera);
-      AbstractResponseContext rc; 
-      rc = new BaseResponseContext<Document<Service>>(service); 
+      AbstractResponseContext rc = 
+        new StreamWriterResponseContext(abdera) {
+          protected void writeTo(
+            StreamWriter sw) 
+              throws IOException {
+            sw.startDocument()
+              .startWorkspace()
+              .writeTitle("Simple")
+              .startCollection("atom/feed")
+              .writeTitle("Simple")
+              .writeAcceptsEntry()
+              .startCategories(false)
+              .endCategories()
+              .endCollection()
+              .endWorkspace()
+              .endDocument();
+          }
+        }; 
       rc.setEntityTag(service_etag);
       return rc;
   }
-  
+
+  /**
+   * Demonstates how to use the BaseResponseContext to serialize a response
+   * document.
+   */
   public ResponseContext getFeed(
     RequestContext request) {
       Abdera abdera = request.getAbdera();

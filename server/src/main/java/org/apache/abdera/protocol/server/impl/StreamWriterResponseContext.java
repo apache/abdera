@@ -37,6 +37,7 @@ public abstract class StreamWriterResponseContext
   private final Abdera abdera;
   private final String sw;
   private boolean autoindent;
+  private String encoding = "UTF-8";
   
   /**
    * Create a new StreamWriterResponseContext
@@ -82,7 +83,7 @@ public abstract class StreamWriterResponseContext
   public void writeTo(
     OutputStream out) 
       throws IOException {
-    writeTo(new OutputStreamWriter(out,"UTF-8"));
+    writeTo(new OutputStreamWriter(out,encoding));
   }
 
   /**
@@ -135,5 +136,23 @@ public abstract class StreamWriterResponseContext
    */
   public boolean getAutoIndent() {
     return this.autoindent;
+  }
+
+  public boolean hasEntity() {
+    return true;
+  }
+
+  /**
+   * Return the character set encoding used when writing to an outputstream
+   */
+  public String getEncoding() {
+    return encoding;
+  }
+  
+  /**
+   * Set the character set encoding used when writing to an outputstream
+   */
+  public void setEncoding(String encoding) {
+    this.encoding = encoding;
   }
 }

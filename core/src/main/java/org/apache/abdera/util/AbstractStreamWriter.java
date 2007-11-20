@@ -79,6 +79,17 @@ public abstract class AbstractStreamWriter
   public StreamWriter startFeed() {
     return startElement(Constants.FEED);
   }
+
+  public StreamWriter startFeed(IRI base) {
+    return startFeed(base.toString());
+  }
+ 
+  public StreamWriter startFeed(String base) {
+    StreamWriter sw = startElement(Constants.FEED);
+    if (base != null)
+      writeAttribute(Constants.BASE, base);
+    return sw;
+  }
   
   public StreamWriter endFeed() {
     return endElement();

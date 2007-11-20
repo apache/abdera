@@ -480,6 +480,30 @@ public interface StreamWriter
    * @param in The text value
    */  
   StreamWriter writeElementText(InputStream in) throws IOException;
+
+  /**
+   * Write element text
+   * @param value The text value
+   */  
+  StreamWriter writeElementText(Date value);
+
+  /**
+   * Write element text
+   * @param value The text value
+   */  
+  StreamWriter writeElementText(int value);
+  
+  /**
+   * Write element text
+   * @param value The text value
+   */  
+  StreamWriter writeElementText(long value);
+  
+  /**
+   * Write element text
+   * @param value The text value
+   */  
+  StreamWriter writeElementText(double value);
   
   /**
    * End the element
@@ -722,6 +746,11 @@ public interface StreamWriter
   /**
    * Write an attribute
    */
+  StreamWriter writeAttribute(QName qname, String value);
+  
+  /**
+   * Write an attribute
+   */
   StreamWriter writeAttribute(String name, String value);
   
   /**
@@ -737,7 +766,83 @@ public interface StreamWriter
   /**
    * Write an attribute
    */
-  StreamWriter writeAttribute(QName qname, String value);
+  StreamWriter writeAttribute(QName qname, Date value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(String name, Date value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(String name, String namespace, Date value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(String name, String namespace, String prefix, Date value);
+
+
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(QName qname, int value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(String name, int value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(String name, String namespace, int value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(String name, String namespace, String prefix, int value);
+
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(QName qname, long value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(String name, long value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(String name, String namespace, long value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(String name, String namespace, String prefix, long value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(QName qname, double value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(String name, double value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(String name, String namespace, double value);
+  
+  /**
+   * Write an attribute
+   */
+  StreamWriter writeAttribute(String name, String namespace, String prefix, double value);
   
   /**
    * Write a new line and indent

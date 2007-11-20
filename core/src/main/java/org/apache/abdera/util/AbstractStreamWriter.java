@@ -654,4 +654,180 @@ public abstract class AbstractStreamWriter
     this.autoindent = indent;
     return this;
   }
+  
+  public StreamWriter writeAttribute(
+    QName qname, 
+    Date value) {
+      return writeAttribute(
+        qname.getLocalPart(), 
+        qname.getNamespaceURI(), 
+        qname.getPrefix(), 
+        value);
+  }
+  
+  public StreamWriter writeAttribute(
+    String name, 
+    Date value) {
+      return writeAttribute(
+        name, null, null, value);
+  }
+  
+  public StreamWriter writeAttribute(
+    String name, 
+    String namespace, 
+    Date value) {
+      return writeAttribute(
+        name, 
+        namespace, 
+        null, 
+        value);
+  }
+  
+  public StreamWriter writeAttribute(
+    String name, 
+    String namespace, 
+    String prefix, 
+    Date value) {
+      return writeAttribute(
+        name, 
+        namespace, 
+        prefix, 
+        AtomDate.format(value));
+  }
+  
+  public StreamWriter writeAttribute(
+    QName qname, 
+    int value) {
+      return writeAttribute(
+          qname.getLocalPart(), 
+          qname.getNamespaceURI(), 
+          qname.getPrefix(), 
+          value);
+  }
+  
+  public StreamWriter writeAttribute(
+    String name, 
+    int value) {
+      return writeAttribute(
+        name, null, null, value);
+  }
+  
+  public StreamWriter writeAttribute(
+    String name, 
+    String namespace, 
+    int value) {
+      return writeAttribute(
+        name, 
+        namespace, 
+        null, 
+        value);
+  }
+  
+  public StreamWriter writeAttribute(
+    String name, 
+    String namespace, 
+    String prefix, 
+    int value) {
+      return writeAttribute(
+        name, 
+        namespace, 
+        prefix, 
+        Integer.toString(value));
+  }
+
+  public StreamWriter writeAttribute(
+    QName qname, 
+    long value) {
+      return writeAttribute(
+          qname.getLocalPart(), 
+          qname.getNamespaceURI(), 
+          qname.getPrefix(), 
+          value);
+  }
+  
+  public StreamWriter writeAttribute(
+    String name, 
+    long value) {
+      return writeAttribute(
+        name, null, null, value);
+  }
+  
+  public StreamWriter writeAttribute(
+    String name, 
+    String namespace, 
+    long value) {
+      return writeAttribute(
+        name, 
+        namespace, 
+        null, 
+        value);
+  }
+  
+  public StreamWriter writeAttribute(
+    String name, 
+    String namespace, 
+    String prefix, 
+    long value) {
+      return writeAttribute(
+        name, 
+        namespace, 
+        prefix, 
+        Long.toString(value));
+  }
+  
+  public StreamWriter writeAttribute(
+    QName qname, 
+    double value) {
+      return writeAttribute(
+          qname.getLocalPart(), 
+          qname.getNamespaceURI(), 
+          qname.getPrefix(), 
+          value);
+  }
+  
+  public StreamWriter writeAttribute(
+    String name, 
+    double value) {
+      return writeAttribute(
+        name, null, null, value);
+  }
+  
+  public StreamWriter writeAttribute(
+    String name, 
+    String namespace, 
+    double value) {
+      return writeAttribute(
+        name, 
+        namespace, 
+        null, 
+        value);
+  }
+  
+  public StreamWriter writeAttribute(
+    String name, 
+    String namespace, 
+    String prefix, 
+    double value) {
+      return writeAttribute(
+        name, 
+        namespace, 
+        prefix, 
+        Double.toString(value));
+  }
+  
+  public StreamWriter writeElementText(Date value) {
+    return writeElementText(AtomDate.format(value));
+  }
+
+  public StreamWriter writeElementText(int value) {
+    return writeElementText(Integer.toString(value));
+  }
+  
+  public StreamWriter writeElementText(long value) {
+    return writeElementText(Long.toString(value));
+  }
+  
+  public StreamWriter writeElementText(double value) {
+    return writeElementText(Double.toString(value));
+  }
 }

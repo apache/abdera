@@ -50,6 +50,10 @@ public abstract class AbstractTarget
   public TargetType getType() {
     return type;
   }
+ 
+  public RequestContext getRequestContext() {
+    return context;
+  }
   
   public String toString() {
     return getType() + " - " + getIdentity();

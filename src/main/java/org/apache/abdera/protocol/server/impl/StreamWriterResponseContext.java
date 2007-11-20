@@ -29,19 +29,29 @@ import org.apache.abdera.writer.StreamWriter;
  * Abstract base class for creating ResponseContext implementations that use
  * the StreamWriter interface.  Using the StreamWriter to write out documents
  * is significantly faster than using the object model but requires developers
- * to know more about proper Atom syntax
+ * to know more about proper Atom syntax.
  */
 public abstract class StreamWriterResponseContext 
   extends AbstractResponseContext {
   
   private final Abdera abdera;
   private final String sw;
+  private boolean autoindent;
   
+  /**
+   * Create a new StreamWriterResponseContext
+   * @param abdera The Abdera instance
+   */
   protected StreamWriterResponseContext(
     Abdera abdera) {
       this(abdera,null);
   }
 
+  /**
+   * Create a new StreamWriterResponseContext
+   * @param abdera The Abdera instance
+   * @param sw The name of the Named StreamWriter to use
+   */
   protected StreamWriterResponseContext(
     Abdera abdera, 
     String sw) {
@@ -49,22 +59,53 @@ public abstract class StreamWriterResponseContext
       this.sw = sw;
   }
   
+  /**
+   * Get the Abdera instance
+   */
   protected final Abdera getAbdera() {
     return abdera;
   }
   
+  /**
+   * Create a new StreamWriter instance.  If the sw property was set,
+   * the specified Named StreamWriter will be returned
+   */
   protected StreamWriter newStreamWriter() {
     return sw == null ? 
       abdera.newStreamWriter() : 
       abdera.getWriterFactory().newStreamWriter(sw);
   }
   
+  /**
+   * Use the StreamWriter to write to the specified OutputStream
+   */
   public void writeTo(
     OutputStream out) 
       throws IOException {
     writeTo(new OutputStreamWriter(out,"UTF-8"));
   }
+
+  /**
+   * Use the StreamWriter to write to the specified java.io.Writer
+   */
+  public void writeTo(Writer writer) 
+    throws IOException {
+      writeTo(
+        newStreamWriter()
+          .setWriter(writer)
+          .setAutoIndent(autoindent)
+      );
+  }
   
+  /**
+   * Write to the specified StreamWriter.  Subclasses of this class must
+   * implement this method.
+   */
+  protected abstract void writeTo(StreamWriter sw) throws IOException;
+  
+  /**
+   * Unsupported
+   */
   public final void writeTo(
     OutputStream out, 
     org.apache.abdera.writer.Writer writer)
@@ -72,6 +113,9 @@ public abstract class StreamWriterResponseContext
     throw new UnsupportedOperationException();
   }
   
+  /**
+   * Unsupported
+   */
   public final void writeTo(
     Writer javaWriter,
     org.apache.abdera.writer.Writer abderaWriter) 
@@ -79,4 +123,17 @@ public abstract class StreamWriterResponseContext
     throw new UnsupportedOperationException();
   }
   
+  /**
+   * True to enable automatic indenting on the StreamWriter
+   */
+  public void setAutoIndent(boolean autoindent) {
+    this.autoindent = autoindent;
+  }
+  
+  /**
+   * True if automatic indenting is enabled on the StreamWriter
+   */
+  public boolean getAutoIndent() {
+    return this.autoindent;
+  }
 }

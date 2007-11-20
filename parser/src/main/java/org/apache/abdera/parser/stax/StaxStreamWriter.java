@@ -162,11 +162,12 @@ public class StaxStreamWriter
           namespace);
       } else if (namespace != null) {
         writer.writeStartElement(
+          "",
           name, 
           namespace);
       } else {
-        writer.writeStartElement(
-          name);
+        writer.writeStartElement("",name,"");
+        writer.writeDefaultNamespace("");
       }
       writeNamespace(prefix,namespace,false);
       if (autoflush) writer.flush();

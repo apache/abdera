@@ -567,6 +567,14 @@ public abstract class AbstractStreamWriter
     return this;
   }
   
+  public StreamWriter writeAcceptsEntry() {
+    return writeAccepts("application/atom+xml;type=entry");
+  }
+  
+  public StreamWriter writeAcceptsNothing() {
+    return writeAccepts("");
+  }
+  
   public StreamWriter startCategories() {
     return startCategories(false,null);
   }

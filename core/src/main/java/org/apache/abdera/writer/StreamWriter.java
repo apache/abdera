@@ -705,6 +705,16 @@ public interface StreamWriter
   StreamWriter writeAccepts(String... accepts);
   
   /**
+   * Writes an app:accept element indicating that entries are accepted 
+   */
+  StreamWriter writeAcceptsEntry();
+  
+  /**
+   * Writes an app:accept element indicating that nothing is accepted
+   */
+  StreamWriter writeAcceptsNothing();
+  
+  /**
    * Start an app:categories element
    */
   StreamWriter startCategories();

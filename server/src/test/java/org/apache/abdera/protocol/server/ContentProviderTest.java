@@ -29,6 +29,8 @@ import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.protocol.server.impl.SingletonProviderManager;
 import org.apache.abdera.protocol.server.impl.WorkspaceProvider;
 import org.apache.abdera.protocol.server.servlet.AbderaServlet;
+import org.apache.abdera.writer.Writer;
+import org.apache.abdera.writer.WriterFactory;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
@@ -118,7 +120,9 @@ public class ContentProviderTest extends TestCase {
   }
 
   protected void prettyPrint(Abdera abdera, Base doc) throws IOException {
-    abdera.getWriterFactory().getWriter("prettyxml").writeTo(doc, System.out);
+    WriterFactory factory = abdera.getWriterFactory();
+    Writer writer = factory.getWriter("prettyxml");
+    writer.writeTo(doc, System.out);
     System.out.println();
   }
 

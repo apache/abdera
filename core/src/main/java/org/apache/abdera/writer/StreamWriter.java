@@ -20,11 +20,13 @@ package org.apache.abdera.writer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.activation.DataHandler;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.lang.Lang;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.util.NamedItem;
@@ -864,5 +866,29 @@ public interface StreamWriter
    */
   StreamWriter setAutoIndent(boolean indent);
   
+  /**
+   * Write the xml:base attribute
+   */
+  StreamWriter writeBase(String iri);
+  
+  /**
+   * Write the xml:base attribute
+   */
+  StreamWriter writeBase(IRI iri);
+  
+  /**
+   * Write the xml:lang attribute
+   */
+  StreamWriter writeLanguage(String lang);
+  
+  /**
+   * Write the xml:lang attribute
+   */
+  StreamWriter writeLanguage(Lang lang);
+  
+  /**
+   * Write the xml:lang attribute
+   */
+  StreamWriter writeLanguage(Locale locale);
 }
 

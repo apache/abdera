@@ -23,11 +23,13 @@ import java.io.InputStream;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.activation.DataHandler;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.lang.Lang;
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Text;
@@ -838,4 +840,25 @@ public abstract class AbstractStreamWriter
   public StreamWriter writeElementText(double value) {
     return writeElementText(Double.toString(value));
   }
+  
+  public StreamWriter writeBase(String iri) {
+    return writeAttribute(Constants.BASE, iri);
+  }
+  
+  public StreamWriter writeBase(IRI iri) {
+    return writeBase(iri.toString());
+  }
+  
+  public StreamWriter writeLanguage(String lang) {
+    return writeAttribute(Constants.LANG, lang);
+  }
+  
+  public StreamWriter writeLanguage(Lang lang) {
+    return writeLanguage(lang.toString());
+  }
+  
+  public StreamWriter writeLanguage(Locale locale) {
+    return writeLanguage(new Lang(locale));
+  }
+
 }

@@ -40,6 +40,8 @@ public class StreamWriterExample {
         .setAutoIndent(true)
         .startDocument()
           .startFeed()
+            .writeBase("http://example.org")
+            .writeLanguage("en-US")
             .writeId("http://example.org")
             .writeTitle("<Testing 123>")
             .writeSubtitle("Foo")

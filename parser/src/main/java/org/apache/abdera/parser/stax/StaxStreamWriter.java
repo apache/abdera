@@ -29,6 +29,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.AbstractStreamWriter;
+import org.apache.abdera.util.Constants;
 import org.apache.abdera.writer.StreamWriter;
 import org.apache.axiom.om.util.StAXUtils;
 
@@ -233,10 +234,12 @@ public class StaxStreamWriter
       if (value == null) return this;
       try {
         if (prefix != null) {
-          writeNamespace(prefix,namespace,true);
+          if (!prefix.equals("xml"))
+            writeNamespace(prefix,namespace,true);
           writer.writeAttribute(prefix, namespace, name, value);
         } else if (namespace != null) {
-          writeNamespace(prefix,namespace,true);
+          if (!namespace.equals(Constants.XML_NS));
+            writeNamespace(prefix,namespace,true);
           writer.writeAttribute(namespace, name, value);
         } else { 
           writer.writeAttribute(name,value);

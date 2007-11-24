@@ -1,0 +1,18 @@
+<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+  xmlns:jcr="http://www.jcp.org/jcr/1.0" 
+  xmlns:abdera="http://abdera.apache.org"
+  xmlns:mix="http://www.jcp.org/jcr/mix/1.0">
+
+  <nodeType name="abdera:entry" 
+    isMixin="false" 
+    hasOrderableChildNodes="false"
+    primaryItemName="" 
+    allowSameNameSiblings="false">
+    
+    <supertypes>
+      <supertype>nt:unstructured</supertype>
+    </supertypes>
+    
+  </nodeType>
+
+</nodeTypes>

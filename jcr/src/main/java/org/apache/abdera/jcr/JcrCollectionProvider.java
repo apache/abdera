@@ -2,19 +2,14 @@ package org.apache.abdera.jcr;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.activation.MimeType;
-import javax.jcr.AccessDeniedException;
 import javax.jcr.Credentials;
-import javax.jcr.InvalidItemStateException;
 import javax.jcr.ItemExistsException;
-import javax.jcr.ItemNotFoundException;
+import javax.jcr.NamespaceException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
@@ -25,13 +20,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
-import javax.jcr.nodetype.NoSuchNodeTypeException;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.jcr.query.QueryResult;
-import javax.jcr.version.VersionException;
+import javax.jcr.Workspace;
 
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Content;
@@ -44,8 +33,13 @@ import org.apache.abdera.protocol.server.impl.AbstractCollectionProvider;
 import org.apache.abdera.protocol.server.impl.EmptyResponseContext;
 import org.apache.abdera.protocol.server.impl.ResponseContextException;
 import org.apache.abdera.protocol.util.EncodingUtil;
+import org.apache.abdera.protocol.util.PoolManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.jackrabbit.core.nodetype.NodeTypeDef;
+import org.apache.jackrabbit.core.nodetype.NodeTypeManagerImpl;
+import org.apache.jackrabbit.core.nodetype.NodeTypeRegistry;
+import org.apache.jackrabbit.core.nodetype.xml.NodeTypeReader;
 
 public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
 
@@ -54,8 +48,6 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
   private static final String TITLE = "title";
 
   private static final String SUMMARY = "summary";
-
-  private static final String ENTRY = "entry";
 
   private static final String UPDATED = "updated";
 
@@ -69,15 +61,13 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
 
   private static final String CONTENT = "content";
 
-  private static final String RESOURCE_NAME = "resourceName";
-
-  private static final String SESSION = "jcrSession";
+  private static final String SESSION_KEY = "jcrSession";
 
   private static final String MEDIA = "media";
 
   private static final String CONTENT_TYPE = "contentType";
 
-  private Repository repository;
+  private static final String NAMESPACE = "http://abdera.apache.org";
 
   private String collectionNodePath;
 
@@ -87,22 +77,35 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
 
   private String author;
 
-  private Credentials credentials;
-
   private String collectionNodeId;
 
-  public JcrCollectionProvider(String title, String author, String collectionNodePath, Repository repository,
-                               Credentials credentials) throws RepositoryException {
-    super();
-    this.title = title;
-    this.author = author;
+  private Repository repository;
+
+  private Credentials credentials;
+  
+  private int maxActiveSessions = 100;
+  
+  private PoolManager<Session> sessionPool;
+  
+  public void setCollectionNodePath(String collectionNodePath) {
     this.collectionNodePath = collectionNodePath;
-    this.credentials = credentials;
-    this.repository = repository;
   }
 
-  public void initialize() throws RepositoryException {
-    Session session = createSession();
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public void setAuthor(String author) {
+    this.author = author;
+  }
+
+  /**
+   * Logs into the repository and creates a node for the collection if one does not exist. Also,
+   * this will set up the session pool.
+   * @throws RepositoryException
+   */
+  public void initialize() throws Exception {
+    Session session = repository.login(credentials);
 
     Node collectionNode = null;
     try {
@@ -112,11 +115,39 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
       collectionNode.addMixin("mix:referenceable");
       session.save();
     }
-
+    
     this.collectionNodeId = collectionNode.getUUID();
     this.id = "urn:" + collectionNodeId;
 
+    // UGH, Jackrabbit specific code
+    Workspace workspace = session.getWorkspace();
+    try {
+      workspace.getNamespaceRegistry().getPrefix(NAMESPACE);
+    } catch (NamespaceException e) {
+      workspace.getNamespaceRegistry().registerNamespace("abdera", NAMESPACE);
+    }
+    
+    NodeTypeDef[] nodeTypes = NodeTypeReader.read(getClass().getResourceAsStream("/org/apache/abdera/jcr/nodeTypes.xml"));
+
+    // Get the NodeTypeManager from the Workspace.
+    // Note that it must be cast from the generic JCR NodeTypeManager to the
+    // Jackrabbit-specific implementation.
+    NodeTypeManagerImpl ntmgr =(NodeTypeManagerImpl)workspace.getNodeTypeManager();
+    
+    // Acquire the NodeTypeRegistry
+    NodeTypeRegistry ntreg = ntmgr.getNodeTypeRegistry();
+
+    // Loop through the prepared NodeTypeDefs
+    for (NodeTypeDef ntd : nodeTypes) {
+        // ...and register it
+        if (!ntreg.isRegistered(ntd.getName())) {
+          ntreg.registerNodeType(ntd);
+        }
+    }
+
     session.logout();
+    
+    sessionPool = new SessionPoolManager(maxActiveSessions, repository, credentials);
   }
 
   @Override
@@ -124,10 +155,10 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
     super.begin(request);
 
     try {
-      Session session = createSession();
+      Session session = (Session) sessionPool.get(request);
 
-      request.setAttribute(Scope.REQUEST, SESSION, session);
-    } catch (RepositoryException e) {
+      request.setAttribute(Scope.REQUEST, SESSION_KEY, session);
+    } catch (Exception e) {
       throw new ResponseContextException(500, e);
     }
   }
@@ -137,14 +168,14 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
     // Logout of the JCR session
     Session session = getSession(request);
     if (session != null) {
-     // session.logout();
+      try {
+        sessionPool.release(session);
+      } catch (Exception e) {
+        log.warn("Could not return Session to pool!", e);
+      }
     }
 
     super.end(request, response);
-  }
-
-  protected Session createSession() throws RepositoryException {
-    return repository.login(credentials);
   }
 
 
@@ -208,18 +239,15 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
   @Override
   public Node createEntry(String title, IRI id, String summary, Date updated, List<Person> authors,
                           Content content, RequestContext request) throws ResponseContextException {
-    
     Node entry = null;
     try {
       Session session = getSession(request);
 
       Node collectionNode = session.getNodeByUUID(collectionNodeId);
-      entry = collectionNode.addNode(ENTRY);
-      entry.addMixin("mix:referenceable");
-
-      mapEntryToNode(entry, title, summary, updated, authors, content, session);
-      
-      session.save();
+      String resourceName = EncodingUtil.sanitize(title);
+      entry =  createEntry(title, summary, updated, authors, 
+                           content, session, collectionNode,
+                           resourceName, 0);
       
       return entry;
     } catch (RepositoryException e) {
@@ -233,11 +261,36 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
     }
   }
 
+  private Node createEntry(String title, String summary, 
+                           Date updated, List<Person> authors, 
+                           Content content, Session session, 
+                           Node collectionNode, String resourceName, int num)
+    throws ResponseContextException, RepositoryException {
+    try {
+      String name = resourceName;
+      if (num > 0) {
+        name = name + "_" + num;
+      }
+      
+      Node entry = collectionNode.addNode(name, "abdera:entry");
+      
+      entry.addMixin("mix:referenceable");
+
+      mapEntryToNode(entry, title, summary, updated, authors, content, session);
+      
+      session.save();
+      
+      return entry;
+    }
+    catch (ItemExistsException e) 
+    {
+      return createEntry(title, summary, updated, authors, content, session, collectionNode, resourceName, num++);
+    }
+  }
+
   private Node mapEntryToNode(Node entry, String title, String summary, Date updated, List<Person> authors,
-                              Content content, Session session) throws ResponseContextException,
-    ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException,
-    ItemExistsException, PathNotFoundException, AccessDeniedException, InvalidItemStateException,
-    NoSuchNodeTypeException {
+                              Content content, Session session)
+    throws ResponseContextException, RepositoryException {
     if (title == null) {
       EmptyResponseContext ctx = new EmptyResponseContext(500);
       ctx.setStatusText("Entry title cannot be empty.");
@@ -245,11 +298,6 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
     }
 
     entry.setProperty(TITLE, title);
-
-    // TODO: figure out a full proof way to check for entries with this same
-    // resource name
-    String resourceName = EncodingUtil.sanitize(title);
-    entry.setProperty(RESOURCE_NAME, resourceName);
 
     if (summary != null) {
       entry.setProperty(SUMMARY, summary);
@@ -280,7 +328,7 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
   }
 
   private Session getSession(RequestContext request) {
-    return (Session)request.getAttribute(Scope.REQUEST, SESSION);
+    return (Session)request.getAttribute(Scope.REQUEST, SESSION_KEY);
   }
 
   @Override
@@ -299,22 +347,11 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
 
   private Node getNode(Session session, String resourceName) throws ResponseContextException,
     RepositoryException {
-    QueryManager qm = session.getWorkspace().getQueryManager();
-
-    StringBuffer qStr = new StringBuffer();
-    qStr.append("//*[@jcr:uuid='").append(collectionNodeId).append("']/entry[@").append(RESOURCE_NAME)
-      .append("='").append(resourceName).append("']");
-    
-    Query query = qm.createQuery(qStr.toString(), Query.XPATH);
-
-    QueryResult execute = query.execute();
-
-    NodeIterator nodes = execute.getNodes();
-    if (!nodes.hasNext()) {
+    try {
+      return session.getNodeByUUID(collectionNodeId).getNode(resourceName);
+    } catch (PathNotFoundException e) {
       throw new ResponseContextException(404);
     }
-
-    return nodes.nextNode();
   }
 
   /** Recursively outputs the contents of the given node. */
@@ -460,7 +497,11 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
   
   @Override
   public String getName(Node entry) throws ResponseContextException {
-    return getStringOrNull(entry, RESOURCE_NAME);
+    try {
+      return entry.getName();
+    } catch (RepositoryException e) {
+      throw new ResponseContextException(500, e);
+    }
   }
 
   @Override
@@ -512,16 +553,16 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
     return null;
   }
 
-  public static Calendar getDateOrNull(Node node, String propName) {
+  public static Calendar getDateOrNull(Node node, String propName) throws ResponseContextException {
     try {
       Value v = getValueOrNull(node, propName);
       if (v != null) {
         return v.getDate();
       }
     } catch (ValueFormatException e) {
-      throw new RuntimeException(e);
+      throw new ResponseContextException(500, e);
     } catch (RepositoryException e) {
-      throw new RuntimeException(e);
+      throw new ResponseContextException(500, e);
     }
 
     return null;
@@ -541,6 +582,18 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
     }
 
     return p.getValue();
+  }
+
+  public void setRepository(Repository repository) {
+    this.repository = repository;
+  }
+
+  public void setCredentials(Credentials credentials) {
+    this.credentials = credentials;
+  }
+
+  public void setMaxActiveSessions(int maxActiveSessions) {
+    this.maxActiveSessions = maxActiveSessions;
   }
 
 }

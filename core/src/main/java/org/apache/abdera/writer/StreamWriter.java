@@ -107,18 +107,6 @@ public interface StreamWriter
   StreamWriter startFeed();
 
   /**
-   * Start an atom:feed element
-   * @param the xml:base attribute value
-   */
-  StreamWriter startFeed(String base);
-
-  /**
-   * Start an atom:feed element
-   * @param the xml:base attribute value
-   */
-  StreamWriter startFeed(IRI base);
-
-  /**
    * End the atom:feed element
    */
   StreamWriter endFeed();

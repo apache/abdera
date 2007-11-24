@@ -25,6 +25,14 @@ public abstract class AbstractItemManager<T>
   extends PoolManager<T>
   implements ItemManager<T> {
 
+  public AbstractItemManager() {
+    super();
+  }
+
+  public AbstractItemManager(int max) {
+    super(max);
+  }
+
   public T get(Request request) {
     return getInstance();
   }

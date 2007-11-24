@@ -44,157 +44,162 @@ import junit.framework.TestCase;
 
 public class JcrCollectionProviderTest extends TestCase {
 
-    private Server server;
-    private DefaultServiceContext abderaServiceContext;
-    private Repository repository;
+  private Server server;
+  private DefaultServiceContext abderaServiceContext;
+  private Repository repository;
 
-    @Override
-    protected void setUp() throws Exception {
-      super.setUp();
-      
-      abderaServiceContext = new DefaultServiceContext();
+  @Override
+  protected void setUp() throws Exception {
+    super.setUp();
 
-      RegexTargetResolver resolver = new RegexTargetResolver();
-      resolver.setPattern("/acme(\\?[^#]*)?", TargetType.TYPE_SERVICE);
-      resolver.setPattern("/acme/feed(\\?[^#]*)?", TargetType.TYPE_COLLECTION);
-      resolver.setPattern("/acme/feed/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY);
-      abderaServiceContext.setTargetResolver(resolver);
-      
-      SingletonProviderManager pm = new SingletonProviderManager();
-      abderaServiceContext.setProviderManager(pm);
+    abderaServiceContext = new DefaultServiceContext();
 
-      WorkspaceProvider wp = new WorkspaceProvider();
+    RegexTargetResolver resolver = new RegexTargetResolver();
+    resolver.setPattern("/acme(\\?[^#]*)?", TargetType.TYPE_SERVICE);
+    resolver.setPattern("/acme/feed(\\?[^#]*)?", TargetType.TYPE_COLLECTION);
+    resolver.setPattern("/acme/feed/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY);
+    abderaServiceContext.setTargetResolver(resolver);
 
-      SimpleWorkspaceInfo wi = new SimpleWorkspaceInfo();
-      wi.setId("acme");
-      
-      repository = new TransientRepository();
-      JcrCollectionProvider cp = 
-          new JcrCollectionProvider("My Entries", 
-                                    "Apache Abdera", 
-                                    "entries", 
-                                    repository,
-                                    new SimpleCredentials("username", "bogus".toCharArray()));
-      cp.initialize();
-      
-      Map<String, CollectionProvider> contentProviders = new HashMap<String, CollectionProvider>();
-      contentProviders.put("feed", cp);
-      
-      wi.setCollectionProviders(contentProviders);
+    SingletonProviderManager pm = new SingletonProviderManager();
+    abderaServiceContext.setProviderManager(pm);
 
-      List<WorkspaceInfo> workspaces = new ArrayList<WorkspaceInfo>();
-      workspaces.add(wi);
-      wp.setWorkspaces(workspaces);
-      pm.setProvider(wp);
+    WorkspaceProvider wp = new WorkspaceProvider();
 
-      initializeJetty();
-    }
+    SimpleWorkspaceInfo wi = new SimpleWorkspaceInfo();
+    wi.setId("acme");
 
-    public void testCustomerProvider() throws Exception {
-
-      Abdera abdera = new Abdera();
-      Factory factory = abdera.getFactory();
-
-      AbderaClient client = new AbderaClient(abdera);
-
-      String base = "http://localhost:9002/";
-
-      // Testing of entry creation
-      IRI colUri = new IRI(base).resolve("acme/feed");
-      Entry entry = factory.newEntry();
-      entry.setTitle("Some Entry");
-      entry.setUpdated(new Date());
-      entry.addAuthor("Dan Diephouse");
-      entry.setId(factory.newUuidUri());
-      entry.setSummary("This is my entry.");
-      entry.setContent("This is my entry. It's swell.");
-      
-      RequestOptions opts = new RequestOptions();
-      opts.setContentType("application/atom+xml;type=entry");
-      ClientResponse res = client.post(colUri.toString(), entry, opts);
-      assertEquals(201, res.getStatus());
-
-      //prettyPrint(abdera, res.getDocument());
-
-      IRI location = res.getLocation();
-      assertEquals(colUri + "/Some%20Entry", 
-                   location.toString());
-
-      // GET the entry
-      res = client.get(location.toString());
-      assertEquals(200, res.getStatus());
-
-      //prettyPrint(abdera, res.getDocument());
-      org.apache.abdera.model.Document<Entry> entry_doc = res.getDocument();
-      Entry entry2 = entry_doc.getRoot();
-
-      assertEquals(entry.getTitle(), entry2.getTitle());
-      assertEquals(entry.getSummary(), entry2.getSummary());
-      assertEquals(entry.getContent(), entry2.getContent());
-      
-      List<Person> authors = entry2.getAuthors();
-      assertEquals(1, authors.size());
-      
-      entry = entry2;
-      entry.setSummary("New Summary");
-      entry.setContent("New Content");
-      res = client.put(location.toString(), entry, opts);
-      assertEquals(204, res.getStatus());
-      
-      res = client.get(colUri.toString());
-      org.apache.abdera.model.Document<Feed> feed_doc = res.getDocument();
-      Feed feed = feed_doc.getRoot();
-      
-      assertEquals(1, feed.getEntries().size());
-      //prettyPrint(abdera, feed_doc);
-    }
-
-    protected void prettyPrint(Abdera abdera, Base doc) throws IOException {
-      Writer writer = abdera.getWriterFactory().getWriter("prettyxml");
-      writer.writeTo(doc, System.out);
-      System.out.println();
-    }
+    repository = new TransientRepository();
     
-    private void clearJcrRepository() {
-      try {
-          Session session = repository.login(new SimpleCredentials("username", "password".toCharArray()));
+    JcrCollectionProvider cp = new JcrCollectionProvider();
+    cp.setTitle("My Entries");
+    cp.setAuthor("Apache Abdera");
+    cp.setCollectionNodePath("entries");         
+    cp.setRepository(repository);
+    cp.setCredentials(new SimpleCredentials("username", "pass".toCharArray()));
+    cp.initialize();
 
-          Node node = session.getRootNode();
+    Map<String, CollectionProvider> contentProviders = new HashMap<String, CollectionProvider>();
+    contentProviders.put("feed", cp);
 
-          for (NodeIterator itr = node.getNodes(); itr.hasNext();) {
-              Node child = itr.nextNode();
-              if (!child.getName().equals("jcr:system")) {
-                  child.remove();
-              }
-          }
-          session.save();
-          session.logout();
-      } catch (PathNotFoundException t) {
-      } catch (Throwable t) {
-          t.printStackTrace();
-      }
+    wi.setCollectionProviders(contentProviders);
+
+    List<WorkspaceInfo> workspaces = new ArrayList<WorkspaceInfo>();
+    workspaces.add(wi);
+    wp.setWorkspaces(workspaces);
+    pm.setProvider(wp);
+
+    initializeJetty();
   }
 
-    private void initializeJetty() throws Exception {
+  public void testCustomerProvider() throws Exception {
+    Abdera abdera = new Abdera();
+    Factory factory = abdera.getFactory();
 
-      server = new Server(9002);
-      Context root = new Context(server, "/", Context.NO_SESSIONS);
-      root.addServlet(new ServletHolder(new AbderaServlet() {
+    AbderaClient client = new AbderaClient(abdera);
 
-        @Override
-        protected ServiceContext createServiceContext() {
-          abderaServiceContext.init(getAbdera(), getProperties(getServletConfig()));
-          return abderaServiceContext;
+    String base = "http://localhost:9002/";
+
+    // Testing of entry creation
+    IRI colUri = new IRI(base).resolve("acme/feed");
+    Entry entry = factory.newEntry();
+    entry.setTitle("Some Entry");
+    entry.setUpdated(new Date());
+    entry.addAuthor("Dan Diephouse");
+    entry.setId(factory.newUuidUri());
+    entry.setSummary("This is my entry.");
+    entry.setContent("This is my entry. It's swell.");
+
+    RequestOptions opts = new RequestOptions();
+    opts.setContentType("application/atom+xml;type=entry");
+    ClientResponse res = client.post(colUri.toString(), entry, opts);
+    assertEquals(201, res.getStatus());
+
+    //prettyPrint(abdera, res.getDocument());
+
+    IRI location = res.getLocation();
+    assertEquals(colUri + "/Some%20Entry", location.toString());
+
+    // GET the entry
+    res = client.get(location.toString());
+    assertEquals(200, res.getStatus());
+
+    //prettyPrint(abdera, res.getDocument());
+    org.apache.abdera.model.Document<Entry> entry_doc = res.getDocument();
+    Entry entry2 = entry_doc.getRoot();
+
+    assertEquals(entry.getTitle(), entry2.getTitle());
+    assertEquals(entry.getSummary(), entry2.getSummary());
+    assertEquals(entry.getContent(), entry2.getContent());
+
+    List<Person> authors = entry2.getAuthors();
+    assertEquals(1, authors.size());
+
+    entry = entry2;
+    entry.setSummary("New Summary");
+    entry.setContent("New Content");
+
+    res = client.put(location.toString(), entry, opts);
+    assertEquals(204, res.getStatus());
+
+    res = client.get(colUri.toString());
+    org.apache.abdera.model.Document<Feed> feed_doc = res.getDocument();
+    Feed feed = feed_doc.getRoot();
+
+    assertEquals(1, feed.getEntries().size());
+    //prettyPrint(abdera, feed_doc);
+
+    // test 404 not found
+    res = client.get(location.toString() + "Invalid");
+    assertEquals(404, res.getStatus());
+  }
+
+  protected void prettyPrint(Abdera abdera, Base doc) throws IOException {
+    Writer writer = abdera.getWriterFactory().getWriter("prettyxml");
+    writer.writeTo(doc, System.out);
+    System.out.println();
+  }
+  
+  private void clearJcrRepository() {
+    try {
+      Session session = repository.login(new SimpleCredentials("username", "password".toCharArray()));
+
+      Node node = session.getRootNode();
+
+      for (NodeIterator itr = node.getNodes(); itr.hasNext();) {
+        Node child = itr.nextNode();
+        if (!child.getName().equals("jcr:system")) {
+          child.remove();
         }
-      }), "/*");
-      server.start();
+      }
+      session.save();
+      session.logout();
+    } catch (PathNotFoundException t) {
+    } catch (Throwable t) {
+      t.printStackTrace();
     }
+  }
 
-    @Override
-    protected void tearDown() throws Exception {
-      clearJcrRepository();
+  private void initializeJetty() throws Exception {
 
-      if (server != null) server.stop();
-    }
+    server = new Server(9002);
+    Context root = new Context(server, "/", Context.NO_SESSIONS);
+    root.addServlet(new ServletHolder(new AbderaServlet() {
+
+      @Override
+      protected ServiceContext createServiceContext() {
+        abderaServiceContext.init(getAbdera(), getProperties(getServletConfig()));
+        return abderaServiceContext;
+      }
+    }), "/*");
+    server.start();
+  }
+
+  @Override
+  protected void tearDown() throws Exception {
+    clearJcrRepository();
+
+    if (server != null)
+      server.stop();
+  }
 
 }

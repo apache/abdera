@@ -34,6 +34,7 @@ import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.protocol.server.impl.SingletonProviderManager;
 import org.apache.abdera.protocol.server.impl.WorkspaceProvider;
 import org.apache.abdera.protocol.server.servlet.AbderaServlet;
+import org.apache.abdera.writer.Writer;
 import org.apache.jackrabbit.core.TransientRepository;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
@@ -149,7 +150,8 @@ public class JcrCollectionProviderTest extends TestCase {
     }
 
     protected void prettyPrint(Abdera abdera, Base doc) throws IOException {
-      abdera.getWriterFactory().getWriter("prettyxml").writeTo(doc, System.out);
+      Writer writer = abdera.getWriterFactory().getWriter("prettyxml");
+      writer.writeTo(doc, System.out);
       System.out.println();
     }
     

@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.util.Date;
+import java.util.Formatter;
 import java.util.Locale;
 
 import javax.activation.DataHandler;
@@ -33,6 +34,7 @@ import org.apache.abdera.i18n.lang.Lang;
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Text;
+import org.apache.abdera.model.Text.Type;
 import org.apache.abdera.writer.StreamWriter;
 import org.apache.commons.codec.binary.Base64;
 
@@ -465,6 +467,10 @@ public abstract class AbstractStreamWriter
   public StreamWriter writeAuthor(String name, String email, String uri) {
     return writePerson(Constants.AUTHOR,name,email,uri);
   }
+  
+  public StreamWriter writeAuthor(String name) {
+    return writeAuthor(name, null, null);
+  }
 
   public StreamWriter startAuthor() {
     return startElement(Constants.AUTHOR);
@@ -476,6 +482,10 @@ public abstract class AbstractStreamWriter
   
   public StreamWriter writeContributor(String name, String email, String uri) {
     return writePerson(Constants.CONTRIBUTOR,name,email,uri);
+  }
+  
+  public StreamWriter writeContributor(String name) {
+    return writeContributor(name,null,null);
   }
 
   public StreamWriter startContributor() {
@@ -850,4 +860,266 @@ public abstract class AbstractStreamWriter
     return writeLanguage(new Lang(locale));
   }
 
+  public StreamWriter writeIRIElement(String name, IRI iri) {
+    return 
+      startElement(name).
+      writeElementText(iri.toString()).
+      endElement();
+  }
+
+  public StreamWriter writeIRIElement(String name, String namespace, IRI iri) {
+    return 
+      startElement(name,namespace).
+      writeElementText(iri.toString()).
+      endElement();
+  }
+
+  public StreamWriter writeIRIElement(
+    String name, 
+    String namespace,
+    String prefix, 
+    IRI iri) {
+      return 
+        startElement(name,namespace,prefix).
+        writeElementText(iri.toString()).
+        endElement();
+  }
+
+  public StreamWriter writeIRIElement(
+    String name, 
+    String namespace,
+    String prefix, 
+    String iri) {
+      return 
+        startElement(name,namespace,prefix).
+        writeElementText(iri).
+        endElement();
+  }
+
+  public StreamWriter writeIRIElement(
+    String name, 
+    String namespace, 
+    String iri) {
+      return 
+      startElement(name,namespace).
+      writeElementText(iri).
+      endElement();
+  }
+
+  public StreamWriter writeIRIElement(
+    String name, 
+    String iri) {
+      return 
+        startElement(name).
+        writeElementText(iri).
+        endElement();
+  }
+
+  public StreamWriter writeDate(
+    String name, 
+    Date date) {
+      return
+        startElement(name).
+        writeElementText(date).
+        endElement();
+  }
+
+  public StreamWriter writeDate(
+    String name, 
+    String namespace, 
+    Date date) {
+      return
+        startElement(name,namespace).
+        writeElementText(date).
+        endElement();
+  }
+
+  public StreamWriter writeDate(
+    String name, 
+    String namespace, 
+    String prefix,
+    Date date) {
+      return
+        startElement(name,namespace,prefix).
+        writeElementText(date).
+        endElement();
+  }
+
+  public StreamWriter writeDate(
+    String name, 
+    String date) {
+      return
+        startElement(name).
+        writeElementText(date).
+        endElement();
+  }
+  
+  public StreamWriter writeDate(
+    String name,
+    String namespace,
+    String date) {
+      return
+        startElement(name,namespace).
+        writeElementText(date).
+        endElement();
+  }
+
+  public StreamWriter writeDate(
+    String name,
+    String namespace,
+    String prefix,
+    String date) {
+      return
+        startElement(name,namespace,prefix).
+        writeElementText(date).
+        endElement();
+  }
+
+  public StreamWriter startText(
+    String name, 
+    String namespace, 
+    String prefix,
+    Type type) {
+      return 
+        startElement(name,namespace,prefix).
+        writeAttribute("type",type!=null?type.name().toLowerCase():"text");
+  }
+
+  public StreamWriter startText(
+    String name, 
+    String namespace, 
+    Type type) {
+      return 
+        startElement(name,namespace).
+        writeAttribute("type",type!=null?type.name().toLowerCase():"text");
+  }
+
+  public StreamWriter startText(
+    String name, 
+    Type type) {
+      return 
+        startElement(name).
+        writeAttribute("type",type!=null?type.name().toLowerCase():"text");
+  }
+
+  public StreamWriter writeText(
+    String name, 
+    String namespace, 
+    String prefix,
+    Type type, 
+    String value) {
+      return 
+        startText(name,namespace,prefix,type).
+        writeElementText(value).
+        endElement();
+  }
+
+  public StreamWriter writeText(
+    String name, 
+    String namespace, 
+    Type type,
+    String value) {
+      return 
+        startText(name,namespace,type).
+        writeElementText(value).
+        endElement();
+  }
+
+  public StreamWriter writeText(
+    String name, 
+    Type type, 
+    String value) {
+      return 
+        startText(name,type).
+        writeElementText(value).
+        endElement();
+  }
+
+  public StreamWriter startPerson(
+    String name, 
+    String namespace, 
+    String prefix) {
+      return startElement(name,namespace,prefix);
+  }
+
+  public StreamWriter startPerson(
+    String name, 
+    String namespace) {
+      return startElement(name,namespace);
+  }
+
+  public StreamWriter startPerson(String name) {
+    return startElement(name);
+  }
+
+  public StreamWriter writePerson(
+    String localname, 
+    String namespace,
+    String prefix, 
+    String name, 
+    String email, 
+    String uri) {
+      return 
+        startPerson(localname,namespace,prefix).
+        writePersonName(name).
+        writePersonEmail(email).
+        writePersonUri(uri).
+        endPerson();
+  }
+
+  public StreamWriter writePerson(
+    String localname, 
+    String namespace,
+    String name, 
+    String email, 
+    String uri) {
+      return 
+        startPerson(localname,namespace).
+        writePersonName(name).
+        writePersonEmail(email).
+        writePersonUri(uri).
+        endPerson();
+  }
+
+  public StreamWriter writePerson(
+    String localname, 
+    String name, 
+    String email,
+    String uri) {
+      return 
+        startPerson(localname).
+        writePersonName(name).
+        writePersonEmail(email).
+        writePersonUri(uri).
+        endPerson();
+  }
+
+  public Appendable append(
+    char c) 
+      throws IOException {
+    return writeElementText(
+      String.valueOf(c));
+  }
+
+  public Appendable append(
+    CharSequence csq, 
+    int start, 
+    int end)
+      throws IOException {
+    return append(
+      csq.subSequence(
+        start, end));
+  }
+
+  public Appendable append(
+    CharSequence csq) 
+      throws IOException {
+    return writeElementText(
+      csq.toString());
+  }  
+  
+  public StreamWriter writeElementText(String format, Object... args) {
+    new Formatter(this).format(format,args); 
+    return this;
+  }
 }

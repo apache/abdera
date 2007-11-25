@@ -17,6 +17,7 @@
  */
 package org.apache.abdera.parser.stax;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.util.Arrays;
@@ -302,5 +303,13 @@ public class StaxStreamWriter
       throw new RuntimeException(e);
     }
     return this;
+  }
+
+  public void close() throws IOException {
+    try {
+      writer.close();
+    } catch (XMLStreamException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

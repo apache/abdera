@@ -19,8 +19,6 @@ package org.apache.abdera.examples.simple;
 
 import java.util.Date;
 
-import javax.xml.namespace.QName;
-
 import org.apache.abdera.Abdera;
 import org.apache.abdera.writer.StreamWriter;
 
@@ -67,8 +65,8 @@ public class StreamWriterExample {
         .writeAuthor("James", null, null)
         .writeContributor("Joe", null, null)
         .startContent("application/xml")
-          .startElement(new QName("a","b","c"))
-            .startElement(new QName("x","y","z"))
+          .startElement("a","b","c")
+            .startElement("x","y","z")
               .writeElementText("This is a test")
               .startElement("a")
                 .writeElementText("foo")

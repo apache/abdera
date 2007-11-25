@@ -17,6 +17,7 @@
  */
 package org.apache.abdera.writer;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -39,7 +40,9 @@ import org.apache.abdera.util.NamedItem;
  * The StreamWriter is NOT synchronized and is NOT threadsafe
  */
 public interface StreamWriter 
-  extends NamedItem {
+  extends NamedItem, 
+          Appendable, 
+          Closeable {
 
   StreamWriter flush();
   
@@ -144,7 +147,31 @@ public interface StreamWriter
    * @param iri The value
    */
   StreamWriter writeIRIElement(QName qname, String iri);
+  
+  /**
+   * Write an IRI element
+   * @param name The element localname
+   * @param namespace The element namespace
+   * @param prefix the element prefix
+   * @param iri the IRI to write
+   */
+  StreamWriter writeIRIElement(String name, String namespace, String prefix, String iri);
 
+  /**
+   * Write an IRI element
+   * @param name The element localname
+   * @param namespace The element namespace
+   * @param iri the IRI to write
+   */
+  StreamWriter writeIRIElement(String name, String namespace, String iri);
+  
+  /**
+   * Write an IRI element
+   * @param name The element localname
+   * @param iri the IRI to write
+   */
+  StreamWriter writeIRIElement(String name, String iri);
+  
   /**
    * Write an atom:id element
    * @param iri The value
@@ -168,6 +195,30 @@ public interface StreamWriter
    * @param iri The value
    */
   StreamWriter writeIRIElement(QName qname, IRI iri);
+  
+  /**
+   * Write an IRI element
+   * @param name The element localname
+   * @param namespace The element namespace
+   * @param prefix the element prefix
+   * @param iri the IRI to write
+   */
+  StreamWriter writeIRIElement(String name, String namespace, String prefix, IRI iri);
+
+  /**
+   * Write an IRI element
+   * @param name The element localname
+   * @param namespace The element namespace
+   * @param iri the IRI to write
+   */
+  StreamWriter writeIRIElement(String name, String namespace, IRI iri);
+  
+  /**
+   * Write an IRI element
+   * @param name The element localname
+   * @param iri the IRI to write
+   */
+  StreamWriter writeIRIElement(String name, IRI iri);
   
   /**
    * Write an atom:id element with a new IRI value
@@ -199,6 +250,30 @@ public interface StreamWriter
    * @param date The date value
    */
   StreamWriter writeDate(QName qname, Date date);
+  
+  /**
+   * Write a Date element
+   * @param name The element localname
+   * @param namespace The element namespace
+   * @param prefix The element prefix
+   * @param date The date value
+   */
+  StreamWriter writeDate(String name, String namespace, String prefix, Date date);
+  
+  /**
+   * Write a Date element
+   * @param name The element localname
+   * @param namespace The element namespace
+   * @param date The date value
+   */
+  StreamWriter writeDate(String name, String namespace, Date date);
+
+  /**
+   * Write a Date element
+   * @param name The element localname
+   * @param date The date value
+   */
+  StreamWriter writeDate(String name, Date date);
 
   /**
    * Write an atom:updated element
@@ -224,6 +299,30 @@ public interface StreamWriter
    * @param date The date value
    */
   StreamWriter writeDate(QName qname, String date);
+  
+  /**
+   * Write a Date element
+   * @param name The element localname
+   * @param namespace The element namespace
+   * @param prefix The element prefix
+   * @param date The date value
+   */
+  StreamWriter writeDate(String name, String namespace, String prefix, String date);
+  
+  /**
+   * Write a Date element
+   * @param name The element localname
+   * @param namespace The element namespace
+   * @param date The date value
+   */
+  StreamWriter writeDate(String name, String namespace, String date);
+
+  /**
+   * Write a Date element
+   * @param name The element localname
+   * @param date The date value
+   */
+  StreamWriter writeDate(String name, String date);
   
   /**
    * End the person element
@@ -365,6 +464,33 @@ public interface StreamWriter
    * @param value The text value
    */
   StreamWriter writeText(QName qname, Text.Type type, String value);
+
+  /**
+   * Write a Text element
+   * @param name The element name
+   * @param type The text type
+   * @param value The text value
+   */
+  StreamWriter writeText(String name, Text.Type type, String value);
+
+  /**
+   * Write a Text element
+   * @param name The element name
+   * @param namespace The element namespace
+   * @param type The text type
+   * @param value The text value
+   */
+  StreamWriter writeText(String name, String namespace, Text.Type type, String value);
+  
+  /**
+   * Write a Text element
+   * @param name The element name
+   * @param namespace The element namespace
+   * @param prefix The element prefix
+   * @param type The text type
+   * @param value The text value
+   */
+  StreamWriter writeText(String name, String namespace, String prefix, Text.Type type, String value);
   
   /**
    * Start a Text element
@@ -372,6 +498,33 @@ public interface StreamWriter
    * @param type The text type
    */
   StreamWriter startText(QName qname, Text.Type type);
+
+  /**
+   * Start a Text element
+   * @param name The element name
+   * @param type The text type
+   * @param value The text value
+   */
+  StreamWriter startText(String name, Text.Type type);
+
+  /**
+   * Start a Text element
+   * @param name The element name
+   * @param namespace The element namespace
+   * @param type The text type
+   * @param value The text value
+   */
+  StreamWriter startText(String name, String namespace, Text.Type type);
+  
+  /**
+   * Start a Text element
+   * @param name The element name
+   * @param namespace The element namespace
+   * @param prefix The element prefix
+   * @param type The text type
+   * @param value The text value
+   */
+  StreamWriter startText(String name, String namespace, String prefix, Text.Type type);  
   
   /**
    * End the atom:content element
@@ -452,6 +605,13 @@ public interface StreamWriter
    * Start an element
    */
   StreamWriter startElement(String name, String namespace, String prefix);
+  
+  /**
+   * Write element text using Formatter
+   * @param format
+   * @param params
+   */
+  StreamWriter writeElementText(String format, Object... params);
   
   /**
    * Write element text
@@ -562,10 +722,61 @@ public interface StreamWriter
   StreamWriter writePerson(QName qname, String name, String email, String uri);
 
   /**
+   * Write a person element
+   * @param localhost the element name
+   * @param name The person name
+   * @param email The person email
+   * @param uri The person uri
+   */
+  StreamWriter writePerson(String localname, String name, String email, String uri);
+
+  /**
+   * Write a person element
+   * @param localhost the element name
+   * @param namespace the element namespace
+   * @param name The person name
+   * @param email The person email
+   * @param uri The person uri
+   */
+  StreamWriter writePerson(String localname, String namespace, String name, String email, String uri);
+
+  /**
+   * Write a person element
+   * @param localhost the element name
+   * @param namespace the element namespace
+   * @param prefix the element prefix
+   * @param name The person name
+   * @param email The person email
+   * @param uri The person uri
+   */
+  StreamWriter writePerson(String localname, String namespace, String prefix, String name, String email, String uri);
+  
+  /**
    * Start a person element
    * @param qname The element qname
    */  
   StreamWriter startPerson(QName qname);
+
+  /**
+   * Start a person element
+   * @param name The element name
+   */  
+  StreamWriter startPerson(String name);
+  
+  /**
+   * Start a person element
+   * @param name The element name
+   * @param namespace The element namespace
+   */  
+  StreamWriter startPerson(String name, String namespace);
+
+  /**
+   * Start a person element
+   * @param name The element name
+   * @param namespace The element namespace
+   * @param prefix The element prefix
+   */  
+  StreamWriter startPerson(String name, String namespace, String prefix);
   
   /**
    * Write a person name
@@ -594,6 +805,12 @@ public interface StreamWriter
   StreamWriter writeAuthor(String name, String email, String uri);
   
   /**
+   * Write an atom:author element
+   * @param name The person name
+   */
+  StreamWriter writeAuthor(String name);
+  
+  /**
    * Start an atom:author element
    */
   StreamWriter startAuthor();
@@ -610,6 +827,12 @@ public interface StreamWriter
    * @param uri The person uri
    */
   StreamWriter writeContributor(String name, String email, String uri);
+
+  /**
+   * Write an atom:contributor element
+   * @param name The person name
+   */
+  StreamWriter writeContributor(String name);
   
   /**
    * Start an atom:contributor element

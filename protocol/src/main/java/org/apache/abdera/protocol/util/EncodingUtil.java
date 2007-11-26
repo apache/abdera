@@ -80,10 +80,9 @@ public class EncodingUtil {
       if (lower) slug = slug.toLowerCase();
       if (form != null) {
         try {
-          StringBuffer value = 
+          slug = 
             Normalizer.normalize(
               slug, form);          
-          slug = value.toString();
         } catch (Exception e) {}
       }
       if (filler != null) {

@@ -35,7 +35,7 @@ class HttpScheme extends AbstractScheme {
 
   @Override
   public IRI normalize(IRI iri) {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     int port = (iri.getPort() == getDefaultPort()) ? -1 : iri.getPort();
     String host = iri.getHost();
     if (host != null) host = host.toLowerCase();

@@ -2187,7 +2187,7 @@ public class UnicodeCharacterDatabase {
   public static void decompose(
     int c, 
     boolean canonical, 
-    StringBuffer buf) {
+    StringBuilder buf) {
       if (c >= 44032 && c <= 55203) {
         int z = c - 0xAC00;
         int t = z % 0x001C;

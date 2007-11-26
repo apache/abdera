@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.i18n.io;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -118,11 +119,15 @@ public final class CharUtils {
     return contains(n,sets);
   }
   
-  public static void append(StringBuffer buf, int c) {
-    if (isSupplementary(c)) {
-      buf.append(getHighSurrogate(c));
-      buf.append(getLowSurrogate(c));
-    } else buf.append((char)c);
+  public static void append(Appendable buf, int c) {
+    try {
+      if (isSupplementary(c)) {
+        buf.append(getHighSurrogate(c));
+        buf.append(getLowSurrogate(c));
+      } else buf.append((char)c);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
   
   public static char getHighSurrogate(int c) {
@@ -176,7 +181,7 @@ public final class CharUtils {
     return c;
   }
   
-  public static int charAt(StringBuffer s, int i) {
+  public static int charAt(CharSequence s, int i) {
     char c = s.charAt(i);
     if (c < 0xD800 || c > 0xDFFF) return c;
     if (isHighSurrogate(c)) {
@@ -193,33 +198,49 @@ public final class CharUtils {
     return c;
   }
   
-  public static void insert(StringBuffer s, int i, int c) {
-    if (i > 0 && i < s.length()) {
-      char ch = s.charAt(i);
-      boolean low = isLowSurrogate(ch);
-      if (low) {
-        if (low && isHighSurrogate(s.charAt(i-1))) {
-          i--;
+  public static void insert(CharSequence s, int i, int c) {
+    if (!(s instanceof StringBuilder) && 
+        !(s instanceof StringBuffer)) { 
+      insert(new StringBuilder(s),i,c);
+    } else {
+      if (i > 0 && i < s.length()) {
+        char ch = s.charAt(i);
+        boolean low = isLowSurrogate(ch);
+        if (low) {
+          if (low && isHighSurrogate(s.charAt(i-1))) {
+            i--;
+          }
         }
       }
+      if (s instanceof StringBuffer) 
+        ((StringBuffer)s).insert(i, toString(c));
+      else if (s instanceof StringBuilder)
+        ((StringBuilder)s).insert(i, toString(c));
     }
-    s.insert(i, toString(c));
   }
   
-  public static void setChar(StringBuffer s, int i, int c) {
-    int l = 1;
-    char ch = s.charAt(i);
-    boolean high = isHighSurrogate(ch);
-    boolean low = isLowSurrogate(ch);
-    if (high || low) {
-      if (high && (i+1) < s.length() && isLowSurrogate(s.charAt(i+1))) l++;
-      else {
-        if (low && i > 0 && isHighSurrogate(s.charAt(i-1))) {
-          i--; l++;
+  public static void setChar(CharSequence s, int i, int c) {
+    if (!(s instanceof StringBuilder) && 
+        !(s instanceof StringBuffer)) { 
+      setChar(new StringBuilder(s),i,c);
+    } else {
+      int l = 1;
+      char ch = s.charAt(i);
+      boolean high = isHighSurrogate(ch);
+      boolean low = isLowSurrogate(ch);
+      if (high || low) {
+        if (high && (i+1) < s.length() && isLowSurrogate(s.charAt(i+1))) l++;
+        else {
+          if (low && i > 0 && isHighSurrogate(s.charAt(i-1))) {
+            i--; l++;
+          }
         }
       }
+      if (s instanceof StringBuffer)
+        ((StringBuffer)s).replace(i, i+l, toString(c));
+      else if (s instanceof StringBuilder)
+        ((StringBuilder)s).replace(i, i+l, toString(c));
     }
-    s.replace(i, i+l, toString(c));
   }
   
   public static int size(int c) {
@@ -276,7 +297,7 @@ public final class CharUtils {
   }
   
   private static String wrap(String s, char c1, char c2) {
-    StringBuffer buf = new StringBuffer(s);
+    StringBuilder buf = new StringBuilder(s);
     if (buf.length() > 1) {
       if (buf.charAt(0) != c1) buf.insert(0, c1);
       if (buf.charAt(buf.length()-1) != c2) buf.append(c2);
@@ -463,6 +484,13 @@ public final class CharUtils {
         }
       }
     ),
+    UNRESERVED(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !isUnreserved(codepoint);
+        }
+      }
+    ),
     SCHEMESPECIFICPART(
       new Check() {
         public boolean escape(int codepoint) {
@@ -489,6 +517,13 @@ public final class CharUtils {
           return !CharUtils.inRange(codepoint,1,9) &&   
                  !CharUtils.inRange(codepoint,14,127);
         }        
+      }
+    ),
+    PCT(
+      new Check() {
+        public boolean escape(int codepoint) {
+          return !CharUtils.isPctEnc(codepoint);
+        }
       }
     ),
     STD3ASCIIRULES(
@@ -546,7 +581,11 @@ public final class CharUtils {
   }
   
   public static boolean isUnreserved(int codepoint) {
-    return isAlphaNum(codepoint) || isMark(codepoint);
+    return isAlphaNum(codepoint) ||  
+           codepoint == '-' || 
+           codepoint == '.' ||
+           codepoint == '_' ||
+           codepoint == '~';
   }
 
   public static boolean isReserved(int codepoint) {

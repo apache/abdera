@@ -18,6 +18,7 @@
 package org.apache.abdera.i18n.iri;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
@@ -37,11 +38,15 @@ public final class Escaping {
   
   private Escaping() {}
   
-  private static void encode(StringBuffer sb, byte... bytes) {
-    for (byte c : bytes) {
-      sb.append("%");
-      sb.append(HEX[(c >> 4) & 0x0f]);
-      sb.append(HEX[(c >> 0) & 0x0f]);
+  private static void encode(Appendable sb, byte... bytes) {
+    try {
+      for (byte c : bytes) {
+        sb.append("%");
+        sb.append(HEX[(c >> 4) & 0x0f]);
+        sb.append(HEX[(c >> 0) & 0x0f]);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
   }
   
@@ -64,9 +69,9 @@ public final class Escaping {
   
   private static boolean check(int codepoint, Profile... profiles) {
     for (Profile profile : profiles) {
-      if (profile.check(codepoint)) return true;
+      if (!profile.check(codepoint)) return false;
     }
-    return false;
+    return true;
   }
   
   public static String encode(
@@ -75,7 +80,7 @@ public final class Escaping {
     Profile... profiles) 
       throws UnsupportedEncodingException {
     if (s == null) return s;
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     char[] chars = s.toCharArray();
     for (int n = 0; n < chars.length; n++) {
       char c = (char) chars[n];
@@ -83,7 +88,7 @@ public final class Escaping {
         encode(sb,String.valueOf(c).getBytes(enc));
       } else if (CharUtils.isHighSurrogate(c)) {
         if (check(c,profiles)) {
-          StringBuffer buf = new StringBuffer();
+          StringBuilder buf = new StringBuilder();
           buf.append(c);
           buf.append(chars[++n]);
           byte[] b = buf.toString().getBytes(enc);

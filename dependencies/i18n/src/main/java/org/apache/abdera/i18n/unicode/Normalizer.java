@@ -65,41 +65,41 @@ public final class Normalizer {
   /**
    * Normalize the string using NFKC
    */
-  public static StringBuffer normalize(String source) throws IOException {
+  public static String normalize(String source) throws IOException {
     return normalize(source, Form.KC);
   }
   
   /**
    * Normalize the string using the specified Form
    */
-  public static StringBuffer normalize(
+  public static String normalize(
     String source, 
     Form form) 
       throws IOException {
-    return normalize(source, form, new StringBuffer());
+    return normalize(source, form, new StringBuilder());
   }
   
   /**
-   * Normalize the string into the given StringBuffer using the given Form
+   * Normalize the string into the given StringBuilder using the given Form
    */
-  public static StringBuffer normalize(
+  public static String normalize(
     String source, 
     Form form, 
-    StringBuffer buf) 
+    StringBuilder buf) 
       throws IOException {
       if (source.length() != 0) {
         decompose(source, form, buf);
         compose(form, buf);
       }
-      return buf;
+      return buf.toString();
   }
   
   private static void decompose(
     String source, 
     Form form, 
-    StringBuffer buf) 
+    StringBuilder buf) 
       throws IOException {
-      StringBuffer internal = new StringBuffer();
+      StringBuilder internal = new StringBuilder();
       CodepointIterator ci = CodepointIterator.forCharSequence(source);
       boolean canonical = form.isCanonical();
       while (ci.hasNext()) {
@@ -117,7 +117,7 @@ public final class Normalizer {
   }
   
   private static int findInsertionPoint( 
-    StringBuffer buf, int c) {
+    StringBuilder buf, int c) {
     int cc = UnicodeCharacterDatabase.getCanonicalClass(c);
     int i = buf.length();
     if (cc != 0) {
@@ -132,7 +132,7 @@ public final class Normalizer {
   
   private static void compose(
     Form form, 
-    StringBuffer buf) 
+    StringBuilder buf) 
       throws IOException {
     if (!form.isComposition()) return;
     int pos = 0;

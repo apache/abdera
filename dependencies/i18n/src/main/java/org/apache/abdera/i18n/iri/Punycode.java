@@ -79,11 +79,11 @@ public final class Punycode {
     return k + (base - tmin + 1) * delta / (delta + skew);
   }
 
-  public static StringBuffer encode(
+  public static String encode(
     char[] chars,
     boolean[] case_flags) 
       throws IOException {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     CodepointIterator ci = CodepointIterator.forCharArray(chars);
     int n, delta, h, b, bias, m, q, k, t;
     n = initial_n;
@@ -136,7 +136,7 @@ public final class Punycode {
       }
       ++delta; ++n;
     }
-    return buf;
+    return buf.toString();
   }
 
   public static String encode(String s) {
@@ -159,11 +159,11 @@ public final class Punycode {
     }
   }
   
-  public static StringBuffer decode(
+  public static String decode(
     char[] chars, 
     boolean[] case_flags) 
       throws IOException {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     int n, out, i, bias, b, j, in, oldi, w, k, digit, t;
     n = initial_n;
     out = i = 0;
@@ -204,7 +204,7 @@ public final class Punycode {
       }
       CharUtils.insert(buf, i++, n);
     }
-    return buf;
+    return buf.toString();
   }
   
 }

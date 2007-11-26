@@ -89,7 +89,7 @@ public class Lang
   }
 
   public String toString() {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     for (String s: tags) {
       if (buf.length() > 0) buf.append('\u002D');
       buf.append(s);

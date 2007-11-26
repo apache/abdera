@@ -26,6 +26,7 @@ import junit.framework.TestCase;
 
 import org.apache.abdera.i18n.templates.HashMapContext;
 import org.apache.abdera.i18n.templates.Template;
+import org.apache.abdera.i18n.templates.URITemplate;
 
 public final class TestTemplate 
   extends TestCase {
@@ -246,7 +247,13 @@ public final class TestTemplate
     String e = "http://example.org/abc/xyz/a/b?baz=true&tag=x&tag=y&tag=z";
     assertEquals(Template.expand(t,new MyObject()),e);
   }
+
+  public static void test22() throws Exception {
+    String e = "http://example.org/abc/xyz/a/b?baz=true&tag=x&tag=y&tag=z";
+    assertEquals(Template.expandAnnotated(new MyObject()),e);
+  }
   
+  @URITemplate("http://example.org/{foo}/{bar}{-opt|/|categories}{-listjoin|/|categories}?{-join|&|baz,tag}")
   public static class MyObject {
     public String foo = "abc";
     public String getBar() {

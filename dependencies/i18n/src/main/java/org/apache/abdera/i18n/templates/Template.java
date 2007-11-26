@@ -263,6 +263,7 @@ public final class Template
   }
   
   public static String expand(String pattern, Context context) {
+    if (context == null || pattern == null) throw new IllegalArgumentException();
     Template template = new Template(pattern);
     return template.expand(context);
   }
@@ -272,8 +273,24 @@ public final class Template
   }
   
   public static String expand(String pattern, Object object, boolean isiri) {
+    if (object == null || pattern == null) throw new IllegalArgumentException();
     Template template = new Template(pattern);
     return template.expand(object,isiri);
+  }
+  
+  /**
+   * Use an Object annotated with the URITemplate annotation to expand a
+   * template
+   */
+  public static String expandAnnotated(Object object) {
+    if (object == null) throw new IllegalArgumentException();
+    Class _class = object.getClass();
+    URITemplate uritemplate = (URITemplate) _class.getAnnotation(URITemplate.class);
+    if (uritemplate != null) {
+      return expand(uritemplate.value(),object,uritemplate.isiri());
+    } else {
+      throw new IllegalArgumentException("No URI Template provided");
+    }
   }
   
   public static String explain(String pattern) {

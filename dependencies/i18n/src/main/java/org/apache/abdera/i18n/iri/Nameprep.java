@@ -36,7 +36,7 @@ public class Nameprep {
   public static String prep(String s, boolean allowunassigned) {
     NameprepCodepointIterator r = null;
     try {
-      StringBuffer buf = new StringBuffer();
+      StringBuilder buf = new StringBuilder();
       CodepointIterator ci = CodepointIterator.forCharSequence(s);
       r = new NameprepCodepointIterator(ci,allowunassigned);
       while(r.hasNext()) {

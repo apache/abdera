@@ -85,7 +85,7 @@ public final class IRI
       this.path = path;
       this.query = query;
       this.fragment = fragment;
-      StringBuffer buf = new StringBuffer();
+      StringBuilder buf = new StringBuilder();
       buildAuthority(buf,userinfo, host, port);
       this.authority = (buf.length()!=0)?buf.toString():null;
       init();
@@ -259,7 +259,7 @@ public final class IRI
   }
   
   void buildAuthority(
-    StringBuffer buf, 
+    StringBuilder buf, 
     String aui, 
     String ah, 
     int port) {
@@ -278,7 +278,7 @@ public final class IRI
   
   private String buildASCIIAuthority() {
     if (_scheme instanceof HttpScheme) {
-      StringBuffer buf = new StringBuffer();
+      StringBuilder buf = new StringBuilder();
       String aui = getASCIIUserInfo();
       String ah = getASCIIHost();
       int port = getPort();
@@ -324,7 +324,7 @@ public final class IRI
     String path,
     String query,
     String fragment) {
-      StringBuffer buf = new StringBuffer();
+      StringBuilder buf = new StringBuilder();
       if (authority != null) {
         buf.append("//");
         buf.append(authority);
@@ -494,7 +494,7 @@ public final class IRI
     if (path == null || path.length() == 0) return "/";
     String[] segments = path.split("/");
     if (segments.length < 2) return path;
-    StringBuffer buf = new StringBuffer("/");
+    StringBuilder buf = new StringBuilder("/");
     for (int n = 0; n < segments.length; n++) {
       String segment = segments[n].intern();
       if (segment == ".") {
@@ -529,7 +529,7 @@ public final class IRI
       return (!cpath.startsWith("/")) ? "/" + cpath : cpath;
     }
     if (bpath != null && cpath == null) return bpath;
-    StringBuffer buf = new StringBuffer("");
+    StringBuilder buf = new StringBuilder("");
     int n = bpath.lastIndexOf('/');
     if (n > -1) buf.append(bpath.substring(0,n+1));
     if (cpath.length() != 0) buf.append(cpath);
@@ -545,7 +545,7 @@ public final class IRI
   }
   
   public String toString() {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     String scheme = getScheme();
     if (scheme != null && scheme.length() != 0) {
       buf.append(scheme);
@@ -557,7 +557,7 @@ public final class IRI
   }
   
   public String toASCIIString() {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     String scheme = getScheme();
     if (scheme != null && scheme.length() != 0) {
       buf.append(scheme);

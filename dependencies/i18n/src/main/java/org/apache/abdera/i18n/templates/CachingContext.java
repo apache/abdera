@@ -15,21 +15,34 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.i18n.test.iri;
+package org.apache.abdera.i18n.templates;
 
+import java.util.HashMap;
+import java.util.Map;
 
-public class TestSuite extends junit.framework.TestSuite {
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite());
+/**
+ * Abstract Context implementation that caches resolved values so that 
+ * do not have to be resolved again
+ */
+@SuppressWarnings("unchecked") 
+public abstract class CachingContext 
+  extends AbstractContext {
+
+  private Map<String,Object> cache = 
+    new HashMap<String,Object>();
+  
+  public <T> T resolve(String var) {
+    T t = (T) cache.get(var);
+    if (t == null) {
+      t = (T)resolveActual(var);
+      if (t != null) cache.put(var,t);
+    }
+    return t;
   }
+  
+  protected abstract <T> T resolveActual(String var);
 
-  public TestSuite() {
-    addTestSuite(TestIDNA.class);
-    addTestSuite(TestIRI.class);
-    addTestSuite(TestLang.class);
-    addTestSuite(TestNameprep.class);
-    addTestSuite(TestNFKC.class);
-    addTestSuite(TestPunycode.class);
-    addTestSuite(TestTemplate.class);
+  public void clear() {
+    cache.clear();
   }
 }

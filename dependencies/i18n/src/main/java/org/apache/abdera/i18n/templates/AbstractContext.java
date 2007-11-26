@@ -15,21 +15,31 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.i18n.test.iri;
+package org.apache.abdera.i18n.templates;
 
-
-public class TestSuite extends junit.framework.TestSuite {
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite());
+/**
+ * Abstract base for custom Context implementations
+ */
+public abstract class AbstractContext 
+  implements Context {
+  
+  protected boolean iri = false;
+  protected boolean normalizing = false;
+  
+  public boolean isIri() {
+    return iri;
+  }
+  
+  public void setIri(boolean isiri) {
+    this.iri = isiri;
   }
 
-  public TestSuite() {
-    addTestSuite(TestIDNA.class);
-    addTestSuite(TestIRI.class);
-    addTestSuite(TestLang.class);
-    addTestSuite(TestNameprep.class);
-    addTestSuite(TestNFKC.class);
-    addTestSuite(TestPunycode.class);
-    addTestSuite(TestTemplate.class);
+  public boolean isNormalizing() {
+    return normalizing;
   }
+
+  public void setNormalizing(boolean normalizing) {
+    this.normalizing = normalizing;
+  }
+  
 }

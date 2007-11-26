@@ -98,7 +98,7 @@ public final class IDNA
       if (regname == null) return null;
       if (regname.length() == 0) return regname;
       String[] labels = regname.split("\\\u002E");
-      StringBuffer buf = new StringBuffer();
+      StringBuilder buf = new StringBuilder();
       for (String label : labels) {        
         label = Nameprep.prep(label);
         char[] chars = label.toCharArray();
@@ -109,7 +109,7 @@ public final class IDNA
         if (!CharUtils.inRange(chars,(char)0x000,(char)0x007F)) {
           if (label.startsWith("xn--"))
             throw new IOException("ToASCII violation");
-          String pc = Punycode.encode(chars,null).insert(0, "xn--").toString();
+          String pc = "xn--" + Punycode.encode(chars,null);
           chars = pc.toCharArray();
         }
         if (chars.length > 63)
@@ -127,7 +127,7 @@ public final class IDNA
     if (regname == null) return null;
     if (regname.length() == 0) return regname;
     String[] labels = regname.split("\\\u002E");
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     for (String label : labels) {
       char[] chars = label.toCharArray();
       if (!CharUtils.inRange(chars,(char)0x000,(char)0x007F)) {

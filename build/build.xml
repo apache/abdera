@@ -713,6 +713,13 @@ Working directory: ${work}
     
   </target>
   
+  <target name="compile.extension.ask">
+    <input addproperty="ask.response" message="Extension name to compile:"/>
+    <antcall target="compile.extension">      
+      <param name="ext" value="${ask.response}"/>
+    </antcall>
+  </target>
+  
   <target name="compile.extension">
     <echo>Compiling extension ${ext}...</echo>
     <mkdir dir="${extensions.work}/${ext}" />
@@ -790,6 +797,13 @@ Working directory: ${work}
     <jar destfile="${extensions.jar.base}.${ext}.${version}.jar"
          basedir="${extensions.work}/${ext}"
          manifest="${work}/MANIFEST.MF" />
+  </target>
+  
+  <target name="dist.extension.ask">
+   <input addproperty="ask.response" message="Extension name to build:"/>
+   <antcall target="dist.extension">
+     <param name="ext" value="${ask.response}"/>
+   </antcall>
   </target>
   
   <target name="test.extensions">

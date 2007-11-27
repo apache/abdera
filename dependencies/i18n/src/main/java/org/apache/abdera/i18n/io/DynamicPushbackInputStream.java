@@ -25,7 +25,8 @@ import java.io.PushbackInputStream;
  * PushbackInputStream implementation that performs dynamic resizing of
  * the unread buffer
  */
-public class DynamicPushbackInputStream extends PushbackInputStream {
+public class DynamicPushbackInputStream 
+  extends PushbackInputStream {
 
   private int origsize = 1;
   
@@ -38,6 +39,9 @@ public class DynamicPushbackInputStream extends PushbackInputStream {
     this.origsize = initialSize;
   }
 
+  /**
+   * Clear the buffer
+   */
   public synchronized int clear() {
     int m = buf.length;
     buf = new byte[origsize];
@@ -45,6 +49,11 @@ public class DynamicPushbackInputStream extends PushbackInputStream {
     return m;
   }
   
+  /**
+   * Shrink the buffer. This will reclaim currently unused space in the 
+   * buffer, reducing memory but potentially increasing the cost of 
+   * resizing the buffer
+   */
   public synchronized int shrink() {
     byte[] old = buf;
     if (pos == 0) return 0; // nothing to do

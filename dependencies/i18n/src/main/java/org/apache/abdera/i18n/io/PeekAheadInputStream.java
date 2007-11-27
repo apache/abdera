@@ -20,8 +20,6 @@ package org.apache.abdera.i18n.io;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.abdera.i18n.io.RewindableInputStream;
-
 /**
  * A version of RewindableInputStream that provides methods for peeking ahead 
  * in the stream (equivalent to read() followed by an appropriate unread() 
@@ -37,16 +35,27 @@ public class PeekAheadInputStream
     super(in,initialSize);
   }
 
+  /**
+   * Peek the next byte in the stream
+   */
   public synchronized int peek() throws IOException {
     int m = read();
     unread(m);
     return m;
   }
   
+  /**
+   * Peek the next bytes in the stream. Returns the number of bytes peeked.
+   * Will return -1 if the end of the stream is reached
+   */
   public synchronized int peek(byte[] buf) throws IOException {
     return peek(buf, 0, buf.length);
   }
-  
+
+  /**
+   * Peek the next bytes in the stream. Returns the number of bytes peeked.
+   * Will return -1 if the end of the stream is reached
+   */
   public synchronized int peek(byte[] buf, int off, int len) throws IOException {
     int r = read(buf, off, len);
     unread(buf,off,len);

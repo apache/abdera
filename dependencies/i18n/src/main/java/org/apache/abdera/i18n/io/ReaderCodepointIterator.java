@@ -17,35 +17,28 @@
 */
 package org.apache.abdera.i18n.io;
 
+import java.io.IOException;
+import java.io.Reader;
 
-/**
- * Iterate over Unicode codepoints contained in a char array
- */
-public class CharArrayCodepointIterator 
-  extends CodepointIterator {
-
-  protected char[] buffer;
+public class ReaderCodepointIterator 
+  extends CharArrayCodepointIterator {
   
-  protected CharArrayCodepointIterator() {}
-  
-  public CharArrayCodepointIterator(char[] buffer) {
-    this(buffer,0,buffer.length);
-  }
-  
-  public CharArrayCodepointIterator(char[] buffer, int n, int e) {
-    this.buffer = buffer;
-    this.position = n;
-    this.limit = Math.min(buffer.length-n,e);
-  }
-  
-  protected char get() {
-    return (position < limit) ? buffer[position++] : (char)-1;
-  }
-  
-  protected char get(int index) {
-    if (index < 0 || index >= limit) 
-      throw new ArrayIndexOutOfBoundsException(index);
-    return buffer[index];
+  public ReaderCodepointIterator(Reader reader) {
+    try {
+      StringBuilder sb = new StringBuilder();
+      char[] buf = new char[1024];
+      int n = -1;
+      while((n = reader.read(buf)) > -1) {
+        sb.append(buf,0,n);
+      }
+      buffer = new char[sb.length()];
+      sb.getChars(0, sb.length(), buffer, 0);
+      position = 0;
+      limit = buffer.length;
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    
   }
   
 }

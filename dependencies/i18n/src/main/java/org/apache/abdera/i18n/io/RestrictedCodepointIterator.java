@@ -22,7 +22,7 @@ import org.apache.abdera.i18n.io.CharUtils.Profile;
 
 
 /**
- * A CodepointIterator implementation that checks output against a BitSet.
+ * A CodepointIterator implementation that checks output against a CharUTils.Profile.
  * If the iterator is set to "scanning only", the iterator will return -1
  * upon encountering a codepoint not in the set, otherwise the iterator 
  * will throw an InvalidCharacterException
@@ -31,8 +31,8 @@ public class RestrictedCodepointIterator
   extends FilterCodepointIterator {
 
   private final Profile profile;
-  private boolean scanningOnly = false;
-  private boolean notset = false;
+  private final boolean scanningOnly;
+  private final boolean notset;
 
   protected RestrictedCodepointIterator(
     CodepointIterator internal, 

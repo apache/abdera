@@ -20,8 +20,6 @@ package org.apache.abdera.i18n.io;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.abdera.i18n.io.DynamicPushbackInputStream;
-
 /**
  * RewindableInputStream is a specialization of the PushbackInputStream
  * that maintains an internal buffer of read bytes that a user can 

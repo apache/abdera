@@ -30,6 +30,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
 
 import org.apache.abdera.protocol.client.AbderaClient;
+import org.apache.abdera.protocol.client.util.MethodHelper;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;

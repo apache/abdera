@@ -28,9 +28,6 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
-import org.apache.abdera.i18n.io.ByteArrayCodepointIterator;
-import org.apache.abdera.i18n.io.CodepointIterator;
-
 /**
  * Implements a buffer that provides a slightly more efficient way of writing,
  * and then reading a stream of bytes.  
@@ -53,7 +50,10 @@ import org.apache.abdera.i18n.io.CodepointIterator;
  * Once the Buffer has been fully read, it must be reset, which sets it 
  * back into write mode and moves the position pointer back to 0;
  * 
+ * @deprecated
+ * @see org.apache.abdera.i18n.io.PipeChannel
  */
+@Deprecated
 public class ReadWriteByteChannel 
   implements ReadableByteChannel,
              WritableByteChannel,

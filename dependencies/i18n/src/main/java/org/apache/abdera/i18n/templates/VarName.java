@@ -24,6 +24,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+/**
+ * Used to specify an alternative URI Template varname for a field or method
+ */
 @Retention(RUNTIME)
 @Target({FIELD,METHOD})
 public @interface VarName {

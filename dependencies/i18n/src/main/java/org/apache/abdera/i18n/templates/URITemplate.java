@@ -23,6 +23,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+/**
+ * The URITemplate annotation can be used to associate a URI Template with a
+ * particular Java class.  Instances of that class can then be expanded using
+ * the associated URI Template.  The public fields and getter methods on the 
+ * class will be automatically mapped to URI Template variable names. Alternative
+ * varnames can be specified for each field/getter using the VarName annotation
+ */
 @Retention(RUNTIME)
 @Target(TYPE)
 public @interface URITemplate {

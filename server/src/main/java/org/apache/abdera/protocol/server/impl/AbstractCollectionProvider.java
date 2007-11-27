@@ -26,6 +26,7 @@ import javax.activation.MimeType;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
+import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Content;
@@ -506,7 +507,8 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
   protected String getEntryID(RequestContext request) {
     String path = request.getUri().toString();
     String[] segments = path.split("/");
-    return segments[segments.length - 1];
+    String id = segments[segments.length - 1];
+    return Escaping.decode(id);
   }
 
   protected IRI getMediaIRI(IRI entryBaseIri, String name) {

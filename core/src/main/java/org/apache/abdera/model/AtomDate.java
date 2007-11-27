@@ -259,7 +259,7 @@ public final class AtomDate
     sb.append(c.get(Calendar.YEAR));
     sb.append('-');
     int f = c.get(Calendar.MONTH);
-    if (f < 10) sb.append('0');
+    if (f < 9) sb.append('0');
     sb.append(f+1);
     sb.append('-');
     f = c.get(Calendar.DATE);

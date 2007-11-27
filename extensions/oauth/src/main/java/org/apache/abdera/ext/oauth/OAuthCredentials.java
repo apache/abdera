@@ -39,11 +39,11 @@ public class OAuthCredentials
 	private String version;
 	private Certificate cert;
 	
-	public OAuthCredentians() {
+	public OAuthCredentials() {
 		super();
 	}
 	
-	public OAuthCredentians(
+	public OAuthCredentials(
 	  String consumerKey, 
 	  String token, 
 	  String signatureMethod, 
@@ -56,7 +56,7 @@ public class OAuthCredentials
 		    "1.0");
 	}
 	
-	public OAuthCredentians(
+	public OAuthCredentials(
 	  String consumerKey, 
 	  String token, 
 	  String signatureMethod, 
@@ -71,7 +71,7 @@ public class OAuthCredentials
 		    null);
 	}
 	
-	public OAuthCredentians(
+	public OAuthCredentials(
 	  String consumerKey, 
 	  String token, 
 	  String signatureMethod, 

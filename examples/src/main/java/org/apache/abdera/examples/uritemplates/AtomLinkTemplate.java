@@ -20,6 +20,7 @@ package org.apache.abdera.examples.uritemplates;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.templates.Template;
 import org.apache.abdera.i18n.templates.URITemplate;
+import org.apache.abdera.i18n.templates.VarName;
 
 public class AtomLinkTemplate {
 
@@ -63,7 +64,8 @@ public class AtomLinkTemplate {
     public int getPage() {
       return page;
     }
-    public int getCount() {
+    @VarName("count")
+    public int getPageSize() {
       return count;
     }
   }

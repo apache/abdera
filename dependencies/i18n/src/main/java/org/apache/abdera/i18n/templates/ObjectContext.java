@@ -56,7 +56,7 @@ public final class ObjectContext
       Field[] fields = _class.getFields();
       for (Field field : fields) {
         if (!Modifier.isPrivate(field.getModifiers())) {
-          accessors.put(field.getName().toLowerCase(), field);
+          accessors.put(getName(field), field);
         }
       }
     }
@@ -67,12 +67,23 @@ public final class ObjectContext
           method.getParameterTypes().length == 0 && 
           !method.getReturnType().equals(Void.class) && 
           !isReserved(name)) {
-        name = name.toLowerCase();
-        if (name.startsWith("get")) name = name.substring(3);
-        else if (name.startsWith("is")) name = name.substring(2);
-        accessors.put(name, method);
+        accessors.put(getName(method), method);
       }
     }
+  }
+  
+  private String getName(AccessibleObject object) {
+    String name = null;
+    VarName varName = object.getAnnotation(VarName.class);
+    if (varName != null) return varName.value();
+    if (object instanceof Field) { 
+      name = ((Field)object).getName().toLowerCase();
+    } else if (object instanceof Method) {
+      name = ((Method)object).getName().toLowerCase();
+      if (name.startsWith("get")) name = name.substring(3);
+      else if (name.startsWith("is")) name = name.substring(2);
+    }
+    return name;
   }
   
   private boolean isReserved(String name) {

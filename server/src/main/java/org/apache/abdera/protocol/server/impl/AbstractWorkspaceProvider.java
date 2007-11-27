@@ -34,6 +34,7 @@ import org.apache.abdera.protocol.server.CollectionProvider;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
+import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.util.EntityTag;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -116,24 +117,30 @@ public abstract class AbstractWorkspaceProvider extends AbstractProvider {
                                                      RequestContext request) throws ResponseContextException {
       String path = resolveBase.getPath();
       String[] paths = path.split("/");
+      String id = null;
+      WorkspaceInfo wp = null;
       if (paths.length < 1) {
         // TODO:
-        throw new RuntimeException();
+        throw new ResponseContextException(404);
       } else if (paths.length == 1) {
-        WorkspaceInfo wp = getWorkspaceInfo("");
+        wp = getWorkspaceInfo("");
         if (wp == null) {
           // TODO: 404
-          throw new RuntimeException();
+          throw new ResponseContextException(404);
         }
-        return wp.getCollectionProvider(paths[0]);
+        id = paths[0];
       } else {    
-        WorkspaceInfo wp = getWorkspaceInfo(paths[paths.length - 2]);
+        wp = getWorkspaceInfo(paths[paths.length - 2]);
         if (wp == null) {
           // TODO: 404
           throw new RuntimeException();
         }
-        return wp.getCollectionProvider(paths[paths.length - 1]);
+        id = paths[paths.length - 1];
       }
+      
+      id = Escaping.decode(id);
+      
+      return wp.getCollectionProvider(id);
     }
 
     /**

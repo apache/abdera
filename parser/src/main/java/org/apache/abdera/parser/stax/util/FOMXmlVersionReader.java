@@ -51,7 +51,6 @@ public class FOMXmlVersionReader
       String v = xmlreader.getVersion();
       if (v != null) version = v;
       unread(p,0,r);
-      
     } catch (Exception e) {}
     return version;
   }

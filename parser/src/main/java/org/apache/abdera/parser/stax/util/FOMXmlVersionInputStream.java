@@ -23,6 +23,7 @@ import java.io.InputStream;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
+import org.apache.abdera.i18n.io.PeekAheadInputStream;
 
 /**
  * Will attempt to autodetect the character encoding from the stream

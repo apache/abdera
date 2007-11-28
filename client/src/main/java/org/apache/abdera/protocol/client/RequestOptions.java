@@ -48,6 +48,7 @@ public class RequestOptions
   private boolean requestException4xx = false;
   private boolean requestException5xx = false;
   private boolean useExpectContinue = true;
+  private boolean useConditional = true;
   
   private final Map<String,String[]> headers = new HashMap<String,String[]>();  
   
@@ -526,5 +527,23 @@ public class RequestOptions
    */
   public boolean isUseExpectContinue() {
     return this.useExpectContinue;
+  }
+  
+  /**
+   * True if HTTP Conditional Requests should be used automatically.
+   * This only has an effect when putting a Document that has an 
+   * ETag or Last-Modified date present
+   */
+  public boolean isConditionalPut() {
+    return this.useConditional;
+  }
+  
+  /**
+   * True if HTTP Conditinal Request should be used automatically.
+   * This only has an effect when putting a Document that has an
+   * ETag or Last-Modified date present
+   */
+  public void setConditionalPut(boolean conditional) {
+    this.useConditional = conditional;
   }
 }

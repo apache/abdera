@@ -44,6 +44,7 @@ import org.apache.abdera.protocol.client.util.SimpleSSLProtocolSocketFactory;
 import org.apache.abdera.protocol.error.Error;
 import org.apache.abdera.protocol.error.ProtocolException;
 import org.apache.abdera.protocol.util.CacheControlUtil;
+import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.util.ServiceUtil;
 import org.apache.abdera.util.Version;
 import org.apache.commons.httpclient.Cookie;
@@ -67,6 +68,7 @@ import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
 /**
  * An Atom Publishing Protocol client.
  */
+@SuppressWarnings("unchecked") 
 public class AbderaClient {
 
   public static final String DEFAULT_USER_AGENT = 
@@ -180,6 +182,15 @@ public class AbderaClient {
     String uri, 
     EntityProvider provider, 
     RequestOptions options) {
+      if (options == null) options = getDefaultRequestOptions();
+      if (options.isConditionalPut()) {
+        EntityTag etag = provider.getEntityTag();
+        if (etag != null) options.setIfMatch(etag);
+        else {
+          Date lm = provider.getLastModified();
+          if (lm != null) options.setIfUnmodifiedSince(lm);
+        }
+      }
       return put(
         uri, 
         new EntityProviderRequestEntity(
@@ -208,11 +219,19 @@ public class AbderaClient {
       String uri, 
       Base base, 
       RequestOptions options) {
+    if (options == null) options = getDefaultRequestOptions();
     if (base instanceof Document) {
       Document d = (Document) base;
       if (options.getSlug() == null && 
           d.getSlug() != null) 
         options.setSlug(d.getSlug());
+      
+      if (options.isConditionalPut()) {
+        if (d.getEntityTag() != null)
+          options.setIfMatch(d.getEntityTag());
+        else if (d.getLastModified() != null)
+          options.setIfUnmodifiedSince(d.getLastModified());
+      }
     }
     return execute("PUT", uri, new BaseRequestEntity(base, options.isUseChunked()), options);
   }

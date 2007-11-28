@@ -438,9 +438,15 @@ public class FOMFactory
     QName qname,
     OMContainer parent,
     OMXMLParserWrapper parserWrapper) {
+    
+//    Element element = (parserWrapper == null) ?
+//      new FOMExtensibleElement(qname, parent, this) :
+//      new FOMExtensibleElement(qname, parent, this, parserWrapper);
+    
     Element element = (parserWrapper == null) ?
-      new FOMExtensibleElement(qname, parent, this) :
-      new FOMExtensibleElement(qname, parent, this, parserWrapper);
+      (Element)createElement(qname,parent,this,null) : 
+      (Element)createElement(qname,parent,(FOMBuilder)parserWrapper);
+        
     return (T) element;
   }
   

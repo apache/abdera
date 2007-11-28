@@ -30,6 +30,7 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.converter.ConverterProvider;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.factory.Factory;
+import org.apache.abdera.factory.StreamBuilder;
 import org.apache.abdera.parser.NamedParser;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserFactory;
@@ -197,6 +198,7 @@ public final class AbderaConfiguration
       if (name != null)
         writers.put(name.toLowerCase(), writer);
     }
+    writers.put("fom", StreamBuilder.class);
     return writers;
   }
   

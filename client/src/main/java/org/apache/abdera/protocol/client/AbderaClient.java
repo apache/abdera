@@ -20,6 +20,7 @@ package org.apache.abdera.protocol.client;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -700,6 +701,30 @@ public class AbderaClient {
    */
   public Cookie[] getCookies() {
     return client.getState().getCookies();
+  }
+  
+  /**
+   * Get the cookies for a specific domain and path
+   */
+  public Cookie[] getCookies(String domain, String path) {
+    Cookie[] cookies = getCookies();
+    List<Cookie> list = new ArrayList<Cookie>();
+    for (Cookie cookie : cookies) {
+      String test = cookie.getDomain();
+      if (test.startsWith(".")) test = test.substring(1);
+      if ((domain.endsWith(test) || test.endsWith(domain)) && 
+          (path == null || cookie.getPath().startsWith(path))) {
+        list.add(cookie);
+      }
+    }
+    return list.toArray(new Cookie[list.size()]);
+  }
+  
+  /**
+   * Get the cookies for a specific domain
+   */
+  public Cookie[] getCookies(String domain) {
+    return getCookies(domain,null);
   }
   
   /**

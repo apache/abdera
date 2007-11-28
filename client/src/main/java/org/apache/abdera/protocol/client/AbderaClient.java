@@ -38,7 +38,7 @@ import org.apache.abdera.protocol.client.cache.CacheFactory;
 import org.apache.abdera.protocol.client.cache.CachedResponse;
 import org.apache.abdera.protocol.client.cache.lru.LRUCache;
 import org.apache.abdera.protocol.client.util.BaseRequestEntity;
-import org.apache.abdera.protocol.client.util.ContentProviderRequestEntity;
+import org.apache.abdera.protocol.client.util.EntityProviderRequestEntity;
 import org.apache.abdera.protocol.client.util.MethodHelper;
 import org.apache.abdera.protocol.client.util.SimpleSSLProtocolSocketFactory;
 import org.apache.abdera.protocol.error.Error;
@@ -141,7 +141,7 @@ public class AbderaClient {
     RequestOptions options) {
       return post(
         uri, 
-        new ContentProviderRequestEntity(
+        new EntityProviderRequestEntity(
           abdera,
           provider,
           options.isUseChunked()
@@ -182,7 +182,7 @@ public class AbderaClient {
     RequestOptions options) {
       return put(
         uri, 
-        new ContentProviderRequestEntity(
+        new EntityProviderRequestEntity(
           abdera,
           provider,
           options.isUseChunked()

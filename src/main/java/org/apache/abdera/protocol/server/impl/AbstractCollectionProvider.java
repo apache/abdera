@@ -517,7 +517,17 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
 
   @Override
   protected IRI resolveBase(RequestContext request) {
-    return request.getBaseUri().resolve(request.getUri());
+    IRI uri = request.getUri();
+    String q = uri.getQuery();
+    if (q != null && !"".equals(q)) {
+      String iriStr = uri.toString();
+      int idx = iriStr.indexOf('?');
+      uri = new IRI(iriStr.substring(0, idx));
+    }
+    
+    IRI resolved = request.getBaseUri().resolve(uri);
+    
+    return resolved;
   }
 
   public void begin(RequestContext request) throws ResponseContextException {

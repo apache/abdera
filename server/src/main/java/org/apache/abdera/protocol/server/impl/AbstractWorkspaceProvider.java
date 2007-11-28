@@ -129,11 +129,13 @@ public abstract class AbstractWorkspaceProvider extends AbstractProvider {
           throw new ResponseContextException(404);
         }
         id = paths[0];
-      } else {    
-        wp = getWorkspaceInfo(paths[paths.length - 2]);
+      } else {
+        String workspaceId = paths[paths.length - 2];
+        workspaceId = Escaping.decode(workspaceId);
+        wp = getWorkspaceInfo(workspaceId);
         if (wp == null) {
           // TODO: 404
-          throw new RuntimeException();
+          throw new ResponseContextException(404);
         }
         id = paths[paths.length - 1];
       }

@@ -25,7 +25,7 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.client.EntityProvider;
 import org.apache.commons.httpclient.methods.RequestEntity;
 
-public class ContentProviderRequestEntity 
+public class EntityProviderRequestEntity 
   implements RequestEntity {
   
   private final Abdera abdera;
@@ -35,7 +35,7 @@ public class ContentProviderRequestEntity
   private boolean auto_indent = false;
   private String encoding = "UTF-8";
   
-  public ContentProviderRequestEntity(
+  public EntityProviderRequestEntity(
     Abdera abdera,
     EntityProvider provider, 
     boolean use_chunked) {

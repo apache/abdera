@@ -144,7 +144,7 @@ public final class TestTemplate
     String t = "http://www.google.com/search?q={term}";
     String e = "http://www.google.com/search?q=%C3%8E%C3%B1%C5%A3%C3%A9r%C3%B1%C3%A5%C5%A3%C3%AE%C3%B6%C3%B1%C3%A5%C4%BC%C3%AE%C5%BE%C3%A5%C5%A3%C3%AE%C3%B6%C3%B1";
     HashMapContext c = new HashMapContext();
-    c.put("term",new String("Îñţérñåţîöñåļîžåţîöñ".getBytes("UTF-8"),"UTF-8"));  // not all java impl's are capable of handling this properly, so we have to force the conversion to UTF-8
+    c.put("term","\u00ce\u00f1\u0163\u00e9\u0072\u00f1\u00e5\u0163\u00ee\u00f6\u00f1\u00e5\u013c\u00ee\u017e\u00e5\u0163\u00ee\u00f6\u00f1");
     eval(t,e,c);
   }
   
@@ -169,10 +169,10 @@ public final class TestTemplate
 
   public static void test16() throws Exception {
     String t = "http://www.google.com/search?q={term}";
-    String e = "http://www.google.com/search?q=Îñţérñåţîöñåļîžåţîöñ";
+    String e = "http://www.google.com/search?q=\u00ce\u00f1\u0163\u00e9\u0072\u00f1\u00e5\u0163\u00ee\u00f6\u00f1\u00e5\u013c\u00ee\u017e\u00e5\u0163\u00ee\u00f6\u00f1";
     HashMapContext c = new HashMapContext();
     c.setIri(true);
-    c.put("term",new String("Îñţérñåţîöñåļîžåţîöñ".getBytes("UTF-8"),"UTF-8"));  // not all java impl's are capable of handling this properly, so we have to force the conversion to UTF-8
+    c.put("term","\u00ce\u00f1\u0163\u00e9\u0072\u00f1\u00e5\u0163\u00ee\u00f6\u00f1\u00e5\u013c\u00ee\u017e\u00e5\u0163\u00ee\u00f6\u00f1");
     eval(t,e,c);  // use the IriEvaluator so that pct-encoding is done correctly for IRI's
   }
   

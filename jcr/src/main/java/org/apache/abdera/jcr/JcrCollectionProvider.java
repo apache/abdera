@@ -244,10 +244,10 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
       Session session = getSession(request);
 
       Node collectionNode = session.getNodeByUUID(collectionNodeId);
-      String resourceName = EncodingUtil.sanitize(title);
-      entry =  createEntry(title, summary, updated, authors, 
-                           content, session, collectionNode,
-                           resourceName, 0);
+      String resourceName = EncodingUtil.sanitize(title, "-");
+      entry = createEntry(title, summary, updated, authors, 
+                          content, session, collectionNode,
+                          resourceName, 0);
       
       return entry;
     } catch (RepositoryException e) {
@@ -261,17 +261,16 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
     }
   }
 
-  private Node createEntry(String title, String summary, 
-                           Date updated, List<Person> authors, 
-                           Content content, Session session, 
-                           Node collectionNode, String resourceName, int num)
+  protected Node createEntry(String title, String summary, 
+                             Date updated, List<Person> authors, 
+                             Content content, Session session, 
+                             Node collectionNode, String resourceName, int num)
     throws ResponseContextException, RepositoryException {
     try {
       String name = resourceName;
       if (num > 0) {
         name = name + "_" + num;
       }
-      
       Node entry = collectionNode.addNode(name, "abdera:entry");
       
       entry.addMixin("mix:referenceable");

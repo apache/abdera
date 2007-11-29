@@ -117,7 +117,7 @@ public class JcrCollectionProviderTest extends TestCase {
     //prettyPrint(abdera, res.getDocument());
 
     IRI location = res.getLocation();
-    assertEquals(colUri + "/Some%20Entry", location.toString());
+    assertEquals(colUri + "/Some-Entry", location.toString());
 
     // GET the entry
     res = client.get(location.toString());

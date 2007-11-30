@@ -707,7 +707,9 @@ public class FOMFactory
       } else if (parent instanceof ExtensibleElement || 
                  parent instanceof Document) {
         element = (OMElement) new FOMExtensibleElement(
-          qname.getLocalPart(), namespace, parent, this);
+          qname, parent, this);
+      } else {
+        element = (OMElement) new FOMExtensibleElement(qname,null,this);
       }
       return element;
     }

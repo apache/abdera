@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.abdera.i18n.io.CharUtils;
+
 /**
  * Used to evaluate a URI Template.  
  * Instances are immutable, cloneable, serializable and threadsafe.
@@ -52,7 +54,7 @@ public final class Template
    */
   public Template(
     String pattern) {
-      this.pattern = pattern;
+      this.pattern = CharUtils.stripBidiInternal(pattern);
       this.tokens = initTokens();
       this.variables = initVariables();
   }
@@ -62,6 +64,35 @@ public final class Template
    */
   public String getPattern() {
     return pattern;
+  }
+  
+  /**
+   * IRI Templates that contain bidirectional characters will 
+   * typically not display properly in unicode enabled environments.
+   * This method return the Template with appropriate bidi control
+   * characters to ensure that the Template can be rendered properly
+   * for display
+   */
+  public String getPatternForDisplay() {
+    String pattern = this.pattern;
+    for(String token : this) {
+      pattern = replace(
+        pattern, 
+        token, 
+        "{" + forDisplay(token) + "}");
+    }
+    return CharUtils.bidiLRM(pattern);
+  }
+  
+  private static String forDisplay(String token) {
+    //return token.replaceAll("([^{}|]*)", "\u200E$1\u200E");
+    String[] splits = token.split("\\|");
+    String d = "";
+    for (String s : splits) {
+      if (d.length() > 0) d+= "|";
+      d += CharUtils.bidiLRM(s);
+    }
+    return d;
   }
   
   /**
@@ -141,7 +172,7 @@ public final class Template
       object instanceof Context ? 
         (Context)object :
         object instanceof Map ? 
-          new HashMapContext((Map)object) :
+          new HashMapContext((Map)object,isiri) :
           new ObjectContext(object,isiri));
   }
   

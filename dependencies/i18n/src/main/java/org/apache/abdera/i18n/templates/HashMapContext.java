@@ -39,6 +39,11 @@ public final class HashMapContext
   public HashMapContext(Map<String,Object> map) {
     super(map);
   }
+
+  public HashMapContext(Map<String,Object> map, boolean isiri) {
+    super(map);
+    this.isiri = isiri;
+  }
   
   public <T> T resolve(String var) {
     return (T)get(var);

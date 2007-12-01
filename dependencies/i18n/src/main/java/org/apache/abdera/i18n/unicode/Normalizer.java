@@ -65,7 +65,7 @@ public final class Normalizer {
   /**
    * Normalize the string using NFKC
    */
-  public static String normalize(String source) throws IOException {
+  public static String normalize(CharSequence source) throws IOException {
     return normalize(source, Form.KC);
   }
   
@@ -73,7 +73,7 @@ public final class Normalizer {
    * Normalize the string using the specified Form
    */
   public static String normalize(
-    String source, 
+    CharSequence source, 
     Form form) 
       throws IOException {
     return normalize(source, form, new StringBuilder());
@@ -83,7 +83,7 @@ public final class Normalizer {
    * Normalize the string into the given StringBuilder using the given Form
    */
   public static String normalize(
-    String source, 
+    CharSequence source, 
     Form form, 
     StringBuilder buf) 
       throws IOException {
@@ -95,7 +95,7 @@ public final class Normalizer {
   }
   
   private static void decompose(
-    String source, 
+    CharSequence source, 
     Form form, 
     StringBuilder buf) 
       throws IOException {

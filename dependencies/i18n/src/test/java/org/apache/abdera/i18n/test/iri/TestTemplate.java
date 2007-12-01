@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.i18n.test.iri;
 
+import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -220,6 +221,10 @@ public final class TestTemplate
     map.put("reserved",":/?#[]@!$&'()*+,;=");
     map.put("u","\u2654\u2655");
     map.put("a_b","baz");
+    map.put("bytes", new byte[] {'a','b','c'});
+    map.put("stream", new ByteArrayInputStream(new byte[] {'a','b','c'}));
+    map.put("chars", new char[] {'a','b','c','/'});
+    map.put("ints", new int[] {1,2,3});
     
     Map<String,String> tests = new HashMap<String,String>();
     tests.put("http://example.org/?q={a}","http://example.org/?q=foo");
@@ -237,6 +242,10 @@ public final class TestTemplate
     tests.put("http://example.org/?d={-listjoin|&d=|points}","http://example.org/?d=10&d=20&d=30");
     tests.put("http://example.org/{a}{b}/{a_b}","http://example.org/foobar/baz");
     tests.put("http://example.org/{a}{-prefix|/-/|a}/","http://example.org/foo/-/foo/");
+    tests.put("{bytes}","%61%62%63");
+    tests.put("{stream}","%61%62%63");
+    tests.put("{chars}","abc%2F");
+    tests.put("{ints}","123");
     
     for (String t : tests.keySet())
       assertEquals(Template.expand(t,map),tests.get(t));

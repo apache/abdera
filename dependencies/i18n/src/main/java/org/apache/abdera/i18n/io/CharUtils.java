@@ -281,6 +281,10 @@ public final class CharUtils {
       s = s.substring(0,s.length()-1);
     return s;
   }
+    
+  public static String stripBidiInternal(String s) {
+    return s.replaceAll("[\u202A\u202B\u202D\u202E\u200E\u200F\u202C]", "");
+  }
   
   /**
    * Returns true if the character is a bidi control 

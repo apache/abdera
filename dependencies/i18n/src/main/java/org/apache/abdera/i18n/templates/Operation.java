@@ -18,6 +18,7 @@
 package org.apache.abdera.i18n.templates;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -103,25 +104,25 @@ public abstract class Operation
     Object value = context.resolve(token);
     if (value != null) {
       if (value instanceof String) {
-        String val = (String) value;
+        String val = toString(value,context);
         if (val != null && val.length() > 0)
-          buf.append(encode(val,context.isIri(),context.isNormalizing()));
+          buf.append(val);
       } else if (value.getClass().isArray()) {
         Object[] values = (Object[])value;
         for (Object obj : values) {
-          String val = toString(obj);
+          String val = toString(obj,context);
           if (val != null && val.length() > 0) {
             if (buf.length() > 0) buf.append(sep);
-            buf.append(encode(val,context.isIri(),context.isNormalizing()));
+            buf.append(val);
           }
         }
       } else if (value instanceof Iterable) {
         Iterable iterable = (Iterable)value;
         for (Object obj : iterable) {
-          String val = toString(obj);
+          String val = toString(obj,context);
           if (val != null && val.length() > 0) {
             if (buf.length() > 0) buf.append(sep);
-            buf.append(encode(val,context.isIri(),context.isNormalizing()));
+            buf.append(val);
           }          
         }
       }
@@ -134,15 +135,113 @@ public abstract class Operation
     String var = vardef[0];
     String def = vardef.length > 1 ? vardef[1] : null;
     Object rep = context.resolve(var);
-    String val = toString(rep);
+    String val = toString(rep,context);
     return val != null && val.length() > 0 ? 
-        encode(rep.toString(),context.isIri(),context.isNormalizing()) : 
-        def != null ? 
-          def : null;
+        val : def != null ? def : null;
   }
   
-  private static String toString(Object val) {
-    return val != null ? val.toString() : null;
+  private static String toString(Object val, Context context) {
+    if (val == null) return null;
+    if (val.getClass().isArray()) {
+      if (val instanceof byte[]) {
+        return Escaping.encode((byte[])val);
+      } else if (val instanceof char[]) {
+        try {
+          String chars = new String((char[])val);
+          return Escaping.encode(
+              !context.isNormalizing() ? chars : 
+              Normalizer.normalize(
+                chars, 
+                Normalizer.Form.C).toString(), 
+              context.isIri() ? 
+                CharUtils.Profile.IUNRESERVED : 
+                CharUtils.Profile.UNRESERVED);
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+      } else if (val instanceof short[]) {
+        StringBuilder buf = new StringBuilder();
+        short[] array = (short[]) val;
+        for (short obj : array)
+          buf.append(String.valueOf(obj));
+        return buf.toString();
+      } else if (val instanceof int[]) {
+        StringBuilder buf = new StringBuilder();
+        int[] array = (int[]) val;
+        for (int obj : array)
+          buf.append(String.valueOf(obj));
+        return buf.toString();
+      } else if (val instanceof long[]) {
+        StringBuilder buf = new StringBuilder();
+        long[] array = (long[]) val;
+        for (long obj : array)
+          buf.append(String.valueOf(obj));
+        return buf.toString();
+      } else if (val instanceof double[]) {
+        StringBuilder buf = new StringBuilder();
+        double[] array = (double[]) val;
+        for (double obj : array)
+          buf.append(String.valueOf(obj));
+        return buf.toString();
+      } else if (val instanceof float[]) {
+        StringBuilder buf = new StringBuilder();
+        float[] array = (float[]) val;
+        for (float obj : array)
+          buf.append(String.valueOf(obj));
+        return buf.toString();
+      } else if (val instanceof boolean[]) {
+        StringBuilder buf = new StringBuilder();
+        boolean[] array = (boolean[]) val;
+        for (boolean obj : array)
+          buf.append(String.valueOf(obj));
+        return buf.toString();
+      } else {
+        StringBuilder buf = new StringBuilder();
+        Object[] array = (Object[]) val;
+        for (Object obj : array)
+          buf.append(toString(obj,context));
+        return buf.toString();
+      }
+    } else if (val instanceof Template) {
+      return toString(((Template)val).getPattern(),context);
+    } else if (val instanceof InputStream) {
+      try {
+        return Escaping.encode((InputStream)val);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    } else if (val instanceof Readable) {
+      try {
+        return Escaping.encode(
+          (Readable)val, 
+          "UTF-8",
+          context.isIri() ? 
+            CharUtils.Profile.IUNRESERVED : 
+            CharUtils.Profile.UNRESERVED);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    } else if (val instanceof CharSequence) {
+      return encode(
+        (CharSequence)val,
+        context.isIri(),
+        context.isNormalizing());
+    } else if (val instanceof Byte) {
+      return Escaping.encode(((Byte)val).byteValue());
+    } else if (val instanceof Iterable) {
+      StringBuilder buf = new StringBuilder();
+      Iterable i = (Iterable) val;
+      for (Object obj : i)
+        buf.append(toString(obj,context));
+      return buf.toString();
+    } else {
+      return encode(
+        val != null ? 
+          val.toString() : 
+          null,
+        context.isIri(),
+        context.isNormalizing());
+    }
   }
   
   protected static String eval(String token, String arg, Context context) {
@@ -155,31 +254,31 @@ public abstract class Operation
       if (rep.getClass().isArray()) {
         Object[] array = (Object[]) rep;
         for (Object obj : array) {
-          String val = toString(obj);
+          String val = toString(obj,context);
           if (val != null && val.length() > 0) {
             if (buf.length() > 0) buf.append(arg);
             buf.append(var);
             buf.append("=");
-            buf.append(encode(val,context.isIri(),context.isNormalizing()));
+            buf.append(val);
           }
         }
       } else if (rep instanceof Iterable) {
         Iterable list = (Iterable)rep;
         for (Object obj : list) {
-          String val = toString(obj);
+          String val = toString(obj,context);
           if (val != null && val.length() > 0) {
             if (buf.length() > 0) buf.append(arg);
             buf.append(var);
             buf.append("=");
-            buf.append(encode(val,context.isIri(),context.isNormalizing()));
+            buf.append(val);
           }
         }
       } else {
-        String val = toString(rep);
+        String val = toString(rep,context);
         if (val != null && val.length() > 0) {
           buf.append(var);
           buf.append("=");
-          buf.append(encode(val,context.isIri(),context.isNormalizing()));
+          buf.append(val);
         }
       }
       return buf.toString();
@@ -202,11 +301,11 @@ public abstract class Operation
     if (rep.getClass().isArray()) {
       Object[] a = (Object[])rep;
       return a.length > 0;
-    } else return true;
+    } else return toString(rep,context).length() > 0;
   }
   
   private static String encode(
-    String val, 
+    CharSequence val, 
     boolean isiri, 
     boolean normalizing) {
       try {
@@ -217,8 +316,7 @@ public abstract class Operation
               Normalizer.Form.C).toString(), 
             isiri ? 
               CharUtils.Profile.IUNRESERVED : 
-              CharUtils.Profile.UNRESERVED, 
-            CharUtils.Profile.PCT);
+              CharUtils.Profile.UNRESERVED);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }

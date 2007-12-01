@@ -582,7 +582,8 @@ public class FOMElement
   }
   
   public void removeAttribute(String name) {
-    removeAttribute(getAttribute(new QName(name)));
+    OMAttribute attr = getAttribute(new QName(name));
+    if (attr != null) getAttribute(new QName(name));
   }
   
   protected void _removeChildren(QName qname, boolean many) {

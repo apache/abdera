@@ -184,6 +184,12 @@ public interface Element
   void removeAttribute(QName qname);
   
   /**
+   * Remove the named attribute
+   * @param name The name of the attribute to remove
+   */
+  void removeAttribute(String name);
+  
+  /**
    * Sets the value of the named attribute
    * @param name The name of the attribute
    * @param value The value of the attribute

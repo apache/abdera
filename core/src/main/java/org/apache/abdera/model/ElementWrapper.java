@@ -167,6 +167,10 @@ public abstract class ElementWrapper
     internal.removeAttribute(qname);
   }
 
+  public void removeAttribute(String name) {
+    internal.removeAttribute(name);
+  }
+  
   public void setAttributeValue(QName qname, String value) {
     internal.setAttributeValue(qname, value);
   }

@@ -745,6 +745,8 @@ public class CoreTest extends TestCase implements Constants {
 
     public void writeTo(String writer, Writer out, WriterOptions options)
         throws IOException {}
+
+    public void removeAttribute(String name) {}
     
   }
   
@@ -1410,6 +1412,8 @@ public class CoreTest extends TestCase implements Constants {
 
     public void writeTo(String writer, Writer out, WriterOptions options)
         throws IOException {}
+
+    public void removeAttribute(String name) {}
     
   }
 }

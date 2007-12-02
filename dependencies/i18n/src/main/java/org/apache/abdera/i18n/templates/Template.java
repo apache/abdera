@@ -81,7 +81,7 @@ public final class Template
         token, 
         forDisplay(token));
     }
-    return CharUtils.bidiLRM(pattern);
+    return CharUtils.bidiLRE(pattern);
   }
   
   private static String forDisplay(String token) {
@@ -89,13 +89,28 @@ public final class Template
     StringBuilder buf = new StringBuilder();
     buf.append('{');
     if (splits.length == 1) {
-      buf.append(CharUtils.bidiLRM(splits[0]));
+      String[] pair = splits[0].split("\\s*=\\s*");
+      buf.append(CharUtils.bidiLRM(pair[0]));
+      if (pair.length > 1) {
+        buf.append('=');
+        buf.append(CharUtils.bidiLRO(pair[1]));
+      }
     } else {
       buf.append(splits[0]);
       buf.append('|');
       buf.append(CharUtils.bidiLRO(splits[1]));
       buf.append('|');
-      buf.append(CharUtils.bidiLRM(splits[2]));
+      String[] vars = splits[2].split("\\s*,\\s*");
+      int i = 0;
+      for (String var : vars) {
+        if (i++ > 0) buf.append(",");
+        String[] pair = var.split("\\s*=\\s*");
+        buf.append(CharUtils.bidiLRM(pair[0]));
+        if (pair.length > 1) {
+          buf.append('=');
+          buf.append(CharUtils.bidiLRO(pair[1]));
+        }
+      }
     }
     buf.append('}');
     return buf.toString();

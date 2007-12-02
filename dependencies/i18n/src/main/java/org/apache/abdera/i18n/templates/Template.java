@@ -79,20 +79,26 @@ public final class Template
       pattern = replace(
         pattern, 
         token, 
-        "{" + forDisplay(token) + "}");
+        forDisplay(token));
     }
     return CharUtils.bidiLRM(pattern);
   }
   
   private static String forDisplay(String token) {
-    //return token.replaceAll("([^{}|]*)", "\u200E$1\u200E");
     String[] splits = token.split("\\|");
-    String d = "";
-    for (String s : splits) {
-      if (d.length() > 0) d+= "|";
-      d += CharUtils.bidiLRM(s);
+    StringBuilder buf = new StringBuilder();
+    buf.append('{');
+    if (splits.length == 1) {
+      buf.append(CharUtils.bidiLRM(splits[0]));
+    } else {
+      buf.append(splits[0]);
+      buf.append('|');
+      buf.append(CharUtils.bidiLRO(splits[1]));
+      buf.append('|');
+      buf.append(CharUtils.bidiLRM(splits[2]));
     }
-    return d;
+    buf.append('}');
+    return buf.toString();
   }
   
   /**
@@ -221,7 +227,7 @@ public final class Template
    StringBuilder buf = new StringBuilder();
    buf.append("Template:");
    buf.append('\n');
-   buf.append("\t"+pattern);
+   buf.append("\t"+getPatternForDisplay());
    buf.append('\n');
    buf.append('\n');
    buf.append(" Variables:");

@@ -30,6 +30,8 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Element;
+import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.util.AbstractNamedWriter;
 import org.apache.abdera.util.AbstractWriterOptions;
 import org.apache.abdera.writer.NamedWriter;
@@ -86,7 +88,7 @@ public class PrettyWriter
       XMLStreamWriter w = StAXUtils.createXMLStreamWriter(out);
       XMLStreamWriter pw = new PrettyStreamWriter(w);
       OMElement om = (base instanceof Document) ? 
-        (OMElement)((Document)base).getRoot() : 
+        getOMElement(((Document)base).getRoot()) : 
         (OMElement)base;
       String charset = options.getCharset();
       if (om.getParent() != null && om.getParent() instanceof OMDocument) {
@@ -103,6 +105,12 @@ public class PrettyWriter
     }
   }
 
+  private OMElement getOMElement(Element el) {
+    if (el instanceof ElementWrapper) {
+      return getOMElement(((ElementWrapper)el).getInternal());
+    } else return (OMElement)el;
+  }
+  
   private static class PrettyStreamWriter implements XMLStreamWriter {
     
     private static final int INDENT = 2;

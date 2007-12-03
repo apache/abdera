@@ -51,7 +51,7 @@ public abstract class Operation
   
   public abstract String evaluate(String var, String arg, Context context);
   
-  public abstract void explain(String var, String arg, StringBuilder buf);
+  public abstract void explain(String var, String arg, Appendable buf) throws IOException;
   
   public String[] getVariables(String var) {
     List<String> list = new ArrayList<String>();
@@ -328,10 +328,10 @@ public abstract class Operation
     public String evaluate(String var, String arg, Context context) {
       return eval(var, context);
     }
-    public void explain(String var, String arg, StringBuilder buf) {
-      buf.append("Replaced with the value of '");
-      buf.append(var);
-      buf.append("'");
+    public void explain(String var, String arg, Appendable buf) throws IOException {
+      buf.append("Replaced with the value of '")
+         .append(var)
+         .append("'");
     }
   }
   
@@ -342,14 +342,14 @@ public abstract class Operation
       String value = eval(var,context);
       return value == null || value.length() == 0 ? "" : arg != null ? arg + value : value;
     }
-    public void explain(String var, String arg, StringBuilder buf) {
-      buf.append("If '");
-      buf.append(var);
-      buf.append("' is defined then prefix the value of '");
-      buf.append(var);
-      buf.append("' with '");
-      buf.append(arg);
-      buf.append("'");
+    public void explain(String var, String arg, Appendable buf) throws IOException {
+      buf.append("If '")
+         .append(var)
+         .append("' is defined then prefix the value of '")
+         .append(var)
+         .append("' with '")
+         .append(arg)
+         .append("'");
     }
   }
   
@@ -360,14 +360,14 @@ public abstract class Operation
       String value = eval(var,context);
       return value == null || value.length() == 0 ? "" : arg != null ? value + arg : value;
     }
-    public void explain(String var, String arg, StringBuilder buf) {
-      buf.append("If '");
-      buf.append(var);
-      buf.append("' is defined then append '");
-      buf.append(arg);
-      buf.append("' to the value of '");
-      buf.append(var);
-      buf.append("'");
+    public void explain(String var, String arg, Appendable buf) throws IOException {
+      buf.append("If '")
+         .append(var)
+         .append("' is defined then append '")
+         .append(arg)
+         .append("' to the value of '")
+         .append(var)
+         .append("'");
     }
   }
   
@@ -389,16 +389,16 @@ public abstract class Operation
       String value = buf.toString();
       return value;
     }
-    public void explain(String var, String arg, StringBuilder buf) {
+    public void explain(String var, String arg, Appendable buf) throws IOException {
       buf.append("Join 'var=value' with '" + arg + "' for each variable in [");
       String[] vars = getVariables(var);
       boolean b = false;
       for (String v : vars) {
         if (b) buf.append(',');
         else b = true;
-        buf.append("'");
-        buf.append(v);
-        buf.append("'");
+        buf.append("'")
+           .append(v)
+           .append("'");
       }
       buf.append("]");
     }
@@ -410,12 +410,12 @@ public abstract class Operation
     public String evaluate(String var, String arg, Context context) {
       return evallist(var,context,arg);
     }
-    public void explain(String var, String arg, StringBuilder buf) {
-      buf.append("Join the members of the list '");
-      buf.append(var);
-      buf.append("' together with '");
-      buf.append(arg);
-      buf.append("'");
+    public void explain(String var, String arg, Appendable buf) throws IOException {
+      buf.append("Join the members of the list '")
+         .append(var)
+         .append("' together with '")
+         .append(arg)
+         .append("'");
     }
   }
   
@@ -429,20 +429,20 @@ public abstract class Operation
       }
       return null;
     }
-    public void explain(String var, String arg, StringBuilder buf) {
+    public void explain(String var, String arg, Appendable buf) throws IOException {
       buf.append("If [");
       String[] vars = getVariables(var);
       boolean b = false;
       for (String v : vars) {
         if (b) buf.append(',');
         else b = true;
-        buf.append("'");
-        buf.append(v);
-        buf.append("'");
+        buf.append("'")
+           .append(v)
+           .append("'");
       }
-      buf.append("] is defined and a string, or a list with one or more members, then insert '");
-      buf.append(arg);
-      buf.append("'");
+      buf.append("] is defined and a string, or a list with one or more members, then insert '")
+         .append(arg)
+         .append("'");
     }
   }
   
@@ -456,20 +456,20 @@ public abstract class Operation
       }
       return null;
     }
-    public void explain(String var, String arg, StringBuilder buf) {
+    public void explain(String var, String arg, Appendable buf) throws IOException {
       buf.append("If [");
       String[] vars = getVariables(var);
       boolean b = false;
       for (String v : vars) {
         if (b) buf.append(',');
         else b = true;
-        buf.append("'");
-        buf.append(v);
-        buf.append("'");
+        buf.append("'")
+           .append(v)
+           .append("'");
       }
-      buf.append("] is undefined, or a zero length list, then insert '");
-      buf.append(arg);
-      buf.append("'");
+      buf.append("] is undefined, or a zero length list, then insert '")
+         .append(arg)
+         .append("'");
     }
   }
   

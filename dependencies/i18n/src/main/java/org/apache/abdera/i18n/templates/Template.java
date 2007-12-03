@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.i18n.templates;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -239,7 +240,25 @@ public final class Template
 
   @Override
   public String toString() {
-   StringBuilder buf = new StringBuilder();
+    StringBuilder buf = new StringBuilder();
+    buf.append("V:" + getPatternForDisplay());
+    buf.append('\n');
+    buf.append("L:" + CharUtils.bidiLRO(getPattern()));
+    buf.append('\n');
+    return buf.toString();
+  }
+  
+  public String explain() {
+    StringBuilder buf = new StringBuilder();
+    try {
+      explain(buf);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    return buf.toString();
+  }
+  
+  public void explain(Appendable buf) throws IOException {
    buf.append("Template:");
    buf.append('\n');
    buf.append("\t"+getPatternForDisplay());
@@ -258,7 +277,7 @@ public final class Template
    buf.append('\n');
    for (String token : this) {
      buf.append('\t');
-     buf.append("{" + token + "} \n\t\t ");
+     buf.append(forDisplay(token) + " \n\t\t ");
      EVALUATOR.explain(token, buf);
      buf.append('\n');
    }
@@ -310,8 +329,6 @@ public final class Template
    }
    buf.append('\n');
    buf.append("\t" + expand(c));
-   
-   return buf.toString();
   }
   
   public static String expand(String pattern, Context context) {
@@ -346,7 +363,13 @@ public final class Template
   }
   
   public static String explain(String pattern) {
-    Template template = new Template(pattern);
-    return template.toString();
+    return new Template(pattern).explain();
+  }
+  
+  public static void explain(
+    String pattern, 
+    Appendable buf) 
+      throws IOException {
+    new Template(pattern).explain(buf);
   }
 }

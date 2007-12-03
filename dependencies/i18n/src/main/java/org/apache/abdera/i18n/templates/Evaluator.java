@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.i18n.templates;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,10 +46,12 @@ final class Evaluator {
   
   /**
    * Writes a plain-text description of the template token
+   * @throws IOException 
    */
   void explain(
     String token, 
-    StringBuilder buf) {
+    Appendable buf) 
+      throws IOException {
     Matcher matcher = PATTERN.matcher(token);
     if (matcher.find()) {
       String op = matcher.group(1);

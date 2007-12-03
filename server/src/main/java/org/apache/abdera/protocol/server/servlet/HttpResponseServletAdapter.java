@@ -20,27 +20,31 @@ public class HttpResponseServletAdapter implements HttpResponse {
     return response.getOutputStream();
   }
 
-  public void setContentType(String contentType) {
+  public HttpResponse setContentType(String contentType) {
     response.setContentType(contentType);
+    return this;
   }
 
-  public void setDateHeader(String key, long time) {
+  public HttpResponse setDateHeader(String key, long time) {
     response.setDateHeader(key, time);
+    return this;
   }
 
-  public void setHeader(String name, String value) {
+  public HttpResponse setHeader(String name, String value) {
     response.setHeader(name, value);
+    return this;
   }
 
-  public void setStatus(int status) {
+  public HttpResponse setStatus(int status) {
     response.setStatus(status);
+    return this;
   }
 
-  public void addCookie(String name, String value) {
-    addCookie(name,value,null,null,-1,null);
+  public HttpResponse addCookie(String name, String value) {
+    return addCookie(name,value,null,null,-1,null);
   }
   
-  public void addCookie(
+  public HttpResponse addCookie(
     String name, 
     String value, 
     String domain,
@@ -53,30 +57,37 @@ public class HttpResponseServletAdapter implements HttpResponse {
       if (maxage >= 0) cookie.setMaxAge(maxage);
       if (comment != null) cookie.setComment(comment);
       response.addCookie(cookie);
+      return this;
   }
   
-  public void setCharacterEncoding(String charset) {
+  public HttpResponse setCharacterEncoding(String charset) {
     response.setCharacterEncoding(charset);
+    return this;
   }
   
-  public void setContentLength(int length) {
+  public HttpResponse setContentLength(int length) {
     response.setContentLength(length);
+    return this;
   }
 
-  public void sendError(int status) throws IOException {
+  public HttpResponse sendError(int status) throws IOException {
     response.sendError(status);
+    return this;
   }
   
-  public void sendError(int status, String message) throws IOException {
+  public HttpResponse sendError(int status, String message) throws IOException {
     response.sendError(status, message);
+    return this;
   }
   
-  public void sendRedirect(String to) throws IOException {
+  public HttpResponse sendRedirect(String to) throws IOException {
     response.sendRedirect(to);
+    return this;
   }
   
-  public void reset() {
+  public HttpResponse reset() {
     response.reset();
+    return this;
   }
   
   public HttpServletResponse getActual() {

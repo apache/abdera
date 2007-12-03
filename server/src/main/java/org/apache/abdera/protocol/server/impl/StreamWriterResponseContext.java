@@ -18,8 +18,6 @@
 package org.apache.abdera.protocol.server.impl;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.apache.abdera.Abdera;
@@ -32,12 +30,11 @@ import org.apache.abdera.writer.StreamWriter;
  * to know more about proper Atom syntax.
  */
 public abstract class StreamWriterResponseContext 
-  extends AbstractResponseContext {
+  extends SimpleResponseContext {
   
   private final Abdera abdera;
   private final String sw;
   private boolean autoindent;
-  private String encoding = "UTF-8";
   
   /**
    * Create a new StreamWriterResponseContext
@@ -45,17 +42,31 @@ public abstract class StreamWriterResponseContext
    */
   protected StreamWriterResponseContext(
     Abdera abdera) {
-      this(abdera,null);
+      this(abdera,null,null);
   }
 
   /**
    * Create a new StreamWriterResponseContext
    * @param abdera The Abdera instance
+   * @param encoding The charset encoding
+   */
+  protected StreamWriterResponseContext(
+      Abdera abdera,
+      String encoding) {
+        this(abdera,encoding,null);
+  }
+  
+  /**
+   * Create a new StreamWriterResponseContext
+   * @param abdera The Abdera instance
+   * @param encoding The charset encoding
    * @param sw The name of the Named StreamWriter to use
    */
   protected StreamWriterResponseContext(
-    Abdera abdera, 
+    Abdera abdera,
+    String encoding,
     String sw) {
+      super(encoding);
       this.abdera = abdera;
       this.sw = sw;
   }
@@ -77,25 +88,13 @@ public abstract class StreamWriterResponseContext
       abdera.getWriterFactory().newStreamWriter(sw);
   }
   
-  /**
-   * Use the StreamWriter to write to the specified OutputStream
-   */
-  public void writeTo(
-    OutputStream out) 
+  protected void writeEntity(
+    Writer writer) 
       throws IOException {
-    writeTo(new OutputStreamWriter(out,encoding));
-  }
-
-  /**
-   * Use the StreamWriter to write to the specified java.io.Writer
-   */
-  public void writeTo(Writer writer) 
-    throws IOException {
-      writeTo(
-        newStreamWriter()
-          .setWriter(writer)
-          .setAutoIndent(autoindent)
-      );
+    writeTo(
+      newStreamWriter()
+        .setWriter(writer)
+        .setAutoIndent(autoindent));
   }
   
   /**
@@ -105,30 +104,11 @@ public abstract class StreamWriterResponseContext
   protected abstract void writeTo(StreamWriter sw) throws IOException;
   
   /**
-   * Unsupported
-   */
-  public final void writeTo(
-    OutputStream out, 
-    org.apache.abdera.writer.Writer writer)
-      throws IOException {
-    throw new UnsupportedOperationException();
-  }
-  
-  /**
-   * Unsupported
-   */
-  public final void writeTo(
-    Writer javaWriter,
-    org.apache.abdera.writer.Writer abderaWriter) 
-      throws IOException {
-    throw new UnsupportedOperationException();
-  }
-  
-  /**
    * True to enable automatic indenting on the StreamWriter
    */
-  public void setAutoIndent(boolean autoindent) {
+  public StreamWriterResponseContext setAutoIndent(boolean autoindent) {
     this.autoindent = autoindent;
+    return this;
   }
   
   /**
@@ -142,17 +122,4 @@ public abstract class StreamWriterResponseContext
     return true;
   }
 
-  /**
-   * Return the character set encoding used when writing to an outputstream
-   */
-  public String getEncoding() {
-    return encoding;
-  }
-  
-  /**
-   * Set the character set encoding used when writing to an outputstream
-   */
-  public void setEncoding(String encoding) {
-    this.encoding = encoding;
-  }
 }

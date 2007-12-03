@@ -17,29 +17,26 @@
 */
 package org.apache.abdera.protocol.server.impl;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.io.CharUtils.Profile;
 import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.model.Collection;
-import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Service;
-import org.apache.abdera.model.Workspace;
 import org.apache.abdera.protocol.server.CollectionProvider;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.util.EntityTag;
+import org.apache.abdera.writer.StreamWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public abstract class AbstractWorkspaceProvider extends AbstractProvider {
+public abstract class AbstractWorkspaceProvider 
+  extends AbstractProvider {
   private final static Log log = LogFactory.getLog(AbstractWorkspaceProvider.class);
   
     private EntityTag service_etag = new EntityTag("simple");
@@ -50,8 +47,7 @@ public abstract class AbstractWorkspaceProvider extends AbstractProvider {
 
     public ResponseContext getService(RequestContext request) {
       Abdera abdera = request.getAbdera();
-      Document<Service> service = getServicesDocument(abdera, getEncoding(request));
-      AbstractResponseContext rc = new BaseResponseContext<Document<Service>>(service);
+      AbstractResponseContext rc = getServicesDocument(abdera, getEncoding(request));
       rc.setEntityTag(service_etag);
       return rc;
     }
@@ -60,36 +56,39 @@ public abstract class AbstractWorkspaceProvider extends AbstractProvider {
       return "utf-8";
     }
     
-    @SuppressWarnings("unchecked")
-    private Document<Service> getServicesDocument(Abdera abdera, String enc) {          
-      if (enc == null) {
-        enc = "utf-8";
-      }
-      
-      Factory factory = abdera.getFactory();
-      Service service = factory.newService();
-      for (WorkspaceInfo wp : getWorkspaces()) {
-        Workspace workspace = service.addWorkspace(wp.getName());
-        Set<Map.Entry<String, CollectionProvider>> entrySet = 
-          (Set<Map.Entry<String, CollectionProvider>>) (wp.getCollectionProviders().entrySet());
-        for (Map.Entry<String, CollectionProvider> entry : entrySet) {
-          CollectionProvider cp = entry.getValue();
-
-          String id;
-          String workspaceKey;
-          try {
-            id = Escaping.encode(wp.getId(), enc, Profile.PATH);
-            workspaceKey = Escaping.encode(entry.getKey(), enc, Profile.PATH);
-          } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-          }
-          Collection collection = workspace.addCollection(cp.getTitle(), 
-                                                          id + "/" + workspaceKey);
-          collection.setAccept("entry");
-          // collection.addCategories().setFixed(false);
+    private AbstractResponseContext getServicesDocument(
+      final Abdera abdera, 
+      final String enc) {
+      return new StreamWriterResponseContext(abdera) { 
+        @SuppressWarnings({"serial","unchecked"}) 
+        protected void writeTo(
+          StreamWriter sw) 
+            throws IOException {
+          sw.startDocument()
+            .startService();          
+          for (WorkspaceInfo wp : getWorkspaces()) {
+            sw.startWorkspace().writeTitle(wp.getName());
+            Set<Map.Entry<String, CollectionProvider>> entrySet = 
+              (Set<Map.Entry<String, CollectionProvider>>) (wp.getCollectionProviders().entrySet());
+            for (Map.Entry<String, CollectionProvider> entry : entrySet) {
+              CollectionProvider cp = entry.getValue();
+              final String id = wp.getId();
+              final String key = entry.getKey();
+              try {
+                sw.startCollection(
+                    Escaping.encode(id,enc,Profile.PATH) + "/" + 
+                    Escaping.encode(key,enc,Profile.PATH))
+                  .writeTitle(cp.getTitle())
+                  .writeAcceptsEntry() 
+                  .endCollection();
+              } catch (RuntimeException e) {}
+            }
+            sw.endWorkspace();    
+          }          
+          sw.endService()
+            .endDocument();
         }
-      }
-      return service.getDocument();
+      };
     }
 
     public abstract java.util.Collection<WorkspaceInfo> getWorkspaces();

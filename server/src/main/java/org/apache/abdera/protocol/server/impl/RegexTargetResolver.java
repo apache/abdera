@@ -40,12 +40,12 @@ import org.apache.abdera.protocol.server.TargetType;
  * <pre>
  *  RequestContext request = ...
  *  RegexTargetResolver tr = new RegexTargetResolver();
- *  tr.setPattern("/atom",ResourceType.INTROSPECTION);
- *  tr.setPattern("/atom/([^/#?]+)",ResourceType.COLLECTION);
- *  tr.setPattern("/atom/([^/#?]+)/([^/#?]+)",ResourceType.ENTRY);
- *  tr.setPattern("/atom/([^/#?]+)/([^/#?]+)\\?edit",ResourceType.ENTRY_EDIT);
- *  tr.setPattern("/atom/([^/#?]+)/([^/#?]+)\\?media",ResourceType.MEDIA);
- *  tr.setPattern("/atom/([^/#?]+)/([^/#?]+)\\?edit-media",ResourceType.MEDIA_EDIT);
+ *  tr.setPattern("/atom",ResourceType.INTROSPECTION)
+ *    .setPattern("/atom/([^/#?]+)",ResourceType.COLLECTION)
+ *    .setPattern("/atom/([^/#?]+)/([^/#?]+)",ResourceType.ENTRY)
+ *    .setPattern("/atom/([^/#?]+)/([^/#?]+)\\?edit",ResourceType.ENTRY_EDIT)
+ *    .setPattern("/atom/([^/#?]+)/([^/#?]+)\\?media",ResourceType.MEDIA)
+ *    .setPattern("/atom/([^/#?]+)/([^/#?]+)\\?edit-media",ResourceType.MEDIA_EDIT);
  *  
  *  Target target = tr.resolve(request);
  *  System.out.println(target.getType());
@@ -70,9 +70,10 @@ public class RegexTargetResolver
     }
   }
   
-  public synchronized void setPattern(String pattern, TargetType type) {
+  public synchronized RegexTargetResolver setPattern(String pattern, TargetType type) {
     Pattern p = Pattern.compile(pattern);
     this.patterns.put(p,type);
+    return this;
   }
   
   public Target resolve(Request request) {
@@ -155,21 +156,21 @@ public class RegexTargetResolver
     public String toString() {
       String m = matcher.group(0);
       String p = matcher.pattern().pattern();
-      StringBuffer buf = new StringBuffer();
-      buf.append("RegexTarget[");
-      buf.append(p);
-      buf.append(" ==> ");
-      buf.append(m);
-      buf.append("] = ");
-      buf.append(type.toString());
-      buf.append("\n");
+      StringBuilder buf = new StringBuilder();
+      buf.append("RegexTarget[")
+         .append(p)
+         .append(" ==> ")
+         .append(m)
+         .append("] = ")
+         .append(type.toString())
+         .append("\n");
       String[] params = getParameterNames();
       for (String param : params) {
-        buf.append("    ");
-        buf.append(param);
-        buf.append(" = ");
-        buf.append(getParameter(param));
-        buf.append("\n");
+        buf.append("    ")
+           .append(param)
+           .append(" = ")
+           .append(getParameter(param))
+           .append("\n");
       }
       return buf.toString();
     }

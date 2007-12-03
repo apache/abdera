@@ -24,6 +24,7 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.Parser;
+import org.apache.abdera.protocol.server.ServiceManager;
 
 public abstract class AbderaFilter 
   extends AbstractFilter {
@@ -31,7 +32,7 @@ public abstract class AbderaFilter
   protected final Abdera abdera;
   
   protected AbderaFilter() {
-    this.abdera = new Abdera();
+    this.abdera = ServiceManager.getAbdera();
   }
   
   protected Abdera getAbdera() {

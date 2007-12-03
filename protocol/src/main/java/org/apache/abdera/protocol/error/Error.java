@@ -24,6 +24,7 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ExtensibleElementWrapper;
+import org.apache.abdera.writer.StreamWriter;
 
 /**
  * Abdera protocol error element.  The Abdera error document provides a 
@@ -113,5 +114,22 @@ public class Error
     error.setCode(code);
     error.setMessage(message);
     return error;
+  }
+  
+  public static Error create(Abdera abdera, int code, String message, Throwable t) {
+    Document<Error> doc = abdera.getFactory().newDocument();
+    Error error = abdera.getFactory().newElement(ERROR,doc);
+    error.setCode(code);
+    error.setMessage(message);
+    return error;
+  }
+  
+  public static void create(StreamWriter sw, int code, String message, Throwable t) {
+    sw.startDocument()
+      .startElement(ERROR)
+      .startElement(CODE).writeElementText(code).endElement()
+      .startElement(MESSAGE).writeElementText(message).endElement()
+      .endElement()
+      .endDocument();
   }
 }

@@ -30,11 +30,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.ItemManager;
+import org.apache.abdera.protocol.error.Error;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.RequestHandler;
 import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.server.ServiceManager;
 import org.apache.abdera.protocol.server.impl.HttpServletRequestContext;
+import org.apache.abdera.writer.StreamWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -114,7 +116,14 @@ public class AbderaServlet
     if (response.isCommitted()) response.reset();
     if (t != null) log.error(message, t);
     else log.error(message);
-    response.sendError(500, message);
+    response.setStatus(500);
+    StreamWriter sw = 
+      getAbdera().newStreamWriter()
+                 .setOutputStream(
+                   response.getOutputStream(),
+                   "UTF-8");
+    Error.create(sw, 500, message,t);
+    sw.close();
   }
   
   protected Map<String,String> getProperties(ServletConfig config) {

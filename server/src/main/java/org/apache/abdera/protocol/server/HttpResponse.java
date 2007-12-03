@@ -22,19 +22,19 @@ import java.io.OutputStream;
 
 public interface HttpResponse {
 
-  void setStatus(int status);
+  HttpResponse setStatus(int status);
 
-  void setHeader(String name, String value);
+  HttpResponse setHeader(String name, String value);
 
-  void setContentType(String contentType);
+  HttpResponse setContentType(String contentType);
 
-  void setDateHeader(String key, long time);
+  HttpResponse setDateHeader(String key, long time);
 
   OutputStream getOutputStream() throws IOException;
 
-  void addCookie(String name, String value);
+  HttpResponse addCookie(String name, String value);
 
-  void addCookie(
+  HttpResponse addCookie(
     String name, 
     String value, 
     String domain,
@@ -42,13 +42,13 @@ public interface HttpResponse {
     int maxage,
     String comment);
   
-  void setContentLength(int length);
+  HttpResponse setContentLength(int length);
   
-  void sendError(int status) throws IOException;
+  HttpResponse sendError(int status) throws IOException;
 
-  void sendError(int status, String message) throws IOException;
+  HttpResponse sendError(int status, String message) throws IOException;
 
-  void sendRedirect(String to) throws IOException;
+  HttpResponse sendRedirect(String to) throws IOException;
   
-  void reset();
+  HttpResponse reset();
 }

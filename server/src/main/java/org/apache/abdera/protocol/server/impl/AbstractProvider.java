@@ -17,15 +17,15 @@
 */
 package org.apache.abdera.protocol.server.impl;
 
+import java.io.IOException;
 import java.util.Date;
 
-
-import org.apache.abdera.model.Categories;
 import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.util.Messages;
+import org.apache.abdera.writer.StreamWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -164,8 +164,21 @@ public abstract class AbstractProvider
 
   public ResponseContext getCategories(
     RequestContext request) {
-      Categories cats = request.getAbdera().newCategories();
-      return returnBase(cats.getDocument(), 200, new Date());
+      AbstractResponseContext rc = 
+        new StreamWriterResponseContext(
+          request.getAbdera()) {
+        protected void writeTo(
+          StreamWriter sw) 
+            throws IOException {
+          sw.startDocument()
+            .startCategories()
+            .endCategories()
+            .endDocument();
+        }        
+      };
+      rc.setStatus(200);
+      rc.setLastModified(new Date());
+      return rc;
   }
   
   public ResponseContext deleteMedia(

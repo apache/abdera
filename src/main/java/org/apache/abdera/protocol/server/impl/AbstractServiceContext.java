@@ -59,24 +59,20 @@ public abstract class AbstractServiceContext
     return config.keySet().toArray(new String[config.size()]);
   }
 
-  public AbstractServiceContext setHandlerManager(ItemManager<RequestHandler> handlerManager) {
+  public void setHandlerManager(ItemManager<RequestHandler> handlerManager) {
     this.handlerManager = handlerManager;
-    return this;
   }
 
-  public AbstractServiceContext setProviderManager(ItemManager<Provider> providerManager) {
+  public void setProviderManager(ItemManager<Provider> providerManager) {
     this.providerManager = providerManager;
-    return this;
   }
 
-  public AbstractServiceContext setSubjectResolver(Resolver<Subject> subjectResolver) {
+  public void setSubjectResolver(Resolver<Subject> subjectResolver) {
     this.subjectResolver = subjectResolver;
-    return this;
   }
 
-  public AbstractServiceContext setTargetResolver(Resolver<Target> targetResolver) {
+  public void setTargetResolver(Resolver<Target> targetResolver) {
     this.targetResolver = targetResolver;
-    return this;
   }
 
 }

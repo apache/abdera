@@ -17,12 +17,17 @@
 */
 package org.apache.abdera.protocol.server.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.Date;
+
+import org.apache.abdera.util.EntityTag;
 
 
 /**
@@ -32,6 +37,22 @@ public class MediaResponseContext
   extends AbstractResponseContext {
 
   private InputStream in;
+
+  public MediaResponseContext(
+    InputStream in, 
+    EntityTag etag, 
+    int status) {
+      this.in = in;
+      this.status = status;
+      setEntityTag(etag);
+  }
+  
+  public MediaResponseContext(
+    InputStream in,  
+    int status) {
+      this.in = in;
+      this.status = status;
+  }
   
   public MediaResponseContext(
     InputStream in, 
@@ -40,6 +61,46 @@ public class MediaResponseContext
       this.in = in;
       this.status = status;
       setLastModified(lastmodified);
+  }
+
+  public MediaResponseContext(
+    byte[] bytes,
+    int status) {
+      this(new ByteArrayInputStream(bytes),status);
+  }
+  
+  public MediaResponseContext(
+    byte[] bytes,
+    Date lastmodified,
+    int status) {
+      this(new ByteArrayInputStream(bytes),lastmodified,status);
+  }
+
+  public MediaResponseContext(
+    byte[] bytes,
+    EntityTag etag,
+    int status) {
+      this(new ByteArrayInputStream(bytes),etag,status);
+  }
+
+  public MediaResponseContext(
+    ReadableByteChannel channel,
+    int status) {
+      this(Channels.newInputStream(channel),status);
+  }
+  
+  public MediaResponseContext(
+    ReadableByteChannel channel,
+    Date lastmodified,
+    int status) {
+      this(Channels.newInputStream(channel),lastmodified,status);
+  }
+
+  public MediaResponseContext(
+    ReadableByteChannel channel,
+    EntityTag etag,
+    int status) {
+      this(Channels.newInputStream(channel),etag,status);
   }
   
   public boolean hasEntity() {
@@ -50,7 +111,7 @@ public class MediaResponseContext
     OutputStream out) 
       throws IOException {
     if (in != null) {
-      byte[] buf = new byte[100];
+      byte[] buf = new byte[500];
       int r = -1;
       while ((r = in.read(buf)) != -1) {
         out.write(buf,0,r);
@@ -64,7 +125,7 @@ public class MediaResponseContext
       throws IOException {
     if (in != null) {
       InputStreamReader rdr = new InputStreamReader(in);
-      char[] buf = new char[100];
+      char[] buf = new char[500];
       int r = -1;
       while ((r = rdr.read(buf)) != -1) {
         out.write(buf,0,r);

@@ -29,6 +29,10 @@ public final class EmptyResponseContext
     setStatus(status);
   }
   
+  public EmptyResponseContext(int status, String text) {
+    setStatusText(text);
+  }
+  
   public boolean hasEntity() {
     return false;
   }

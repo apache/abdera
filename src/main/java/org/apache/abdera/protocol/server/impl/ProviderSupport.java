@@ -1,5 +1,6 @@
 package org.apache.abdera.protocol.server.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.util.Messages;
 import org.apache.abdera.util.MimeTypeHelper;
+import org.apache.abdera.writer.StreamWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -47,6 +49,10 @@ public class ProviderSupport {
     this.defaultpagesize = defaultpagesize;
   }
 
+  /**
+   * Returns an Error document based on FOM objects
+   * @deprecated Use createErrorResponse
+   */
   protected Document<Error> createErrorDocument(
     Abdera abdera, 
     int code, 
@@ -54,6 +60,36 @@ public class ProviderSupport {
     Throwable e) {
       Error error = Error.create(abdera,code,message);
       return error.getDocument();
+  }
+
+  /**
+   * Returns an Error document based on the StreamWriter
+   */
+  protected AbstractResponseContext createErrorResponse(
+      Abdera abdera, 
+      final int code, 
+      final String message) {
+    return createErrorResponse(abdera,code,message,null);
+  }
+  
+  /**
+   * Returns an Error document based on the StreamWriter
+   */
+  protected AbstractResponseContext createErrorResponse(
+    Abdera abdera, 
+    final int code, 
+    final String message, 
+    final Throwable t) {
+      AbstractResponseContext rc = 
+        new StreamWriterResponseContext(abdera) {
+          protected void writeTo(StreamWriter sw) 
+            throws IOException {
+            Error.create(sw, code, message, t);
+          }
+        };
+      rc.setStatus(code);
+      rc.setStatusText(message);
+      return rc;
   }
 
   /**
@@ -65,11 +101,7 @@ public class ProviderSupport {
     String reason,
     Throwable t) {
       log.debug(Messages.get("SERVER_ERROR"));
-      return returnBase(
-        createErrorDocument(
-          abdera, 500, 
-          reason, t), 
-        500, null);
+      return createErrorResponse(abdera,500,reason,t);
   }
 
   /**
@@ -80,11 +112,7 @@ public class ProviderSupport {
     RequestContext request,
     String reason) {
       log.debug(Messages.get("UNAUTHORIZED"));
-      return returnBase(
-        createErrorDocument(
-          abdera, 401, 
-          reason, null), 
-        401, null);
+      return createErrorResponse(abdera,401,reason);
   }
 
   /**
@@ -95,11 +123,7 @@ public class ProviderSupport {
     RequestContext request,
     String reason) {
       log.debug(Messages.get("FORBIDDEN"));
-      return returnBase(
-        createErrorDocument(
-          abdera, 403, 
-          reason, null), 
-        403, null);
+      return createErrorResponse(abdera,403,reason);
   }
 
   /**
@@ -110,11 +134,7 @@ public class ProviderSupport {
     RequestContext request,
     String reason) {
     log.debug(Messages.get("UNKNOWN"));
-    return returnBase(
-      createErrorDocument(
-        abdera, 404, 
-        reason, null), 
-      404, null);
+    return createErrorResponse(abdera,404,reason);
   }
 
   /**
@@ -126,14 +146,10 @@ public class ProviderSupport {
     String reason,
     String... methods) {
       log.debug(Messages.get("NOT.ALLOWED")); 
-      BaseResponseContext resp = 
-        (BaseResponseContext)returnBase(
-          createErrorDocument(
-            abdera, 405, 
-            reason, null), 
-          405, null);
-        resp.setAllow(methods);
-        return resp;
+      AbstractResponseContext resp = 
+        createErrorResponse(abdera,405,reason);
+      resp.setAllow(methods);
+      return resp;
   }
 
   /**
@@ -144,11 +160,7 @@ public class ProviderSupport {
     RequestContext request,
     String reason) {
       log.debug(Messages.get("BAD.REQUEST"));
-      return returnBase(
-        createErrorDocument(
-          abdera, 400, 
-          reason, null), 
-        400, null);
+      return createErrorResponse(abdera,400,reason);
   }
 
   /**
@@ -159,11 +171,7 @@ public class ProviderSupport {
     RequestContext request,
     String reason) {
     log.debug(Messages.get("CONFLICT"));
-      return returnBase(
-        createErrorDocument(
-          abdera, 409, 
-          reason, null), 
-        409, null);
+    return createErrorResponse(abdera,409,reason);
   }
 
   /**
@@ -174,11 +182,7 @@ public class ProviderSupport {
     RequestContext request,
     String reason) {
       log.debug(Messages.get("UNAVAILABLE"));
-      return returnBase(
-        createErrorDocument(
-          abdera, 503, 
-          reason, null), 
-        503, null);
+      return createErrorResponse(abdera,503,reason);
   }
 
   protected ResponseContext notmodified(
@@ -186,9 +190,7 @@ public class ProviderSupport {
     RequestContext request,
     String reason) {
       log.debug(Messages.get("NOT.MODIFIED"));
-      EmptyResponseContext rc = new EmptyResponseContext(304);
-      rc.setStatusText(reason);
-      return rc;
+      return new EmptyResponseContext(304,reason);
   }
 
   protected ResponseContext preconditionfailed(
@@ -196,11 +198,7 @@ public class ProviderSupport {
     RequestContext request,
     String reason) {
       log.debug(Messages.get("PRECONDITION.FAILED"));
-      return returnBase(
-        createErrorDocument(
-          abdera, 412, 
-          reason, null), 
-        412, null);
+      return createErrorResponse(abdera,412,reason);
   }
 
   /**
@@ -211,11 +209,7 @@ public class ProviderSupport {
     RequestContext request,
     String reason) {
       log.debug(Messages.get("NOT.SUPPORTED"));
-      return returnBase(
-        createErrorDocument(
-          abdera, 415, 
-          reason, null),
-        415,null);
+      return createErrorResponse(abdera,415,reason);
   }
 
   /**
@@ -226,11 +220,7 @@ public class ProviderSupport {
     RequestContext request,
     String reason) {
       log.debug(Messages.get("LOCKED"));
-      return returnBase(
-        createErrorDocument(
-          abdera, 423,
-          reason, null),
-        423,null);
+      return createErrorResponse(abdera,423,reason);
     }
 
   /**
@@ -313,6 +303,9 @@ public class ProviderSupport {
           !id.isAbsolute()) return false;
       if (entry.getTitle() == null) return false;
       if (entry.getUpdated() == null) return false;
+      if (entry.getAuthor() == null && 
+          (entry.getSource() != null && 
+           entry.getAuthor() == null)) return false;
       Content content = entry.getContentElement();
       if (content == null) {
         if (entry.getAlternateLink() == null) return false;

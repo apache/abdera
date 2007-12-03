@@ -102,20 +102,24 @@ public class DefaultServiceContext
     return defaulttargetresolver;
   }
 
-  public void setDefaultProviderManager(String defaultprovidermanager) {
+  public DefaultServiceContext setDefaultProviderManager(String defaultprovidermanager) {
     this.defaultprovidermanager = defaultprovidermanager;
+    return this;
   }
 
-  public void setDefaultRequestHandlerManager(String defaultrequesthandlermanager) {
+  public DefaultServiceContext setDefaultRequestHandlerManager(String defaultrequesthandlermanager) {
     this.defaultrequesthandlermanager = defaultrequesthandlermanager;
+    return this;
   }
 
-  public void setDefaultSubjectResolver(String defaultsubjectresolver) {
+  public DefaultServiceContext setDefaultSubjectResolver(String defaultsubjectresolver) {
     this.defaultsubjectresolver = defaultsubjectresolver;
+    return this;
   }
 
-  public void setDefaultTargetResolver(String defaulttargetresolver) {
+  public DefaultServiceContext setDefaultTargetResolver(String defaulttargetresolver) {
     this.defaulttargetresolver = defaulttargetresolver;
+    return this;
   }
 
 }

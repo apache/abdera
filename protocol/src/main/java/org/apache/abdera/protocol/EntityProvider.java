@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.client;
+package org.apache.abdera.protocol;
 
 import java.util.Date;
 
@@ -23,8 +23,8 @@ import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.writer.StreamWriter;
 
 /**
- * An EntityProvider is used to serialize client requests using the StreamWriter
- * interface.  The EntityProvider interface can be implemented by client applications
+ * An EntityProvider is used to serialize entities using the StreamWriter
+ * interface.  The EntityProvider interface can be implemented by applications
  * to provide an efficient means of serializing non-FOM objects to Atom/XML. 
  */
 public abstract class EntityProvider {

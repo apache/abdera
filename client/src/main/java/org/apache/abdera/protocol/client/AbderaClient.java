@@ -32,6 +32,7 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.protocol.EntityProvider;
 import org.apache.abdera.protocol.Response.ResponseType;
 import org.apache.abdera.protocol.client.cache.Cache;
 import org.apache.abdera.protocol.client.cache.CacheDisposition;

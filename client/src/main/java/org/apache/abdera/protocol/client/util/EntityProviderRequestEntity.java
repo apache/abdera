@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.client.EntityProvider;
+import org.apache.abdera.protocol.EntityProvider;
 import org.apache.commons.httpclient.methods.RequestEntity;
 
 public class EntityProviderRequestEntity 

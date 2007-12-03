@@ -44,8 +44,9 @@ public abstract class SimpleResponseContext
     this.encoding = encoding != null ? encoding : "UTF-8";
   }
   
-  protected void setEncoding(String encoding) {
+  protected SimpleResponseContext setEncoding(String encoding) {
     this.encoding = encoding;
+    return this;
   }
   
   protected String getEncoding() {

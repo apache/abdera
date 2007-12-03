@@ -47,55 +47,58 @@ public abstract class AbstractResponseContext
   
   protected Map<String,Object[]> headers = null;
 
-  public void removeHeader(String name) {
+  public ResponseContext removeHeader(String name) {
     Map<String,Object[]> headers = getHeaders();
     headers.remove(name);
+    return this;
   }
   
-  public void setEncodedHeader(String name, String charset, String value) {
-    setHeader(name, EncodingUtil.encode(value, charset));
+  public ResponseContext setEncodedHeader(String name, String charset, String value) {
+    return setHeader(name, EncodingUtil.encode(value, charset));
   }
   
-  public void setEncodedHeader(String name, String charset, String... vals) {
+  public ResponseContext setEncodedHeader(String name, String charset, String... vals) {
     Object[] evals = new Object[vals.length];
     for (int n = 0; n < vals.length; n++) {
       evals[n] = EncodingUtil.encode(vals[n], charset);
     }
-    setHeader(name, evals);
+    return setHeader(name, evals);
   }
   
-  public void setEscapedHeader(String name, Profile profile, String value) {
-    setHeader(name,Escaping.encode(value, profile));
+  public ResponseContext setEscapedHeader(String name, Profile profile, String value) {
+    return setHeader(name,Escaping.encode(value, profile));
   }
   
-  public void setHeader(String name, Object value) {
-    setHeader(name, new Object[] {value});
+  public ResponseContext setHeader(String name, Object value) {
+    return setHeader(name, new Object[] {value});
   }
   
-  public void setHeader(String name, Object... vals) {
+  public ResponseContext setHeader(String name, Object... vals) {
     Map<String,Object[]> headers = getHeaders();
     List<Object> values = new ArrayList<Object>();
     for (Object value : vals) {
       values.add(value);
     }
     headers.put(name, values.toArray(new Object[values.size()]));
+    return this;
   }
   
-  public void addEncodedHeader(String name, String charset, String value) {
-    addHeader(name, EncodingUtil.encode(value, charset));
+  public ResponseContext addEncodedHeader(String name, String charset, String value) {
+    return addHeader(name, EncodingUtil.encode(value, charset));
   }
   
-  public void addEncodedHeaders(String name, String charset, String... vals) {
+  public ResponseContext addEncodedHeaders(String name, String charset, String... vals) {
     for (String value : vals) {
       addHeader(name,EncodingUtil.encode(value, charset));
     }
+    return this;
   }
   
-  public void addHeader(String name, Object value) {
-    addHeaders(name, new Object[] {value});
+  public ResponseContext addHeader(String name, Object value) {
+    return addHeaders(name, new Object[] {value});
   }
   
-  public void addHeaders(String name, Object... vals) {
+  public ResponseContext addHeaders(String name, Object... vals) {
     Map<String,Object[]> headers = getHeaders();
     Object[] values = headers.get(name);
     List<Object> l = null;
@@ -108,6 +111,7 @@ public abstract class AbstractResponseContext
       l.add(value);
     }
     headers.put(name, l.toArray(new Object[l.size()]));
+    return this;
   }
   
   public Map<String, Object[]> getHeaders() {
@@ -178,133 +182,122 @@ public abstract class AbstractResponseContext
     return buf.toString();
   }
 
-  public void setAge(long age) {
-    if (age == -1) {
-      removeHeader("Age"); 
-      return;
-    }
-    setHeader("Age", String.valueOf(age));
+  public ResponseContext  setAge(long age) {
+    return age == -1 ?
+        removeHeader("Age") :
+        setHeader("Age", String.valueOf(age));
   }
   
-  public void setContentLanguage(String language) {
-    if (language == null) {
-      removeHeader("Content-Language");
-      return;
-    }
-    setHeader("Content-Language", language);
+  public ResponseContext  setContentLanguage(String language) {
+    return language == null ?
+        removeHeader("Content-Language") :
+        setHeader("Content-Language",language);
   }
 
-  public void setContentLength(long length) {
-    if (length == -1) {
-      removeHeader("Content-Length");
-      return;
-    }
-    setHeader("Content-Length", String.valueOf(length));
+  public ResponseContext  setContentLength(long length) {
+    return length == -1 ?
+      removeHeader("Content-Length") :
+      setHeader("Content-Length", String.valueOf(length));
   }
 
-  public void setContentLocation(String uri) {
-    if (uri == null) {
-      removeHeader("Content-Location");
-      return;
-    }
-    setHeader("Content-Location", uri);
+  public ResponseContext  setContentLocation(String uri) {
+    return uri == null ?
+      removeHeader("Content-Location") :
+      setHeader("Content-Location",uri);
   }
   
-  public void setSlug(String slug) {
+  public ResponseContext setSlug(String slug) {
     if (slug == null) {
-      removeHeader("Slug");
-      return;
+      return removeHeader("Slug");
     }
     if (slug.indexOf((char)10) > -1 ||
         slug.indexOf((char)13) > -1)
       throw new IllegalArgumentException(
         Messages.get("SLUG.BAD.CHARACTERS"));
-    setEscapedHeader("Slug", Profile.ASCIISANSCRLF, slug);
+    return setEscapedHeader("Slug", Profile.ASCIISANSCRLF, slug);
   }
   
-  public void setContentType(String type) {
-    setContentType(type,null);
+  public ResponseContext setContentType(String type) {
+    return setContentType(type,null);
   }
   
-  public void setContentType(String type, String charset) {
+  public ResponseContext setContentType(String type, String charset) {
     if (type == null) {
-      removeHeader("Content-Type");
-      return;
+      return removeHeader("Content-Type");
     }
     try {
       MimeType mimeType = new MimeType(type);
       if (charset != null) mimeType.setParameter("charset", charset);
-      setHeader("Content-Type", mimeType.toString());
-    } catch (Exception e) {}
+      return setHeader("Content-Type", mimeType.toString());
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
   
-  public void setEntityTag(String etag) {
-    setEntityTag(new EntityTag(etag));
-  }
-  
-  public void setEntityTag(EntityTag etag) {
-    if (etag == null) {
+  public ResponseContext setEntityTag(String etag) {
+    return etag != null ?
+      setEntityTag(new EntityTag(etag)) :
       removeHeader("ETag");
-      return;
-    }
-    setHeader("ETag", etag.toString());
-  }
-
-  public void setExpires(Date date) {
-    if (date == null) {
-      removeHeader("Expires");
-      return;
-    }
-    setHeader("Expires", date);
   }
   
-  public void setLastModified(Date date) {
-    if (date == null) {
-      removeHeader("Last-Modified");
-      return;
-    }
-    setHeader("Last-Modified", date);
+  public ResponseContext  setEntityTag(EntityTag etag) {
+    return etag == null ?
+      removeHeader("ETag") :
+      setHeader("ETag",etag.toString());
   }
 
-  public void setLocation(String uri) {
-    if (uri == null) {
-      removeHeader("Location");
-      return;
-    }
-    setHeader("Location", uri);
+  public ResponseContext  setExpires(Date date) {
+    return date == null ?
+      removeHeader("Expires") :
+      setHeader("Expires",date);
+  }
+  
+  public ResponseContext  setLastModified(Date date) {
+    return date == null ?
+      removeHeader("Last-Modified") :
+      setHeader("Last-Modified",date);
+  }
+
+  public ResponseContext setLocation(String uri) {
+    return uri == null ?
+      removeHeader("Location") :
+      setHeader("Location",uri);
   }
   
   public int getStatus() {
     return status;
   }
   
-  public void setStatus(int status) {
+  public ResponseContext setStatus(int status) {
     this.status = status;
+    return this;
   }
 
   public String getStatusText() {
     return status_text;
   }
   
-  public void setStatusText(String text) {
+  public ResponseContext setStatusText(String text) {
     this.status_text = text;
+    return this;
   }
 
-  public void setAllow(String method) {
-    setHeader("Allow", method);
+  public ResponseContext setAllow(String method) {
+    return setHeader("Allow", method);
   }
   
-  public void setAllow(String... methods) {
+  public ResponseContext setAllow(String... methods) {
     StringBuffer buf = new StringBuffer();
     for(String method : methods) {
       if (buf.length() > 0) buf.append(", ");
       buf.append(method);
     }
-    setAllow(buf.toString());
+    return setAllow(buf.toString());
   }
   
-  public void setWriter(Writer writer) {
+  public ResponseContext setWriter(Writer writer) {
     this.writer = writer;
+    return this;
   }
   
 }

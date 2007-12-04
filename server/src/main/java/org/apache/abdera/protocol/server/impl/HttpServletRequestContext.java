@@ -114,11 +114,12 @@ public class HttpServletRequestContext
     return session;
   }
   
-  public void setAttribute(Scope scope, String name, Object value) {
+  public RequestContext setAttribute(Scope scope, String name, Object value) {
     switch(scope) {
       case REQUEST: request.setAttribute(name, value); break;
       case SESSION: getSession().setAttribute(name, value); break;
     }
+    return this;
   }
   
   public Object getAttribute(Scope scope, String name) {

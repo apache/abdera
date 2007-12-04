@@ -26,6 +26,6 @@ public interface SecurityOptions {
 
   Parser getParser();
   
-  void setParser(Parser parser);
+  <T extends SecurityOptions>T setParser(Parser parser);
   
 }

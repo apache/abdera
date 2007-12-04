@@ -96,7 +96,7 @@ public interface Text
    * Set the Text.Type
    * @param type The Text.Type
    */
-  void setTextType(Type type);
+  Text setTextType(Type type);
   
   /**
    * Return the text value element
@@ -108,7 +108,7 @@ public interface Text
    * Set the text value element
    * @param value The xhtml:div
    */
-  void setValueElement(Div value);
+  Text setValueElement(Div value);
   
   /**
    * Return the text value
@@ -120,7 +120,7 @@ public interface Text
    * Set the text value
    * @param value The text value
    */
-  void setValue(String value);
+  Text setValue(String value);
   
   /**
    * Return the wrapped value
@@ -132,6 +132,6 @@ public interface Text
    * Set the wrapped value
    * @param wrappedValue The text value wrapped in a xhtml:div
    */
-  void setWrappedValue(String wrappedValue);
+  Text setWrappedValue(String wrappedValue);
   
 }

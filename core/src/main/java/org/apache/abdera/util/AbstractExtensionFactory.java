@@ -82,15 +82,17 @@ public abstract class AbstractExtensionFactory
   /**
    * Associate a MIME media type for the specific QName
    */
-  protected void addMimeType(QName qname, String mimetype) {
+  protected AbstractExtensionFactory addMimeType(QName qname, String mimetype) {
     mimetypes.put(qname, mimetype);
+    return this;
   }
   
   /**
    * Associate a QName with an implementation class
    */
-  protected void addImpl(QName qname, Class<? extends ElementWrapper> impl) {
+  protected AbstractExtensionFactory addImpl(QName qname, Class<? extends ElementWrapper> impl) {
     impls.put(qname, impl);
+    return this;
   }
   
   @SuppressWarnings("unchecked") 

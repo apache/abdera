@@ -77,9 +77,10 @@ public class ExtensionFactoryMap
     return false;
   }
   
-  public void addFactory(ExtensionFactory factory) {
+  public ExtensionFactoryMap addFactory(ExtensionFactory factory) {
     if (!factories.contains(factory))
       factories.add(factory);
+    return this;
   }
 
   public <T extends Base> String getMimeType(T base) {

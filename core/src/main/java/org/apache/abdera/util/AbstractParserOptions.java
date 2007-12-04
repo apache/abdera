@@ -72,68 +72,77 @@ public abstract class AbstractParserOptions
     return factory;
   }
   
-  public void setFactory(Factory factory) {
+  public ParserOptions setFactory(Factory factory) {
     checkFactory(factory);
     this.factory = factory;
+    return this;
   }
 
   public String getCharset() {
     return charset;
   }
 
-  public void setCharset(String charset) {
+  public ParserOptions setCharset(String charset) {
     this.charset = charset;
+    return this;
   }
 
   public ParseFilter getParseFilter() {
     return parseFilter;
   }
-  public void setParseFilter(ParseFilter parseFilter) {
+  public ParserOptions setParseFilter(ParseFilter parseFilter) {
     this.parseFilter = parseFilter;
+    return this;
   }
   
   public boolean getAutodetectCharset() {
     return this.detect;
   }
   
-  public void setAutodetectCharset(boolean detect) {
+  public ParserOptions setAutodetectCharset(boolean detect) {
     this.detect = detect;
+    return this;
   }
   
   public boolean getMustPreserveWhitespace() {
     return preserve;
   }
   
-  public void setMustPreserveWhitespace(boolean preserve) {
+  public ParserOptions setMustPreserveWhitespace(boolean preserve) {
     this.preserve = preserve;
+    return this;
   }
   
   public boolean getFilterRestrictedCharacters() {
     return filterreserved;
   }
   
-  public void setFilterRestrictedCharacters(boolean filter) {
+  public ParserOptions setFilterRestrictedCharacters(boolean filter) {
     this.filterreserved = filter;
+    return this;
   }
   
   public char getFilterRestrictedCharacterReplacement() {
     return replacement;
   }
   
-  public void setFilterRestrictedCharacterReplacement(char replacement) {
+  public ParserOptions setFilterRestrictedCharacterReplacement(char replacement) {
     this.replacement = replacement;
+    return this;
   }
   
   public CompressionCodec[] getCompressionCodecs() {
     return codecs;
   }
   
-  public void setCompressionCodecs(CompressionCodec... codecs) {
+  public ParserOptions setCompressionCodecs(CompressionCodec... codecs) {
     this.codecs = codecs;
+    return this;
   }
   
-  public void registerEntity(String name, String value) {
+  public ParserOptions registerEntity(String name, String value) {
     entities.put(name, value);
+    return this;
   }
 
   private void initDefaultEntities() {
@@ -395,8 +404,9 @@ public abstract class AbstractParserOptions
     return resolveentities ? entities.get(name.toLowerCase()) : null;
   }
   
-  public void setResolveEntities(boolean resolve) {
+  public ParserOptions setResolveEntities(boolean resolve) {
     this.resolveentities = resolve;
+    return this;
   }
   
   public boolean getResolveEntities() {
@@ -407,15 +417,17 @@ public abstract class AbstractParserOptions
     return aliases;
   }
   
-  public void setQNameAliasMap(Map<QName,QName> map) {
+  public ParserOptions setQNameAliasMap(Map<QName,QName> map) {
     this.aliases = map;
+    return this;
   }
   
   public boolean isQNameAliasMappingEnabled() {
     return qnamealiasing;
   }
   
-  public void setQNameAliasMappingEnabled(boolean enabled) {
+  public ParserOptions setQNameAliasMappingEnabled(boolean enabled) {
     this.qnamealiasing = enabled;
+    return this;
   }
 }

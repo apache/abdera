@@ -138,9 +138,10 @@ public class FOMWorkspace
     return col;
   }
 
-  public void addCollection(Collection collection) {
+  public Workspace addCollection(Collection collection) {
     complete();
     addChild((OMElement)collection);
+    return this;
   }
 
   public Collection addCollection(String title, String href) {

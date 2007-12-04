@@ -29,7 +29,7 @@ public interface SignatureOptions
 
   String getSigningAlgorithm();
   
-  void setSigningAlgorithm(String algorithm);
+  SignatureOptions setSigningAlgorithm(String algorithm);
   
   /**
    * Return the private key with which to sign the element
@@ -39,7 +39,7 @@ public interface SignatureOptions
   /**
    * Set the private key with which to sign the element
    */
-  void setSigningKey(PrivateKey privateKey);
+  SignatureOptions setSigningKey(PrivateKey privateKey);
   
   /**
    * Return the X.509 cert to associated with the signature
@@ -49,7 +49,7 @@ public interface SignatureOptions
   /**
    * Set the X.509 cert to associate with the signature
    */
-  void setCertificate(X509Certificate cert);
+  SignatureOptions setCertificate(X509Certificate cert);
   
   /**
    * Get the public key associated with the signature
@@ -59,9 +59,9 @@ public interface SignatureOptions
   /**
    * Set the public key to associate with the signature
    */
-  void setPublicKey(PublicKey publickey);
+  SignatureOptions setPublicKey(PublicKey publickey);
 
-  void addReference(String href);
+  SignatureOptions addReference(String href);
   
   String[] getReferences();
   
@@ -69,7 +69,7 @@ public interface SignatureOptions
    * True if atom:link/@href and atom:content/@src targets should be 
    * included in the signature
    */
-  void setSignLinks(boolean signlinks);
+  SignatureOptions setSignLinks(boolean signlinks);
   
   /**
    * True if atom:link/@href and atom:content/@src targets should be 
@@ -80,7 +80,7 @@ public interface SignatureOptions
   /**
    * Only sign links whose link rels match those provided in the list
    */
-  void setSignedLinkRels(String... rel);
+  SignatureOptions setSignedLinkRels(String... rel);
   
   /**
    * Get the list of link relations to sign

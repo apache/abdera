@@ -31,6 +31,7 @@ import org.apache.abdera.model.DateTime;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
+import org.apache.abdera.model.ExtensibleElement;
 import org.apache.abdera.model.ExtensibleElementWrapper;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
@@ -60,8 +61,9 @@ public class RssFeed
     return c;
   }
 
-  public void addEntry(Entry entry) {
+  public Feed addEntry(Entry entry) {
     getChannel().addEntry(entry);
+    return this;
   }
 
   public Entry addEntry() {
@@ -80,28 +82,33 @@ public class RssFeed
     return getChannel().getEntry(id);
   }
 
-  public void insertEntry(Entry entry) {
+  public Feed insertEntry(Entry entry) {
     getChannel().insertEntry(entry);
+    return this;
   }
 
   public Entry insertEntry() {
     return getChannel().insertEntry();
   }
 
-  public void sortEntries(Comparator<Entry> comparator) {
+  public Feed sortEntries(Comparator<Entry> comparator) {
     getChannel().sortEntries(comparator);
+    return this;
   }
 
-  public void sortEntriesByEdited(boolean new_first) {
+  public Feed sortEntriesByEdited(boolean new_first) {
     getChannel().sortEntriesByEdited(new_first);
+    return this;
   }
 
-  public void sortEntriesByUpdated(boolean new_first) {
+  public Feed sortEntriesByUpdated(boolean new_first) {
     getChannel().sortEntriesByUpdated(new_first);
+    return this;
   }
 
-  public void addAuthor(Person person) {
+  public <T extends Source>T addAuthor(Person person) {
     getChannel().addAuthor(person);
+    return (T)this;
   }
 
   public Person addAuthor(String name) {
@@ -112,8 +119,9 @@ public class RssFeed
     return getChannel().addAuthor(name,email,iri);
   }
 
-  public void addCategory(Category category) {
+  public <T extends Source>T addCategory(Category category) {
     getChannel().addCategory(category);
+    return (T)this;
   }
 
   public Category addCategory(String term) {
@@ -124,7 +132,7 @@ public class RssFeed
     return getChannel().addCategory(scheme, term, label);
   }
 
-  public void addContributor(Person person) {
+  public <T extends Source>T addContributor(Person person) {
     throw new UnsupportedOperationException("Contributor's are not supported");
   }
 
@@ -136,8 +144,9 @@ public class RssFeed
     throw new UnsupportedOperationException("Contributor's are not supported");
   }
 
-  public void addLink(Link link) {
+  public <T extends Source>T addLink(Link link) {
     getChannel().addLink(link);
+    return (T)this;
   }
 
   public Link addLink(String href) {
@@ -314,12 +323,13 @@ public class RssFeed
     return getChannel().newId();
   }
 
-  public void setCollection(Collection collection) {
+  public <T extends Source>T setCollection(Collection collection) {
     throw new UnsupportedOperationException("Collection is not supported");
   }
 
-  public void setGenerator(Generator generator) {
+  public <T extends Source>T setGenerator(Generator generator) {
     getChannel().setGenerator(generator);
+    return (T)this;
   }
 
   public Generator setGenerator(String iri, String version, String value) {
@@ -330,8 +340,9 @@ public class RssFeed
     return getChannel().setIcon(iri);
   }
 
-  public void setIconElement(IRIElement iri) {
+  public <T extends Source>T setIconElement(IRIElement iri) {
     getChannel().setIconElement(iri);
+    return (T)this;
   }
 
   public IRIElement setId(String id) {
@@ -342,16 +353,18 @@ public class RssFeed
     return getChannel().setId(id,normalize);
   }
 
-  public void setIdElement(IRIElement id) {
+  public <T extends Source>T setIdElement(IRIElement id) {
     getChannel().setIdElement(id);
+    return (T)this;
   }
 
   public IRIElement setLogo(String iri) {
     return getChannel().setLogo(iri);
   }
 
-  public void setLogoElement(IRIElement iri) {
+  public <T extends Source>T setLogoElement(IRIElement iri) {
     getChannel().setLogoElement(iri);
+    return (T)this;
   }
 
   public Text setRights(String value) {
@@ -374,8 +387,9 @@ public class RssFeed
     return getChannel().setRightsAsXhtml(value);
   }
 
-  public void setRightsElement(Text text) {
+  public <T extends Source>T setRightsElement(Text text) {
     getChannel().setRightsElement(text);
+    return (T)this;
   }
 
   public Text setSubtitle(String value) {
@@ -398,8 +412,9 @@ public class RssFeed
     return getChannel().setSubtitleAsXhtml(value);
   }
 
-  public void setSubtitleElement(Text text) {
+  public <T extends Source>T setSubtitleElement(Text text) {
     getChannel().setSubtitleElement(text);
+    return (T)this;
   }
 
   public Text setTitle(String value) {
@@ -422,8 +437,9 @@ public class RssFeed
     return getChannel().setTitleAsXhtml(value);
   }
 
-  public void setTitleElement(Text text) {
+  public <T extends Source>T setTitleElement(Text text) {
     getChannel().setTitleElement(text);
+    return (T)this;
   }
 
   public DateTime setUpdated(Date value) {
@@ -434,12 +450,14 @@ public class RssFeed
     return getChannel().setUpdated(value);
   }
 
-  public void setUpdatedElement(DateTime dateTime) {
+  public <T extends Source>T setUpdatedElement(DateTime dateTime) {
     getChannel().setUpdatedElement(dateTime);
+    return (T)this;
   }
 
-  public void addExtension(Element extension) {
+  public <T extends ExtensibleElement>T addExtension(Element extension) {
     getChannel().addExtension(extension);
+    return (T)this;
   }
 
   public <T extends Element> T addExtension(QName qname) {
@@ -509,28 +527,34 @@ public class RssFeed
     return getChannel().getLanguage();
   }
 
-  public void removeAttribute(QName qname) {
+  public <T extends Element>T removeAttribute(QName qname) {
     getChannel().removeAttribute(qname);
+    return (T)this;
   }
 
-  public void setAttributeValue(String name, String value) {
+  public <T extends Element>T setAttributeValue(String name, String value) {
     getChannel().setAttributeValue(name, value);
+    return (T)this;
   }
 
-  public void setAttributeValue(QName qname, String value) {
+  public <T extends Element>T setAttributeValue(QName qname, String value) {
     getChannel().setAttributeValue(qname, value);
+    return (T)this;
   }
 
-  public void setBaseUri(IRI base) {
+  public <T extends Element>T setBaseUri(IRI base) {
     //throw new UnsupportedOperationException("Setting the base uri with xml:base is not supported");
+    return (T)this;
   }
 
-  public void setBaseUri(String base) {
+  public <T extends Element>T setBaseUri(String base) {
     //throw new UnsupportedOperationException("Setting the base uri with xml:base is not supported");
+    return (T)this;
   }
 
-  public void setLanguage(String language) {
+  public <T extends Element>T setLanguage(String language) {
     getChannel().setLanguage(language);
+    return (T)this;
   }
 
   public String getVersion() {

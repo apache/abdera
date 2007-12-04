@@ -42,8 +42,9 @@ public class XmlSignatureOptions
     return algo;
   }
   
-  public void setSigningAlgorithm(String algorithm) {
+  public SignatureOptions setSigningAlgorithm(String algorithm) {
     this.algo = algorithm;
+    return this;
   }
   
   protected XmlSignatureOptions(Abdera abdera) {
@@ -55,20 +56,23 @@ public class XmlSignatureOptions
     return signingKey;
   }
 
-  public void setSigningKey(PrivateKey privateKey) {
+  public SignatureOptions setSigningKey(PrivateKey privateKey) {
     this.signingKey = privateKey;
+    return this;
   }
 
   public X509Certificate getCertificate() {
     return cert;
   }
 
-  public void setCertificate(X509Certificate cert) {
+  public SignatureOptions setCertificate(X509Certificate cert) {
     this.cert = cert;
+    return this;
   }
 
-  public void addReference(String href) {
+  public SignatureOptions addReference(String href) {
     if (!references.contains(href)) references.add(href);
+    return this;
   }
 
   public String[] getReferences() {
@@ -79,24 +83,27 @@ public class XmlSignatureOptions
     return publickey;
   }
 
-  public void setPublicKey(PublicKey publickey) {
+  public SignatureOptions setPublicKey(PublicKey publickey) {
     this.publickey = publickey;
+    return this;
   }
 
   public boolean isSignLinks() {
     return signlinks;
   }
 
-  public void setSignLinks(boolean signlinks) {
+  public SignatureOptions setSignLinks(boolean signlinks) {
     this.signlinks = signlinks;
+    return this;
   }
 
   public String[] getSignLinkRels() {
     return this.linkrels;
   }
 
-  public void setSignedLinkRels(String... rel) {
+  public SignatureOptions setSignedLinkRels(String... rel) {
     this.linkrels = rel;
+    return this;
   }
 
 }

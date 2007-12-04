@@ -147,7 +147,7 @@ public interface Base
    * Add an XML comment to this Base
    * @param value The text value of the comment
    */
-  void addComment(String value);
+  <T extends Base>T addComment(String value);
   
   /**
    * Ensure that the underlying streams are fully parsed.
@@ -156,6 +156,6 @@ public interface Base
    * that the underlying stream is fully consumed, only that
    * that particular element has been completely parsed.
    */
-  void complete();
+  <T extends Base>T complete();
   
 }

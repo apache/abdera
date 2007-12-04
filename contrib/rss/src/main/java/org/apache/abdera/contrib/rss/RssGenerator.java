@@ -49,11 +49,11 @@ public class RssGenerator
     return null;
   }
 
-  public void setUri(String uri) {
+  public Generator setUri(String uri) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setVersion(String version) {
+  public Generator setVersion(String version) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 

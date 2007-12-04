@@ -25,6 +25,7 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.ExtensibleElement;
 import org.apache.abdera.model.ExtensibleElementWrapper;
 import org.apache.abdera.model.Link;
 
@@ -75,31 +76,31 @@ public class RssEnclosure
     return null;
   }
 
-  public void setHref(String href) {
+  public Link setHref(String href) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setHrefLang(String lang) {
+  public Link setHrefLang(String lang) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setLength(long length) {
+  public Link setLength(long length) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setMimeType(String type) {
+  public Link setMimeType(String type) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setRel(String rel) {
+  public Link setRel(String rel) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setTitle(String title) {
+  public Link setTitle(String title) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void addExtension(Element extension) {
+  public <T extends ExtensibleElement>T addExtension(Element extension) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 

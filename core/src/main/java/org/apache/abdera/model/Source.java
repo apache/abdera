@@ -81,7 +81,7 @@ public interface Source
    * Adds an individual author to the entry
    * @param person an atom:author element
    */
-  void addAuthor(Person person);
+  <T extends Source>T addAuthor(Person person);
   
   /**
    * Adds an author
@@ -118,7 +118,7 @@ public interface Source
    * Adds an individual category to the entry
    * @param category A atom:category element
    */
-  void addCategory(Category category);
+  <T extends Source>T addCategory(Category category);
 
   /**
    * Adds a category to the feed
@@ -147,7 +147,7 @@ public interface Source
    * Adds an individual contributor to this entry
    * @param person a atom:contributor element
    */
-  void addContributor(Person person);
+  <T extends Source>T addContributor(Person person);
   
   /**
    * Adds a contributor
@@ -178,7 +178,7 @@ public interface Source
    * agent used to generate a feed, for debugging and other purposes.
    * @param generator A atom:generator element
    */
-  void setGenerator(Generator generator);
+  <T extends Source>T setGenerator(Generator generator);
 
   /**
    * RFC4287: The "atom:generator" element's content identifies the 
@@ -213,7 +213,7 @@ public interface Source
    *  presentation at a small size.
    *  @param iri The atom:icon element
    */
-  void setIconElement(IRIElement iri);
+  <T extends Source>T setIconElement(IRIElement iri);
   
   /** 
    * RFC4287: The "atom:icon" element's content is an IRI reference 
@@ -249,7 +249,7 @@ public interface Source
    * identifier for an entry or feed.
    * @param id A atom:id element
    */
-  void setIdElement(IRIElement id);
+  <T extends Source>T setIdElement(IRIElement id);
   
   /**
    * Returns the universally unique identifier for this feed
@@ -304,7 +304,7 @@ public interface Source
    * Adds an individual link to the entry
    * @param link A atom:link element
    */
-  void addLink(Link link);
+  <T extends Source>T addLink(Link link);
   
   /**
    * Adds an individual link element
@@ -349,7 +349,7 @@ public interface Source
    * The image SHOULD have an aspect ratio of 2 (horizontal) to 1 (vertical).
    * @param iri The atom:logo element
    */
-  void setLogoElement(IRIElement iri);
+  <T extends Source>T setLogoElement(IRIElement iri);
   
   /**
    * RFC4287: The "atom:logo" element's content is an IRI reference [RFC3987] 
@@ -389,7 +389,7 @@ public interface Source
    * 
    * @param text The atom:rights element
    */
-  void setRightsElement(Text text);
+  <T extends Source>T setRightsElement(Text text);
   
   /**
    * Sets the value of the rights as @type="text"
@@ -460,7 +460,7 @@ public interface Source
    * 
    * @param text A atom:subtitle element
    */  
-  void setSubtitleElement(Text text);
+  <T extends Source>T setSubtitleElement(Text text);
   
   /**
    * Sets the value of the subtitle as @type="text"
@@ -523,7 +523,7 @@ public interface Source
    * human-readable title for an entry or feed.
    * @param text The atom:title element
    */
-  void setTitleElement(Text text);
+  <T extends Source>T setTitleElement(Text text);
   
   /**
    * Sets the value of the title as @type="text"
@@ -589,7 +589,7 @@ public interface Source
    * modifications necessarily result in a changed atom:updated value.
    * @param dateTime A atom:updated element
    */
-  void setUpdatedElement(DateTime dateTime);
+  <T extends Source>T setUpdatedElement(DateTime dateTime);
   
   /**
    * Return the atom:updated value
@@ -680,7 +680,7 @@ public interface Source
    * Set the app:collection element
    * @param collection An app:collection element
    */
-  void setCollection(Collection collection);
+  <T extends Source>T setCollection(Collection collection);
   
   /**
    * Convert the Source element into an empty Feed element

@@ -48,7 +48,7 @@ public interface Document<T extends Element>
    * Sets the root element of the document
    * @param root Set the root element of the document
    */
-  void setRoot(T root);
+  Document<T> setRoot(T root);
   
   /**
    * Returns the Base URI of the document.  All relative URI's contained in the
@@ -63,7 +63,7 @@ public interface Document<T extends Element>
    * @param base The Base URI
    * @throws IRISyntaxException if the IRI is malformed 
    */
-  void setBaseUri(String base);
+  Document<T> setBaseUri(String base);
   
   /**
    * Returns the content type of this document
@@ -76,7 +76,7 @@ public interface Document<T extends Element>
    * @param contentType The content type of document
    * @throws MimeTypeParseException if the content type is malformed
    */
-  void setContentType(String contentType);
+  Document<T> setContentType(String contentType);
   
   /**
    * Returns the last modified date for this document
@@ -88,7 +88,7 @@ public interface Document<T extends Element>
    * Sets the last modified date for this document
    * @param lastModified the last-modified date
    */
-  void setLastModified(Date lastModified);
+  Document<T> setLastModified(Date lastModified);
   
   /**
    * Gets the charset used for this document
@@ -100,14 +100,14 @@ public interface Document<T extends Element>
    * Sets the charset used for this document
    * @param charset The character encoding to use
    */
-  void setCharset(String charset);
+  Document<T> setCharset(String charset);
   
   /**
    * Add a processing instruction to the document
    * @param target The processing instruction target
    * @param value The processing instruction value
    */
-  void addProcessingInstruction(String target, String value);
+  Document<T> addProcessingInstruction(String target, String value);
   
   /**
    * Get the values for the given processing instruction
@@ -119,7 +119,7 @@ public interface Document<T extends Element>
    * @param href The href of the stylesheet
    * @param media The media target for this stylesheet or null if none
    */
-  void addStylesheet(String href, String media);
+  Document<T> addStylesheet(String href, String media);
   
   /**
    * Return the entity tag for this document
@@ -129,12 +129,12 @@ public interface Document<T extends Element>
   /**
    * Set the entity tag for this document
    */
-  void setEntityTag(EntityTag tag);
+  Document<T> setEntityTag(EntityTag tag);
   
   /**
    * Set the entity tag for this document
    */
-  void setEntityTag(String tag);
+  Document<T> setEntityTag(String tag);
   
   /**
    * Get the language
@@ -149,7 +149,7 @@ public interface Document<T extends Element>
   /**
    * set the base language
    */
-  void setLanguage(String lang);
+  Document<T> setLanguage(String lang);
   
   /**
    * Get the slug for this document
@@ -159,7 +159,7 @@ public interface Document<T extends Element>
   /**
    * Set the slug for this document
    */
-  void setSlug(String slug);
+  Document<T> setSlug(String slug);
   
   /**
    * Return true if insignificant whitespace must be preserved
@@ -169,7 +169,7 @@ public interface Document<T extends Element>
   /**
    * Set to true to preserve insignificant whitespace
    */
-  void setMustPreserveWhitespace(boolean preserve);
+  Document<T> setMustPreserveWhitespace(boolean preserve);
   
   /**
    * Get the XMLVersion used by this document

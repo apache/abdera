@@ -18,6 +18,7 @@
 package org.apache.abdera.model;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * <p>Identifies the software implementation that produced the Atom feed.</p>
@@ -69,7 +70,7 @@ public interface Generator
    * @param uri The URI attribute value
    * @throws IRISyntaxException if the uri is malformed
    */
-  void setUri(String uri);
+  Generator setUri(String uri);
   
   /**
    * The atom:generator element MAY have a "version" attribute that
@@ -83,6 +84,6 @@ public interface Generator
    * indicates the version of the generating agent.
    * @param version The version attribute
    */
-  void setVersion(String version);
+  Generator setVersion(String version);
   
 }

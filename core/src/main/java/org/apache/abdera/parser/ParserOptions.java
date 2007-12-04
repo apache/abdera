@@ -40,7 +40,7 @@ public interface ParserOptions extends Cloneable {
   /**
    * Sets the factory the parser should use
    */
-  void setFactory(Factory factory);
+  ParserOptions setFactory(Factory factory);
   
   /**
    * Returns the default character set to use for the parsed document
@@ -50,7 +50,7 @@ public interface ParserOptions extends Cloneable {
   /**
    * Sets the character set to use for the parsed document
    */
-  void setCharset(String charset);
+  ParserOptions setCharset(String charset);
   
   /**
    * Returns the Parse Filter.  The parse filter is a set of XML QNames that
@@ -66,7 +66,7 @@ public interface ParserOptions extends Cloneable {
    * parse all elements in the document.  I the filter is not null, the parser
    * will only pay attention to elements whose QName's appear in the filter list.
    */
-  void setParseFilter(ParseFilter parseFilter);
+  ParserOptions setParseFilter(ParseFilter parseFilter);
   
   /**
    * Returns true if the parser should attempt to automatically detect the 
@@ -79,7 +79,7 @@ public interface ParserOptions extends Cloneable {
    * encoding from the stream by checking for the byte order mark or checking
    * the XML prolog.
    */
-  void setAutodetectCharset(boolean detect);
+  ParserOptions setAutodetectCharset(boolean detect);
   
   /**
    * If false, the parser will trim leading and trailing whitespace in element
@@ -91,7 +91,7 @@ public interface ParserOptions extends Cloneable {
    * If false, the parser will trim leading and trailing whitespace in element
    * and attribute values unless there is an in-scope xml:space="preserve".
    */
-  void setMustPreserveWhitespace(boolean preserve);
+  ParserOptions setMustPreserveWhitespace(boolean preserve);
   
   /**
    * If true, the parser will attempt to silently filter out invalid XML
@@ -103,7 +103,7 @@ public interface ParserOptions extends Cloneable {
    * If true, the parser will attempt to silently filter out invalid XML
    * characters appearing within the XML document
    */
-  void setFilterRestrictedCharacters(boolean filter);
+  ParserOptions setFilterRestrictedCharacters(boolean filter);
   
   /**
    * If getFilterRestrictedCharacters is true, restricted characters will
@@ -115,7 +115,7 @@ public interface ParserOptions extends Cloneable {
    * If getFilterRestrictedCharacters is true, restricted characters will
    * be replaced with the specified character
    */
-  void setFilterRestrictedCharacterReplacement(char replacement);
+  ParserOptions setFilterRestrictedCharacterReplacement(char replacement);
   
   /**
    * When parsing an InputStream that contains compressed data, use these
@@ -129,14 +129,14 @@ public interface ParserOptions extends Cloneable {
    * codecs to decompress the stream. Only used when parsing an InputStream.
    * Ignored when parsing a Reader
    */
-  void setCompressionCodecs(CompressionCodec... codecs);
+  ParserOptions setCompressionCodecs(CompressionCodec... codecs);
   
   /**
    * Register a named entity. This provides an escape clause for when 
    * feeds use entities that are not supported in XML without a DTD decl.
    * By default, all of the (X)HTML entities are preregistered
    */
-  void registerEntity(String name, String value);
+  ParserOptions registerEntity(String name, String value);
 
   /**
    * Resolves a value for a named entity. This provides an escape clause for when 
@@ -148,7 +148,7 @@ public interface ParserOptions extends Cloneable {
   /**
    * True if undeclared named entities should be resolved.
    */
-  void setResolveEntities(boolean resolve);
+  ParserOptions setResolveEntities(boolean resolve);
 
   /**
    * True if undeclared named entities should be resolved.
@@ -158,7 +158,7 @@ public interface ParserOptions extends Cloneable {
   /**
    * True if QName-Alias mapping is enabled
    */
-  void setQNameAliasMappingEnabled(boolean enabled);
+  ParserOptions setQNameAliasMappingEnabled(boolean enabled);
   
   /**
    * True if QName-Alias mapping is enabled (default is false)
@@ -173,6 +173,6 @@ public interface ParserOptions extends Cloneable {
   /**
    * Set the QName-Alias Mapping
    */
-  void setQNameAliasMap(Map<QName,QName> map);
+  ParserOptions setQNameAliasMap(Map<QName,QName> map);
   
 }

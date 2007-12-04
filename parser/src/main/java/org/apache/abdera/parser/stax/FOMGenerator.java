@@ -20,6 +20,7 @@ package org.apache.abdera.parser.stax;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Generator;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
@@ -44,7 +45,7 @@ public class FOMGenerator
     String uri) 
       {
     this();
-    setText(value);
+    ((Element)this).setText(value);
     setVersion(version);
     setUri(uri);
   }
@@ -97,24 +98,26 @@ public class FOMGenerator
     return _resolve(getResolvedBaseUri(), getUri());
   }
 
-  public void setUri(String uri) {
+  public Generator setUri(String uri) {
     complete();
     if (uri != null)
       setAttributeValue(AURI, (new IRI(uri)).toString());
     else 
       removeAttribute(AURI);
+    return this;
   }
   
   public String getVersion() {
     return getAttributeValue(VERSION);
   }
 
-  public void setVersion(String version) {
+  public Generator setVersion(String version) {
     complete();
     if (version != null)
       setAttributeValue(VERSION, version);
     else
       removeAttribute(VERSION);
+    return this;
   }
 
 }

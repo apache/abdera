@@ -43,11 +43,11 @@ public class RssUriElement extends ElementWrapper implements IRIElement {
     return new IRI(getText());
   }
 
-  public void setNormalizedValue(String iri) {
+  public IRIElement setNormalizedValue(String iri) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setValue(String iri) {
+  public IRIElement setValue(String iri) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 

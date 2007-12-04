@@ -40,39 +40,44 @@ public class XmlEncryptionOptions
     return dek;
   }
 
-  public void setDataEncryptionKey(Key key) {
+  public EncryptionOptions setDataEncryptionKey(Key key) {
     this.dek = key;
+    return this;
   }
 
   public Key getKeyEncryptionKey() {
     return kek;
   }
 
-  public void setKeyEncryptionKey(Key key) {
+  public EncryptionOptions setKeyEncryptionKey(Key key) {
     this.kek = key;
+    return this;
   }
 
   public String getKeyCipherAlgorithm() {
     return kca;
   }
 
-  public void setKeyCipherAlgorithm(String alg) {
+  public EncryptionOptions setKeyCipherAlgorithm(String alg) {
     this.kca = alg;
+    return this;
   }
 
   public String getDataCipherAlgorithm() {
     return dca;
   }
 
-  public void setDataCipherAlgorithm(String alg) {
+  public EncryptionOptions setDataCipherAlgorithm(String alg) {
     this.dca = alg;
+    return this;
   }
 
   public boolean includeKeyInfo() {
     return setki;
   }
 
-  public void setIncludeKeyInfo(boolean includeKeyInfo) {
+  public EncryptionOptions setIncludeKeyInfo(boolean includeKeyInfo) {
     this.setki = includeKeyInfo;
+    return this;
   }
 }

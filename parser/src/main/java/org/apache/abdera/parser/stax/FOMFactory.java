@@ -787,8 +787,9 @@ public class FOMFactory
     return element;
   }
 
-  public void registerExtension(ExtensionFactory factory) {
+  public Factory registerExtension(ExtensionFactory factory) {
     factoriesMap.addFactory(factory);
+    return this;
   }
 
   public Categories newCategories() {

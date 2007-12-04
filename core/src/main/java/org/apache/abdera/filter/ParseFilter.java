@@ -64,15 +64,15 @@ public interface ParseFilter
   /**
    * True if the parser should ignore comments
    */
-  void setIgnoreComments(boolean ignore);
+  ParseFilter setIgnoreComments(boolean ignore);
   
   /**
    * True if the parser should ignore insignificant whitespace
    */
-  void setIgnoreWhitespace(boolean ignore);
+  ParseFilter setIgnoreWhitespace(boolean ignore);
   
   /**
    * True if the parser should ignore processing instructions
    */
-  void setIgnoreProcessingInstructions(boolean ignore);
+  ParseFilter setIgnoreProcessingInstructions(boolean ignore);
 }

@@ -109,9 +109,10 @@ public class FOMSource
     return _getChildrenAsSet(AUTHOR);
   }
 
-  public void addAuthor(Person person) {
+  public <T extends Source>T addAuthor(Person person) {
     complete();
     addChild((OMElement)person);
+    return (T)this;
   }
   
   public Person addAuthor(String name) {
@@ -140,7 +141,7 @@ public class FOMSource
     return FOMHelper.getCategories(this, scheme);
   }
   
-  public void addCategory(Category category) {
+  public <T extends Source>T addCategory(Category category) {
     complete();
     Element el = category.getParentElement();
     if (el != null && el instanceof Categories) {
@@ -154,6 +155,7 @@ public class FOMSource
       }
     }
     addChild((OMElement)category);
+    return (T)this;
   }
 
   public Category addCategory(String term) {
@@ -178,9 +180,10 @@ public class FOMSource
     return _getChildrenAsSet(CONTRIBUTOR);
   }
 
-  public void addContributor(Person person) {
+  public <T extends Source>T addContributor(Person person) {
     complete();
     addChild((OMElement)person);
+    return (T)this;
   }
 
   public Person addContributor(String name) {
@@ -205,12 +208,13 @@ public class FOMSource
     return (IRIElement)getFirstChildWithName(ID);
   }
 
-  public void setIdElement(IRIElement id) {
+  public <T extends Source>T setIdElement(IRIElement id) {
     complete();
     if (id != null)
       _setChild(ID, (OMElement)id);
     else 
       _removeChildren(ID, false);
+    return (T)this;
   }
 
   public IRI getId() {
@@ -258,9 +262,10 @@ public class FOMSource
     return FOMHelper.getLinks(this, rels);
   }
 
-  public void addLink(Link link) {
+  public <T extends Source>T addLink(Link link) {
     complete();
     addChild((OMElement)link);
+    return (T)this;
   }
 
   public Link addLink(String href) {
@@ -293,9 +298,10 @@ public class FOMSource
     return getTextElement(RIGHTS);
   }
 
-  public void setRightsElement(Text text) {
+  public <T extends Source>T setRightsElement(Text text) {
     complete();
     setTextElement(RIGHTS, text, false);
+    return (T)this;
   }
 
   public Text setRights(String value) {
@@ -338,9 +344,10 @@ public class FOMSource
     return getTextElement(SUBTITLE);
   }
 
-  public void setSubtitleElement(Text text) {
+  public <T extends Source>T setSubtitleElement(Text text) {
     complete();
     setTextElement(SUBTITLE, text, false);
+    return (T)this;
   }
 
   public Text setSubtitle(String value) {
@@ -383,9 +390,10 @@ public class FOMSource
     return getTextElement(TITLE);
   }
 
-  public void setTitleElement(Text text) {
+  public <T extends Source>T setTitleElement(Text text) {
     complete();
     setTextElement(TITLE, text, false);
+    return (T)this;
   }
 
   public Text setTitle(String value) {
@@ -428,12 +436,13 @@ public class FOMSource
     return (DateTime)getFirstChildWithName(UPDATED);
   }
 
-  public void setUpdatedElement(DateTime updated) {
+  public <T extends Source>T setUpdatedElement(DateTime updated) {
     complete();
     if (updated != null)
       _setChild(UPDATED, (OMElement)updated);
     else 
       _removeChildren(UPDATED, false);
+    return (T)this;
   }
 
   public String getUpdatedString() {
@@ -476,12 +485,13 @@ public class FOMSource
     return (Generator)getFirstChildWithName(GENERATOR);
   }
 
-  public void setGenerator(Generator generator) {
+  public <T extends Source>T setGenerator(Generator generator) {
     complete();
     if (generator != null)
       _setChild(GENERATOR, (OMElement) generator);
     else 
       _removeChildren(GENERATOR, false);
+    return (T)this;
   }
 
   public Generator setGenerator(
@@ -501,12 +511,13 @@ public class FOMSource
     return (IRIElement)getFirstChildWithName(ICON);
   }
 
-  public void setIconElement(IRIElement iri) {
+  public <T extends Source>T setIconElement(IRIElement iri) {
     complete();
     if (iri != null)
       _setChild(ICON, (OMElement) iri);
     else 
       _removeChildren(ICON, false);
+    return (T)this;
   }
 
   public IRIElement setIcon(String value) {
@@ -532,12 +543,13 @@ public class FOMSource
     return (IRIElement)getFirstChildWithName(LOGO);
   }
 
-  public void setLogoElement(IRIElement iri) {
+  public <T extends Source>T setLogoElement(IRIElement iri) {
     complete();
     if (iri != null)
       _setChild(LOGO, (OMElement)iri);
     else 
       _removeChildren(LOGO, false);
+    return (T)this;
   }
 
   public IRIElement setLogo(String value) {
@@ -608,7 +620,7 @@ public class FOMSource
     return coll;
   }
   
-  public void setCollection(Collection collection) {
+  public <T extends Source>T setCollection(Collection collection) {
     complete();
     if (collection != null) {
       _removeChildren(PRE_RFC_COLLECTION, true);
@@ -616,6 +628,7 @@ public class FOMSource
     } else { 
       _removeChildren(COLLECTION, false);
     }
+    return (T)this;
   }
   
   public Link getAlternateLink(

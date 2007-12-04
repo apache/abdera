@@ -112,46 +112,47 @@ public class RequestOptions
   /**
    * True if the local client cache should be used
    */
-  public void setUseLocalCache(boolean use_cache) {
+  public RequestOptions setUseLocalCache(boolean use_cache) {
     this.noLocalCache = !use_cache;
+    return this;
   }
   
   /**
    * Set the value of the HTTP Content-Type header
    */
-  public void setContentType(String value) {
-    setHeader("Content-Type", value);
+  public RequestOptions setContentType(String value) {
+    return setHeader("Content-Type", value);
   }
   
-  public void setContentLocation(String iri) {
-    setHeader("Content-Location", iri);
+  public RequestOptions setContentLocation(String iri) {
+    return setHeader("Content-Location", iri);
   }
   
   /**
    * Set the value of the HTTP Content-Type header
    */
-  public void setContentType(MimeType value) {
-    setHeader("Content-Type", value.toString());
+  public RequestOptions setContentType(MimeType value) {
+    return setHeader("Content-Type", value.toString());
   }
   
   /**
    * Set the value of the HTTP Authorization header
    */
-  public void setAuthorization(String auth) {
-    setHeader("Authorization", auth);
+  public RequestOptions setAuthorization(String auth) {
+    return setHeader("Authorization", auth);
   }
   
   /**
    * Set the value of a header using proper encoding of non-ascii characters
    */
-  public void setEncodedHeader(String header, String charset, String value) {
-    setHeader(header, EncodingUtil.encode(value,charset));
+  public RequestOptions setEncodedHeader(String header, String charset, String value) {
+    return setHeader(header, EncodingUtil.encode(value,charset));
   }
   
   /**
    * Set the values of a header using proper encoding of non-ascii characters
    */
-  public void setEncodedHeader(String header, String charset, String... values) {
+  public RequestOptions setEncodedHeader(String header, String charset, String... values) {
     if (values != null && values.length > 0) {
       for (int n = 0; n < values.length; n++) {
         values[n] = EncodingUtil.encode(values[n], charset);
@@ -160,36 +161,36 @@ public class RequestOptions
     } else {
       removeHeaders(header);
     }
+    return this;
   }
   
   /**
    * Set the value of the specified HTTP header
    */
-  public void setHeader(String header, String value) {
-    if (value != null)
-      setHeader(header, new String[] {value});
-    else
+  public RequestOptions setHeader(String header, String value) {
+    return value != null ?
+      setHeader(header, new String[] {value}) :
       removeHeaders(header);
   }
 
   /**
    * Set the value of the specified HTTP header
    */
-  public void setHeader(String header, String... values) {
+  public RequestOptions setHeader(String header, String... values) {
     if (values != null && values.length > 0) {
       getHeaders().put(header, new String[] {combine(values)});
     } else {
       removeHeaders(header);
     }
+    return this;
   }
   
   /**
    * Set the date value of the specified HTTP header
    */
-  public void setDateHeader(String header, Date value) {
-    if (value != null) 
-      setHeader(header, DateUtil.formatDate(value));
-    else 
+  public RequestOptions setDateHeader(String header, Date value) {
+    return value != null ?
+      setHeader(header, DateUtil.formatDate(value)) :
       removeHeaders(header);
   }
   
@@ -197,16 +198,16 @@ public class RequestOptions
    * Similar to setEncodedHeader, but allows for multiple instances of the
    * specified header
    */
-  public void addEncodedHeader(String header, String charset, String value) {
-    addHeader(header, EncodingUtil.encode(value, charset));
+  public RequestOptions addEncodedHeader(String header, String charset, String value) {
+    return addHeader(header, EncodingUtil.encode(value, charset));
   }
   
   /**
    * Similar to setEncodedHeader, but allows for multiple instances of the
    * specified header
    */
-  public void addEncodedHeader(String header, String charset, String... values) {
-    if (values == null || values.length == 0) return;
+  public RequestOptions addEncodedHeader(String header, String charset, String... values) {
+    if (values == null || values.length == 0) return this;
     for (int n = 0; n < values.length; n++) {
       values[n] = EncodingUtil.encode(values[n], charset);
     }
@@ -218,21 +219,23 @@ public class RequestOptions
     } else {
       setHeader(header, new String[] {value});
     }
+    return this;
   }
   
   /**
    * Similar to setHeader but allows for multiple instances of the specified header
    */
-  public void addHeader(String header, String value) {
+  public RequestOptions addHeader(String header, String value) {
     if (value != null)
       addHeader(header, new String[] {value});
+    return this;
   }
   
   /**
    * Similar to setHeader but allows for multiple instances of the specified header
    */
-  public void addHeader(String header, String... values) {
-    if (values == null || values.length == 0) return;
+  public RequestOptions addHeader(String header, String... values) {
+    if (values == null || values.length == 0) return this;
     List<String> list = Arrays.asList(getHeaders().get(header));
     String value = combine(values);
     if (list != null) {
@@ -241,14 +244,15 @@ public class RequestOptions
     } else {
       setHeader(header, new String[] {value});
     }
+    return this;
   }
 
   /**
    * Similar to setDateHeader but allows for multiple instances of the specified header
    */
-  public void addDateHeader(String header, Date value) {
-    if (value == null) return;
-    addHeader(header, DateUtil.formatDate(value));
+  public RequestOptions addDateHeader(String header, Date value) {
+    if (value == null) return this;
+    return addHeader(header, DateUtil.formatDate(value));
   }
   
   /**
@@ -289,152 +293,154 @@ public class RequestOptions
   /**
    * Sets the value of the HTTP If-Match header
    */
-  public void setIfMatch(String entity_tag) {
-    setIfMatch(new EntityTag(entity_tag));
+  public RequestOptions setIfMatch(String entity_tag) {
+    return setIfMatch(new EntityTag(entity_tag));
   }
   
   /**
    * Sets the value of the HTTP If-Match header
    */
-  public void setIfMatch(EntityTag entity_tag) {
-    setHeader("If-Match", entity_tag.toString());
+  public RequestOptions setIfMatch(EntityTag entity_tag) {
+    return setHeader("If-Match", entity_tag.toString());
   }
   
   /**
    * Sets the value of the HTTP If-Match header
    */
-  public void setIfMatch(EntityTag... entity_tags) {
-    setHeader("If-Match", EntityTag.toString(entity_tags));
+  public RequestOptions setIfMatch(EntityTag... entity_tags) {
+    return setHeader("If-Match", EntityTag.toString(entity_tags));
   }
   
   /**
    * Sets the value of the HTTP If-Match header
    */
-  public void setIfMatch(String... entity_tags) {
-    setHeader("If-Match", EntityTag.toString(entity_tags));
+  public RequestOptions setIfMatch(String... entity_tags) {
+    return setHeader("If-Match", EntityTag.toString(entity_tags));
   }
   
   /**
    * Sets the value of the HTTP If-None-Match header
    */
-  public void setIfNoneMatch(String entity_tag) {
-    setIfNoneMatch(new EntityTag(entity_tag));
+  public RequestOptions setIfNoneMatch(String entity_tag) {
+    return setIfNoneMatch(new EntityTag(entity_tag));
   }
   
   /**
    * Sets the value of the HTTP If-None-Match header
    */
-  public void setIfNoneMatch(EntityTag entity_tag) {
-    setHeader("If-None-Match", entity_tag.toString());
+  public RequestOptions setIfNoneMatch(EntityTag entity_tag) {
+    return setHeader("If-None-Match", entity_tag.toString());
   }
   
   /**
    * Sets the value of the HTTP If-None-Match header
    */
-  public void setIfNoneMatch(EntityTag... entity_tags) {
-    setHeader("If-None-Match", EntityTag.toString(entity_tags));
+  public RequestOptions setIfNoneMatch(EntityTag... entity_tags) {
+    return setHeader("If-None-Match", EntityTag.toString(entity_tags));
   }
   
   /**
    * Sets the value of the HTTP If-None-Match header
    */
-  public void setIfNoneMatch(String... entity_tags) {
-    setHeader("If-None-Match", EntityTag.toString(entity_tags));
+  public RequestOptions setIfNoneMatch(String... entity_tags) {
+    return setHeader("If-None-Match", EntityTag.toString(entity_tags));
   }
   
   /**
    * Sets the value of the HTTP If-Modified-Since header
    */
-  public void setIfModifiedSince(Date date) {
-    setDateHeader("If-Modified-Since", date);
+  public RequestOptions setIfModifiedSince(Date date) {
+    return setDateHeader("If-Modified-Since", date);
   }
   
   /**
    * Sets the value of the HTTP If-Unmodified-Since header
    */
-  public void setIfUnmodifiedSince(Date date) {
-    setDateHeader("If-Unmodified-Since", date);
+  public RequestOptions setIfUnmodifiedSince(Date date) {
+    return setDateHeader("If-Unmodified-Since", date);
   }
   
   /**
    * Sets the value of the HTTP Accept header
    */
-  public void setAccept(String accept) {
-    setAccept(new String[] {accept});
+  public RequestOptions setAccept(String accept) {
+    return setAccept(new String[] {accept});
   }
   
   /**
    * Sets the value of the HTTP Accept header
    */
-  public void setAccept(String... accept) {
-    setHeader("Accept", combine(accept));
+  public RequestOptions setAccept(String... accept) {
+    return setHeader("Accept", combine(accept));
   }
   
   /**
    * Sets the value of the HTTP Accept-Language header
    */
-  public void setAcceptLanguage(String accept) {
-    setAcceptLanguage(new String[] {accept});
+  public RequestOptions setAcceptLanguage(String accept) {
+    return setAcceptLanguage(new String[] {accept});
   }
   
   /**
    * Sets the value of the HTTP Accept-Language header
    */
-  public void setAcceptLanguage(String... accept) {
-    setHeader("Accept-Language", combine(accept));
+  public RequestOptions setAcceptLanguage(String... accept) {
+    return setHeader("Accept-Language", combine(accept));
   }
   
   /**
    * Sets the value of the HTTP Accept-Charset header
    */
-  public void setAcceptCharset(String accept) {
-    setAcceptCharset(new String[] {accept});
+  public RequestOptions setAcceptCharset(String accept) {
+    return setAcceptCharset(new String[] {accept});
   }
   
   /**
    * Sets the value of the HTTP Accept-Charset header
    */
-  public void setAcceptCharset(String... accept) {
-    setHeader("Accept-Charset", combine(accept));
+  public RequestOptions setAcceptCharset(String... accept) {
+    return setHeader("Accept-Charset", combine(accept));
   }
   
   /**
    * Sets the value of the HTTP Accept-Encoding header
    */
-  public void setAcceptEncoding(String accept) {
-    setAcceptEncoding(new String[] {accept});
+  public RequestOptions setAcceptEncoding(String accept) {
+    return setAcceptEncoding(new String[] {accept});
   }
   
   /**
    * Sets the value of the HTTP Accept-Encoding header
    */
-  public void setAcceptEncoding(String... accept) {
-    setHeader("Accept-Encoding", combine(accept));
+  public RequestOptions setAcceptEncoding(String... accept) {
+    return setHeader("Accept-Encoding", combine(accept));
   }
   
   /**
    * Sets the value of the Atom Publishing Protocol Slug header
    */
-  public void setSlug(String slug) {
+  public RequestOptions setSlug(String slug) {
     if (slug.indexOf((char)10) > -1 ||
         slug.indexOf((char)13) > -1)
       throw new IllegalArgumentException(
         Messages.get("SLUG.BAD.CHARACTERS"));
-    setHeader("Slug", Escaping.encode(slug,Profile.ASCIISANSCRLF));
+    return setHeader("Slug", Escaping.encode(slug,Profile.ASCIISANSCRLF));
   }
   
   /**
    * Sets the value of the HTTP Cache-Control header
    */
-  public void setCacheControl(String cc) {
+  public RequestOptions setCacheControl(String cc) {
     CacheControlUtil.parseCacheControl(cc, this);
+    return this;
   }
   
   /**
    * Remove the specified HTTP header
    */
-  public void removeHeaders(String name) {
+  public RequestOptions removeHeaders(String name) {
     getHeaders().remove(name);
+    return this;
   }
  
   /**
@@ -454,8 +460,9 @@ public class RequestOptions
   /**
    * Configure the AbderaClient Side cache to revalidate when using Authorization
    */
-  public void setRevalidateWithAuth(boolean revalidateAuth) {
+  public RequestOptions setRevalidateWithAuth(boolean revalidateAuth) {
     this.revalidateAuth= revalidateAuth;
+    return this;
   }
   
   /**
@@ -468,15 +475,17 @@ public class RequestOptions
   /**
    * Set whether the request should use chunked encoding.
    */
-  public void setUseChunked(boolean useChunked) {
+  public RequestOptions setUseChunked(boolean useChunked) {
     this.useChunked = useChunked;
+    return this;
   }
 
   /**
    * Set whether the request should use the X-HTTP-Method-Override option
    */
-  public void setUsePostOverride(boolean useOverride) {
+  public RequestOptions setUsePostOverride(boolean useOverride) {
     this.usePostOverride = useOverride;
+    return this;
   }
   
   /**
@@ -489,8 +498,9 @@ public class RequestOptions
   /**
    * Set whether or not to throw a RequestExeption on 4xx responses
    */
-  public void set4xxRequestException(boolean v) {
+  public RequestOptions set4xxRequestException(boolean v) {
     this.requestException4xx = v;
+    return this;
   }
   
   /**
@@ -503,8 +513,9 @@ public class RequestOptions
   /**
    * Set whether or not to throw a RequestExeption on 5xx responses
    */
-  public void set5xxRequestException(boolean v) {
+  public RequestOptions set5xxRequestException(boolean v) {
     this.requestException5xx = v;
+    return this;
   }
   
   /**
@@ -518,8 +529,9 @@ public class RequestOptions
    * Set whether or not to use the HTTP Expect-Continue mechanism
    * (enabled by default)
    */
-  public void setUseExpectContinue(boolean useExpect) {
+  public RequestOptions setUseExpectContinue(boolean useExpect) {
     this.useExpectContinue = useExpect;
+    return this;
   }
   
   /**
@@ -543,7 +555,8 @@ public class RequestOptions
    * This only has an effect when putting a Document that has an
    * ETag or Last-Modified date present
    */
-  public void setConditionalPut(boolean conditional) {
+  public RequestOptions setConditionalPut(boolean conditional) {
     this.useConditional = conditional;
+    return this;
   }
 }

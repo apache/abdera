@@ -90,9 +90,10 @@ public class FOMCategories
     this.declareNamespace(ATOM_NS, "atom");
   }
   
-  public void addCategory(Category category) {
+  public Categories addCategory(Category category) {
     complete();
     addChild((OMElement)category);
+    return this;
   }
 
   public Category addCategory(String term) {
@@ -156,20 +157,22 @@ public class FOMCategories
     return (value != null && value.equals(YES));
   }
 
-  public void setFixed(boolean fixed) {
+  public Categories setFixed(boolean fixed) {
     complete();
     if (fixed && !isFixed())
       setAttributeValue(FIXED, YES);
     else if (!fixed && isFixed())
       removeAttribute(FIXED);
+    return this;
   }
 
-  public void setScheme(String scheme) {
+  public Categories setScheme(String scheme) {
     complete();
     if (scheme != null)
       setAttributeValue(SCHEME, new IRI(scheme).toString());
     else 
       removeAttribute(SCHEME);
+    return this;
   }
   
   public IRI getHref()  {
@@ -180,12 +183,13 @@ public class FOMCategories
     return _resolve(getResolvedBaseUri(), getHref());
   }
   
-  public void setHref(String href) {
+  public Categories setHref(String href) {
     complete();
     if (href != null)
       setAttributeValue(HREF, (new IRI(href)).toString());
     else 
       removeAttribute(HREF);
+    return this;
   }
 
   public boolean contains(

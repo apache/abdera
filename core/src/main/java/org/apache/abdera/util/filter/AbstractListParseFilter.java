@@ -43,15 +43,16 @@ public abstract class AbstractListParseFilter
     return super.clone();
   }
   
-  public void add(QName qname) {
+  public ListParseFilter add(QName qname) {
     if (!contains(qname)) qnames.add(qname);
+    return this;
   }
 
   public boolean contains(QName qname) {
     return qnames.contains(qname);
   }
 
-  public void add(QName parent, QName attribute) {
+  public ListParseFilter add(QName parent, QName attribute) {
     if (attributes.containsKey(parent)) {
       List<QName> attrs = attributes.get(parent);
       if (!attrs.contains(attribute)) attrs.add(attribute);
@@ -60,6 +61,7 @@ public abstract class AbstractListParseFilter
       attrs.add(attribute);
       attributes.put(parent, attrs);
     }
+    return this;
   }
 
   public boolean contains(QName qname, QName attribute) {

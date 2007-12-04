@@ -40,8 +40,9 @@ public class FOMAttribute
     return attr.getAttributeValue();
   }
   
-  public void setText(String text) {
+  public Attribute setText(String text) {
     attr.setAttributeValue(text);
+    return this;
   }
   
   public Factory getFactory() {

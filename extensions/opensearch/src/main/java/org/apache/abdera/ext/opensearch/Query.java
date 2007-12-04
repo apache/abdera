@@ -155,12 +155,13 @@ public class Query
     return getInternal().getAttributeValue("language");
   }
   
-  public void setLanguage(String language) {
+  public <T extends Element>T setLanguage(String language) {
     if (language != null) {
       getInternal().setAttributeValue("language", language);
     } else {
       getInternal().removeAttribute(new QName("language"));
     }
+    return (T)this;
   }
   
   public String getInputEncoding() {

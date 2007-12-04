@@ -199,6 +199,6 @@ public interface Parser {
    * copies the specified options.
    * @param options The Parser Options to use as the default
    */
-  void setDefaultParserOptions(ParserOptions options);
+  Parser setDefaultParserOptions(ParserOptions options);
   
 }

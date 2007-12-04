@@ -45,7 +45,7 @@ public interface Element
    * Set this Element's parent element
    * @param parent The parent element
    */
-  void setParentElement(Element parent);
+  <T extends Element>T setParentElement(Element parent);
   
   /**
    * Get the element preceding this one
@@ -114,7 +114,7 @@ public interface Element
    * Sets the value of this elements <code>xml:lang</code> attribute.
    * @param language the value of the xml:lang element
    */
-  void setLanguage(String language);
+  <T extends Element>T setLanguage(String language);
   
   /**
    * Returns the value of this element's <code>xml:base</code> attribute or
@@ -134,14 +134,14 @@ public interface Element
    * Sets the value of this element's <code>xml:base</code> attribute.
    * @param base The IRI base value
    */
-  void setBaseUri(IRI base);
+  <T extends Element>T setBaseUri(IRI base);
   
   /**
    * Sets the value of this element's <code>xml:base</code> attribute.
    * @param base The Base IRI
    * @throws IRISyntaxException if the base URI is malformed 
    */
-  void setBaseUri(String base);
+  <T extends Element>T setBaseUri(String base);
   
   /**
    * Returns the document to which this element belongs
@@ -181,27 +181,27 @@ public interface Element
    * Remove the named Attribute
    * @param qname The XML QName of the attribute to remove
    */
-  void removeAttribute(QName qname);
+  <T extends Element>T removeAttribute(QName qname);
   
   /**
    * Remove the named attribute
    * @param name The name of the attribute to remove
    */
-  void removeAttribute(String name);
+  <T extends Element>T removeAttribute(String name);
   
   /**
    * Sets the value of the named attribute
    * @param name The name of the attribute
    * @param value The value of the attribute
    */
-  void setAttributeValue(String name, String value);
+  <T extends Element>T setAttributeValue(String name, String value);
 
   /**
    * Sets the value of the named attribute
    * @param qname The XML QName of the attribute
    * @param value The value of the attribute
    */
-  void setAttributeValue(QName qname, String value);
+  <T extends Element>T setAttributeValue(QName qname, String value);
   
   /**
    * Removes this element from its current document
@@ -218,17 +218,17 @@ public interface Element
    * Set the Text value of this element
    * @param text The text value
    */
-  void setText(String text);
+  <T extends Element>T setText(String text);
   
   /**
    * Set the Text value of this element using the data handler
    */
-  void setText(DataHandler dataHandler);
+  <T extends Element>T setText(DataHandler dataHandler);
   
   /**
    * Declare a namespace
    */
-  void declareNS(String uri, String prefix);
+  <T extends Element>T declareNS(String uri, String prefix);
   
   /**
    * Return a map listing the xml namespaces declared for this element
@@ -248,5 +248,5 @@ public interface Element
   /**
    * Set to true to preserve insignificant whitespace
    */
-  void setMustPreserveWhitespace(boolean preserve);
+  <T extends Element>T setMustPreserveWhitespace(boolean preserve);
 }

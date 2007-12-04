@@ -22,7 +22,6 @@ import java.math.BigInteger;
 import java.security.AlgorithmParameterGenerator;
 import java.security.AlgorithmParameters;
 import java.security.InvalidAlgorithmParameterException;
-import java.security.spec.InvalidParameterSpecException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -30,6 +29,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.InvalidParameterSpecException;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.KeyAgreement;
@@ -185,7 +185,7 @@ public class DHContext
     return keyFact.generatePublic(x509KeySpec);
   }
   
-  public void setPublicKey(
+  public DHContext setPublicKey(
     String dh) 
       throws NoSuchAlgorithmException, 
              InvalidKeySpecException {
@@ -201,6 +201,7 @@ public class DHContext
         key = Base64.decode(value);
     }
     publicKey = decode(key);
+    return this;
   }
   
   public Key generateSecret() 

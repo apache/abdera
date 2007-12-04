@@ -139,7 +139,7 @@ public interface Content extends Element {
    * Set the Content Type
    * @param type The Content Type
    */
-  void setContentType(Type type);
+  Content setContentType(Type type);
   
   /**
    * Return the value element or null if type="text", type="html" or type is 
@@ -154,7 +154,7 @@ public interface Content extends Element {
    * set to type="application/xml"
    * @param value The element to set
    */
-  <T extends Element>void setValueElement(T value);
+  <T extends Element>Content setValueElement(T value);
 
   /**
    * RFC4287: On the atom:content element, the value of the "type" 
@@ -178,7 +178,7 @@ public interface Content extends Element {
    * @param type The media type 
    * @throws MimeTypeParseException if the media type is malformed 
    */
-  void setMimeType(String type);
+  Content setMimeType(String type);
 
   /**
    * <p>RFC4287: atom:content MAY have a "src" attribute, whose value MUST 
@@ -216,7 +216,7 @@ public interface Content extends Element {
    * @param src The IRI to use as the src attribute value for the content
    * @throws IRISyntaxException if the src value is malformed
    */
-  void setSrc(String src);
+  Content setSrc(String src);
   
   /**
    * Attempts to Base64 decode the string value of the content element.
@@ -231,7 +231,7 @@ public interface Content extends Element {
    * @param dataHandler The DataHandler for the binary content requiring Base64 encoding 
    * @throws UnsupportedOperationException if type = text, html, xhtml, or any application/*+xml, or text/* type
    */
-  void setDataHandler(DataHandler dataHandler);
+  Content setDataHandler(DataHandler dataHandler);
   
   /**
    * Returns the string value of this atom:content element
@@ -243,7 +243,7 @@ public interface Content extends Element {
    * Set the string value of the atom:content element
    * @param value The string value
    */
-  void setValue(String value);
+  Content setValue(String value);
   
   /**
    * Return the string value of the atom:content element with the enclosing 
@@ -256,5 +256,5 @@ public interface Content extends Element {
    * Set the string value of the atom:content with the enclosing div tag
    * @param wrappedValue The string value with the wrapping div tag
    */
-  void setWrappedValue(String wrappedValue);
+  Content setWrappedValue(String wrappedValue);
 }

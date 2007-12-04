@@ -36,24 +36,27 @@ public abstract class AbstractWriterOptions
     return codecs;
   }
 
-  public void setCompressionCodecs(CompressionCodec... codecs) {
+  public WriterOptions setCompressionCodecs(CompressionCodec... codecs) {
     this.codecs = codecs;
+    return this;
   }
 
   public String getCharset() {
     return charset;
   }
   
-  public void setCharset(String charset) {
+  public WriterOptions setCharset(String charset) {
     this.charset = charset;
+    return this;
   }
 
   public boolean getAutoClose() {
     return autoclose;
   }
 
-  public void setAutoClose(boolean autoclose) {
+  public WriterOptions setAutoClose(boolean autoclose) {
     this.autoclose = autoclose;
+    return this;
   }
   
   

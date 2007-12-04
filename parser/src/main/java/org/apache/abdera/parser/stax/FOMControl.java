@@ -82,16 +82,18 @@ public class FOMControl
     return (value != null && YES.equalsIgnoreCase(value));
   }
 
-  public void setDraft(boolean draft) {
+  public Control setDraft(boolean draft) {
     complete();
     _removeChildren(PRE_RFC_DRAFT, true);
     _setElementValue(DRAFT, (draft) ? YES:NO);
+    return this;
   }
   
-  public void unsetDraft() {
+  public Control unsetDraft() {
     complete();
     _removeChildren(PRE_RFC_DRAFT, true);
     _removeChildren(DRAFT, true);
+    return this;
   }
 
 }

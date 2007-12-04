@@ -92,7 +92,7 @@ public class FOMExtensibleElement
     return (T) ((t != null) ? factory.getElementWrapper(t) : null);
   }
   
-  public void addExtension(Element extension) {
+  public <T extends ExtensibleElement>T addExtension(Element extension) {
     complete();
     if (extension instanceof ElementWrapper) {
       ElementWrapper wrapper = (ElementWrapper) extension;
@@ -102,6 +102,7 @@ public class FOMExtensibleElement
     String prefix = qname.getPrefix();
     declareIfNecessary(qname.getNamespaceURI(), prefix);
     addChild((OMElement)extension);
+    return (T)this;
   }
   
   public <T extends Element>T addExtension(QName qname) {
@@ -195,7 +196,7 @@ public class FOMExtensibleElement
     return element;
   }
   
-  public void addExtension(Element extension, Element before) {
+  public <T extends ExtensibleElement>T addExtension(Element extension, Element before) {
     complete();
     extension = getInternal(extension);
     before = getInternal(before);
@@ -209,6 +210,7 @@ public class FOMExtensibleElement
       extension.setParentElement(this);
       ((OMElement)before).insertSiblingBefore((OMElement)extension);
     }
+    return (T)this;
   }
 
   public <T extends Element> T addExtension(QName qname, QName before) {

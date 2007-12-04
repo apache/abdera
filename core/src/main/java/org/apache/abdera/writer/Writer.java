@@ -85,4 +85,5 @@ public interface Writer {
   
   WriterOptions getDefaultWriterOptions();
   
+  Writer setDefaultWriterOptions(WriterOptions options);
 }

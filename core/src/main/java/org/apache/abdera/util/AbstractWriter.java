@@ -53,7 +53,7 @@ public abstract class AbstractWriter
 
   protected abstract WriterOptions initDefaultWriterOptions();
   
-  public synchronized void setDefaultWriterOptions(WriterOptions options) {
+  public synchronized Writer setDefaultWriterOptions(WriterOptions options) {
     // Ok, we need to make a defensive copy of the options, since otherwise
     // the caller still has access to the object, which means our access to
     // it isn't certain to be thread safe.
@@ -67,6 +67,7 @@ public abstract class AbstractWriter
       // This shouldn't actually happen
       throw new RuntimeException(cnse);
     }
+    return this;
   }
 
   public Object write(Base base) throws IOException {

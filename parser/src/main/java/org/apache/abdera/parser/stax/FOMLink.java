@@ -24,6 +24,7 @@ import javax.activation.MimeType;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.URIHelper;
@@ -108,21 +109,23 @@ public class FOMLink
     return _resolve(getResolvedBaseUri(), getHref());
   }
   
-  public void setHref(String href) {
+  public Link setHref(String href) {
     complete();
     if (href != null)
       setAttributeValue(HREF, (new IRI(href)).toString());
     else 
       removeAttribute(HREF);
+    return this;
   }
   
   public String getRel() {
     return getAttributeValue(REL);
   }
 
-  public void setRel(String rel) {
+  public Link setRel(String rel) {
     complete();
     setAttributeValue(REL, rel);
+    return this;
   }
 
   public MimeType getMimeType() {
@@ -139,7 +142,7 @@ public class FOMLink
     setAttributeValue(TYPE, (type != null) ? type.toString() : null);
   }
 
-  public void setMimeType(String type) {
+  public Link setMimeType(String type) {
     complete();
     try {
       if (type != null) 
@@ -149,30 +152,33 @@ public class FOMLink
     } catch (javax.activation.MimeTypeParseException e) {
       throw new org.apache.abdera.util.MimeTypeParseException(e);
     }
+    return this;
   }
 
   public String getHrefLang() {
     return getAttributeValue(HREFLANG);
   }
 
-  public void setHrefLang(String lang) {
+  public Link setHrefLang(String lang) {
     complete();
     if (lang != null)
       setAttributeValue(HREFLANG, lang);
     else 
       removeAttribute(HREFLANG);
+    return this;
   }
 
   public String getTitle() {
     return getAttributeValue(ATITLE);
   }
 
-  public void setTitle(String title) {
+  public Link setTitle(String title) {
     complete();
     if (title != null)
       setAttributeValue(ATITLE, title);
     else 
       removeAttribute(ATITLE);
+    return this;
   }
 
   public long getLength() {
@@ -180,12 +186,13 @@ public class FOMLink
     return (l != null) ? Long.valueOf(l) : -1;
   }
 
-  public void setLength(long length) {
+  public Link setLength(long length) {
     complete();
     if (length > -1)
       setAttributeValue(LENGTH, (length >= 0) ? String.valueOf(length) : "0");
     else
       removeAttribute(LENGTH);
+    return this;
   }
 
   
@@ -222,7 +229,7 @@ public class FOMLink
   public void setValue(String value) {
     complete();
     if (value != null)
-      setText(value);
+      ((Element)this).setText(value);
     else
       _removeAllChildren();
   }

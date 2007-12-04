@@ -43,8 +43,9 @@ public abstract class ExtensibleElementWrapper
     return (ExtensibleElement) getInternal();
   }
   
-  public void addExtension(Element extension) {
+  public <T extends ExtensibleElement>T addExtension(Element extension) {
     getExtInternal().addExtension(extension);
+    return (T)this;
   }
 
   @SuppressWarnings("unchecked")
@@ -98,12 +99,14 @@ public abstract class ExtensibleElementWrapper
     return getExtInternal().getMustPreserveWhitespace();
   }
 
-  public void setMustPreserveWhitespace(boolean preserve) {
+  public <T extends Element>T setMustPreserveWhitespace(boolean preserve) {
     getExtInternal().setMustPreserveWhitespace(preserve);
+    return (T)this;
   }
 
-  public void addExtension(Element extension, Element before) {
+  public <T extends ExtensibleElement>T addExtension(Element extension, Element before) {
     getExtInternal().addExtension(extension,before);
+    return (T)this;
   }
 
   @SuppressWarnings("unchecked")

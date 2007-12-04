@@ -103,45 +103,55 @@ public abstract class AbstractResponse
     return check(PUBLIC);
   }
 
-  public void setMaxAge(long max_age) {
+  public AbstractResponse setMaxAge(long max_age) {
     this.max_age = max_age;
+    return this;
   }
   
-  public void setMustRevalidate(boolean val) {
+  public AbstractResponse setMustRevalidate(boolean val) {
     toggle(val, REVALIDATE);
+    return this;
   }
   
-  public void setProxyRevalidate(boolean val) {
+  public AbstractResponse setProxyRevalidate(boolean val) {
     toggle(val, PROXYREVALIDATE);
+    return this;
   }
   
-  public void setNoCache(boolean val) {
+  public AbstractResponse setNoCache(boolean val) {
     toggle(val, NOCACHE);
+    return this;
   }
   
-  public void setNoStore(boolean val) {
+  public AbstractResponse setNoStore(boolean val) {
     toggle(val, NOSTORE);
+    return this;
   }
   
-  public void setNoTransform(boolean val) {
+  public AbstractResponse setNoTransform(boolean val) {
     toggle(val, NOTRANSFORM);
+    return this;
   }
   
-  public void setPublic(boolean val) {
+  public AbstractResponse setPublic(boolean val) {
     toggle(val, PUBLIC);
+    return this;
   }
   
-  public void setPrivate(boolean val) {
+  public AbstractResponse setPrivate(boolean val) {
     if (val) flags |= PRIVATE;
     else if (isPrivate()) flags ^= PRIVATE;
+    return this;
   }
   
-  public void setPrivateHeaders(String... headers) {
+  public AbstractResponse setPrivateHeaders(String... headers) {
     this.private_headers = headers;
+    return this;
   }
   
-  public void setNoCacheHeaders(String... headers) {
+  public AbstractResponse setNoCacheHeaders(String... headers) {
     this.nocache_headers = headers;
+    return this;
   }
 
 }

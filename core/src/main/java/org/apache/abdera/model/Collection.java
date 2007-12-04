@@ -100,7 +100,7 @@ public interface Collection
    * @param href The value of href attribute
    * @throws IRISyntaxException if the href attribute is malformed 
    */
-  void setHref(String href);
+  Collection setHref(String href);
   
   /**
    * Returns the listing of media-ranges allowed for this collection
@@ -114,7 +114,7 @@ public interface Collection
    * @param mediaRanges a listing of media-ranges 
    * @throws MimeTypeParseException 
    */
-  void setAccept(String... mediaRanges);
+  Collection setAccept(String... mediaRanges);
   
   /**
    * Returns true if the collection accepts the given media-type
@@ -138,28 +138,28 @@ public interface Collection
    * Sets the appropriate accept element to indicate that entries are accepted
    * (equivalent to calling setAccept("application/atom+xml;type=entry");)
    */
-  void setAcceptsEntry();
+  Collection setAcceptsEntry();
   
   /**
    * Sets the collection so that nothing is accepted
    * (equivalent to calling setAccept(""); )
    */
-  void setAcceptsNothing();
+  Collection setAcceptsNothing();
   
   /**
    * Adds a new accept element to the collection
    */
-  void addAccepts(String mediaRange);
+  Collection addAccepts(String mediaRange);
   
   /**
    * Adds new accept elements to the collection
    */
-  void addAccepts(String... mediaRanges);
+  Collection addAccepts(String... mediaRanges);
   
   /**
    * Same as setAcceptsEntry except the existing accepts are not discarded
    */
-  void addAcceptsEntry();
+  Collection addAcceptsEntry();
   
   /**
    * Returns true if the collection accepts the given media-type
@@ -191,7 +191,7 @@ public interface Collection
    * Add the app:categories element to the collection
    * @param categories The app:categories element 
    */
-  void addCategories(Categories categories);
+  Collection addCategories(Categories categories);
   
   /**
    * Add a listing of categories to the collection

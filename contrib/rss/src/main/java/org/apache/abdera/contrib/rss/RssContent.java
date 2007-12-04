@@ -71,31 +71,31 @@ public class RssContent
     return getText();
   }
 
-  public void setContentType(Type type) {
+  public Content setContentType(Type type) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setDataHandler(DataHandler dataHandler) {
+  public Content setDataHandler(DataHandler dataHandler) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setMimeType(String type){
+  public Content setMimeType(String type){
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setSrc(String src) {
+  public Content setSrc(String src) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setValue(String value) {
+  public Content setValue(String value) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public <T extends Element> void setValueElement(T value) {
+  public <T extends Element> Content setValueElement(T value) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setWrappedValue(String wrappedValue) {
+  public Content setWrappedValue(String wrappedValue) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 

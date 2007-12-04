@@ -21,6 +21,8 @@ import java.util.List;
 
 import javax.activation.MimeType;
 
+import org.apache.abdera.i18n.iri.IRISyntaxException;
+
 /**
  * <p>An Atom Publishing Protocol Introspection Document workspace element.</p>
  * 
@@ -94,7 +96,7 @@ public interface Workspace
    * Adds an individual collection to this workspace
    * @param collection The collection to add
    */
-  void addCollection(Collection collection);
+  Workspace addCollection(Collection collection);
 
   /**
    * Adds an individual collection to this workspace

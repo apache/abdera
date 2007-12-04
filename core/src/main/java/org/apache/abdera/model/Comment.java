@@ -41,7 +41,7 @@ public interface Comment {
   /**
    * The text of this comment node
    */
-  void setText(String text);
+  Comment setText(String text);
   
   /**
    * The Abdera Factory

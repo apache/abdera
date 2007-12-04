@@ -121,7 +121,7 @@ public interface Entry
    * Adds an individual author to the entry
    * @param person The person to add
    */
-  void addAuthor(Person person);
+  Entry addAuthor(Person person);
 
   /**
    * Adds an author
@@ -157,7 +157,7 @@ public interface Entry
    * Adds an individual category to the entry
    * @param category The atom:category element to add
    */
-  void addCategory(Category category);
+  Entry addCategory(Category category);
   
   /**
    * Adds a category to the entry
@@ -186,7 +186,7 @@ public interface Entry
    * Sets the content for this entry
    * @param content The atom:content element
    */
-  void setContentElement(Content content);
+  Entry setContentElement(Content content);
 
   /**
    * Sets the content for this entry as @type="text"
@@ -327,7 +327,7 @@ public interface Entry
    * Adds an individual contributor to this entry
    * @param person The atom:contributor element
    */
-  void addContributor(Person person);
+  Entry addContributor(Person person);
   
   /**
    * Adds a contributor 
@@ -356,7 +356,7 @@ public interface Entry
    * Sets the universally unique identifier for this entry
    * @param id The atom:id element
    */
-  void setIdElement(IRIElement id);
+  Entry setIdElement(IRIElement id);
   
   /**
    * Returns the universally unique identifier for this entry
@@ -410,7 +410,7 @@ public interface Entry
    * Adds an individual link to the entry
    * @param link the atom:link to add
    */
-  void addLink(Link link);
+  Entry addLink(Link link);
   
   /**
    * Add a link to the entry
@@ -457,7 +457,7 @@ public interface Entry
    * creation or first availability of the resource.
    * @param dateTime the atom:published element
    */
-  void setPublishedElement(DateTime dateTime);
+  Entry setPublishedElement(DateTime dateTime);
   
   /**
    * Return the value of the atom:published element
@@ -499,7 +499,7 @@ public interface Entry
    * 
    * @param text The atom:rights element
    */
-  void setRightsElement(Text text);
+  Entry setRightsElement(Text text);
   
   /**
    * Sets the value of the rights as @type="text"
@@ -583,7 +583,7 @@ public interface Entry
    * 
    * @param source The atom:source element
    */
-  void setSource(Source source);
+  Entry setSource(Source source);
   
   /**
    * RFC4287: The "atom:summary" element is a Text construct that conveys 
@@ -605,7 +605,7 @@ public interface Entry
    * 
    * @param text The atom:summary element
    */
-  void setSummaryElement(Text text);
+  Entry setSummaryElement(Text text);
   
   /**
    * Sets the value of the summary as @type="text"
@@ -668,7 +668,7 @@ public interface Entry
    * human-readable title for an entry or feed.
    * @param title the atom:title element
    */
-  void setTitleElement(Text title);
+  Entry setTitleElement(Text title);
   
   /**
    * Sets the value of the title as @type="text"
@@ -734,7 +734,7 @@ public interface Entry
    * modifications necessarily result in a changed atom:updated value.
    * @param updated the atom:updated element.
    */
-  void setUpdatedElement(DateTime updated);
+  Entry setUpdatedElement(DateTime updated);
   
   /**
    * Return atom:updated
@@ -806,13 +806,13 @@ public interface Entry
    * Sets this entries Atom Publishing Protocol control element
    * @param control The app:contorl element
    */
-  void setControl(Control control);
+  Entry setControl(Control control);
   
   /**
    * Sets whether or not this entry is a draft
    * @param draft true if this entry should be marked as a draft
    */
-  void setDraft(boolean draft);
+  Entry setDraft(boolean draft);
   
   /**
    * Returns true if this entry is a draft

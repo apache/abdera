@@ -35,6 +35,7 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
+import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
 @SuppressWarnings("unchecked")
@@ -117,9 +118,10 @@ public class FOMContent
     return type;
   }
 
-  public void setContentType(Type type) {
+  public Content setContentType(Type type) {
     complete();
     init(type);
+    return this;
   }
   
   public <T extends Element> T getValueElement() {
@@ -127,7 +129,7 @@ public class FOMContent
     return (T)factory.getElementWrapper((Element)this.getFirstElement());
   }
 
-  public <T extends Element> void setValueElement(T value) {
+  public <T extends Element> Content setValueElement(T value) {
     complete();
     if (value != null) {
       if (this.getFirstElement() != null)
@@ -154,6 +156,7 @@ public class FOMContent
     } else {
       _removeAllChildren();
     }
+    return this;
   }
 
   public MimeType getMimeType() {
@@ -167,7 +170,7 @@ public class FOMContent
     return type;
   }
   
-  public void setMimeType(String type) {
+  public Content setMimeType(String type) {
     complete();
     try {
       if (type != null)
@@ -177,6 +180,7 @@ public class FOMContent
     } catch (javax.activation.MimeTypeParseException e) {
       throw new org.apache.abdera.util.MimeTypeParseException(e);
     }      
+    return this;
   }
 
   public IRI getSrc() {
@@ -187,13 +191,13 @@ public class FOMContent
     return _resolve(getResolvedBaseUri(), getSrc());
   }
   
-  public void setSrc(String src) {
+  public Content setSrc(String src) {
     complete();
     if (src != null)
       setAttributeValue(SRC, (new IRI(src)).toString());
     else 
       removeAttribute(SRC);
-
+    return this;
   }
 
   public DataHandler getDataHandler() {
@@ -215,7 +219,7 @@ public class FOMContent
     return dh;
   }
   
-  public void setDataHandler(DataHandler dataHandler) {
+  public Content setDataHandler(DataHandler dataHandler) {
     complete();
     if (!Type.MEDIA.equals(type)) throw new IllegalArgumentException();
     if (dataHandler.getContentType() != null) {
@@ -225,6 +229,7 @@ public class FOMContent
     }
     _removeAllChildren();
     addChild(factory.createOMText(dataHandler, true));
+    return this;
   }
   
   public String getValue() {
@@ -245,22 +250,37 @@ public class FOMContent
     return val;
   }
 
-  public void setText(String value) {
+  public <T extends Element>T setText(Content.Type type, String value) {
     complete();
-    init(Content.Type.TEXT);
-    super.setText(value);
+    init(type);
+    if (value != null) {
+      OMNode child = this.getFirstOMChild();
+      while (child != null) {
+          if (child.getType() == OMNode.TEXT_NODE) {
+              child.detach();
+          }
+          child = child.getNextOMSibling();
+      }
+      getOMFactory().createOMText(this, value);
+    } else 
+      _removeAllChildren();
+    return (T)this;
+  }  
+  
+  public <T extends Element>T setText(String value) {
+    return (T)setText(Content.Type.TEXT,value);
   }
   
-  public void setValue(String value) {
+  public Content setValue(String value) {
     complete();
     if (value != null) removeAttribute(SRC);
     if (value != null) {
       if (Type.TEXT.equals(type)) {
         _removeAllChildren();
-        super.setText(value); 
+        setText(type,value); 
       } else if (Type.HTML.equals(type)) {
         _removeAllChildren();
-        super.setText(value);
+        setText(type,value);
       } else if (Type.XHTML.equals(type)) {
         IRI baseUri = null;
         Element element = null;
@@ -286,7 +306,7 @@ public class FOMContent
         } catch (Exception e) {}
       } else if (Type.MEDIA.equals(type)) {
         _removeAllChildren();
-        super.setText(value);
+        setText(type,value);
         try {
           if (getMimeType() == null)
             setMimeType("text/plain");
@@ -295,6 +315,7 @@ public class FOMContent
     } else {
       _removeAllChildren();
     }
+    return this;
   }
 
   public String getWrappedValue() {
@@ -305,7 +326,7 @@ public class FOMContent
     }
   }
 
-  public void setWrappedValue(String wrappedValue) {
+  public Content setWrappedValue(String wrappedValue) {
     complete();
     if (Type.XHTML.equals(type)) {
       IRI baseUri = null;
@@ -317,8 +338,9 @@ public class FOMContent
       if (element != null && element instanceof Div)
         setValueElement((Div)element);
     } else {
-      setText(wrappedValue);
+      ((Element)this).setText(wrappedValue);
     }
+    return this;
   }
 
   @Override

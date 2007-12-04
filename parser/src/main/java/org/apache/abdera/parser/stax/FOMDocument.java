@@ -31,6 +31,7 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.lang.Lang;
+import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
@@ -104,20 +105,22 @@ public class FOMDocument<T extends Element>
     return (T) factory.getElementWrapper((T) this.getOMDocumentElement());
   }
 
-  public void setRoot(T root) {
+  public Document<T> setRoot(T root) {
     if (root instanceof OMElement) {
       this.setOMDocumentElement((OMElement) root);
     } else if (root instanceof ElementWrapper) {
       this.setOMDocumentElement((OMElement) ((ElementWrapper)root).getInternal());
     }
+    return this;
   }
 
   public IRI getBaseUri() {
     return base;
   }
 
-  public void setBaseUri(String base) {
+  public Document<T> setBaseUri(String base) {
     this.base = new IRI(base);
+    return this;
   }
 
   public void writeTo(
@@ -192,7 +195,7 @@ public class FOMDocument<T extends Element>
     return contentType;
   }
   
-  public void setContentType(String contentType) {
+  public Document<T> setContentType(String contentType) {
     try {
       this.contentType = new MimeType(contentType);
       if (this.contentType.getParameter("charset") != null)
@@ -200,14 +203,16 @@ public class FOMDocument<T extends Element>
     } catch (javax.activation.MimeTypeParseException e) {
       throw new org.apache.abdera.util.MimeTypeParseException(e);
     }
+    return this;
   }
   
   public Date getLastModified() {
     return this.lastModified;
   }
   
-  public void setLastModified(Date lastModified) {
+  public Document<T> setLastModified(Date lastModified) {
     this.lastModified = lastModified;
+    return this;
   }
   
   public Object clone() {
@@ -241,8 +246,9 @@ public class FOMDocument<T extends Element>
     return this.getCharsetEncoding();
   }
 
-  public void setCharset(String charset) {
+  public Document<T> setCharset(String charset) {
     this.setCharsetEncoding(charset);
+    return this;
   }
 
   public Factory getFactory() {
@@ -262,7 +268,7 @@ public class FOMDocument<T extends Element>
     return values.toArray(new String[values.size()]);
   }
 
-  public void addProcessingInstruction(String target, String value) {
+  public Document<T> addProcessingInstruction(String target, String value) {
     OMProcessingInstruction pi = 
       this.factory.createOMProcessingInstruction(
         null, target, value);
@@ -271,9 +277,10 @@ public class FOMDocument<T extends Element>
     } else {
       this.addChild(pi);
     }
+    return this;
   }
 
-  public void addStylesheet(String href, String media) {
+  public Document<T> addStylesheet(String href, String media) {
     if (media == null) {
       addProcessingInstruction(
         "xml-stylesheet", "href=\"" + href + "\"");
@@ -282,9 +289,10 @@ public class FOMDocument<T extends Element>
         "xml-stylesheet", "href=\"" + href + 
         "\" media=\"" + media + "\"");
     }
+    return this;
   }
 
-  public void addComment(String value) {
+  public <T extends Base>T addComment(String value) {
     OMComment comment =
       this.factory.createOMComment(null, value);
     if (this.getOMDocumentElement() != null) {
@@ -292,18 +300,21 @@ public class FOMDocument<T extends Element>
     } else {
       this.addChild(comment);
     }
+    return (T)this;
   }
 
   public EntityTag getEntityTag() {
     return etag;
   }
 
-  public void setEntityTag(EntityTag tag) {
+  public Document<T> setEntityTag(EntityTag tag) {
     this.etag = tag;
+    return this;
   }
 
-  public void setEntityTag(String tag) {
+  public Document<T> setEntityTag(String tag) {
     this.etag = new EntityTag(tag);
+    return this;
   }
   
   public String getLanguage() {
@@ -315,24 +326,27 @@ public class FOMDocument<T extends Element>
     return (lang != null) ? new Lang(lang) : null;
   }
   
-  public void setLanguage(String lang) {
+  public Document<T> setLanguage(String lang) {
     this.language = lang;
+    return this;
   }
   
   public String getSlug() {
     return slug;
   }
   
-  public void setSlug(String slug) {
+  public Document<T> setSlug(String slug) {
     this.slug = slug;
+    return this;
   }
   
   public boolean getMustPreserveWhitespace() {
     return preserve;
   }
   
-  public void setMustPreserveWhitespace(boolean preserve) {
+  public Document<T> setMustPreserveWhitespace(boolean preserve) {
     this.preserve = preserve;
+    return this;
   }
 
   public XMLVersion getXmlVersion() {
@@ -350,8 +364,9 @@ public class FOMDocument<T extends Element>
    * ensure that this particular object is fully parsed and ready 
    * to be modified.
    */
-  public void complete() {
+  public <T extends Base>T complete() {
     if (!isComplete() && getRoot() != null) getRoot().complete();
+    return (T)this;
   }
 
   public void writeTo(

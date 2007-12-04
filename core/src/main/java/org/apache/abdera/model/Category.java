@@ -56,7 +56,7 @@ public interface Category
    * MUST have a "term" attribute.
    * @param term The string value of the term attribute
    */
-  void setTerm(String term);
+  Category setTerm(String term);
   
   /**
    * RFC4287: The "scheme" attribute is an IRI that identifies a 
@@ -72,7 +72,7 @@ public interface Category
    * attribute.
    * @param scheme The IRI of the scheme
    */
-  void setScheme(String scheme);
+  Category setScheme(String scheme);
  
   /**
    * RFC4287: The "label" attribute provides a human-readable label 
@@ -94,6 +94,6 @@ public interface Category
    * "label" attribute.
    * @param label The value of the human-readable label
    */
-  void setLabel(String label);
+  Category setLabel(String label);
   
 }

@@ -528,7 +528,7 @@ public class RssChannel
     return lang;
   }
 
-  public void setLanguage(String language) {  
+  public <T extends Element>T setLanguage(String language) {  
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 

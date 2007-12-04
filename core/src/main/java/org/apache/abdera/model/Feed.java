@@ -20,6 +20,8 @@ package org.apache.abdera.model;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.abdera.i18n.iri.IRISyntaxException;
+
 /**
  * <p>Represents an Atom Feed Element</p>
  * 
@@ -107,7 +109,7 @@ public interface Feed
    * Adds a new Entry to the <i>end</i> of the Feeds collection of entries
    * @param entry Add an entry 
    */
-  void addEntry(Entry entry);
+  Feed addEntry(Entry entry);
 
   /**
    * Adds a new Entry to the <i>end</i> of the Feeds collection of entries
@@ -119,7 +121,7 @@ public interface Feed
    * Adds a new Entry to the <i>start</i> of the Feeds collection of entries
    * @param entry An atom:entry to insert
    */
-  void insertEntry(Entry entry);
+  Feed insertEntry(Entry entry);
 
   /**
    * Adds a new Entry to the <i>start</i> of the Feeds collection of entries
@@ -137,18 +139,18 @@ public interface Feed
    * Sorts entries by the atom:updated property
    * @param new_first If true, entries with newer atom:updated values will come first
    */
-  void sortEntriesByUpdated(boolean new_first);
+  Feed sortEntriesByUpdated(boolean new_first);
   
   /**
    * Sorts entries by the app:edited property. if app:edited is null, use app:updated
    */
-  void sortEntriesByEdited(boolean new_first);
+  Feed sortEntriesByEdited(boolean new_first);
   
   /**
    * Sorts entries using the given comparator
    * @param comparator Sort the entries using the comparator
    */
-  void sortEntries(Comparator<Entry> comparator);
+  Feed sortEntries(Comparator<Entry> comparator);
   
   /**
    * Retrieves the first entry in the feed with the given atom:id value

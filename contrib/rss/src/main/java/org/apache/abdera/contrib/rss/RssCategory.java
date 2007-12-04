@@ -25,6 +25,7 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.ExtensibleElement;
 import org.apache.abdera.model.ExtensibleElementWrapper;
 
 public class RssCategory 
@@ -52,19 +53,19 @@ public class RssCategory
     return getText();
   }
 
-  public void setLabel(String label) {
+  public Category setLabel(String label) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setScheme(String scheme) {
+  public Category setScheme(String scheme) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setTerm(String term) {
+  public Category setTerm(String term) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void addExtension(Element extension) {
+  public <T extends ExtensibleElement>T addExtension(Element extension) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 

@@ -77,32 +77,39 @@ public abstract class AbstractRequest
     return check(ONLYIFCACHED);
   }
 
-  public void setMaxAge(long max_age) {
+  public AbstractRequest setMaxAge(long max_age) {
     this.max_age = max_age;
+    return this;
   }
   
-  public void setMaxStale(long max_stale) {
+  public AbstractRequest setMaxStale(long max_stale) {
     this.max_stale = max_stale;
+    return this;
   }
   
-  public void setMinFresh(long min_fresh) {
+  public AbstractRequest setMinFresh(long min_fresh) {
     this.min_fresh = min_fresh;
+    return this;
   }
 
-  public void setNoCache(boolean val) {
+  public AbstractRequest setNoCache(boolean val) {
     toggle(val, NOCACHE);
+    return this;
   }
   
-  public void setNoStore(boolean val) {
+  public AbstractRequest setNoStore(boolean val) {
     toggle(val, NOSTORE);
+    return this;
   }
   
-  public void setNoTransform(boolean val) {
+  public AbstractRequest setNoTransform(boolean val) {
     toggle(val, NOTRANSFORM);
+    return this;
   }
   
-  public void setOnlyIfCached(boolean val) {
+  public AbstractRequest setOnlyIfCached(boolean val) {
     toggle(val, ONLYIFCACHED);
+    return this;
   }
 
 }

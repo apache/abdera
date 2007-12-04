@@ -157,7 +157,7 @@ public abstract class AbstractParser
   
   protected abstract ParserOptions initDefaultParserOptions();
 
-  public synchronized void setDefaultParserOptions(ParserOptions options) {
+  public synchronized Parser setDefaultParserOptions(ParserOptions options) {
     // Ok, we need to make a defensive copy of the options, since otherwise
     // the caller still has access to the object, which means our access to
     // it isn't certain to be thread safe.
@@ -167,6 +167,7 @@ public abstract class AbstractParser
         (options != null) ? 
           (ParserOptions) options.clone() : 
           initDefaultParserOptions();
+      return this;
     } catch (CloneNotSupportedException cnse) {
       // This shouldn't actually happen
       throw new RuntimeException(cnse);

@@ -612,7 +612,7 @@ public interface Factory {
    * Registers an extension factory for this Factory instance only
    * @param extensionFactory An ExtensionFactory instance 
    */
-  void registerExtension(ExtensionFactory extensionFactory);
+  Factory registerExtension(ExtensionFactory extensionFactory);
     
   /**
    * Create a new Categories element. The app:categories element is introduced

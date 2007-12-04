@@ -21,6 +21,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Category;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
@@ -95,12 +96,13 @@ public class FOMCategory
     return getAttributeValue(TERM);
   }
 
-  public void setTerm(String term) {
+  public Category setTerm(String term) {
     complete();
     if (term != null)
       setAttributeValue(TERM, term);
     else
       removeAttribute(TERM);
+    return this;
   }
 
   public IRI getScheme() {
@@ -108,24 +110,26 @@ public class FOMCategory
     return (value != null) ? new IRI(value) : null;
   }
 
-  public void setScheme(String scheme) {
+  public Category setScheme(String scheme) {
     complete();
     if (scheme != null)
       setAttributeValue(SCHEME, new IRI(scheme).toString());
     else 
       removeAttribute(SCHEME);
+    return this;
   }
   
   public String getLabel() {
     return getAttributeValue(LABEL);
   }
 
-  public void setLabel(String label) {
+  public Category setLabel(String label) {
     complete();
     if (label != null)
       setAttributeValue(LABEL, label);
     else
       removeAttribute(LABEL);
+    return this;
   }
 
   public String getValue() {
@@ -135,7 +139,7 @@ public class FOMCategory
   public void setValue(String value) {
     complete();
     if (value != null)
-      setText(value);
+      ((Element)this).setText(value);
     else
       _removeAllChildren();
   }

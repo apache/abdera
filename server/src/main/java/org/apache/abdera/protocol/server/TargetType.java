@@ -17,6 +17,9 @@
 */
 package org.apache.abdera.protocol.server;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 public final class TargetType {
 
   public static final String UNKNOWN = "UNKNOWN";
@@ -25,6 +28,9 @@ public final class TargetType {
   public static final String ENTRY = "ENTRY";
   public static final String MEDIA = "MEDIA";
   public static final String CATEGORIES = "CATEGORIES";
+
+  private static final Map<String,TargetType> types = 
+    new WeakHashMap<String,TargetType>();
   
   public static final TargetType TYPE_UNKNOWN = new TargetType(UNKNOWN);
   public static final TargetType TYPE_SERVICE = new TargetType(SERVICE);
@@ -32,29 +38,34 @@ public final class TargetType {
   public static final TargetType TYPE_ENTRY = new TargetType(ENTRY);
   public static final TargetType TYPE_MEDIA = new TargetType(MEDIA);
   public static final TargetType TYPE_CATEGORIES = new TargetType(CATEGORIES);
-  
+
+  public static Iterable<TargetType> values() {
+    return types.values();
+  }
+    
   public static TargetType get(String name) {
-    if (name == null) return null;
-    name = name.toUpperCase();
-    if (name.equals(UNKNOWN)) return TYPE_UNKNOWN;
-    if (name.equals(SERVICE)) return TYPE_SERVICE;
-    if (name.equals(COLLECTION)) return TYPE_COLLECTION;
-    if (name.equals(ENTRY)) return TYPE_ENTRY;
-    if (name.equals(MEDIA)) return TYPE_MEDIA;
-    if (name.equals(CATEGORIES)) return TYPE_CATEGORIES;
-    return null;
+    return types.get(name.toUpperCase());
   }
   
   public static TargetType get(String name, boolean create) {
+    if (name == null) return null;
     TargetType type = get(name);
-    return (type != null) ? type : (create) ? new TargetType(name) : null;
+    return type != null ? type : create ? create(name) : null;
+  }
+  
+  private static synchronized TargetType create(String name) {
+    TargetType type = new TargetType(name.toUpperCase());
+    types.put(type.name(), type);
+    return type;
   }
   
   private final String name;
   
-  public TargetType(String name) {
+  private TargetType(String name) {
     if (name == null || name.length() == 0) throw new IllegalArgumentException();
+    if (get(name) != null) throw new IllegalArgumentException();
     this.name = name.toUpperCase();
+    types.put(name, this);
   }
   
   public String name() {

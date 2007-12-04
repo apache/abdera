@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import junit.framework.TestCase;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
@@ -19,10 +20,6 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.protocol.client.RequestOptions;
-import org.apache.abdera.protocol.server.CollectionProvider;
-import org.apache.abdera.protocol.server.ServiceContext;
-import org.apache.abdera.protocol.server.TargetType;
-import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.impl.DefaultServiceContext;
 import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
@@ -46,11 +43,12 @@ public class ContentProviderTest extends TestCase {
     
     abderaServiceContext = new DefaultServiceContext();
 
-    RegexTargetResolver resolver = new RegexTargetResolver();
-    resolver.setPattern("/acme(\\?[^#]*)?", TargetType.TYPE_SERVICE);
-    resolver.setPattern("/acme/customers(\\?[^#]*)?", TargetType.TYPE_COLLECTION);
-    resolver.setPattern("/acme/customers/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY);
-    abderaServiceContext.setTargetResolver(resolver);
+    abderaServiceContext.setTargetResolver(
+      new RegexTargetResolver()
+        .setPattern("/acme(\\?[^#]*)?", TargetType.TYPE_SERVICE)
+        .setPattern("/acme/customers(\\?[^#]*)?", TargetType.TYPE_COLLECTION)
+        .setPattern("/acme/customers/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY)
+    );
     
     SingletonProviderManager pm = new SingletonProviderManager();
     abderaServiceContext.setProviderManager(pm);

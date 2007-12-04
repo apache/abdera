@@ -26,13 +26,13 @@ import java.util.List;
 import javax.security.auth.Subject;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.protocol.Request;
-import org.apache.abdera.i18n.iri.IRI;
 
 public interface RequestContext 
   extends Request {
@@ -75,7 +75,7 @@ public interface RequestContext
   
   String[] getAttributeNames(Scope scope);
   
-  void setAttribute(Scope scope, String name, Object value);
+  RequestContext setAttribute(Scope scope, String name, Object value);
   
   InputStream getInputStream() throws IOException;
   

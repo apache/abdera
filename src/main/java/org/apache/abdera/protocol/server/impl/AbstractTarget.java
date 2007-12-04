@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.protocol.server.impl;
 
+import java.util.Iterator;
+
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.TargetType;
@@ -45,6 +47,10 @@ public abstract class AbstractTarget
   public String[] getParameterNames() {
     String[] pn = context.getParameterNames();
     return (pn != null) ? pn : new String[0];
+  }
+
+  public Iterator<String> iterator() {
+    return java.util.Arrays.asList(getParameterNames()).iterator();
   }
 
   public TargetType getType() {

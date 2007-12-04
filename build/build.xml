@@ -415,7 +415,7 @@ Working directory: ${work}
   </target>
 
   <target name="clean">
-<!--    <delete dir="${work}" />
+    <delete dir="${work}" />
     <delete dir="${test}" />
     <delete dir="${dist}" />
     <delete dir="${dependencies.work}" />
@@ -424,7 +424,7 @@ Working directory: ${work}
     <delete>
       <fileset dir="${basedir}" includes="*.zip" />
       <fileset dir="${basedir}" includes="*.md5" />
-    </delete>-->
+    </delete>
   </target>
 
   <target name="dist" depends="clean,build,test,docs">

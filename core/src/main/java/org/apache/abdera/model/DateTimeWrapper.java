@@ -49,36 +49,41 @@ public abstract class DateTimeWrapper
     return value;
   }
 
-  public void setValue(AtomDate dateTime) {
+  public DateTime setValue(AtomDate dateTime) {
     if (dateTime != null)
       setText(dateTime.getValue());
     else 
       setText("");
+    return this;
   }
 
-  public void setDate(Date date) {
+  public DateTime setDate(Date date) {
     if (date != null)
       setText(AtomDate.valueOf(date).getValue());
     else 
       setText("");
+    return this;
   }
 
-  public void setCalendar(Calendar date) {
+  public DateTime setCalendar(Calendar date) {
     if (date != null)
       setText(AtomDate.valueOf(date).getValue());
     else 
       setText("");
+    return this;
   }
 
-  public void setTime(long date) {
+  public DateTime setTime(long date) {
     setText(AtomDate.valueOf(date).getValue());
+    return this;
   }
 
-  public void setString(String date) {
+  public DateTime setString(String date) {
     if (date != null)
       setText(AtomDate.valueOf(date).getValue());
     else 
       setText("");
+    return this;
   }
 
   public Date getDate() {

@@ -74,27 +74,27 @@ public class RssLink
     return null;
   }
 
-  public void setHref(String href) {
+  public Link setHref(String href) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setHrefLang(String lang) {
+  public Link setHrefLang(String lang) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setLength(long length) {
+  public Link setLength(long length) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setMimeType(String type) {
+  public Link setMimeType(String type) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setRel(String rel) {
+  public Link setRel(String rel) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setTitle(String title) {
+  public Link setTitle(String title) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 

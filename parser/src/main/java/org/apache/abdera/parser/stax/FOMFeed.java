@@ -92,9 +92,10 @@ public class FOMFeed
     return _getChildrenAsSet(ENTRY);
   }
 
-  public void addEntry(Entry entry) {
+  public Feed addEntry(Entry entry) {
     complete();
     addChild((OMElement)entry);
+    return this;
   }
 
   public Entry addEntry() {
@@ -103,7 +104,7 @@ public class FOMFeed
     return fomfactory.newEntry(this);
   }
   
-  public void insertEntry(Entry entry) {
+  public Feed insertEntry(Entry entry) {
     complete();
     OMElement el = getFirstChildWithName(ENTRY);
     if (el == null) {
@@ -112,6 +113,7 @@ public class FOMFeed
       entry.setParentElement(this);
       el.insertSiblingBefore((OMElement)entry);
     }
+    return this;
   }
   
   public Entry insertEntry() {
@@ -150,24 +152,27 @@ public class FOMFeed
     super.addChild(node);
   }
  
-  public void sortEntriesByUpdated(boolean new_first) {
+  public Feed sortEntriesByUpdated(boolean new_first) {
     complete();
     sortEntries(new UpdatedComparator(new_first));
+    return this;
   }
   
-  public void sortEntriesByEdited(boolean new_first) {
+  public Feed sortEntriesByEdited(boolean new_first) {
     complete();
     sortEntries(new EditedComparator(new_first));
+    return this;
   }
   
-  public void sortEntries(Comparator<Entry> comparator) {
+  public Feed sortEntries(Comparator<Entry> comparator) {
     complete();
-    if (comparator == null) return;
+    if (comparator == null) return this;
     List<Entry> entries = this.getEntries();
     Entry[] a = entries.toArray(new Entry[entries.size()]);
     Arrays.sort(a, comparator);
     for (Entry e: entries) { e.discard(); }
     for (Entry e: a) { addEntry(e); }
+    return this;
   }
   
   private static class EditedComparator implements Comparator<Entry> {

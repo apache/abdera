@@ -51,6 +51,7 @@ import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
+import org.apache.abdera.model.ExtensibleElement;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Generator;
 import org.apache.abdera.model.IRIElement;
@@ -168,7 +169,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
     
-    public void addEntry(Entry entry) {
+    public Feed addEntry(Entry entry) {
+      return this;
     }
 
     public Entry addEntry() {
@@ -187,23 +189,28 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void insertEntry(Entry entry) {
+    public Feed insertEntry(Entry entry) {
+      return this;
     }
 
     public Entry insertEntry() {
       return null;
     }
 
-    public void sortEntries(Comparator<Entry> comparator) {
+    public Feed sortEntries(Comparator<Entry> comparator) {
+      return null;
     }
 
-    public void sortEntriesByEdited(boolean new_first) {
+    public Feed sortEntriesByEdited(boolean new_first) {
+      return null;
     }
 
-    public void sortEntriesByUpdated(boolean new_first) {
+    public Feed sortEntriesByUpdated(boolean new_first) {
+      return null;
     }
 
-    public void addAuthor(Person person) {
+    public <T extends Source>T addAuthor(Person person) {
+      return (T)this;
     }
 
     public Person addAuthor(String name) {
@@ -214,7 +221,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void addCategory(Category category) {
+    public <T extends Source>T addCategory(Category category) {
+      return (T)this;
     }
 
     public Category addCategory(String term) {
@@ -225,7 +233,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void addContributor(Person person) {
+    public <T extends Source>T addContributor(Person person) {
+      return (T)this;
     }
 
     public Person addContributor(String name) {
@@ -236,7 +245,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void addLink(Link link) {
+    public <T extends Source>T addLink(Link link) {
+      return (T)this;
     }
 
     public Link addLink(String href) {
@@ -403,10 +413,12 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void setCollection(Collection collection) {
+    public <T extends Source>T setCollection(Collection collection) {
+      return (T)this;
     }
 
-    public void setGenerator(Generator generator) {
+    public <T extends Source>T setGenerator(Generator generator) {
+      return (T)this;
     }
 
     public Generator setGenerator(String iri, String version, String value) {
@@ -417,7 +429,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void setIconElement(IRIElement iri) {
+    public <T extends Source>T setIconElement(IRIElement iri) {
+      return (T)this;
     }
 
     public IRIElement setId(String id) {
@@ -428,14 +441,16 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void setIdElement(IRIElement id) {
+    public <T extends Source>T setIdElement(IRIElement id) {
+      return (T)this;
     }
 
     public IRIElement setLogo(String iri) {
       return null;
     }
 
-    public void setLogoElement(IRIElement iri) {
+    public <T extends Source>T setLogoElement(IRIElement iri) {
+      return (T)this;
     }
 
     public Text setRights(String value) {
@@ -458,7 +473,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void setRightsElement(Text text) {
+    public <T extends Source>T setRightsElement(Text text) {
+      return (T)this;
     }
 
     public Text setSubtitle(String value) {
@@ -481,7 +497,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void setSubtitleElement(Text text) {
+    public <T extends Source>T setSubtitleElement(Text text) {
+      return (T)this;
     }
 
     public Text setTitle(String value) {
@@ -504,7 +521,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void setTitleElement(Text text) {
+    public <T extends Source>T setTitleElement(Text text) {
+      return (T)this;
     }
 
     public DateTime setUpdated(Date value) {
@@ -515,10 +533,12 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void setUpdatedElement(DateTime dateTime) {
+    public <T extends Source>T setUpdatedElement(DateTime dateTime) {
+      return (T)this;
     }
 
-    public void addExtension(Element extension) {
+    public <T extends ExtensibleElement>T addExtension(Element extension) {
+      return (T)this;
     }
 
     public <T extends Element> T addExtension(QName qname) {
@@ -565,7 +585,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void declareNS(String uri, String prefix) {
+    public Feed declareNS(String uri, String prefix) {
+      return null;
     }
 
     public void discard() {
@@ -659,37 +680,48 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void removeAttribute(QName qname) {
+    public Feed removeAttribute(QName qname) {
+      return null;
     }
 
-    public void setAttributeValue(String name, String value) {
+    public Feed setAttributeValue(String name, String value) {
+      return null;
     }
 
-    public void setAttributeValue(QName qname, String value) {
+    public Feed setAttributeValue(QName qname, String value) {
+      return null;
     }
 
-    public void setBaseUri(IRI base) {
+    public Feed setBaseUri(IRI base) {
+      return null;
     }
 
-    public void setBaseUri(String base) {
+    public Feed setBaseUri(String base) {
+      return null;
     }
 
-    public void setLanguage(String language) {
+    public Feed setLanguage(String language) {
+      return null;
     }
 
-    public void setMustPreserveWhitespace(boolean preserve) {
+    public Feed setMustPreserveWhitespace(boolean preserve) {
+      return null;
     }
 
-    public void setParentElement(Element parent) {
+    public Feed setParentElement(Element parent) {
+      return null;
     }
 
-    public void setText(String text) {
+    public Feed setText(String text) {
+      return null;
     }
 
-    public void setText(DataHandler dataHandler) {
+    public Feed setText(DataHandler dataHandler) {
+      return null;
     }
 
-    public void addComment(String value) {
+    public Feed addComment(String value) {
+      return null;
     }
 
     public WriterOptions getDefaultWriterOptions() {
@@ -724,13 +756,17 @@ public class CoreTest extends TestCase implements Constants {
     public void writeTo(Writer writer) throws IOException {
     }
 
-    public void addExtension(Element extension, Element before) {}
+    public <T extends ExtensibleElement>T addExtension(Element extension, Element before) {
+      return (T)this;
+    }
 
     public <T extends Element> T addExtension(QName qname, QName before) {
       return null;
     }
 
-    public void complete() {}
+    public Feed complete() {
+      return null;
+    }
 
     public Iterator<Element> iterator() {
       return null;
@@ -746,7 +782,9 @@ public class CoreTest extends TestCase implements Constants {
     public void writeTo(String writer, Writer out, WriterOptions options)
         throws IOException {}
 
-    public void removeAttribute(String name) {}
+    public Feed removeAttribute(String name) {
+      return null;
+    }
     
   }
   
@@ -756,7 +794,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
     
-    public void addAuthor(Person person) {
+    public Entry addAuthor(Person person) {
+      return this;
     }
 
     public Person addAuthor(String name) {
@@ -767,7 +806,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void addCategory(Category category) {
+    public Entry addCategory(Category category) {
+      return this;
     }
 
     public Category addCategory(String term) {
@@ -778,7 +818,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void addContributor(Person person) {
+    public Entry addContributor(Person person) {
+      return this;
     }
 
     public Person addContributor(String name) {
@@ -789,7 +830,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void addLink(Link link) {
+    public Entry addLink(Link link) {
+      return this;
     }
 
     public Link addLink(String href) {
@@ -1060,13 +1102,16 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void setContentElement(Content content) {
+    public Entry setContentElement(Content content) {
+      return this;
     }
 
-    public void setControl(Control control) {
+    public Entry setControl(Control control) {
+      return this;
     }
 
-    public void setDraft(boolean draft) {
+    public Entry setDraft(boolean draft) {
+      return this;
     }
 
     public DateTime setEdited(Date value) {
@@ -1088,7 +1133,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void setIdElement(IRIElement id) {
+    public Entry setIdElement(IRIElement id) {
+      return this;
     }
 
     public DateTime setPublished(Date value) {
@@ -1099,7 +1145,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void setPublishedElement(DateTime dateTime) {
+    public Entry setPublishedElement(DateTime dateTime) {
+      return this;
     }
 
     public Text setRights(String value) {
@@ -1122,10 +1169,12 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void setRightsElement(Text text) {
+    public Entry setRightsElement(Text text) {
+      return this;
     }
 
-    public void setSource(Source source) {
+    public Entry setSource(Source source) {
+      return this;
     }
 
     public Text setSummary(String value) {
@@ -1148,7 +1197,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void setSummaryElement(Text text) {
+    public Entry setSummaryElement(Text text) {
+      return this;
     }
 
     public Text setTitle(String value) {
@@ -1171,7 +1221,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void setTitleElement(Text title) {
+    public Entry setTitleElement(Text title) {
+      return this;
     }
 
     public DateTime setUpdated(Date value) {
@@ -1182,10 +1233,12 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void setUpdatedElement(DateTime updated) {
+    public Entry setUpdatedElement(DateTime updated) {
+      return this;
     }
 
-    public void addExtension(Element extension) {
+    public <T extends ExtensibleElement>T addExtension(Element extension) {
+      return (T)this;
     }
 
     public <T extends Element> T addExtension(QName qname) {
@@ -1232,7 +1285,8 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void declareNS(String uri, String prefix) {
+    public Entry declareNS(String uri, String prefix) {
+      return null;
     }
 
     public void discard() {
@@ -1326,37 +1380,48 @@ public class CoreTest extends TestCase implements Constants {
       return null;
     }
 
-    public void removeAttribute(QName qname) {
+    public Entry removeAttribute(QName qname) {
+      return null;
     }
 
-    public void setAttributeValue(String name, String value) {
+    public Entry setAttributeValue(String name, String value) {
+      return null;
     }
 
-    public void setAttributeValue(QName qname, String value) {
+    public Entry setAttributeValue(QName qname, String value) {
+      return null;
     }
 
-    public void setBaseUri(IRI base) {
+    public Entry setBaseUri(IRI base) {
+      return null;
     }
 
-    public void setBaseUri(String base) {
+    public Entry setBaseUri(String base) {
+      return null;
     }
 
-    public void setLanguage(String language) {
+    public Entry setLanguage(String language) {
+      return null;
     }
 
-    public void setMustPreserveWhitespace(boolean preserve) {
+    public Entry setMustPreserveWhitespace(boolean preserve) {
+      return null;
     }
 
-    public void setParentElement(Element parent) {
+    public Entry setParentElement(Element parent) {
+      return null;
     }
 
-    public void setText(String text) {
+    public Entry setText(String text) {
+      return null;
     }
 
-    public void setText(DataHandler dataHandler) {
+    public Entry setText(DataHandler dataHandler) {
+      return null;
     }
 
-    public void addComment(String value) {
+    public Entry addComment(String value) {
+      return null;
     }
 
     public WriterOptions getDefaultWriterOptions() {
@@ -1391,13 +1456,17 @@ public class CoreTest extends TestCase implements Constants {
     public void writeTo(Writer writer) throws IOException {
     }
 
-    public void addExtension(Element extension, Element before) {}
+    public <T extends ExtensibleElement>T addExtension(Element extension, Element before) {
+      return (T)this;
+    }
 
     public <T extends Element> T addExtension(QName qname, QName before) {
       return null;
     }
 
-    public void complete() {}
+    public Entry complete() {
+      return null;
+    }
 
     public Iterator<Element> iterator() {
       return null;
@@ -1413,7 +1482,9 @@ public class CoreTest extends TestCase implements Constants {
     public void writeTo(String writer, Writer out, WriterOptions options)
         throws IOException {}
 
-    public void removeAttribute(String name) {}
+    public Entry removeAttribute(String name) {
+      return null;
+    }
     
   }
 }

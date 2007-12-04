@@ -88,23 +88,25 @@ public class FOMDiv
     return getAttributeValue(ATITLE);
   }
 
-  public void setId(String id) {
+  public Div setId(String id) {
     complete();
     if (id != null)
       setAttributeValue(AID, id);
     else 
       removeAttribute(AID);
+    return this;
   }
   
-  public void setTitle(String title) {
+  public Div setTitle(String title) {
     complete();
     if (title != null)
       setAttributeValue(ATITLE, title);
     else 
       removeAttribute(ATITLE);
+    return this;
   }
   
-  public void setXhtmlClass(String[] classes) {
+  public Div setXhtmlClass(String[] classes) {
     complete();
     if (classes != null) {
       StringBuffer val = new StringBuffer();
@@ -115,6 +117,7 @@ public class FOMDiv
       }
       setAttributeValue(CLASS, val.toString());
     } else removeAttribute(CLASS);
+    return this;
   }
 
   public String getValue() {

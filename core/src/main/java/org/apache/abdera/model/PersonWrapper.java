@@ -80,12 +80,13 @@ public abstract class PersonWrapper
     }
   }
 
-  public void setEmailElement(Element element) {
+  public Person setEmailElement(Element element) {
     ExtensibleElement internal = getExtInternal();
     Element el = getEmailElement();
     if (el != null) el.discard();
     if (element != null) 
       internal.addExtension(element);
+    return this;
   }
 
   public Element setName(String name) {
@@ -102,12 +103,13 @@ public abstract class PersonWrapper
     }
   }
 
-  public void setNameElement(Element element) {
+  public Person setNameElement(Element element) {
     ExtensibleElement internal = getExtInternal();
     Element el = getNameElement();
     if (el != null) el.discard();
     if (element != null) 
       internal.addExtension(element);
+    return this;
   }
 
   public IRIElement setUri(String uri) {
@@ -124,12 +126,13 @@ public abstract class PersonWrapper
     }
   }
 
-  public void setUriElement(IRIElement element) {
+  public Person setUriElement(IRIElement element) {
     ExtensibleElement internal = getExtInternal();
     Element el = getUriElement();
     if (el != null) el.discard();
     if (element != null) 
       internal.addExtension(element);
+    return this;
   }
 
 }

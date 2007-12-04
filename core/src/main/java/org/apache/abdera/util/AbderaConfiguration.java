@@ -138,10 +138,11 @@ public final class AbderaConfiguration
   /**
    * Registers an ExtensionFactory implementation.
    */
-  public void addExtensionFactory(ExtensionFactory factory) {
+  public AbderaConfiguration addExtensionFactory(ExtensionFactory factory) {
     List<ExtensionFactory> factories = getExtensionFactories();
     if (!factories.contains(factory))
       factories.add(factory);
+    return this;
   }
   
   /**
@@ -164,9 +165,10 @@ public final class AbderaConfiguration
   /**
    * Registers a NamedWriter implementation
    */
-  public void addNamedWriter(NamedWriter writer) {
+  public AbderaConfiguration addNamedWriter(NamedWriter writer) {
     Map<String,NamedWriter> writers = getNamedWriters();
     writers.put(writer.getName(), writer);
+    return this;
   }
   
   /**
@@ -230,16 +232,18 @@ public final class AbderaConfiguration
   /**
    * Registers a NamedParser implementation
    */
-  public void addNamedParser(NamedParser parser) {
+  public AbderaConfiguration addNamedParser(NamedParser parser) {
     Map<String,NamedParser> parsers = getNamedParsers();
     parsers.put(parser.getName(), parser);
+    return this;
   }
 
   /**
    * Registers a StreamWriter implementation
    */
-  public void addStreamWriter(Class<? extends StreamWriter> sw) {
+  public AbderaConfiguration addStreamWriter(Class<? extends StreamWriter> sw) {
     getStreamWriters().put(getName(sw), sw);
+    return this;
   }
   
   /**

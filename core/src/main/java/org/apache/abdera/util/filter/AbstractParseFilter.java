@@ -37,16 +37,19 @@ public abstract class AbstractParseFilter
     return (flags & flag) == flag;
   }
   
-  public void setIgnoreComments(boolean ignore) {
+  public ParseFilter setIgnoreComments(boolean ignore) {
     toggle(ignore,COMMENTS);
+    return this;
   }
 
-  public void setIgnoreWhitespace(boolean ignore) {
+  public ParseFilter setIgnoreWhitespace(boolean ignore) {
     toggle(ignore,(byte)WHITESPACE);
+    return this;
   }
   
-  public void setIgnoreProcessingInstructions(boolean ignore) {
+  public ParseFilter setIgnoreProcessingInstructions(boolean ignore) {
     toggle(ignore,(byte)PI);
+    return this;
   }
   
   public boolean getIgnoreComments() {

@@ -105,7 +105,7 @@ public interface Link
    * @param href The href IRI
    * @throws IRISyntaxException if the href is malformed
    */
-  void setHref(String href);
+  Link setHref(String href);
   
   /**
    * <p>RFC4287: atom:link elements MAY have a "rel" attribute that indicates the link
@@ -141,7 +141,7 @@ public interface Link
    * behavioral requirements on Atom Processors.</p>
    * @param rel The rel attribute value
    */
-  void setRel(String rel);
+  Link setRel(String rel);
   
   /**
    * RFC4287: On the link element, the "type" attribute's value is an advisory
@@ -167,7 +167,7 @@ public interface Link
    * @param type The link type
    * @throws MimeTypeParseException if the type is malformed
    */
-  void setMimeType(String type);
+  Link setMimeType(String type);
   
   /**
    * RFC4287: The "hreflang" attribute's content describes the language of the
@@ -187,7 +187,7 @@ public interface Link
    * language tag [RFC3066].
    * @param lang The hreflang value
    */
-  void setHrefLang(String lang);
+  Link setHrefLang(String lang);
   
   /**
    * RFC4287: The "title" attribute conveys human-readable information about the
@@ -207,7 +207,7 @@ public interface Link
    * MAY have a title attribute.
    * @param title The title attribute
    */
-  void setTitle(String title);
+  Link setTitle(String title);
   
   /**
    * RFC4287: The "length" attribute indicates an advisory length of the linked
@@ -231,6 +231,6 @@ public interface Link
    * attribute.
    * @param length The length attribute value
    */
-  void setLength(long length);
+  Link setLength(long length);
   
 }

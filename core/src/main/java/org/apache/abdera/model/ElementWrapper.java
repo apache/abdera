@@ -36,6 +36,7 @@ import org.apache.abdera.writer.WriterOptions;
 /**
  * Base implementation used for static extensions.
  */
+@SuppressWarnings("unchecked") 
 public abstract class ElementWrapper 
   implements Element {
 
@@ -52,9 +53,10 @@ public abstract class ElementWrapper
       ((ElementWrapper)el).getInternal() : el;
   }
 
-  public void addComment(
+  public <T extends Base>T addComment(
     String value) {
       internal.addComment(value);
+      return (T)this;
   }
 
   public Object clone() {
@@ -68,8 +70,9 @@ public abstract class ElementWrapper
     }
   }
 
-  public void declareNS(String uri, String prefix) {
+  public <T extends Element>T declareNS(String uri, String prefix) {
     internal.declareNS(uri, prefix);
+    return (T)this;
   }
 
   public void discard() {
@@ -163,44 +166,54 @@ public abstract class ElementWrapper
     return internal.getText();
   }
 
-  public void removeAttribute(QName qname) {
+  public <T extends Element>T removeAttribute(QName qname) {
     internal.removeAttribute(qname);
+    return (T)this;
   }
 
-  public void removeAttribute(String name) {
+  public <T extends Element>T removeAttribute(String name) {
     internal.removeAttribute(name);
+    return (T)this;
   }
   
-  public void setAttributeValue(QName qname, String value) {
+  public <T extends Element>T setAttributeValue(QName qname, String value) {
     internal.setAttributeValue(qname, value);
+    return (T)this;
   }
 
-  public void setAttributeValue(String name, String value) {
+  public <T extends Element>T setAttributeValue(String name, String value) {
     internal.setAttributeValue(name, value);
+    return (T)this;
   }
 
-  public void setBaseUri(IRI base) {
+  public <T extends Element>T setBaseUri(IRI base) {
     internal.setBaseUri(base);
+    return (T)this;
   }
 
-  public void setBaseUri(String base) {
+  public <T extends Element>T setBaseUri(String base) {
     internal.setBaseUri(base);
+    return (T)this;
   }
 
-  public void setLanguage(String language) {
+  public <T extends Element>T setLanguage(String language) {
     internal.setLanguage(language);
+    return (T)this;
   }
 
-  public void setParentElement(Element parent) {
+  public <T extends Element>T setParentElement(Element parent) {
     internal.setParentElement(parent);
+    return (T)this;
   }
 
-  public void setText(String text) {
+  public <T extends Element>T setText(String text) {
     internal.setText(text);
+    return (T)this;
   }
 
-  public void setText(DataHandler handler) {
+  public <T extends Element>T setText(DataHandler handler) {
     internal.setText(handler);
+    return (T)this;
   }
   
   public void writeTo(OutputStream out) throws IOException {
@@ -241,8 +254,9 @@ public abstract class ElementWrapper
     return internal.getMustPreserveWhitespace();
   }
 
-  public void setMustPreserveWhitespace(boolean preserve) {
+  public <T extends Element>T setMustPreserveWhitespace(boolean preserve) {
     internal.setMustPreserveWhitespace(preserve);
+    return (T)this;
   }
 
   public void writeTo(OutputStream out, WriterOptions options) throws IOException {
@@ -289,8 +303,9 @@ public abstract class ElementWrapper
     return internal.getDefaultWriterOptions();
   }
   
-  public void complete() {
+  public <T extends Base>T complete() {
     internal.complete();
+    return (T)this;
   }
   
   public Iterator<Element> iterator() {

@@ -112,9 +112,10 @@ public class FOMService
     return workspace;
   }
 
-  public void addWorkspace(Workspace workspace) {
+  public Service addWorkspace(Workspace workspace) {
     complete();
     addChild((OMElement) workspace);
+    return this;
   }
   
   public Workspace addWorkspace(String title) {

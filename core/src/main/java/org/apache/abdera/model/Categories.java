@@ -47,7 +47,7 @@ public interface Categories
    * Sets the value of the href attribute.
    * @param href The location of an Atompub Categories Document
    */
-  void setHref(String href);
+  Categories setHref(String href);
   
   /**
    * If an app:categories element is marked as fixed, then the set of atom:category
@@ -63,7 +63,7 @@ public interface Categories
    * false, the fixed attribute will be removed from the app:categories element.
    * @param fixed True if the app:categories listing is fixed
    */
-  void setFixed(boolean fixed);
+  Categories setFixed(boolean fixed);
   
   /**
    * The app:categories element may specify a default scheme attribute for listed
@@ -76,7 +76,7 @@ public interface Categories
    * Sets the default scheme for this listing of categories 
    * @param scheme The default scheme used for this listing of categories
    */
-  void setScheme(String scheme);
+  Categories setScheme(String scheme);
 
   /**
    * Lists the complete set of categories
@@ -110,7 +110,7 @@ public interface Categories
    * Add an atom:category to the listing
    * @param category The atom:category to add to the listing
    */
-  void addCategory(Category category);
+  Categories addCategory(Category category);
 
   /**
    * Create and add an atom:category to the listing

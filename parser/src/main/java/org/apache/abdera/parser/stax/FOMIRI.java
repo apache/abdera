@@ -20,6 +20,7 @@ package org.apache.abdera.parser.stax;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.model.IRIElement;
 import org.apache.abdera.util.URIHelper;
 import org.apache.axiom.om.OMContainer;
@@ -73,23 +74,24 @@ public class FOMIRI
     return _getUriValue(getText());
   }
 
-  public void setValue(String iri) {
+  public IRIElement setValue(String iri) {
     complete();
     if (iri != null)
-      setText((new IRI(iri)).toString());
+      ((Element)this).setText((new IRI(iri)).toString());
     else
       _removeAllChildren();
-
+    return this;
   }
   
   public IRI getResolvedValue() {
     return _resolve(getResolvedBaseUri(), getValue());
   }
 
-  public void setNormalizedValue(String uri) {
+  public IRIElement setNormalizedValue(String uri) {
     if (uri != null)
       setValue(URIHelper.normalize(uri));
     else 
       setValue(null);
+    return this;
   }
 }

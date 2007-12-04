@@ -55,7 +55,7 @@ public class RssSource
     self = new RssLink(factory,qname);
   }
 
-  public void addAuthor(Person person) {
+  public <T extends Source>T addAuthor(Person person) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -67,7 +67,7 @@ public class RssSource
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void addCategory(Category category) {
+  public <T extends Source>T addCategory(Category category) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -79,7 +79,7 @@ public class RssSource
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void addContributor(Person person) {
+  public <T extends Source>T addContributor(Person person) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -91,7 +91,7 @@ public class RssSource
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void addLink(Link link) {
+  public <T extends Source>T addLink(Link link) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -255,11 +255,11 @@ public class RssSource
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setCollection(Collection collection) {
+  public <T extends Source>T setCollection(Collection collection) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setGenerator(Generator generator) {
+  public <T extends Source>T setGenerator(Generator generator) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -271,7 +271,7 @@ public class RssSource
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setIconElement(IRIElement iri) {
+  public <T extends Source>T setIconElement(IRIElement iri) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -283,7 +283,7 @@ public class RssSource
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setIdElement(IRIElement id) {
+  public <T extends Source>T setIdElement(IRIElement id) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -291,7 +291,7 @@ public class RssSource
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setLogoElement(IRIElement iri) {
+  public <T extends Source>T setLogoElement(IRIElement iri) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -315,7 +315,7 @@ public class RssSource
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setRightsElement(Text text) {
+  public <T extends Source>T setRightsElement(Text text) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -339,7 +339,7 @@ public class RssSource
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setSubtitleElement(Text text) {
+  public <T extends Source>T setSubtitleElement(Text text) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -359,7 +359,7 @@ public class RssSource
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setTitleElement(Text text) {
+  public <T extends Source>T setTitleElement(Text text) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -371,7 +371,7 @@ public class RssSource
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setUpdatedElement(DateTime dateTime) {
+  public <T extends Source>T setUpdatedElement(DateTime dateTime) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 

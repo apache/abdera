@@ -63,29 +63,29 @@ public interface DateTime
    * Sets the content value of the element
    * @param dateTime the Atom Date value
    */
-  void setValue(AtomDate dateTime);
+  DateTime setValue(AtomDate dateTime);
   
   /**
    * Sets the content value of the element
    * @param date The java.util.Date value
    */
-  void setDate(Date date);
+  DateTime setDate(Date date);
   
   /**
    * Sets the content value of the element
    * @param date The java.util.Calendar value
    */
-  void setCalendar(Calendar date);
+  DateTime setCalendar(Calendar date);
   
   /**
    * Sets the content value of the element
    * @param date the number of milliseconds since January 1, 1970, 00:00:00 GMT
    */
-  void setTime(long date);
+  DateTime setTime(long date);
   
   /**
    * Sets the content value of the element
    * @param date The serialized string value
    */
-  void setString(String date);
+  DateTime setString(String date);
 }

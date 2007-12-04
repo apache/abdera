@@ -59,7 +59,7 @@ public class Error
    * The code should typically match the HTTP status code; however, certain
    * application scenarios may require the use of a different code
    */
-  public void setCode(int code) {
+  public Error setCode(int code) {
     if (code > -1) {
       Element element = getExtension(CODE);
       if (element != null) {
@@ -71,6 +71,7 @@ public class Error
       Element element = getExtension(CODE);
       if (element != null) element.discard();
     }
+    return this;
   }
  
   /**
@@ -83,7 +84,7 @@ public class Error
   /**
    * Human-readable, language-sensitive description of the error
    */
-  public void setMessage(String message) {
+  public Error setMessage(String message) {
     if (message != null) {
       Element element = getExtension(MESSAGE);
       if (element != null) {
@@ -95,6 +96,7 @@ public class Error
       Element element = getExtension(MESSAGE);
       if (element != null) element.discard();
     }
+    return this;
   }
   
   /**
@@ -109,18 +111,14 @@ public class Error
    * Create a new Error object
    */
   public static Error create(Abdera abdera, int code, String message) {
-    Document<Error> doc = abdera.getFactory().newDocument();
-    Error error = abdera.getFactory().newElement(ERROR,doc);
-    error.setCode(code);
-    error.setMessage(message);
-    return error;
+    return create(abdera,code,message,null);
   }
   
   public static Error create(Abdera abdera, int code, String message, Throwable t) {
     Document<Error> doc = abdera.getFactory().newDocument();
     Error error = abdera.getFactory().newElement(ERROR,doc);
-    error.setCode(code);
-    error.setMessage(message);
+    error.setCode(code)
+         .setMessage(message);
     return error;
   }
   

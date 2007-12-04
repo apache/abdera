@@ -351,8 +351,9 @@ public class AbderaClient {
   /**
    * Configure the client to use preemptive authentication (HTTP Basic Authentication only)
    */
-  public void usePreemptiveAuthentication(boolean val) {
+  public AbderaClient usePreemptiveAuthentication(boolean val) {
     client.getParams().setAuthenticationPreemptive(val);
+    return this;
   }
   
   private boolean useCache(
@@ -507,7 +508,7 @@ public class AbderaClient {
     return MethodHelper.createDefaultRequestOptions();
   }
   
-  public void addCredentials(
+  public AbderaClient addCredentials(
     String target,
     String realm,
     String scheme,
@@ -528,18 +529,21 @@ public class AbderaClient {
         (scheme != null) ? scheme : AuthScope.ANY_SCHEME);
     client.getState().setCredentials(
       scope, credentials);
+    return this;
   }
 
-  public void setAuthenticationSchemeDefaults() {
+  public AbderaClient setAuthenticationSchemeDefaults() {
     List authPrefs = AuthPolicy.getDefaultAuthPrefs();
     client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
+    return this;
   }
   
-  public void setAuthenticationSchemePriority(String... scheme) {
+  public AbderaClient setAuthenticationSchemePriority(String... scheme) {
     List authPrefs = java.util.Arrays.asList(scheme);
     client.getParams().setParameter(
       AuthPolicy.AUTH_SCHEME_PRIORITY, 
       authPrefs);
+    return this;
   }
   
   public List getAuthenticationSchemePriority() {
@@ -558,19 +562,21 @@ public class AbderaClient {
    *   closure of all HTTP connections in the connection pool.
    * </blockquote>
    */
-  public void teardown() {
+  public AbderaClient teardown() {
     ((MultiThreadedHttpConnectionManager)
       client.getHttpConnectionManager()).shutdown();
+    return this;
   }
 
   /**
    * Set the maximum number of connections allowed for a single host
    */
-  public void setMaxConnectionsPerHost(int max) {
+  public AbderaClient setMaxConnectionsPerHost(int max) {
     Map<HostConfiguration,Integer> m = new HashMap<HostConfiguration,Integer>();
     m.put(HostConfiguration.ANY_HOST_CONFIGURATION, max);
     client.getHttpConnectionManager().getParams().setParameter(
       HttpConnectionManagerParams.MAX_HOST_CONNECTIONS, m);
+    return this;
   }
   
   /**
@@ -590,9 +596,10 @@ public class AbderaClient {
   /**
    * Return the maximum number of connections allowed for the client
    */
-  public void setMaxConnectionsTotal(int max) {
+  public AbderaClient setMaxConnectionsTotal(int max) {
     client.getHttpConnectionManager().getParams().setIntParameter(
       HttpConnectionManagerParams.MAX_TOTAL_CONNECTIONS, max);
+    return this;
   }
   
   /**
@@ -607,26 +614,28 @@ public class AbderaClient {
   /**
    * Configure the client to use the specified proxy
    */
-  public void setProxy(
+  public AbderaClient setProxy(
     String host, 
     int port) {
       client.getHostConfiguration().setProxy(host, port);
+      return this;
   }
   
   /**
    * Specify the auth credentials for the proxy server
    */
-  public void setProxyCredentials(
+  public AbderaClient setProxyCredentials(
       String host,
       int port,
       Credentials credentials) {
     setProxyCredentials(host,port,null,null,credentials);
+    return this;
   }
   
   /**
    * Specify the auth credentials for the proxy server
    */
-  public void setProxyCredentials(
+  public AbderaClient setProxyCredentials(
     String host,
     int port,
     String realm,
@@ -642,23 +651,25 @@ public class AbderaClient {
           scheme != null ? scheme : AuthScope.ANY_SCHEME);
       client.getState().setProxyCredentials(
         scope, credentials);
+      return this;
   }
   
   /**
    * Manually add cookies
    */
-  public void addCookie(
+  public AbderaClient addCookie(
     String domain, 
     String name, 
     String value) {
       Cookie cookie = new Cookie(domain,name,value);
       client.getState().addCookie(cookie);
+      return this;
   }
   
   /**
    * Manually add cookies
    */
-  public void addCookie(
+  public AbderaClient addCookie(
     String domain, 
     String name, 
     String value, 
@@ -667,12 +678,13 @@ public class AbderaClient {
     boolean secure) {
       Cookie cookie = new Cookie(domain,name,value,path,expires,secure);
       client.getState().addCookie(cookie);
+      return this;
   }  
 
   /**
    * Manually add cookies
    */
-  public void addCookie(
+  public AbderaClient addCookie(
     String domain, 
     String name, 
     String value, 
@@ -681,20 +693,23 @@ public class AbderaClient {
     boolean secure) {
       Cookie cookie = new Cookie(domain,name,value,path,maxAge,secure);
       client.getState().addCookie(cookie);
+      return this;
   }  
 
   /**
    * Manually add cookies
    */
-  public void addCookies(Cookie cookie) {
+  public AbderaClient addCookies(Cookie cookie) {
     client.getState().addCookie(cookie);
+    return this;
   }
   
   /**
    * Manually add cookies
    */
-  public void addCookies(Cookie... cookies) {
+  public AbderaClient addCookies(Cookie... cookies) {
     client.getState().addCookies(cookies);
+    return this;
   }
   
   /**
@@ -731,7 +746,26 @@ public class AbderaClient {
   /**
    * Clear the cookies
    */
-  public void clearCookies() {
+  public AbderaClient clearCookies() {
     client.getState().clearCookies();
+    return this;
+  }
+  
+  public AbderaClient setConnectionTimeout(long timeout) {
+    client.getParams().setConnectionManagerTimeout(timeout);
+    return this;
+  }
+  
+  public AbderaClient setSocketTimeout(int timeout) {
+    client.getParams().setSoTimeout(timeout);
+    return this;
+  }
+  
+  public long getConnectionTimeout() {
+    return client.getParams().getConnectionManagerTimeout();
+  }
+  
+  public int getSocketTimeout() {
+    return client.getParams().getSoTimeout();
   }
 }

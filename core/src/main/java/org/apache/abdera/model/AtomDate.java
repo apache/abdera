@@ -122,32 +122,36 @@ public final class AtomDate
    * Sets the value of the Atom date using the serialized string form
    * @param value The serialized string form of the date 
    */
-  public void setValue(String value) {
+  public AtomDate setValue(String value) {
     this.value = parse(value);
+    return this;
   }
 
   /**
    * Sets the value of the Atom date using java.util.Date
    * @param date A java.util.Date
    */
-  public void setValue(Date date) {
+  public AtomDate setValue(Date date) {
     this.value = date;
+    return this;
   }
 
   /**
    * Sets the value of the Atom date using java.util.Calendar
    * @param calendar a java.util.Calendar
    */
-  public void setValue(Calendar calendar) {
+  public AtomDate setValue(Calendar calendar) {
     this.value = calendar.getTime();
+    return this;
   }
   
   /**
    * Sets the value of the Atom date using the number of milliseconds since January 1, 1970, 00:00:00 GMT
    * @param timestamp The number of milliseconds since January 1, 1970, 00:00:00 GMT
    */
-  public void setValue(long timestamp) {
+  public AtomDate setValue(long timestamp) {
     this.value = new Date(timestamp);
+    return this;
   }
   
   /**

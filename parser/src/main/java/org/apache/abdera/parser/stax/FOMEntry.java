@@ -112,9 +112,10 @@ public class FOMEntry
     return _getChildrenAsSet(AUTHOR);
   }
 
-  public void addAuthor(Person person) {
+  public Entry addAuthor(Person person) {
     complete();
     addChild((OMElement)person);
+    return this;
   }
   
   public Person addAuthor(String name) {
@@ -143,7 +144,7 @@ public class FOMEntry
     return FOMHelper.getCategories(this, scheme);
   }
 
-  public void addCategory(Category category) {
+  public Entry addCategory(Category category) {
     complete();
     Element el = category.getParentElement();
     if (el != null && el instanceof Categories) {
@@ -157,6 +158,7 @@ public class FOMEntry
       }
     }
     addChild((OMElement)category);
+    return this;
   }
 
   public Category addCategory(String term) {
@@ -181,13 +183,14 @@ public class FOMEntry
     return (Content)getFirstChildWithName(CONTENT);
   }
 
-  public void setContentElement(Content content) {
+  public Entry setContentElement(Content content) {
     complete();
     if (content != null) {
       _setChild(CONTENT, (OMElement)content);
     } else {
       _removeChildren(CONTENT, false);
     }
+    return this;
   }
   
   /**
@@ -326,9 +329,10 @@ public class FOMEntry
     return _getChildrenAsSet(CONTRIBUTOR);
   }
 
-  public void addContributor(Person person) {
+  public Entry addContributor(Person person) {
     complete();
     addChild((OMElement)person);
+    return this;
   }
 
   public Person addContributor(String name) {
@@ -356,12 +360,13 @@ public class FOMEntry
     return (IRIElement)getFirstChildWithName(ID);
   }
 
-  public void setIdElement(IRIElement id) {
+  public Entry setIdElement(IRIElement id) {
     complete();
     if (id != null)
       _setChild(ID, (OMElement)id);
     else
       _removeChildren(ID, false);
+    return this;
   }
 
   public IRI getId() {
@@ -408,9 +413,10 @@ public class FOMEntry
     return FOMHelper.getLinks(this, rels);
   }
 
-  public void addLink(Link link) {
+  public Entry addLink(Link link) {
     complete();
     addChild((OMElement)link);
+    return this;
   }
 
   public Link addLink(String href) {
@@ -450,12 +456,13 @@ public class FOMEntry
     return (DateTime)getFirstChildWithName(PUBLISHED);
   }
 
-  public void setPublishedElement(DateTime dateTime) {
+  public Entry setPublishedElement(DateTime dateTime) {
     complete();
     if (dateTime != null)
       _setChild(PUBLISHED, (OMElement)dateTime);
     else
       _removeChildren(PUBLISHED, false);
+    return this;
   }
 
   public Date getPublished() {
@@ -493,9 +500,10 @@ public class FOMEntry
     return getTextElement(RIGHTS);
   }
 
-  public void setRightsElement(Text text) {
+  public Entry setRightsElement(Text text) {
     complete();
     setTextElement(RIGHTS, text, false);
+    return this;
   }
   
   public Text setRights(String value) {
@@ -538,7 +546,7 @@ public class FOMEntry
     return (Source)getFirstChildWithName(SOURCE);
   }
 
-  public void setSource(Source source) {
+  public Entry setSource(Source source) {
     complete();
     if (source != null) {
       if (source instanceof Feed)
@@ -547,15 +555,17 @@ public class FOMEntry
     } else {
       _removeChildren(SOURCE, false);
     }
+    return this;
   }
 
   public Text getSummaryElement() {
     return getTextElement(SUMMARY);
   }
 
-  public void setSummaryElement(Text text) {
+  public Entry setSummaryElement(Text text) {
     complete();
     setTextElement(SUMMARY, text, false);
+    return this;
   }
   
   public Text setSummary(String value) {
@@ -598,9 +608,10 @@ public class FOMEntry
     return getTextElement(TITLE);
   }
 
-  public void setTitleElement(Text title) {
+  public Entry setTitleElement(Text title) {
     complete();
     setTextElement(TITLE, title, false);
+    return this;
   }
 
   public Text setTitle(String value) {
@@ -643,12 +654,13 @@ public class FOMEntry
     return (DateTime)getFirstChildWithName(UPDATED);
   }
 
-  public void setUpdatedElement(DateTime updated) {
+  public Entry setUpdatedElement(DateTime updated) {
     complete();
     if (updated != null)
       _setChild(UPDATED, (OMElement)updated);
     else 
       _removeChildren(UPDATED, false);
+    return this;
   }
 
   public Date getUpdated() {
@@ -746,13 +758,14 @@ public class FOMEntry
     return control;
   }
 
-  public void setControl(Control control) {
+  public Entry setControl(Control control) {
     complete();
     _removeChildren(PRE_RFC_CONTROL,true);
     if (control != null) 
       _setChild(CONTROL, (OMElement)control);
     else 
       _removeChildren(CONTROL, false);
+    return this;
   }
 
   public Link getLink(String rel) {
@@ -878,13 +891,14 @@ public class FOMEntry
     return (link != null) ? link.getResolvedHref() : null;
   }
   
-  public void setDraft(boolean draft) {
+  public Entry setDraft(boolean draft) {
     complete();
     Control control = getControl();
     if (control == null && draft) {
       control = ((FOMFactory)factory).newControl(this);
     }
     if (control != null) control.setDraft(draft);
+    return this;
   }
   
   /**

@@ -42,8 +42,9 @@ public class FOMComment
     return super.getValue();
   }
   
-  public void setText(String text) {
+  public Comment setText(String text) {
     super.setValue(text);
+    return this;
   }
   
   public <T extends Base>T getParentElement() {

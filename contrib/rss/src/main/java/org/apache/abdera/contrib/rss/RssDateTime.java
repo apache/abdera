@@ -79,27 +79,27 @@ public class RssDateTime
   }
 
   @Override
-  public void setCalendar(Calendar date) {
+  public DateTime setCalendar(Calendar date) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
   @Override
-  public void setDate(Date date) {
+  public DateTime setDate(Date date) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
   @Override
-  public void setString(String date) {
+  public DateTime setString(String date) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
   @Override
-  public void setTime(long date) {
+  public DateTime setTime(long date) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
   @Override
-  public void setValue(AtomDate dateTime) {
+  public DateTime setValue(AtomDate dateTime) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 

@@ -81,7 +81,7 @@ public interface Control
    * 
    * @param draft true if app:draft should be set to "yes"
    */
-  void setDraft(boolean draft);
+  Control setDraft(boolean draft);
   
   /**
    * <p>Removes the draft setting completely from the control element.</p>
@@ -92,6 +92,6 @@ public interface Control
    * If the "pub:draft" element is missing then the value MUST be 
    * understood to be "no".  The pub:draft element MAY be ignored.</p>
    */
-  void unsetDraft();
+  Control unsetDraft();
   
 }

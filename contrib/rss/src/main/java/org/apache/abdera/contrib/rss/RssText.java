@@ -53,19 +53,19 @@ public class RssText
     return getValue();
   }
 
-  public void setTextType(Type type) {
+  public Text setTextType(Type type) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setValue(String value) {
+  public Text setValue(String value) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setValueElement(Div value) {
+  public Text setValueElement(Div value) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setWrappedValue(String wrappedValue) {
+  public Text setWrappedValue(String wrappedValue) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 

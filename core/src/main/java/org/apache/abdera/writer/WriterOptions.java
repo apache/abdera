@@ -29,7 +29,7 @@ public interface WriterOptions extends Cloneable {
   /**
    * When writing, use the specified compression codecs
    */
-  void setCompressionCodecs(CompressionCodec... codecs);
+  WriterOptions setCompressionCodecs(CompressionCodec... codecs);
 
   Object clone() throws CloneNotSupportedException;
 
@@ -41,7 +41,7 @@ public interface WriterOptions extends Cloneable {
   /**
    * The character encoding to use for the output
    */
-  void setCharset(String charset);
+  WriterOptions setCharset(String charset);
 
   /**
    * True if the writer should close the output stream or writer when finished
@@ -51,5 +51,5 @@ public interface WriterOptions extends Cloneable {
   /**
    * True if the writer should close the output stream or writer when finished
    */
-  void setAutoClose(boolean autoclose);
+  WriterOptions setAutoClose(boolean autoclose);
 }

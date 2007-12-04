@@ -97,7 +97,7 @@ public class RssPerson
   }
 
   @Override
-  public void setEmailElement(Element element) {
+  public Person setEmailElement(Element element) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -107,7 +107,7 @@ public class RssPerson
   }
 
   @Override
-  public void setNameElement(Element element) {
+  public Person setNameElement(Element element) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -117,7 +117,7 @@ public class RssPerson
   }
 
   @Override
-  public void setUriElement(IRIElement element) {
+  public Person setUriElement(IRIElement element) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 

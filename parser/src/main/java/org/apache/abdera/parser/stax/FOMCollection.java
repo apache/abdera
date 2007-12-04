@@ -137,12 +137,13 @@ public class FOMCollection
     return _resolve(getResolvedBaseUri(), getHref());
   }
   
-  public void setHref(String href) {
+  public Collection setHref(String href) {
     complete();
     if (href != null)
       setAttributeValue(HREF, (new IRI(href).toString()));
     else 
       removeAttribute(HREF);
+    return this;
   }
   
   public String[] getAccept(){
@@ -164,11 +165,11 @@ public class FOMCollection
     }
   }
 
-  public void setAccept(String mediaRange) {
-    setAccept(new String[] {mediaRange});
+  public Collection setAccept(String mediaRange) {
+    return setAccept(new String[] {mediaRange});
   }
   
-  public void setAccept(String... mediaRanges) {
+  public Collection setAccept(String... mediaRanges) {
     complete();
     if (mediaRanges != null && mediaRanges.length > 0) {
       _removeChildren(ACCEPT, true);
@@ -193,13 +194,14 @@ public class FOMCollection
       _removeChildren(ACCEPT, true);
       _removeChildren(PRE_RFC_ACCEPT,true);
     }
+    return this;
   }
   
-  public void addAccepts(String mediaRange) {
-    addAccepts(new String[] {mediaRange});
+  public Collection addAccepts(String mediaRange) {
+    return addAccepts(new String[] {mediaRange});
   }
   
-  public void addAccepts(String... mediaRanges) {
+  public Collection addAccepts(String... mediaRanges) {
     complete();
     if (mediaRanges != null) {
       for (String type : mediaRanges) {
@@ -210,18 +212,19 @@ public class FOMCollection
         }
       }
     }
+    return this;
   }
   
-  public void addAcceptsEntry() {
-    addAccepts("application/atom+xml;type=entry");
+  public Collection addAcceptsEntry() {
+    return addAccepts("application/atom+xml;type=entry");
   }
   
-  public void setAcceptsEntry() {
-    setAccept("application/atom+xml;type=entry");
+  public Collection setAcceptsEntry() {
+    return setAccept("application/atom+xml;type=entry");
   }
   
-  public void setAcceptsNothing() {
-    setAccept("");
+  public Collection setAcceptsNothing() {
+    return setAccept("");
   }
   
   public boolean acceptsEntry() {
@@ -250,9 +253,10 @@ public class FOMCollection
     return ((FOMFactory)factory).newCategories(this);
   }
   
-  public void addCategories(Categories categories) {
+  public Collection addCategories(Categories categories) {
     complete();
     addChild((OMElement)categories);
+    return this;
   }
 
   public Categories addCategories(

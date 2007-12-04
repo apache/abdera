@@ -90,12 +90,13 @@ public class FOMPerson
     return (Element)getFirstChildWithName(NAME);
   }
 
-  public void setNameElement(Element element) {
+  public Person setNameElement(Element element) {
     complete();
     if (element != null)
       _setChild(NAME, (OMElement)element);
     else 
       _removeChildren(NAME, false);
+    return this;
   }
 
   public Element setName(String name) {
@@ -121,12 +122,13 @@ public class FOMPerson
     return (Element)getFirstChildWithName(EMAIL);
   }
 
-  public void setEmailElement(Element element) {
+  public Person setEmailElement(Element element) {
     complete();
     if (element != null)
       _setChild(EMAIL, (OMElement)element);
     else 
       _removeChildren(EMAIL, false);
+    return this;
   }
 
   public Element setEmail(String email) {
@@ -152,12 +154,13 @@ public class FOMPerson
     return (IRIElement)getFirstChildWithName(URI);
   }
 
-  public void setUriElement(IRIElement uri) {
+  public Person setUriElement(IRIElement uri) {
     complete();
     if (uri != null) 
       _setChild(URI, (OMElement)uri);
     else 
       _removeChildren(URI, false);
+    return this;
   }
 
   public IRIElement setUri(String uri) {

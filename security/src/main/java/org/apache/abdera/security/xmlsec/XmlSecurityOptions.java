@@ -36,8 +36,10 @@ public abstract class XmlSecurityOptions
     return (parser != null) ? parser : abdera.getParser();
   }
 
-  public void setParser(Parser parser) {
+  @SuppressWarnings("unchecked") 
+  public <T extends SecurityOptions>T setParser(Parser parser) {
     this.parser = parser;
+    return (T)this;
   }
 
 }

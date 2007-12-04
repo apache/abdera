@@ -45,19 +45,19 @@ public interface Div
    * Sets the value of the div element's id attribute
    * @param id The value of the id attribute
    */
-  void setId(String id);
+  Div setId(String id);
   
   /**
    * Set the value of the div element's title attribute
    * @param title The value of the title attribute
    */
-  void setTitle(String title);
+  Div setTitle(String title);
   
   /**
    * Sets the array of class attribute values on the div
    * @param classes A listing of class attribute values
    */
-  void setXhtmlClass(String[] classes);
+  Div setXhtmlClass(String[] classes);
   
   /**
    * Returns the value of the div element

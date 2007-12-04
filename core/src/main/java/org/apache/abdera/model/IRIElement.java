@@ -18,6 +18,7 @@
 package org.apache.abdera.model;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * <p>The IRI interface provides a common base for a set of feed and 
@@ -38,14 +39,14 @@ public interface IRIElement
    * @param iri The iri value
    * @throws IRISyntaxException  if the value is malformed
    */
-  void setValue(String iri);
+  IRIElement setValue(String iri);
   
   /**
    * Set the value of this element using the normalization as specified in RFC4287
    * @param iri A non-normalized IRI
    * @throws IRISyntaxException if the iri is malformed
    */
-  void setNormalizedValue(String iri);
+  IRIElement setNormalizedValue(String iri);
   
   /**
    * Returns the value of the element resolved against the current

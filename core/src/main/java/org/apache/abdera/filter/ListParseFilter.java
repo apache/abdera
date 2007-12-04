@@ -28,7 +28,7 @@ public interface ListParseFilter
   /**
    * Add an element QName to the parse filter
    */
-  void add(QName qname);
+  ListParseFilter add(QName qname);
 
   /**
    * Returns true if the given qname has been added to the filter
@@ -38,7 +38,7 @@ public interface ListParseFilter
   /**
    * Adds an attribute to the parse filter
    */
-  void add(QName parent, QName attribute);
+  ListParseFilter add(QName parent, QName attribute);
 
   /**
    * Returns true if the given attribute has been added to the filter

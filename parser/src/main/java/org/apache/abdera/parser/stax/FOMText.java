@@ -29,6 +29,7 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
+import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
 public class FOMText 
@@ -91,16 +92,17 @@ public class FOMText
     return type;
   }
 
-  public void setTextType(Type type) {
+  public Text setTextType(Type type) {
     complete();
     init(type);
+    return this;
   }
   
   public Div getValueElement() {
     return (Div)this.getFirstChildWithName(Constants.DIV);
   }
 
-  public void setValueElement(Div value) {
+  public Text setValueElement(Div value) {
     complete();
     if (value != null) {
       if (this.getFirstChildWithName(Constants.DIV) != null)
@@ -109,6 +111,7 @@ public class FOMText
       this.setFirstChild((OMElement)value);
     } else
       _removeAllChildren();
+    return this;
   }
 
   public String getValue() {
@@ -124,19 +127,34 @@ public class FOMText
     return val;
   }
 
-  public void setText(String value) {
-    complete();
-    init(Text.Type.TEXT);
-    super.setText(value);
+  public <T extends Element>T setText(String value) {
+    return (T)setText(Text.Type.TEXT,value);
   }
   
-  public void setValue(String value) {
+  public <T extends Element>T setText(Text.Type type, String value) {
+    complete();
+    init(type);
+    if (value != null) {
+      OMNode child = this.getFirstOMChild();
+      while (child != null) {
+          if (child.getType() == OMNode.TEXT_NODE) {
+              child.detach();
+          }
+          child = child.getNextOMSibling();
+      }
+      getOMFactory().createOMText(this, value);
+    } else 
+      _removeAllChildren();
+    return (T)this;
+  }
+  
+  public Text setValue(String value) {
     complete();
     if (value != null) {
       if (Type.TEXT.equals(type)) {
-        super.setText(value);
+        setText(type,value);
       } else if (Type.HTML.equals(type)) {
-        super.setText(value);
+        setText(type,value);
       } else if (Type.XHTML.equals(type)) {
         IRI baseUri = null;
         value = "<div xmlns=\"" + XHTML_NS + "\">" + value + "</div>";
@@ -150,6 +168,7 @@ public class FOMText
       }
     } else 
       _removeAllChildren();
+    return this;
   }
 
   public String getWrappedValue() {
@@ -160,7 +179,7 @@ public class FOMText
     }
   }
 
-  public void setWrappedValue(String wrappedValue) {
+  public Text setWrappedValue(String wrappedValue) {
     complete();
     if (Type.XHTML.equals(type)) {
       IRI baseUri = null;
@@ -175,6 +194,7 @@ public class FOMText
     } else {
       setValue(wrappedValue);
     }
+    return this;
   }
 
   @Override

@@ -24,6 +24,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.DateTime;
+import org.apache.abdera.model.Element;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -102,46 +103,51 @@ public class FOMDateTime
     return value;
   }
 
-  public void setValue(AtomDate dateTime) {
+  public DateTime setValue(AtomDate dateTime) {
     complete();
     value = null;
     if (dateTime != null)
-      setText(dateTime.getValue());
+      ((Element)this).setText(dateTime.getValue());
     else 
       _removeAllChildren();
+    return this;
   }
 
-  public void setDate(Date date) {
+  public DateTime setDate(Date date) {
     complete();
     value = null;
     if (date != null)
-      setText(AtomDate.valueOf(date).getValue());
+      ((Element)this).setText(AtomDate.valueOf(date).getValue());
     else 
       _removeAllChildren();
+    return this;
   }
 
-  public void setCalendar(Calendar date) {
+  public DateTime setCalendar(Calendar date) {
     complete();
     value = null;
     if (date != null)
-      setText(AtomDate.valueOf(date).getValue());
+      ((Element)this).setText(AtomDate.valueOf(date).getValue());
     else 
       _removeAllChildren();
+    return this;
   }
 
-  public void setTime(long date) {
+  public DateTime setTime(long date) {
     complete();
     value = null;
-    setText(AtomDate.valueOf(date).getValue());
+    ((Element)this).setText(AtomDate.valueOf(date).getValue());
+    return this;
   }
 
-  public void setString(String date) {
+  public DateTime setString(String date) {
     complete();
     value = null;
     if (date != null)
-      setText(AtomDate.valueOf(date).getValue());
+      ((Element)this).setText(AtomDate.valueOf(date).getValue());
     else 
       _removeAllChildren();
+    return this;
   }
 
   public Date getDate() {

@@ -150,11 +150,12 @@ public class FOMElement
     super.setParent((OMContainer)parent);
   }
   
-  public void setParentElement(Element parent) {
+  public <T extends Element>T setParentElement(Element parent) {
     if (parent instanceof ElementWrapper) {
       parent = ((ElementWrapper)parent).getInternal();
     }
     super.setParent((FOMElement)parent);
+    return (T)this;
   }
 
   
@@ -226,8 +227,9 @@ public class FOMElement
         ((Document)parent).getLanguage(): null;
   }
 
-  public void setLanguage(String language) {
+  public <T extends Element>T setLanguage(String language) {
     setAttributeValue(LANG,language);
+    return (T)this;
   }
 
   public IRI getBaseUri() {
@@ -261,13 +263,15 @@ public class FOMElement
     return uri;    
   }
   
-  public void setBaseUri(IRI base) {
+  public <T extends Element>T setBaseUri(IRI base) {
     complete();
     setAttributeValue(BASE,_getStringValue(base));
+    return (T)this;
   }
   
-  public void setBaseUri(String base) {
+  public <T extends Element>T setBaseUri(String base) {
     setBaseUri((base != null) ? new IRI(base) : null);
+    return (T)this;
   }
   
   public String getAttributeValue(QName qname) {
@@ -276,7 +280,7 @@ public class FOMElement
     return getMustPreserveWhitespace() || value == null ? value : value.trim();
   }
   
-  public void setAttributeValue(QName qname, String value) {
+  public <T extends Element>T setAttributeValue(QName qname, String value) {
     OMAttribute attr = this.getAttribute(qname);
     if (attr != null && value != null) {
       attr.setAttributeValue(value);
@@ -300,6 +304,7 @@ public class FOMElement
         removeAttribute(attr);
       }
     }
+    return (T)this;
   }
   
   protected <E extends Element>List<E> _getChildrenAsSet(QName qname) {
@@ -411,8 +416,9 @@ public class FOMElement
     return getAttributeValue(new QName(name));
   }
   
-  public void setAttributeValue(String name, String value) {
+  public <T extends Element>T setAttributeValue(String name, String value) {
     setAttributeValue(new QName(name), value);
+    return (T)this;
   }
   
   protected void _setElementValue(QName qname, String value) {
@@ -503,7 +509,7 @@ public class FOMElement
     return text;
   }
   
-  public void setText(String text) {
+  public <T extends Element>T setText(String text) {
     complete();
     if (text != null) {
       OMNode child = this.getFirstOMChild();
@@ -516,6 +522,7 @@ public class FOMElement
       getOMFactory().createOMText(this, text);
     } else 
       _removeAllChildren();
+    return (T)this;
   }
 
   public String getText() {
@@ -576,14 +583,16 @@ public class FOMElement
     return doc.getRoot();
   }
 
-  public void removeAttribute(QName qname) {
+  public <T extends Element>T removeAttribute(QName qname) {
     OMAttribute attr = getAttribute(qname);
     if (attr != null) removeAttribute(attr);
+    return (T)this;
   }
   
-  public void removeAttribute(String name) {
+  public <T extends Element>T removeAttribute(String name) {
     OMAttribute attr = getAttribute(new QName(name));
     if (attr != null) getAttribute(new QName(name));
+    return (T)this;
   }
   
   protected void _removeChildren(QName qname, boolean many) {
@@ -693,8 +702,9 @@ public class FOMElement
 //    super.internalSerialize(writer, bool);
 //  }
   
-  public void addComment(String value) {
+  public <T extends Base>T addComment(String value) {
     factory.createOMComment(this, value);
+    return (T)this;
   }
   
   public Locale getLocale() {
@@ -730,10 +740,11 @@ public class FOMElement
     return null;
   }
   
-  public void declareNS(String uri, String prefix) {
+  public <T extends Element>T declareNS(String uri, String prefix) {
     if (!isDeclared(uri,prefix)) {
       super.declareNamespace(uri,prefix);
     }
+    return (T)this;
   }
   
   protected boolean isDeclared(String ns, String prefix) {
@@ -793,17 +804,19 @@ public class FOMElement
         ((Document)parent).getMustPreserveWhitespace() : true;
   }
   
-  public void setMustPreserveWhitespace(boolean preserve) {
+  public <T extends Element>T setMustPreserveWhitespace(boolean preserve) {
     if (preserve && !getMustPreserveWhitespace()) {
       setAttributeValue(SPACE, "preserve");
     } else if (!preserve && getMustPreserveWhitespace()) {
       setAttributeValue(SPACE, "default");
     }
+    return (T)this;
   }
   
-  public void setText(DataHandler handler) {
+  public <T extends Element>T setText(DataHandler handler) {
     _removeAllChildren();
     addChild(factory.createOMText(handler, true));
+    return (T)this;
   }
 
   public WriterOptions getDefaultWriterOptions() {
@@ -821,8 +834,9 @@ public class FOMElement
    * that the underlying stream is fully consumed, only that
    * that particular element has been completely parsed.
    */
-  public void complete() {
+  public <T extends Base>T complete() {
     if (!isComplete() && builder != null) super.build();
+    return (T)this;
   }
 
   /**

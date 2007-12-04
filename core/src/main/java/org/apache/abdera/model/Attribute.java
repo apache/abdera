@@ -47,7 +47,7 @@ public interface Attribute {
    * 
    * @param text The attribute value
    */
-  void setText(String text);
+  Attribute setText(String text);
   
   /**
    * The Abdera Factory

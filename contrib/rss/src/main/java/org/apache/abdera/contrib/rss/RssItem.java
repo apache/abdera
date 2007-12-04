@@ -59,7 +59,7 @@ public class RssItem
     super(factory, qname);
   }
 
-  public void addAuthor(Person person) {
+  public Entry addAuthor(Person person) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -71,7 +71,7 @@ public class RssItem
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void addCategory(Category category) {
+  public Entry addCategory(Category category) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -83,7 +83,7 @@ public class RssItem
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void addContributor(Person person) {
+  public Entry addContributor(Person person) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -95,7 +95,7 @@ public class RssItem
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void addLink(Link link) {
+  public Entry addLink(Link link) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -451,15 +451,15 @@ public class RssItem
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setContentElement(Content content) {
+  public Entry setContentElement(Content content) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setControl(Control control) {
+  public Entry setControl(Control control) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setDraft(boolean draft) {
+  public Entry setDraft(boolean draft) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -483,7 +483,7 @@ public class RssItem
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setIdElement(IRIElement id) {
+  public Entry setIdElement(IRIElement id) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -495,7 +495,7 @@ public class RssItem
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setPublishedElement(DateTime dateTime) {
+  public Entry setPublishedElement(DateTime dateTime) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -519,11 +519,11 @@ public class RssItem
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setRightsElement(Text text) {
+  public Entry setRightsElement(Text text) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setSource(Source source) {
+  public Entry setSource(Source source) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -547,7 +547,7 @@ public class RssItem
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setSummaryElement(Text text) {
+  public Entry setSummaryElement(Text text) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -571,7 +571,7 @@ public class RssItem
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setTitleElement(Text title) {
+  public Entry setTitleElement(Text title) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -583,7 +583,7 @@ public class RssItem
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setUpdatedElement(DateTime updated) {
+  public Entry setUpdatedElement(DateTime updated) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
@@ -601,11 +601,11 @@ public class RssItem
     return (about != null) ? new IRI(about) : null;
   }
 
-  public void setNormalizedValue(String iri) {
+  public IRIElement setNormalizedValue(String iri) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 
-  public void setValue(String iri) {
+  public IRIElement setValue(String iri) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
 }

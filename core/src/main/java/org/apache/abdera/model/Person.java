@@ -18,6 +18,7 @@
 package org.apache.abdera.model;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRISyntaxException;
 
 /**
  * <p>An Atom Person Construct</p>
@@ -54,7 +55,7 @@ public interface Person
    * constructs MUST contain exactly one "atom:name" element.
    * @param element The atom:name element
    */
-  void setNameElement(Element element);
+  Person setNameElement(Element element);
   
   /**
    * The "atom:name" element's content conveys a human-readable name for
@@ -89,7 +90,7 @@ public interface Person
    * MUST conform to the "addr-spec" production in [RFC2822].
    * @param element The atom:email element
    */
-  void setEmailElement(Element element);
+  Person setEmailElement(Element element);
   
   /**
    * The "atom:email" element's content conveys an e-mail address
@@ -126,7 +127,7 @@ public interface Person
    * construct MUST be an IRI reference [RFC3987].
    * @param uri The atom:uri element
    */
-  void setUriElement(IRIElement uri);
+  Person setUriElement(IRIElement uri);
   
   /**
    * The "atom:uri" element's content conveys an IRI associated with the

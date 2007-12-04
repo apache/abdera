@@ -60,12 +60,12 @@ public interface ExtensibleElement
    * Adds an individual extension element
    * @param extension An extension element to add
    */
-  void addExtension(Element extension);
+  <T extends ExtensibleElement>T addExtension(Element extension);
 
   /**
    * Adds an individual extension element before the specified element 
    */
-  void addExtension(Element extension, Element before);
+  <T extends ExtensibleElement>T addExtension(Element extension, Element before);
   
   /**
    * Adds an individual extension element

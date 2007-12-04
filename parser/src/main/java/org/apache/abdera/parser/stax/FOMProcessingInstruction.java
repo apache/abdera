@@ -58,9 +58,10 @@ public class FOMProcessingInstruction
     return getValue();
   }
 
-  public void setText(String text) {
+  public <T extends ProcessingInstruction>T setText(String text) {
     if (!isComplete() && builder != null) build();
     setValue(text);
+    return (T)this;
   }
 
   public String toString() {
@@ -70,4 +71,10 @@ public class FOMProcessingInstruction
     } catch (Exception e) {}
     return w.toString();
   }
+
+  public <T extends ProcessingInstruction>T setTarget(String target) {
+    super.setTarget(target);
+    return (T)this;
+  }
+  
 }

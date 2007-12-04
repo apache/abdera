@@ -61,7 +61,7 @@ public interface Service
    * Add an individual workspace
    * @param workspace a app:workspace element
    */
-  void addWorkspace(Workspace workspace);
+  Service addWorkspace(Workspace workspace);
 
   /**
    * Add an individual workspace

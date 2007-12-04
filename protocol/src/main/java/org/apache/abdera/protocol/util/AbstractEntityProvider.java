@@ -15,43 +15,22 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol;
+package org.apache.abdera.protocol.util;
 
 import java.util.Date;
 
+import org.apache.abdera.protocol.EntityProvider;
 import org.apache.abdera.util.EntityTag;
-import org.apache.abdera.writer.StreamWriter;
 
-/**
- * An EntityProvider is used to serialize entities using the StreamWriter
- * interface.  The EntityProvider interface can be implemented by applications
- * to provide an efficient means of serializing non-FOM objects to Atom/XML. 
- */
-public interface EntityProvider {
-
-  /**
-   * Write to the specified StreamWriter
-   */
-  void writeTo(StreamWriter sw);
- 
-  /**
-   * True if the serialization is repeatable. 
-   */
-  boolean isRepeatable();
+public abstract class AbstractEntityProvider 
+  implements EntityProvider {
   
-  /**
-   * Return the mime content type of the serialized entity
-   */
-  String getContentType();
+  public String getContentType() {
+    return "application/xml";
+  }
   
-  /**
-   * Return the EntityTag of the entity,
-   */
-  EntityTag getEntityTag();
+  public EntityTag getEntityTag() { return null; }
   
-  /**
-   * Return the Last-Modified date of the entity
-   */
-  Date getLastModified();
+  public Date getLastModified() { return null; }
   
 }

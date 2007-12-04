@@ -17,7 +17,8 @@
 */
 package org.apache.abdera.protocol.server;
 
-public interface Target {
+public interface Target 
+  extends Iterable<String> {
 
   TargetType getType();
   

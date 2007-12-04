@@ -28,6 +28,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ServiceManager;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.TargetType;
@@ -166,7 +167,8 @@ public class UtilityTest extends TestCase {
       return null;
     }
 
-    public void setAttribute(Scope scope, String name, Object value) {
+    public RequestContext setAttribute(Scope scope, String name, Object value) {
+      return this;
     }
 
     public Date getDateHeader(String name) {

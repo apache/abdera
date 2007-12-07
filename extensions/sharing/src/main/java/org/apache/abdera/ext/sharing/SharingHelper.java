@@ -33,7 +33,7 @@ import org.apache.abdera.model.Source;
 
 public class SharingHelper {
 
-  public static final String SSENS = "http://www.microsoft.com/schemas/sse";
+  public static final String SSENS = "http://feedsync.org/2007/feedsync";
   public static final String SSEPFX = "sx";
   
   public static final QName SSE_SHARING = new QName(SSENS, "sharing", SSEPFX);
@@ -42,7 +42,6 @@ public class SharingHelper {
   public static final QName SSE_HISTORY = new QName(SSENS, "history", SSEPFX);
   public static final QName SSE_SYNC = new QName(SSENS, "sync", SSEPFX);
   public static final QName SSE_UNPUBLISHED = new QName(SSENS, "unpublished", SSEPFX);
-  
   
   protected static boolean isTrue(String value) {
     return value.equalsIgnoreCase("true") || 
@@ -386,5 +385,64 @@ public class SharingHelper {
       }
     }
     return false;
+  }
+  
+  public static boolean isValidEndpointIdentifier(String id) {
+    if (id == null) return false;
+    char[] chars = id.toCharArray();
+    for (int i = 0; i < chars.length; i++) {
+      char c = chars[i];
+      if (!is_alphanum(c) && 
+          !is_reserved_or_other(c) && 
+          !is_hex(chars,i)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  
+  private static boolean is_alphanum(char c) {
+    return (c >= 'a' && c <= 'z') || 
+           (c >= 'A' && c <= 'Z') || 
+           (c >= '0' && c <= '9'); 
+  }
+  
+  private static boolean is_reserved_or_other(char c) {
+    return c == '/' ||
+           c == '?' ||
+           c == '#' ||
+           c == '(' ||
+           c == ')' ||
+           c == '+' ||
+           c == ',' ||
+           c == '-' ||
+           c == '.' ||
+           c == ':' ||
+           c == '=' ||
+           c == '@' ||
+           c == ';' ||
+           c == '$' ||
+           c == '_' ||
+           c == '!' ||
+           c == '*' ||
+           c == '\'';
+  }
+
+  private static boolean is_hex(char[] chars, int i) {
+    if (chars[i] == '%') {
+      if (i + 2 > chars.length) return false;
+      return is_hex(chars[i],chars[i+1],chars[i+2]);
+    }
+    return false;
+  }
+  
+  private static boolean is_hexdigit(char c) {
+    return (c >= 'a' && c <= 'f') || 
+           (c >= 'A' && c <= 'F') || 
+           (c >= '0' && c <= '9'); 
+  }
+  
+  private static boolean is_hex(char c, char c2, char c3) {
+    return (c == '%' && is_hexdigit(c2) && is_hexdigit(c3));
   }
 }

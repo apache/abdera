@@ -69,6 +69,8 @@ public class History
   
   public void setBy(String by) {
     if (by != null) {
+      if (!SharingHelper.isValidEndpointIdentifier(by))
+        throw new IllegalArgumentException("Invalid Endpoint Identifier");
       setAttributeValue("by", by);
     } else {
       removeAttribute(new QName("by"));

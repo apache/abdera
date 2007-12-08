@@ -63,6 +63,7 @@ import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
+import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
@@ -75,6 +76,8 @@ public class AbderaClient {
 
   public static final String DEFAULT_USER_AGENT = 
     Version.APP_NAME + "/" + Version.VERSION;
+  
+  public static int DEFAULT_MAX_REDIRECTS = 10;
   
   protected final Abdera abdera;
   protected final Cache cache;
@@ -102,6 +105,7 @@ public class AbderaClient {
     client.getParams().setCookiePolicy(
       CookiePolicy.BROWSER_COMPATIBILITY);
     setAuthenticationSchemeDefaults();
+    setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
   }
   
   public AbderaClient(Abdera abdera) {
@@ -750,22 +754,126 @@ public class AbderaClient {
     client.getState().clearCookies();
     return this;
   }
-  
-  public AbderaClient setConnectionTimeout(long timeout) {
-    client.getParams().setConnectionManagerTimeout(timeout);
+
+  /**
+   * Sets the timeout until a connection is etablished. 
+   * A value of zero means the timeout is not used. The default value is zero.
+   */
+  public AbderaClient setConnectionTimeout(int timeout) {
+    client.getHttpConnectionManager().getParams().setIntParameter(HttpConnectionParams.CONNECTION_TIMEOUT, timeout);
     return this;
   }
   
+  /**
+   * Sets the default socket timeout (SO_TIMEOUT) in milliseconds which is the timeout for waiting for data.
+   * A timeout value of zero is interpreted as an infinite timeout.
+   */
   public AbderaClient setSocketTimeout(int timeout) {
     client.getParams().setSoTimeout(timeout);
     return this;
   }
-  
-  public long getConnectionTimeout() {
-    return client.getParams().getConnectionManagerTimeout();
+
+  /**
+   * Sets the timeout in milliseconds used when retrieving an HTTP connection from the HTTP connection manager.
+   */
+  public void setConnectionManagerTimeout(long timeout) {
+    client.getParams().setLongParameter(HttpClientParams.CONNECTION_MANAGER_TIMEOUT, timeout);
   }
-  
+
+  /**
+   * Return the timeout until a connection is etablished, in milliseconds. 
+   * A value of zero means the timeout is not used. The default value is zero.
+   */
+  public int getConnectionTimeout() {
+    return client.getHttpConnectionManager().getParams().getIntParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 0);
+  }
+
+  /**
+   * Return the socket timeout for the connection in milliseconds
+   * A timeout value of zero is interpreted as an infinite timeout.
+   */
   public int getSocketTimeout() {
     return client.getParams().getSoTimeout();
+  }
+
+  /**
+   * Returns the timeout in milliseconds used when retrieving an HTTP connection from the HTTP connection manager.
+   */
+  public long getConnectionManagerTimeout() { 
+    return client.getParams().getLongParameter(HttpClientParams.CONNECTION_MANAGER_TIMEOUT, 0);
+  }
+  
+  /**
+   * Determines whether Nagle's algorithm is to be used. The Nagle's algorithm tries to conserve bandwidth 
+   * by minimizing the number of segments that are sent. When applications wish to decrease network latency and increase performance, 
+   * they can disable Nagle's algorithm (that is enable TCP_NODELAY). Data will be sent earlier, at the cost of an increase in bandwidth consumption.
+   */
+  public void setTcpNoDelay(boolean enable) {
+    client.getHttpConnectionManager().getParams().setBooleanParameter(HttpConnectionParams.TCP_NODELAY, enable);
+  }
+  
+  /**
+   * Tests if Nagle's algorithm is to be used.
+   */
+  public boolean getTcpNoDelay() {
+    return client.getHttpConnectionManager().getParams().getBooleanParameter(HttpConnectionParams.TCP_NODELAY, false );
+  }
+  
+  /**
+   * Return the HttpConnectionManagerParams object of the underlying HttpClient.
+   * This enables you to configure options not explicitly exposed by the AbderaClient 
+   */
+  public HttpConnectionManagerParams getHttpConnectionManagerParams() {
+    return client.getHttpConnectionManager().getParams();
+  }
+
+  /**
+   * Return the HttpClientParams object of the underlying HttpClient.
+   * This enables you to configure options not explicitly exposed by the AbderaClient 
+   */
+  public HttpClientParams getHttpClientParams() {
+    return client.getParams(); 
+  }
+  
+  /**
+   * Set the maximum number of redirects
+   */
+  public AbderaClient setMaximumRedirects(int redirects) {
+    client.getParams().setIntParameter(HttpClientParams.MAX_REDIRECTS, redirects);
+    return this;
+  }
+  
+  /**
+   * Get the maximum number of redirects
+   */
+  public int getMaximumRedirects() {
+    return client.getParams().getIntParameter(
+      HttpClientParams.MAX_REDIRECTS, 
+      DEFAULT_MAX_REDIRECTS);
+  }
+  
+  /**
+   * Clear all credentials (including proxy credentials)
+   */
+  public AbderaClient clearCredentials() {
+    client.getState().clearCredentials();
+    clearProxyCredentials();
+    return this;
+  }
+  
+  /**
+   * Clear proxy credentials 
+   */
+  public AbderaClient clearProxyCredentials() {
+    client.getState().clearProxyCredentials();
+    return this;
+  }
+  
+  /**
+   * Clear all state (cookies, credentials, etc)
+   */
+  public AbderaClient clearState() {
+    client.getState().clear();
+    return this;
   }
 }

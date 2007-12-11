@@ -155,6 +155,9 @@ public class MethodHelper {
         httpMethod.getParams().setBooleanParameter(
           HttpMethodParams.USE_EXPECT_CONTINUE, false);
       
+      // should we follow redirects, default is true
+      httpMethod.setFollowRedirects(options.isFollowRedirects());
+      
       return httpMethod;
   }
 

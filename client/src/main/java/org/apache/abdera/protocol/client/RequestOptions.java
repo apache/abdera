@@ -49,6 +49,7 @@ public class RequestOptions
   private boolean requestException5xx = false;
   private boolean useExpectContinue = true;
   private boolean useConditional = true;
+  private boolean followRedirects = true;
   
   private final Map<String,String[]> headers = new HashMap<String,String[]>();  
   
@@ -557,6 +558,21 @@ public class RequestOptions
    */
   public RequestOptions setConditionalPut(boolean conditional) {
     this.useConditional = conditional;
+    return this;
+  }
+  
+  /**
+   * True if the client should follow redirects automatically
+   */
+  public boolean isFollowRedirects() {
+    return followRedirects;
+  }
+  
+  /**
+   * True if the client should follow redirects automatically
+   */
+  public RequestOptions setFollowRedirects(boolean followredirects) {
+    this.followRedirects = followredirects;
     return this;
   }
 }

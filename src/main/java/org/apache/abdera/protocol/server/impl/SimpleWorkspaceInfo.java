@@ -26,18 +26,7 @@ import org.apache.abdera.protocol.server.WorkspaceInfo;
 public class SimpleWorkspaceInfo implements WorkspaceInfo {
     private Map<String, CollectionProvider> collectionProviders;
     private String name;
-    private String id;
-    
-    /* (non-Javadoc)
-     * @see org.apache.abdera.protocol.server.content.WorkspaceInfo#getId()
-     */
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
     public String getName() {
         return name;
     }

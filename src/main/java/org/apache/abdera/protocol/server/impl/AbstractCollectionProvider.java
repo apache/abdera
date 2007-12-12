@@ -229,6 +229,8 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
       return new EmptyResponseContext(415);
     } catch (ClassCastException cce) {
       return new EmptyResponseContext(415);
+    } catch (ResponseContextException e) {
+      return e.getResponseContext();
     } catch (Exception e) {
       log.warn(e.getMessage(), e);
       return new EmptyResponseContext(400);
@@ -505,7 +507,11 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
   }
 
   protected String getEntryID(RequestContext request) {
-    String path = request.getUri().toString();
+    String path = request.getTargetPath();
+    int q = path.indexOf("?");
+    if (q != -1) {
+      path = path.substring(0, q);
+    }
     String[] segments = path.split("/");
     String id = segments[segments.length - 1];
     return Escaping.decode(id);

@@ -21,21 +21,17 @@ import java.util.Collection;
 
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 
-public class WorkspaceProvider extends AbstractWorkspaceProvider {
+/**
+ *  Represents an Atom service which is backed by a static list of WorkspaceInfos.
+ *  
+ *  @see AbstractServiceProvider
+ */
+public class ServiceProvider extends AbstractServiceProvider {
 
   private Collection<WorkspaceInfo> workspaces;
   
-  public WorkspaceProvider() {
+  public ServiceProvider() {
     super(10);
-  }
-  
-  public WorkspaceInfo getWorkspaceInfo(String id) {
-    for (WorkspaceInfo wp : workspaces) {
-      if (wp.getId().equals(id)) {
-        return wp;
-      }
-    }
-    return null;
   }
 
   public Collection<WorkspaceInfo> getWorkspaces() {

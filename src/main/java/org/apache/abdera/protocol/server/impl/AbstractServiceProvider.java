@@ -112,10 +112,10 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
       return new DefaultTarget(tt, context);
     }
 
-    private TargetType getOtherTargetType(RequestContext context, 
-                                          String path, 
-                                          String providerHref, 
-                                          CollectionProvider provider) {
+    protected TargetType getOtherTargetType(RequestContext context, 
+                                            String path, 
+                                            String providerHref, 
+                                            CollectionProvider provider) {
       String baseMedia = null;
       if (provider instanceof AbstractCollectionProvider) {
         baseMedia = ((AbstractCollectionProvider) provider).getBaseMediaIri();

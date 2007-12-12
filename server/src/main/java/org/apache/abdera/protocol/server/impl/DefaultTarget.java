@@ -23,19 +23,19 @@ import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.TargetType;
 
-public abstract class AbstractTarget 
+public class DefaultTarget 
   implements Target {
 
   protected final TargetType type;
   protected final RequestContext context;
   
-  protected AbstractTarget(
+  public DefaultTarget(
     TargetType type, 
     RequestContext context) {
       this.type = type;
       this.context = context;
   }
-  
+
   public String getIdentity() {
     return context.getUri().toString();
   }
@@ -82,7 +82,7 @@ public abstract class AbstractTarget
       return false;
     if (getClass() != obj.getClass())
       return false;
-    final AbstractTarget other = (AbstractTarget) obj;
+    final DefaultTarget other = (DefaultTarget) obj;
     if (context == null) {
       if (other.context != null)
         return false;

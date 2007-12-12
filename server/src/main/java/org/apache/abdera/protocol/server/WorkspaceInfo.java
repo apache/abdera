@@ -23,12 +23,16 @@ import org.apache.abdera.protocol.server.impl.ResponseContextException;
 
 public interface WorkspaceInfo {
 
-  String getId();
-
   String getName();
 
+  /**
+   * A map of CollectionProviders keyed by URI (in relation to the services document) - i.e.
+   * if the services document was at "/services" and the collection at "/services/workspace/feed",
+   * then the key would be "workspace/feed".
+   * @return
+   */
   Map<String, CollectionProvider> getCollectionProviders();
 
-  CollectionProvider getCollectionProvider(String id) throws ResponseContextException;
+  CollectionProvider getCollectionProvider(String href);
 
 }

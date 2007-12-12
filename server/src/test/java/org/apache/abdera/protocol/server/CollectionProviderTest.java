@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import junit.framework.TestCase;
-
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
@@ -20,11 +19,15 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.protocol.client.RequestOptions;
+import org.apache.abdera.protocol.server.CollectionProvider;
+import org.apache.abdera.protocol.server.ServiceContext;
+import org.apache.abdera.protocol.server.TargetType;
+import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.impl.DefaultServiceContext;
 import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.protocol.server.impl.SingletonProviderManager;
-import org.apache.abdera.protocol.server.impl.WorkspaceProvider;
+import org.apache.abdera.protocol.server.impl.ServiceProvider;
 import org.apache.abdera.protocol.server.servlet.AbderaServlet;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
@@ -32,7 +35,7 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 
-public class ContentProviderTest extends TestCase {
+public class CollectionProviderTest extends TestCase {
 
   private Server server;
   private DefaultServiceContext abderaServiceContext;
@@ -43,31 +46,26 @@ public class ContentProviderTest extends TestCase {
     
     abderaServiceContext = new DefaultServiceContext();
 
-    abderaServiceContext.setTargetResolver(
-      new RegexTargetResolver()
-        .setPattern("/acme(\\?[^#]*)?", TargetType.TYPE_SERVICE)
-        .setPattern("/acme/customers(\\?[^#]*)?", TargetType.TYPE_COLLECTION)
-        .setPattern("/acme/customers/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY)
-    );
     
     SingletonProviderManager pm = new SingletonProviderManager();
     abderaServiceContext.setProviderManager(pm);
 
-    WorkspaceProvider wp = new WorkspaceProvider();
-
+    ServiceProvider sp = new ServiceProvider();
+    
     SimpleWorkspaceInfo wi = new SimpleWorkspaceInfo();
-    wi.setId("acme");
-    CustomerContentProvider cp = new CustomerContentProvider();
+    CustomerCollectionProvider cp = new CustomerCollectionProvider();
     Map<String, CollectionProvider> contentProviders = new HashMap<String, CollectionProvider>();
-    contentProviders.put("customers", cp);
+    contentProviders.put("acme/customers", cp);
     
     wi.setCollectionProviders(contentProviders);
 
     List<WorkspaceInfo> workspaces = new ArrayList<WorkspaceInfo>();
     workspaces.add(wi);
-    wp.setWorkspaces(workspaces);
-    pm.setProvider(wp);
-
+    sp.setWorkspaces(workspaces);
+    
+    pm.setProvider(sp);
+    abderaServiceContext.setTargetResolver(sp);
+    
     initializeJetty();
   }
 

@@ -18,31 +18,118 @@
 package org.apache.abdera.protocol.server.impl;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.io.CharUtils.Profile;
 import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.model.Collection;
+import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Service;
+import org.apache.abdera.model.Workspace;
+import org.apache.abdera.protocol.Request;
+import org.apache.abdera.protocol.Resolver;
 import org.apache.abdera.protocol.server.CollectionProvider;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
+import org.apache.abdera.protocol.server.Target;
+import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
-import org.apache.abdera.protocol.util.EncodingUtil;
+import org.apache.abdera.protocol.server.RequestContext.Scope;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.writer.StreamWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public abstract class AbstractWorkspaceProvider 
-  extends AbstractProvider {
-  private final static Log log = LogFactory.getLog(AbstractWorkspaceProvider.class);
+/**
+ * Represents an Atom service which is backed by various workspaces and CollectionProviders.
+ * This class can be extended to provide a dynamic list of workspaces or ServiceProvider can
+ * be used to use a static list.
+ * 
+ */
+public abstract class AbstractServiceProvider extends AbstractProvider implements Resolver<Target> {
+  private static final Log log = LogFactory.getLog(AbstractServiceProvider.class);
+  public static final String COLLECTION_PROVIDER_ATTRIBUTE = "collectionProvider";
   
     private EntityTag service_etag = new EntityTag("simple");
+    private String servicesPath = "/";
     
-    protected AbstractWorkspaceProvider(int count) {
+    protected AbstractServiceProvider(int count) {
       super(count);
+    }
+
+    public Target resolve(Request request) {
+      RequestContext context = (RequestContext) request;
+      String uri = context.getTargetPath();
+      
+      if (servicesPath == null) {
+        throw new RuntimeException("You must set the servicesPath property on the ServiceProvider.");
+      }
+      
+      TargetType tt = null;
+      if (uri.equals(servicesPath)) {
+        tt = TargetType.TYPE_SERVICE;
+      } else if (uri.startsWith(servicesPath)) {
+        String path = uri.substring(servicesPath.length());
+        int q = path.indexOf("?");
+        if (q != -1) {
+          path = path.substring(0, q);
+        }
+        
+        path = Escaping.decode(path);
+
+        CollectionProvider provider = null;
+        String providerHref = null;
+        for (WorkspaceInfo wi : getWorkspaces()) {
+          for (Map.Entry<String, CollectionProvider> e : wi.getCollectionProviders().entrySet()) {
+            if (path.startsWith(e.getKey())) {
+              provider = e.getValue();
+              providerHref = e.getKey();
+              break;
+            }
+          }
+        }
+        
+        if (provider != null) {
+          context.setAttribute(Scope.REQUEST, COLLECTION_PROVIDER_ATTRIBUTE, provider);
+          
+          if (providerHref.equals(path)) {
+            tt = TargetType.TYPE_COLLECTION;
+          } else {
+            tt = getOtherTargetType(context, path, providerHref, provider);
+          }
+        }
+      } 
+      
+      if (tt == null) {
+        tt = TargetType.TYPE_UNKNOWN;
+      }
+      
+      return new DefaultTarget(tt, context);
+    }
+
+    private TargetType getOtherTargetType(RequestContext context, 
+                                          String path, 
+                                          String providerHref, 
+                                          CollectionProvider provider) {
+      String baseMedia = null;
+      if (provider instanceof AbstractCollectionProvider) {
+        baseMedia = ((AbstractCollectionProvider) provider).getBaseMediaIri();
+      }
+      
+      if (providerHref.startsWith("/")) {
+        providerHref = providerHref.substring(1);
+      }
+      
+      if (providerHref.startsWith(baseMedia)) {
+        return TargetType.TYPE_MEDIA;
+      } else {
+        return TargetType.TYPE_ENTRY;
+      }
     }
 
     public ResponseContext getService(RequestContext request) {
@@ -55,7 +142,7 @@ public abstract class AbstractWorkspaceProvider
     private String getEncoding(RequestContext request) {
       return "utf-8";
     }
-    
+
     private AbstractResponseContext getServicesDocument(
       final Abdera abdera, 
       final String enc) {
@@ -64,40 +151,49 @@ public abstract class AbstractWorkspaceProvider
         protected void writeTo(
           StreamWriter sw) 
             throws IOException {
+          
           sw.startDocument()
             .startService();          
+          
           for (WorkspaceInfo wp : getWorkspaces()) {
             sw.startWorkspace().writeTitle(wp.getName());
             Set<Map.Entry<String, CollectionProvider>> entrySet = 
               (Set<Map.Entry<String, CollectionProvider>>) (wp.getCollectionProviders().entrySet());
+            
             for (Map.Entry<String, CollectionProvider> entry : entrySet) {
               CollectionProvider cp = entry.getValue();
-              final String id = wp.getId();
-              final String key = entry.getKey();
+
+              String href;
               try {
-                sw.startCollection(
-                    Escaping.encode(id,enc,Profile.PATH) + "/" + 
-                    Escaping.encode(key,enc,Profile.PATH))
+                href = Escaping.encode(entry.getKey(), enc, Profile.PATH);
+              } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+              }
+
+              try {
+                sw.startCollection(href)
                   .writeTitle(cp.getTitle())
                   .writeAcceptsEntry() 
                   .endCollection();
               } catch (RuntimeException e) {}
             }
+            
             sw.endWorkspace();    
           }          
           sw.endService()
             .endDocument();
+          
         }
       };
     }
-
+    
     public abstract java.util.Collection<WorkspaceInfo> getWorkspaces();
 
     public ResponseContext getFeed(RequestContext request) {
       CollectionProvider provider = null;
       ResponseContext res = null;
       try {
-        provider = getCollectionProvider(resolveBase(request), request);
+        provider = getCollectionProvider(request);
         
         provider.begin(request);
         
@@ -112,36 +208,8 @@ public abstract class AbstractWorkspaceProvider
     }
 
     @SuppressWarnings("unchecked")
-    private CollectionProvider getCollectionProvider(IRI resolveBase, 
-                                                     RequestContext request) throws ResponseContextException {
-      String path = resolveBase.getPath();
-      String[] paths = path.split("/");
-      String id = null;
-      WorkspaceInfo wp = null;
-      if (paths.length < 1) {
-        // TODO:
-        throw new ResponseContextException(404);
-      } else if (paths.length == 1) {
-        wp = getWorkspaceInfo("");
-        if (wp == null) {
-          // TODO: 404
-          throw new ResponseContextException(404);
-        }
-        id = paths[0];
-      } else {
-        String workspaceId = paths[paths.length - 2];
-        workspaceId = Escaping.decode(workspaceId);
-        wp = getWorkspaceInfo(workspaceId);
-        if (wp == null) {
-          // TODO: 404
-          throw new ResponseContextException(404);
-        }
-        id = paths[paths.length - 1];
-      }
-      
-      id = Escaping.decode(id);
-      
-      return wp.getCollectionProvider(id);
+    private CollectionProvider getCollectionProvider(RequestContext request) {
+      return (CollectionProvider) request.getAttribute(Scope.REQUEST, COLLECTION_PROVIDER_ATTRIBUTE);
     }
 
     /**
@@ -160,13 +228,12 @@ public abstract class AbstractWorkspaceProvider
       
       return e.getResponseContext();
     }
-    protected abstract WorkspaceInfo getWorkspaceInfo(String string);
 
     public ResponseContext createEntry(RequestContext request) {
       CollectionProvider provider = null;
       ResponseContext response = null;
       try {
-        provider = getCollectionProvider(request.getUri(), request);
+        provider = getCollectionProvider(request);
         provider.begin(request);
         
         return provider.createEntry(request);
@@ -193,8 +260,7 @@ public abstract class AbstractWorkspaceProvider
       CollectionProvider provider = null;
       ResponseContext response = null;
       try {
-        IRI entryBaseIri = resolveBase(request).resolve("../");
-        provider = getCollectionProvider(entryBaseIri, request);
+        provider = getCollectionProvider(request);
         provider.begin(request);
         
         return provider.getMedia(request);
@@ -217,12 +283,9 @@ public abstract class AbstractWorkspaceProvider
       CollectionProvider provider = null;
       ResponseContext response = null;
       try {
-        provider = getCollectionProvider(resolveBase(request).resolve("./"), request);
+        provider = getCollectionProvider(request);
       
         return provider.deleteEntry(request);
-      } catch (ResponseContextException e) {
-        response = createErrorResponse(e);
-        return response;
       } finally {
         end(provider, request, response);
       }
@@ -234,7 +297,7 @@ public abstract class AbstractWorkspaceProvider
       ResponseContext response = null;
       try {
         IRI entryBaseIri = resolveBase(request).resolve("./");
-        provider = getCollectionProvider(entryBaseIri, request);
+        provider = getCollectionProvider(request);
         provider.begin(request);
         
         return provider.getEntry(request, entryBaseIri);
@@ -252,7 +315,7 @@ public abstract class AbstractWorkspaceProvider
       ResponseContext response = null;
       try {
         IRI entryBaseIri = resolveBase(request).resolve("./");
-        provider = getCollectionProvider(entryBaseIri, request);
+        provider = getCollectionProvider(request);
         provider.begin(request);
         
         return provider.updateEntry(request, entryBaseIri);
@@ -264,5 +327,12 @@ public abstract class AbstractWorkspaceProvider
       }
     }
 
+    public String getServicesPath() {
+      return servicesPath;
+    }
+
+    public void setServicesPath(String servicesPath) {
+      this.servicesPath = servicesPath;
+    }
 
 }

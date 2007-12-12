@@ -26,13 +26,11 @@ import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.server.CollectionProvider;
 import org.apache.abdera.protocol.server.ServiceContext;
-import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.impl.DefaultServiceContext;
-import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
+import org.apache.abdera.protocol.server.impl.ServiceProvider;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.protocol.server.impl.SingletonProviderManager;
-import org.apache.abdera.protocol.server.impl.WorkspaceProvider;
 import org.apache.abdera.protocol.server.servlet.AbderaServlet;
 import org.apache.abdera.writer.Writer;
 import org.apache.jackrabbit.core.TransientRepository;
@@ -54,19 +52,12 @@ public class JcrCollectionProviderTest extends TestCase {
 
     abderaServiceContext = new DefaultServiceContext();
 
-    RegexTargetResolver resolver = new RegexTargetResolver();
-    resolver.setPattern("/acme(\\?[^#]*)?", TargetType.TYPE_SERVICE);
-    resolver.setPattern("/acme/feed(\\?[^#]*)?", TargetType.TYPE_COLLECTION);
-    resolver.setPattern("/acme/feed/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY);
-    abderaServiceContext.setTargetResolver(resolver);
-
     SingletonProviderManager pm = new SingletonProviderManager();
     abderaServiceContext.setProviderManager(pm);
 
-    WorkspaceProvider wp = new WorkspaceProvider();
+    ServiceProvider sp = new ServiceProvider();
 
     SimpleWorkspaceInfo wi = new SimpleWorkspaceInfo();
-    wi.setId("acme");
 
     repository = new TransientRepository();
     
@@ -79,15 +70,15 @@ public class JcrCollectionProviderTest extends TestCase {
     cp.initialize();
 
     Map<String, CollectionProvider> contentProviders = new HashMap<String, CollectionProvider>();
-    contentProviders.put("feed", cp);
+    contentProviders.put("acme/feed", cp);
 
     wi.setCollectionProviders(contentProviders);
 
     List<WorkspaceInfo> workspaces = new ArrayList<WorkspaceInfo>();
     workspaces.add(wi);
-    wp.setWorkspaces(workspaces);
-    pm.setProvider(wp);
-
+    sp.setWorkspaces(workspaces);
+    pm.setProvider(sp);
+    abderaServiceContext.setTargetResolver(sp);
     initializeJetty();
   }
 

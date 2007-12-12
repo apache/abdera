@@ -45,6 +45,7 @@ import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.test.client.JettyTest;
+import org.apache.abdera.test.client.JettyUtil;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.writer.WriterOptions;
@@ -400,7 +401,8 @@ public class AppTest extends JettyTest {
     options.setUseExpectContinue(false);
 
     // do the introspection step
-    ClientResponse response = abderaClient.get("http://localhost:8080/service",
+    ClientResponse response = abderaClient.get("http://localhost:" +
+    		JettyUtil.getPort() + "/service",
                                          options);
     String col_uri;
 

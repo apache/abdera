@@ -26,7 +26,7 @@ public class JettyUtil {
 
   private static final String PORT_PROP = "abdera.test.client.port";
   
-  private static int PORT = 8080;
+  private static int PORT = 9002;
   private static Server server = null;
   private static ServletHandler handler = null;
   

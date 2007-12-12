@@ -18,7 +18,7 @@ import org.apache.abdera.model.Person;
 import org.apache.abdera.protocol.server.impl.AbstractCollectionProvider;
 import org.apache.abdera.protocol.server.impl.ResponseContextException;
 
-public class CustomerContentProvider extends AbstractCollectionProvider<Customer> {
+public class CustomerCollectionProvider extends AbstractCollectionProvider<Customer> {
   private static final String ID_PREFIX = "urn:acme:customer:";
   
   private final static AtomicInteger nextId = new AtomicInteger(1000);

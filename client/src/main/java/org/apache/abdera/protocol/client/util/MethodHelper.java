@@ -156,7 +156,8 @@ public class MethodHelper {
           HttpMethodParams.USE_EXPECT_CONTINUE, false);
       
       // should we follow redirects, default is true
-      httpMethod.setFollowRedirects(options.isFollowRedirects());
+      if (!(httpMethod instanceof EntityEnclosingMethod))
+        httpMethod.setFollowRedirects(options.isFollowRedirects());
       
       return httpMethod;
   }

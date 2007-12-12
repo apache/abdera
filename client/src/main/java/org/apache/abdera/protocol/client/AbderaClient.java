@@ -35,10 +35,10 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.protocol.EntityProvider;
 import org.apache.abdera.protocol.Response.ResponseType;
 import org.apache.abdera.protocol.client.cache.Cache;
-import org.apache.abdera.protocol.client.cache.CacheDisposition;
 import org.apache.abdera.protocol.client.cache.CacheFactory;
 import org.apache.abdera.protocol.client.cache.CachedResponse;
-import org.apache.abdera.protocol.client.cache.lru.LRUCache;
+import org.apache.abdera.protocol.client.cache.LRUCache;
+import org.apache.abdera.protocol.client.cache.Cache.Disposition;
 import org.apache.abdera.protocol.client.util.BaseRequestEntity;
 import org.apache.abdera.protocol.client.util.EntityProviderRequestEntity;
 import org.apache.abdera.protocol.client.util.MethodHelper;
@@ -116,7 +116,7 @@ public class AbderaClient {
     CacheFactory cacheFactory = 
       (CacheFactory)ServiceUtil.newInstance(
         "org.apache.abdera.protocol.cache.CacheFactory",
-        "org.apache.abdera.protocol.cache.lru.LRUCacheFactory", 
+        "org.apache.abdera.protocol.cache.LRUCacheFactory", 
         abdera);
     return cacheFactory;
   }
@@ -342,16 +342,6 @@ public class AbderaClient {
           (ProtocolSocketFactory)factory, port));
   }
   
-  private static void registerFactory(
-    SimpleSSLProtocolSocketFactory factory, 
-    int port) {
-      Protocol.registerProtocol(
-        "https", 
-        new Protocol(
-          "https", 
-          (ProtocolSocketFactory)factory, port));
-  }
-  
   /**
    * Configure the client to use preemptive authentication (HTTP Basic Authentication only)
    */
@@ -386,8 +376,11 @@ public class AbderaClient {
     String uri,
     Base base,
     RequestOptions options) {
-      RequestEntity re = new BaseRequestEntity(base);
-      return execute(method,uri,re,options);
+      return execute(
+        method,
+        uri,
+        new BaseRequestEntity(base),
+        options);
   }
     
   public ClientResponse execute(
@@ -409,18 +402,18 @@ public class AbderaClient {
       return execute(method,uri,re,options);
   }
   
-  private CacheDisposition getCacheDisposition(
+  private Disposition getCacheDisposition(
     boolean usecache, 
     String uri, 
     RequestOptions options,
     CachedResponse cached_response) {
-    CacheDisposition disp = 
+    Disposition disp = 
       (usecache) ? 
-        cache.getDisposition(uri, options) : 
-        CacheDisposition.TRANSPARENT;
-    disp = (!disp.equals(CacheDisposition.TRANSPARENT) && 
+        cache.disposition(uri, options) : 
+        Disposition.TRANSPARENT;
+    disp = (!disp.equals(Disposition.TRANSPARENT) && 
             mustRevalidate(options, cached_response)) ? 
-              CacheDisposition.STALE : 
+              Disposition.STALE : 
               disp;
     return disp;
   }
@@ -434,15 +427,17 @@ public class AbderaClient {
       options = options != null ? options : getDefaultRequestOptions();
       try {
         Cache cache = getCache();
-        CachedResponse cached_response = cache.get(uri, options);
-        CacheDisposition disp = getCacheDisposition(
-          usecache, uri, options, cached_response);
-        switch(disp) {
+        CachedResponse cached_response = cache.get(uri);
+        switch(
+          getCacheDisposition(
+            usecache, 
+            uri, 
+            options, 
+            cached_response)) {
           case FRESH:                                                            // CACHE HIT: FRESH
-            if (cached_response != null) {
-              checkRequestException(cached_response,options);
-              return cached_response;
-            }
+            if (cached_response != null)
+              return checkRequestException(
+                cached_response,options);
           case STALE:                                                            // CACHE HIT: STALE
             // revalidate the cached entry
             if (cached_response != null) {
@@ -451,8 +446,6 @@ public class AbderaClient {
               else if (cached_response.getLastModified() != null) 
                 options.setIfModifiedSince(cached_response.getLastModified());
               else options.setNoCache(true);
-            } else {
-              disp = CacheDisposition.TRANSPARENT;
             }
           default:                                                               // CACHE MISS
             HttpMethod httpMethod = 
@@ -465,21 +458,21 @@ public class AbderaClient {
                 cached_response != null) return cached_response;
             ClientResponse response = new CommonsResponse(abdera,httpMethod);
             response = options.getUseLocalCache() ?
-              response = cache.update(options, response, cached_response) : 
+              response = cache.update(uri, options, response, cached_response) : 
               response;
-            checkRequestException(response,options);
-            return response;
+            return checkRequestException(response,options);
         }
+      } catch (RuntimeException r) {
+        throw r;
       } catch (Throwable t) {
-        if (t instanceof ClientException) throw (ClientException)t;
-        throw new ClientException(t);
+        throw new RuntimeException(t);
       }
   }
 
-  private void checkRequestException(
+  private ClientResponse checkRequestException(
     ClientResponse response, 
     RequestOptions options) {
-      if (response == null) return;
+      if (response == null) return response;
       ResponseType type = response.getType();
       if ((type.equals(ResponseType.CLIENT_ERROR) && options.is4xxRequestException()) ||
           (type.equals(ResponseType.SERVER_ERROR) && options.is5xxRequestException())) {
@@ -506,6 +499,7 @@ public class AbderaClient {
           throw new RuntimeException(e);
         }
       }
+      return response;
   }
   
   public RequestOptions getDefaultRequestOptions() {

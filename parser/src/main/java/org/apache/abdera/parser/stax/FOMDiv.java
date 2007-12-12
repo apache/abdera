@@ -109,7 +109,7 @@ public class FOMDiv
   public Div setXhtmlClass(String[] classes) {
     complete();
     if (classes != null) {
-      StringBuffer val = new StringBuffer();
+      StringBuilder val = new StringBuilder();
       for (String s : classes) {
         if (s.length() > 0)
           val.append(" ");

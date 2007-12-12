@@ -28,20 +28,25 @@ import java.util.regex.Pattern;
  */
 public class CacheControlUtil {
 
+  private static enum Idempotent { GET, HEAD, OPTIONS }
+  
   /**
    * Idempotent methods are handled differently in caches than other methods
    */
   public static boolean isIdempotent(String method) {
-    return (method.equalsIgnoreCase("GET") ||
-            method.equalsIgnoreCase("HEAD") ||
-            method.equalsIgnoreCase("OPTIONS"));
+    try {
+      Idempotent.valueOf(method.toUpperCase());
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
   }
   
   private static long value(String val) {
     return (val != null) ? Long.parseLong(val) : -1; 
   }
   
-  private static void append(StringBuffer buf, String value) {
+  private static void append(StringBuilder buf, String value) {
     if (buf.length() > 0) buf.append(", ");
     buf.append(value);
   }
@@ -50,7 +55,7 @@ public class CacheControlUtil {
    * Construct the Cache-Control header from info in the request object
    */
   public static String buildCacheControl(AbstractRequest request) {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     if (request.isNoCache()) append(buf,"no-cache");
     if (request.isNoStore()) append(buf,"no-store");
     if (request.isNoTransform()) append(buf, "no-transform");

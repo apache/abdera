@@ -134,7 +134,7 @@ public abstract class AbstractProvider
   }
   
   protected String combine(String... vals) {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     for(String val : vals) {
       if (buf.length() > 0) buf.append(", ");
       buf.append(val);

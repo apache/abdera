@@ -92,7 +92,7 @@ public class RequestOptions
   }
 
   private String combine(String ... values) {
-    StringBuffer v = new StringBuffer();
+    StringBuilder v = new StringBuilder();
     for (String val : values) {
       if (v.length() > 0)
         v.append(", ");
@@ -279,7 +279,7 @@ public class RequestOptions
     try {
       return (val != null) ? DateUtil.parseDate(val) : null;
     } catch (DateParseException e) {
-      throw new ClientException(e);
+      throw new RuntimeException(e);
     }
   }
 

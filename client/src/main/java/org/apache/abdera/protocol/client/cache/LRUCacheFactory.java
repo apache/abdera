@@ -17,8 +17,13 @@
 */
 package org.apache.abdera.protocol.client.cache;
 
-public enum CacheDisposition {
+import org.apache.abdera.Abdera;
 
-  STALE, FRESH, TRANSPARENT
-  
+public class LRUCacheFactory 
+  implements CacheFactory {
+
+  public Cache getCache(Abdera abdera) {
+    return new LRUCache(abdera);
+  }
+
 }

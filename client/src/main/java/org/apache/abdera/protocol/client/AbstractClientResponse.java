@@ -35,6 +35,8 @@ import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.protocol.util.AbstractResponse;
 import org.apache.abdera.protocol.util.CacheControlUtil;
 import org.apache.abdera.util.EntityTag;
+import org.apache.commons.httpclient.util.DateParseException;
+import org.apache.commons.httpclient.util.DateUtil;
 
 public abstract class AbstractClientResponse
   extends AbstractResponse
@@ -45,11 +47,16 @@ public abstract class AbstractClientResponse
   protected final Date now = new Date();
   
   protected InputStream in = null;
-  protected Date response_date = null; 
+  protected Date response_date = null;
   
   protected AbstractClientResponse(Abdera abdera) {
     this.abdera = abdera;
     this.parser = abdera.getParser();
+  }
+  
+  protected Date initResponseDate() {
+    Date date = getDateHeader("Date");
+    return (date != null) ? date : now;
   }
   
   protected synchronized Parser getParser() {
@@ -123,10 +130,8 @@ public abstract class AbstractClientResponse
   }
 
   public Date getServerDate() {
-    if (response_date == null) {
-      Date date = getDateHeader("Date");
-      response_date = (date != null) ? date : now;
-    }
+    if (response_date == null) 
+      response_date = initResponseDate();
     return response_date;
   }
   
@@ -145,4 +150,17 @@ public abstract class AbstractClientResponse
     return charset;
   }
 
+  /**
+   * Return the named HTTP header as a java.util.Date
+   */
+  public Date getDateHeader(String header) {
+    try {
+      String value = getHeader(header);
+      if (value != null)
+        return DateUtil.parseDate(value);
+      else return null;
+    } catch (DateParseException e) {
+      throw new RuntimeException(e); // server likely returned a bad date format
+    }
+  }
 }

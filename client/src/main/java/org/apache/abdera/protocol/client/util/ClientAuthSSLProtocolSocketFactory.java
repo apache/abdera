@@ -23,15 +23,12 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.KeyStore;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import org.apache.abdera.util.Messages;
 import org.apache.commons.httpclient.ConnectTimeoutException;
@@ -41,15 +38,19 @@ import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
 public class ClientAuthSSLProtocolSocketFactory 
   implements SecureProtocolSocketFactory {
 
-  private String protocol = "TLS";
-  private String kmfFactory = "ibmX509";
-  private TrustManager tm = null;
+  private static final String DEFAULT_PROTOCOL = "TLS";
+  private static final String DEFAULT_KMF_FACTORY = "ibmX509";
   
+  private final String protocol;
+  private final String kmfFactory;
+  private final TrustManager tm;
   private final String keyStorePass;
   private final KeyStore ks;
   
-  public ClientAuthSSLProtocolSocketFactory(KeyStore ks, String keyStorePass) {
-    this(ks,keyStorePass,"TLS","ibmX509",null);
+  public ClientAuthSSLProtocolSocketFactory(
+    KeyStore ks, 
+    String keyStorePass) {
+      this(ks,keyStorePass,DEFAULT_PROTOCOL,DEFAULT_KMF_FACTORY,null);
   }
   
   public ClientAuthSSLProtocolSocketFactory(
@@ -61,9 +62,9 @@ public class ClientAuthSSLProtocolSocketFactory
       if (ks == null) throw new IllegalArgumentException(Messages.get("INVALID.KEYSTORE"));
       this.ks = ks;
       this.keyStorePass = keyStorePass;
-      if (protocol != null) this.protocol = protocol;
-      if (kmfFactory != null) this.kmfFactory = kmfFactory;
-      if (tm != null) this.tm = tm;
+      this.protocol = protocol != null ? protocol : DEFAULT_PROTOCOL;
+      this.kmfFactory = kmfFactory != null ? kmfFactory : DEFAULT_KMF_FACTORY;
+      this.tm = tm;
   }
   
   public ClientAuthSSLProtocolSocketFactory(
@@ -135,30 +136,16 @@ public class ClientAuthSSLProtocolSocketFactory
     SSLSocket socket = null;
     try {
       KeyManagerFactory kmf;
-
       context = SSLContext.getInstance(protocol);
       kmf = KeyManagerFactory.getInstance(kmfFactory);
-
-      TrustManager tm = (this.tm != null) ? this.tm : new X509TrustManager() {
-        public void checkClientTrusted(X509Certificate[] arg0, String arg1) 
-          throws CertificateException {}
-        public void checkServerTrusted(X509Certificate[] arg0, String arg1) 
-          throws CertificateException {}
-        public X509Certificate[] getAcceptedIssuers() {
-          return null;
-        }
-      };
-      
+      TrustManager tm = (this.tm != null) ? this.tm : new NonOpTrustManager();
       kmf.init(ks, keyStorePass.toCharArray());
-      context.init(kmf.getKeyManagers(), new TrustManager[] {tm}, null);
-      
+      context.init(kmf.getKeyManagers(), new TrustManager[] {tm}, null);      
       factory = context.getSocketFactory();
-
       socket = (SSLSocket) factory.createSocket(host, port);
       return socket;
     } catch (Exception e) {
-      e.printStackTrace();
+      throw new RuntimeException(e);
     }
-    return null;
   }
 }

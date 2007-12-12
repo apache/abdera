@@ -84,7 +84,17 @@ public abstract class AbstractMessage
   }
   
   public boolean isNoCache() {
-    return check(NOCACHE);
+    if (check(NOCACHE)) return true;    
+    Object[] pragma = getHeaders("Pragma");
+    if (pragma != null) {
+      for (Object o: pragma) {
+        String s = (String)o;
+        if (s.equalsIgnoreCase("no-cache")) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   public boolean isNoStore() {

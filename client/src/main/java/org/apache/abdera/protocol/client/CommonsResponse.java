@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +31,6 @@ import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URIException;
-import org.apache.commons.httpclient.util.DateParseException;
-import org.apache.commons.httpclient.util.DateUtil;
 
 public class CommonsResponse 
   extends AbstractClientResponse
@@ -41,13 +38,15 @@ public class CommonsResponse
 
   private final HttpMethod method;
     
-  protected CommonsResponse(Abdera abdera, HttpMethod method) {
-    super(abdera);
-    if (method.isRequestSent()) 
-      this.method = method;
-    else throw new IllegalStateException();
-    parse_cc();
-    getServerDate();
+  protected CommonsResponse(
+    Abdera abdera,
+    HttpMethod method) {
+      super(abdera);
+      if (method.isRequestSent()) 
+        this.method = method;
+      else throw new IllegalStateException();
+      parse_cc();
+      getServerDate();
   }
 
   public HttpMethod getHttpMethod() {
@@ -155,22 +154,9 @@ public class CommonsResponse
       in = method.getResponseBodyAsStream();
       if (ce != null)
         in = EncodingUtil.getDecodingInputStream(in, ce);
+      in = new AutoReleasingInputStream(method,in);
     }
-    return new AutoReleasingInputStream(method,in);
-  }
-
-  /**
-   * Return the named HTTP header as a java.util.Date
-   */
-  public Date getDateHeader(String header) {
-    try {
-      String value = getHeader(header);
-      if (value != null)
-        return DateUtil.parseDate(value);
-      else return null;
-    } catch (DateParseException e) {
-      throw new ClientException(e); // server likely returned a bad date format
-    }
+    return in;
   }
 
 }

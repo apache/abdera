@@ -205,8 +205,8 @@ public class HttpServletRequestContext
   private static IRI initBaseUri(
     ServiceContext context, 
     HttpServletRequest request) {
-      StringBuffer buffer = 
-        new StringBuffer(
+      StringBuilder buffer = 
+        new StringBuilder(
           (request.isSecure())?
             "https":"http");
       buffer.append("://");
@@ -224,8 +224,8 @@ public class HttpServletRequestContext
   
   private static IRI initRequestUri(HttpServletRequest request) {
     IRI uri = null;
-    StringBuffer buf = 
-      new StringBuffer(
+    StringBuilder buf = 
+      new StringBuilder(
         request.getRequestURI());
     String qs = request.getQueryString();
     if (qs != null && qs.length() != 0)

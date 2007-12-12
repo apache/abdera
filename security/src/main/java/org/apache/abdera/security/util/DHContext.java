@@ -92,7 +92,7 @@ public class DHContext
   }
   
   public String getRequestString() {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     buf.append("DH ");
     buf.append("p=");
     buf.append(p.toString());
@@ -106,7 +106,7 @@ public class DHContext
   }
   
   public String getResponseString() {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     buf.append("DH ");
     buf.append("k=");
     buf.append(Base64.encode(keyPair.getPublic().getEncoded()));

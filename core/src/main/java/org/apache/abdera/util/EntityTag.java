@@ -137,7 +137,7 @@ public class EntityTag implements Cloneable, Serializable {
   }
 
   public String toString() {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     if (wild) {
       buf.append("*");
     } else {
@@ -212,7 +212,7 @@ public class EntityTag implements Cloneable, Serializable {
   }
 
   public static String toString(EntityTag... tags) {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     for (EntityTag tag : tags) {
       if (buf.length() > 0) buf.append(", ");
       buf.append(tag.toString());
@@ -221,7 +221,7 @@ public class EntityTag implements Cloneable, Serializable {
   }
   
   public static String toString(String ... tags) {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     for (String tag : tags) {
       if (buf.length() > 0) buf.append(", ");
       EntityTag etag = new EntityTag(tag);

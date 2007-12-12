@@ -15,16 +15,28 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.client.cache.lru;
+package org.apache.abdera.protocol.client.util;
 
-import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.client.cache.Cache;
-import org.apache.abdera.protocol.client.cache.CacheFactory;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
-public class LRUCacheFactory implements CacheFactory {
+import javax.net.ssl.X509TrustManager;
 
-  public Cache getCache(Abdera abdera) {
-    return new LRUCache(abdera);
+public class NonOpTrustManager 
+  implements X509TrustManager {
+  
+  public void checkClientTrusted(
+    X509Certificate[] arg0, 
+    String arg1)
+      throws CertificateException {}
+  
+  public void checkServerTrusted(
+    X509Certificate[] arg0, 
+    String arg1)
+      throws CertificateException {}
+  
+  public X509Certificate[] getAcceptedIssuers() {
+    return null;
   }
-
+  
 }

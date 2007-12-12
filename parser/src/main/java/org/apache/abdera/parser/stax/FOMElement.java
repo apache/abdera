@@ -526,7 +526,7 @@ public class FOMElement
   }
 
   public String getText() {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     Iterator i = getChildren();
     while (i.hasNext()) {
       OMNode node = (OMNode) i.next();

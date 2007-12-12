@@ -248,7 +248,7 @@ public final class CharUtils {
   }
   
   private static String supplementaryToString(int c) {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     buf.append((char)getHighSurrogate(c));
     buf.append((char)getLowSurrogate(c));
     return buf.toString();

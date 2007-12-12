@@ -15,14 +15,9 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.client.cache.lru;
+package org.apache.abdera.protocol.client.cache;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.client.cache.Cache;
-import org.apache.abdera.protocol.client.cache.CacheKey;
-import org.apache.abdera.protocol.client.cache.CachedResponse;
-import org.apache.abdera.protocol.client.cache.InMemoryCache;
-import org.apache.abdera.protocol.client.cache.LRUMap;
 
 @SuppressWarnings("serial")
 public class LRUCache
@@ -36,8 +31,10 @@ public class LRUCache
   }
   
   public LRUCache(Abdera abdera, final int size) {
-    super(abdera);
-    setMap(new LRUMap<CacheKey,CachedResponse>(size,0.75f,true));    
+    super(
+      abdera,
+      new LRUMap<Object,CachedResponse>(
+        size,0.75f));
   }
   
 }

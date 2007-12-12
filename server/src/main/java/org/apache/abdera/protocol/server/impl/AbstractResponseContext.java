@@ -150,13 +150,13 @@ public abstract class AbstractResponseContext
     return headers.keySet().toArray(new String[headers.size()]);
   }
   
-  private void append(StringBuffer buf, String value) {
+  private void append(StringBuilder buf, String value) {
     if (buf.length() > 0) buf.append(", ");
     buf.append(value);
   }
     
   public String getCacheControl() {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     if (isPublic()) append(buf,"public");
     if (isPrivate()) append(buf,"private");
     if (private_headers != null && private_headers.length > 0) {
@@ -287,7 +287,7 @@ public abstract class AbstractResponseContext
   }
   
   public ResponseContext setAllow(String... methods) {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     for(String method : methods) {
       if (buf.length() > 0) buf.append(", ");
       buf.append(method);

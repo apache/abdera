@@ -29,7 +29,8 @@ import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.protocol.Response;
 
-public interface ClientResponse extends Response {
+public interface ClientResponse 
+  extends Response {
 
   /**
    * Return the request method

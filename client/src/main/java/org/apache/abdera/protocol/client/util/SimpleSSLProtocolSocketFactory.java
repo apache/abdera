@@ -21,12 +21,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.httpclient.ConnectTimeoutException;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
@@ -37,21 +34,13 @@ public class SimpleSSLProtocolSocketFactory
 
   private SSLContext context = null;
   
-  public SimpleSSLProtocolSocketFactory(TrustManager trustManager) {
-    init(trustManager);
+  public SimpleSSLProtocolSocketFactory(
+    TrustManager trustManager) {
+      init(trustManager);
   }
   
   public SimpleSSLProtocolSocketFactory() {
-    try {
-      TrustManager tm = new X509TrustManager() {
-        public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
-        public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
-        public X509Certificate[] getAcceptedIssuers() {
-          return null;
-        }
-      };
-      init(tm);
-    } catch (Exception e) {}
+    this(new NonOpTrustManager());
   }
 
   private void init(TrustManager trustManager) {

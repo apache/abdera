@@ -24,114 +24,67 @@ import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.util.CacheControlUtil;
 
-public abstract class CacheBase 
+public abstract class AbstractCache 
   implements Cache {
 
   protected final Abdera abdera;
   
-  protected CacheBase(Abdera abdera) {
+  protected AbstractCache(Abdera abdera) {
     this.abdera = abdera;
   }
   
-  public CachedResponse get(String uri, RequestOptions options) {
-    return get(getCacheKey(uri,options));
-  }
-
-  public CacheDisposition getDisposition(
-    String uri, 
+  public Disposition disposition(
+    Object key,
     RequestOptions options) {
-      CacheKey key = getCacheKey(uri, options);
       CachedResponse response = get(key);
       if (response != null && options != null) {
-        Object[] pragma = options.getHeaders("Pragma");
-        if (pragma != null) {
-          for (Object o: pragma) {
-            String s = (String)o;
-            if (s.equalsIgnoreCase("no-cache")) {
-              return CacheDisposition.TRANSPARENT;
-            }
-          }
-        }
         if (options.isNoCache()) 
-          return CacheDisposition.TRANSPARENT;
+          return Disposition.TRANSPARENT;
         else if (response.isNoCache())
-          return CacheDisposition.STALE;
+          return Disposition.STALE;
         else if (options != null && options.isOnlyIfCached())
-          return CacheDisposition.FRESH;
+          return Disposition.FRESH;
         else if (response.isMustRevalidate())
-          return CacheDisposition.STALE;
+          return Disposition.STALE;
         else if (response.getCachedTime() != -1) {
           if (response.isFresh()) {
             long maxAge = options.getMaxAge();
             long currentAge = response.getCurrentAge();
-            if (maxAge != -1) {
-              return (maxAge > currentAge) ? 
-                CacheDisposition.FRESH:
-                CacheDisposition.STALE;
-            }
             long minFresh = options.getMinFresh();
-            if (minFresh != -1) {
-              long lifetime = response.getFreshnessLifetime();
-              long age = currentAge;
-              return (lifetime < age + minFresh) ? 
-                CacheDisposition.TRANSPARENT : 
-                CacheDisposition.FRESH;
-            }
-            return CacheDisposition.FRESH;
+            if (maxAge != -1)
+              return (maxAge > currentAge) ? 
+                Disposition.FRESH:
+                Disposition.STALE;
+            if (minFresh != -1)
+              return response.getFreshnessLifetime() < currentAge + minFresh ? 
+                Disposition.TRANSPARENT : 
+                Disposition.FRESH;
+            return Disposition.FRESH;
           } else {
             long maxStale = options.getMaxStale();
-            if (maxStale != -1) {
-              long howStale = response.getHowStale();
-              return (maxStale < howStale) ? 
-                CacheDisposition.STALE : 
-                CacheDisposition.FRESH;
-            } 
-            return CacheDisposition.STALE;
+            if (maxStale != -1)
+              return maxStale < response.getHowStale() ? 
+                Disposition.STALE : 
+                Disposition.FRESH;
+            return Disposition.STALE;
           }
         }
       }
-      return CacheDisposition.TRANSPARENT;
-
-  }
-
-  public void remove(String uri, RequestOptions options) {
-    remove(getCacheKey(uri,options));
+      return Disposition.TRANSPARENT;
   }
 
   protected abstract void add(
-    CacheKey key, 
+    Object key, 
     CachedResponse response);
 
   protected abstract CachedResponse createCachedResponse(
-    ClientResponse response, CacheKey key) throws IOException;
+    ClientResponse response, 
+    Object key) 
+      throws IOException;
   
-  protected abstract CacheKey getCacheKey(
-    String uri, 
-    RequestOptions options, 
-    ClientResponse response);
-  
-  public CachedResponse getIfFreshEnough(
-    String uri, 
-    RequestOptions options) {
-      CacheKey key = getCacheKey(uri,options);
-      CachedResponse response = get(key);
-      if (!response.isFresh()) {
-        // if the milk is only slightly sour, we'll still go ahead and take a drink
-        long max_stale = (options != null) ? options.getMaxStale() : -1;
-        if (max_stale != -1 && response.getHowStale() > max_stale)
-          return null;
-      } else {
-        long min_fresh = (options != null) ? options.getMinFresh() : -1;
-        if (min_fresh != -1 && response.getCurrentAge() < min_fresh)
-          return null;
-      }
-      return response;
-  }
-
   private boolean shouldUpdateCache(
     ClientResponse response,
-    boolean allowedByDefault) {
-    // TODO: we should probably include pragma: no-cache headers in here 
+    boolean allowedByDefault) { 
       if (allowedByDefault) {
         return !response.isNoCache() &&
                !response.isNoStore() &&
@@ -146,6 +99,7 @@ public abstract class CacheBase
   }
   
   public ClientResponse update(
+    Object key,
     RequestOptions options,
     ClientResponse response,
     ClientResponse cached_response) {
@@ -155,7 +109,7 @@ public abstract class CacheBase
       // if the method changes state on the server, don't cache and 
       // clear what we already have
       if (!CacheControlUtil.isIdempotent(method)) {
-        remove(uri,options);
+        remove(uri);
         return response;
       }
       // otherwise, base the decision on the response status code
@@ -163,8 +117,8 @@ public abstract class CacheBase
         case 200: case 203: case 300: case 301: case 410:
           // rfc2616 says these are cacheable unless otherwise noted
           if (shouldUpdateCache(response,true))
-            return update(options, response);
-          else remove(uri, options);
+            return update(key, options, response);
+          else remove(uri);
           break;
         case 304: case 412:
           // if not revalidated, fall through
@@ -173,24 +127,24 @@ public abstract class CacheBase
         default:
           // rfc2616 says are *not* cacheable unless otherwise noted
           if (shouldUpdateCache(response,false))
-            return update(options, response);
-          else remove(uri, options);
+            return update(key, options, response);
+          else remove(uri);
           break;
       }
       return response;
   }
    
   private ClientResponse update(
+    Object key,
     RequestOptions options,
     ClientResponse response) {
-      String uri = response.getUri();
-      CacheKey key = getCacheKey(uri, options,response);
       try {
-        CachedResponse cachedResponse = createCachedResponse(response, key);
+        CachedResponse cachedResponse = 
+          createCachedResponse(response, key);
         add(key, cachedResponse);
         return cachedResponse;
        } catch (IOException e) {
-        throw new CacheException(e);
+        throw new RuntimeException(e);
       }
   }
 

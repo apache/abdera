@@ -55,7 +55,6 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
   private static final Log log = LogFactory.getLog(AbstractServiceProvider.class);
   public static final String COLLECTION_PROVIDER_ATTRIBUTE = "collectionProvider";
   
-    private EntityTag service_etag = new EntityTag("simple");
     private String servicesPath = "/";
     
     protected AbstractServiceProvider(int count) {
@@ -135,7 +134,7 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
     public ResponseContext getService(RequestContext request) {
       Abdera abdera = request.getAbdera();
       AbstractResponseContext rc = getServicesDocument(abdera, getEncoding(request));
-      rc.setEntityTag(service_etag);
+      rc.setStatus(200);
       return rc;
     }
 
@@ -143,46 +142,44 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
       return "utf-8";
     }
 
-    private AbstractResponseContext getServicesDocument(
-      final Abdera abdera, 
-      final String enc) {
-      return new StreamWriterResponseContext(abdera) { 
-        @SuppressWarnings({"serial","unchecked"}) 
-        protected void writeTo(
-          StreamWriter sw) 
-            throws IOException {
-          
-          sw.startDocument()
-            .startService();          
-          
+    private AbstractResponseContext getServicesDocument(final Abdera abdera, 
+                                                        final String enc) {
+      
+      return new StreamWriterResponseContext(abdera) {
+
+        @SuppressWarnings( {"serial", "unchecked"})
+        protected void writeTo(StreamWriter sw) throws IOException {
+          sw.startDocument().startService();
+  
           for (WorkspaceInfo wp : getWorkspaces()) {
             sw.startWorkspace().writeTitle(wp.getName());
-            Set<Map.Entry<String, CollectionProvider>> entrySet = 
-              (Set<Map.Entry<String, CollectionProvider>>) (wp.getCollectionProviders().entrySet());
-            
+            Set<Map.Entry<String, CollectionProvider>> entrySet = (Set<Map.Entry<String, CollectionProvider>>)(wp
+              .getCollectionProviders().entrySet());
+  
             for (Map.Entry<String, CollectionProvider> entry : entrySet) {
               CollectionProvider cp = entry.getValue();
-
+  
               String href;
               try {
                 href = Escaping.encode(entry.getKey(), enc, Profile.PATH);
               } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
               }
-
+  
               try {
                 sw.startCollection(href)
                   .writeTitle(cp.getTitle())
-                  .writeAcceptsEntry() 
+                  .writeAcceptsEntry()
                   .endCollection();
-              } catch (RuntimeException e) {}
+              } catch (RuntimeException e) {
+              }
             }
-            
-            sw.endWorkspace();    
-          }          
-          sw.endService()
-            .endDocument();
-          
+  
+            sw.endWorkspace();
+          }
+  
+          sw.endService().endDocument();
+  
         }
       };
     }

@@ -303,9 +303,9 @@ public class AbderaClient {
    * @param name
    * @param scheme
    */
-  public static <T extends AuthScheme>void registerScheme(
+  public static void registerScheme(
     String name, 
-    Class<T> scheme) {
+    Class<? extends AuthScheme> scheme) {
       AuthPolicy.registerAuthScheme(name, scheme);
   }
   

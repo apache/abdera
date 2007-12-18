@@ -309,6 +309,21 @@ public class AbderaClient {
       AuthPolicy.registerAuthScheme(name, scheme);
   }
   
+  /**
+   * Unregister a specific authentication scheme
+   */
+  public static void unregisterScheme(
+    String name) {
+      AuthPolicy.unregisterAuthScheme(name);
+  }
+  
+  /**
+   * Unregister multiple schemes
+   */
+  public static void unregisterScheme(String... names) {
+    for (String name : names) unregisterScheme(name);
+  }
+  
   public static void registerTrustManager(
     TrustManager trustManager) {
       registerTrustManager(trustManager,443);

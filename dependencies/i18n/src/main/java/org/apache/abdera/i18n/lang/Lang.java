@@ -27,7 +27,7 @@ import org.apache.abdera.i18n.io.CharUtils.Profile;
 
 
 /**
- * rfc3066
+ * rfc3066 implementation
  */
 public class Lang 
   implements Iterable<String>, 

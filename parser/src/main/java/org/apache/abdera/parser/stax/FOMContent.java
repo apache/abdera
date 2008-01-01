@@ -23,12 +23,12 @@ import javax.activation.URLDataSource;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.util.Constants;
-import org.apache.abdera.util.Messages;
 import org.apache.axiom.attachments.utils.DataHandlerUtils;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
@@ -203,7 +203,7 @@ public class FOMContent
   public DataHandler getDataHandler() {
     if (!Type.MEDIA.equals(type)) 
       throw new UnsupportedOperationException(
-        Messages.get("DATA.HANDLER.NOT.SUPPORTED"));
+        Localizer.get("DATA.HANDLER.NOT.SUPPORTED"));
     MimeType type = getMimeType();
     java.net.URL src = null;
     try {

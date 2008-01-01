@@ -32,8 +32,8 @@ import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.util.AbstractRequest;
-import org.apache.abdera.util.Messages;
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.text.Localizer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -71,7 +71,7 @@ public abstract class AbstractRequestContext
   public synchronized <T extends Element>Document<T> getDocument()
     throws ParseException, 
            IOException {
-    log.debug(Messages.get("PARSING.REQUEST.DOCUMENT"));
+    log.debug(Localizer.get("PARSING.REQUEST.DOCUMENT"));
     if (document == null) {
       Abdera abdera = context.getAbdera();
       Parser parser = abdera.getParser();
@@ -85,7 +85,7 @@ public abstract class AbstractRequestContext
     Parser parser)
       throws ParseException, 
              IOException {
-    log.debug(Messages.get("PARSING.REQUEST.DOCUMENT"));
+    log.debug(Localizer.get("PARSING.REQUEST.DOCUMENT"));
     if (document == null) {
       ParserOptions options = parser.getDefaultParserOptions();
       document = getDocument(parser, options);
@@ -98,7 +98,7 @@ public abstract class AbstractRequestContext
     ParserOptions options)
      throws ParseException, 
             IOException  {
-    log.debug(Messages.get("PARSING.REQUEST.DOCUMENT"));
+    log.debug(Localizer.get("PARSING.REQUEST.DOCUMENT"));
     if (document == null) {
       Abdera abdera = context.getAbdera();
       Parser parser = abdera.getParser();
@@ -113,7 +113,7 @@ public abstract class AbstractRequestContext
     ParserOptions options) 
       throws ParseException, 
              IOException {
-    log.debug(Messages.get("PARSING.REQUEST.DOCUMENT"));
+    log.debug(Localizer.get("PARSING.REQUEST.DOCUMENT"));
     if (document == null) {
       return parser.parse(
         getInputStream(), 

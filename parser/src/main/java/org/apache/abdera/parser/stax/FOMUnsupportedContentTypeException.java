@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.parser.stax;
 
-import org.apache.abdera.util.Messages;
+import org.apache.abdera.i18n.text.Localizer;
 
 public class FOMUnsupportedContentTypeException 
   extends FOMException {
@@ -25,7 +25,7 @@ public class FOMUnsupportedContentTypeException
   private static final long serialVersionUID = 4156893310308105899L;
 
   public FOMUnsupportedContentTypeException(String message) {
-    super(Messages.format("UNSUPPORTED.CONTENT.TYPE",message));
+    super(Localizer.sprintf("UNSUPPORTED.CONTENT.TYPE",message));
   }
 
 }

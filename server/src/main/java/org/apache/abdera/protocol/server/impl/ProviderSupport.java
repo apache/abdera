@@ -9,6 +9,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Document;
@@ -21,7 +22,6 @@ import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.util.EncodingUtil;
-import org.apache.abdera.util.Messages;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.writer.StreamWriter;
 import org.apache.commons.logging.Log;
@@ -100,7 +100,7 @@ public class ProviderSupport {
     RequestContext request,
     String reason,
     Throwable t) {
-      log.debug(Messages.get("SERVER_ERROR"));
+      log.debug(Localizer.get("SERVER_ERROR"));
       return createErrorResponse(abdera,500,reason,t);
   }
 
@@ -111,7 +111,7 @@ public class ProviderSupport {
     Abdera abdera,
     RequestContext request,
     String reason) {
-      log.debug(Messages.get("UNAUTHORIZED"));
+      log.debug(Localizer.get("UNAUTHORIZED"));
       return createErrorResponse(abdera,401,reason);
   }
 
@@ -122,7 +122,7 @@ public class ProviderSupport {
     Abdera abdera,
     RequestContext request,
     String reason) {
-      log.debug(Messages.get("FORBIDDEN"));
+      log.debug(Localizer.get("FORBIDDEN"));
       return createErrorResponse(abdera,403,reason);
   }
 
@@ -133,7 +133,7 @@ public class ProviderSupport {
     Abdera abdera,
     RequestContext request,
     String reason) {
-    log.debug(Messages.get("UNKNOWN"));
+    log.debug(Localizer.get("UNKNOWN"));
     return createErrorResponse(abdera,404,reason);
   }
 
@@ -145,7 +145,7 @@ public class ProviderSupport {
     RequestContext request,
     String reason,
     String... methods) {
-      log.debug(Messages.get("NOT.ALLOWED")); 
+      log.debug(Localizer.get("NOT.ALLOWED")); 
       AbstractResponseContext resp = 
         createErrorResponse(abdera,405,reason);
       resp.setAllow(methods);
@@ -159,7 +159,7 @@ public class ProviderSupport {
     Abdera abdera,
     RequestContext request,
     String reason) {
-      log.debug(Messages.get("BAD.REQUEST"));
+      log.debug(Localizer.get("BAD.REQUEST"));
       return createErrorResponse(abdera,400,reason);
   }
 
@@ -170,7 +170,7 @@ public class ProviderSupport {
     Abdera abdera,
     RequestContext request,
     String reason) {
-    log.debug(Messages.get("CONFLICT"));
+    log.debug(Localizer.get("CONFLICT"));
     return createErrorResponse(abdera,409,reason);
   }
 
@@ -181,7 +181,7 @@ public class ProviderSupport {
     Abdera abdera,
     RequestContext request,
     String reason) {
-      log.debug(Messages.get("UNAVAILABLE"));
+      log.debug(Localizer.get("UNAVAILABLE"));
       return createErrorResponse(abdera,503,reason);
   }
 
@@ -189,7 +189,7 @@ public class ProviderSupport {
     Abdera abdera, 
     RequestContext request,
     String reason) {
-      log.debug(Messages.get("NOT.MODIFIED"));
+      log.debug(Localizer.get("NOT.MODIFIED"));
       return new EmptyResponseContext(304,reason);
   }
 
@@ -197,7 +197,7 @@ public class ProviderSupport {
     Abdera abdera, 
     RequestContext request,
     String reason) {
-      log.debug(Messages.get("PRECONDITION.FAILED"));
+      log.debug(Localizer.get("PRECONDITION.FAILED"));
       return createErrorResponse(abdera,412,reason);
   }
 
@@ -208,7 +208,7 @@ public class ProviderSupport {
     Abdera abdera,
     RequestContext request,
     String reason) {
-      log.debug(Messages.get("NOT.SUPPORTED"));
+      log.debug(Localizer.get("NOT.SUPPORTED"));
       return createErrorResponse(abdera,415,reason);
   }
 
@@ -219,7 +219,7 @@ public class ProviderSupport {
     Abdera abdera,
     RequestContext request,
     String reason) {
-      log.debug(Messages.get("LOCKED"));
+      log.debug(Localizer.get("LOCKED"));
       return createErrorResponse(abdera,423,reason);
     }
 
@@ -231,7 +231,7 @@ public class ProviderSupport {
     Base base, 
     int status,
     Date lastModified) {
-      log.debug(Messages.get("RETURNING.DOCUMENT"));
+      log.debug(Localizer.get("RETURNING.DOCUMENT"));
       BaseResponseContext response = new BaseResponseContext(base);
       response.setStatus(status);
       if (lastModified != null) response.setLastModified(lastModified);
@@ -250,14 +250,14 @@ public class ProviderSupport {
    * the slug are replaced with an underscore
    */
   protected String sanitizeSlug(String slug) {
-    if (slug == null) throw new IllegalArgumentException(Messages.get("SLUG.NOT.NULL"));
+    if (slug == null) throw new IllegalArgumentException(Localizer.get("SLUG.NOT.NULL"));
     String sanitized = EncodingUtil.sanitize(slug);
-    log.debug(Messages.format("SLUG.SANITIZED", slug, sanitized));
+    log.debug(Localizer.sprintf("SLUG.SANITIZED", slug, sanitized));
     return sanitized;
   }
 
   protected int getDefaultPageSize() {
-    log.debug(Messages.format("DEFAULT.PAGE.SIZE",defaultpagesize));
+    log.debug(Localizer.sprintf("DEFAULT.PAGE.SIZE",defaultpagesize));
     return defaultpagesize;
   }
 
@@ -271,7 +271,7 @@ public class ProviderSupport {
         size = (_ps != null) ? 
           Math.min(Math.max(Integer.parseInt(_ps),0),max) : max;
       } catch (Exception e) {}
-      log.debug(Messages.format("PAGE.SIZE",size));
+      log.debug(Localizer.sprintf("PAGE.SIZE",size));
       return size;
   }
 
@@ -286,7 +286,7 @@ public class ProviderSupport {
         page = Math.max(page, 1) - 1;
         offset = pageSize * page;
       } catch (Exception e) {}
-      log.debug(Messages.format("OFFSET",offset));
+      log.debug(Localizer.sprintf("OFFSET",offset));
       return offset;
   }
 
@@ -314,15 +314,15 @@ public class ProviderSupport {
             content.getContentType() == Content.Type.MEDIA || 
             content.getContentType() == Content.Type.XML) &&
             entry.getSummary() == null) {
-          log.debug(Messages.format("CHECKING.VALID.ENTRY",false));
+          log.debug(Localizer.sprintf("CHECKING.VALID.ENTRY",false));
           return false;
         }
       }
     } catch (Exception e) {
-      log.debug(Messages.format("CHECKING.VALID.ENTRY",false));
+      log.debug(Localizer.sprintf("CHECKING.VALID.ENTRY",false));
       return false;
     }
-    log.debug(Messages.format("CHECKING.VALID.ENTRY",true));
+    log.debug(Localizer.sprintf("CHECKING.VALID.ENTRY",true));
     return true;
   }
 
@@ -345,7 +345,7 @@ public class ProviderSupport {
       ignore.add(org.apache.abdera.util.Constants.XML_NS);
       checkEntryAddAdditionalNamespaces(ignore);
       boolean answer = checkElement(entry,ignore);
-      log.debug(Messages.format("CHECKING.ENTRY.NAMESPACES",answer));
+      log.debug(Localizer.sprintf("CHECKING.ENTRY.NAMESPACES",answer));
       return answer;
   }
 

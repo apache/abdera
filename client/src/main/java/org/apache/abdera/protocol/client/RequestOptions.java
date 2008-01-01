@@ -26,6 +26,7 @@ import java.util.Set;
 
 import javax.activation.MimeType;
 
+import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.i18n.text.UrlEncoding;
 import org.apache.abdera.i18n.text.CharUtils.Profile;
 import org.apache.abdera.protocol.Request;
@@ -33,7 +34,6 @@ import org.apache.abdera.protocol.util.AbstractRequest;
 import org.apache.abdera.protocol.util.CacheControlUtil;
 import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.util.EntityTag;
-import org.apache.abdera.util.Messages;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
 
@@ -424,7 +424,7 @@ public class RequestOptions
     if (slug.indexOf((char)10) > -1 ||
         slug.indexOf((char)13) > -1)
       throw new IllegalArgumentException(
-        Messages.get("SLUG.BAD.CHARACTERS"));
+        Localizer.get("SLUG.BAD.CHARACTERS"));
     return setHeader("Slug", UrlEncoding.encode(slug,Profile.ASCIISANSCRLF.filter()));
   }
   

@@ -26,6 +26,8 @@ import java.util.List;
 
 import javax.activation.DataHandler;
 
+import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Content;
@@ -42,9 +44,6 @@ import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.util.MimeTypeParseException;
-import org.apache.abdera.util.URIHelper;
-import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRISyntaxException;
 import org.apache.axiom.om.OMException;
 
 public class FeedValidatorTest 
@@ -2733,7 +2732,7 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      assertNotNull(doc);
      assertEquals(doc.getRoot().getId(), new IRI("http://example.org/./id/1234"));
-     assertEquals(URIHelper.normalize(doc.getRoot().getId()), new IRI("http://example.org/id/1234"));
+     assertEquals(IRI.normalize(doc.getRoot().getId()), new IRI("http://example.org/id/1234"));
    }
    
    public static void testSection426IdEmptyFragmentId() throws Exception {

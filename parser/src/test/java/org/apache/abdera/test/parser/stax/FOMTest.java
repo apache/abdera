@@ -19,8 +19,8 @@ package org.apache.abdera.test.parser.stax;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
@@ -35,9 +35,13 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 
+import junit.framework.TestCase;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.filter.ListParseFilter;
+import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.lang.Lang;
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
@@ -62,17 +66,13 @@ import org.apache.abdera.parser.ParserFactory;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.util.AbderaSource;
 import org.apache.abdera.util.Constants;
-import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.util.Version;
 import org.apache.abdera.util.filter.BlackListParseFilter;
 import org.apache.abdera.util.filter.WhiteListParseFilter;
-import org.apache.abdera.i18n.lang.Lang;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
 import org.apache.abdera.xpath.XPath;
 import org.apache.axiom.attachments.ByteArrayDataSource;
-
-import junit.framework.TestCase;
 
 public class FOMTest extends TestCase   {
 
@@ -262,8 +262,8 @@ public class FOMTest extends TestCase   {
   public void testUriNormalization() throws Exception {
     String s1 = "HTTP://www.Example.ORG:80/./foo/%2d/../%2d/./foo";
     String s2 = "HTTP://www.Example.ORG:81/./foo/%2d/../%2d/./foo";
-    assertEquals(URIHelper.normalize(s1), "http://www.example.org/foo/-/foo");
-    assertEquals(URIHelper.normalize(s2), "http://www.example.org:81/foo/-/foo");
+    assertEquals(IRI.normalizeString(s1), "http://www.example.org/foo/-/foo");
+    assertEquals(IRI.normalizeString(s2), "http://www.example.org:81/foo/-/foo");
   }
   
   public void testFactory() throws Exception {

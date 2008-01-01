@@ -22,7 +22,6 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.IRIElement;
-import org.apache.abdera.util.URIHelper;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -89,7 +88,7 @@ public class FOMIRI
 
   public IRIElement setNormalizedValue(String uri) {
     if (uri != null)
-      setValue(URIHelper.normalize(uri));
+      setValue(IRI.normalizeString(uri));
     else 
       setValue(null);
     return this;

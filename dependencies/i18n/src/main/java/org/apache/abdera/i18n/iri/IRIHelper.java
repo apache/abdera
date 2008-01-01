@@ -15,16 +15,15 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.util;
+package org.apache.abdera.i18n.iri;
 
 import java.util.regex.Pattern;
 
-import org.apache.abdera.i18n.iri.IRI;
 
 /**
  * Utility methods for working with URI's / IRI's
  */
-public class URIHelper {
+public class IRIHelper {
 
   private static final Pattern javascript = 
     Pattern.compile(
@@ -45,28 +44,4 @@ public class URIHelper {
     return mailto.matcher(uri.toString()).matches();
   }
   
-  /**
-   * Normalize a URI as specified by RFC4287 Section 4.2.6
-   */
-  public static IRI normalize(
-    IRI uri)  {
-    if (uri == null) return null;
-    return uri.normalize();
-  }
-  
-  public static String normalize(String uri) {
-    return normalize(new IRI(uri)).toASCIIString();
-  }
-  
-  public static IRI resolve(IRI base, IRI value) {
-    if (value == null) return null;
-    if ("".equals(value.toString()) || 
-        "#".equals(value.toString()) ||
-        ".".equals(value.toString()) ||
-        "./".equals(value.toString())) return base;
-    if (base == null) return value;
-    if ("".equals(base.getPath())) base = base.resolve("/");
-    IRI resolved = (base != null) ? base.resolve(value) : value;
-    return resolved;
-  }
 }

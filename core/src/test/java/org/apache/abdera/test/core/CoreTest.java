@@ -65,7 +65,6 @@ import org.apache.abdera.util.CompressionUtil;
 import org.apache.abdera.util.Configuration;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
-import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.util.XmlRestrictedCharReader;
 import org.apache.abdera.writer.WriterOptions;
 
@@ -87,19 +86,19 @@ public class CoreTest extends TestCase implements Constants {
   public static void testUriNormalization() {
     try {
       assertEquals(
-        URIHelper.normalize(
+        IRI.normalizeString(
           "HTTP://www.EXAMPLE.org:80/foo/../Bar/%3f/./foo/."), 
         "http://www.example.org/Bar/%3F/foo/");
       assertEquals(
-        URIHelper.normalize(
+          IRI.normalizeString(
           "HTTPs://www.EXAMPLE.org:443/foo/../Bar/%3f/./foo/."), 
         "https://www.example.org/Bar/%3F/foo/");
       assertEquals(
-        URIHelper.normalize(
+        IRI.normalizeString(
           "HTTP://www.EXAMPLE.org:81/foo/../Bar/%3f/./foo/."), 
         "http://www.example.org:81/Bar/%3F/foo/");
       assertEquals(
-        URIHelper.normalize(
+        IRI.normalizeString(
           "HTTPs://www.EXAMPLE.org:444/foo/../Bar/%3f/./foo/."), 
         "https://www.example.org:444/Bar/%3F/foo/");
     } catch (Exception e) {

@@ -26,7 +26,6 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ExtensibleElementWrapper;
-import org.apache.abdera.util.URIHelper;
 
 public class Features 
   extends ExtensibleElementWrapper {
@@ -43,7 +42,9 @@ public class Features
   }
 
   public IRI getResolvedHref() {
-    return URIHelper.resolve(getResolvedBaseUri(), getHref());
+    IRI base = getResolvedBaseUri();
+    IRI href = getHref();
+    return base != null ? base.resolve(href) : href;
   }
   
   public IRI getHref() {

@@ -473,6 +473,10 @@ public final class IRI
     return normalize(this);
   }
   
+  public static String normalizeString(String iri) {
+    return normalize(new IRI(iri)).toString();
+  }
+  
   public static IRI normalize(IRI iri) {
     if (iri.isOpaque() || iri.getPath() == null) return iri;
     IRI normalized = null;

@@ -27,7 +27,6 @@ import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.util.Constants;
-import org.apache.abdera.util.URIHelper;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -216,7 +215,7 @@ public class FOMLink
   }
   public static final String getRelEquiv(String val) {
     try {
-      val = URIHelper.normalize(val);
+      val = IRI.normalizeString(val);
     } catch (Exception e) {}
     String rel = REL_EQUIVS.get(val);
     return (rel != null) ? rel : val;

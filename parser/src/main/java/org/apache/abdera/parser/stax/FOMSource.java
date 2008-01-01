@@ -24,6 +24,7 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRIHelper;
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Category;
@@ -40,7 +41,6 @@ import org.apache.abdera.model.Source;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.Constants;
-import org.apache.abdera.util.URIHelper;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -245,7 +245,7 @@ public class FOMSource
     } else {
       FOMFactory fomfactory = (FOMFactory) factory;
       IRIElement iri = fomfactory.newID(this);
-      iri.setValue((normalize) ? URIHelper.normalize(value) : value);
+      iri.setValue((normalize) ? IRI.normalizeString(value) : value);
       return iri;
     }
   }
@@ -535,8 +535,8 @@ public class FOMSource
   public IRI getIcon() {
     IRIElement iri = getIconElement();
     IRI uri = (iri != null) ? iri.getResolvedValue() : null;
-    return (URIHelper.isJavascriptUri(uri) ||
-        URIHelper.isMailtoUri(uri)) ? null : uri;
+    return (IRIHelper.isJavascriptUri(uri) ||
+        IRIHelper.isMailtoUri(uri)) ? null : uri;
   }
 
   public IRIElement getLogoElement() {
@@ -567,8 +567,8 @@ public class FOMSource
   public IRI getLogo() {
     IRIElement iri = getLogoElement();
     IRI uri = (iri != null) ? iri.getResolvedValue() : null;
-    return (URIHelper.isJavascriptUri(uri) ||
-        URIHelper.isMailtoUri(uri)) ? null : uri;
+    return (IRIHelper.isJavascriptUri(uri) ||
+        IRIHelper.isMailtoUri(uri)) ? null : uri;
   }
   
   public Link getLink(String rel) {

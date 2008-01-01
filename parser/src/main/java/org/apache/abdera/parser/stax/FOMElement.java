@@ -37,6 +37,7 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRIHelper;
 import org.apache.abdera.i18n.lang.Lang;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Content;
@@ -53,7 +54,6 @@ import org.apache.abdera.parser.stax.util.FOMElementIteratorWrapper;
 import org.apache.abdera.parser.stax.util.FOMList;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
-import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterOptions;
 import org.apache.axiom.om.OMAttribute;
@@ -234,8 +234,8 @@ public class FOMElement
 
   public IRI getBaseUri() {
     IRI uri = _getUriValue(getAttributeValue(BASE));
-    if (URIHelper.isJavascriptUri(uri) || 
-        URIHelper.isMailtoUri(uri)) { uri = null; }
+    if (IRIHelper.isJavascriptUri(uri) || 
+        IRIHelper.isMailtoUri(uri)) { uri = null; }
     if (uri == null) {
       if (parent instanceof Element) {
         uri = ((Element)parent).getBaseUri();
@@ -249,8 +249,8 @@ public class FOMElement
   public IRI getResolvedBaseUri() {
     IRI baseUri = null;
     IRI uri = _getUriValue(getAttributeValue(BASE));
-    if (URIHelper.isJavascriptUri(uri) || 
-        URIHelper.isMailtoUri(uri)) { uri = null; }
+    if (IRIHelper.isJavascriptUri(uri) || 
+        IRIHelper.isMailtoUri(uri)) { uri = null; }
     if (parent instanceof Element) 
       baseUri = ((Element)parent).getResolvedBaseUri();
     else if (parent instanceof Document)
@@ -334,7 +334,7 @@ public class FOMElement
   }
   
   protected IRI _resolve(IRI base, IRI value) {
-    return URIHelper.resolve(base, value);
+    return base != null ? base.resolve(value) : value;
   }
 
   public void writeTo(

@@ -44,9 +44,9 @@ import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Content.Type;
 import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.Constants;
-import org.apache.abdera.util.URIHelper;
 import org.apache.abdera.i18n.text.io.InputStreamDataSource;
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.iri.IRIHelper;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -396,7 +396,7 @@ public class FOMEntry
     } else {
       FOMFactory fomfactory = (FOMFactory) factory;
       IRIElement iri = fomfactory.newID(this);
-      iri.setValue((normalize) ? URIHelper.normalize(value) : value);
+      iri.setValue((normalize) ? IRI.normalizeString(value) : value);
       return iri;
     }
   }

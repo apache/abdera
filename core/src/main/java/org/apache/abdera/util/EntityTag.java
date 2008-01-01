@@ -19,6 +19,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.abdera.i18n.text.Localizer;
 import org.apache.commons.codec.binary.Hex;
@@ -26,57 +28,66 @@ import org.apache.commons.codec.binary.Hex;
 /**
  * Implements an EntityTag.
  */
-public class EntityTag implements Cloneable, Serializable {
-
+public class EntityTag 
+  implements Cloneable, 
+             Serializable,
+             Comparable<EntityTag> {
+  
   private static final long serialVersionUID = 1559972888659121461L;
   
-  private static final String INVALID_ENTITY_TAG = Localizer
-      .get("INVALID.ENTITY.TAG");
-
+  private static final Pattern PATTERN = 
+    Pattern.compile("(\\*)|([wW]/)?\"([^\"]*)\"");
+  
+  private static final String INVALID_ENTITY_TAG = 
+    Localizer.get("INVALID.ENTITY.TAG");
+  
   public static final EntityTag WILD = new EntityTag("*");
   
   public static EntityTag parse(String entity_tag) {
     if (entity_tag == null || entity_tag.length() == 0)
       throw new IllegalArgumentException(INVALID_ENTITY_TAG);
-    boolean weak = entity_tag.startsWith("W/");
-    boolean wild = entity_tag.equals("*");
-    if (!wild && !weak && !entity_tag.startsWith("\""))
+    Matcher m = PATTERN.matcher(entity_tag);
+    if (m.find()) {
+      boolean wild = m.group(1) != null;
+      boolean weak = m.group(2) != null;
+      String tag = wild ? "*" : m.group(3);
+      return new EntityTag(tag, weak, wild);
+    } else {
       throw new IllegalArgumentException(INVALID_ENTITY_TAG);
-    String tag = wild ? "*" : entity_tag.substring((weak) ? 3 : 1, entity_tag.length() - 1);
-    return new EntityTag(tag, weak);
+    }
   }
-
+  
   public static EntityTag[] parseTags(String entity_tags) {
     if (entity_tags == null || entity_tags.length() == 0)
       return new EntityTag[0];
-    String[] tags = entity_tags.split("((?<=\")\\s*,\\s*(?=(W/)?\"))");
+    String[] tags = entity_tags.split("((?<=\")\\s*,\\s*(?=([wW]/)?\"|\\*))");
     List<EntityTag> etags = new ArrayList<EntityTag>();
     for (String tag : tags) {
       etags.add(EntityTag.parse(tag.trim()));
     }
     return etags.toArray(new EntityTag[etags.size()]);
   }
-
+  
   public static boolean matchesAny(EntityTag tag1, String tags) {
     return matchesAny(tag1, parseTags(tags), false);
   }
-
+  
   public static boolean matchesAny(EntityTag tag1, String tags, boolean weak) {
     return matchesAny(tag1, parseTags(tags), weak);
   }
-
+  
   public static boolean matchesAny(String tag1, String tags) {
     return matchesAny(parse(tag1), parseTags(tags), false);
   }
-
+  
   public static boolean matchesAny(String tag1, String tags, boolean weak) {
     return matchesAny(parse(tag1), parseTags(tags), weak);
   }
-
+  
   public static boolean matchesAny(EntityTag tag1, EntityTag[] tags) {
     return matchesAny(tag1, tags, false);
   }
-
+  
   public static boolean matchesAny(EntityTag tag1, EntityTag[] tags,
       boolean weak) {
     if (tags == null)
@@ -88,43 +99,59 @@ public class EntityTag implements Cloneable, Serializable {
     }
     return false;
   }
-
+  
   public static boolean matches(EntityTag tag1, EntityTag tag2) {
     return tag1.equals(tag2);
   }
-
+  
   public static boolean matches(String tag1, String tag2) {
     EntityTag etag1 = parse(tag1);
     EntityTag etag2 = parse(tag2);
     return etag1.equals(etag2);
   }
-
+  
   public static boolean matches(EntityTag tag1, String tag2) {
     return tag1.equals(parse(tag2));
   }
-
+  
   private final String tag;
-
+  
   private final boolean weak;
   private final boolean wild;
-
+  
   public EntityTag(String tag) {
     this(tag, false);
   }
-
+  
   public EntityTag(String tag, boolean weak) {
-    checkTag(tag);
+    EntityTag etag = attemptParse(tag);
+    if (etag == null) {
+      if (tag.indexOf('"') > -1)
+        throw new IllegalArgumentException(INVALID_ENTITY_TAG);
+      this.tag = tag;
+      this.weak = weak;
+      this.wild = tag.equals("*");
+    } else {
+      this.tag = etag.tag;
+      this.weak = etag.weak;
+      this.wild = etag.wild;
+    }
+  }
+  
+  private EntityTag(String tag, boolean weak, boolean wild) {
     this.tag = tag;
     this.weak = weak;
-    this.wild = tag.equals("*");
+    this.wild = wild;
   }
-
-  private void checkTag(String tag) {
-    if (tag.startsWith("\"") || 
-        (tag.endsWith("\"") && !tag.endsWith("\\\"")) )
-      throw new IllegalArgumentException("Invalid Entity Tag");
+  
+  private EntityTag attemptParse(String tag) {
+    try {
+      return parse(tag);
+    } catch (Exception e) {
+      return null;
+    }
   }
-
+  
   public boolean isWild() {
     return wild;
   }
@@ -132,11 +159,11 @@ public class EntityTag implements Cloneable, Serializable {
   public String getTag() {
     return tag;
   }
-
+  
   public boolean isWeak() {
     return weak;
   }
-
+  
   public String toString() {
     StringBuilder buf = new StringBuilder();
     if (wild) {
@@ -150,7 +177,7 @@ public class EntityTag implements Cloneable, Serializable {
     }
     return buf.toString();
   }
-
+  
   @Override public int hashCode() {
     final int prime = 31;
     int result = 1;
@@ -159,7 +186,7 @@ public class EntityTag implements Cloneable, Serializable {
     result = prime * result + (wild ? 1231 : 1237);
     return result;
   }
-
+  
   @Override public boolean equals(Object obj) {
     if (this == obj) return true;
     if (obj == null) return false;
@@ -173,12 +200,16 @@ public class EntityTag implements Cloneable, Serializable {
     if (wild != other.wild) return false;
     return true;
   }
-
+  
   @Override
-  protected Object clone() throws CloneNotSupportedException {
-    return super.clone();
+  protected EntityTag clone() {
+    try {
+      return (EntityTag) super.clone();
+    } catch (CloneNotSupportedException e) {
+      return new EntityTag(tag,weak,wild); // not going to happen
+    }
   }
-
+  
   /**
    * Utility method for generating ETags. Works by concatenating the UTF-8 bytes
    * of the provided strings then generating an MD5 hash of the result.
@@ -202,7 +233,7 @@ public class EntityTag implements Cloneable, Serializable {
     }
     return new EntityTag(etag);
   }
-
+  
   /**
    * Checks that the passed in ETag matches the ETag generated by the generate
    * method
@@ -211,7 +242,7 @@ public class EntityTag implements Cloneable, Serializable {
     EntityTag etag2 = generate(material);
     return EntityTag.matches(etag, etag2);
   }
-
+  
   public static String toString(EntityTag... tags) {
     StringBuilder buf = new StringBuilder();
     for (EntityTag tag : tags) {
@@ -229,5 +260,13 @@ public class EntityTag implements Cloneable, Serializable {
       buf.append(etag.toString());
     }
     return buf.toString();
+  }
+  
+  public int compareTo(EntityTag o) {
+    if (o.isWild() && !isWild()) return 1;
+    if (isWild() && !o.isWild()) return -1;
+    if (o.isWeak() && !isWeak()) return -1;
+    if (isWeak() && !o.isWeak()) return 1;
+    return tag.compareTo(o.tag);
   }
 }

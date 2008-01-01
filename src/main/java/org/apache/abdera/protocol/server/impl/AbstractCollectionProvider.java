@@ -26,8 +26,8 @@ import javax.activation.MimeType;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
-import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.text.UrlEncoding;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Document;
@@ -514,7 +514,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     }
     String[] segments = path.split("/");
     String id = segments[segments.length - 1];
-    return Escaping.decode(id);
+    return UrlEncoding.decode(id);
   }
 
   protected IRI getMediaIRI(IRI entryBaseIri, String name) {

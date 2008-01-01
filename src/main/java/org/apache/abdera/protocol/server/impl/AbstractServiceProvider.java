@@ -23,14 +23,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.factory.Factory;
-import org.apache.abdera.i18n.io.CharUtils.Profile;
-import org.apache.abdera.i18n.iri.Escaping;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.model.Collection;
-import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Service;
-import org.apache.abdera.model.Workspace;
+import org.apache.abdera.i18n.text.UrlEncoding;
+import org.apache.abdera.i18n.text.CharUtils.Profile;
 import org.apache.abdera.protocol.Request;
 import org.apache.abdera.protocol.Resolver;
 import org.apache.abdera.protocol.server.CollectionProvider;
@@ -79,7 +74,7 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
           path = path.substring(0, q);
         }
         
-        path = Escaping.decode(path);
+        path = UrlEncoding.decode(path);
 
         CollectionProvider provider = null;
         String providerHref = null;
@@ -161,7 +156,7 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
   
               String href;
               try {
-                href = Escaping.encode(entry.getKey(), enc, Profile.PATH);
+                href = UrlEncoding.encode(entry.getKey(), enc, Profile.PATH.filter());
               } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
               }

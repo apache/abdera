@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.security.Principal;
 import java.util.List;
+import java.util.Locale;
 
 import javax.security.auth.Subject;
 
@@ -54,6 +55,10 @@ public interface RequestContext
   Subject getSubject();
   
   Principal getPrincipal();
+  
+  Locale getPreferredLocale();
+  
+  Locale[] getPreferredLocales();
   
   String getMethod();
   

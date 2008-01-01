@@ -19,13 +19,13 @@ package org.apache.abdera.protocol.server.impl;
 
 import javax.security.auth.Subject;
 
+import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.protocol.ItemManager;
 import org.apache.abdera.protocol.Resolver;
 import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.RequestHandler;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.util.ServerConstants;
-import org.apache.abdera.util.Messages;
 import org.apache.abdera.util.ServiceUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,7 +46,7 @@ public class DefaultServiceContext
   private Object instance(String id, String _default) {
     String instance = getProperty(id);
     Object obj =  ServiceUtil.newInstance( id, (instance!=null)?instance:_default, abdera);
-    logger.debug(Messages.format("RETURNING.INSTANCE", obj, id));
+    logger.debug(Localizer.sprintf("RETURNING.INSTANCE", obj, id));
     return obj;
   }
   

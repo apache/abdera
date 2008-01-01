@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import org.apache.abdera.i18n.io.RewindableInputStream;
+import org.apache.abdera.i18n.text.io.RewindableInputStream;
 import org.apache.abdera.util.CompressionUtil;
 import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 

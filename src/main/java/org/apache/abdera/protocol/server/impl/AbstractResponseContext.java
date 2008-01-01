@@ -26,8 +26,8 @@ import java.util.Map;
 
 import javax.activation.MimeType;
 
-import org.apache.abdera.i18n.io.CharUtils.Profile;
-import org.apache.abdera.i18n.iri.Escaping;
+import org.apache.abdera.i18n.text.UrlEncoding;
+import org.apache.abdera.i18n.text.CharUtils.Profile;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.util.AbstractResponse;
 import org.apache.abdera.protocol.util.EncodingUtil;
@@ -66,7 +66,7 @@ public abstract class AbstractResponseContext
   }
   
   public ResponseContext setEscapedHeader(String name, Profile profile, String value) {
-    return setHeader(name,Escaping.encode(value, profile));
+    return setHeader(name,UrlEncoding.encode(value, profile.filter()));
   }
   
   public ResponseContext setHeader(String name, Object value) {

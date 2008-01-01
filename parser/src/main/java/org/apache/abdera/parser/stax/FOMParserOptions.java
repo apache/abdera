@@ -18,8 +18,8 @@
 package org.apache.abdera.parser.stax;
 
 import org.apache.abdera.factory.Factory;
+import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.util.AbstractParserOptions;
-import org.apache.abdera.util.Messages;
 
 
 public class FOMParserOptions
@@ -37,7 +37,7 @@ public class FOMParserOptions
   protected void checkFactory(Factory factory) {
     if (!(factory instanceof FOMFactory))
       throw new FOMException(
-        Messages.format("WRONG.PARSER.INSTANCE",FOMFactory.class.getName()));
+        Localizer.sprintf("WRONG.PARSER.INSTANCE",FOMFactory.class.getName()));
   }
 
 

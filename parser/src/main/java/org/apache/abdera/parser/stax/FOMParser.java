@@ -27,6 +27,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.ParseException;
@@ -36,7 +37,6 @@ import org.apache.abdera.parser.stax.util.FOMSniffingInputStream;
 import org.apache.abdera.parser.stax.util.FOMXmlRestrictedCharReader;
 import org.apache.abdera.util.AbstractParser;
 import org.apache.abdera.util.CompressionUtil;
-import org.apache.abdera.util.Messages;
 import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.util.StAXUtils;
 
@@ -90,7 +90,7 @@ public class FOMParser
     ParserOptions options)
       throws ParseException {
     if (in == null)
-      throw new IllegalArgumentException(Messages.get("INPUTSTREAM.NOT.NULL"));
+      throw new IllegalArgumentException(Localizer.get("INPUTSTREAM.NOT.NULL"));
     try {
       if (options == null) options = getDefaultParserOptions();
       if (options.getCompressionCodecs() != null) {
@@ -133,7 +133,7 @@ public class FOMParser
     ParserOptions options) 
       throws ParseException {
     if (in == null)
-      throw new IllegalArgumentException(Messages.get("READER.NOT.NULL"));
+      throw new IllegalArgumentException(Localizer.get("READER.NOT.NULL"));
     try {
       if (options == null) options = getDefaultParserOptions();
       if (options.getFilterRestrictedCharacters() && 

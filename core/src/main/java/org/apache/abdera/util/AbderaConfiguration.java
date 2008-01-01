@@ -31,6 +31,7 @@ import org.apache.abdera.converter.ConverterProvider;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.factory.StreamBuilder;
+import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.parser.NamedParser;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserFactory;
@@ -304,7 +305,7 @@ public final class AbderaConfiguration
     try {
       return ServiceUtil.newXPathInstance(abdera);
     } catch (NoClassDefFoundError n) {
-      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","XPath"),n);
+      throw new RuntimeException(Localizer.sprintf("IMPLEMENTATION.NOT.AVAILABLE","XPath"),n);
     }
   }
     
@@ -317,7 +318,7 @@ public final class AbderaConfiguration
     try {
       return ServiceUtil.newParserFactoryInstance(abdera);
     } catch (NoClassDefFoundError n) {
-      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","Parser"),n);
+      throw new RuntimeException(Localizer.sprintf("IMPLEMENTATION.NOT.AVAILABLE","Parser"),n);
     }
   }
     
@@ -330,7 +331,7 @@ public final class AbderaConfiguration
     try {
       return ServiceUtil.newWriterFactoryInstance(abdera);
     } catch (NoClassDefFoundError n) {
-      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","WriterFactory"),n);
+      throw new RuntimeException(Localizer.sprintf("IMPLEMENTATION.NOT.AVAILABLE","WriterFactory"),n);
     }
   }
     
@@ -343,7 +344,7 @@ public final class AbderaConfiguration
     try {
       return ServiceUtil.newWriterInstance(abdera);
     } catch (NoClassDefFoundError n) {
-      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","Writer"),n);
+      throw new RuntimeException(Localizer.sprintf("IMPLEMENTATION.NOT.AVAILABLE","Writer"),n);
     }
   }
   
@@ -356,7 +357,7 @@ public final class AbderaConfiguration
     try {
       return ServiceUtil.newStreamWriterInstance(abdera);
     } catch (NoClassDefFoundError n) {
-      throw new RuntimeException(Messages.format("IMPLEMENTATION.NOT.AVAILABLE","StreamWriter"),n);
+      throw new RuntimeException(Localizer.sprintf("IMPLEMENTATION.NOT.AVAILABLE","StreamWriter"),n);
     }
   }  
 

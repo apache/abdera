@@ -20,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.abdera.i18n.text.Localizer;
 import org.apache.commons.codec.binary.Hex;
 
 /**
@@ -29,7 +30,7 @@ public class EntityTag implements Cloneable, Serializable {
 
   private static final long serialVersionUID = 1559972888659121461L;
   
-  private static final String INVALID_ENTITY_TAG = Messages
+  private static final String INVALID_ENTITY_TAG = Localizer
       .get("INVALID.ENTITY.TAG");
 
   public static final EntityTag WILD = new EntityTag("*");
@@ -193,11 +194,11 @@ public class EntityTag implements Cloneable, Serializable {
       byte[] digest = md.digest();
       etag = new String(Hex.encodeHex(digest));
     } catch (NoSuchAlgorithmException e) {
-      throw new UnsupportedOperationException(Messages
+      throw new UnsupportedOperationException(Localizer
           .get("HASHING.NOT.AVAILABLE"));
     } catch (UnsupportedEncodingException e) {
       // should not happen
-      throw new RuntimeException(Messages.get("UTF8.NOT.SUPPORTED"), e);
+      throw new RuntimeException(Localizer.get("UTF8.NOT.SUPPORTED"), e);
     }
     return new EntityTag(etag);
   }

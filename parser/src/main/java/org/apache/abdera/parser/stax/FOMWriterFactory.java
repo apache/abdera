@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.util.Messages;
+import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.writer.NamedWriter;
 import org.apache.abdera.writer.StreamWriter;
 import org.apache.abdera.writer.Writer;
@@ -89,7 +89,7 @@ public class FOMWriterFactory
         sw = _class.newInstance();
       } catch (Exception e) {
         throw new RuntimeException(
-          Messages.format(
+          Localizer.sprintf(
             "IMPLEMENTATION.NOT.AVAILABLE",
             "StreamWriter"),e);
       }

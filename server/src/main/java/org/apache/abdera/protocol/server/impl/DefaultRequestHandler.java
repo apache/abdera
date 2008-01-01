@@ -27,6 +27,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.protocol.ItemManager;
 import org.apache.abdera.protocol.error.Error;
 import org.apache.abdera.protocol.server.HttpResponse;
@@ -36,7 +37,6 @@ import org.apache.abdera.protocol.server.RequestHandler;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.server.Target;
-import org.apache.abdera.util.Messages;
 import org.apache.abdera.writer.StreamWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -52,24 +52,24 @@ public class DefaultRequestHandler
     HttpResponse response) 
       throws IOException {
     
-    log.debug(Messages.get("PROCESSING.REQUEST"));
+    log.debug(Localizer.get("PROCESSING.REQUEST"));
     ItemManager<Provider> manager = context.getProviderManager();
     Provider provider = manager.get(request);
-    log.debug(Messages.format("USING.PROVIDER",provider));
+    log.debug(Localizer.sprintf("USING.PROVIDER",provider));
     try {
       if (preconditions(provider, request, response)) {
         response(request, response,provider.request(request));
       }
     } catch (Throwable e) {
-      log.error(Messages.get("OUTPUT.ERROR"), e);
+      log.error(Localizer.get("OUTPUT.ERROR"), e);
       try {
         response(request,response,new EmptyResponseContext(500));
       } catch (Exception ex) {
-        log.error(Messages.get("OUTPUT.ERROR"), ex);
+        log.error(Localizer.get("OUTPUT.ERROR"), ex);
         internalServerError(request, response);
       }
     } finally {
-      log.debug(Messages.format("RELEASING.PROVIDER", provider));
+      log.debug(Localizer.sprintf("RELEASING.PROVIDER", provider));
       if (provider != null) manager.release(provider);
     }
   }
@@ -174,12 +174,12 @@ public class DefaultRequestHandler
   }
     
   protected void noprovider(RequestContext request, HttpResponse response) throws IOException {
-    sendError(request, response, 500, Messages.get("NO.PROVIDER"));
+    sendError(request, response, 500, Localizer.get("NO.PROVIDER"));
   }
   
   protected void notfound(RequestContext request, HttpResponse response) throws IOException {
     sendError(request, response, 404,
-              Messages.get("NOT.FOUND"));
+              Localizer.get("NOT.FOUND"));
   }
   
   protected void notallowed(
@@ -188,7 +188,7 @@ public class DefaultRequestHandler
     String method, 
     String[] methods) 
       throws IOException {
-    sendError(request, response, 405, Messages.format("METHOD.NOT.ALLOWED", method));
+    sendError(request, response, 405, Localizer.sprintf("METHOD.NOT.ALLOWED", method));
     response.setHeader("Allow", combine(methods));;
   }
   

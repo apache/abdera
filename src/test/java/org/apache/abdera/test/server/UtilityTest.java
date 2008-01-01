@@ -24,6 +24,7 @@ import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import junit.framework.TestCase;
 
@@ -193,6 +194,14 @@ public class UtilityTest extends TestCase {
 
     public String getContextPath() {
       return "/test";
+    }
+
+    public Locale getPreferredLocale() {
+      return null;
+    }
+
+    public Locale[] getPreferredLocales() {
+      return null;
     }
     
   }

@@ -20,9 +20,11 @@ package org.apache.abdera.protocol.server.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Locale;
 
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
@@ -240,5 +242,14 @@ public class HttpServletRequestContext
 
   public String getContextPath() {
     return request.getContextPath();
+  }
+  
+  public Locale getPreferredLocale() {
+    return request.getLocale();
+  }
+  
+  public Locale[] getPreferredLocales() {
+    List<Locale> locales = Collections.list(request.getLocales());
+    return locales.toArray(new Locale[locales.size()]);
   }
 }

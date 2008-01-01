@@ -396,4 +396,8 @@ public final class Lang
     }
     throw new IllegalArgumentException();
   }
+  
+  public static String fromLocale(Locale locale) {
+    return new Lang(locale).toString();
+  }
 }

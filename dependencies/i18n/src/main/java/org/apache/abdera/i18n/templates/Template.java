@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.abdera.i18n.io.CharUtils;
+import org.apache.abdera.i18n.text.CharUtils;
 
 /**
  * Used to evaluate a URI Template.  
@@ -82,7 +82,7 @@ public final class Template
         token, 
         forDisplay(token));
     }
-    return CharUtils.bidiLRO(pattern);
+    return CharUtils.wrapBidi(pattern, CharUtils.LRO);
   }
   
   private static String forDisplay(String token) {
@@ -91,7 +91,7 @@ public final class Template
     buf.append('{');
     if (splits.length == 1) {
       String[] pair = splits[0].split("\\s*=\\s*");
-      buf.append(CharUtils.bidiLRE(pair[0]));
+      buf.append(CharUtils.wrapBidi(pair[0], CharUtils.LRE));
       if (pair.length > 1) {
         buf.append('=');
         buf.append(pair[1]);
@@ -106,7 +106,7 @@ public final class Template
       for (String var : vars) {
         if (i++ > 0) buf.append(",");
         String[] pair = var.split("\\s*=\\s*");
-        buf.append(CharUtils.bidiLRE(pair[0]));
+        buf.append(CharUtils.wrapBidi(pair[0], CharUtils.LRE));
         if (pair.length > 1) {
           buf.append('=');
           buf.append(pair[1]);
@@ -243,7 +243,7 @@ public final class Template
     StringBuilder buf = new StringBuilder();
     buf.append("V:" + getPatternForDisplay());
     buf.append('\n');
-    buf.append("L:" + CharUtils.bidiLRO(getPattern()));
+    buf.append("L:" + CharUtils.wrapBidi(getPattern(),CharUtils.LRO));
     buf.append('\n');
     return buf.toString();
   }

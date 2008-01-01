@@ -17,13 +17,12 @@
 */
 package org.apache.abdera.util;
 
-import java.io.FilterReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 
+import org.apache.abdera.i18n.text.io.FilteredCharReader;
 import org.apache.abdera.util.XmlUtil.XMLVersion;
 
 /**
@@ -35,15 +34,12 @@ import org.apache.abdera.util.XmlUtil.XMLVersion;
  * is a valid XML character itself.
  */
 public class XmlRestrictedCharReader 
-  extends FilterReader {
+  extends FilteredCharReader {
 
   /**
    * The XMLVersion determines which set of restrictions to apply depending 
    * on the XML version being parsed
    */
-  private final XMLVersion version;
-  private final char replacement;
-  
   public XmlRestrictedCharReader(InputStream in) {
     this(new InputStreamReader(in));
   }
@@ -120,37 +116,7 @@ public class XmlRestrictedCharReader
     Reader in, 
     XMLVersion version, 
     char replacement) {
-      super(in);
-      this.version = version;
-      this.replacement = replacement;
-      if (replacement != 0 && 
-          ((!Character.isValidCodePoint(replacement)) || 
-          XmlUtil.restricted(version,replacement))) 
-            throw new IllegalArgumentException();
-  }
-
-  @Override
-  public int read() throws IOException {
-    int c = -1;
-    if (replacement == 0) {
-      while(((c = super.read()) != -1 && XmlUtil.restricted(version,c))) {}
-    } else {
-      c = super.read();
-      if (c != -1 && XmlUtil.restricted(version,c)) c = replacement;
-    }
-    return c;
-  }
-
-  @Override
-  public int read(char[] cbuf, int off, int len) throws IOException {
-    int n = off;
-    for (; n < Math.min(len,cbuf.length-off); n++) {
-      int r = read();
-      if (r != -1) cbuf[n] = (char)r;
-      else break;
-    }
-    n -= off;
-    return n <= 0 ? -1 : n;
+      super(in,version.filter(),replacement);
   }
 
 }

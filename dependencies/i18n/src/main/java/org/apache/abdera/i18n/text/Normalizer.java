@@ -15,19 +15,19 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.i18n.unicode;
+package org.apache.abdera.i18n.text;
 
 import java.io.IOException;
 
-import org.apache.abdera.i18n.io.CharUtils;
-import org.apache.abdera.i18n.io.CodepointIterator;
+import org.apache.abdera.i18n.text.data.UnicodeCharacterDatabase;
+
 
 /**
  * Performs Unicode Normalization (Form D,C,KD and KC)
  */
 public final class Normalizer {
 
-  public enum Mask {
+  private enum Mask {
     NONE,
     COMPATIBILITY,
     COMPOSITION
@@ -65,7 +65,7 @@ public final class Normalizer {
   /**
    * Normalize the string using NFKC
    */
-  public static String normalize(CharSequence source) throws IOException {
+  public static String normalize(CharSequence source) {
     return normalize(source, Form.KC);
   }
   
@@ -74,8 +74,7 @@ public final class Normalizer {
    */
   public static String normalize(
     CharSequence source, 
-    Form form) 
-      throws IOException {
+    Form form) {
     return normalize(source, form, new StringBuilder());
   }
   
@@ -85,11 +84,14 @@ public final class Normalizer {
   public static String normalize(
     CharSequence source, 
     Form form, 
-    StringBuilder buf) 
-      throws IOException {
+    StringBuilder buf) {
       if (source.length() != 0) {
-        decompose(source, form, buf);
-        compose(form, buf);
+        try {
+          decompose(source, form, buf);
+          compose(form, buf);
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
       }
       return buf.toString();
   }
@@ -103,14 +105,14 @@ public final class Normalizer {
       CodepointIterator ci = CodepointIterator.forCharSequence(source);
       boolean canonical = form.isCanonical();
       while (ci.hasNext()) {
-        int c = ci.next();
+        Codepoint c = ci.next();
         internal.setLength(0);
-        UnicodeCharacterDatabase.decompose(c, canonical, internal);
+        UnicodeCharacterDatabase.decompose(c.getValue(), canonical, internal);
         CodepointIterator ii = CodepointIterator.forCharSequence(internal);
         while(ii.hasNext()) {
-          int ch = ii.next();
-          int i = findInsertionPoint(buf, ch);
-          buf.insert(i,CharUtils.toString(ch));
+          Codepoint ch = ii.next();
+          int i = findInsertionPoint(buf, ch.getValue());
+          buf.insert(i,CharUtils.toString(ch.getValue()));
         }
       }
     
@@ -122,8 +124,8 @@ public final class Normalizer {
     int i = buf.length();
     if (cc != 0) {
       int ch;
-      for (; i > 0; i -= CharUtils.size(c)) {
-        ch = CharUtils.charAt(buf, i-1);
+      for (; i > 0; i -= CharUtils.length(c)) {
+        ch = CharUtils.codepointAt(buf, i-1).getValue();
         if (UnicodeCharacterDatabase.getCanonicalClass(ch) <= cc) break;
       }
     }
@@ -136,14 +138,14 @@ public final class Normalizer {
       throws IOException {
     if (!form.isComposition()) return;
     int pos = 0;
-    int lc = CharUtils.charAt(buf, pos);
-    int cpos = CharUtils.size(lc);    
+    int lc = CharUtils.codepointAt(buf, pos).getValue();
+    int cpos = CharUtils.length(lc);    
     int lcc = UnicodeCharacterDatabase.getCanonicalClass(lc);
     if (lcc != 0) lcc = 256;
     int len = buf.length();
     int c;
-    for (int dpos = cpos; dpos < buf.length(); dpos += CharUtils.size(c)) {
-      c = CharUtils.charAt(buf,dpos);
+    for (int dpos = cpos; dpos < buf.length(); dpos += CharUtils.length(c)) {
+      c = CharUtils.codepointAt(buf,dpos).getValue();
       int cc = UnicodeCharacterDatabase.getCanonicalClass(c);
       int composite = UnicodeCharacterDatabase.getPairComposition(lc, c);
       if (composite != '\uFFFF' && (lcc < cc || lcc == 0)) {
@@ -160,10 +162,10 @@ public final class Normalizer {
           dpos += buf.length() - len;
           len = buf.length();
         }
-        cpos += CharUtils.size(c);
+        cpos += CharUtils.length(c);
       }
     }
     buf.setLength(cpos);
   }
-  
+
 }

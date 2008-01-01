@@ -15,21 +15,19 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.i18n.io;
-
-import org.apache.abdera.i18n.io.CodepointIterator;
-import org.apache.abdera.i18n.io.InvalidCharacterException;
+package org.apache.abdera.i18n.text;
 
 /**
  * Base implementation of a CodepointIterator that filters the output of
  * another CodpointIterator
  */
-public abstract class FilterCodepointIterator 
+public abstract class DelegatingCodepointIterator 
   extends CodepointIterator {
 
   private CodepointIterator internal;
   
-  protected FilterCodepointIterator(CodepointIterator internal) {
+  protected DelegatingCodepointIterator(
+    CodepointIterator internal) {
     this.internal = internal;
   }
   
@@ -64,27 +62,27 @@ public abstract class FilterCodepointIterator
   }
 
   @Override
-  public int next() throws InvalidCharacterException {
+  public Codepoint next() {
     return internal.next();
   }
 
   @Override
-  public char[] nextChars() throws InvalidCharacterException {
+  public char[] nextChars(){
     return internal.nextChars();
   }
 
   @Override
-  public int peek() throws InvalidCharacterException {
+  public Codepoint peek() {
     return internal.peek();
   }
 
   @Override
-  public int peek(int index) throws InvalidCharacterException {
+  public Codepoint peek(int index) {
     return internal.peek(index);
   }
 
   @Override
-  public char[] peekChars() throws InvalidCharacterException {
+  public char[] peekChars() {
     return internal.peekChars();
   }
 

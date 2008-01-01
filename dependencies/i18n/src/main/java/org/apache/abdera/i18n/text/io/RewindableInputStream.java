@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.i18n.io;
+package org.apache.abdera.i18n.text.io;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,16 +32,19 @@ public class RewindableInputStream
   private static final int INITIAL_CAPACITY = 32;
   private byte[] buffer;
   private int position;
-  private int scale = INITIAL_CAPACITY;
+  private final int scale;
   
-  public RewindableInputStream(InputStream in) {
-    this(in,INITIAL_CAPACITY);
+  public RewindableInputStream(
+    InputStream in) {
+      this(in,INITIAL_CAPACITY);
   }
   
-  public RewindableInputStream(InputStream in, int capacity) {
-    super(in);
-    grow(capacity);
-    this.scale = capacity;
+  public RewindableInputStream(
+    InputStream in, 
+    int capacity) {
+      super(in);
+      grow(capacity);
+      this.scale = capacity;
   }
 
   public int position() {

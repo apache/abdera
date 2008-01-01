@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.i18n.test.iri;
 
-import org.apache.abdera.i18n.unicode.Normalizer;
+import org.apache.abdera.i18n.text.Normalizer;
 
 public class TestNFKC extends TestBase {
 

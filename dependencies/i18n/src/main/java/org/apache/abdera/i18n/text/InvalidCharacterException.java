@@ -15,34 +15,23 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.i18n.io;
+package org.apache.abdera.i18n.text;
 
-import org.apache.abdera.i18n.io.CodepointIterator;
 
-/**
- * Iterate over Unicode codepoints in a CharSequence (e.g. String, StringBuffer, etc)
- */
-public class CharSequenceCodepointIterator 
-  extends CodepointIterator {
+public class InvalidCharacterException 
+  extends RuntimeException {
 
-  private CharSequence buffer;
+  private static final long serialVersionUID = -7150645484748059676L;
+  private int input;
   
-  public CharSequenceCodepointIterator(CharSequence buffer) {
-    this(buffer,0,buffer.length());
-  }
-  
-  public CharSequenceCodepointIterator(CharSequence buffer, int n, int e) {
-    this.buffer = buffer;
-    this.position = n;
-    this.limit = Math.min(buffer.length()-n,e);
-  }
-  
-  protected char get() {
-    return buffer.charAt(position++);
+  public InvalidCharacterException(int input) {
+    this.input = input;
   }
 
-  protected char get(int index) {
-    return buffer.charAt(index);
+  @Override
+  public String getMessage() {
+    return "Invalid Character 0x" + Integer.toHexString(input) + "(" + (char)input + ")";
   }
+
   
 }

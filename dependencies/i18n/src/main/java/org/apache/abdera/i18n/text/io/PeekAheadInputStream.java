@@ -1,4 +1,4 @@
-package org.apache.abdera.i18n.io;
+package org.apache.abdera.i18n.text.io;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  The ASF licenses this file to You
@@ -27,28 +27,34 @@ import java.io.InputStream;
 public class PeekAheadInputStream 
   extends RewindableInputStream {
   
-  public PeekAheadInputStream(InputStream in) {
-    super(in);
+  public PeekAheadInputStream(
+    InputStream in) {
+      super(in);
   }
   
-  public PeekAheadInputStream(InputStream in, int initialSize) {
-    super(in,initialSize);
+  public PeekAheadInputStream(
+    InputStream in, 
+    int initialSize) {
+      super(in,initialSize);
   }
 
   /**
    * Peek the next byte in the stream
    */
-  public synchronized int peek() throws IOException {
-    int m = read();
-    unread(m);
-    return m;
+  public int peek() 
+    throws IOException {
+      int m = read();
+      unread(m);
+      return m;
   }
   
   /**
    * Peek the next bytes in the stream. Returns the number of bytes peeked.
    * Will return -1 if the end of the stream is reached
    */
-  public synchronized int peek(byte[] buf) throws IOException {
+  public int peek(
+    byte[] buf) 
+      throws IOException {
     return peek(buf, 0, buf.length);
   }
 
@@ -56,7 +62,11 @@ public class PeekAheadInputStream
    * Peek the next bytes in the stream. Returns the number of bytes peeked.
    * Will return -1 if the end of the stream is reached
    */
-  public synchronized int peek(byte[] buf, int off, int len) throws IOException {
+  public int peek(
+    byte[] buf, 
+    int off, 
+    int len) 
+      throws IOException {
     int r = read(buf, off, len);
     unread(buf,off,len);
     return r;

@@ -23,17 +23,18 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.Date;
 
+import junit.framework.TestCase;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.util.CompressionUtil;
 import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 import org.apache.abdera.writer.WriterOptions;
-
-import junit.framework.TestCase;
 
 
 public class EncodingTest extends TestCase {
@@ -81,7 +82,7 @@ public class EncodingTest extends TestCase {
       Parser parser = abdera.getParser();
       ParserOptions options = parser.getDefaultParserOptions();
       options.setFilterRestrictedCharacters(true);
-      Document doc = parser.parse(new StringReader(s), null, options);
+      Document<Element> doc = parser.parse(new StringReader(s), null, options);
       doc.getRoot().toString();
     }
     
@@ -95,7 +96,7 @@ public class EncodingTest extends TestCase {
       ParserOptions options = parser.getDefaultParserOptions();
       options.setFilterRestrictedCharacters(true);
       options.setCharset("UTF-8");
-      Document doc = parser.parse(new ByteArrayInputStream(s.getBytes("UTF-8")), null, options);
+      Document<Element> doc = parser.parse(new ByteArrayInputStream(s.getBytes("UTF-8")), null, options);
       doc.getRoot().toString();
     }
     

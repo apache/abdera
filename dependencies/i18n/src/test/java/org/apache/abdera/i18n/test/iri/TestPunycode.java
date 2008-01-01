@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.i18n.test.iri;
 
-import org.apache.abdera.i18n.iri.Punycode;
+import org.apache.abdera.i18n.text.Punycode;
 
 public class TestPunycode extends TestBase {
 

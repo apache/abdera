@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.i18n.io;
+package org.apache.abdera.i18n.text.io;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,21 +28,25 @@ import java.io.PushbackInputStream;
 public class DynamicPushbackInputStream 
   extends PushbackInputStream {
 
-  private int origsize = 1;
+  private final int origsize;
   
-  public DynamicPushbackInputStream(InputStream in) {
-    super(in);
+  public DynamicPushbackInputStream(
+    InputStream in) {
+      super(in);
+      this.origsize = 1;
   }
 
-  public DynamicPushbackInputStream(InputStream in, int initialSize) {
-    super(in,initialSize);
-    this.origsize = initialSize;
+  public DynamicPushbackInputStream(
+    InputStream in, 
+    int initialSize) {
+      super(in,initialSize);
+      this.origsize = initialSize;
   }
 
   /**
    * Clear the buffer
    */
-  public synchronized int clear() {
+  public int clear() {
     int m = buf.length;
     buf = new byte[origsize];
     pos = origsize;
@@ -54,7 +58,7 @@ public class DynamicPushbackInputStream
    * buffer, reducing memory but potentially increasing the cost of 
    * resizing the buffer
    */
-  public synchronized int shrink() {
+  public int shrink() {
     byte[] old = buf;
     if (pos == 0) return 0; // nothing to do
     int n = old.length - pos;
@@ -84,7 +88,7 @@ public class DynamicPushbackInputStream
     System.arraycopy(old, 0, buf, len, old.length);
   }
 
-  public synchronized void unread(byte[] b, int off, int len) throws IOException {
+  public void unread(byte[] b, int off, int len) throws IOException {
     if (len > pos && pos + len > buf.length) {
       resize(len-pos);
       pos += len-pos;
@@ -92,7 +96,7 @@ public class DynamicPushbackInputStream
     super.unread(b, off, len);
   }
 
-  public synchronized void unread(int b) throws IOException {
+  public void unread(int b) throws IOException {
     if (pos == 0) {
       resize(1);
       pos++;
@@ -100,20 +104,20 @@ public class DynamicPushbackInputStream
     super.unread(b);
   }
   
-  public synchronized int read() throws IOException {
+  public int read() throws IOException {
     int m = super.read();
     if (pos >= buf.length && buf.length > origsize) shrink();
     return m;
   }
 
-  public synchronized int read(byte[] b, int off, int len) throws IOException {
+  public int read(byte[] b, int off, int len) throws IOException {
     this.available(); // workaround for a problem in PushbackInputStream, without this, the amount of bytes read from some streams will be incorrect
     int r = super.read(b, off, len);
     if (pos >= buf.length && buf.length > origsize) shrink();
     return r;
   }
 
-  public synchronized long skip(long n) throws IOException {
+  public long skip(long n) throws IOException {
     long r = super.skip(n);
     if (pos >= buf.length && buf.length > origsize) shrink();
     return r;

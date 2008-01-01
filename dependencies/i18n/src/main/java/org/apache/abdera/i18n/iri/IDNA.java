@@ -21,8 +21,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.UnknownHostException;
 
-import org.apache.abdera.i18n.io.CharUtils;
-import org.apache.abdera.i18n.io.CharUtils.Profile;
+import org.apache.abdera.i18n.text.CharUtils;
+import org.apache.abdera.i18n.text.Nameprep;
+import org.apache.abdera.i18n.text.Punycode;
+import org.apache.abdera.i18n.text.CharUtils.Profile;
 
 
 /**

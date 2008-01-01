@@ -24,8 +24,8 @@ import java.util.Locale;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.i18n.io.CharUtils;
 import org.apache.abdera.i18n.lang.Lang;
+import org.apache.abdera.i18n.text.CharUtils;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
@@ -118,8 +118,8 @@ public final class BidiHelper {
    */
   public static String getBidiText(Direction direction, String text) {
     switch (direction) {
-      case LTR: return CharUtils.bidiLRE(text);
-      case RTL: return CharUtils.bidiRLE(text);
+      case LTR: return CharUtils.wrapBidi(text,CharUtils.LRE);
+      case RTL: return CharUtils.wrapBidi(text,CharUtils.RLE);
       default:  return text;
     }
   }

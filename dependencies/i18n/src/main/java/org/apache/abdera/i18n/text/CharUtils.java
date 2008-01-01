@@ -15,10 +15,10 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.i18n.io;
+package org.apache.abdera.i18n.text;
 
 import java.io.IOException;
-import java.util.Arrays;
+
 
 /**
  * General utilities for dealing with Unicode characters
@@ -27,70 +27,12 @@ public final class CharUtils {
 
   private CharUtils() {}
  
-  public static boolean isValidCodepoint(int d) {
-    return d >= 0x000000 && d <= 0x10ffff;
+  public static boolean isValid(int c) {
+    return c >= 0x000000 && c <= 0x10ffff;
   }
   
-  public static int scanNot(CodepointIterator ci, Profile profile) throws InvalidCharacterException {
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,true,true);
-    while (rci.hasNext()) rci.next();
-    return rci.position;
-  }
-  
-  public static int scanNot(char[] array, Profile profile) throws InvalidCharacterException {
-    CodepointIterator ci = CodepointIterator.forCharArray(array);
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,true,true);
-    while (rci.hasNext()) rci.next();
-    return rci.position;
-  }
-  
-  public static int scan(CodepointIterator ci, Profile profile) throws InvalidCharacterException {
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,true);
-    while (rci.hasNext()) rci.next();
-    return rci.position();
-  }
-  
-  public static int scan(char[] array, Profile profile) throws InvalidCharacterException {
-    CodepointIterator ci = CodepointIterator.forCharArray(array);
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,true);
-    while (rci.hasNext()) rci.next();
-    return rci.position();
-  }
-  
-  public static int scan(String s, Profile profile) throws InvalidCharacterException {
-    CodepointIterator ci = CodepointIterator.forCharSequence(s);
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,true);
-    while (rci.hasNext()) rci.next();
-    return rci.position;
-  }
-  
-  public static void verifyNot(CodepointIterator ci, Profile profile) throws InvalidCharacterException {
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,false,true);
-    while (rci.hasNext()) rci.next();
-  }
-  
-  public static void verifyNot(char[] array, Profile profile) throws InvalidCharacterException {
-    CodepointIterator ci = CodepointIterator.forCharArray(array);
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,false,true);
-    while (rci.hasNext()) rci.next();
-  }
-  
-  public static void verify(CodepointIterator ci, Profile profile) throws InvalidCharacterException {
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,false);
-    while (rci.hasNext()) rci.next();
-  }
-  
-  public static void verify(char[] array, Profile profile) throws InvalidCharacterException {
-    CodepointIterator ci = CodepointIterator.forCharArray(array);
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,false);
-    while (rci.hasNext()) rci.next();
-  }
-  
-  public static void verify(String s, Profile profile) throws InvalidCharacterException {
-    if (s == null) return;
-    CodepointIterator ci = CodepointIterator.forCharSequence(s);
-    RestrictedCodepointIterator rci = new RestrictedCodepointIterator(ci,profile,false);
-    while (rci.hasNext()) rci.next();
+  public static boolean isValid(Codepoint c) {
+    return isValid(c.getValue());
   }
   
   public static boolean inRange(char[] chars, char low, char high) {
@@ -102,9 +44,12 @@ public final class CharUtils {
   public static boolean inRange(char[] chars, int low, int high) {
     for (int i = 0; i < chars.length; i++) {
       char n = chars[i];
-      int c = (isHighSurrogate(n) && 
+      Codepoint cp = (isHighSurrogate(n) && 
                i + 1 < chars.length && 
-               isLowSurrogate(chars[i+1])) ? toCodePoint(n,chars[i++]) : n;
+               isLowSurrogate(chars[i+1])) ? 
+                 toSupplementary(n,chars[i++]) : 
+                 new Codepoint(n);
+      int c = cp.getValue();
       if (c < low || c > high) return false;
     }
     return true;
@@ -114,9 +59,8 @@ public final class CharUtils {
     return codepoint >= low && codepoint <= high;
   }
   
-  public static boolean isSet(int n, int[]... sets) {
-    if (n == -1) return false;
-    return contains(n,sets);
+  public static void append(Appendable buf, Codepoint c) {
+    append(buf,c.getValue());
   }
   
   public static void append(Appendable buf, int c) {
@@ -129,7 +73,7 @@ public final class CharUtils {
       throw new RuntimeException(e);
     }
   }
-  
+
   public static char getHighSurrogate(int c) {
     return (c >= 0x10000) ?
        (char)((0xD800 - (0x10000 >> 10)) + (c >> 10)) : 0;
@@ -156,46 +100,50 @@ public final class CharUtils {
     return isHighSurrogate(high) && isLowSurrogate(low);
   }
   
-  public static int toCodePoint(char[] chars) {
-    return toCodePoint(chars[0],chars[1]);
-  }
-  
-  public static int toCodePoint(char high, char low) {
-    return ((high - '\uD800') << 10) + (low - '\uDC00') + 0x010000;    
+  public static Codepoint toSupplementary(char high, char low) {
+    if (!isHighSurrogate(high)) 
+      throw new IllegalArgumentException("Invalid High Surrogate");
+    if (!isLowSurrogate(low))
+      throw new IllegalArgumentException("Invalid Low Surrogate");
+    return new Codepoint(((high - '\uD800') << 10) + (low - '\uDC00') + 0x010000);    
   }
 
-  public static int charAt(String s, int i) {
+  public static Codepoint codepointAt(String s, int i) {
     char c = s.charAt(i);
-    if (c < 0xD800 || c > 0xDFFF) return c;
+    if (c < 0xD800 || c > 0xDFFF) return new Codepoint(c);
     if (isHighSurrogate(c)) {
       if (s.length() != i) {
         char low = s.charAt(i+1);
-        if (isLowSurrogate(low)) return toCodePoint(c,low);
+        if (isLowSurrogate(low)) return toSupplementary(c,low);
       }
     } else if (isLowSurrogate(c)) {
       if (i >= 1) {
         char high = s.charAt(i-1);
-        if (isHighSurrogate(high)) return toCodePoint(high,c);
+        if (isHighSurrogate(high)) return toSupplementary(high,c);
       }
     }
-    return c;
+    return new Codepoint(c);
   }
   
-  public static int charAt(CharSequence s, int i) {
+  public static Codepoint codepointAt(CharSequence s, int i) {
     char c = s.charAt(i);
-    if (c < 0xD800 || c > 0xDFFF) return c;
+    if (c < 0xD800 || c > 0xDFFF) return new Codepoint(c);
     if (isHighSurrogate(c)) {
       if (s.length() != i) {
         char low = s.charAt(i+1);
-        if (isLowSurrogate(low)) return toCodePoint(c,low);
+        if (isLowSurrogate(low)) return toSupplementary(c,low);
       }
     } else if (isLowSurrogate(c)) {
       if (i >= 1) {
         char high = s.charAt(i-1);
-        if (isHighSurrogate(high)) return toCodePoint(high,c);
+        if (isHighSurrogate(high)) return toSupplementary(high,c);
       }
     }
-    return c;
+    return new Codepoint(c);
+  }
+  
+  public static void insert(CharSequence s, int i, Codepoint c) {
+    insert(s,i,c.getValue());
   }
   
   public static void insert(CharSequence s, int i, int c) {
@@ -217,6 +165,10 @@ public final class CharUtils {
       else if (s instanceof StringBuilder)
         ((StringBuilder)s).insert(i, toString(c));
     }
+  }
+  
+  public static void setChar(CharSequence s, int i, Codepoint c) {
+    setChar(s,i,c.getValue());
   }
   
   public static void setChar(CharSequence s, int i, int c) {
@@ -243,10 +195,30 @@ public final class CharUtils {
     }
   }
   
-  public static int size(int c) {
-    return (isSupplementary(c)) ? 2 : 1;
+  public static int length(Codepoint c) {
+    return c.getCharCount();
   }
   
+  public static int length(int c) {
+    return new Codepoint(c).getCharCount();
+  }
+  
+  public static int length(CharSequence c) {
+    return length(CodepointIterator.forCharSequence(c));
+  }
+  
+  public static int length(char[] c) {
+    return length(CodepointIterator.forCharArray(c));
+  }
+  
+  private static int length(CodepointIterator ci) {
+    int n = 0;
+    while(ci.hasNext()) {
+      ci.next(); n++;
+    }
+    return n;    
+  }
+
   private static String supplementaryToString(int c) {
     StringBuilder buf = new StringBuilder();
     buf.append((char)getHighSurrogate(c));
@@ -260,46 +232,31 @@ public final class CharUtils {
       String.valueOf((char)c);
   }
   
-  
-
-  private static final char LRE = 0x202A; 
-  private static final char RLE = 0x202B; 
-  private static final char LRO = 0x202D; 
-  private static final char RLO = 0x202E; 
-  private static final char LRM = 0x200E; 
-  private static final char RLM = 0x200F;
-  private static final char PDF = 0x202C;
+  public static final char LRE = 0x202A; 
+  public static final char RLE = 0x202B; 
+  public static final char LRO = 0x202D; 
+  public static final char RLO = 0x202E; 
+  public static final char LRM = 0x200E; 
+  public static final char RLM = 0x200F;
+  public static final char PDF = 0x202C;
   
   /**
    * Removes leading and trailing bidi controls from the string
    */
   public static String stripBidi(String s) {
     if (s == null || s.length() <= 1) return s;
-    if (charIsBidiControl(s.charAt(0)))
+    if (isBidi(s.charAt(0)))
       s = s.substring(1);
-    if (charIsBidiControl(s.charAt(s.length()-1)))
+    if (isBidi(s.charAt(s.length()-1)))
       s = s.substring(0,s.length()-1);
     return s;
   }
     
   public static String stripBidiInternal(String s) {
+    
     return s.replaceAll("[\u202A\u202B\u202D\u202E\u200E\u200F\u202C]", "");
   }
-  
-  /**
-   * Returns true if the character is a bidi control 
-   */
-  public static boolean charIsBidiControl(char c) {
-    return c == 0x202A ||
-    c == LRE ||
-    c == RLE ||
-    c == LRO ||
-    c == RLO ||
-    c == RLM ||
-    c == LRM || 
-    c == PDF;
-  }
-  
+
   private static String wrap(String s, char c1, char c2) {
     StringBuilder buf = new StringBuilder(s);
     if (buf.length() > 1) {
@@ -310,194 +267,222 @@ public final class CharUtils {
   }
   
   /**
-   * Wrap the string with Bidi Right-to-Left embed
+   * Wrap the string with the specified bidi control
    */
-  public static String bidiRLE(String s) {
-    return wrap(s,RLE,PDF);
+  public static String wrapBidi(String s, char c) {
+    switch(c) {
+      case RLE: return wrap(s,RLE,PDF);
+      case RLO: return wrap(s,RLO,PDF);
+      case LRE: return wrap(s,LRE,PDF);
+      case LRO: return wrap(s,LRO,PDF);
+      case RLM: return wrap(s,RLM,RLM);
+      case LRM: return wrap(s,LRM,LRM);
+      default:  return s;
+    }
+  }
+  
+  public static boolean isDigit(Codepoint codepoint) {
+    return isDigit(codepoint.getValue());
+  }
+  
+  public static boolean isDigit(int codepoint) {
+    return CharUtils.inRange(codepoint, '0', '9');
+  }
+  
+  public static boolean isAlpha(Codepoint codepoint) {
+    return isAlpha(codepoint.getValue());
+  }
+  
+  public static boolean isAlpha(int codepoint) {
+    return CharUtils.inRange(codepoint, 'A', 'Z') ||
+           CharUtils.inRange(codepoint, 'a', 'z');
+  }
+
+  public static boolean isAlphaDigit(Codepoint codepoint) {
+    return isAlphaDigit(codepoint.getValue());
+  }
+  
+  public static boolean isAlphaDigit(int codepoint) {
+    return isDigit(codepoint) || isAlpha(codepoint);
+  }
+
+  public static boolean isBidi(Codepoint codepoint) {
+    return isBidi(codepoint.getValue());
+  }
+  
+  public static boolean isBidi(int codepoint) {
+    return  codepoint == LRM || // Left-to-right mark
+            codepoint == RLM || // Right-to-left mark
+            codepoint == LRE || // Left-to-right embedding
+            codepoint == RLE || // Right-to-left embedding
+            codepoint == LRO || // Left-to-right override
+            codepoint == RLO || // Right-to-left override
+            codepoint == PDF;   // Pop directional formatting
+  }
+  
+  public static int get_index(int[] set, int value) {
+    int s = 0, e = set.length;
+    while (e - s > 8) {
+      int i = (e + s) >> 1;
+      s = set[i] <= value ? i : s;
+      e = set[i] > value ? i : e;
+    }
+    while(s < e) {
+      if (value < set[s]) break;
+      s++;
+    }
+    return s == e ? -1 : s - 1;
   }
   
   /**
-   * Wrap the string with Bidi Right-to-Left override 
+   * Treats the specified int array as an Inversion Set and returns
+   * true if the value is located within the set. This will only work
+   * correctly if the values in the int array are monotonically increasing
    */
-  public static String bidiRLO(String s) {
-    return wrap(s,RLO,PDF);
+  public static boolean invset_contains(
+    int[] set, 
+    int value) {
+      return (get_index(set,value) & 1) == 0;    
   }
   
-  /**
-   * Wrap the string with Bidi Left-to-Right embed
-   */
-  public static String bidiLRE(String s) {
-    return wrap(s,LRE,PDF);
-  }
-  
-  /**
-   * Wrap the string with Bidi Left-to-Right override
-   */
-  public static String bidiLRO(String s) {
-    return wrap(s,LRO,PDF);
-  }
-  
-  /**
-   * Wrap the string with Bidi RML marks
-   */
-  public static String bidiRLM(String s) {
-    return wrap(s,RLM,RLM);
-  }
-  
-  /**
-   * Wrap the string with Bidi LRM marks
-   */
-  public static String bidiLRM(String s) {
-    return wrap(s,LRM,LRM);
-  }
-  
-  public static boolean contains(int v, int[]... ranges) {
-    for (int[] range : ranges) 
-      if (Arrays.binarySearch(range, v) > -1) return true;
-    return false;
-  }
-  
-  public static interface Check {
-    boolean escape(int codepoint);
-  }
   
   public static enum Profile {
     NONE(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return true;
         }
       }
     ),
     ALPHA(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !isAlpha(codepoint);
         }
       }
     ),
     ALPHANUM(
-      new Check() {
-        public boolean escape(int codepoint) {
-          return !isAlphaNum(codepoint);
+      new Filter() {
+        public boolean accept(int codepoint) {
+          return !isAlphaDigit(codepoint);
         }
       }
     ),
     FRAGMENT(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !isFragment(codepoint);
         }
       }
     ),
     IFRAGMENT(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !is_ifragment(codepoint);
         }
       }
     ),
     PATH(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !isPath(codepoint);
         }
       }
     ),
     IPATH(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !is_ipath(codepoint);
         }
       }
     ),
     IUSERINFO(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !is_iuserinfo(codepoint);
         }
       }
     ),
     USERINFO(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !isUserInfo(codepoint);
         }
       }
     ),
     QUERY(
-        new Check() {
-        public boolean escape(int codepoint) {
+        new Filter() {
+        public boolean accept(int codepoint) {
           return !isQuery(codepoint);
         }
       }
     ),
     IQUERY(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !is_iquery(codepoint);
         }
       }
     ),
     SCHEME(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !isScheme(codepoint);
         }
       }
     ),
     PATHNODELIMS(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !isPathNoDelims(codepoint);
         }
       }
     ),
     IPATHNODELIMS(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !is_ipathnodelims(codepoint);
         }
       }
     ),
     IREGNAME(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !is_iregname(codepoint);
         }
       }
     ),
     IPRIVATE(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !is_iprivate(codepoint);
         }
       }
     ),
     RESERVED(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !isReserved(codepoint);
         }
       }
     ),
     IUNRESERVED(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !is_iunreserved(codepoint);
         }
       }
     ),
     UNRESERVED(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !isUnreserved(codepoint);
         }
       }
     ),
     SCHEMESPECIFICPART(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !is_iunreserved(codepoint) && 
                  !isReserved(codepoint) && 
                  !is_iprivate(codepoint) && 
@@ -507,8 +492,8 @@ public final class CharUtils {
       }
     ),
     AUTHORITY(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !is_regname(codepoint) &&
                  !isUserInfo(codepoint) && 
                  !isGenDelim(codepoint);
@@ -516,23 +501,23 @@ public final class CharUtils {
       }
     ),
     ASCIISANSCRLF(
-      new Check() {
-        public boolean escape(int codepoint) {  
+      new Filter() {
+        public boolean accept(int codepoint) {  
           return !CharUtils.inRange(codepoint,1,9) &&   
                  !CharUtils.inRange(codepoint,14,127);
         }        
       }
     ),
     PCT(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !CharUtils.isPctEnc(codepoint);
         }
       }
     ),
     STD3ASCIIRULES(
-      new Check() {
-        public boolean escape(int codepoint) {
+      new Filter() {
+        public boolean accept(int codepoint) {
           return !CharUtils.inRange(codepoint,0x0000,0x002C) &&
                  !CharUtils.inRange(codepoint,0x002E,0x002F) &&
                  !CharUtils.inRange(codepoint,0x003A,0x0040) &&
@@ -542,26 +527,16 @@ public final class CharUtils {
       }
     )
     ;
-    private final Check check;
-    Profile(Check check) {
-      this.check = check;
+    private final Filter filter;
+    Profile(Filter filter) {
+      this.filter = filter;
+    }
+    public Filter filter() {
+      return filter;
     }
     public boolean check(int codepoint) {
-      return check.escape(codepoint);
+      return filter.accept(codepoint);
     }
-  }
-  
-  public static boolean isDigit(int codepoint) {
-    return CharUtils.inRange(codepoint, '0', '9');
-  }
-  
-  public static boolean isAlpha(int codepoint) {
-    return CharUtils.inRange(codepoint, 'A', 'Z') ||
-           CharUtils.inRange(codepoint, 'a', 'z');
-  }
-
-  public static boolean isAlphaNum(int codepoint) {
-    return isDigit(codepoint) || isAlpha(codepoint);
   }
 
   public static boolean isPctEnc(int codepoint) {
@@ -585,7 +560,7 @@ public final class CharUtils {
   }
   
   public static boolean isUnreserved(int codepoint) {
-    return isAlphaNum(codepoint) ||  
+    return isAlphaDigit(codepoint) ||  
            codepoint == '-' || 
            codepoint == '.' ||
            codepoint == '_' ||
@@ -656,7 +631,7 @@ public final class CharUtils {
   }
 
   public static boolean isScheme(int codepoint) {
-    return isAlphaNum(codepoint) || 
+    return isAlphaDigit(codepoint) || 
            codepoint == '+' || 
            codepoint == '-' ||
            codepoint == '.';
@@ -682,16 +657,6 @@ public final class CharUtils {
            codepoint == '/' ||
            codepoint == '?' ||
            codepoint == '%';
-  }
-  
-  public static boolean isBidi(int codepoint) {
-    return  codepoint == '\u200E' || // Left-to-right mark
-            codepoint == '\u200F' || // Right-to-left mark
-            codepoint == '\u202A' || // Left-to-right embedding
-            codepoint == '\u202B' || // Right-to-left embedding
-            codepoint == '\u202D' || // Left-to-right override
-            codepoint == '\u202E' || // Right-to-left override
-            codepoint == '\u202C';   // Pop directional formatting
   }
   
   public static boolean is_ucschar(int codepoint) {    
@@ -723,7 +688,7 @@ public final class CharUtils {
   }
   
   public static boolean is_iunreserved(int codepoint) {
-    return isAlphaNum(codepoint) || isMark(codepoint) || is_ucschar(codepoint);
+    return isAlphaDigit(codepoint) || isMark(codepoint) || is_ucschar(codepoint);
   }
 
   public static boolean is_ipchar(int codepoint) {
@@ -811,7 +776,7 @@ public final class CharUtils {
   public static boolean is_iserver(int codepoint) {
     return is_iuserinfo(codepoint) || 
            is_iregname(codepoint) || 
-           isAlphaNum(codepoint) || 
+           isAlphaDigit(codepoint) || 
            codepoint == '.' || 
            codepoint == ':' || 
            codepoint == '@' || 
@@ -819,6 +784,33 @@ public final class CharUtils {
            codepoint == ']' || 
            codepoint == '%' || 
            codepoint == '-';
+  }
+
+  public static void verify(CodepointIterator ci, Profile profile) throws InvalidCharacterException {
+    CodepointIterator rci = CodepointIterator.restrict(ci, profile.filter());
+    while (rci.hasNext()) rci.next();
+  }
+  
+  public static void verify(char[] s, Profile profile) throws InvalidCharacterException {
+    if (s == null) return;
+    verify(CodepointIterator.forCharArray(s),profile);
+  }
+  
+  public static void verify(String s, Profile profile) throws InvalidCharacterException {
+    if (s == null) return;
+    verify(CodepointIterator.forCharSequence(s),profile);
+  }
+  
+  public static void verifyNot(CodepointIterator ci, Profile profile) throws InvalidCharacterException {
+    CodepointIterator rci = ci.restrict(profile.filter(),false,true);
+    while (rci.hasNext()) rci.next();
+  }
+  
+  public static void verifyNot(char[] array, Profile profile) throws InvalidCharacterException {
+    CodepointIterator rci = 
+      CodepointIterator.forCharArray(array)
+        .restrict(profile.filter(),false,true);
+    while (rci.hasNext()) rci.next();
   }
 
 }

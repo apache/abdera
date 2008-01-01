@@ -24,11 +24,13 @@ import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.abdera.i18n.io.CharUtils;
-import org.apache.abdera.i18n.io.InvalidCharacterException;
-import org.apache.abdera.i18n.io.CharUtils.Profile;
-import org.apache.abdera.i18n.unicode.Normalizer;
-import org.apache.abdera.i18n.unicode.UnicodeCharacterDatabase;
+import org.apache.abdera.i18n.text.CharUtils;
+import org.apache.abdera.i18n.text.InvalidCharacterException;
+import org.apache.abdera.i18n.text.Nameprep;
+import org.apache.abdera.i18n.text.Normalizer;
+import org.apache.abdera.i18n.text.UrlEncoding;
+import org.apache.abdera.i18n.text.CharUtils.Profile;
+import org.apache.abdera.i18n.text.data.UnicodeCharacterDatabase;
 
 public final class IRI 
   implements Serializable, 
@@ -139,10 +141,10 @@ public final class IRI
   
   private void init() {    
     a_host = IDNA.toASCII(host);
-    a_fragment = Escaping.encode(fragment,Profile.FRAGMENT);
-    a_path = Escaping.encode(path, Profile.PATH);
-    a_query = Escaping.encode(query,Profile.QUERY, Profile.PATH);
-    a_userinfo = Escaping.encode(userinfo,Profile.USERINFO);
+    a_fragment = UrlEncoding.encode(fragment,Profile.FRAGMENT.filter());
+    a_path = UrlEncoding.encode(path, Profile.PATH.filter());
+    a_query = UrlEncoding.encode(query,Profile.QUERY.filter(), Profile.PATH.filter());
+    a_userinfo = UrlEncoding.encode(userinfo,Profile.USERINFO.filter());
     a_authority = buildASCIIAuthority();
   }
     
@@ -285,9 +287,9 @@ public final class IRI
       buildAuthority(buf,aui,ah,port);
       return buf.toString();
     } else {
-      return Escaping.encode(
+      return UrlEncoding.encode(
         authority, 
-        Profile.AUTHORITY);
+        Profile.AUTHORITY.filter());
     }
   }
   
@@ -485,8 +487,8 @@ public final class IRI
         iri.getHost(),
         iri.getPort(),
         normalize(iri.getPath()),
-        Escaping.encode(Escaping.decode(iri.getQuery()),Profile.IQUERY),
-        Escaping.encode(Escaping.decode(iri.getFragment()),Profile.IFRAGMENT)
+        UrlEncoding.encode(UrlEncoding.decode(iri.getQuery()),Profile.IQUERY.filter()),
+        UrlEncoding.encode(UrlEncoding.decode(iri.getFragment()),Profile.IFRAGMENT.filter())
       );
   }
 
@@ -512,10 +514,10 @@ public final class IRI
       if (segments[n] != null) {
         if (buf.length() > 1) buf.append('/');
         buf.append(
-          Escaping.encode(
-            Escaping.decode(
+            UrlEncoding.encode(
+                UrlEncoding.decode(
               segments[n]),
-              Profile.IPATHNODELIMS));
+              Profile.IPATHNODELIMS.filter()));
       }
     }
     if (path.endsWith("/") || path.endsWith("/.")) 
@@ -552,8 +554,8 @@ public final class IRI
       buf.append(':');
     }
     buf.append(getSchemeSpecificPart());
-    return Escaping.encode(buf.toString(),
-      Profile.SCHEMESPECIFICPART);
+    return UrlEncoding.encode(buf.toString(),
+      Profile.SCHEMESPECIFICPART.filter());
   }
   
   public String toASCIIString() {
@@ -568,7 +570,7 @@ public final class IRI
   }
   
   public String toBIDIString() {
-    return CharUtils.bidiLRE(toString());
+    return CharUtils.wrapBidi(toString(),CharUtils.LRE);
   }
   
   public java.net.URI toURI() 

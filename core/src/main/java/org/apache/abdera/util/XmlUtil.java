@@ -18,10 +18,31 @@
 package org.apache.abdera.util;
 
 import org.apache.abdera.i18n.ChainableBitSet;
+import org.apache.abdera.i18n.text.Filter;
 
 public class XmlUtil {
 
-  public enum XMLVersion { XML10, XML11 };
+  public enum XMLVersion { 
+    XML10, 
+    XML11;
+    private final Filter filter;
+    XMLVersion() {
+      this.filter = new XmlFilter(this);
+    }
+    public Filter filter() {
+      return filter;
+    }
+  };
+  
+  private static class XmlFilter implements Filter {
+    private final XMLVersion version;
+    XmlFilter(XMLVersion version) {
+      this.version = version;
+    }
+    public boolean accept(int c) {
+      return !restricted(version, c);
+    }
+  }
   
   private static final ChainableBitSet restrictedchar10 =
     new ChainableBitSet().set2(0, 8)

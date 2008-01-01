@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.i18n.iri;
+package org.apache.abdera.i18n.text;
 
 import java.io.ByteArrayInputStream;
 import java.io.FilterInputStream;
@@ -32,21 +32,19 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.CharBuffer;
 
-import org.apache.abdera.i18n.io.CharUtils;
-import org.apache.abdera.i18n.io.CharUtils.Profile;
-
 
 /**
  * Performs URL Percent Encoding
  */
-public final class Escaping {
+public final class UrlEncoding {
 
+  private static final String DEFAULT_ENCODING = "UTF-8";
   public final static char[] HEX = {
     '0','1','2','3','4','5','6','7',
     '8','9','A','B','C','D','E','F'
   };
   
-  private Escaping() {}
+  private UrlEncoding() {}
   
   private static void encode(Appendable sb, byte... bytes) {
     encode(sb,0,bytes.length,bytes);
@@ -66,52 +64,52 @@ public final class Escaping {
   }
   
   public static String encode(char... chars) {
-    return encode(chars,0,chars.length,"UTF-8",new Profile[0]);
+    return encode(chars,0,chars.length,DEFAULT_ENCODING,new Filter[0]);
   }
   
-  public static String encode(char[] chars, Profile profile) {
-    return encode(chars,0,chars.length,"UTF-8",new Profile[] {profile});
+  public static String encode(char[] chars, Filter Filter) {
+    return encode(chars,0,chars.length,DEFAULT_ENCODING,new Filter[] {Filter});
   }
   
-  public static String encode(char[] chars, Profile... profiles) {
-    return encode(chars,0,chars.length,"UTF-8",profiles);
+  public static String encode(char[] chars, Filter... filters) {
+    return encode(chars,0,chars.length,DEFAULT_ENCODING,filters);
   }
 
   public static String encode(char[] chars, String enc) {
-    return encode(chars,0,chars.length,enc,new Profile[0]);
+    return encode(chars,0,chars.length,enc,new Filter[0]);
   }
   
-  public static String encode(char[] chars, String enc, Profile profile) {
-    return encode(chars,0,chars.length,enc,new Profile[] {profile});
+  public static String encode(char[] chars, String enc, Filter Filter) {
+    return encode(chars,0,chars.length,enc,new Filter[] {Filter});
   }
   
-  public static String encode(char[] chars, String enc, Profile... profiles) {
-    return encode(chars,0,chars.length,enc,profiles);
+  public static String encode(char[] chars, String enc, Filter... filters) {
+    return encode(chars,0,chars.length,enc,filters);
   }
   
   public static String encode(char[] chars, int offset, int length) {
-    return encode(chars,offset,length,"UTF-8",new Profile[0]);
+    return encode(chars,offset,length,DEFAULT_ENCODING,new Filter[0]);
   }
 
   public static String encode(char[] chars, int offset, int length, String enc) {
-    return encode(chars,offset,length,enc,new Profile[0]);
+    return encode(chars,offset,length,enc,new Filter[0]);
   }
   
-  public static String encode(char[] chars, int offset, int length, Profile profile) {
-    return encode(chars,offset,length,"UTF-8",new Profile[] {profile});
+  public static String encode(char[] chars, int offset, int length, Filter Filter) {
+    return encode(chars,offset,length,DEFAULT_ENCODING,new Filter[] {Filter});
   }
   
-  public static String encode(char[] chars, int offset, int length, Profile... profiles) {
-    return encode(chars,offset,length,"UTF-8",profiles);
+  public static String encode(char[] chars, int offset, int length, Filter... filters) {
+    return encode(chars,offset,length,DEFAULT_ENCODING,filters);
   }
   
-  public static String encode(char[] chars, int offset, int length, String enc, Profile profile) {
-    return encode(chars,offset,length,enc,new Profile[] {profile});    
+  public static String encode(char[] chars, int offset, int length, String enc, Filter Filter) {
+    return encode(chars,offset,length,enc,new Filter[] {Filter});    
   }
   
-  public static String encode(char[] chars, int offset, int length, String enc, Profile... profiles) {
+  public static String encode(char[] chars, int offset, int length, String enc, Filter... filters) {
     try {
-      return encode((CharSequence)CharBuffer.wrap(chars,offset,length),enc,profiles);
+      return encode((CharSequence)CharBuffer.wrap(chars,offset,length),enc,filters);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -129,132 +127,132 @@ public final class Escaping {
   public static String encode(
     InputStream in, 
     String charset) throws IOException {
-      return encode(in,charset,"UTF-8",new Profile[0]);
+      return encode(in,charset,DEFAULT_ENCODING,new Filter[0]);
   }
 
   public static String encode(
     InputStream in, 
     String charset,
-    Profile profile) 
+    Filter Filter) 
       throws IOException {
-    return encode(in,charset,"UTF-8",new Profile[] {profile});
+    return encode(in,charset,DEFAULT_ENCODING,new Filter[] {Filter});
   }
 
   public static String encode(
     InputStream in, 
     String charset,
     String enc) throws IOException {
-      return encode(in,charset,enc,new Profile[0]);
+      return encode(in,charset,enc,new Filter[0]);
   }
 
   public static String encode(
     InputStream in, 
     String charset,
     String enc,
-    Profile profile) 
+    Filter Filter) 
       throws IOException {
-    return encode(in,charset,enc,new Profile[] {profile});
+    return encode(in,charset,enc,new Filter[] {Filter});
   }
   
   public static String encode(
     InputStream in,
     String charset,
     String enc,
-    Profile... profiles) 
+    Filter... filters) 
       throws IOException {
-    return encode(new InputStreamReader(in,charset),enc,profiles);
+    return encode(new InputStreamReader(in,charset),enc,filters);
   }
 
   public static String encode(
     InputStream in,
     String charset,
-    Profile... profiles) 
+    Filter... filters) 
       throws IOException {
-    return encode(new InputStreamReader(in,charset),"UTF-8",profiles);
+    return encode(new InputStreamReader(in,charset),DEFAULT_ENCODING,filters);
   }
   
   public static String encode(
     Reader reader) 
       throws IOException {
-    return encode(reader,"UTF-8", new Profile[0]);
+    return encode(reader,DEFAULT_ENCODING, new Filter[0]);
   }
 
   public static String encode(
     Readable readable) 
       throws IOException {
-    return encode(readable,"UTF-8", new Profile[0]);
+    return encode(readable,DEFAULT_ENCODING, new Filter[0]);
   }
   
   public static String encode(
     Reader reader, 
     String enc) 
       throws IOException {
-    return encode(reader, enc, new Profile[0]);
+    return encode(reader, enc, new Filter[0]);
   }
 
   public static String encode(
     Readable readable, 
     String enc) 
       throws IOException {
-    return encode(readable, enc, new Profile[0]);
+    return encode(readable, enc, new Filter[0]);
   }
   
   public static String encode(
     Reader reader, 
     String enc, 
-    Profile profile)
+    Filter Filter)
       throws IOException {
-    return encode(reader,enc,new Profile[] {profile});
+    return encode(reader,enc,new Filter[] {Filter});
   }
 
   public static String encode(
     Reader reader,  
-    Profile profile)
+    Filter Filter)
       throws IOException {
-    return encode(reader,"UTF-8",new Profile[] {profile});
+    return encode(reader,DEFAULT_ENCODING,new Filter[] {Filter});
   }
 
   public static String encode(
     Reader reader,  
-    Profile... profiles)
+    Filter... filters)
       throws IOException {
-    return encode(reader,"UTF-8",profiles);
+    return encode(reader,DEFAULT_ENCODING,filters);
   }
   
   public static String encode(
     Readable readable, 
     String enc, 
-    Profile profile)
+    Filter Filter)
       throws IOException {
-    return encode(readable,enc,new Profile[] {profile});
+    return encode(readable,enc,new Filter[] {Filter});
   }
 
   public static String encode(
     Readable readable,  
-    Profile profile)
+    Filter Filter)
       throws IOException {
-    return encode(readable,"UTF-8",new Profile[] {profile});
+    return encode(readable,DEFAULT_ENCODING,new Filter[] {Filter});
   }
 
   public static String encode(
     Readable readable,  
-    Profile... profiles)
+    Filter... filters)
       throws IOException {
-    return encode(readable,"UTF-8",profiles);
+    return encode(readable,DEFAULT_ENCODING,filters);
   }
   
   private static void processChars(
     StringBuilder sb,
     CharBuffer chars, 
     String enc, 
-    Profile... profiles) 
+    Filter... filters) 
       throws IOException {
     for (int n = 0; n < chars.length(); n++) {
       char c = chars.charAt(n);
-      if (!CharUtils.isHighSurrogate(c) && check(c,profiles)) {
+      if (!CharUtils.isHighSurrogate(c) && check(c,filters)) {
         encode(sb,String.valueOf(c).getBytes(enc));
       } else if (CharUtils.isHighSurrogate(c)) {
-        if (check(c,profiles)) {
+        if (check(c,filters)) {
           StringBuilder buf = new StringBuilder();
           buf.append(c);
           buf.append(chars.charAt(++n));
@@ -273,13 +271,13 @@ public final class Escaping {
   public static String encode(
     Readable readable,
     String enc,
-    Profile... profiles) 
+    Filter... filters) 
       throws IOException {
     StringBuilder sb = new StringBuilder();
     CharBuffer chars = CharBuffer.allocate(1024);
     while (readable.read(chars) > -1) {
       chars.flip();
-      processChars(sb, chars, enc, profiles);
+      processChars(sb, chars, enc, filters);
     }
     return sb.toString();
   }
@@ -287,7 +285,7 @@ public final class Escaping {
   public static String encode(
     Reader reader,
     String enc,
-    Profile... profiles) 
+    Filter... filters) 
       throws IOException {
     StringBuilder sb = new StringBuilder();
     char[] chunk = new char[1024];
@@ -295,7 +293,7 @@ public final class Escaping {
     while ((r = reader.read(chunk)) > -1)
       processChars(
         sb, CharBuffer.wrap(chunk, 0, r), 
-        enc, profiles);
+        enc, filters);
     return sb.toString();
   }
   
@@ -312,44 +310,44 @@ public final class Escaping {
   }
   
   public static String encode(CharSequence s) {
-    return encode(s,Profile.NONE);
+    return encode(s,Filter.NONOPFILTER);
   }
   
-  public static String encode(CharSequence s, Profile profile) {
-    return encode(s, new Profile[] {profile});
+  public static String encode(CharSequence s, Filter Filter) {
+    return encode(s, new Filter[] {Filter});
   }
   
-  public static String encode(CharSequence s, Profile... profiles) {
+  public static String encode(CharSequence s, Filter... filters) {
     try {
       if (s == null) return null;
-      return encode(s,"utf-8",profiles);
+      return encode(s,"utf-8",filters);
     } catch (UnsupportedEncodingException e) {
       return null; // shouldn't happen
     }
   }
   
   public static String encode(CharSequence s, int offset, int length) {
-    return encode(s,offset,length,Profile.NONE);
+    return encode(s,offset,length,Filter.NONOPFILTER);
   }
   
-  public static String encode(CharSequence s, int offset, int length, Profile profile) {
-    return encode(s,offset,length, new Profile[] {profile});
+  public static String encode(CharSequence s, int offset, int length, Filter Filter) {
+    return encode(s,offset,length, new Filter[] {Filter});
   }
   
-  public static String encode(CharSequence s, int offset, int length, Profile... profiles) {
+  public static String encode(CharSequence s, int offset, int length, Filter... filters) {
     try {
       if (s == null) return null;
-      return encode(s,offset,length,"utf-8",profiles);
+      return encode(s,offset,length,"utf-8",filters);
     } catch (UnsupportedEncodingException e) {
       return null; // shouldn't happen
     }
   }
   
-  private static boolean check(int codepoint, Profile... profiles) {
-    for (Profile profile : profiles) {
-      if (!profile.check(codepoint)) return false;
+  private static boolean check(int codepoint, Filter... filters) {
+    for (Filter Filter : filters) {
+      if (Filter.accept(codepoint)) return true;
     }
-    return true;
+    return false;
   }
 
   public static String encode(
@@ -357,27 +355,27 @@ public final class Escaping {
       int offset,
       int length,
       String enc, 
-      Profile... profiles) 
+      Filter... filters) 
         throws UnsupportedEncodingException {
     int end = Math.min(s.length(), offset+length);
     CharSequence seq = s.subSequence(offset, end);
-    return encode(seq,enc,profiles);
+    return encode(seq,enc,filters);
   }
   
   public static String encode(
     CharSequence s, 
     String enc, 
-    Profile... profiles) 
+    Filter... filters) 
       throws UnsupportedEncodingException {
     if (s == null) return s.toString();
     StringBuilder sb = new StringBuilder();
 
     for (int n = 0; n < s.length(); n++) {
         char c = s.charAt(n);
-      if (!CharUtils.isHighSurrogate(c) && check(c,profiles)) {
+      if (!CharUtils.isHighSurrogate(c) && check(c,filters)) {
         encode(sb,String.valueOf(c).getBytes(enc));
       } else if (CharUtils.isHighSurrogate(c)) {
-        if (check(c,profiles)) {
+        if (check(c,filters)) {
           StringBuilder buf = new StringBuilder();
           buf.append(c);
           buf.append(s.charAt(++n));
@@ -422,55 +420,55 @@ public final class Escaping {
     @Override 
     public void write(byte[] b, int off, int len) throws IOException {
       String enc = encode(b,off,len);
-      out.write(enc.getBytes("UTF-8"));
+      out.write(enc.getBytes(DEFAULT_ENCODING));
     }
     @Override 
     public void write(byte[] b) throws IOException {
       String enc = encode(b);
-      out.write(enc.getBytes("UTF-8"));
+      out.write(enc.getBytes(DEFAULT_ENCODING));
     }
     @Override 
     public void write(int b) throws IOException {
       String enc = encode((byte)b);
-      out.write(enc.getBytes("UTF-8"));
+      out.write(enc.getBytes(DEFAULT_ENCODING));
     }
   }
 
   public static class EncodingWriter
     extends FilterWriter {
-    private final Profile[] profiles;
+    private final Filter[] filters;
     public EncodingWriter(OutputStream out) {
       this(new OutputStreamWriter(out));
     }
-    public EncodingWriter(OutputStream out,Profile profile) {
-      this(new OutputStreamWriter(out),profile);
+    public EncodingWriter(OutputStream out,Filter Filter) {
+      this(new OutputStreamWriter(out),Filter);
     }    
-    public EncodingWriter(OutputStream out,Profile... profiles) {
-      this(new OutputStreamWriter(out),profiles);
+    public EncodingWriter(OutputStream out,Filter... filters) {
+      this(new OutputStreamWriter(out),filters);
     }    
     public EncodingWriter(Writer out) {
-      this(out,new Profile[0]);
+      this(out,new Filter[0]);
     }
-    public EncodingWriter(Writer out, Profile profile) {
-      this(out,new Profile[] {profile});
+    public EncodingWriter(Writer out, Filter Filter) {
+      this(out,new Filter[] {Filter});
     }
-    public EncodingWriter(Writer out, Profile... profiles) {
+    public EncodingWriter(Writer out, Filter... filters) {
       super(out);
-      this.profiles = profiles;
+      this.filters = filters;
     }
     @Override 
     public void write(char[] b, int off, int len) throws IOException {
-      String enc = encode(b,off,len,profiles);
+      String enc = encode(b,off,len,filters);
       out.write(enc.toCharArray());
     }
     @Override 
     public void write(char[] b) throws IOException {
-      String enc = encode(b,profiles);
+      String enc = encode(b,filters);
       out.write(enc.toCharArray());
     }
     @Override 
     public void write(int b) throws IOException {
-      String enc = encode(new char[] {(char)b},profiles);
+      String enc = encode(new char[] {(char)b},filters);
       out.write(enc.toCharArray());
     }
     @Override 
@@ -479,7 +477,7 @@ public final class Escaping {
       int off, 
       int len)
         throws IOException {
-      String enc = encode(str,off,len,profiles);
+      String enc = encode(str,off,len,filters);
       out.write(enc.toCharArray());
     }
   }
@@ -538,7 +536,7 @@ public final class Escaping {
     public DecodingReader(
       InputStream in) 
         throws UnsupportedEncodingException {
-      this(in, "UTF-8");
+      this(in, DEFAULT_ENCODING);
     }
     public DecodingReader(
       InputStream in, 

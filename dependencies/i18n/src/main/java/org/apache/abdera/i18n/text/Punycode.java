@@ -15,13 +15,9 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.i18n.iri;
+package org.apache.abdera.i18n.text;
 
 import java.io.IOException;
-
-import org.apache.abdera.i18n.io.CharUtils;
-import org.apache.abdera.i18n.io.CodepointIterator;
-
 
 /**
  * Implementation of the Punycode encoding scheme used by IDNA
@@ -91,7 +87,7 @@ public final class Punycode {
     bias = initial_bias;
     int i = -1;
     while (ci.hasNext()) {
-      i = ci.next();
+      i = ci.next().getValue();
       if (basic(i)) {
         if (case_flags != null) {
         } else {
@@ -106,7 +102,7 @@ public final class Punycode {
       i = -1;
       m = Integer.MAX_VALUE;
       while(ci.hasNext()) {
-        i = ci.next();
+        i = ci.next().getValue();
         if (i >= n && i < m) m = i;
       }
       if (m - n > (Integer.MAX_VALUE - delta) / (h + 1)) 
@@ -116,7 +112,7 @@ public final class Punycode {
       ci.position(0);
       i = -1;
       while (ci.hasNext()) {
-        i = ci.next();
+        i = ci.next().getValue();
         if (i < n) {
           if (++delta == 0) throw new IOException("Overflow");
         }
@@ -199,7 +195,7 @@ public final class Punycode {
       if (case_flags != null) {
         System.arraycopy(    // not sure if this is right
           case_flags, i, 
-          case_flags, i+CharUtils.size(n), 
+          case_flags, i+CharUtils.length(n), 
           case_flags.length-i);
       }
       CharUtils.insert(buf, i++, n);

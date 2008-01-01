@@ -17,8 +17,8 @@
 */
 package org.apache.abdera.i18n.test.iri;
 
-import org.apache.abdera.i18n.io.CharUtils;
-import org.apache.abdera.i18n.iri.Nameprep;
+import org.apache.abdera.i18n.text.CharUtils;
+import org.apache.abdera.i18n.text.Nameprep;
 
 
 public class TestNameprep extends TestBase {
@@ -68,38 +68,38 @@ public class TestNameprep extends TestBase {
       string(0xE1,0xBD,0x96)),
     N("ASCII space character U+0020", "\u0020" , "\u0020"),
     O("Non-ASCII 8bit space character U+00A0", "\u00A0", ""),
-    P("Non-ASCII multibyte space character U+1680", "\u1680", null, false, -1),
-    Q("Non-ASCII multibyte space character U+2000", "\u2000", "\u0020", false, -1),
+    P("Non-ASCII multibyte space character U+1680", "\u1680", null, -1),
+    Q("Non-ASCII multibyte space character U+2000", "\u2000", "\u0020", -1),
     R("Zero Width Space U+200b", "\u200B", ""),
-    S("Non-ASCII multibyte space character U+3000", "\u3000", "\u0020",false,-1),
+    S("Non-ASCII multibyte space character U+3000", "\u3000", "\u0020",-1),
     T("ASCII control characters U+0010 U+007F","\u0010\u007F","\u0010\u007F"),
-    U("Non-ASCII 8bit control character U+0085", "\u0085", null, false, -1),
-    V("Non-ASCII multibyte control character U+180E", "\u180E", null, false, -1),
+    U("Non-ASCII 8bit control character U+0085", "\u0085", null, -1),
+    V("Non-ASCII multibyte control character U+180E", "\u180E", null, -1),
     W("Zero Width No-Break Space U+FEFF","\uFEFF",""),
     X("Non-ASCII control character U+1D175",
       new String(new char[] {
          CharUtils.getHighSurrogate(0x1D175),
          CharUtils.getLowSurrogate(0x1D175)}),
-         null,false,-1),    
-    Y("Plane 0 private use character U+F123", "\uF123", null, false, -1),
-    Z("Plane 15 private use character U+F1234", string(0xF3,0xB1,0x88,0xB4), null, false, -1),
-   AA("Plane 16 private use character U+10F234", string(0xF4,0x8F,0x88,0xB4), null, false, -1),
-   AB("Non-character code point U+8FFFE", string(0xF2,0x8F,0x8F,0xBE), null, false, -1),
-   AC("Non-character code point U+10FFFF", string(0xF4,0x8F,0x8F,0x8F), null, false, -1),
-   AD("Surrogate code U+DF42",string(0xED,0xBD,0x82),null,false,-1),  
-   AE("Non-plain text character U+FFFD", string(0xEF,0xBF,0xBD), null, false, -1),
-   AF("Ideographic description character U+2FF5", string(0xE2,0xBF,0xB5), null, false, -1),
-   AG("Display property character U+0341", string(0xCD,0x81), string(0xCC,0x81), false, -1),
-   AH("Left-to-right mark U+200E",string(0xE2,0x80,0x8E),null,false, -1),
-   AI("Deprecated U+202A", string(0xE2,0x80,0xAA), null, false, -1),
-   AJ("Language tagging character U+E0001", string(0xF3,0xA0,0x80,0x81), null, false, -1),
-   AK("Language tagging character U+E0042", string(0xF3,0xA0,0x81,0x82), null, false, -1),
-   AL("Bidi: RandALCat character U+05BE and LCat characters", string('f','o','o',0xD6,0xBE), null, false, -1),
-   AM("Bidi: RandALCat character U+FD50 and LCat characters", string('f','o','o',0xEF,0xB5,0x90), null, false, -1),
-   AN("Bidi: RandALCat character U+FB38 and LCat characters", string('f','o','o',0xEF,0xB9,0xB6), null, false, -1),
-   AO("Bidi: RandALCat without trailing RandALCat U+0627 U+0031", string(0xD8,0xA7,0x31), null, false, -1),
+         null,-1),    
+    Y("Plane 0 private use character U+F123", "\uF123", null, -1),
+    Z("Plane 15 private use character U+F1234", string(0xF3,0xB1,0x88,0xB4), null, -1),
+   AA("Plane 16 private use character U+10F234", string(0xF4,0x8F,0x88,0xB4), null, -1),
+   AB("Non-character code point U+8FFFE", string(0xF2,0x8F,0x8F,0xBE), null, -1),
+   AC("Non-character code point U+10FFFF", string(0xF4,0x8F,0x8F,0x8F), null, -1),
+   AD("Surrogate code U+DF42",string(0xED,0xBD,0x82),null,-1),  
+   AE("Non-plain text character U+FFFD", string(0xEF,0xBF,0xBD), null, -1),
+   AF("Ideographic description character U+2FF5", string(0xE2,0xBF,0xB5), null, -1),
+   AG("Display property character U+0341", string(0xCD,0x81), string(0xCC,0x81), -1),
+   AH("Left-to-right mark U+200E",string(0xE2,0x80,0x8E),null,-1),
+   AI("Deprecated U+202A", string(0xE2,0x80,0xAA), null, -1),
+   AJ("Language tagging character U+E0001", string(0xF3,0xA0,0x80,0x81), null, -1),
+   AK("Language tagging character U+E0042", string(0xF3,0xA0,0x81,0x82), null, -1),
+   AL("Bidi: RandALCat character U+05BE and LCat characters", string('f','o','o',0xD6,0xBE), null, -1),
+   AM("Bidi: RandALCat character U+FD50 and LCat characters", string('f','o','o',0xEF,0xB5,0x90), null, -1),
+   AN("Bidi: RandALCat character U+FB38 and LCat characters", string('f','o','o',0xEF,0xB9,0xB6), null, -1),
+   AO("Bidi: RandALCat without trailing RandALCat U+0627 U+0031", string(0xD8,0xA7,0x31), null, -1),
    AP("Bidi: RandALCat character U+0627 U+0031 U+0628", string(0xD8,0xA7,0x31,0xD8,0xA8), string(0xD8,0xA7,0x31,0xD8,0xA8)),
-   AQ("Unassigned code point U+E0002",string(0xF3,0xA0,0x80,0x82),null,true,-1),
+   //AQ("Unassigned code point U+E0002",string(0xF3,0xA0,0x80,0x82),null,true,-1),
 // AR("Larger test (shrinking)",                                                                                           //      {"Larger test (shrinking)","X\xC2\xAD\xC3\x9F\xC4\xB0\xE2\x84\xA1\x6a\xcc\x8c\xc2\xa0\xc2""\xaa\xce\xb0\xe2\x80\x80", "xssi\xcc\x87" "tel\xc7\xb0 a\xce\xb0 ","Nameprep"}, 
 //  string('X',0xC2,0xAD,0xC3,0x9F,0xC4,0xB0,0xE2,0x84,0xA1,0x6a,0xc,'c',0x8c,0xc2,0xa0,0xc2),
 //  string('x','s','s','i',0xcc,0x87,'t','e','l',0xc7,0xb0,'a',0xce,0xb0), false, 0),
@@ -110,17 +110,16 @@ public class TestNameprep extends TestBase {
    AU("NFKC test", string(0xC2,0xAA), string(0x61)),
    AV("nameprep, exposed a bug in libstringprep 0.0.5",
       string(0xC2,0xAA,0x0A), string(0x61,0x0A)),
-   AW("unassigned code point U+0221", "\u0221", "\u0221", true, 0),
-   AX("unassigned code point U+0221", "\u0221", "\u0221", false, -1),
-   AY("Unassigned code point U+0236", "\u0236", "\u0236", true, 0),
-   AZ("unassigned code point U+0236", "\u0236", "\u0236", false, -1),
+  // AW("unassigned code point U+0221", "\u0221", "\u0221", true, 0),
+   AX("unassigned code point U+0221", "\u0221", "\u0221", -1),
+   //AY("Unassigned code point U+0236", "\u0236", "\u0236", true, 0),
+   AZ("unassigned code point U+0236", "\u0236", "\u0236", -1),
    BA("bidi both RandALCat and LCat  U+0627 U+00AA U+0628",
-      string(0xD8,0xA7,0xC2,0xAA,0xD8,0xA8), null, false, -1);
+      string(0xD8,0xA7,0xC2,0xAA,0xD8,0xA8), null, -1);
     
     String comment;
     String in;
     String out;
-    boolean allowunassigned = true;
     int rc;
     
     Test(
@@ -136,12 +135,10 @@ public class TestNameprep extends TestBase {
       String comment, 
       String in, 
       String out, 
-      boolean allowunassigned,
       int rc) {
       this.comment = comment;
       this.in = in;
       this.out = out;
-      this.allowunassigned = allowunassigned;
       this.rc = rc;
     }
     
@@ -150,7 +147,7 @@ public class TestNameprep extends TestBase {
   public static void testNameprep() throws Exception {
     for (Test test : Test.values()) {
       try {
-        String out = Nameprep.prep(test.in,test.allowunassigned);
+        String out = Nameprep.prep(test.in);
         assertEquals(test.out,out);
       } catch (Exception e) {
         if (test.rc != -1)

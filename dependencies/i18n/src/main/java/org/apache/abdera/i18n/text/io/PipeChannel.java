@@ -1,4 +1,4 @@
-package org.apache.abdera.i18n.io;
+package org.apache.abdera.i18n.text.io;
 
 
 import java.io.Closeable;
@@ -18,6 +18,9 @@ import java.nio.channels.Pipe;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
+
+import org.apache.abdera.i18n.text.CodepointIterator;
+
 
 /**
  * Implements a buffer that provides a slightly more efficient way of writing,
@@ -123,7 +126,7 @@ public class PipeChannel
    */
   public CodepointIterator getIterator() {
     checkNotFlipped();
-    return new ReadableByteChannelCodepointIterator(pipe.source(),charset);
+    return CodepointIterator.forReadableByteChannel(pipe.source(), charset);
   }
 
   /**
@@ -132,7 +135,7 @@ public class PipeChannel
    */
   public CodepointIterator getIterator(String charset) {
     checkNotFlipped();
-    return new ReadableByteChannelCodepointIterator(pipe.source(),charset);
+    return CodepointIterator.forReadableByteChannel(pipe.source(), charset);
   }
 
   /**

@@ -23,12 +23,12 @@ import java.io.InputStream;
 
 import javax.activation.DataHandler;
 
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Person;
-import org.apache.abdera.i18n.iri.IRI;
 
 public class FeedParserTest extends BaseParserTestCase {
 
@@ -44,8 +44,8 @@ public class FeedParserTest extends BaseParserTestCase {
   }
   
   public void testEntryAuthorEmail() throws Exception {
-    Document doc = parse(baseURI.resolve("entry_author_email.xml"));
-    Feed feed = (Feed) doc.getRoot();
+    Document<Feed> doc = parse(baseURI.resolve("entry_author_email.xml"));
+    Feed feed = doc.getRoot();
     Entry entry = feed.getEntries().get(0);
     Person person = entry.getAuthor();
     assertEquals(person.getEmail(), "me@example.com");

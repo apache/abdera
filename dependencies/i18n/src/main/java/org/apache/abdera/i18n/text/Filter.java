@@ -15,30 +15,15 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.i18n.io;
+package org.apache.abdera.i18n.text;
 
-import java.io.IOException;
-import java.io.Reader;
+public interface Filter {
 
-public class ReaderCodepointIterator 
-  extends CharArrayCodepointIterator {
+  boolean accept(int c);
   
-  public ReaderCodepointIterator(Reader reader) {
-    try {
-      StringBuilder sb = new StringBuilder();
-      char[] buf = new char[1024];
-      int n = -1;
-      while((n = reader.read(buf)) > -1) {
-        sb.append(buf,0,n);
-      }
-      buffer = new char[sb.length()];
-      sb.getChars(0, sb.length(), buffer, 0);
-      position = 0;
-      limit = buffer.length;
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+  public static final Filter NONOPFILTER = new Filter() {
+    public boolean accept(int c) {
+      return true;
     }
-    
-  }
-  
+  };
 }

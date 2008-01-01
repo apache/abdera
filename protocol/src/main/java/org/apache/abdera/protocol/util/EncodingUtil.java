@@ -20,9 +20,8 @@ package org.apache.abdera.protocol.util;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.abdera.i18n.io.CharUtils.Profile;
-import org.apache.abdera.i18n.iri.Escaping;
-import org.apache.abdera.i18n.unicode.Normalizer;
+import org.apache.abdera.i18n.text.Normalizer;
+import org.apache.abdera.i18n.text.Sanitizer;
 import org.apache.abdera.util.CompressionUtil;
 import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 import org.apache.commons.codec.DecoderException;
@@ -33,32 +32,56 @@ public class EncodingUtil {
 
   public static final String SANITIZE_PATTERN = "[^A-Za-z0-9\\%!$&\\\\'()*+,;=]+";
   
+  /**
+   * @deprecated
+   * @see org.apache.abdera.i18n.text.Sanitizer
+   */
   public static String sanitize(String slug) {
-    return sanitize(slug, null, false, null, SANITIZE_PATTERN);
+    return Sanitizer.sanitize(slug, null, false, null, SANITIZE_PATTERN);
   }
   
+  /**
+   * @deprecated
+   * @see org.apache.abdera.i18n.text.Sanitizer
+   */
   public static String sanitize(String slug, String filler) {
-    return sanitize(slug, filler, false, null, SANITIZE_PATTERN);
+    return Sanitizer.sanitize(slug, filler, false, null, SANITIZE_PATTERN);
   }
   
+  /**
+   * @deprecated
+   * @see org.apache.abdera.i18n.text.Sanitizer
+   */
   public static String sanitize(String slug, String filler, boolean lower) {
-    return sanitize(slug, filler, lower, null, SANITIZE_PATTERN);
+    return Sanitizer.sanitize(slug, filler, lower, null, SANITIZE_PATTERN);
   }
   
+  /**
+   * @deprecated
+   * @see org.apache.abdera.i18n.text.Sanitizer
+   */
   public static String sanitize(String slug, String filler, String pattern) {
-    return sanitize(slug, filler, false, null, pattern);
+    return Sanitizer.sanitize(slug, filler, false, null, pattern);
   }
   
+  /**
+   * @deprecated
+   * @see org.apache.abdera.i18n.text.Sanitizer
+   */
   public static String sanitize(String slug, String filler, boolean lower, String pattern) {
-    return sanitize(slug, filler, lower, null, pattern);
+    return Sanitizer.sanitize(slug, filler, lower, null, pattern);
   }
 
+  /**
+   * @deprecated
+   * @see org.apache.abdera.i18n.text.Sanitizer
+   */
   public static String sanitize(
       String slug, 
       String filler, 
       boolean lower, 
       Normalizer.Form form) {
-    return sanitize(slug,filler,lower,form,SANITIZE_PATTERN);
+    return Sanitizer.sanitize(slug,filler,lower,form,SANITIZE_PATTERN);
   }
   
   /**
@@ -69,6 +92,8 @@ public class EncodingUtil {
    * @param filler The replacement string
    * @param lower True if the result should be lowercase
    * @param form Unicode Normalization form to use (or null)
+   * @deprecated
+   * @see org.apache.abdera.i18n.text.Sanitizer
    */
   public static String sanitize(
     String slug, 
@@ -76,21 +101,7 @@ public class EncodingUtil {
     boolean lower, 
     Normalizer.Form form,
     String pattern) {
-      if (slug == null) return null;
-      if (lower) slug = slug.toLowerCase();
-      if (form != null) {
-        try {
-          slug = 
-            Normalizer.normalize(
-              slug, form);          
-        } catch (Exception e) {}
-      }
-      if (filler != null) {
-        slug = slug.replaceAll(pattern,filler);
-      } else { 
-        slug = Escaping.encode(slug, Profile.PATHNODELIMS);
-      }
-      return slug;
+      return Sanitizer.sanitize(slug,filler,lower,form,pattern);
   }
   
   public static enum Codec { B, Q };

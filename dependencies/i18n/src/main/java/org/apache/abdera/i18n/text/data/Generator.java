@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.i18n.unicode;
+package org.apache.abdera.i18n.text.data;
 
 import java.io.FileInputStream;
 import java.io.InputStream;

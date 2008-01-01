@@ -21,9 +21,9 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Locale;
 
-import org.apache.abdera.i18n.io.CharUtils;
-import org.apache.abdera.i18n.io.InvalidCharacterException;
-import org.apache.abdera.i18n.io.CharUtils.Profile;
+import org.apache.abdera.i18n.text.CharUtils;
+import org.apache.abdera.i18n.text.InvalidCharacterException;
+import org.apache.abdera.i18n.text.CharUtils.Profile;
 
 
 /**

@@ -25,9 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.abdera.i18n.io.CharUtils;
-import org.apache.abdera.i18n.iri.Escaping;
-import org.apache.abdera.i18n.unicode.Normalizer;
+import org.apache.abdera.i18n.text.CharUtils;
+import org.apache.abdera.i18n.text.Normalizer;
+import org.apache.abdera.i18n.text.UrlEncoding;
 
 @SuppressWarnings("unchecked") 
 public abstract class Operation
@@ -144,21 +144,17 @@ public abstract class Operation
     if (val == null) return null;
     if (val.getClass().isArray()) {
       if (val instanceof byte[]) {
-        return Escaping.encode((byte[])val);
+        return UrlEncoding.encode((byte[])val);
       } else if (val instanceof char[]) {
-        try {
-          String chars = new String((char[])val);
-          return Escaping.encode(
-              !context.isNormalizing() ? chars : 
-              Normalizer.normalize(
-                chars, 
-                Normalizer.Form.C).toString(), 
-              context.isIri() ? 
-                CharUtils.Profile.IUNRESERVED : 
-                CharUtils.Profile.UNRESERVED);
-        } catch (IOException e) {
-          throw new RuntimeException(e);
-        }
+        String chars = new String((char[])val);
+        return UrlEncoding.encode(
+            !context.isNormalizing() ? chars : 
+            Normalizer.normalize(
+              chars, 
+              Normalizer.Form.C).toString(), 
+            context.isIri() ? 
+              CharUtils.Profile.IUNRESERVED.filter() : 
+              CharUtils.Profile.UNRESERVED.filter());
       } else if (val instanceof short[]) {
         StringBuilder buf = new StringBuilder();
         short[] array = (short[]) val;
@@ -206,18 +202,18 @@ public abstract class Operation
       return toString(((Template)val).getPattern(),context);
     } else if (val instanceof InputStream) {
       try {
-        return Escaping.encode((InputStream)val);
+        return UrlEncoding.encode((InputStream)val);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
     } else if (val instanceof Readable) {
       try {
-        return Escaping.encode(
+        return UrlEncoding.encode(
           (Readable)val, 
           "UTF-8",
           context.isIri() ? 
-            CharUtils.Profile.IUNRESERVED : 
-            CharUtils.Profile.UNRESERVED);
+            CharUtils.Profile.IUNRESERVED.filter() : 
+            CharUtils.Profile.UNRESERVED.filter());
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
@@ -227,7 +223,7 @@ public abstract class Operation
         context.isIri(),
         context.isNormalizing());
     } else if (val instanceof Byte) {
-      return Escaping.encode(((Byte)val).byteValue());
+      return UrlEncoding.encode(((Byte)val).byteValue());
     } else if (val instanceof Iterable) {
       StringBuilder buf = new StringBuilder();
       Iterable i = (Iterable) val;
@@ -308,18 +304,14 @@ public abstract class Operation
     CharSequence val, 
     boolean isiri, 
     boolean normalizing) {
-      try {
-        return Escaping.encode(
-            !normalizing ? val : 
-            Normalizer.normalize(
-              val, 
-              Normalizer.Form.C).toString(), 
-            isiri ? 
-              CharUtils.Profile.IUNRESERVED : 
-              CharUtils.Profile.UNRESERVED);
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
+      return UrlEncoding.encode(
+          !normalizing ? val : 
+          Normalizer.normalize(
+            val, 
+            Normalizer.Form.C).toString(), 
+          isiri ? 
+            CharUtils.Profile.IUNRESERVED.filter() : 
+            CharUtils.Profile.UNRESERVED.filter());
   }  
   
   private static final class DefaultOperation extends Operation {

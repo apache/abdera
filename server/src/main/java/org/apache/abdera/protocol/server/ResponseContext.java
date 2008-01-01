@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 
-import org.apache.abdera.i18n.io.CharUtils.Profile;
+import org.apache.abdera.i18n.text.CharUtils.Profile;
 import org.apache.abdera.protocol.Response;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.writer.Writer;

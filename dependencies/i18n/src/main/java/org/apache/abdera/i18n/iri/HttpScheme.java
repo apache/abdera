@@ -17,8 +17,8 @@
 */
 package org.apache.abdera.i18n.iri;
 
-import org.apache.abdera.i18n.io.CharUtils.Profile;
-
+import org.apache.abdera.i18n.text.UrlEncoding;
+import org.apache.abdera.i18n.text.CharUtils.Profile;
 
 class HttpScheme extends AbstractScheme {
 
@@ -54,8 +54,8 @@ class HttpScheme extends AbstractScheme {
         host,
         port,
         IRI.normalize(iri.getPath()),
-        Escaping.encode(Escaping.decode(iri.getQuery()),Profile.IQUERY),
-        Escaping.encode(Escaping.decode(iri.getFragment()),Profile.IFRAGMENT)
+        UrlEncoding.encode(UrlEncoding.decode(iri.getQuery()),Profile.IQUERY.filter()),
+        UrlEncoding.encode(UrlEncoding.decode(iri.getFragment()),Profile.IFRAGMENT.filter())
       );
   }
   

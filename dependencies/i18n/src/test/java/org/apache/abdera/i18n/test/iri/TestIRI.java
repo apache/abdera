@@ -22,7 +22,7 @@ import java.net.URI;
 import junit.framework.TestCase;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.unicode.Normalizer;
+import org.apache.abdera.i18n.text.Normalizer;
 
 public class TestIRI extends TestCase {
 

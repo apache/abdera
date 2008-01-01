@@ -21,11 +21,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import javax.activation.MimeType;
 
+import org.apache.abdera.i18n.rfc4646.Lang;
 import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.i18n.text.UrlEncoding;
 import org.apache.abdera.i18n.text.CharUtils.Profile;
@@ -373,6 +375,18 @@ public class RequestOptions
    */
   public RequestOptions setAccept(String... accept) {
     return setHeader("Accept", combine(accept));
+  }
+  
+  public RequestOptions setAcceptLanguage(Locale locale) {
+    return setAcceptLanguage(Lang.fromLocale(locale));
+  }
+  
+  public RequestOptions setAcceptLanguage(Locale...locales) {
+    String[] langs = new String[locales.length];
+    for (int n = 0; n < locales.length; n++)
+      langs[n] = Lang.fromLocale(locales[n]);
+    setAcceptLanguage(langs);
+    return this;
   }
   
   /**

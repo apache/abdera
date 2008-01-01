@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.util;
 
-import org.apache.abdera.i18n.ChainableBitSet;
+import org.apache.abdera.i18n.text.CharUtils;
 import org.apache.abdera.i18n.text.Filter;
 
 public class XmlUtil {
@@ -34,7 +34,8 @@ public class XmlUtil {
     }
   };
   
-  private static class XmlFilter implements Filter {
+  private static class XmlFilter 
+    implements Filter {
     private final XMLVersion version;
     XmlFilter(XMLVersion version) {
       this.version = version;
@@ -44,32 +45,34 @@ public class XmlUtil {
     }
   }
   
-  private static final ChainableBitSet restrictedchar10 =
-    new ChainableBitSet().set2(0, 8)
-                         .set2(11, 12)
-                         .set2(14, 31)
-                         .set2(55296, 57343)
-                         .set2(65534, 65535);
-
-  private static final ChainableBitSet restrictedchar11 = 
-    new ChainableBitSet().set2(0, 8)
-                         .set2(11, 12)
-                         .set2(14, 31)
-                         .set2(127, 159)
-                         .set2(55296, 57343)
-                         .set2(65534, 65535);
+  // inversion set
+  private static int[] RESTRICTED_SET_v1 = {
+    0,   9,
+    11, 13,
+    14, 32,
+    55296, 57344,
+    65534, 65536
+  };
+  
+  // inversion set
+  private static int[] RESTRICTED_SET_v11 = {
+    11, 13,
+    14, 32,
+    127, 160,
+    55296, 57344,
+    65534, 65536      
+  };
   
   public static boolean restricted(XMLVersion version, char c) {
     return restricted(version,(int)c);
   }
   
   public static boolean restricted(XMLVersion version, int c) {
-    switch(version) {
-      case XML11:
-        return restrictedchar11.get(c);
-      default:
-        return restrictedchar10.get(c);
-    }
+    return CharUtils.invset_contains(
+      version == XMLVersion.XML10 ? 
+        RESTRICTED_SET_v1 : 
+        RESTRICTED_SET_v11, 
+      c);
   }
   
   public static XMLVersion getVersion(String version) {

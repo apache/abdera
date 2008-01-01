@@ -30,11 +30,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.protocol.Resolver;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.server.Target;
-import org.apache.abdera.util.Messages;
 
 public class HttpServletRequestContext 
   extends AbstractRequestContext
@@ -89,7 +89,7 @@ public class HttpServletRequestContext
       case SERVERNAME:        return request.getServerName();
       case SERVERPORT:        return request.getServerPort();
       default:
-        throw new UnsupportedOperationException(Messages.get("PROPERTY.NOT.SUPPORTED")); 
+        throw new UnsupportedOperationException(Localizer.get("PROPERTY.NOT.SUPPORTED")); 
     }
   }
   

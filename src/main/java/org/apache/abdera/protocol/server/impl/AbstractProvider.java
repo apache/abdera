@@ -20,11 +20,11 @@ package org.apache.abdera.protocol.server.impl;
 import java.io.IOException;
 import java.util.Date;
 
+import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.TargetType;
-import org.apache.abdera.util.Messages;
 import org.apache.abdera.writer.StreamWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,9 +46,9 @@ public abstract class AbstractProvider
   public ResponseContext request(RequestContext request) {
     TargetType type = request.getTarget().getType();
     String method = request.getMethod();
-    log.debug(Messages.format("TARGET.TYPE",type));
-    log.debug(Messages.format("TARGET.ID",request.getTarget().getIdentity()));
-    log.debug(Messages.format("METHOD",method));
+    log.debug(Localizer.sprintf("TARGET.TYPE",type));
+    log.debug(Localizer.sprintf("TARGET.ID",request.getTarget().getIdentity()));
+    log.debug(Localizer.sprintf("METHOD",method));
     if (method.equals("GET")) {
       if (type == TargetType.TYPE_SERVICE) {
         return getService(request);
@@ -118,7 +118,7 @@ public abstract class AbstractProvider
     return notallowed(
       request.getAbdera(), 
       request, 
-      Messages.get("NOT.ALLOWED"), 
+      Localizer.get("NOT.ALLOWED"), 
       getAllowedMethods(
         request.getTarget().getType()));
   }
@@ -147,7 +147,7 @@ public abstract class AbstractProvider
       return notallowed(
         request.getAbdera(), 
         request, 
-        Messages.get("NOT.ALLOWED"), 
+        Localizer.get("NOT.ALLOWED"), 
         getAllowedMethods(
           request.getTarget().getType()));
   }
@@ -157,7 +157,7 @@ public abstract class AbstractProvider
       return notallowed(
         request.getAbdera(), 
         request, 
-        Messages.get("NOT.ALLOWED"), 
+        Localizer.get("NOT.ALLOWED"), 
         getAllowedMethods(
           request.getTarget().getType()));
   } 

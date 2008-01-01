@@ -26,13 +26,13 @@ import java.util.Map;
 
 import javax.activation.MimeType;
 
+import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.i18n.text.UrlEncoding;
 import org.apache.abdera.i18n.text.CharUtils.Profile;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.util.AbstractResponse;
 import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.util.EntityTag;
-import org.apache.abdera.util.Messages;
 import org.apache.abdera.writer.Writer;
 
 public abstract class AbstractResponseContext
@@ -213,7 +213,7 @@ public abstract class AbstractResponseContext
     if (slug.indexOf((char)10) > -1 ||
         slug.indexOf((char)13) > -1)
       throw new IllegalArgumentException(
-        Messages.get("SLUG.BAD.CHARACTERS"));
+        Localizer.get("SLUG.BAD.CHARACTERS"));
     return setEscapedHeader("Slug", Profile.ASCIISANSCRLF, slug);
   }
   

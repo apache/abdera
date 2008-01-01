@@ -20,9 +20,9 @@ package org.apache.abdera.protocol.server;
 import java.util.Map;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.protocol.server.impl.DefaultServiceContext;
 import org.apache.abdera.protocol.server.util.ServerConstants;
-import org.apache.abdera.util.Messages;
 import org.apache.abdera.util.ServiceUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,7 +39,7 @@ public class ServiceManager
   
   public static synchronized ServiceManager getInstance() {
     if (INSTANCE == null) {
-      log.debug(Messages.format("CREATING.NEW.INSTANCE","ServiceManager"));
+      log.debug(Localizer.sprintf("CREATING.NEW.INSTANCE","ServiceManager"));
       INSTANCE = new ServiceManager();
     }
     return INSTANCE;
@@ -47,7 +47,7 @@ public class ServiceManager
   
   public static synchronized Abdera getAbdera() {
     if (abdera == null) {
-      log.debug(Messages.format("CREATING.NEW.INSTANCE","Abdera"));
+      log.debug(Localizer.sprintf("CREATING.NEW.INSTANCE","Abdera"));
       abdera = new Abdera();
     }
     return abdera;
@@ -57,7 +57,7 @@ public class ServiceManager
     Map<String,String> properties) {
     Abdera abdera = getAbdera();
     String instance = properties.get(SERVICE_CONTEXT);
-    log.debug(Messages.format("CREATING.NEW.INSTANCE","ServiceContext"));
+    log.debug(Localizer.sprintf("CREATING.NEW.INSTANCE","ServiceContext"));
     ServiceContext context = 
       (ServiceContext) ServiceUtil.newInstance(
         SERVICE_CONTEXT, 
@@ -65,7 +65,7 @@ public class ServiceManager
           instance : 
           DefaultServiceContext.class.getName(),
         abdera);
-    log.debug(Messages.format("INITIALIZING.INSTANCE", "ServiceContext"));
+    log.debug(Localizer.sprintf("INITIALIZING.INSTANCE", "ServiceContext"));
     context.init(abdera, properties);
     return context;
   }

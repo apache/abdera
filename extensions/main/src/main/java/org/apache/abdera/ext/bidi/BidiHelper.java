@@ -24,7 +24,7 @@ import java.util.Locale;
 
 import javax.xml.namespace.QName;
 
-import org.apache.abdera.i18n.lang.Lang;
+import org.apache.abdera.i18n.rfc4646.Lang;
 import org.apache.abdera.i18n.text.CharUtils;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
@@ -184,7 +184,15 @@ public final class BidiHelper {
   }
   
   private static final String[] RTL_LANGS = {
-    "ar","fa","ur","ps","syr","dv","he","yi"};
+    "ar",
+    "dv",
+    "fa",
+    "he",
+    "ps",
+    "syr",
+    "ur",
+    "yi"};
+  
   private static final String[] RTL_SCRIPTS = {
     "arab","avst","hebr","hung","lydi","mand",
     "mani","mero","mong","nkoo","orkh","phlv",
@@ -226,17 +234,17 @@ public final class BidiHelper {
    */
   public static <T extends Element>Direction guessDirectionFromLanguage(T element, boolean ignoredir) {
     if (!ignoredir && hasDirection(element)) return getDirection(element);
-    Lang lang = element.getLanguageTag();
-    if (lang == null) {
-      Locale l = Locale.getDefault();
-      lang = new Lang(l.getLanguage());
-    }
-    if (lang.getSubtagCount() > 0) {
-      String script = lang.getSubtag(0);
+    String language = element.getLanguage();
+    Lang lang = 
+      language != null ? 
+        new Lang(language) :
+        new Lang(Locale.getDefault());
+    if (lang.getScript() != null) {
+      String script = lang.getScript().getName();
       if (Arrays.binarySearch(RTL_SCRIPTS, script.toLowerCase()) > -1)
         return Direction.RTL;
     }
-    String primary = lang.getPrimary();
+    String primary = lang.getLanguage().getName();
     if (Arrays.binarySearch(RTL_LANGS, primary.toLowerCase()) > -1) 
           return Direction.RTL;
     return Direction.UNSPECIFIED;

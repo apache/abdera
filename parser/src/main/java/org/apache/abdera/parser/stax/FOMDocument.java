@@ -30,7 +30,7 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.lang.Lang;
+import org.apache.abdera.i18n.rfc4646.Lang;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;

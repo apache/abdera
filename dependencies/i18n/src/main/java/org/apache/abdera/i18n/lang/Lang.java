@@ -28,6 +28,8 @@ import org.apache.abdera.i18n.text.CharUtils.Profile;
 
 /**
  * rfc3066 implementation
+ * @deprecated 
+ * @see org.apache.abdera.i18n.rfc4646.Lang
  */
 public class Lang 
   implements Iterable<String>, 

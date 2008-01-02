@@ -27,7 +27,7 @@ import javax.activation.DataHandler;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.lang.Lang;
+import org.apache.abdera.i18n.rfc4646.Lang;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.util.NamedItem;

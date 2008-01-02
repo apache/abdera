@@ -23,7 +23,7 @@ import java.util.Date;
 import javax.activation.MimeType;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.lang.Lang;
+import org.apache.abdera.i18n.rfc4646.Lang;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.util.XmlUtil.XMLVersion;
 

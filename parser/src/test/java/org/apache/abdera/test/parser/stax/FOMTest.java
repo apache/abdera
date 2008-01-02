@@ -41,7 +41,7 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.filter.ListParseFilter;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.lang.Lang;
+import org.apache.abdera.i18n.rfc4646.Lang;
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
@@ -752,8 +752,8 @@ public class FOMTest extends TestCase   {
     assertEquals(entry.getLanguage(),"en-US");
     Lang lang = entry.getLanguageTag();
     assertNotNull(lang);
-    assertEquals(lang.getPrimary(),"en");
-    assertEquals(lang.getSubtag(0), "US");
+    assertEquals(lang.getLanguage().getName(),"en");
+    assertEquals(lang.getRegion().getName(), "US");
     assertEquals(lang.getLocale(), java.util.Locale.US);
   }
   

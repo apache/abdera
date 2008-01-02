@@ -26,7 +26,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.iri.IRISyntaxException;
-import org.apache.abdera.i18n.lang.Lang;
+import org.apache.abdera.i18n.rfc4646.Lang;
 
 /**
  * Root interface for all elements in the Feed Object Model

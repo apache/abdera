@@ -84,7 +84,7 @@ public class TestNameprep extends TestBase {
     Y("Plane 0 private use character U+F123", "\uF123", null, -1),
     Z("Plane 15 private use character U+F1234", string(0xF3,0xB1,0x88,0xB4), null, -1),
    AA("Plane 16 private use character U+10F234", string(0xF4,0x8F,0x88,0xB4), null, -1),
-   AB("Non-character code point U+8FFFE", string(0xF2,0x8F,0x8F,0xBE), null, -1),
+   AB("Non-character code point U+8FFFE", "\ud9ff\udffe", null, -1),
    AC("Non-character code point U+10FFFF", string(0xF4,0x8F,0x8F,0x8F), null, -1),
    AD("Surrogate code U+DF42",string(0xED,0xBD,0x82),null,-1),  
    AE("Non-plain text character U+FFFD", string(0xEF,0xBF,0xBD), null, -1),

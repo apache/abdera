@@ -342,7 +342,17 @@ public final class CharUtils {
   public static boolean invset_contains(
     int[] set, 
     int value) {
-      return (get_index(set,value) & 1) == 0;    
+    int s = 0, e = set.length;
+    while (e - s > 8) {
+      int i = (e + s) >> 1;
+      s = set[i] <= value ? i : s;
+      e = set[i] > value ? i : e;
+    }
+    while(s < e) {
+      if (value < set[s]) break;
+      s++;
+    }
+    return ((s-1) & 1) == 0;    
   }
   
   
@@ -786,6 +796,11 @@ public final class CharUtils {
            codepoint == '-';
   }
 
+  public static void verify(CodepointIterator ci, Filter filter) throws InvalidCharacterException {
+    CodepointIterator rci = CodepointIterator.restrict(ci, filter);
+    while (rci.hasNext()) rci.next();
+  }
+  
   public static void verify(CodepointIterator ci, Profile profile) throws InvalidCharacterException {
     CodepointIterator rci = CodepointIterator.restrict(ci, profile.filter());
     while (rci.hasNext()) rci.next();
@@ -799,6 +814,11 @@ public final class CharUtils {
   public static void verify(String s, Profile profile) throws InvalidCharacterException {
     if (s == null) return;
     verify(CodepointIterator.forCharSequence(s),profile);
+  }
+
+  public static void verifyNot(CodepointIterator ci, Filter filter) throws InvalidCharacterException {
+    CodepointIterator rci = ci.restrict(filter,false,true);
+    while (rci.hasNext()) rci.next();
   }
   
   public static void verifyNot(CodepointIterator ci, Profile profile) throws InvalidCharacterException {

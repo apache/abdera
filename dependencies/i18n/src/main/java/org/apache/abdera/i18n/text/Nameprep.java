@@ -18,8 +18,6 @@
 package org.apache.abdera.i18n.text;
 
 
-//import java.util.Arrays;
-
 /**
  * Implements the Nameprep protocol
  */
@@ -32,15 +30,26 @@ public class Nameprep {
       CodepointIterator ci = CodepointIterator.forCharSequence(s);
       r = new NameprepCodepointIterator(ci);
       while(r.hasNext()) {
-        int i = r.next().getValue();
-        if (i != -1)
-        buf.append((char)i);
+        Codepoint cp = r.next();
+        int i = cp != null ? cp.getValue() : -1;
+        if (i != -1) {
+          CharUtils.append(buf, cp);
+        }
       }
-      return Normalizer.normalize(
+      String n = Normalizer.normalize(
         buf.toString(),
         Normalizer.Form.KC).toString();
+      CharUtils.verify(
+        CodepointIterator.forCharSequence(n), 
+        new Filter() {
+          public boolean accept(int c) {
+            return isProhibited(c);
+          }
+        }
+      );
+      return n;
     } catch (Throwable e) {
-      throw new RuntimeException(e);
+      return null;
     }
   }
   
@@ -76,12 +85,11 @@ public class Nameprep {
           }
           if (haslcat && hasrandalcat) 
             throw new RuntimeException("Bidi Exception");
-          while(r != -1 && Nameprep.isB1(r)) { 
-            r = super.next().getValue();
+          while(r != -1 && Nameprep.isB1(r)) {
+            Codepoint cp = super.next();
+            r = cp != null ? cp.getValue() : -1;
           }
           if (r != -1) {
-            if (Nameprep.isProhibited(r)) 
-              throw new InvalidCharacterException(r);
             int[] rep = Nameprep.B2(r);
             if (rep != null) {
               if (rep.length > 1) {
@@ -102,7 +110,7 @@ public class Nameprep {
            !Nameprep.isRandAL((r ==-1)?peek(position()).getValue():r))) {
         throw new RuntimeException("Bidi Exception");
       }
-      return new Codepoint(r);
+      return r != -1 ? new Codepoint(r) : null;
     }
   
     @Override
@@ -112,21 +120,20 @@ public class Nameprep {
   
   }
     
+  
+  
   private static final int[] B1 = {
-    0x0080, 0x0082,
-    0x0086, 0x0087,
-    0x0088, 0x0089,
-    0x008B, 0x008C,
-    0x008F, 0x0090,
-    0x00A0, 0x00A1,
-    0x00AD, 0x00AE,
-    0x034F, 0x0350,
-    0x1806, 0x1807,
-    0x180B, 0x180E,
-    0x200B, 0x200E,
-    0x2060, 0x2061,
-    0xFE00, 0xFE0F,
-    0xFEFF, 0xFF00
+    0x80, 0x81, 0x86, 0x88,
+    0x8B, 0x8F, 0xA0, 0x00AD,
+    0x034F, 0x1806, 0x180B,
+    0x180C, 0x180D, 0x200B,
+    0x200C, 0x200D, 0x2060,
+    0xFE00, 0xFE01, 0xFE02,
+    0xFE03, 0xFE04, 0xFE05,
+    0xFE06, 0xFE07, 0xFE08,
+    0xFE09, 0xFE0A, 0xFE0B,
+    0xFE0C, 0xFE0D, 0xFE0E,
+    0xFE0F, 0xFEFF,
   };
   
   private static final int[] PROHIBITED = {
@@ -700,12 +707,12 @@ public class Nameprep {
 
     
     public static final int[] B2(int c) {
-      int i = CharUtils.get_index(b2index, c);
+      int i = java.util.Arrays.binarySearch(b2index,c);
       return i > -1 ? b2data[i] : null;
     }
     
     public static boolean isB1(int c) {
-      return CharUtils.invset_contains(B1, c);    
+      return java.util.Arrays.binarySearch(B1,c) > -1;    
     }
     
     public static boolean isProhibited(int c) {

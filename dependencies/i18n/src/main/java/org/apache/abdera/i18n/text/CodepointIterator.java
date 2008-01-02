@@ -470,15 +470,16 @@ public abstract class CodepointIterator
     
     @Override
     public Codepoint next() throws InvalidCharacterException {
-      int cp = super.next().getValue();
-      if (cp != -1 && check(cp)) {
+      Codepoint cp = super.next();
+      int v = cp.getValue();
+      if (v != -1 && check(v)) {
         if (scanningOnly) {
           position(position()-1);
           return null;
         }
-        else throw new InvalidCharacterException(cp);
+        else throw new InvalidCharacterException(v);
       }
-      return new Codepoint(cp);
+      return cp;
     }
   
     private boolean check(int cp) {

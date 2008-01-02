@@ -171,7 +171,6 @@ public class Range
    * @param extended True if extended matching rules should be used
    */
   public boolean matches(Lang lang, boolean extended) {
-    if (count() > lang.count()) return false;
     Iterator<Subtag> i = iterator();
     Iterator<Subtag> e = lang.iterator();
     if (isBasic() && !extended) {
@@ -191,6 +190,8 @@ public class Range
         icurrent = i.next();
         while(icurrent.getType() == Subtag.Type.WILDCARD && i.hasNext())
           icurrent = i.next();
+        // the range ends in a wildcard so it will match everything beyond this point
+        if (icurrent.getType() == Subtag.Type.WILDCARD) return true;
         boolean matched = false;
         while(e.hasNext()) {
           ecurrent = e.next();
@@ -294,7 +295,7 @@ public class Range
   private static final String variant = "((?:[-_](?:(?:[a-zA-Z0-9]{5,8})|(?:[0-9][a-zA-Z0-9]{3})|\\*))*)";
   private static final String extension = "((?:[-_](?:(?:[a-wy-zA-WY-Z0-9](?:[-_][a-zA-Z0-9]{2,8})+)|\\*))*)";
   private static final String privateuse = "[xX](?:[-_][a-zA-Z0-9]{2,8})+";
-  private static final String _privateuse = "((?:[-_](?:" + privateuse + ")?|\\*))";
+  private static final String _privateuse = "((?:[-_](?:" + privateuse + ")+|\\*)?)";
   private static final String langtag = "^" + language + script + region + variant + extension + _privateuse + "$";
   private static final String grandfathered = "^(?:art[-_]lojban|cel[-_]gaulish|en[-_]GB[-_]oed|i[-_]ami|i[-_]bnn|i[-_]default|i[-_]enochian|i[-_]hak|i[-_]klingon|i[-_]lux|i[-_]mingo|i[-_]navajo|i[-_]pwn|i[-_]tao||i[-_]tay|i[-_]tsu|no[-_]bok|no[-_]nyn|sgn[-_]BE[-_]fr|sgn[-_]BE[-_]nl|sgn[-_]CH[-_]de|zh[-_]cmn|zh[-_]cmn[-_]Hans|zh[-_]cmn[-_]Hant|zh[-_]gan|zh[-_]guoyu|zh[-_]hakka|zh[-_]min|zh[-_]min[-_]nan|zh[-_]wuu|zh[-_]xiang|zh[-_]yue)$";
   private static final Pattern p_privateuse = Pattern.compile("^" + privateuse + "$");

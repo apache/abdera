@@ -298,6 +298,21 @@ public final class Lang
     return lang;
   }
   
+  /**
+   * Return true if the specified lang tag is the parent of this one
+   */
+  public boolean isChildOf(Lang lang) {
+    Range range = new Range(lang).appendWildcard();
+    return range.matches(this);
+  }
+
+  /**
+   * Return true if the specified lang tag is the child of this one
+   */
+  public boolean isParentOf(Lang lang) {
+    return lang.isChildOf(this);
+  }
+  
   // Parsing Logic
   
   private static final String language = "((?:[a-zA-Z]{2,3}(?:[-_][a-zA-Z]{3}){0,3})|[a-zA-Z]{4}|[a-zA-Z]{5,8})";

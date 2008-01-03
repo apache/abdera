@@ -133,7 +133,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
   }
 
   protected ResponseContext buildGetEntryResponse(RequestContext request, Entry entry) {
-    Feed feed = createFeed(request.getAbdera());
+    Feed feed = createFeed(request.getAbdera(), request);
     entry.setSource(feed.getAsSource());
     Document<Entry> entry_doc = entry.getDocument();
     AbstractResponseContext rc = new BaseResponseContext<Document<Entry>>(entry_doc);
@@ -148,7 +148,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
 
   public ResponseContext getFeed(RequestContext request) {
     Abdera abdera = request.getAbdera();
-    Feed feed = createFeed(abdera);
+    Feed feed = createFeed(abdera, request);
     
     return getFeed(request, feed);
   }
@@ -255,7 +255,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
   
   public abstract String getName(T entry) throws ResponseContextException;
 
-  public abstract String getTitle();
+  public abstract String getTitle(RequestContext request);
 
   public abstract String getTitle(T entry) throws ResponseContextException;
 
@@ -375,12 +375,12 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     }
     return EntityTag.generate(id, modified);
   }
-  protected Feed createFeed(Abdera abdera) {
+  protected Feed createFeed(Abdera abdera, RequestContext request) {
     Factory factory = abdera.getFactory();
     Feed feed = factory.newFeed();
     try {
       feed.setId(getId());
-      feed.setTitle(getTitle());
+      feed.setTitle(getTitle(request));
       feed.addLink("");
       feed.addLink("", "self");
       feed.addAuthor(getAuthor());

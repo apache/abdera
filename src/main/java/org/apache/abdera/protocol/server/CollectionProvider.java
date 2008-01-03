@@ -33,7 +33,7 @@ public interface CollectionProvider {
   
   void end(RequestContext request, ResponseContext response);
   
-  String getTitle();
+  String getTitle(RequestContext request);
 
   ResponseContext getFeed(RequestContext request, Feed feed);
 

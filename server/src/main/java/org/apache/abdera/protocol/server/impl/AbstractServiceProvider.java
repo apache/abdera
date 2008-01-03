@@ -128,7 +128,7 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
 
     public ResponseContext getService(RequestContext request) {
       Abdera abdera = request.getAbdera();
-      AbstractResponseContext rc = getServicesDocument(abdera, getEncoding(request));
+      AbstractResponseContext rc = getServicesDocument(abdera, request);
       rc.setStatus(200);
       return rc;
     }
@@ -138,7 +138,8 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
     }
 
     private AbstractResponseContext getServicesDocument(final Abdera abdera, 
-                                                        final String enc) {
+                                                        final RequestContext request) {
+      final String enc = getEncoding(request);
       
       return new StreamWriterResponseContext(abdera) {
 
@@ -163,7 +164,7 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
   
               try {
                 sw.startCollection(href)
-                  .writeTitle(cp.getTitle())
+                  .writeTitle(cp.getTitle(request))
                   .writeAcceptsEntry()
                   .endCollection();
               } catch (RuntimeException e) {

@@ -117,7 +117,7 @@ public class CustomerCollectionProvider extends AbstractCollectionProvider<Custo
     return entry.getId() + "-" + entry.getName().replaceAll(" ", "_");
   }
 
-  public String getTitle() {
+  public String getTitle(RequestContext request) {
     return "Acme Customer Database";
   }
 

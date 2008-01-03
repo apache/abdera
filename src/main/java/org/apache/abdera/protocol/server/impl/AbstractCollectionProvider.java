@@ -142,9 +142,6 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
   }
   
   public abstract T getEntry(String resourceName, RequestContext request) throws ResponseContextException;
-  
-  public abstract T getEntryFromId(String id, RequestContext request) throws ResponseContextException;
-
 
   public ResponseContext getFeed(RequestContext request) {
     Abdera abdera = request.getAbdera();

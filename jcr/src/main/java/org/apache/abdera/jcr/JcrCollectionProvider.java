@@ -23,6 +23,7 @@ import javax.jcr.ValueFormatException;
 import javax.jcr.Workspace;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.text.Sanitizer;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Text;
@@ -244,7 +245,7 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
       Session session = getSession(request);
 
       Node collectionNode = session.getNodeByUUID(collectionNodeId);
-      String resourceName = EncodingUtil.sanitize(title, "-");
+      String resourceName = Sanitizer.sanitize(title, "-");
       entry = createEntry(title, summary, updated, authors, 
                           content, session, collectionNode,
                           resourceName, 0);
@@ -439,23 +440,6 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
   public Node getEntry(String resourceName, RequestContext request) throws ResponseContextException {
     try {
       return getNode(getSession(request), resourceName);
-    } catch (RepositoryException e) {
-      throw new ResponseContextException(500, e);
-    }
-  }
-
-  @Override
-  public Node getEntryFromId(String id, RequestContext request) throws ResponseContextException {
-    if (!id.startsWith("urn:")) {
-      EmptyResponseContext res = new EmptyResponseContext(404);
-      res.setStatusText("Invalid entry id.");
-      throw new ResponseContextException(res);
-    }
-    
-    id = id.substring(4);
-    
-    try {
-      return getSession(request).getNodeByUUID(id);
     } catch (RepositoryException e) {
       throw new ResponseContextException(500, e);
     }

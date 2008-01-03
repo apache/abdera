@@ -703,6 +703,7 @@ public final class CharUtils {
 
   public static boolean is_ipchar(int codepoint) {
     return is_iunreserved(codepoint) || 
+           isSubDelim(codepoint) ||
            codepoint == ':' || 
            codepoint == '@' || 
            codepoint == '&' || 

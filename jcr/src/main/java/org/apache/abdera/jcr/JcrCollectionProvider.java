@@ -511,7 +511,7 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
   }
 
   @Override
-  public String getTitle() {
+  public String getTitle(RequestContext request) {
     return title;
   }
 

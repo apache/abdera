@@ -35,7 +35,7 @@ public interface CollectionProvider {
   
   String getTitle(RequestContext request);
 
-  ResponseContext getFeed(RequestContext request, Feed feed);
+  ResponseContext getFeed(Feed feed, RequestContext request);
 
   ResponseContext createEntry(RequestContext request);
 

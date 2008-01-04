@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.test.core;
+package org.apache.abdera.test.converter;
 
 
 public class TestSuite extends junit.framework.TestSuite {
@@ -24,7 +24,7 @@ public class TestSuite extends junit.framework.TestSuite {
   }
 
   public TestSuite() {
-    addTestSuite(CoreTest.class);
-    addTestSuite(EntityTagTest.class);
+    addTestSuite(ConversionTest.class);
+    addTestSuite(ConventionsTest.class);
   }
 }

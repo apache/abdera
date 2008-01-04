@@ -29,7 +29,6 @@ import java.util.Enumeration;
 import java.util.List;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.converter.ConverterProvider;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.parser.Parser;
@@ -318,11 +317,12 @@ public final class ServiceUtil
       return factories;
   }
   
-  protected static synchronized List<ConverterProvider> loadConverterProviders() {
-    List<ConverterProvider> providers =
-      _loadimpls(
-        "META-INF/services/org.apache.abdera.converter.ConverterProvider");
-    return providers;    
+  public static synchronized <T>List<T> loadimpls(String sid) {
+    return loadimpls(sid,false);
+  }
+  
+  public static synchronized <T>List<T> loadimpls(String sid, boolean classesonly) {
+    return _loadimpls(sid,classesonly);
   }
   
   @SuppressWarnings("unchecked")

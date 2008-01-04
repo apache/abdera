@@ -133,7 +133,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
   }
 
   protected ResponseContext buildGetEntryResponse(RequestContext request, Entry entry) {
-    Feed feed = createFeed(request.getAbdera(), request);
+    Feed feed = createFeedBase(request);
     entry.setSource(feed.getAsSource());
     Document<Entry> entry_doc = entry.getDocument();
     AbstractResponseContext rc = new BaseResponseContext<Document<Entry>>(entry_doc);
@@ -144,39 +144,41 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
   public abstract T getEntry(String resourceName, RequestContext request) throws ResponseContextException;
 
   public ResponseContext getFeed(RequestContext request) {
-    Abdera abdera = request.getAbdera();
-    Feed feed = createFeed(abdera, request);
+    Feed feed = createFeedBase(request);
     
-    return getFeed(request, feed);
+    return getFeed(feed, request);
   }
   
-  public ResponseContext getFeed(RequestContext request, Feed feed) {
+  public ResponseContext getFeed(Feed feed, RequestContext request) {
+    try {
+      addFeedDetails(feed, request);
+      
+      return buildGetFeedResponse(feed);
+    } catch (ResponseContextException e) {
+      return createErrorResponse(e);
+    }
+  }
+
+  protected void addFeedDetails(Feed feed, RequestContext request) throws ResponseContextException {
     feed.setUpdated(new Date());
 
     IRI baseIri = resolveBase(request);
     IRI entryIri = getEntryBaseFromFeedIRI(baseIri);
     
-    try {
-      Iterable<T> entries = getEntries(request);
-      if (entries != null) {
-        for (T entryObj : entries) {
-          Entry e = feed.addEntry();
-    
-          addEntryDetails(request, e, entryIri, entryObj);
+    Iterable<T> entries = getEntries(request);
+    if (entries != null) {
+      for (T entryObj : entries) {
+        Entry e = feed.addEntry();
+  
+        addEntryDetails(request, e, entryIri, entryObj);
 
-          if (isMediaEntry(entryObj)) {
-            addMediaContent(entryIri, e, entryObj);
-          } else {
-            addContent(e, entryObj, request);
-          }
+        if (isMediaEntry(entryObj)) {
+          addMediaContent(entryIri, e, entryObj);
+        } else {
+          addContent(e, entryObj, request);
         }
       }
-  
-      return buildGetFeedResponse(feed);
-    } catch (ResponseContextException e) {
-      return createErrorResponse(e);
     }
-    
   }
 
   protected ResponseContext buildGetFeedResponse(Feed feed) {
@@ -372,8 +374,9 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     }
     return EntityTag.generate(id, modified);
   }
-  protected Feed createFeed(Abdera abdera, RequestContext request) {
-    Factory factory = abdera.getFactory();
+  
+  protected Feed createFeedBase(RequestContext request) {
+    Factory factory = request.getAbdera().getFactory();
     Feed feed = factory.newFeed();
     try {
       feed.setId(getId());

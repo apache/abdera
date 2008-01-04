@@ -17,33 +17,55 @@
 */
 package org.apache.abdera.converter;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.util.ServiceUtil;
 
 public class DefaultConversionContext 
   extends AbstractConversionContext {
 
   private static final long serialVersionUID = 740460842415905883L;
 
+  private final List<ConverterProvider> providers;
+  
   public DefaultConversionContext() {
     super();   
     initConverters();
+    providers = loadConverterProviders();
   }
   
   public DefaultConversionContext(Abdera abdera) {
     super(abdera);
     initConverters();
+    providers = loadConverterProviders();
   }
   
   private void initConverters() {
-    ConverterProvider[] providers = 
-      getAbdera().getConfiguration().getConverterProviders();
+    ConverterProvider[] providers = getConverterProviders();
     for (ConverterProvider provider : providers) {
       for (Map.Entry<Class<?>,Converter<?>> entry : provider) {
         setConverter(entry.getKey(), entry.getValue());
       }
     }
+  }
+  
+  /**
+   * Returns the listing of registered ConverterProvider implementations
+   */
+  public ConverterProvider[] getConverterProviders() {
+    return providers != null ? 
+      providers.toArray(
+        new ConverterProvider[providers.size()]) : 
+          new ConverterProvider[0];
+  }
+  
+  protected static synchronized List<ConverterProvider> loadConverterProviders() {
+    List<ConverterProvider> providers =
+      ServiceUtil.loadimpls(
+        "META-INF/services/org.apache.abdera.converter.ConverterProvider");
+    return providers;    
   }
   
 }

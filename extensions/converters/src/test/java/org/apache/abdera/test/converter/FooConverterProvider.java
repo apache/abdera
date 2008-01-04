@@ -15,11 +15,11 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.test.core;
+package org.apache.abdera.test.converter;
 
 import org.apache.abdera.converter.ConverterProvider;
-import org.apache.abdera.test.core.ConversionTest.Bar;
-import org.apache.abdera.test.core.ConversionTest.FooConverter;
+import org.apache.abdera.test.converter.ConversionTest.Bar;
+import org.apache.abdera.test.converter.ConversionTest.FooConverter;
 
 public class FooConverterProvider 
   extends ConverterProvider {

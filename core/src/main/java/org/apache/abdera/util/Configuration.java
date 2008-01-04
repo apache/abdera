@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.converter.ConverterProvider;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.parser.NamedParser;
@@ -84,11 +83,6 @@ public interface Configuration
    * Get a new instance of the default StreamWriter impl
    */
   public StreamWriter newStreamWriterInstance(Abdera abdera);
-  
-  /**
-   * Get a listing of ConverterProviders
-   */
-  public ConverterProvider[] getConverterProviders();
   
   /**
    * Get the collection of NamedParsers;

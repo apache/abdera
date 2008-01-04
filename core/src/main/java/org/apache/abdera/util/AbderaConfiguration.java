@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.converter.ConverterProvider;
 import org.apache.abdera.factory.ExtensionFactory;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.factory.StreamBuilder;
@@ -83,7 +82,6 @@ public final class AbderaConfiguration
   
   private final ResourceBundle bundle;
   private final List<ExtensionFactory> factories;
-  private final List<ConverterProvider> providers;
   private final Map<String,NamedWriter> writers;
   private final Map<String,Class<? extends StreamWriter>> streamwriters;
   private final Map<String,NamedParser> parsers;
@@ -98,7 +96,6 @@ public final class AbderaConfiguration
         ServiceUtil.getClassLoader(), 
         Locale.getDefault());
     factories = ServiceUtil.loadExtensionFactories();
-    providers = ServiceUtil.loadConverterProviders();
     writers = initNamedWriters();
     parsers = initNamedParsers();
     streamwriters = initStreamWriters();
@@ -151,16 +148,6 @@ public final class AbderaConfiguration
    */
   public List<ExtensionFactory> getExtensionFactories() {
     return factories;
-  }
-  
-  /**
-   * Returns the listing of registered ConverterProvider implementations
-   */
-  public ConverterProvider[] getConverterProviders() {
-    return providers != null ? 
-      providers.toArray(
-        new ConverterProvider[providers.size()]) : 
-          new ConverterProvider[0];
   }
   
   /**

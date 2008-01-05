@@ -22,12 +22,12 @@ import org.apache.abdera.i18n.iri.IDNA;
 public class TestIDNA extends TestBase {
 
   public static void testPunycode() throws Exception {
-    String o = "áéíñó½©";
+    String o = "\u00e1\u00e9\u00ed\u00f1\u00f3\u00bd\u00a9";
     String i = "12-uda5tmbya2aq8623e";
     String out = IDNA.toASCII(o);
     String in = IDNA.toUnicode(i);
-//    assertTrue(out.equalsIgnoreCase("xn--" + i));
-//    assertTrue(in.equalsIgnoreCase(i));
+    assertTrue(out.equalsIgnoreCase("xn--" + i));
+    assertTrue(in.equalsIgnoreCase(i));
   }
   
 }

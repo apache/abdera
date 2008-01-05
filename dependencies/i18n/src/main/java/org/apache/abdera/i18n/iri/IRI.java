@@ -410,6 +410,14 @@ public final class IRI
   }
   
   public static IRI resolve(IRI b, IRI c) {
+    
+    if (c == null) return null;
+    if ("".equals(c.toString()) || 
+        "#".equals(c.toString()) ||
+        ".".equals(c.toString()) ||
+        "./".equals(c.toString())) return b;
+    if (b == null) return c;
+    
     if (c.isOpaque() || b.isOpaque()) return c;
     if (c.isSameDocumentReference()) {
       String cfragment = c.getFragment();
@@ -539,6 +547,7 @@ public final class IRI
     int n = bpath.lastIndexOf('/');
     if (n > -1) buf.append(bpath.substring(0,n+1));
     if (cpath.length() != 0) buf.append(cpath);
+    if (buf.charAt(0) != '/') buf.insert(0,'/');
     return normalize(buf.toString());
   }
   

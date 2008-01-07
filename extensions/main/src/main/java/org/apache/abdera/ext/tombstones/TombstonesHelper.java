@@ -24,6 +24,7 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.AtomDate;
+import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 
@@ -59,7 +60,8 @@ public class TombstonesHelper {
       Tombstone tombstone = 
         source.getFactory().newExtensionElement(DELETED_ENTRY, source);
       tombstone.setRef(entry.getId());
-      if (entry.getParentElement().equals(source))
+      Base parent = entry.getParentElement();
+      if (parent != null && parent.equals(source))
         entry.discard();
       return tombstone;
   }

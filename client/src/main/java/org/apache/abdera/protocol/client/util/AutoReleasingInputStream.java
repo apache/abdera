@@ -35,6 +35,7 @@ public final class AutoReleasingInputStream
 
   @Override
   public int read() throws IOException {
+    if (this.in == null) return -1;
     try {
       int r = super.read();
       if (r == -1) {
@@ -50,6 +51,7 @@ public final class AutoReleasingInputStream
 
   @Override
   public int read(byte[] b, int off, int len) throws IOException {
+    if (this.in == null) return -1;
     try {
       int r= super.read(b, off, len);
       if (r == -1) {

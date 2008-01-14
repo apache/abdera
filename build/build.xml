@@ -187,6 +187,8 @@ Working directory: ${work}
           <available file="${dependencies}/${wstx.jar}" />
           <available file="${dependencies}/${jetty.jar}" />
           <available file="${dependencies}/${jetty-util.jar}" />
+          <available file="${dependencies}/${htmlparser.jar}" />
+          <available file="${dependencies}/${htmlserializer.jar}" />
           <available file="${dependencies}/${json.zip}" />
         </and>
       </not>
@@ -415,6 +417,7 @@ Working directory: ${work}
   </target>
 
   <target name="clean">
+    <!--
     <delete dir="${work}" />
     <delete dir="${test}" />
     <delete dir="${dist}" />
@@ -425,6 +428,7 @@ Working directory: ${work}
       <fileset dir="${basedir}" includes="*.zip" />
       <fileset dir="${basedir}" includes="*.md5" />
     </delete>
+    -->
   </target>
 
   <target name="dist" depends="clean,build,test,docs">
@@ -573,6 +577,8 @@ Working directory: ${work}
       <get src="${wstx.dir}/${wstx.jar}" dest="${dependencies}/${wstx.jar}" usetimestamp="true" />
       <get src="${jetty.dir}/${jetty.jar}" dest="${dependencies}/${jetty.jar}" usetimestamp="true" />
       <get src="${jetty-util.dir}/${jetty-util.jar}" dest="${dependencies}/${jetty-util.jar}" usetimestamp="true" />
+      <get src="${htmlparser.dir}/${htmlparser.jar}" dest="${dependencies}/${htmlparser.jar}" usetimestamp="true" />
+      <get src="${htmlparser.dir}/${htmlserializer.jar}" dest="${dependencies}/${htmlserializer.jar}" usetimestamp="true" />
       <get src="${json.dir}/${json.zip}" dest="${dependencies}/${json.zip}" usetimestamp="true" />
     </parallel>
     <mkdir dir="${json.src}/main/java/org/json" />
@@ -711,6 +717,10 @@ Working directory: ${work}
       <param name="ext" value="oauth" />
     </antcall>
     
+    <antcall target="compile.extension">
+      <param name="ext" value="html" />
+    </antcall>
+    
   </target>
   
   <target name="compile.extension.ask">
@@ -790,6 +800,10 @@ Working directory: ${work}
       <param name="ext" value="oauth" />
     </antcall>
     
+    <antcall target="dist.extension">
+      <param name="ext" value="html" />
+    </antcall>
+    
   </target>
   
   <target name="dist.extension">
@@ -844,6 +858,10 @@ Working directory: ${work}
       <param name="ext" value="oauth" />
     </antcall>
     
+    <antcall target="test.extension">
+      <param name="ext" value="html" />
+    </antcall>
+    
   </target>
   
   <target name="test.extension">
@@ -890,6 +908,10 @@ Working directory: ${work}
 
     <antcall target="retro.extension">
       <param name="ext" value="oauth" />
+    </antcall>
+    
+    <antcall target="retro.extension">
+      <param name="ext" value="html" />
     </antcall>
   </target>
   

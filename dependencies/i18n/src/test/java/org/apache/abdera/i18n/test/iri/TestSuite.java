@@ -31,5 +31,7 @@ public class TestSuite extends junit.framework.TestSuite {
     addTestSuite(TestNFKC.class);
     addTestSuite(TestPunycode.class);
     addTestSuite(TestTemplate.class);
+    addTestSuite(TestIO.class);
+    addTestSuite(TestText.class);
   }
 }

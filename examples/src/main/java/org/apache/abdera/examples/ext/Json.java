@@ -19,7 +19,6 @@ package org.apache.abdera.examples.ext;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Entry;
-import org.apache.abdera.writer.Writer;
 
 /**
  * The JSONWriter can be used to serialize an Abdera entry into a JSON structure
@@ -35,27 +34,23 @@ public class Json {
     entry.setContentAsHtml("<b>foo</b>");
     entry.addAuthor("James");
     entry.addCategory("term");
-    
-    Writer w = abdera.getWriterFactory().getWriter("json");
-    entry.writeTo(w, System.out);
+    entry.writeTo("json", System.out);
     
     /**
      * Produces: 
      * 
      * {
-     *   "categories":[
-     *     {"term":"term"}
-     *   ],
-     *   "id":"urn:uuid:BFE2C793F1E4327BA91187720122895",
-     *   "content":{
-     *     "type":"html",
-     *     "value":"<b>foo<\/b>"},
-     *   "links":[],
-     *   "contributors":[],
-     *   "authors":[
-     *     {"name":"James"}
-     *   ],
-     *   "title":"test"}
+     * "id":"urn:uuid:97893C35372BE77BD51200273434152",
+     *  "title":"test",
+     *  "content":{
+     *   "attributes":{"type":"html"},
+     *   "children":[{
+     *     "name":"b",
+     *     "attributes":{},
+     *     "children":["foo"]}]},
+     *  "authors":[{"name":"James"}],
+     *  "categories":[{"term":"term"}]
+     * }
      */
   }
   

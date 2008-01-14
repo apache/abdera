@@ -257,7 +257,6 @@ public class FOMBuilder
     } catch (OMException e) {
         throw new ParseException(e);
     } catch (Exception e) {
-      e.printStackTrace();
         throw new ParseException(e);
     }
   }

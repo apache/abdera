@@ -157,7 +157,8 @@ public final class Lang
       switch(subtag.getType()) {
         case PRIMARY:
         case EXTLANG: 
-        case SCRIPT: break;
+        case SCRIPT:
+        case REGION: break;
         case VARIANT: return subtag;
         default: return null;
       }
@@ -175,6 +176,7 @@ public final class Lang
         case PRIMARY:
         case EXTLANG: 
         case SCRIPT:
+        case REGION:
         case VARIANT: break;
         case EXTENSION: return subtag.getPrevious();
         default: return null;
@@ -194,6 +196,7 @@ public final class Lang
         case EXTLANG: 
         case SCRIPT:
         case VARIANT: 
+        case REGION:
         case EXTENSION: break;
         case PRIVATEUSE: return subtag.getPrevious();
         default: return null;

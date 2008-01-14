@@ -166,4 +166,13 @@ public class Codepoint
     }
   }
   
+  public Codepoint next() {
+    if (value == 0x10ffff) throw new IndexOutOfBoundsException();
+    return new Codepoint(value + 1);
+  }
+  
+  public Codepoint previous() {
+    if (value == 0) throw new IndexOutOfBoundsException();
+    return new Codepoint(value - 1);
+  }
 }

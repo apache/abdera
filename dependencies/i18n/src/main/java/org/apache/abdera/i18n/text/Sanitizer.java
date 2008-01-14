@@ -86,7 +86,7 @@ public class Sanitizer {
   private static final Filter PathNoDelimFilter = 
     new Filter() {
       public boolean accept(int c) {
-        return CharUtils.isAlphaDigit(c) || 
+        return !(CharUtils.isAlphaDigit(c) || 
                c == '-' || 
                c == '.' ||
                c == '_' ||
@@ -97,7 +97,7 @@ public class Sanitizer {
                c == '$' || 
                c == ',' ||
                c == ';' ||
-               c == '%';
+               c == '%');
       }
     };
 }

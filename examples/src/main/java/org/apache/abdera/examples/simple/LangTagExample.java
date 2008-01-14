@@ -26,6 +26,7 @@ import org.apache.abdera.i18n.rfc4646.Subtag;
 /**
  * Example using the Lang tag implementation
  */
+@SuppressWarnings("unused") 
 public class LangTagExample {
 
   public static void main(String... args) throws Exception {

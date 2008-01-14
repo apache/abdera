@@ -22,9 +22,9 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMNode;
@@ -38,8 +38,9 @@ public class ResolveFunction implements Function {
   
   public static final QName QNAME = new QName("http://incubator.apache.org/abdera", "resolve");
   
+  @SuppressWarnings("unchecked") 
   public Object call(Context context, List args) throws FunctionCallException {
-    List<IRI> results = new ArrayList<IRI>();
+    List<String> results = new ArrayList<String>();
     if (args.isEmpty()) return null;
     Navigator navigator = context.getNavigator();
     for(Object obj : args) {
@@ -53,7 +54,7 @@ public class ResolveFunction implements Function {
               OMNode node = (OMNode) o;
               OMContainer el = node.getParent();
               if (el instanceof Document) {
-                Document doc = (Document) el;
+                Document<Element> doc = (Document<Element>) el;
                 baseUri = doc.getBaseUri();
               } else if (el instanceof Element) {
                 Element element = (Element) el;
@@ -66,7 +67,7 @@ public class ResolveFunction implements Function {
             }
             if (baseUri != null) {
               resolved = baseUri.resolve(value);
-              results.add(resolved);
+              results.add(resolved.toString());
             }
           } catch (Exception e) {}
         }

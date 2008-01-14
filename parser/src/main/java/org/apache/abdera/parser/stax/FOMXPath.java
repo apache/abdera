@@ -297,7 +297,17 @@ public class FOMXPath extends AbstractXPath {
     return new HashMap<QName,Function>(functions);
   }
   
+  public synchronized void setDefaultFunctions(Map<QName,Function> functions) {
+    this.functions.clear();
+    this.functions.putAll(functions);
+  }
+  
   public Map<QName,Object> getDefaultVariables() {
     return new HashMap<QName,Object>(variables);
+  }
+  
+  public synchronized void setDefaultVariables(Map<QName,Object> variables) {
+    this.variables.clear();
+    this.variables.putAll(variables);
   }
 }

@@ -27,6 +27,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.parser.Parser;
@@ -44,7 +45,7 @@ public class XsltExample {
       TransformerFactory factory = TransformerFactory.newInstance();
       
       // Abdera is capable of parsing any well-formed XML document, even XSLT
-      Document xslt = parser.parse(XsltExample.class.getResourceAsStream("/test.xslt"));
+      Document<Element> xslt = parser.parse(XsltExample.class.getResourceAsStream("/test.xslt"));
       AbderaSource xsltSource = new AbderaSource(xslt);
       Transformer transformer = factory.newTransformer(xsltSource);
       

@@ -39,6 +39,7 @@ public class UnacceptableElementsExample {
      * when the parsed XML contains any content we don't want
      */
     ListParseFilter exceptionFilter = new BlackListParseFilter() {
+      private static final long serialVersionUID = 7564587859561916928L;
       @Override
       public boolean acceptable(QName qname) {
         boolean answer = super.acceptable(qname);

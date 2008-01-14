@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.util;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.parser.NamedParser;
 
 /**
@@ -29,9 +30,13 @@ public abstract class AbstractNamedParser
   protected final String name;
   protected final String[] formats;
   
-  protected AbstractNamedParser(String name, String... formats) {
-    this.name = name;
-    this.formats = formats;
+  protected AbstractNamedParser(
+    Abdera abdera, 
+    String name, 
+    String... formats) {
+      super(abdera);
+      this.name = name;
+      this.formats = formats;
   }
   
   public String getName() {

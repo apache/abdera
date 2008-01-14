@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.Writer;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
@@ -113,6 +114,22 @@ public class CoreTest extends TestCase implements Constants {
     atomNow = AtomDate.valueOf(rfc3339);
     Date parsed = atomNow.getDate();
     assertEquals(now, parsed);
+  }
+  
+  public static void testAtomDate2() {
+    String date = "2007-12-13T14:15:16.123Z";
+    AtomDate atomDate = new AtomDate(date);
+    Calendar calendar = atomDate.getCalendar();
+    atomDate = new AtomDate(calendar);
+    assertEquals(date,atomDate.toString());
+  }
+  
+  public static void testAtomDate3() {
+    long date = System.currentTimeMillis();
+    AtomDate atomDate = new AtomDate(date);
+    Calendar calendar = atomDate.getCalendar();
+    atomDate = new AtomDate(calendar);
+    assertEquals(date,atomDate.getTime());
   }
   
   public static void testXmlRestrictedCharReader() throws Exception {

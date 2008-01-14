@@ -257,6 +257,7 @@ public class FOMBuilder
     } catch (OMException e) {
         throw new ParseException(e);
     } catch (Exception e) {
+      e.printStackTrace();
         throw new ParseException(e);
     }
   }
@@ -382,10 +383,10 @@ public class FOMBuilder
               omElement.addChild(text);
               return text;
           } else {
-              return new FOMTextValue(omElement, value, textType, (OMFactory)this);
+              return new FOMTextValue(omElement, value, textType, (OMFactory)this.fomfactory);
           }
       } catch (IllegalArgumentException e) {
-          return new FOMTextValue(omElement, value, textType, (OMFactory)this);
+          return new FOMTextValue(omElement, value, textType, (OMFactory)this.fomfactory);
       }
   }
 }

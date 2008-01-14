@@ -18,6 +18,7 @@
 package org.apache.abdera.util;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -36,7 +37,7 @@ import org.apache.abdera.parser.ParserOptions;
 public abstract class AbstractParser 
   implements Parser {
 
-  protected final Abdera abdera;
+  protected Abdera abdera;
   protected ParserOptions options;
   
   protected AbstractParser() {
@@ -49,6 +50,10 @@ public abstract class AbstractParser
   
   public Abdera getAbdera() {
     return abdera;
+  }
+  
+  public void setAbdera(Abdera abdera) {
+    this.abdera = abdera;
   }
   
   public Factory getFactory() {
@@ -80,7 +85,7 @@ public abstract class AbstractParser
     String base, 
     ParserOptions options) 
       throws ParseException{
-    return parse(in, base, options);
+    return parse(new InputStreamReader(in), base, options);
   }
   
   public <T extends Element>Document<T> parse(

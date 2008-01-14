@@ -240,8 +240,7 @@ public final class AbderaConfiguration
    */
   private Map<String,NamedParser> initNamedParsers() {
     Map<String,NamedParser> parsers = null;
-    List<NamedParser> _parsers = 
-      ServiceUtil._loadimpls(NAMED_PARSER);
+    List<NamedParser> _parsers = ServiceUtil._loadimpls(NAMED_PARSER);
     parsers = Collections.synchronizedMap(new HashMap<String,NamedParser>());
     for (NamedParser parser : _parsers) {
       parsers.put(parser.getName().toLowerCase(), parser);

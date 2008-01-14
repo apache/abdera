@@ -24,6 +24,7 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.parser.NamedParser;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserFactory;
+import org.apache.abdera.util.AbstractParser;
 
 @SuppressWarnings("unchecked")
 public class FOMParserFactory 
@@ -51,8 +52,12 @@ public class FOMParserFactory
   }
 
   public <T extends Parser>T getParser(String name) {
-    return (T)((name != null) ? 
+    Parser parser = (T)((name != null) ? 
       getParsers().get(name.toLowerCase()) : getParser());
+    if (parser instanceof AbstractParser) {
+      ((AbstractParser)parser).setAbdera(abdera);
+    }
+    return (T) parser;
   }
 
   private Map<String,NamedParser> getParsers() {

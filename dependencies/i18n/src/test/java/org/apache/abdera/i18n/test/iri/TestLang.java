@@ -19,16 +19,18 @@ package org.apache.abdera.i18n.test.iri;
 
 import java.util.Locale;
 
-import org.apache.abdera.i18n.lang.InvalidLangTagSyntax;
-import org.apache.abdera.i18n.lang.Lang;
-
 import junit.framework.TestCase;
+
+import org.apache.abdera.i18n.rfc4646.Lang;
+import org.apache.abdera.i18n.rfc4646.Range;
 
 public class TestLang extends TestCase {
 
+  @SuppressWarnings("deprecation") 
   public static void testLang() throws Exception {
     
-    Lang lang = new Lang("en-US-ca");
+    org.apache.abdera.i18n.lang.Lang lang = 
+      new org.apache.abdera.i18n.lang.Lang("en-US-ca");
     Locale testLocale = new Locale("en", "US", "ca");
         
     assertEquals(lang.getPrimary(),"en");
@@ -52,11 +54,46 @@ public class TestLang extends TestCase {
     
     Exception e = null;
     try {
-      lang = new Lang("en_US");
-    } catch (InvalidLangTagSyntax ex) {
+      lang = new org.apache.abdera.i18n.lang.Lang("en_US");
+    } catch (org.apache.abdera.i18n.lang.InvalidLangTagSyntax ex) {
       e = ex;
     }
     assertNotNull(e);
   }
   
+  public static void test4646Lang() throws Exception {
+    Lang lang = new Lang("en-Latn-US-valencia");
+    assertEquals(lang.getLanguage().toString(),"en");
+    assertEquals(lang.getRegion().toString(), "US");
+    assertEquals(lang.getScript().toString(), "Latn");
+    assertEquals(lang.getVariant().toString(), "valencia");
+    assertNull(lang.getExtLang());
+    assertNull(lang.getExtension());
+    assertNull(lang.getPrivateUse());
+    assertTrue(lang.isValid());
+    Locale locale = lang.getLocale();
+    assertEquals(locale.getCountry(),"US");
+    assertEquals(locale.getLanguage(),"en");
+    assertEquals(locale.getVariant(),"valencia");
+  }
+  
+  public static void test4647Matching() throws Exception {
+    Lang lang = new Lang("en-Latn-US-valencia");
+    Range range1 = new Range("*",true);
+    Range range2 = new Range("en-*",true);
+    Range range3 = new Range("en-Latn-*",true);
+    Range range4 = new Range("en-US-*",true);
+    Range range5 = new Range("en-*-US-*",true);
+    Range range6 = new Range("*-US",true);
+    Range range7 = new Range("*-valencia",true);
+    Range range8 = new Range("*-FR",true);
+    assertTrue(range1.matches(lang,true));
+    assertTrue(range2.matches(lang,true));
+    assertTrue(range3.matches(lang,true));
+    assertTrue(range4.matches(lang,true));
+    assertTrue(range5.matches(lang,true));
+    assertTrue(range6.matches(lang,true));
+    assertTrue(range7.matches(lang,true));
+    assertFalse(range8.matches(lang,true));
+  }
 }

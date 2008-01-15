@@ -205,7 +205,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     return e.getResponseContext();
   }
 
-  public abstract String getId();
+  public abstract String getId(RequestContext request);
   
   /**
    * Gets the UUID for the specified entry.
@@ -379,7 +379,7 @@ public abstract class AbstractCollectionProvider<T> extends ProviderSupport
     Factory factory = request.getAbdera().getFactory();
     Feed feed = factory.newFeed();
     try {
-      feed.setId(getId());
+      feed.setId(getId(request));
       feed.setTitle(getTitle(request));
       feed.addLink("");
       feed.addLink("", "self");

@@ -34,9 +34,7 @@ public interface CollectionProvider {
   void end(RequestContext request, ResponseContext response);
   
   String getTitle(RequestContext request);
-
-  ResponseContext getFeed(Feed feed, RequestContext request);
-
+  
   ResponseContext createEntry(RequestContext request);
 
   ResponseContext getMedia(RequestContext request);

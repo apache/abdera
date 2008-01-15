@@ -15,10 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package oauth.src.test.java.org.apache.abdera.ext.oauth;
-
-import oauth.src.main.java.org.apache.abdera.ext.oauth.OAuthCredentials;
-import oauth.src.main.java.org.apache.abdera.ext.oauth.OAuthScheme;
+package org.apache.abdera.ext.oauth;
 
 import org.apache.commons.httpclient.auth.AuthenticationException;
 

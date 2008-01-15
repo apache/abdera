@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.iri.IRI;
@@ -35,7 +37,6 @@ import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.RequestContext.Scope;
-import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.writer.StreamWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -49,8 +50,9 @@ import org.apache.commons.logging.LogFactory;
 public abstract class AbstractServiceProvider extends AbstractProvider implements Resolver<Target> {
   private static final Log log = LogFactory.getLog(AbstractServiceProvider.class);
   public static final String COLLECTION_PROVIDER_ATTRIBUTE = "collectionProvider";
+  public static final String URI_PARAMETER_ATTRIBUTE_PREFIX = "uriParameter";
   
-    private String servicesPath = "/";
+    private Pattern servicesPattern = Pattern.compile("^/");
     
     protected AbstractServiceProvider(int count) {
       super(count);
@@ -60,52 +62,66 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
       RequestContext context = (RequestContext) request;
       String uri = context.getTargetPath();
       
-      if (servicesPath == null) {
-        throw new RuntimeException("You must set the servicesPath property on the ServiceProvider.");
+      if (servicesPattern == null) {
+        throw new RuntimeException("You must set the servicesPattern property on the ServiceProvider.");
       }
       
+      Matcher uriMatcher = servicesPattern.matcher(uri);
       TargetType tt = null;
-      if (uri.equals(servicesPath)) {
+      if (uriMatcher.matches()) {
         tt = TargetType.TYPE_SERVICE;
-      } else if (uri.startsWith(servicesPath)) {
-        String path = uri.substring(servicesPath.length());
-        int q = path.indexOf("?");
-        if (q != -1) {
-          path = path.substring(0, q);
-        }
-        
-        path = UrlEncoding.decode(path);
-
-        CollectionProvider provider = null;
-        String providerHref = null;
-        for (WorkspaceInfo wi : getWorkspaces()) {
-          for (Map.Entry<String, CollectionProvider> e : wi.getCollectionProviders().entrySet()) {
-            if (path.startsWith(e.getKey())) {
-              provider = e.getValue();
-              providerHref = e.getKey();
-              break;
+      } else {
+        uriMatcher.reset();
+        if (uriMatcher.find()) {
+          String path = uri.substring(uriMatcher.end());
+          int q = path.indexOf("?");
+          if (q != -1) {
+            path = path.substring(0, q);
+          }
+          
+          path = UrlEncoding.decode(path);
+  
+          CollectionProvider provider = null;
+          String providerHref = null;
+          for (WorkspaceInfo wi : getWorkspaces()) {
+            for (Map.Entry<String, CollectionProvider> e : wi.getCollectionProviders().entrySet()) {
+              if (path.startsWith(e.getKey())) {
+                provider = e.getValue();
+                providerHref = e.getKey();
+                break;
+              }
             }
           }
-        }
-        
-        if (provider != null) {
-          context.setAttribute(Scope.REQUEST, COLLECTION_PROVIDER_ATTRIBUTE, provider);
           
-          if (providerHref.equals(path)) {
-            tt = TargetType.TYPE_COLLECTION;
-          } else {
-            tt = getOtherTargetType(context, path, providerHref, provider);
+          if (provider != null) {
+            context.setAttribute(Scope.REQUEST, COLLECTION_PROVIDER_ATTRIBUTE, provider);
+            
+            if (providerHref.equals(path)) {
+              tt = TargetType.TYPE_COLLECTION;
+            } else {
+              tt = getOtherTargetType(context, path, providerHref, provider);
+            }
           }
-        }
-      } 
+        } 
+      }
       
       if (tt == null) {
         tt = TargetType.TYPE_UNKNOWN;
+      } else {
+        for (int i = 1; i <= uriMatcher.groupCount(); i++) {
+          if (uriMatcher.group(i) != null) {
+            context.setAttribute(
+              Scope.REQUEST, 
+              URI_PARAMETER_ATTRIBUTE_PREFIX + Integer.toString(i), 
+              uriMatcher.group(i));
+          }
+        }
       }
       
       return new DefaultTarget(tt, context);
     }
 
+    @SuppressWarnings("unchecked")
     protected TargetType getOtherTargetType(RequestContext context, 
                                             String path, 
                                             String providerHref, 
@@ -143,7 +159,6 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
       
       return new StreamWriterResponseContext(abdera) {
 
-        @SuppressWarnings( {"serial", "unchecked"})
         protected void writeTo(StreamWriter sw) throws IOException {
           sw.startDocument().startService();
   
@@ -191,16 +206,14 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
         provider.begin(request);
         
         res = provider.getFeed(request);
-        return res;
       } catch (ResponseContextException e) {
         res = createErrorResponse(e);
-        return res;
       } finally {
         end(provider, request, res);
       }
+      return res;
     }
 
-    @SuppressWarnings("unchecked")
     private CollectionProvider getCollectionProvider(RequestContext request) {
       return (CollectionProvider) request.getAttribute(Scope.REQUEST, COLLECTION_PROVIDER_ATTRIBUTE);
     }
@@ -229,13 +242,13 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
         provider = getCollectionProvider(request);
         provider.begin(request);
         
-        return provider.createEntry(request);
+        response =  provider.createEntry(request);
       } catch (ResponseContextException e) {
         response = createErrorResponse(e);
-        return response;
       } finally {
         end(provider, request, response);
       }
+      return response;
     }
 
     protected void end(CollectionProvider provider, RequestContext request, ResponseContext response) {
@@ -256,13 +269,13 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
         provider = getCollectionProvider(request);
         provider.begin(request);
         
-        return provider.getMedia(request);
+        response = provider.getMedia(request);
       } catch (ResponseContextException e) {
         response = createErrorResponse(e);
-        return response;
       } finally {
         end(provider, request, response);
       }
+      return response;
     }
 
 
@@ -278,10 +291,11 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
       try {
         provider = getCollectionProvider(request);
       
-        return provider.deleteEntry(request);
+        response = provider.deleteEntry(request);
       } finally {
         end(provider, request, response);
       }
+      return response;
     }
 
     
@@ -293,16 +307,15 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
         provider = getCollectionProvider(request);
         provider.begin(request);
         
-        return provider.getEntry(request, entryBaseIri);
+        response = provider.getEntry(request, entryBaseIri);
       } catch (ResponseContextException e) {
         response = createErrorResponse(e);
-        return response;
       } finally {
         end(provider, request, response);
       }
+      return response;
     }
 
-    @SuppressWarnings("unchecked")
     public ResponseContext updateEntry(RequestContext request) {
       CollectionProvider provider = null;
       ResponseContext response = null;
@@ -311,21 +324,21 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
         provider = getCollectionProvider(request);
         provider.begin(request);
         
-        return provider.updateEntry(request, entryBaseIri);
+        response = provider.updateEntry(request, entryBaseIri);
       } catch (ResponseContextException e) {
         response = createErrorResponse(e);
-        return response;
       } finally {
         end(provider, request, response);
       }
+      return response;
     }
 
-    public String getServicesPath() {
-      return servicesPath;
+    public String getServicesPattern() {
+      return servicesPattern.pattern();
     }
 
-    public void setServicesPath(String servicesPath) {
-      this.servicesPath = servicesPath;
+    public void setServicesPattern(String servicesPattern) {
+      this.servicesPattern = Pattern.compile(servicesPattern);
     }
 
 }

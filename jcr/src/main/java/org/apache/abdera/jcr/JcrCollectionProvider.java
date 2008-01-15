@@ -446,7 +446,7 @@ public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
   }
 
   @Override
-  public String getId() {
+  public String getId(RequestContext request) {
     return id;
   }
 

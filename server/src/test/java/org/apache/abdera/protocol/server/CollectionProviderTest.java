@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import junit.framework.TestCase;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
@@ -19,15 +20,10 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.protocol.client.RequestOptions;
-import org.apache.abdera.protocol.server.CollectionProvider;
-import org.apache.abdera.protocol.server.ServiceContext;
-import org.apache.abdera.protocol.server.TargetType;
-import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.impl.DefaultServiceContext;
-import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
+import org.apache.abdera.protocol.server.impl.ServiceProvider;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.protocol.server.impl.SingletonProviderManager;
-import org.apache.abdera.protocol.server.impl.ServiceProvider;
 import org.apache.abdera.protocol.server.servlet.AbderaServlet;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
@@ -51,6 +47,7 @@ public class CollectionProviderTest extends TestCase {
     abderaServiceContext.setProviderManager(pm);
 
     ServiceProvider sp = new ServiceProvider();
+    sp.setServicesPattern("^/([^\\/])+/");
     
     SimpleWorkspaceInfo wi = new SimpleWorkspaceInfo();
     CustomerCollectionProvider cp = new CustomerCollectionProvider();
@@ -79,7 +76,7 @@ public class CollectionProviderTest extends TestCase {
     String base = "http://localhost:9002/";
 
     // Testing of entry creation
-    IRI colUri = new IRI(base).resolve("acme/customers"); // base +
+    IRI colUri = new IRI(base).resolve("foo/acme/customers"); // base +
                                                           // docCollection.getHref().toString();
     Entry entry = factory.newEntry();
     entry.setTitle("Hmmm this is ignored right now");

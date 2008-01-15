@@ -25,7 +25,7 @@ public class CustomerCollectionProvider extends AbstractCollectionProvider<Custo
   private Map<Integer, Customer> customers = new HashMap<Integer, Customer>();
   private Factory factory = new Abdera().getFactory();
   
-  public String getId() {
+  public String getId(RequestContext request) {
     return "tag:example.org,2007:feed";
   }
 

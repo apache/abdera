@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package oauth.src.main.java.org.apache.abdera.ext.oauth;
+package org.apache.abdera.ext.oauth;
 
 import java.security.cert.Certificate;
 

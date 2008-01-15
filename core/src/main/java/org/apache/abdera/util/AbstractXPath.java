@@ -47,6 +47,7 @@ public abstract class AbstractXPath
     Map<String,String> namespaces = new HashMap<String,String>();
     namespaces.put("a", Constants.ATOM_NS);
     namespaces.put("app", Constants.APP_NS);
+    namespaces.put("xhtml", Constants.XHTML_NS);
     return namespaces;
   }
 

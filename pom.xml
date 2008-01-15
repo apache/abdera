@@ -280,6 +280,8 @@
     <module>extensions/opensearch</module>
     <module>extensions/sharing</module>
     <module>extensions/wsse</module>
+    <module>extensions/oauth</module>
+    <module>extensions/html</module>
     <module>spring</module>
     <module>examples</module>
   </modules>

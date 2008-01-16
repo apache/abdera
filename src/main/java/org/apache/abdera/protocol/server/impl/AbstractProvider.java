@@ -195,4 +195,17 @@ public abstract class AbstractProvider
     RequestContext request) {
       throw new UnsupportedOperationException();
   }
+
+  public abstract ResponseContext createEntry(RequestContext request);
+  
+  public abstract ResponseContext deleteEntry(RequestContext request);
+  
+  public abstract ResponseContext updateEntry(RequestContext request);
+  
+  public abstract ResponseContext getService(RequestContext request);
+  
+  public abstract ResponseContext getFeed(RequestContext request);
+  
+  public abstract ResponseContext getEntry(RequestContext request);
+  
 }

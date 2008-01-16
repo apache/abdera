@@ -127,8 +127,8 @@ public abstract class AbstractServiceProvider extends AbstractProvider implement
                                             String providerHref, 
                                             CollectionProvider provider) {
       String baseMedia = null;
-      if (provider instanceof AbstractCollectionProvider) {
-        baseMedia = ((AbstractCollectionProvider) provider).getBaseMediaIri();
+      if (provider instanceof AbstractEntityCollectionProvider) {
+        baseMedia = ((AbstractEntityCollectionProvider) provider).getBaseMediaIri();
       }
       
       if (providerHref.startsWith("/")) {

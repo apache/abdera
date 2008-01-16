@@ -30,7 +30,7 @@ import org.apache.abdera.model.Text;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.RequestContext.Scope;
-import org.apache.abdera.protocol.server.impl.AbstractCollectionProvider;
+import org.apache.abdera.protocol.server.impl.AbstractEntityCollectionProvider;
 import org.apache.abdera.protocol.server.impl.EmptyResponseContext;
 import org.apache.abdera.protocol.server.impl.ResponseContextException;
 import org.apache.abdera.protocol.util.EncodingUtil;
@@ -42,7 +42,7 @@ import org.apache.jackrabbit.core.nodetype.NodeTypeManagerImpl;
 import org.apache.jackrabbit.core.nodetype.NodeTypeRegistry;
 import org.apache.jackrabbit.core.nodetype.xml.NodeTypeReader;
 
-public class JcrCollectionProvider extends AbstractCollectionProvider<Node> {
+public class JcrCollectionProvider extends AbstractEntityCollectionProvider<Node> {
 
   private final static Log log = LogFactory.getLog(JcrCollectionProvider.class);
   

@@ -15,10 +15,10 @@ import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Person;
-import org.apache.abdera.protocol.server.impl.AbstractCollectionProvider;
+import org.apache.abdera.protocol.server.impl.AbstractEntityCollectionProvider;
 import org.apache.abdera.protocol.server.impl.ResponseContextException;
 
-public class CustomerCollectionProvider extends AbstractCollectionProvider<Customer> {
+public class CustomerCollectionProvider extends AbstractEntityCollectionProvider<Customer> {
   private static final String ID_PREFIX = "urn:acme:customer:";
   
   private final static AtomicInteger nextId = new AtomicInteger(1000);

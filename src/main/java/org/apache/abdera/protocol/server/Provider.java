@@ -18,31 +18,6 @@
 package org.apache.abdera.protocol.server;
 
 public interface Provider {
-
-  ResponseContext createEntry(RequestContext request);
-  
-  ResponseContext deleteEntry(RequestContext request);
-  
-  ResponseContext deleteMedia(RequestContext request);
-  
-  ResponseContext updateEntry(RequestContext request);
-  
-  ResponseContext updateMedia(RequestContext request);
-  
-  ResponseContext getService(RequestContext request);
-  
-  ResponseContext getFeed(RequestContext request);
-  
-  ResponseContext getEntry(RequestContext request);
-  
-  ResponseContext getMedia(RequestContext request);
-  
-  ResponseContext getCategories(RequestContext request);
-  
-  ResponseContext entryPost(RequestContext request);
-  
-  ResponseContext mediaPost(RequestContext request);
-  
   ResponseContext request(RequestContext request);
   
   String[] getAllowedMethods(TargetType type);

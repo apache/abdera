@@ -106,6 +106,39 @@ public class HtmlCleaner {
         }
       } 
       super.endElement(uri, localName, name);
+    }
+    
+    @Override 
+    public void characters(
+      char[] ch, 
+      int start, 
+      int length)
+        throws SAXException {
+      StringBuilder buf = new StringBuilder();
+      for (int n = start; n < (start + length); n++) {
+        if (ch[n] == '<') buf.append("&lt;");
+        else if (ch[n] == '>') buf.append("&gt;");
+        else if (ch[n] == '&') {
+          boolean isentity = false;
+          int i = n;
+          String ent = null;
+          for (; i < (start+length); i++) {
+            if (ch[i] == ';') {
+              ent = new String(ch,n,i-n+1);
+              isentity = ent.matches("\\&[\\w]*\\;");
+              break;
+            }
+          }
+          if (isentity) {
+            buf.append(ent);
+            n = i;
+          } else {
+            buf.append("&amp;");
+          }
+        }
+        else buf.append(ch[n]);
+      }
+      super.characters(buf.toString().toCharArray(), 0, buf.length());
     }    
   }
 }

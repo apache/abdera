@@ -19,8 +19,8 @@ package org.apache.abdera.examples.ext;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.bidi.BidiHelper;
+import org.apache.abdera.i18n.text.Bidi.Direction;
 import org.apache.abdera.model.Entry;
-
 /**
  * The Atom Bidi Extension is described in an IETF Internet-Draft and is used
  * to communicate information about the base directionality of text in an Atom
@@ -34,7 +34,7 @@ public class Bidi {
     
     Abdera abdera = new Abdera();
     Entry entry = abdera.newEntry();
-    BidiHelper.setDirection(BidiHelper.Direction.RTL, entry);
+    BidiHelper.setDirection(Direction.RTL, entry);
     
     entry.setTitle(text);
     

@@ -21,6 +21,7 @@ import java.util.Date;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.bidi.BidiHelper;
+import org.apache.abdera.i18n.text.Bidi.Direction;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
@@ -38,7 +39,7 @@ public class i18nExample {
     
     // Set the language context and default text direction
     feed.setLanguage("ar");  // Arabic
-    BidiHelper.setDirection(BidiHelper.Direction.RTL, feed);
+    BidiHelper.setDirection(Direction.RTL, feed);
     
     feed.setBaseUri("http://\u0645\u062b\u0627\u0644.org/ar/feed.xml");
     feed.setId("tag:\u0645\u062b\u0627\u0644.org,2007:/\u0645\u062b\u0627\u0644");

@@ -17,15 +17,14 @@
 */
 package org.apache.abdera.ext.bidi;
 
-import java.text.AttributedString;
-import java.text.Bidi;
-import java.util.Arrays;
 import java.util.Locale;
 
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.rfc4646.Lang;
+import org.apache.abdera.i18n.text.Bidi;
 import org.apache.abdera.i18n.text.CharUtils;
+import org.apache.abdera.i18n.text.Bidi.Direction;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
@@ -71,8 +70,6 @@ public final class BidiHelper {
   private static final QName DIR = new QName("dir");
   
   BidiHelper() {}
-  
-  public enum Direction { UNSPECIFIED, LTR, RTL};
   
   /**
    * Set the value of dir attribute
@@ -183,40 +180,6 @@ public final class BidiHelper {
     return guessDirectionFromLanguage(element, false);
   }
   
-  private static final String[] RTL_LANGS = {
-    "ar",
-    "dv",
-    "fa",
-    "he",
-    "ps",
-    "syr",
-    "ur",
-    "yi"};
-  
-  private static final String[] RTL_SCRIPTS = {
-    "arab","avst","hebr","hung","lydi","mand",
-    "mani","mero","mong","nkoo","orkh","phlv",
-    "phnx","samr","syrc","syre","syrj","syrn",
-    "tfng","thaa"
-  };
-  // charset encodings that one may typically expect to be RTL
-  private static final String[] RTL_ENCODINGS = {
-    "iso-8859-6", "iso-8859-6-bidi", 
-    "iso-8859-6-i", "iso-ir-127", 
-    "ecma-114", "asmo-708", "arabic", 
-    "csisolatinarabic", "windows-1256", 
-    "ibm-864", "macarabic", "macfarsi", 
-    "iso-8859-8-i", "iso-8859-8-bidi", 
-    "windows-1255", "iso-8859-8", "ibm-862", 
-    "machebrew", "asmo-449", "iso-9036", 
-    "arabic7", "iso-ir-89", "csiso89asmo449", 
-    "iso-unicode-ibm-1264", "csunicodeibm1264", 
-    "iso_8859-8:1988", "iso-ir-138", "hebrew", 
-    "csisolatinhebrew", "iso-unicode-ibm-1265", 
-    "csunicodeibm1265", "cp862", "862", 
-    "cspc862latinhebrew"
-  };
-  
   /**
    * Attempt to guess the base direction using the in-scope language.  
    * Implements the method used by Internet Explorer 7's feed view
@@ -239,15 +202,7 @@ public final class BidiHelper {
       language != null ? 
         new Lang(language) :
         new Lang(Locale.getDefault());
-    if (lang.getScript() != null) {
-      String script = lang.getScript().getName();
-      if (Arrays.binarySearch(RTL_SCRIPTS, script.toLowerCase()) > -1)
-        return Direction.RTL;
-    }
-    String primary = lang.getLanguage().getName();
-    if (Arrays.binarySearch(RTL_LANGS, primary.toLowerCase()) > -1) 
-          return Direction.RTL;
-    return Direction.UNSPECIFIED;
+    return Bidi.guessDirectionFromLanguage(lang);
   }
 
   /**
@@ -267,13 +222,7 @@ public final class BidiHelper {
     if (!ignoredir && hasDirection(element)) return getDirection(element);
     Document doc = element.getDocument();
     if (doc == null) return Direction.UNSPECIFIED;
-    String charset = doc.getCharset();
-    if (charset == null) return Direction.UNSPECIFIED;
-    charset = charset.replace('_', '-');
-    Arrays.sort(RTL_ENCODINGS);
-    if (Arrays.binarySearch(RTL_ENCODINGS, charset.toLowerCase()) > -1) 
-      return Direction.RTL;
-    return Direction.UNSPECIFIED;
+    return Bidi.guessDirectionFromEncoding(doc.getCharset());
   }
   
   /**
@@ -304,21 +253,8 @@ public final class BidiHelper {
    * ignoredir to true.
    */
   public static <T extends Element>Direction guessDirectionFromTextProperties(T element, boolean ignoredir) {
-    Direction dir = Direction.UNSPECIFIED;
     if (!ignoredir && hasDirection(element)) return getDirection(element);
-    String text = element.getText();
-    if (text != null && text.length() > 0) {
-      if (text.charAt(0) == 0x200F) return Direction.RTL; // if using the unicode right-to-left mark
-      if (text.charAt(0) == 0x200E) return Direction.LTR; // if using the unicode left-to-right mark
-      int c = 0;
-      for (int n = 0; n < text.length(); n++) {
-        char ch = text.charAt(n);
-        if (Bidi.requiresBidi(new char[] {ch}, 0, 1)) c++;
-        else c--;
-      }
-      dir = (c > 0) ? Direction.RTL : Direction.LTR;
-    }
-    return dir;
+    return Bidi.guessDirectionFromTextProperties(element.getText());
   }
 
   /**
@@ -343,30 +279,22 @@ public final class BidiHelper {
    * ignoredir to true.
    */
   public static <T extends Element>Direction guessDirectionFromJavaBidi(T element, boolean ignoredir) {
-    Direction dir = Direction.UNSPECIFIED;
     if (!ignoredir && hasDirection(element)) return getDirection(element);
-    String text = element.getText();
-    if (text != null) {
-      AttributedString s = new AttributedString(text);
-      Bidi bidi = new Bidi(s.getIterator());
-      dir = (bidi.baseIsLeftToRight()) ? Direction.LTR : Direction.RTL;
-    }
-    return dir;
+    return Bidi.guessDirectionFromJavaBidi(element.getText());
   }
   
   private static <T extends Element>boolean hasDirection(T element) {
-    boolean answer = false;
     String dir = element.getAttributeValue("dir");
     if (dir != null && dir.length() > 0)
-      answer = true;
+      return true;
     else if (dir == null) {
       // if the direction is unspecified on this element, 
       // let's see if we've inherited it
       Base parent = element.getParentElement(); 
       if (parent != null && 
           parent instanceof Element)
-        answer = hasDirection((Element)parent);
+        return hasDirection((Element)parent);
     }
-    return answer;
+    return false;
   }
 }

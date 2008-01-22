@@ -21,7 +21,7 @@ import junit.framework.TestCase;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.bidi.BidiHelper;
-import org.apache.abdera.ext.bidi.BidiHelper.Direction;
+import org.apache.abdera.i18n.text.Bidi.Direction;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 

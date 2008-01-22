@@ -30,6 +30,7 @@ import org.apache.abdera.ext.thread.InReplyTo;
 import org.apache.abdera.ext.thread.ThreadHelper;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.text.UrlEncoding;
+import org.apache.abdera.i18n.text.Bidi.Direction;
 import org.apache.abdera.i18n.text.CharUtils.Profile;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Categories;
@@ -507,14 +508,14 @@ if (element instanceof Text) {
   }
 
   private static boolean needToWriteDir(Element element) {
-    BidiHelper.Direction parentdir = BidiHelper.Direction.UNSPECIFIED;
-    BidiHelper.Direction dir = BidiHelper.getDirection(element);
+    Direction parentdir = Direction.UNSPECIFIED;
+    Direction dir = BidiHelper.getDirection(element);
     if (element.getParentElement() != null) {
       Base parent = element.getParentElement();
       if (parent instanceof Element)
         parentdir = BidiHelper.getDirection((Element)parent);
     }
-    return dir != BidiHelper.Direction.UNSPECIFIED && !dir.equals(parentdir);
+    return dir != Direction.UNSPECIFIED && !dir.equals(parentdir);
   }
   
   private static void writeLanguageFields(
@@ -526,7 +527,7 @@ if (element instanceof Text) {
       jstream.writeField("lang",lang);
     }
     if (needToWriteDir(element)) {
-      BidiHelper.Direction dir = BidiHelper.getDirection(element);
+      Direction dir = BidiHelper.getDirection(element);
       jstream.writeField("dir", dir.name().toLowerCase());
     }
   }

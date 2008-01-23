@@ -6,7 +6,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.abdera.protocol.Request;
-import org.apache.abdera.protocol.server.impl.AbstractItemManager;
+import org.apache.abdera.protocol.util.AbstractItemManager;
 
 public class SessionPoolManager extends AbstractItemManager<Session> {
   private Repository repository;

@@ -1,11 +1,8 @@
 package org.apache.abdera.jcr;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -24,13 +21,9 @@ import org.apache.abdera.model.Person;
 import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.protocol.client.RequestOptions;
-import org.apache.abdera.protocol.server.CollectionProvider;
-import org.apache.abdera.protocol.server.ServiceContext;
-import org.apache.abdera.protocol.server.WorkspaceInfo;
-import org.apache.abdera.protocol.server.impl.DefaultServiceContext;
-import org.apache.abdera.protocol.server.impl.ServiceProvider;
+import org.apache.abdera.protocol.server.Provider;
+import org.apache.abdera.protocol.server.impl.DefaultProvider;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
-import org.apache.abdera.protocol.server.impl.SingletonProviderManager;
 import org.apache.abdera.protocol.server.servlet.AbderaServlet;
 import org.apache.abdera.writer.Writer;
 import org.apache.jackrabbit.core.TransientRepository;
@@ -40,49 +33,38 @@ import org.mortbay.jetty.servlet.ServletHolder;
 
 import junit.framework.TestCase;
 
-public class JcrCollectionProviderTest extends TestCase {
+public class JcrCollectionAdapterTest extends TestCase {
 
   private Server server;
-  private DefaultServiceContext abderaServiceContext;
+  private DefaultProvider jcrProvider;
   private Repository repository;
 
   @Override
   protected void setUp() throws Exception {
     super.setUp();
 
-    abderaServiceContext = new DefaultServiceContext();
-
-    SingletonProviderManager pm = new SingletonProviderManager();
-    abderaServiceContext.setProviderManager(pm);
-
-    ServiceProvider sp = new ServiceProvider();
-
-    SimpleWorkspaceInfo wi = new SimpleWorkspaceInfo();
+    jcrProvider = new DefaultProvider();
 
     repository = new TransientRepository();
     
-    JcrCollectionProvider cp = new JcrCollectionProvider();
+    JcrCollectionAdapter cp = new JcrCollectionAdapter();
     cp.setTitle("My Entries");
     cp.setAuthor("Apache Abdera");
     cp.setCollectionNodePath("entries");         
     cp.setRepository(repository);
     cp.setCredentials(new SimpleCredentials("username", "pass".toCharArray()));
+    cp.setHref("acme/feed");
     cp.initialize();
-
-    Map<String, CollectionProvider> contentProviders = new HashMap<String, CollectionProvider>();
-    contentProviders.put("acme/feed", cp);
-
-    wi.setCollectionProviders(contentProviders);
-
-    List<WorkspaceInfo> workspaces = new ArrayList<WorkspaceInfo>();
-    workspaces.add(wi);
-    sp.setWorkspaces(workspaces);
-    pm.setProvider(sp);
-    abderaServiceContext.setTargetResolver(sp);
+    
+    SimpleWorkspaceInfo wkspc = new SimpleWorkspaceInfo();
+    wkspc.setTitle("JCR Workspace");
+    wkspc.addCollection(cp);
+    jcrProvider.addWorkspace(wkspc);
+    
     initializeJetty();
   }
 
-  public void testCustomerProvider() throws Exception {
+  public void testJCRAdapter() throws Exception {
     Abdera abdera = new Abdera();
     Factory factory = abdera.getFactory();
 
@@ -177,9 +159,9 @@ public class JcrCollectionProviderTest extends TestCase {
     root.addServlet(new ServletHolder(new AbderaServlet() {
 
       @Override
-      protected ServiceContext createServiceContext() {
-        abderaServiceContext.init(getAbdera(), getProperties(getServletConfig()));
-        return abderaServiceContext;
+      protected Provider createProvider() {
+        jcrProvider.init(getAbdera(), getProperties(getServletConfig()));
+        return jcrProvider;
       }
     }), "/*");
     server.start();

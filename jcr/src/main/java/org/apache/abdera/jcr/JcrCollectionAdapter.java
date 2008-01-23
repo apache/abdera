@@ -30,10 +30,9 @@ import org.apache.abdera.model.Text;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.RequestContext.Scope;
-import org.apache.abdera.protocol.server.impl.AbstractEntityCollectionProvider;
-import org.apache.abdera.protocol.server.impl.EmptyResponseContext;
-import org.apache.abdera.protocol.server.impl.ResponseContextException;
-import org.apache.abdera.protocol.util.EncodingUtil;
+import org.apache.abdera.protocol.server.context.EmptyResponseContext;
+import org.apache.abdera.protocol.server.context.ResponseContextException;
+import org.apache.abdera.protocol.server.impl.AbstractEntityCollectionAdapter;
 import org.apache.abdera.protocol.util.PoolManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,9 +41,9 @@ import org.apache.jackrabbit.core.nodetype.NodeTypeManagerImpl;
 import org.apache.jackrabbit.core.nodetype.NodeTypeRegistry;
 import org.apache.jackrabbit.core.nodetype.xml.NodeTypeReader;
 
-public class JcrCollectionProvider extends AbstractEntityCollectionProvider<Node> {
+public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> {
 
-  private final static Log log = LogFactory.getLog(JcrCollectionProvider.class);
+  private final static Log log = LogFactory.getLog(JcrCollectionAdapter.class);
   
   private static final String TITLE = "title";
 
@@ -101,7 +100,7 @@ public class JcrCollectionProvider extends AbstractEntityCollectionProvider<Node
   }
 
   /**
-   * Logs into the repository and creates a node for the collection if one does not exist. Also,
+   * Logs into the repository and posts a node for the collection if one does not exist. Also,
    * this will set up the session pool.
    * @throws RepositoryException
    */
@@ -152,9 +151,7 @@ public class JcrCollectionProvider extends AbstractEntityCollectionProvider<Node
   }
 
   @Override
-  public void begin(RequestContext request) throws ResponseContextException {
-    super.begin(request);
-
+  public void start(RequestContext request) throws ResponseContextException {
     try {
       Session session = (Session) sessionPool.get(request);
 
@@ -175,8 +172,6 @@ public class JcrCollectionProvider extends AbstractEntityCollectionProvider<Node
         log.warn("Could not return Session to pool!", e);
       }
     }
-
-    super.end(request, response);
   }
 
 
@@ -195,19 +190,19 @@ public class JcrCollectionProvider extends AbstractEntityCollectionProvider<Node
   }
 
   @Override
-  public Node createMediaEntry(MimeType mimeType, String slug, 
+  public Node postMediaEntry(MimeType mimeType, String slug, 
                                InputStream inputStream, RequestContext request)
     throws ResponseContextException {
     if (slug == null) {
       throw new ResponseContextException("A slug header must be supplied.", 500);
     }
-    Node n = createEntry(slug, null, null, new Date(), null, null, request);
+    Node n = postEntry(slug, null, null, new Date(), null, null, request);
     
     try {
       n.setProperty(MEDIA, inputStream);
       n.setProperty(CONTENT_TYPE, mimeType.toString());
 
-      String summary = createSummaryForEntry(n);
+      String summary = postSummaryForEntry(n);
       if (summary != null) {
         n.setProperty(SUMMARY, summary);
       }
@@ -226,19 +221,19 @@ public class JcrCollectionProvider extends AbstractEntityCollectionProvider<Node
   }
   
   /**
-   * Create a summary for an entry. Used when a media entry is created
-   * so you have the chance to create a meaningful summary for consumers
+   * post a summary for an entry. Used when a media entry is postd
+   * so you have the chance to post a meaningful summary for consumers
    * of the feed.
    * 
    * @param n
    * @return
    */
-  protected String createSummaryForEntry(Node n) {
+  protected String postSummaryForEntry(Node n) {
     return null;
   }
 
   @Override
-  public Node createEntry(String title, IRI id, String summary, Date updated, List<Person> authors,
+  public Node postEntry(String title, IRI id, String summary, Date updated, List<Person> authors,
                           Content content, RequestContext request) throws ResponseContextException {
     Node entry = null;
     try {
@@ -246,7 +241,7 @@ public class JcrCollectionProvider extends AbstractEntityCollectionProvider<Node
 
       Node collectionNode = session.getNodeByUUID(collectionNodeId);
       String resourceName = Sanitizer.sanitize(title, "-");
-      entry = createEntry(title, summary, updated, authors, 
+      entry = postEntry(title, summary, updated, authors, 
                           content, session, collectionNode,
                           resourceName, 0);
       
@@ -262,7 +257,7 @@ public class JcrCollectionProvider extends AbstractEntityCollectionProvider<Node
     }
   }
 
-  protected Node createEntry(String title, String summary, 
+  protected Node postEntry(String title, String summary, 
                              Date updated, List<Person> authors, 
                              Content content, Session session, 
                              Node collectionNode, String resourceName, int num)
@@ -284,7 +279,7 @@ public class JcrCollectionProvider extends AbstractEntityCollectionProvider<Node
     }
     catch (ItemExistsException e) 
     {
-      return createEntry(title, summary, updated, authors, content, session, collectionNode, resourceName, num++);
+      return postEntry(title, summary, updated, authors, content, session, collectionNode, resourceName, num++);
     }
   }
 
@@ -494,7 +489,6 @@ public class JcrCollectionProvider extends AbstractEntityCollectionProvider<Node
     return summary;
   }
 
-  @Override
   public String getTitle(RequestContext request) {
     return title;
   }
@@ -510,7 +504,7 @@ public class JcrCollectionProvider extends AbstractEntityCollectionProvider<Node
   }
 
   @Override
-  public void updateEntry(Node entry, String title, Date updated,
+  public void putEntry(Node entry, String title, Date updated,
                           List<Person> authors, String summary,
                           Content content, RequestContext request) throws ResponseContextException {
     Session session = getSession(request);
@@ -533,6 +527,10 @@ public class JcrCollectionProvider extends AbstractEntityCollectionProvider<Node
       throw new RuntimeException(e);
     }
 
+    return null;
+  }
+
+  public ResponseContext getCategories(RequestContext request) {
     return null;
   }
 

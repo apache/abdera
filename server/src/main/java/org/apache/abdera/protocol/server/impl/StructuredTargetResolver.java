@@ -56,9 +56,6 @@ public class StructuredTargetResolver implements Resolver<Target> {
   public Target resolve(Request request) {
     RequestContext context = (RequestContext)request;
     String uri = context.getTargetPath();
-
-    System.out.println("Target " + uri);
-    System.out.println("Request " + context.getResolvedUri());
     
     if (servicesPattern == null) {
       throw new RuntimeException("You must set the servicesPattern property on the ServiceProvider.");

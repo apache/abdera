@@ -18,36 +18,41 @@
  */
 package org.apache.abdera.spring;
 
-import org.apache.abdera.protocol.server.ServiceContext;
-import org.apache.abdera.protocol.server.impl.DefaultServiceContext;
-import org.apache.abdera.protocol.server.impl.SingletonProviderManager;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.abdera.protocol.server.Provider;
+import org.apache.abdera.protocol.server.WorkspaceInfo;
+import org.apache.abdera.protocol.server.impl.DefaultProvider;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
+
 import org.w3c.dom.Element;
 
-public class ServiceContextDefinitionParser 
+public class DefaultProviderDefinitionParser 
     extends org.apache.abdera.spring.AbstractSingleBeanDefinitionParser {
 
     @Override
+    protected void mapAttribute(BeanDefinitionBuilder bean, Element element, String name, String val) {
+        if (name.equals("servicesPattern")) {
+            bean.addPropertyValue(name, val);
+        }
+    }
+
+    @Override
     protected void mapElement(ParserContext ctx, BeanDefinitionBuilder bean, Element element, String name) {
-        if (name.equals("provider")) {
-            String id = getAndRegisterFirstChild(element, ctx, bean, "provider");
-            
-            BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(SingletonProviderManager.class);
-            builder.addPropertyReference("provider", id);
-            AbstractBeanDefinition singletonBean = builder.getBeanDefinition();
-            ctx.getRegistry().registerBeanDefinition(SingletonProviderManager.class.getName() + hashCode(), 
-                                                     singletonBean);
-            
-            bean.addPropertyValue("providerManager", singletonBean);
-        } else if (name.equals("providerManager")) {
-            setFirstChildAsProperty(element, ctx, bean, "providerManager");
+        if (name.equals("workspaceManager")) {
+            setFirstChildAsProperty(element, ctx, bean, "workspaceManager");
         } else if (name.equals("targetResolver")) {
             setFirstChildAsProperty(element, ctx, bean, "targetResolver");
         } else if (name.equals("subjectResolver")) {
-            setFirstChildAsProperty(element, ctx, bean, "subjectResolver");
+            setFirstChildAsProperty(element, ctx, bean, name);
+        } else if (name.equals("workspace")) {
+            String id = getAndRegister(ctx, bean, element);
+            
+            bean.addPropertyReference("workspaces", id);
         }
     }
 
@@ -56,7 +61,7 @@ public class ServiceContextDefinitionParser
         String cls = super.getBeanClassName(arg0);
         
         if (cls == null) {
-            cls = DefaultServiceContext.class.getName();
+            cls = ProviderFactoryBean.class.getName();
         }
         
         return cls;
@@ -67,12 +72,13 @@ public class ServiceContextDefinitionParser
         String id = element.getAttribute("id");
         
         if (id == null || "".equals(id)) {
-            id = ServiceContext.class.getName();
+            id = Provider.class.getName();
         }
         
         
         return id;
     }
+    
     
 }
  

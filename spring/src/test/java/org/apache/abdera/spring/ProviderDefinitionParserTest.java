@@ -19,29 +19,39 @@
  */
 package org.apache.abdera.spring;
 
+import java.util.Collection;
+
 import org.apache.abdera.protocol.ItemManager;
 import org.apache.abdera.protocol.Resolver;
+import org.apache.abdera.protocol.server.CollectionInfo;
 import org.apache.abdera.protocol.server.Provider;
-import org.apache.abdera.protocol.server.ServiceContext;
 import org.apache.abdera.protocol.server.Target;
+import org.apache.abdera.protocol.server.WorkspaceInfo;
+import org.apache.abdera.protocol.server.WorkspaceManager;
+import org.apache.abdera.protocol.server.impl.DefaultProvider;
 import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
-import org.apache.abdera.protocol.server.impl.SingletonProviderManager;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
-public class ServiceContextDefinitionParserTest 
+public class ProviderDefinitionParserTest 
     extends AbstractDependencyInjectionSpringContextTests {
 
     public void testParser() throws Exception {
-        ServiceContext ctx = (ServiceContext) applicationContext.getBean(ServiceContext.class.getName());
+        DefaultProvider p = (DefaultProvider) applicationContext.getBean(Provider.class.getName());
         
-        ItemManager<Provider> pm = ctx.getProviderManager();
-        assertTrue(pm instanceof SingletonProviderManager);
-        
-        Provider provider = pm.get(null);
-        assertTrue(provider instanceof TestProvider);
-        
-        Resolver<Target> tresolver = ctx.getTargetResolver("/path");
+        Resolver<Target> tresolver = p.getTargetResolver();
         assertTrue(tresolver instanceof RegexTargetResolver);
+        
+        WorkspaceManager wm = p.getWorkspaceManager();
+        
+        Collection<WorkspaceInfo> workspaces = wm.getWorkspaces(null);
+        assertEquals(1, workspaces.size());
+        
+        WorkspaceInfo w = workspaces.iterator().next();
+        assertEquals("Foo Workspace", w.getTitle(null));
+        
+        Collection<CollectionInfo> collections = w.getCollections(null);
+        assertEquals(1, collections.size());
+        
     }
     
     @Override

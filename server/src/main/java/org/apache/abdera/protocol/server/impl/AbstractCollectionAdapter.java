@@ -66,6 +66,10 @@ public abstract class AbstractCollectionAdapter
     return null;
   }
 
+  public ResponseContext getCategories(RequestContext request) {
+      return null;
+  }
+
   public ResponseContext deleteMedia(RequestContext request) {
     return ProviderHelper.notallowed(request);
   }

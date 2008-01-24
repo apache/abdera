@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.protocol.server;
 
-import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Category;
 
 public interface CategoryInfo {
@@ -28,5 +27,5 @@ public interface CategoryInfo {
   
   String getLabel(RequestContext request);
   
-  Category asCategoryElement(Abdera abdera);
+  Category asCategoryElement(RequestContext request);
 }

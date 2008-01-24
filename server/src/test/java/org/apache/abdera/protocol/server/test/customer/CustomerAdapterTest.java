@@ -1,9 +1,11 @@
-package org.apache.abdera.protocol.server.customer;
+package org.apache.abdera.protocol.server.test.customer;
 
 import java.io.IOException;
 import java.util.Date;
 
 import javax.xml.namespace.QName;
+
+import junit.framework.TestCase;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
@@ -23,8 +25,6 @@ import org.apache.abdera.writer.WriterFactory;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
-
-import junit.framework.TestCase;
 
 public class CustomerAdapterTest extends TestCase {
 
@@ -102,6 +102,7 @@ public class CustomerAdapterTest extends TestCase {
     System.out.println();
   }
 
+  @SuppressWarnings("serial") 
   private void initializeJetty() throws Exception {
 
     server = new Server(9002);

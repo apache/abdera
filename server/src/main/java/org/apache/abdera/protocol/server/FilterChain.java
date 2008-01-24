@@ -15,16 +15,29 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.examples.appserver;
+package org.apache.abdera.protocol.server;
 
-import org.apache.abdera.protocol.server.impl.DefaultServiceContext;
+import java.util.Arrays;
+import java.util.Iterator;
 
-public class SimpleServiceContext 
-  extends DefaultServiceContext {
+public class FilterChain {
 
-  public SimpleServiceContext() {
-    this.defaultprovidermanager = SimpleProviderManager.class.getName();
-    this.defaulttargetresolver = SimpleTargetResolver.class.getName();
+  private final Iterator<Filter> filters;
+  private final Provider provider;
+  
+  public FilterChain( 
+    Provider provider,
+    RequestContext request) {
+      this.provider = provider;
+      this.filters = 
+        Arrays.asList(
+          provider.getFilters(request)).iterator();
+  }
+  
+  public ResponseContext next(RequestContext request) {
+    return filters.hasNext() ?
+      filters.next().filter(request, this) :
+      provider.process(request);
   }
   
 }

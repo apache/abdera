@@ -17,7 +17,6 @@
 */
 package org.apache.abdera.protocol.server;
 
-import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Categories;
 
 public interface CategoriesInfo 
@@ -29,5 +28,5 @@ public interface CategoriesInfo
 
   String getHref(RequestContext request);
   
-  Categories asCategoriesElement(Abdera abdera);
+  Categories asCategoriesElement(RequestContext request);
 }

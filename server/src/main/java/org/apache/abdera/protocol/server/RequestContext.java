@@ -80,6 +80,8 @@ public interface RequestContext
   
   String[] getAttributeNames(Scope scope);
   
+  RequestContext setAttribute(String name, Object value);
+  
   RequestContext setAttribute(Scope scope, String name, Object value);
   
   InputStream getInputStream() throws IOException;

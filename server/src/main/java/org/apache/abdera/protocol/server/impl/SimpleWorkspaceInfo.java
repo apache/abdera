@@ -17,16 +17,22 @@
  */
 package org.apache.abdera.protocol.server.impl;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.abdera.model.Workspace;
 import org.apache.abdera.protocol.server.CollectionInfo;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 
-public class SimpleWorkspaceInfo implements WorkspaceInfo {
+public class SimpleWorkspaceInfo 
+  implements WorkspaceInfo,
+             Serializable {
 
+  private static final long serialVersionUID = -8459688584319762878L;
+  
   protected String title;
   protected Set<CollectionInfo> collections;
 
@@ -60,5 +66,36 @@ public class SimpleWorkspaceInfo implements WorkspaceInfo {
 
   public void setCollections(Set<CollectionInfo> collections) {
     this.collections = collections;
+  }
+
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result
+        + ((collections == null) ? 0 : collections.hashCode());
+    result = prime * result + ((title == null) ? 0 : title.hashCode());
+    return result;
+  }
+
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    final SimpleWorkspaceInfo other = (SimpleWorkspaceInfo) obj;
+    if (collections == null) {
+      if (other.collections != null) return false;
+    } else if (!collections.equals(other.collections)) return false;
+    if (title == null) {
+      if (other.title != null) return false;
+    } else if (!title.equals(other.title)) return false;
+    return true;
+  }
+  
+  public Workspace asWorkspaceElement(RequestContext request) {
+    Workspace workspace = request.getAbdera().getFactory().newWorkspace();
+    workspace.setTitle(title);
+    for (CollectionInfo collection : this.collections)
+      workspace.addCollection(collection.asCollectionElement(request));
+    return workspace;
   }
 }

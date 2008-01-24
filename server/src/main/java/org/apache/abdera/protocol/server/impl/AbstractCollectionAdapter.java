@@ -5,12 +5,11 @@ import static org.apache.abdera.protocol.server.ProviderHelper.calculateEntityTa
 import java.io.IOException;
 import java.util.Date;
 
-import javax.activation.MimeType;
-
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.text.UrlEncoding;
+import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
@@ -28,12 +27,14 @@ import org.apache.abdera.protocol.server.context.AbstractResponseContext;
 import org.apache.abdera.protocol.server.context.BaseResponseContext;
 import org.apache.abdera.protocol.server.context.EmptyResponseContext;
 import org.apache.abdera.protocol.server.context.ResponseContextException;
-import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public abstract class AbstractCollectionAdapter implements CollectionAdapter, MediaCollectionAdapter,
-  Transactional, CollectionInfo {
+public abstract class AbstractCollectionAdapter 
+  implements CollectionAdapter, 
+             MediaCollectionAdapter,
+             Transactional, 
+             CollectionInfo {
 
   private final static Log log = LogFactory.getLog(AbstractEntityCollectionAdapter.class);
 
@@ -182,4 +183,14 @@ public abstract class AbstractCollectionAdapter implements CollectionAdapter, Me
     return ProviderHelper.getDefaultMethods(request);
   }
 
+  public Collection asCollectionElement(RequestContext request) {
+    Collection collection = request.getAbdera().getFactory().newCollection();
+    collection.setHref(getHref(request));
+    collection.setTitle(getTitle(request));
+    collection.setAccept(getAccepts(request));
+    for (CategoriesInfo catsinfo : getCategoriesInfo(request)) {
+      collection.addCategories(catsinfo.asCategoriesElement(request));
+    }
+    return collection;
+  }
 }

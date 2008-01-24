@@ -452,4 +452,5 @@ public abstract class AbstractEntityCollectionAdapter<T>
 
     return entry;
   }
+  
 }

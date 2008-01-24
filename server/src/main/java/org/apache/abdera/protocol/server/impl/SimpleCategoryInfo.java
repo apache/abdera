@@ -19,15 +19,13 @@ package org.apache.abdera.protocol.server.impl;
 
 import java.io.Serializable;
 
-import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.protocol.server.CategoryInfo;
 import org.apache.abdera.protocol.server.RequestContext;
 
 public class SimpleCategoryInfo 
   implements CategoryInfo, 
-             Serializable, 
-             Cloneable {
+             Serializable {
   
   private static final long serialVersionUID = -4013333222147077975L;
   private final String label;
@@ -92,16 +90,8 @@ public class SimpleCategoryInfo
     return true;
   }
   
-  public Object clone() {
-    try {
-      return super.clone();
-    } catch (CloneNotSupportedException e) {
-      return new SimpleCategoryInfo(term,scheme,label);
-    }
-  }
-  
-  public Category asCategoryElement(Abdera abdera) {
-    Category cat = abdera.getFactory().newCategory();
+  public Category asCategoryElement(RequestContext request) {
+    Category cat = request.getAbdera().getFactory().newCategory();
     cat.setTerm(term);
     if (scheme != null) cat.setScheme(scheme);
     if (label != null) cat.setLabel(label);

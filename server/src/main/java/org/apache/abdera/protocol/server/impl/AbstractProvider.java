@@ -18,16 +18,20 @@
 package org.apache.abdera.protocol.server.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.security.auth.Subject;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.model.Service;
 import org.apache.abdera.protocol.Resolver;
 import org.apache.abdera.protocol.server.CategoriesInfo;
 import org.apache.abdera.protocol.server.CategoryInfo;
 import org.apache.abdera.protocol.server.CollectionAdapter;
 import org.apache.abdera.protocol.server.CollectionInfo;
+import org.apache.abdera.protocol.server.Filter;
 import org.apache.abdera.protocol.server.MediaCollectionAdapter;
 import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.ProviderHelper;
@@ -47,6 +51,7 @@ public abstract class AbstractProvider
   
   protected Abdera abdera;
   protected Map<String,String> properties;
+  protected List<Filter> filters = new ArrayList<Filter>();
   
   public void init(
     Abdera abdera, 
@@ -161,6 +166,13 @@ public abstract class AbstractProvider
     RequestContext request);
   
 
+  protected Service getServiceElement(RequestContext request) {
+    Service service = abdera.newService();
+    for (WorkspaceInfo wi : getWorkspaceManager(request).getWorkspaces(request))
+      service.addWorkspace(wi.asWorkspaceElement(request));
+    return service;
+  }
+  
   protected ResponseContext getServiceDocument(
     final RequestContext request) {
       return 
@@ -211,5 +223,12 @@ public abstract class AbstractProvider
         .setContentType(Constants.APP_MEDIA_TYPE);
   }
 
-  
+  public Filter[] getFilters(RequestContext request) {
+    return filters.toArray(new Filter[filters.size()]);
+  }
+
+  public void addFilter(Filter... filters) {
+    for (Filter filter : filters)
+      this.filters.add(filter);
+  }  
 }

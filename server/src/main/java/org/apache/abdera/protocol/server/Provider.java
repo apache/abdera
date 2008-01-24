@@ -40,4 +40,6 @@ public interface Provider {
   
   ResponseContext process(RequestContext request);
   
+  Filter[] getFilters(RequestContext request);
+  
 }

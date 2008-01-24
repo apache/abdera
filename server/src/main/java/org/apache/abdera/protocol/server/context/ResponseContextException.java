@@ -19,6 +19,9 @@ package org.apache.abdera.protocol.server.context;
 
 
 public class ResponseContextException extends Exception {
+
+  private static final long serialVersionUID = -3031651143835987024L;
+
   private AbstractResponseContext responseContext;
 
   public ResponseContextException(AbstractResponseContext responseContext, Throwable t) {

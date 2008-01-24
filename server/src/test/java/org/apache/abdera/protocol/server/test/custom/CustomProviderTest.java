@@ -15,11 +15,13 @@
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
  */
-package org.apache.abdera.protocol.server.test.simple;
+package org.apache.abdera.protocol.server.test.custom;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Date;
+
+import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
@@ -39,16 +41,11 @@ import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
-public class SimpleTest extends Assert {
+public class CustomProviderTest extends Assert {
 
   private static JettyServer server;
   private static Abdera abdera = Abdera.getInstance();
@@ -58,7 +55,7 @@ public class SimpleTest extends Assert {
   public static void setUp() throws Exception {
     try {
       server = new JettyServer();
-      server.start(SimpleProvider.class);
+      server.start(CustomProvider.class);
     } catch (Exception e) {
       e.printStackTrace();
     }

@@ -153,4 +153,7 @@ public abstract class AbstractRequestContext
     return cpath == null ? uri : uri.substring(cpath.length());
   }
   
+  public RequestContext setAttribute(String name, Object value) {
+    return setAttribute(Scope.REQUEST, name, value);
+  }
 }

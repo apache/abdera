@@ -19,10 +19,13 @@ package org.apache.abdera.protocol.server;
 
 import java.util.Collection;
 
+import org.apache.abdera.model.Workspace;
+
 public interface WorkspaceInfo {
 
   String getTitle(RequestContext requsest);
   
   Collection<CollectionInfo> getCollections(RequestContext request);
   
+  Workspace asWorkspaceElement(RequestContext request);
 }

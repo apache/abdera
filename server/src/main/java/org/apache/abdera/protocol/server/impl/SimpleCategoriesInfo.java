@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Categories;
 import org.apache.abdera.protocol.server.CategoriesInfo;
 import org.apache.abdera.protocol.server.CategoryInfo;
@@ -30,10 +29,10 @@ import org.apache.abdera.protocol.server.RequestContext;
 
 public class SimpleCategoriesInfo 
   implements CategoriesInfo, 
-             Serializable, 
-             Cloneable {
+             Serializable {
   
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 8732335394387909260L;
+  
   private final String href;
   private final String scheme;
   private final boolean fixed;
@@ -111,29 +110,15 @@ public class SimpleCategoriesInfo
     return true;
   }
   
-  public Object clone() {
-    try {
-      return super.clone();
-    } catch (CloneNotSupportedException e) {
-      return href != null ? 
-        new SimpleCategoriesInfo(href) : 
-        new SimpleCategoriesInfo(
-          scheme, 
-          fixed, 
-          list.toArray(
-            new CategoryInfo[list.size()]));
-    }
-  }
-  
-  public Categories asCategoriesElement(Abdera abdera) {
-    Categories cats = abdera.getFactory().newCategories();
+  public Categories asCategoriesElement(RequestContext request) {
+    Categories cats = request.getAbdera().getFactory().newCategories();
     if (href != null) cats.setHref(href);
     else {
       cats.setFixed(fixed);
       cats.setScheme(scheme);
       for (CategoryInfo cat : this)
         cats.addCategory(
-          cat.asCategoryElement(abdera));
+          cat.asCategoryElement(request));
     }
     return cats;
   }

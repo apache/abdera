@@ -19,14 +19,14 @@ package org.apache.abdera.protocol.server.impl;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
 
-import org.apache.abdera.protocol.server.CollectionAdapter;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.WorkspaceManager;
 
-public abstract class AbstractWorkspaceManager implements WorkspaceManager {
+public abstract class AbstractWorkspaceManager 
+  implements WorkspaceManager {
+  
   protected Collection<WorkspaceInfo> workspaces;
 
   public Collection<WorkspaceInfo> getWorkspaces(RequestContext request) {

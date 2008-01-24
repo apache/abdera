@@ -15,21 +15,17 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.test.simple;
+package org.apache.abdera.protocol.server.test.custom;
 
 import java.io.IOException;
 import java.util.Date;
 
-import javax.activation.MimeType;
-
 import org.apache.abdera.Abdera;
-import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.text.UrlEncoding;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.parser.ParseException;
-import org.apache.abdera.protocol.server.CollectionAdapter;
 import org.apache.abdera.protocol.server.ProviderHelper;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
@@ -40,11 +36,11 @@ import org.apache.abdera.protocol.server.context.ResponseContextException;
 import org.apache.abdera.protocol.server.context.StreamWriterResponseContext;
 import org.apache.abdera.protocol.server.impl.AbstractCollectionAdapter;
 import org.apache.abdera.util.Constants;
-import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.writer.StreamWriter;
 
 @SuppressWarnings("unchecked")
-public class SimpleAdapter extends AbstractCollectionAdapter {
+public class SimpleAdapter 
+  extends AbstractCollectionAdapter {
   
   @Override
   public String getAuthor() throws ResponseContextException {

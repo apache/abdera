@@ -15,17 +15,10 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.examples.appserver;
+package org.apache.abdera.protocol.server;
 
-import org.apache.abdera.protocol.server.Provider;
-import org.apache.abdera.protocol.server.impl.AbstractSingletonProviderManager;
-
-public class SimpleProviderManager 
-  extends AbstractSingletonProviderManager {
-
-  @Override
-  protected Provider initProvider() {
-    return new SimpleProvider();
-  }
-
+public interface Filter {
+  
+  ResponseContext filter(RequestContext request, FilterChain chain);
+  
 }

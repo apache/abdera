@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.protocol.server;
 
+import org.apache.abdera.model.Collection;
+
 
 public interface CollectionInfo {
 
@@ -27,5 +29,7 @@ public interface CollectionInfo {
   String[] getAccepts(RequestContext request);
   
   CategoriesInfo[] getCategoriesInfo(RequestContext request);
+  
+  Collection asCollectionElement(RequestContext request);
 
 }

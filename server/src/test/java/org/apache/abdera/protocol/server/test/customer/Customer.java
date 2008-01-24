@@ -1,6 +1,4 @@
-package org.apache.abdera.protocol.server.customer;
-
-import java.util.Date;
+package org.apache.abdera.protocol.server.test.customer;
 
 public class Customer {
   private int id;

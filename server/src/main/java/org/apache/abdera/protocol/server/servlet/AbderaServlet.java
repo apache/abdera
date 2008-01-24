@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.error.Error;
+import org.apache.abdera.protocol.server.FilterChain;
 import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
@@ -84,11 +85,12 @@ public class AbderaServlet
       throws ServletException, IOException {
     RequestContext reqcontext = 
       new ServletRequestContext(provider, request);
+    FilterChain chain = new FilterChain(provider,reqcontext);
     try {
       output(
         request,
         response,
-        provider.process(
+        chain.next(
           reqcontext));
     } catch (Throwable t) {
       error("Error servicing request", t, response);

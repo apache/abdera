@@ -17,12 +17,16 @@
 */
 package org.apache.abdera.protocol.server.provider.basic;
 
+import org.apache.abdera.Abdera;
+import org.apache.abdera.protocol.server.CollectionAdapter;
+import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.TargetType;
-import org.apache.abdera.protocol.server.impl.DefaultProvider;
+import org.apache.abdera.protocol.server.impl.AbstractWorkspaceProvider;
+import org.apache.abdera.protocol.server.impl.CollectionAdapterManager;
 import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
 
 public class BasicProvider 
-  extends DefaultProvider {
+  extends AbstractWorkspaceProvider {
 
   public static final String PARAM_FEED = "feed";
   public static final String PARAM_ENTRY = "entry";
@@ -34,7 +38,28 @@ public class BasicProvider
         .setPattern("/" + "([^/#?]+)", TargetType.TYPE_COLLECTION, PARAM_FEED)
         .setPattern("/" + "([^/#?]+)/([^/#?]+)", TargetType.TYPE_ENTRY, PARAM_FEED, PARAM_ENTRY)
     );
-    addWorkspace(new BasicWorkspace());
+    addWorkspace(new BasicWorkspace(this));
+  }
+
+  protected CollectionAdapterManager cam;
+  
+  protected CollectionAdapterManager getCollectionAdapterManager(
+    Abdera abdera) {
+      if (cam == null) 
+        cam = new CollectionAdapterManager(abdera);
+    return cam;
+  }
+  
+  public CollectionAdapter getCollectionAdapter(RequestContext request) {
+    try {
+      return getCollectionAdapterManager(request.getAbdera())
+        .getAdapter(
+          request.getTarget()
+            .getParameter(
+                BasicProvider.PARAM_FEED));
+    } catch (Exception e) {
+      return null;
+    }
   }
   
 }

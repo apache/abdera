@@ -21,7 +21,6 @@ import java.io.ByteArrayInputStream;
 import java.util.Date;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Collection;

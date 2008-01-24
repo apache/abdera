@@ -23,61 +23,47 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.abdera.protocol.server.CollectionAdapter;
+import org.apache.abdera.model.Workspace;
 import org.apache.abdera.protocol.server.CollectionInfo;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.impl.CollectionAdapterManager;
-import org.apache.abdera.protocol.server.impl.SimpleCollection;
+import org.apache.abdera.protocol.server.impl.SimpleCollectionInfo;
 
-public class BasicWorkspace implements WorkspaceInfo {
-
-  protected CollectionAdapterManager cam;
+class BasicWorkspace 
+  implements WorkspaceInfo {
   
-  protected CollectionAdapterManager getCollectionAdapterManager(
-    RequestContext request) {
-      if (cam == null) 
-        cam = new CollectionAdapterManager(
-          request.getAbdera());
-    return cam;
+  private final BasicProvider provider;
+  
+  BasicWorkspace(BasicProvider provider) {
+    this.provider = provider;
   }
   
   public Collection<CollectionInfo> getCollections(RequestContext request) {
-    CollectionAdapterManager cam = getCollectionAdapterManager(request);
+    CollectionAdapterManager cam = provider.getCollectionAdapterManager(request.getAbdera());
     List<CollectionInfo> collections = new ArrayList<CollectionInfo>();
     try {
       Map<String,Properties> map = cam.listAdapters();
       for (Map.Entry<String,Properties> entry : map.entrySet()) {
-        String id = entry.getKey();
         Properties properties = entry.getValue();
-        CollectionAdapter ca = cam.getAdapter(id);
         String href = properties.getProperty(BasicAdapter.PROP_NAME_FEED_URI);
         String title = properties.getProperty(BasicAdapter.PROP_NAME_TITLE);
-        SimpleCollection col = new SimpleCollection(ca,id,title,href,"application/atom+xml;type=entry");
+        SimpleCollectionInfo col = new SimpleCollectionInfo(title,href,"application/atom+xml;type=entry");
         collections.add(col);
       }
     } catch (Exception e) {}
     return collections;
   }
 
-  public CollectionAdapter getCollectionAdapter(RequestContext request) {
-    try {
-      return getCollectionAdapterManager(request)
-        .getAdapter(
-          request.getTarget()
-            .getParameter(
-                BasicProvider.PARAM_FEED));
-    } catch (Exception e) {
-      return null;
-    }
-  }
-
   public String getTitle(RequestContext request) {
     return "Abdera";
   }
 
-  public boolean isWorkspaceFor(RequestContext request) {
-    return getCollectionAdapter(request) != null;
+  public Workspace asWorkspaceElement(RequestContext request) {
+    Workspace workspace = request.getAbdera().getFactory().newWorkspace();
+    workspace.setTitle(getTitle(null));
+    for (CollectionInfo collection : getCollections(request))
+      workspace.addCollection(collection.asCollectionElement(request));
+    return workspace;
   }
-
 }

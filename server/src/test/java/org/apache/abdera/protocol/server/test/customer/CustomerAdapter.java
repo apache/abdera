@@ -1,6 +1,5 @@
-package org.apache.abdera.protocol.server.customer;
+package org.apache.abdera.protocol.server.test.customer;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;

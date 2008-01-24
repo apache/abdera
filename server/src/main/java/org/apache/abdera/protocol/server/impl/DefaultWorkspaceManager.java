@@ -1,9 +1,7 @@
 package org.apache.abdera.protocol.server.impl;
 
 import org.apache.abdera.protocol.server.CollectionAdapter;
-import org.apache.abdera.protocol.server.CollectionInfo;
 import org.apache.abdera.protocol.server.RequestContext;
-import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.RequestContext.Scope;
 
 

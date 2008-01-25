@@ -21,6 +21,13 @@ import java.util.Collection;
 
 import org.apache.abdera.model.Workspace;
 
+/**
+ * Metadata interface used by WorkspaceManager and Provider 
+ * implementations to construct Atompub Service Documents.
+ * 
+ * The WorkspaceInfo interface provides information used to
+ * construct an app:workspace element 
+ */
 public interface WorkspaceInfo {
 
   String getTitle(RequestContext requsest);

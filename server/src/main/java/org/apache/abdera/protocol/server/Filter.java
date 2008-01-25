@@ -17,6 +17,14 @@
 */
 package org.apache.abdera.protocol.server;
 
+/**
+ * Filters are invoked by AbderaServlet immediately before passing the 
+ * request off to the Provider for processing  The filters use a model
+ * generally identical to that of Servlet Filters, with each filter forwarding
+ * the request on to the next filter in the chain.
+ * @author jasnell
+ *
+ */
 public interface Filter {
   
   ResponseContext filter(RequestContext request, FilterChain chain);

@@ -19,6 +19,13 @@ package org.apache.abdera.protocol.server;
 
 import org.apache.abdera.model.Categories;
 
+/**
+ * Metadata interface used by WorkspaceManager and Provider 
+ * implementations to construct Atompub Service Documents.
+ * 
+ * The CategoriesInfo interface provides information used to
+ * construct an app:categories element within an app:collection. 
+ */
 public interface CategoriesInfo 
   extends Iterable<CategoryInfo> {
 

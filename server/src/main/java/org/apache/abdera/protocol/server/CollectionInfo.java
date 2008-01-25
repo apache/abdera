@@ -19,7 +19,13 @@ package org.apache.abdera.protocol.server;
 
 import org.apache.abdera.model.Collection;
 
-
+/**
+ * Metadata interface used by WorkspaceManager and Provider 
+ * implementations to construct Atompub Service Documents.
+ * 
+ * The CollectionInfo interface provides information used to
+ * construct an app:collection element 
+ */
 public interface CollectionInfo {
 
   String getHref(RequestContext request);

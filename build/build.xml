@@ -692,6 +692,10 @@ Working directory: ${work}
     </antcall>
 
     <antcall target="compile.extension">
+      <param name="ext" value="html" />
+    </antcall>
+    
+    <antcall target="compile.extension">
       <param name="ext" value="json" />
     </antcall>
 
@@ -715,10 +719,6 @@ Working directory: ${work}
       <param name="ext" value="oauth" />
     </antcall>
     
-    <antcall target="compile.extension">
-      <param name="ext" value="html" />
-    </antcall>
-    
   </target>
   
   <target name="compile.extension.ask">
@@ -732,7 +732,7 @@ Working directory: ${work}
     <echo>Compiling extension ${ext}...</echo>
     <mkdir dir="${extensions.work}/${ext}" />
     <mkdir dir="${extensions.work}/${ext}/META-INF" />
-    <javac srcdir="${extensions}/${ext}/src/main/java" destdir="${extensions.work}/${ext}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${client.work};${protocol.work};${extensions.work}/main" debug="${debug}" />
+    <javac srcdir="${extensions}/${ext}/src/main/java" destdir="${extensions.work}/${ext}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${client.work};${protocol.work};${extensions.work}/main;${extensions.work}/html" debug="${debug}" />
 
     <available file="${extensions}/${ext}/src/test/java" property="is.available.${ext}.test" />
     
@@ -775,6 +775,10 @@ Working directory: ${work}
     </antcall>
 
     <antcall target="dist.extension">
+      <param name="ext" value="html" />
+    </antcall>
+          
+    <antcall target="dist.extension">
       <param name="ext" value="json" />
     </antcall>
 
@@ -796,10 +800,6 @@ Working directory: ${work}
     
     <antcall target="dist.extension">
       <param name="ext" value="oauth" />
-    </antcall>
-    
-    <antcall target="dist.extension">
-      <param name="ext" value="html" />
     </antcall>
     
   </target>
@@ -833,6 +833,10 @@ Working directory: ${work}
     </antcall>
 
     <antcall target="test.extension">
+      <param name="ext" value="html" />
+    </antcall>
+
+    <antcall target="test.extension">
       <param name="ext" value="json" />
     </antcall>
 
@@ -855,11 +859,7 @@ Working directory: ${work}
     <antcall target="test.extension">
       <param name="ext" value="oauth" />
     </antcall>
-    
-    <antcall target="test.extension">
-      <param name="ext" value="html" />
-    </antcall>
-    
+        
   </target>
   
   <target name="test.extension">
@@ -885,6 +885,10 @@ Working directory: ${work}
     </antcall>
 
     <antcall target="retro.extension">
+      <param name="ext" value="html" />
+    </antcall>
+    
+    <antcall target="retro.extension">
       <param name="ext" value="json" />
     </antcall>
 
@@ -908,9 +912,6 @@ Working directory: ${work}
       <param name="ext" value="oauth" />
     </antcall>
     
-    <antcall target="retro.extension">
-      <param name="ext" value="html" />
-    </antcall>
   </target>
   
   <target name="retro.extension">

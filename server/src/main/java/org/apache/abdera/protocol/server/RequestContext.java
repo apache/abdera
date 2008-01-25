@@ -105,4 +105,15 @@ public interface RequestContext
    * (everything after the context path)
    */
   String getTargetPath();
+  
+  /**
+   * Returns the subset of the request URI that is the base of the target path
+   * (e.g. HttpServletRequest.getServletPath())
+   * @return
+   */
+  String getTargetBasePath();
+  
+  String resolveIri(Object key, Object param);
+  
+  String resolveAbsoluteIri(Object key, Object param);
 }

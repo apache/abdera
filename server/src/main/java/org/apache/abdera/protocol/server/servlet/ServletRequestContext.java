@@ -243,4 +243,8 @@ public class ServletRequestContext
     List<Locale> locales = Collections.list(request.getLocales());
     return locales.toArray(new Locale[locales.size()]);
   }
+
+  public String getTargetBasePath() {
+    return request.getContextPath() + request.getServletPath();
+  }
 }

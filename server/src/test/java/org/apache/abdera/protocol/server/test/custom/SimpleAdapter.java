@@ -19,6 +19,8 @@ package org.apache.abdera.protocol.server.test.custom;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.text.UrlEncoding;
@@ -71,11 +73,19 @@ public class SimpleAdapter
     Feed feed = (Feed)context.getAttribute(Scope.SESSION, "feed");
     if (feed == null) {
       feed = createFeedBase(context);
+      feed.setBaseUri(getFeedBaseUri(context));
       context.setAttribute(Scope.SESSION, "feed", feed);
     }
     return feed.getDocument();
   }
-
+ 
+  private String getFeedBaseUri(RequestContext context) {
+    Map<String,String> params = new HashMap<String,String>();
+    params.put("collection", context.getTarget().getParameter("collection"));
+    String uri = context.resolveIri(TargetType.TYPE_COLLECTION, params);
+    return context.getResolvedUri().resolve(uri).toString();
+  }
+  
   public ResponseContext getFeed(
     RequestContext request) {
       Document<Feed> feed;
@@ -136,6 +146,7 @@ public class SimpleAdapter
           if (!ProviderHelper.isValidEntry(entry))
             return ProviderHelper.badrequest(request);
           setEntryDetails(
+            request,
             entry, 
             abdera.getFactory().newUuidUri());
           Feed feed = getFeedDocument(request).getRoot();
@@ -163,14 +174,22 @@ public class SimpleAdapter
   }
   
   private void setEntryDetails(
+    RequestContext request,
     Entry entry, 
     String id) {
       entry.setUpdated(new Date());
       entry.setEdited(entry.getUpdated());
       entry.getIdElement().setValue(id);
       entry.addLink(
-        "/atom/feed/" + entry.getId().toASCIIString(), 
+        getEntryLink(request,entry.getId().toASCIIString()),
         "edit");
+  }
+  
+  private String getEntryLink(RequestContext request, String entryid) {
+    Map<String,String> params = new HashMap<String,String>();
+    params.put("collection", request.getTarget().getParameter("collection"));
+    params.put("entry", entryid);
+    return request.resolveIri(TargetType.TYPE_ENTRY, params);
   }
   
   public ResponseContext putEntry(
@@ -189,6 +208,7 @@ public class SimpleAdapter
             if (!ProviderHelper.isValidEntry(entry))
               return ProviderHelper.badrequest(request);
             setEntryDetails(
+              request,
               entry, 
               orig_entry.getId().toString());
             orig_entry.discard();

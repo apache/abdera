@@ -156,4 +156,17 @@ public abstract class AbstractRequestContext
   public RequestContext setAttribute(String name, Object value) {
     return setAttribute(Scope.REQUEST, name, value);
   }
+
+  public String resolveIri(
+    Object key, 
+    Object param) {
+      return provider.resolveIri(this, key, param);
+  }
+ 
+  public String resolveAbsoluteIri(
+    Object key,
+    Object param) {
+      return getResolvedUri().resolve(
+        resolveIri(key,param)).toString();
+    }
 }

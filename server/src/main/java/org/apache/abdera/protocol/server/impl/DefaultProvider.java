@@ -24,6 +24,7 @@ import javax.security.auth.Subject;
 import org.apache.abdera.protocol.Resolver;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.Target;
+import org.apache.abdera.protocol.server.TargetBuilder;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.WorkspaceManager;
 
@@ -87,5 +88,9 @@ public class DefaultProvider extends AbstractProvider {
     for (WorkspaceInfo w : workspaces) {
       ((DefaultWorkspaceManager)getWorkspaceManager()).addWorkspace(w);
     }
+  }
+
+  protected TargetBuilder getTargetBuilder(RequestContext request) {
+    return (TargetBuilder)targetResolver;
   }
 }

@@ -19,7 +19,11 @@ package org.apache.abdera.protocol.server;
 
 import java.util.Collection;
 
-
+/**
+ * The Workspace Manager is used by a Provider to access metadata used to
+ * construct Atompub service documents and to determine the appropriate
+ * CollectionAdapter to handle a particular request 
+ */
 public interface WorkspaceManager {
     
   CollectionAdapter getCollectionAdapter(RequestContext request);

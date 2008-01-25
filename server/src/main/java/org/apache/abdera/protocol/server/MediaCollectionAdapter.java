@@ -17,6 +17,10 @@
 */
 package org.apache.abdera.protocol.server;
 
+/**
+ * Extends CollectionAdapter with methods specific to the handling of 
+ * Atompub Media Link Entries
+ */
 public interface MediaCollectionAdapter 
   extends CollectionAdapter {
 

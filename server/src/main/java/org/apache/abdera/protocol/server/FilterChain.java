@@ -20,7 +20,7 @@ package org.apache.abdera.protocol.server;
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class FilterChain {
+public final class FilterChain {
 
   private final Iterator<Filter> filters;
   private final Provider provider;
@@ -33,7 +33,11 @@ public class FilterChain {
         Arrays.asList(
           provider.getFilters(request)).iterator();
   }
-  
+
+  /**
+   * Invoke the next filter in the chain.  If there are no more filters in 
+   * the chain, pass the request context on to the Provider for processing.
+   */
   public ResponseContext next(RequestContext request) {
     return filters.hasNext() ?
       filters.next().filter(request, this) :

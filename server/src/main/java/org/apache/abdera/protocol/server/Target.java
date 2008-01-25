@@ -17,6 +17,9 @@
 */
 package org.apache.abdera.protocol.server;
 
+/**
+ * Identifies the target of the request.
+ */
 public interface Target 
   extends Iterable<String> {
 

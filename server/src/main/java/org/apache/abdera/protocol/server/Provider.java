@@ -23,7 +23,9 @@ import javax.security.auth.Subject;
 
 import org.apache.abdera.Abdera;
 
-
+/**
+ * Providers are responsible for processing all requests to the Atompub server.
+ */
 public interface Provider {
   
   void init(Abdera abdera, Map<String,String> properties);
@@ -33,7 +35,7 @@ public interface Provider {
   String getProperty(String name);
   
   String[] getPropertyNames();
-  
+
   Subject resolveSubject(RequestContext request);
   
   Target resolveTarget(RequestContext request);

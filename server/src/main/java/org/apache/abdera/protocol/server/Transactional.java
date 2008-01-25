@@ -19,6 +19,12 @@ package org.apache.abdera.protocol.server;
 
 import org.apache.abdera.protocol.server.context.ResponseContextException;
 
+/**
+ * CollectionAdapter implementations can implement the Transactional
+ * interface in order to support start/end/compensate behaviors.  Providers 
+ * will invoke the start/end methods before/after calling the appropriate 
+ * CollectionAdapter methods and will call compensate if an error occurs
+ */
 public interface Transactional {
 
   void start(RequestContext request) throws ResponseContextException;

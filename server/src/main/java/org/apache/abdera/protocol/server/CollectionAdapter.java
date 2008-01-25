@@ -17,6 +17,13 @@
 */
 package org.apache.abdera.protocol.server;
 
+/**
+ * The CollectionAdapter interface is the component that provides the business
+ * logic of an Atompub server.  The Provider will use it's WorkspaceManager to
+ * determine which CollectionAdapter to dispatch a request to.  Once an adapter
+ * is selected, the Provider will determine what kind of request is being made
+ * and will forward the request on to the appropriate CollectionAdapter method.
+ */
 public interface CollectionAdapter {
 
   ResponseContext postEntry(RequestContext request);
@@ -30,7 +37,12 @@ public interface CollectionAdapter {
   ResponseContext getFeed(RequestContext request);
 
   ResponseContext getCategories(RequestContext request);
-  
+
+  /**
+   * Any request that is not covered by the postEntry, deleteEntry, etc
+   * methods will be passed on to the extensionRequest method.  This provides
+   * an Adapter with the ability to support Atompub protocol extensions.
+   */
   ResponseContext extensionRequest(RequestContext request);
   
 }

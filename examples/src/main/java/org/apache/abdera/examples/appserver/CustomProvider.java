@@ -28,6 +28,8 @@ import org.apache.abdera.protocol.server.impl.AbstractWorkspaceProvider;
 import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
 import org.apache.abdera.protocol.server.impl.SimpleCollectionInfo;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
+import org.apache.abdera.protocol.server.impl.TemplateTargetBuilder;
+import org.apache.abdera.protocol.server.test.custom.OpenSearchFilter;
 
 public class CustomProvider 
   extends AbstractWorkspaceProvider {
@@ -46,6 +48,17 @@ public class CustomProvider
         .setPattern("/atom/([^/#?;]+)(\\?[^#]*)?", TargetType.TYPE_COLLECTION, "collection")
         .setPattern("/atom/([^/#?]+)/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY, "collection","entry")
     );
+    
+    
+    // The target builder is used to construct url's for the various targets
+    setTargetBuilder(
+        new TemplateTargetBuilder()
+          .setTemplate(TargetType.TYPE_SERVICE, "{target_base}/atom")
+          .setTemplate(TargetType.TYPE_COLLECTION, "{target_base}/atom/{collection}{-opt|?|q,c,s,p,l,i,o}{-join|&|q,c,s,p,l,i,o}")
+          .setTemplate(TargetType.TYPE_CATEGORIES, "{target_base}/atom/{collection};categories")
+          .setTemplate(TargetType.TYPE_ENTRY, "{target_base}/atom/{collection}/{entry}")
+          .setTemplate(OpenSearchFilter.TYPE_OPENSEARCH_DESCRIPTION, "{target_base}/search")
+      );
     
     // Add a Workspace descriptor so the provider can generate an atompub service document
     SimpleWorkspaceInfo workspace = new SimpleWorkspaceInfo();

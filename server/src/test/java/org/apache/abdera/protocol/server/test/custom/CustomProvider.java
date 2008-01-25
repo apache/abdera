@@ -28,6 +28,7 @@ import org.apache.abdera.protocol.server.impl.AbstractWorkspaceProvider;
 import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
 import org.apache.abdera.protocol.server.impl.SimpleCollectionInfo;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
+import org.apache.abdera.protocol.server.impl.TemplateTargetBuilder;
 
 public class CustomProvider 
   extends AbstractWorkspaceProvider {
@@ -38,7 +39,7 @@ public class CustomProvider
     
     this.adapter = new SimpleAdapter();
     
-    super.setTargetResolver(      
+    setTargetResolver(      
       new RegexTargetResolver()
         .setPattern("/atom(\\?[^#]*)?", TargetType.TYPE_SERVICE)
         .setPattern("/atom/([^/#?]+);categories", TargetType.TYPE_CATEGORIES, "collection")
@@ -47,11 +48,19 @@ public class CustomProvider
         .setPattern("/search", OpenSearchFilter.TYPE_OPENSEARCH_DESCRIPTION)
     );
     
+    setTargetBuilder(
+      new TemplateTargetBuilder()
+        .setTemplate(TargetType.TYPE_SERVICE, "{target_base}/atom")
+        .setTemplate(TargetType.TYPE_COLLECTION, "{target_base}/atom/{collection}{-opt|?|q,c,s,p,l,i,o}{-join|&|q,c,s,p,l,i,o}")
+        .setTemplate(TargetType.TYPE_CATEGORIES, "{target_base}/atom/{collection};categories")
+        .setTemplate(TargetType.TYPE_ENTRY, "{target_base}/atom/{collection}/{entry}")
+        .setTemplate(OpenSearchFilter.TYPE_OPENSEARCH_DESCRIPTION, "{target_base}/search")
+    );
+    
     SimpleWorkspaceInfo workspace = new SimpleWorkspaceInfo();
     workspace.setTitle("A Simple Workspace");
     workspace.addCollection(
       new SimpleCollectionInfo(
-        "feed",
         "A simple feed",
         "/atom/feed",
         "application/atom+xml;type=entry"

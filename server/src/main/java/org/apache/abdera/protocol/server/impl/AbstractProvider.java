@@ -38,6 +38,7 @@ import org.apache.abdera.protocol.server.ProviderHelper;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.Target;
+import org.apache.abdera.protocol.server.TargetBuilder;
 import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.Transactional;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
@@ -85,10 +86,20 @@ public abstract class AbstractProvider
       targetResolver.resolve(request) : null;
   }
 
+  public String resolveIri(
+    RequestContext request, 
+    Object key, 
+    Object param) {
+      TargetBuilder tm = getTargetBuilder(request);
+      return tm != null ? tm.resolveIri(request, key, param) : null;
+  }
+  
   protected Resolver<Subject> getSubjectResolver(RequestContext request) {
     return new SimpleSubjectResolver();
   }
-    
+
+  protected abstract TargetBuilder getTargetBuilder(RequestContext request);
+  
   protected abstract Resolver<Target> getTargetResolver(RequestContext request);
 
   public ResponseContext process(

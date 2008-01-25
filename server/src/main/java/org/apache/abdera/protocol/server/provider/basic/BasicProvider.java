@@ -24,6 +24,7 @@ import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.impl.AbstractWorkspaceProvider;
 import org.apache.abdera.protocol.server.impl.CollectionAdapterManager;
 import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
+import org.apache.abdera.protocol.server.impl.TemplateTargetBuilder;
 
 public class BasicProvider 
   extends AbstractWorkspaceProvider {
@@ -37,6 +38,12 @@ public class BasicProvider
         .setPattern("/", TargetType.TYPE_SERVICE)
         .setPattern("/" + "([^/#?]+)", TargetType.TYPE_COLLECTION, PARAM_FEED)
         .setPattern("/" + "([^/#?]+)/([^/#?]+)", TargetType.TYPE_ENTRY, PARAM_FEED, PARAM_ENTRY)
+    );
+    setTargetBuilder(
+      new TemplateTargetBuilder()
+        .setTemplate(TargetType.TYPE_SERVICE, "{target_base}/")
+        .setTemplate(TargetType.TYPE_COLLECTION, "{target_base}/{" + PARAM_FEED + "}")
+        .setTemplate(TargetType.TYPE_ENTRY, "{target_base}/{" + PARAM_FEED + "}/{" + PARAM_ENTRY + "}")
     );
     addWorkspace(new BasicWorkspace(this));
   }

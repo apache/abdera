@@ -17,9 +17,13 @@
 */
 package org.apache.abdera.protocol.server.impl;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.abdera.i18n.templates.Context;
+import org.apache.abdera.i18n.templates.DelegatingContext;
 import org.apache.abdera.i18n.text.UrlEncoding;
 import org.apache.abdera.protocol.Request;
 import org.apache.abdera.protocol.Resolver;
@@ -35,7 +39,9 @@ import org.apache.abdera.protocol.server.RequestContext.Scope;
 /**
  * Resolves targets based on a simple assumed URI structure. 
  */
-public class StructuredTargetResolver implements Resolver<Target> {
+public class StructuredTargetResolver
+  extends TemplateTargetBuilder
+  implements Resolver<Target> {
 
   public static final String COLLECTION_PROVIDER_ATTRIBUTE = "collectionProvider";
   public static final String URI_PARAMETER_ATTRIBUTE_PREFIX = "uriParameter";
@@ -46,6 +52,10 @@ public class StructuredTargetResolver implements Resolver<Target> {
   
   public StructuredTargetResolver(WorkspaceManager workspaceManager) {
     this.workspaceManager = workspaceManager;
+    setTemplate(TargetType.TYPE_SERVICE, "{target_base}");
+    setTemplate(TargetType.TYPE_COLLECTION, "{target_base}/{collection}");
+    setTemplate(TargetType.TYPE_CATEGORIES, "{target_base}/{collection};categories");
+    setTemplate(TargetType.TYPE_ENTRY, "{target_base}/{collection}/{entryid}");
   }
 
   public StructuredTargetResolver(WorkspaceManager workspaceManager, String servicesPattern) {
@@ -128,5 +138,49 @@ public class StructuredTargetResolver implements Resolver<Target> {
     } else {
       return TargetType.TYPE_ENTRY;
     }
+  }
+
+  public String resolveIri(
+    RequestContext request, 
+    Object key, 
+    Object param) {
+      CollectionInfo ci = 
+        (CollectionInfo) request.getAttribute(
+          Scope.REQUEST, 
+          COLLECTION_PROVIDER_ATTRIBUTE);
+      String collection = ci != null ? ci.getHref(request) : null;
+      Context context = 
+        new StructuredContext(
+          TemplateTargetBuilder.getContext(request, param), 
+          collection);
+      return super.resolveIri(request, key, context);
+  }
+  
+  @SuppressWarnings("unchecked")
+  private static class StructuredContext 
+    extends DelegatingContext {
+
+    private static final long serialVersionUID = 1L;
+    private final String collection;
+    
+    protected StructuredContext(
+      Context subcontext,
+      String collection) {
+        super(subcontext);
+        this.collection = collection;
+    }
+
+    public Iterator<String> iterator() {
+      List<String> list = TemplateTargetBuilder.asList(super.iterator());
+      if (!list.contains("collection")) list.add("collection");
+      return list.iterator();
+    }
+
+    protected <T> T resolveActual(String var) {
+      if (var.equalsIgnoreCase("collection")) 
+        return (T)collection;
+      return (T)super.resolveActual(var);
+    }
+
   }
 }

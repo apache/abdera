@@ -20,6 +20,12 @@ import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.RequestContext.Scope;
 
 @SuppressWarnings("unchecked") 
+/**
+ * A TargetBuilder implementation that uses URI/IRI Templates to construct
+ * URIs/IRIs.  The input parameter can be a java.util.Map<String,Object>, 
+ * an instance of the org.apache.abdera.i18n.templates.Context interface,
+ * or any Java object with public getter methods. 
+ */
 public class TemplateTargetBuilder 
   implements TargetBuilder {
 

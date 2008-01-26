@@ -86,12 +86,12 @@ public abstract class AbstractProvider
       targetResolver.resolve(request) : null;
   }
 
-  public String resolveIri(
+  public String urlFor(
     RequestContext request, 
     Object key, 
     Object param) {
       TargetBuilder tm = getTargetBuilder(request);
-      return tm != null ? tm.resolveIri(request, key, param) : null;
+      return tm != null ? tm.urlFor(request, key, param) : null;
   }
   
   protected Resolver<Subject> getSubjectResolver(RequestContext request) {

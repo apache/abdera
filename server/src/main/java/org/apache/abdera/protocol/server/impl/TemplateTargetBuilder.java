@@ -68,7 +68,7 @@ public class TemplateTargetBuilder
     return list;
   }
   
-  public String resolveIri(
+  public String urlFor(
     RequestContext request, 
     Object key, 
     Object param) {

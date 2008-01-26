@@ -40,7 +40,7 @@ public interface Provider {
   
   Target resolveTarget(RequestContext request);
   
-  String resolveIri(RequestContext request, Object key, Object param);
+  String urlFor(RequestContext request, Object key, Object param);
  
   ResponseContext process(RequestContext request);
   

@@ -113,7 +113,7 @@ public interface RequestContext
    */
   String getTargetBasePath();
   
-  String resolveIri(Object key, Object param);
+  String urlFor(Object key, Object param);
   
-  String resolveAbsoluteIri(Object key, Object param);
+  String absoluteUrlFor(Object key, Object param);
 }

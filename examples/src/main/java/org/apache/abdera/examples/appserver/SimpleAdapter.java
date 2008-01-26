@@ -82,7 +82,7 @@ public class SimpleAdapter
   private String getFeedBaseUri(RequestContext context) {
     Map<String,String> params = new HashMap<String,String>();
     params.put("collection", context.getTarget().getParameter("collection"));
-    String uri = context.resolveIri(TargetType.TYPE_COLLECTION, params);
+    String uri = context.urlFor(TargetType.TYPE_COLLECTION, params);
     return context.getResolvedUri().resolve(uri).toString();
   }
   
@@ -189,7 +189,7 @@ public class SimpleAdapter
     Map<String,String> params = new HashMap<String,String>();
     params.put("collection", request.getTarget().getParameter("collection"));
     params.put("entry", entryid);
-    return request.resolveIri(TargetType.TYPE_ENTRY, params);
+    return request.urlFor(TargetType.TYPE_ENTRY, params);
   }
   
   public ResponseContext putEntry(

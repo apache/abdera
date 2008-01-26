@@ -275,19 +275,19 @@ public class RequestContextWrapper
     return request.isNoTransform();
   }
 
-  public String resolveIri(Object key, Object param) {
-    return getProvider().resolveIri(this, key, param);
+  public String urlFor(Object key, Object param) {
+    return getProvider().urlFor(this, key, param);
   }
 
   public String getTargetBasePath() {
     return request.getTargetBasePath();
   }
 
-  public String resolveAbsoluteIri(
+  public String absoluteUrlFor(
     Object key,
     Object param) {
       return request.getResolvedUri().resolve(
-        resolveIri(key,param)).toString();
+        urlFor(key,param)).toString();
   }
   
 }

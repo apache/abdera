@@ -157,16 +157,16 @@ public abstract class AbstractRequestContext
     return setAttribute(Scope.REQUEST, name, value);
   }
 
-  public String resolveIri(
+  public String urlFor(
     Object key, 
     Object param) {
-      return provider.resolveIri(this, key, param);
+      return provider.urlFor(this, key, param);
   }
  
-  public String resolveAbsoluteIri(
+  public String absoluteUrlFor(
     Object key,
     Object param) {
       return getResolvedUri().resolve(
-        resolveIri(key,param)).toString();
+        urlFor(key,param)).toString();
     }
 }

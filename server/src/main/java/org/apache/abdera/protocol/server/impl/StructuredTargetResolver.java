@@ -140,7 +140,7 @@ public class StructuredTargetResolver
     }
   }
 
-  public String resolveIri(
+  public String urlFor(
     RequestContext request, 
     Object key, 
     Object param) {
@@ -153,7 +153,7 @@ public class StructuredTargetResolver
         new StructuredContext(
           TemplateTargetBuilder.getContext(request, param), 
           collection);
-      return super.resolveIri(request, key, context);
+      return super.urlFor(request, key, context);
   }
   
   @SuppressWarnings("unchecked")

@@ -9,6 +9,6 @@ package org.apache.abdera.protocol.server;
  */
 public interface TargetBuilder {
 
-  String resolveIri(RequestContext context, Object key, Object param);
+  String urlFor(RequestContext context, Object key, Object param);
   
 }

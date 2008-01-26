@@ -114,11 +114,11 @@ public class TemplateTargetBuilder
           case REQUEST_USER: 
             Principal p = request.getPrincipal();
             return p != null ? (T)p.getName() : null;
-          case REQUEST_ATTRIBUTE_SESSION:
-            name = Variable.REQUEST_ATTRIBUTE_SESSION.label(var);
+          case SESSION_ATTRIBUTE:
+            name = Variable.SESSION_ATTRIBUTE.label(var);
             return (T) request.getAttribute(Scope.SESSION, name);
-          case REQUEST_ATTRIBUTE_REQUEST: 
-            name = Variable.REQUEST_ATTRIBUTE_REQUEST.label(var);
+          case REQUEST_ATTRIBUTE: 
+            name = Variable.REQUEST_ATTRIBUTE.label(var);
             return (T) request.getAttribute(Scope.REQUEST, name);
           case REQUEST_HEADER:
             name = Variable.REQUEST_HEADER.label(var);
@@ -144,9 +144,9 @@ public class TemplateTargetBuilder
       for (String var : request.getParameterNames()) 
         vars.add(toVar(Variable.REQUEST_PARAMETER,var));      
       for (String var : request.getAttributeNames(Scope.SESSION))
-        vars.add(toVar(Variable.REQUEST_ATTRIBUTE_SESSION,var));      
+        vars.add(toVar(Variable.SESSION_ATTRIBUTE,var));      
       for (String var : request.getAttributeNames(Scope.REQUEST))
-        vars.add(toVar(Variable.REQUEST_ATTRIBUTE_REQUEST,var));      
+        vars.add(toVar(Variable.REQUEST_ATTRIBUTE,var));      
       for (String var : request.getHeaderNames()) 
         vars.add(toVar(Variable.REQUEST_HEADER, var));        
       Target target = request.getTarget();
@@ -179,8 +179,8 @@ public class TemplateTargetBuilder
     REQUEST_LANGUAGE,
     REQUEST_CHARSET,
     REQUEST_USER,
-    REQUEST_ATTRIBUTE_SESSION,
-    REQUEST_ATTRIBUTE_REQUEST,
+    SESSION_ATTRIBUTE,
+    REQUEST_ATTRIBUTE,
     REQUEST_HEADER,
     TARGET_PARAMETER,
     TARGET_IDENTITY,
@@ -191,10 +191,10 @@ public class TemplateTargetBuilder
     static Variable get(String var) {
       if (REQUEST_PARAMETER.match(var)) {
         return REQUEST_PARAMETER;
-      } else if (REQUEST_ATTRIBUTE_SESSION.match(var)) {
-        return REQUEST_ATTRIBUTE_SESSION;
-      } else if (REQUEST_ATTRIBUTE_REQUEST.match(var)) {
-        return REQUEST_ATTRIBUTE_REQUEST;
+      } else if (SESSION_ATTRIBUTE.match(var)) {
+        return SESSION_ATTRIBUTE;
+      } else if (REQUEST_ATTRIBUTE.match(var)) {
+        return REQUEST_ATTRIBUTE;
       } else if (REQUEST_HEADER.match(var)) {
         return REQUEST_HEADER;
       } else if (TARGET_PARAMETER.match(var)) {

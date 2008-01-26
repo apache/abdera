@@ -94,7 +94,7 @@ public class TemplateTargetBuilder
       String var) {
         Variable variable = Variable.get(var);
         if (variable == null) 
-          return (T)subcontext.resolve(var);
+          return subcontext != null ? (T)subcontext.resolve(var) : null;
         switch(variable) {
           case REQUEST_URI:
             return (T) request.getUri().toString();
@@ -133,7 +133,7 @@ public class TemplateTargetBuilder
           case TARGET_BASE:
             return (T) request.getTargetBasePath();
           default: 
-            return (T)subcontext.resolve(var);
+            return subcontext != null ? (T)subcontext.resolve(var) : null;
         }
     }
 

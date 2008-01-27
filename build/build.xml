@@ -417,7 +417,6 @@ Working directory: ${work}
   </target>
 
   <target name="clean">
-<!--
     <delete dir="${work}" />
     <delete dir="${test}" />
     <delete dir="${dist}" />
@@ -428,7 +427,6 @@ Working directory: ${work}
       <fileset dir="${basedir}" includes="*.zip" />
       <fileset dir="${basedir}" includes="*.md5" />
     </delete>
--->
   </target>
 
   <target name="dist" depends="clean,build,test,docs">

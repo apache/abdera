@@ -29,7 +29,6 @@ import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
 import org.apache.abdera.protocol.server.impl.SimpleCollectionInfo;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.protocol.server.impl.TemplateTargetBuilder;
-import org.apache.abdera.protocol.server.test.custom.OpenSearchFilter;
 
 public class CustomProvider 
   extends AbstractWorkspaceProvider {
@@ -57,7 +56,6 @@ public class CustomProvider
           .setTemplate(TargetType.TYPE_COLLECTION, "{target_base}/atom/{collection}{-opt|?|q,c,s,p,l,i,o}{-join|&|q,c,s,p,l,i,o}")
           .setTemplate(TargetType.TYPE_CATEGORIES, "{target_base}/atom/{collection};categories")
           .setTemplate(TargetType.TYPE_ENTRY, "{target_base}/atom/{collection}/{entry}")
-          .setTemplate(OpenSearchFilter.TYPE_OPENSEARCH_DESCRIPTION, "{target_base}/search")
       );
     
     // Add a Workspace descriptor so the provider can generate an atompub service document

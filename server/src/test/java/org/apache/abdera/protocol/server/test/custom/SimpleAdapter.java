@@ -55,7 +55,9 @@ public class SimpleAdapter
   }
 
   public String getHref(RequestContext request) {
-    return "atom/feed";
+    Map<String,Object> params = new HashMap<String,Object>();
+    params.put("collection","feed");
+    return request.urlFor(TargetType.TYPE_COLLECTION, params);
   }
 
   public String getTitle(RequestContext request) {

@@ -18,10 +18,12 @@
 package org.apache.abdera.protocol.server.servlet;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.activation.MimeType;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,13 +31,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.protocol.ItemManager;
 import org.apache.abdera.protocol.error.Error;
+import org.apache.abdera.protocol.server.FilterChain;
+import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.RequestContext;
-import org.apache.abdera.protocol.server.RequestHandler;
-import org.apache.abdera.protocol.server.ServiceContext;
+import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.ServiceManager;
-import org.apache.abdera.protocol.server.impl.HttpServletRequestContext;
 import org.apache.abdera.writer.StreamWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -52,38 +53,29 @@ public class AbderaServlet
   private final static Log log = LogFactory.getLog(AbderaServlet.class);
   
   protected ServiceManager manager;
-  protected ServiceContext context;
+  protected Provider provider;
   
   public void init() throws ServletException {
     log.debug("Initialing Abdera Servlet");
     manager = createServiceManager();
-    context = createServiceContext();
-    if (context == null) {
-      log.debug("Cannot create service context");
-      throw new ServletException("Cannot create service context");
-    }
+    provider = createProvider();
+    log.debug("Using provider - " + provider);
   }
 
   public Abdera getAbdera() {
      return ServiceManager.getAbdera();
   }
   
-  public ServiceContext getServiceContext() {
-    return context;
-  }
-
   public ServiceManager getServiceManager() {
     return manager;
   }
 
-  protected ServiceContext createServiceContext() {
-    return manager.newServiceContext(
-        getProperties(
-          getServletConfig()));
-  }
-
   protected ServiceManager createServiceManager() {
     return ServiceManager.getInstance();
+  }
+
+  protected Provider createProvider() {
+    return manager.newProvider(getProperties(getServletConfig()));
   }
   
   @Override
@@ -91,21 +83,54 @@ public class AbderaServlet
     HttpServletRequest request, 
     HttpServletResponse response) 
       throws ServletException, IOException {
-    RequestContext reqcontext = new HttpServletRequestContext(context, request);
-    ItemManager<RequestHandler> manager = context.getRequestHandlerManager();
-    log.debug("Processing request");
-    RequestHandler handler = manager.get(reqcontext);
-    log.debug("Handler - " + handler);
+    RequestContext reqcontext = 
+      new ServletRequestContext(provider, request);
+    FilterChain chain = new FilterChain(provider,reqcontext);
     try {
-      handler.process(context, reqcontext, new HttpResponseServletAdapter(response));
+      output(
+        request,
+        response,
+        chain.next(
+          reqcontext));
     } catch (Throwable t) {
       error("Error servicing request", t, response);
       return;
-    } finally {
-      log.debug("Releasing handler - " + handler);
-      manager.release(handler);
     }
     log.debug("Request complete");
+  }
+  
+  private void output(
+    HttpServletRequest request, 
+    HttpServletResponse response, 
+    ResponseContext context)
+      throws IOException {
+    if (context != null) {
+      response.setStatus(context.getStatus());
+      long cl = context.getContentLength();
+      String cc = context.getCacheControl();
+      if (cl > -1) response.setHeader("Content-Length", Long.toString(cl));
+      if (cc != null && cc.length() > 0) response.setHeader("Cache-Control",cc);
+      try {
+        MimeType ct = context.getContentType();
+        if (ct != null) response.setContentType(ct.toString());
+      } catch (Exception e) {}
+      String[] names = context.getHeaderNames();
+      for (String name : names) {
+        Object[] headers = context.getHeaders(name);
+        for (Object value : headers) {          
+          if (value instanceof Date)
+            response.setDateHeader(name, ((Date)value).getTime());
+          else
+            response.setHeader(name, value.toString());
+        }
+      }
+      
+      if (!request.getMethod().equals("HEAD") && context.hasEntity()) {
+        context.writeTo(response.getOutputStream());
+      }  
+    } else {
+      error("Internal Server Error", null, response);
+    }
   }
   
   private void error(

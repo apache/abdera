@@ -84,30 +84,36 @@ public abstract class AbstractSingleBeanDefinitionParser
             throw new IllegalStateException(propertyName + " property must have child elements!");
         }
         
+        return getAndRegister(ctx, bean, first);
+    }
+
+    protected String getAndRegister(ParserContext ctx, 
+                                    BeanDefinitionBuilder bean,
+                                    Element el) {
         // Seems odd that we have to do the registration, I wonder if there is a better way
         String id;
         BeanDefinition child;
-        if (first.getNamespaceURI().equals(BeanDefinitionParserDelegate.BEANS_NAMESPACE_URI)) {
-            String name = first.getLocalName();
+        if (el.getNamespaceURI().equals(BeanDefinitionParserDelegate.BEANS_NAMESPACE_URI)) {
+            String name = el.getLocalName();
             if ("ref".equals(name)) {
-                id = first.getAttribute("bean");
+                id = el.getAttribute("bean");
                 if (id == null) {
                     throw new IllegalStateException("<ref> elements must have a \"bean\" attribute!");
                 }
                 return id;
             } else if ("bean".equals(name)) {
-                BeanDefinitionHolder bdh = ctx.getDelegate().parseBeanDefinitionElement(first);
+                BeanDefinitionHolder bdh = ctx.getDelegate().parseBeanDefinitionElement(el);
                 child = bdh.getBeanDefinition();
                 id = bdh.getBeanName();
             } else {
                 throw new UnsupportedOperationException("Elements with the name " + name  
                                                         + " are not currently "
                                                         + "supported as sub elements of " 
-                                                        + element.getLocalName());
+                                                        + el.getParentNode().getLocalName());
             }
             
         } else {
-            child = ctx.getDelegate().parseCustomElement(first, bean.getBeanDefinition());
+            child = ctx.getDelegate().parseCustomElement(el, bean.getBeanDefinition());
             id = child.toString();
         }
     

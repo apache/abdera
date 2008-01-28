@@ -18,194 +18,228 @@
 package org.apache.abdera.protocol.server.impl;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import org.apache.abdera.i18n.text.Localizer;
+import javax.security.auth.Subject;
+
+import org.apache.abdera.Abdera;
+import org.apache.abdera.model.Service;
+import org.apache.abdera.protocol.Resolver;
+import org.apache.abdera.protocol.server.CategoriesInfo;
+import org.apache.abdera.protocol.server.CategoryInfo;
+import org.apache.abdera.protocol.server.CollectionAdapter;
+import org.apache.abdera.protocol.server.CollectionInfo;
+import org.apache.abdera.protocol.server.Filter;
+import org.apache.abdera.protocol.server.MediaCollectionAdapter;
 import org.apache.abdera.protocol.server.Provider;
+import org.apache.abdera.protocol.server.ProviderHelper;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
+import org.apache.abdera.protocol.server.Target;
+import org.apache.abdera.protocol.server.TargetBuilder;
 import org.apache.abdera.protocol.server.TargetType;
+import org.apache.abdera.protocol.server.Transactional;
+import org.apache.abdera.protocol.server.WorkspaceInfo;
+import org.apache.abdera.protocol.server.WorkspaceManager;
+import org.apache.abdera.protocol.server.context.StreamWriterResponseContext;
+import org.apache.abdera.util.Constants;
 import org.apache.abdera.writer.StreamWriter;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public abstract class AbstractProvider 
-  extends ProviderSupport
   implements Provider {
-
-  private final static Log log = LogFactory.getLog(AbstractProvider.class);
   
-  protected int defaultpagesize = 10;
+  protected Abdera abdera;
+  protected Map<String,String> properties;
+  protected List<Filter> filters = new ArrayList<Filter>();
   
-  protected AbstractProvider() {}
-  
-  protected AbstractProvider(int defaultpagesize) {
-    this.defaultpagesize = defaultpagesize;
+  public void init(
+    Abdera abdera, 
+    Map<String, String> properties) {
+      this.abdera = abdera;
+      this.properties = properties;
   }
   
-  public ResponseContext request(RequestContext request) {
-    TargetType type = request.getTarget().getType();
-    String method = request.getMethod();
-    log.debug(Localizer.sprintf("TARGET.TYPE",type));
-    log.debug(Localizer.sprintf("TARGET.ID",request.getTarget().getIdentity()));
-    log.debug(Localizer.sprintf("METHOD",method));
-    if (method.equals("GET")) {
-      if (type == TargetType.TYPE_SERVICE) {
-        return getService(request);
-      }
-      if (type == TargetType.TYPE_COLLECTION) {
-        return getFeed(request);
-      }
-      if (type == TargetType.TYPE_ENTRY) {
-        return getEntry(request);
-      }
-      if (type == TargetType.TYPE_MEDIA) {
-        return getMedia(request);
-      }
-      if (type == TargetType.TYPE_CATEGORIES) {
-        return getCategories(request);
-      }
-    }
-    else if (method.equals("HEAD")) {
-      if (type == TargetType.TYPE_SERVICE) {
-        return getService(request);
-      }
-      if (type == TargetType.TYPE_COLLECTION) {
-        return getFeed(request);
-      }
-      if (type == TargetType.TYPE_ENTRY) {
-        return getEntry(request);
-      }
-      if (type == TargetType.TYPE_MEDIA) {
-        return getMedia(request);
-      }
-      if (type == TargetType.TYPE_CATEGORIES) {
-        return getCategories(request);
-      }
-    }
-    else if (method.equals("POST")) {
-      if (type == TargetType.TYPE_COLLECTION) {
-        return createEntry(request);
-      }
-      if (type == TargetType.TYPE_ENTRY) {
-        return entryPost(request);
-      }
-      if (type == TargetType.TYPE_MEDIA) {
-        return mediaPost(request);
-      }
-    }
-    else if (method.equals("PUT")) {
-      if (type == TargetType.TYPE_ENTRY) {
-        return updateEntry(request);
-      }
-      if (type == TargetType.TYPE_MEDIA) {
-        return updateMedia(request);
-      }
-    }
-    else if (method.equals("DELETE")) {
-      if (type == TargetType.TYPE_ENTRY) {
-        return deleteEntry(request);
-      }
-      if (type == TargetType.TYPE_MEDIA) {
-        return deleteMedia(request);
-      }
-    } 
-    else if (method.equals("OPTIONS")) {
-      AbstractResponseContext rc = new EmptyResponseContext(200);
-      rc.addHeader("Allow", combine(getAllowedMethods(type)));
-      return rc;
-    }
-    return notallowed(
-      request.getAbdera(), 
-      request, 
-      Localizer.get("NOT.ALLOWED"), 
-      getAllowedMethods(
-        request.getTarget().getType()));
+  public String getProperty(String name) {
+    return properties.get(name);
   }
   
-  public String[] getAllowedMethods(TargetType type) {
-    if (type == null)                       return new String[0];
-    if (type == TargetType.TYPE_COLLECTION) return new String[] { "GET", "POST", "HEAD", "OPTIONS" };
-    if (type == TargetType.TYPE_CATEGORIES) return new String[] { "GET", "HEAD", "OPTIONS" };
-    if (type == TargetType.TYPE_ENTRY)      return new String[] { "GET", "DELETE", "PUT", "POST", "HEAD", "OPTIONS" };
-    if (type == TargetType.TYPE_MEDIA)      return new String[] { "GET", "DELETE", "PUT", "POST", "HEAD", "OPTIONS" };
-    if (type == TargetType.TYPE_SERVICE)    return new String[] { "GET", "HEAD", "OPTIONS" };
-    return new String[] { "GET", "HEAD", "OPTIONS" };
+  public String[] getPropertyNames() {
+    return properties.keySet().toArray(new String[properties.size()]);
   }
   
-  protected String combine(String... vals) {
-    StringBuilder buf = new StringBuilder();
-    for(String val : vals) {
-      if (buf.length() > 0) buf.append(", ");
-      buf.append(val);
-    }
-    return buf.toString();
-  }
-  
-  public ResponseContext entryPost(
-    RequestContext request) {
-      return notallowed(
-        request.getAbdera(), 
-        request, 
-        Localizer.get("NOT.ALLOWED"), 
-        getAllowedMethods(
-          request.getTarget().getType()));
-  }
-    
-  public ResponseContext mediaPost(
-    RequestContext request) {
-      return notallowed(
-        request.getAbdera(), 
-        request, 
-        Localizer.get("NOT.ALLOWED"), 
-        getAllowedMethods(
-          request.getTarget().getType()));
-  } 
-
-  public ResponseContext getCategories(
-    RequestContext request) {
-      AbstractResponseContext rc = 
-        new StreamWriterResponseContext(
-          request.getAbdera()) {
-        protected void writeTo(
-          StreamWriter sw) 
-            throws IOException {
-          sw.startDocument()
-            .startCategories()
-            .endCategories()
-            .endDocument();
-        }        
-      };
-      rc.setStatus(200);
-      rc.setLastModified(new Date());
-      return rc;
-  }
-  
-  public ResponseContext deleteMedia(
-    RequestContext request) {
-      throw new UnsupportedOperationException();
-  }
-    
-  public ResponseContext getMedia(
-    RequestContext request) {
-      throw new UnsupportedOperationException();
-  }
-  
-  public ResponseContext updateMedia(
-    RequestContext request) {
-      throw new UnsupportedOperationException();
+  public Abdera getAbdera() {
+    return abdera;
   }
 
-  public abstract ResponseContext createEntry(RequestContext request);
+  public Subject resolveSubject(RequestContext request) {
+    Resolver<Subject> subjectResolver = getSubjectResolver(request);
+    return subjectResolver != null ? 
+       subjectResolver.resolve(request) : null;
+  }
+
+  public Target resolveTarget(RequestContext request) {
+    Resolver<Target> targetResolver = 
+      getTargetResolver(request);
+    return targetResolver != null ? 
+      targetResolver.resolve(request) : null;
+  }
+
+  public String urlFor(
+    RequestContext request, 
+    Object key, 
+    Object param) {
+      TargetBuilder tm = getTargetBuilder(request);
+      return tm != null ? tm.urlFor(request, key, param) : null;
+  }
   
-  public abstract ResponseContext deleteEntry(RequestContext request);
+  protected Resolver<Subject> getSubjectResolver(RequestContext request) {
+    return new SimpleSubjectResolver();
+  }
+
+  protected abstract TargetBuilder getTargetBuilder(RequestContext request);
   
-  public abstract ResponseContext updateEntry(RequestContext request);
+  protected abstract Resolver<Target> getTargetResolver(RequestContext request);
+
+  public ResponseContext process(
+    RequestContext request) {    
+      Target target = request.getTarget();
+      String method = request.getMethod();
+      TargetType type = target.getType();
+      if (type == TargetType.TYPE_SERVICE && 
+          method.equalsIgnoreCase("GET")) {
+          return getServiceDocument(request);
+      }
+      WorkspaceManager wm = getWorkspaceManager(request);
+      
+      CollectionAdapter adapter = 
+        wm.getCollectionAdapter(request);
+      if (adapter == null) {
+        return ProviderHelper.notfound(
+          request);
+      }
+      
+      Transactional transaction = 
+        adapter instanceof Transactional ? 
+          (Transactional)adapter : null;
+      ResponseContext response = null;
+      try {
+        if (transaction != null) transaction.start(request);
+        if (type == TargetType.TYPE_CATEGORIES) {
+          if (method.equalsIgnoreCase("GET"))
+            response = adapter.getCategories(request);
+        } else if (type == TargetType.TYPE_COLLECTION) {
+          if (method.equalsIgnoreCase("GET")) 
+            response = adapter.getFeed(request);
+          else if (method.equalsIgnoreCase("POST")) {
+            response = ProviderHelper.isAtom(request) ?
+              adapter.postEntry(request) :
+              adapter instanceof MediaCollectionAdapter ?
+                ((MediaCollectionAdapter)adapter).postMedia(request) :
+                ProviderHelper.notsupported(request);
+          }
+        } else if (type == TargetType.TYPE_ENTRY) {
+          if (method.equalsIgnoreCase("GET")) 
+            response = adapter.getEntry(request);
+          else if (method.equalsIgnoreCase("PUT")) 
+            response = adapter.putEntry(request);
+          else if (method.equalsIgnoreCase("DELETE")) 
+            response = adapter.deleteEntry(request);
+        } else if (type == TargetType.TYPE_MEDIA) {
+          if (adapter instanceof MediaCollectionAdapter) {
+            MediaCollectionAdapter mcadapter = 
+              (MediaCollectionAdapter) adapter;
+            if (method.equalsIgnoreCase("GET")) 
+              response = mcadapter.getMedia(request);
+            else if (method.equalsIgnoreCase("PUT")) 
+              response = mcadapter.putMedia(request);
+            else if (method.equalsIgnoreCase("DELETE")) 
+              response = mcadapter.deleteMedia(request);        
+          } else {
+            response = ProviderHelper.notsupported(request);
+          }
+        } else {
+          response = adapter.extensionRequest(request);
+        }
+        return response;
+      } catch (Throwable e) {
+        if (transaction != null) 
+          transaction.compensate(request,e);
+        return ProviderHelper.servererror(request, e);
+      } finally {
+        if (transaction != null) 
+          transaction.end(request, response);
+      }
+  }
+   
+  protected abstract WorkspaceManager getWorkspaceManager(
+    RequestContext request);
   
-  public abstract ResponseContext getService(RequestContext request);
+
+  protected Service getServiceElement(RequestContext request) {
+    Service service = abdera.newService();
+    for (WorkspaceInfo wi : getWorkspaceManager(request).getWorkspaces(request))
+      service.addWorkspace(wi.asWorkspaceElement(request));
+    return service;
+  }
   
-  public abstract ResponseContext getFeed(RequestContext request);
-  
-  public abstract ResponseContext getEntry(RequestContext request);
-  
+  protected ResponseContext getServiceDocument(
+    final RequestContext request) {
+      return 
+        new StreamWriterResponseContext(request.getAbdera()) {
+          protected void writeTo(
+            StreamWriter sw) 
+              throws IOException {
+            sw.startDocument()
+              .startService();
+            for (WorkspaceInfo wi : getWorkspaceManager(request).getWorkspaces(request)) {
+              sw.startWorkspace()
+                .writeTitle(wi.getTitle(request));
+              for (CollectionInfo ci : wi.getCollections(request)) {
+                sw.startCollection(ci.getHref(request))
+                  .writeTitle(ci.getTitle(request))
+                  .writeAccepts(ci.getAccepts(request));
+                CategoriesInfo[] catinfos = ci.getCategoriesInfo(request);
+                if (catinfos != null) {
+                  for (CategoriesInfo catinfo : catinfos) {
+                    String href = catinfo.getHref(request);
+                    if (href != null) {
+                      sw.startCategories()
+                        .writeAttribute("href", href)
+                        .endCategories();
+                    } else {
+                      sw.startCategories(
+                        catinfo.isFixed(request), 
+                        catinfo.getScheme(request));
+                      for (CategoryInfo cat : catinfo) {
+                        sw.writeCategory(
+                          cat.getTerm(request), 
+                          cat.getScheme(request), 
+                          cat.getLabel(request));
+                      }
+                      sw.endCategories();
+                    }
+                  }
+                }
+                sw.endCollection();
+              }
+              sw.endWorkspace();
+            }
+            sw.endService()
+              .endDocument();
+          }
+        }
+        .setStatus(200)
+        .setContentType(Constants.APP_MEDIA_TYPE);
+  }
+
+  public Filter[] getFilters(RequestContext request) {
+    return filters.toArray(new Filter[filters.size()]);
+  }
+
+  public void addFilter(Filter... filters) {
+    for (Filter filter : filters)
+      this.filters.add(filter);
+  }  
 }

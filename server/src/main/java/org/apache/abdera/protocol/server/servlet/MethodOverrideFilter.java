@@ -18,8 +18,7 @@
 package org.apache.abdera.protocol.server.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -42,7 +41,7 @@ public class MethodOverrideFilter
 
   public static final String METHODS = "org.apache.abdera.protocol.server.servlet.Overrides";
   
-  private final List<String> METHODS_TO_OVERRIDE = new ArrayList<String>();
+  private String[] METHODS_TO_OVERRIDE;
   
   public void doFilter(
     ServletRequest request, 
@@ -63,11 +62,9 @@ public class MethodOverrideFilter
   public void init(FilterConfig config) throws ServletException {
     String param = config.getInitParameter(METHODS);
     if (param != null) {
-      String[] methods = param.split(",");
-      for (String method : methods) {
-        method = method.trim();
-        METHODS_TO_OVERRIDE.add(method);
-      }
+      String[] methods = param.split("\\s*,\\s*");
+      Arrays.sort(methods);
+      this.METHODS_TO_OVERRIDE = methods;
     }
   }
 
@@ -78,15 +75,14 @@ public class MethodOverrideFilter
     
     public MethodOverrideRequestWrapper(HttpServletRequest request) {
       super(request);
-      
       String method = super.getMethod();
       String xheader = getHeader("X-HTTP-Method-Override");
       if (xheader == null) xheader = getHeader("X-Method-Override");
       if (xheader != null) xheader = xheader.toUpperCase().trim();
       if (method.equals("POST") && 
-          xheader != null && 
-          METHODS_TO_OVERRIDE.contains(xheader)) {
-        method = xheader;
+        xheader != null && 
+        Arrays.binarySearch(METHODS_TO_OVERRIDE,xheader) > -1) {
+          method = xheader;
       }
       this.method = method;
     }

@@ -17,22 +17,22 @@
 */
 package org.apache.abdera.protocol.server;
 
-import java.util.Map;
+import java.util.Collection;
 
-import org.apache.abdera.protocol.server.impl.ResponseContextException;
+import org.apache.abdera.model.Workspace;
 
+/**
+ * Metadata interface used by WorkspaceManager and Provider 
+ * implementations to construct Atompub Service Documents.
+ * 
+ * The WorkspaceInfo interface provides information used to
+ * construct an app:workspace element 
+ */
 public interface WorkspaceInfo {
 
-  String getName();
-
-  /**
-   * A map of CollectionProviders keyed by URI (in relation to the services document) - i.e.
-   * if the services document was at "/services" and the collection at "/services/workspace/feed",
-   * then the key would be "workspace/feed".
-   * @return
-   */
-  Map<String, CollectionProvider> getCollectionProviders();
-
-  CollectionProvider getCollectionProvider(String href);
-
+  String getTitle(RequestContext requsest);
+  
+  Collection<CollectionInfo> getCollections(RequestContext request);
+  
+  Workspace asWorkspaceElement(RequestContext request);
 }

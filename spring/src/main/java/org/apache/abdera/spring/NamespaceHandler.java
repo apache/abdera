@@ -22,7 +22,8 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 public class NamespaceHandler extends NamespaceHandlerSupport {
     public void init() {
-        registerBeanDefinitionParser("serviceContext", new ServiceContextDefinitionParser());
+        registerBeanDefinitionParser("workspace", new WorkspaceDefinitionParser());
+        registerBeanDefinitionParser("provider", new DefaultProviderDefinitionParser());
         registerBeanDefinitionParser("regexTargetResolver", new RegexTargetResolverDefinitionParser());
     }
 }

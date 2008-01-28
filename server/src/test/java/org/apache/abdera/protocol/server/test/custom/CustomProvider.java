@@ -26,14 +26,13 @@ import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.context.RequestContextWrapper;
 import org.apache.abdera.protocol.server.impl.AbstractWorkspaceProvider;
 import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
-import org.apache.abdera.protocol.server.impl.SimpleCollectionInfo;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.protocol.server.impl.TemplateTargetBuilder;
 
 public class CustomProvider 
   extends AbstractWorkspaceProvider {
 
-  private final CollectionAdapter adapter;
+  private final SimpleAdapter adapter;
   
   public CustomProvider() {
     
@@ -59,12 +58,7 @@ public class CustomProvider
     
     SimpleWorkspaceInfo workspace = new SimpleWorkspaceInfo();
     workspace.setTitle("A Simple Workspace");
-    workspace.addCollection(
-      new SimpleCollectionInfo(
-        "A simple feed",
-        "/atom/feed",
-        "application/atom+xml;type=entry"
-      ));
+    workspace.addCollection(adapter);
     addWorkspace(workspace);
     
     addFilter(new SimpleFilter());

@@ -47,17 +47,6 @@ public abstract class AbstractCollectionAdapter
   public void start(RequestContext request) throws ResponseContextException {
   }
 
-  public boolean isCollectionFor(RequestContext request) {
-    String href = getHref(request);
-    IRI base = ProviderHelper.resolveBase(request);
-    
-    if (base.getPath().equals(href)) { 
-      return true;
-    }
-    
-    return false;
-  }
-
   public String[] getAccepts(RequestContext request) {
     return new String[] { "application/atom+xml;type=entry" };
   }

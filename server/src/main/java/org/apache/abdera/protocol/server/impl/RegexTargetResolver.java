@@ -17,7 +17,10 @@
 */
 package org.apache.abdera.protocol.server.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,24 +59,37 @@ import org.apache.abdera.protocol.server.TargetType;
 public class RegexTargetResolver 
   implements Resolver<Target> {
 
-  private final Map<Pattern, TargetType> patterns;
+  protected final Map<Pattern, TargetType> patterns;
+  protected final Map<Pattern, String[]> fields;
   
   public RegexTargetResolver() {
     this.patterns = new HashMap<Pattern, TargetType>();
+    this.fields = new HashMap<Pattern, String[]>();
   }
   
   public RegexTargetResolver(Map<String, TargetType> patterns) {
     this.patterns = new HashMap<Pattern, TargetType>();
+    this.fields = new HashMap<Pattern, String[]>();
     for (String p : patterns.keySet()) {
       TargetType type = patterns.get(p);
       setPattern(p,type);
     }
   }
   
-  public synchronized RegexTargetResolver setPattern(String pattern, TargetType type) {
-    Pattern p = Pattern.compile(pattern);
-    this.patterns.put(p,type);
-    return this;
+  public RegexTargetResolver setPattern(
+    String pattern, 
+    TargetType type) {
+      return setPattern(pattern,type, new String[0]);
+  }
+  
+  public RegexTargetResolver setPattern(
+    String pattern, 
+    TargetType type, 
+    String... fields) {
+      Pattern p = Pattern.compile(pattern);
+      this.patterns.put(p,type);
+      this.fields.put(p,fields);
+      return this;
   }
   
   public Target resolve(Request request) {
@@ -82,8 +98,9 @@ public class RegexTargetResolver
     for (Pattern pattern : patterns.keySet()) {
       Matcher matcher = pattern.matcher(uri);
       if (matcher.matches()) {
-        TargetType type = patterns.get(pattern);
-        return getTarget(type, context, matcher);
+        TargetType type = this.patterns.get(pattern);
+        String[] fields = this.fields.get(pattern);
+        return getTarget(type, context, matcher, fields);
       }
     }
     return null;
@@ -92,25 +109,79 @@ public class RegexTargetResolver
   protected Target getTarget(
     TargetType type, 
     RequestContext request, 
-    Matcher matcher) {
-      return new RegexTarget(type, request, matcher);
+    Matcher matcher,
+    String[] fields) {
+      return new RegexTarget(type, request, matcher, fields);
   }
   
+  public String toString() {
+    StringBuilder buf = new StringBuilder();
+    buf.append("Regex Target Resolver:\n");
+    for (Pattern pattern : patterns.keySet()) {
+      TargetType type = this.patterns.get(pattern);
+      String[] fields = this.fields.get(pattern);
+      buf.append(pattern.toString() + ", Type: " + type + ", Fields: " + Arrays.toString(fields));
+    }
+    return buf.toString();
+  }
+  
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((fields == null) ? 0 : fields.hashCode());
+    result = prime * result + ((patterns == null) ? 0 : patterns.hashCode());
+    return result;
+  }
+ 
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    final RegexTargetResolver other = (RegexTargetResolver) obj;
+    if (fields == null) {
+      if (other.fields != null) return false;
+    } else if (!fields.equals(other.fields)) return false;
+    if (patterns == null) {
+      if (other.patterns != null) return false;
+    } else if (!patterns.equals(other.patterns)) return false;
+    return true;
+  }  
+  
   public static class RegexTarget
-    extends DefaultTarget
+    extends AbstractTarget
     implements Target {
     
     private static final long serialVersionUID = 165211244926064449L;
-    protected transient Matcher matcher;
+    protected Matcher matcher;
+    protected String[] fields;
     
-    protected RegexTarget(
+    public RegexTarget(
       TargetType type, 
       RequestContext context, 
-      Matcher matcher) {
+      Matcher matcher,
+      String[] fields) {
         super(type, context);
         this.matcher = matcher;
+        this.fields = fields;
     }
     
+    public String getParameter(String name) {
+      if (fields == null) return super.getParameter(name);
+      int idx = 0;
+      for (int n = 0; n < fields.length; n++)
+        if (fields[n].equalsIgnoreCase(name)) idx = n + 1;
+      return idx > 0 && idx <= matcher.groupCount() ? 
+        matcher.group(idx) : super.getParameter(name);
+    }
+
+    public String[] getParameterNames() {
+      String[] names = super.getParameterNames();
+      List<String> list = new ArrayList<String>();
+      if (names != null) list.addAll(Arrays.asList(names));
+      if (fields != null) list.addAll(Arrays.asList(fields));
+      return list.toArray(new String[list.size()]);
+    }
+
     @Override
     public int hashCode() {
       final int PRIME = 31;
@@ -174,7 +245,11 @@ public class RegexTargetResolver
       }
       return buf.toString();
     }
+
+    public String getIdentity() {
+      return context.getUri().toString();
+    }
     
   }
-
+  
 }

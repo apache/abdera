@@ -17,8 +17,33 @@
 */
 package org.apache.abdera.protocol.server;
 
+import java.util.Map;
+
+import javax.security.auth.Subject;
+
+import org.apache.abdera.Abdera;
+
+/**
+ * Providers are responsible for processing all requests to the Atompub server.
+ */
 public interface Provider {
-  ResponseContext request(RequestContext request);
   
-  String[] getAllowedMethods(TargetType type);
+  void init(Abdera abdera, Map<String,String> properties);
+
+  Abdera getAbdera();
+  
+  String getProperty(String name);
+  
+  String[] getPropertyNames();
+
+  Subject resolveSubject(RequestContext request);
+  
+  Target resolveTarget(RequestContext request);
+  
+  String urlFor(RequestContext request, Object key, Object param);
+ 
+  ResponseContext process(RequestContext request);
+  
+  Filter[] getFilters(RequestContext request);
+  
 }

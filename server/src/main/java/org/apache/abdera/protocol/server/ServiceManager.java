@@ -21,14 +21,15 @@ import java.util.Map;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.text.Localizer;
-import org.apache.abdera.protocol.server.impl.DefaultServiceContext;
-import org.apache.abdera.protocol.server.util.ServerConstants;
+import org.apache.abdera.protocol.server.impl.DefaultProvider;
 import org.apache.abdera.util.ServiceUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class ServiceManager 
-  implements ServerConstants {
+public class ServiceManager {
+   
+  public static final String PROVIDER =
+    "org.apache.abdera.protocol.server.Provider";
   
   private final static Log log = LogFactory.getLog(ServiceManager.class);
   
@@ -53,21 +54,20 @@ public class ServiceManager
     return abdera;
   }
   
-  public ServiceContext newServiceContext(
+  public Provider newProvider (
     Map<String,String> properties) {
     Abdera abdera = getAbdera();
-    String instance = properties.get(SERVICE_CONTEXT);
-    log.debug(Localizer.sprintf("CREATING.NEW.INSTANCE","ServiceContext"));
-    ServiceContext context = 
-      (ServiceContext) ServiceUtil.newInstance(
-        SERVICE_CONTEXT, 
+    String instance = properties.get(PROVIDER);
+    log.debug(Localizer.sprintf("CREATING.NEW.INSTANCE","Provider"));
+    Provider provider = 
+      (Provider) ServiceUtil.newInstance(
+        PROVIDER, 
         (instance != null) ? 
           instance : 
-          DefaultServiceContext.class.getName(),
+          DefaultProvider.class.getName(),
         abdera);
-    log.debug(Localizer.sprintf("INITIALIZING.INSTANCE", "ServiceContext"));
-    context.init(abdera, properties);
-    return context;
+    log.debug(Localizer.sprintf("INITIALIZING.INSTANCE", "Provider"));
+    provider.init(abdera, properties);
+    return provider;
   }
-  
 }

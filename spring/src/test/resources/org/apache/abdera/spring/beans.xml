@@ -7,12 +7,14 @@
     http://abdera.apache.org http://abdera.apache.org/schemas/abdera-spring.xsd">
 
   <!-- Abdera -->
-  <a:serviceContext>
+  <a:provider>
   
-    <a:provider>
-      <ref bean="provider"/>
-    </a:provider>
+    <a:workspace title="Foo Workspace">
+      <!-- These are our collections -->
+      <bean class="org.apache.abdera.spring.TestAdapter"/>
+    </a:workspace>
     
+    <!-- It is not necessary to specify this, but we're testing it -->
     <a:targetResolver>
       <a:regexTargetResolver>
         <a:collection>/atom/feed(\?[^#]*)?</a:collection>
@@ -21,10 +23,6 @@
       </a:regexTargetResolver>
     </a:targetResolver>
     
-  </a:serviceContext>
-
-  
-  <bean id="provider" class="org.apache.abdera.spring.TestProvider">
-  </bean>
+  </a:provider>
 
 </beans>

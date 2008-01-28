@@ -27,22 +27,37 @@
   attributeFormDefault="unqualified"  >
 
   <xsd:import namespace="http://www.springframework.org/schema/beans" schemaLocation="http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"/>
-  <xsd:element name="serviceContext">
+  <xsd:element name="provider">
     <xsd:complexType>
       <xsd:complexContent>
         <xsd:extension base="beans:identifiedType">
           <xsd:sequence>
-            <xsd:element name="provider" type="xsd:anyType" minOccurs="0"/>
-            <xsd:element name="providerManager" type="xsd:anyType" minOccurs="0"/>
+            <xsd:element name="workspace" type="xsd:anyType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="workspaceManager" type="xsd:anyType" minOccurs="0"/>
             <xsd:element name="targetResolver" type="xsd:anyType" minOccurs="0"/>
             <xsd:element name="subjectResolver" type="xsd:anyType" minOccurs="0"/>
           </xsd:sequence>
           <xsd:attribute name="class" type="xsd:string" />
+          <xsd:attribute name="servicesPattern" type="xsd:string"/>
         </xsd:extension>
       </xsd:complexContent>
     </xsd:complexType>
   </xsd:element>
 
+  <xsd:element name="workspace">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="beans:identifiedType">
+          <xsd:sequence>
+            <xsd:element ref="beans:bean" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element ref="beans:ref" minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+          <xsd:attribute name="title" type="xsd:string"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+  
   <xsd:element name="regexTargetResolver">
     <xsd:complexType>
       <xsd:complexContent>

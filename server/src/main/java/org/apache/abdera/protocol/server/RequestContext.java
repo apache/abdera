@@ -48,7 +48,7 @@ public interface RequestContext
   
   Abdera getAbdera();
     
-  ServiceContext getServiceContext();
+  Provider getProvider();
     
   Target getTarget();
     
@@ -80,6 +80,8 @@ public interface RequestContext
   
   String[] getAttributeNames(Scope scope);
   
+  RequestContext setAttribute(String name, Object value);
+  
   RequestContext setAttribute(Scope scope, String name, Object value);
   
   InputStream getInputStream() throws IOException;
@@ -103,4 +105,15 @@ public interface RequestContext
    * (everything after the context path)
    */
   String getTargetPath();
+  
+  /**
+   * Returns the subset of the request URI that is the base of the target path
+   * (e.g. HttpServletRequest.getServletPath())
+   * @return
+   */
+  String getTargetBasePath();
+  
+  String urlFor(Object key, Object param);
+  
+  String absoluteUrlFor(Object key, Object param);
 }

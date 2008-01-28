@@ -27,7 +27,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.abdera.protocol.server.util.ServerUtils;
+import org.apache.abdera.protocol.server.ProviderHelper;
 import org.apache.abdera.util.CompressionUtil;
 import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 
@@ -51,7 +51,7 @@ public class CompressionFilter
     String encoding = req.getHeader("Accept-Encoding");
     String[] encodings = 
       encoding != null ? 
-        ServerUtils.orderByQ(encoding) : 
+        ProviderHelper.orderByQ(encoding) : 
         new String[0];
     for (String enc : encodings) {
       if (CompressingResponseWrapper.canHandle(enc)) {

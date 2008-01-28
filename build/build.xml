@@ -777,7 +777,7 @@ Working directory: ${work}
     <antcall target="dist.extension">
       <param name="ext" value="html" />
     </antcall>
-    
+          
     <antcall target="dist.extension">
       <param name="ext" value="json" />
     </antcall>
@@ -836,7 +836,6 @@ Working directory: ${work}
       <param name="ext" value="html" />
     </antcall>
 
-    
     <antcall target="test.extension">
       <param name="ext" value="json" />
     </antcall>
@@ -886,6 +885,10 @@ Working directory: ${work}
     </antcall>
 
     <antcall target="retro.extension">
+      <param name="ext" value="html" />
+    </antcall>
+    
+    <antcall target="retro.extension">
       <param name="ext" value="json" />
     </antcall>
 
@@ -909,9 +912,6 @@ Working directory: ${work}
       <param name="ext" value="oauth" />
     </antcall>
     
-    <antcall target="retro.extension">
-      <param name="ext" value="html" />
-    </antcall>
   </target>
   
   <target name="retro.extension">

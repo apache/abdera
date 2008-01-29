@@ -36,6 +36,7 @@ import org.apache.abdera.protocol.server.RequestContext.Scope;
  * Resolves targets based on a simple assumed URI structure. 
  */
 public class StructuredTargetResolver
+  extends TemplateTargetBuilder
   implements Resolver<Target> {
 
   public static final String URI_PARAMETER_ATTRIBUTE_PREFIX = "uriParameter";
@@ -55,7 +56,10 @@ public class StructuredTargetResolver
       this.servicesPattern = Pattern.compile(servicesPattern);
     }
     
-
+    setTemplate(TargetType.TYPE_SERVICE, "{target_base}");
+    setTemplate(TargetType.TYPE_COLLECTION, "{target_base}/{collection}");
+    setTemplate(TargetType.TYPE_CATEGORIES, "{target_base}/{collection};categories");
+    setTemplate(TargetType.TYPE_ENTRY, "{target_base}/{collection}/{entryid}");
   }
 
   public Target resolve(Request request) {

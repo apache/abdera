@@ -38,6 +38,14 @@ public class SimpleCategoriesInfo
   private final boolean fixed;
   private final List<CategoryInfo> list = new ArrayList<CategoryInfo>();
   
+  public SimpleCategoriesInfo() {
+    this(null,false);
+  }
+  
+  public SimpleCategoriesInfo(boolean fixed) {
+    this(null,fixed);
+  }
+  
   public SimpleCategoriesInfo(
     String href) {
       this.href = href;

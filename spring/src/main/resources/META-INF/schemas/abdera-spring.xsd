@@ -38,7 +38,7 @@
             <xsd:element name="subjectResolver" type="xsd:anyType" minOccurs="0"/>
           </xsd:sequence>
           <xsd:attribute name="class" type="xsd:string" />
-          <xsd:attribute name="servicesPattern" type="xsd:string"/>
+          <xsd:attribute name="base" type="xsd:string"/>
         </xsd:extension>
       </xsd:complexContent>
     </xsd:complexType>

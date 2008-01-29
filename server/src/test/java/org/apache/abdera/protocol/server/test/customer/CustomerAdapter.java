@@ -23,21 +23,21 @@ import org.apache.abdera.protocol.server.impl.AbstractEntityCollectionAdapter;
 public class CustomerAdapter extends AbstractEntityCollectionAdapter<Customer> {
   private static final String ID_PREFIX = "urn:acme:customer:";
   
-  private final static AtomicInteger nextId = new AtomicInteger(1000);
+  private AtomicInteger nextId = new AtomicInteger(1000);
   private Map<Integer, Customer> customers = new HashMap<Integer, Customer>();
   private Factory factory = new Abdera().getFactory();
   
   public String getId(RequestContext request) {
     return "tag:example.org,2007:feed";
   }
-
   
   public ResponseContext getCategories(RequestContext request) {
     return null;
   }
   
   @Override
-  public Customer postEntry(String title, IRI id, String summary, Date updated, List<Person> authors,
+  public Customer postEntry(String title, IRI id, String summary, 
+                            Date updated, List<Person> authors,
                             Content content, RequestContext request) throws ResponseContextException {   
     Customer customer = contentToCustomer(content);
     customers.put(customer.getId(), customer);

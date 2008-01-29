@@ -53,7 +53,7 @@ public class JcrCollectionAdapterTest extends TestCase {
     cp.setCollectionNodePath("entries");         
     cp.setRepository(repository);
     cp.setCredentials(new SimpleCredentials("username", "pass".toCharArray()));
-    cp.setHref("acme/feed");
+    cp.setHref("feed");
     cp.initialize();
     
     SimpleWorkspaceInfo wkspc = new SimpleWorkspaceInfo();
@@ -73,7 +73,7 @@ public class JcrCollectionAdapterTest extends TestCase {
     String base = "http://localhost:9002/";
 
     // Testing of entry creation
-    IRI colUri = new IRI(base).resolve("acme/feed");
+    IRI colUri = new IRI(base).resolve("feed");
     Entry entry = factory.newEntry();
     entry.setTitle("Some Entry");
     entry.setUpdated(new Date());

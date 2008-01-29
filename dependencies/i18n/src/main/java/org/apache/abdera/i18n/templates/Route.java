@@ -28,24 +28,28 @@ public class Route
   private static final long serialVersionUID = -8979172281494208841L;
   
   private static final Evaluator EVALUATOR = new Evaluator();
-  private static final Pattern VARIABLE = Pattern.compile("[\\*\\:](?:\\()?[^\\/,;\\.#\\)]+(?:\\))?");
+  private static final Pattern VARIABLE = Pattern.compile("[\\*\\:](?:\\()?[0-9a-zA-Z]+(?:\\))?");
   
   private final String name;
   private final String pattern;
   private final String[] tokens;
   private final String[] variables;
-  private final Pattern parser;
-  private final String[] index;
-  
-  public Route(
-    String name,
-    String pattern) {
-      this.name = name;
-      this.pattern = CharUtils.stripBidiInternal(pattern);
-      this.tokens = initTokens();
-      this.variables = initVariables();
-      this.parser = compile();
-      this.index = index();
+
+  private Map<String, String> requirements;
+
+  private Map<String, String> defaultValues;
+
+  public Route(String name, String pattern) {
+    this(name, pattern, null, null);
+  }
+
+  public Route(String name, String pattern, Map<String, String> defaultValues, Map<String, String> requirements) {
+    this.name = name;
+    this.pattern = CharUtils.stripBidiInternal(pattern);
+    this.tokens = initTokens();
+    this.variables = initVariables();
+    this.defaultValues = defaultValues;
+    this.requirements = requirements;
   }
   
   private String[] initTokens() {
@@ -70,64 +74,100 @@ public class Route
     return vars;
   }
   
-  private Pattern compile() {
-    Matcher m = VARIABLE.matcher(pattern);
-    StringBuilder buf = new StringBuilder();
-    int e = -1, s = 0;
-    while(m.find(s)) {
-      e = m.start();
-      if (s != 0) {
-        String q = "(?:" + Pattern.quote(pattern.substring(s,e)) + ")";
-        buf.append(q);
-        buf.append("]+))?");
-        buf.append(q);
-      }
-      buf.append("(?:([^\\/,;\\.#\\)\\?");
-      s = m.end();
-    }
-    if (s > 0) {
-      if (s < pattern.length()) {
-        String q = "(?:" + Pattern.quote(pattern.substring(s)) + ")";
-        buf.append(q);
-      }
-      buf.append("]+))?");
-    }
-    return Pattern.compile(buf.toString());
-  }
-  
-  private String[] index() {
-    List<String> index = new ArrayList<String>();
-    Matcher m = VARIABLE.matcher(pattern);
-    int s = 0;
-    while(m.find(s)) {
-      String var = var(m.group(0));
-      if (!index.contains(var)) index.add(var);
-      s = m.end();
-    }
-    return index.toArray(new String[index.size()]);
-  }
-  
   /**
    * Returns true if the given uri matches the route pattern
    */
-  public boolean match(String pattern) {
-    Matcher m = parser.matcher(pattern);
-    return m.find();
+  public boolean match(String uri) {
+    Matcher matcher = VARIABLE.matcher(pattern);
+    int uriStart = 0;
+    int prevPatternEnd = 0;
+    while (matcher.find()) {
+      int patternStart = matcher.start();
+      
+      String nonVariablePattern = pattern.substring(prevPatternEnd, patternStart);
+      if (prevPatternEnd == 0 && nonVariablePattern.length() == 0) {
+        prevPatternEnd = matcher.end();
+        continue;
+      }
+      
+      int idx = uri.indexOf(nonVariablePattern, uriStart);
+      if ((idx == -1 || idx+1 == uri.length()) && (defaultValues == null || !defaultValues.containsKey(var(matcher.group())))) {
+        return false;
+      } else {
+        uriStart = idx + 1 + nonVariablePattern.length();
+      }
+      
+      // TODO: ensure requirements are met
+      
+      prevPatternEnd = matcher.end();
+    }
+    
+    // Check if the non variable, end segment matches
+    if (prevPatternEnd != pattern.length()) {
+      if (!uri.endsWith(pattern.substring(prevPatternEnd))) {
+        return false;
+      } else {
+        return true;
+      }
+    } else if (uriStart > uri.length()) {
+      return false;
+    }
+    
+    return uri.indexOf('/', uriStart) == -1;
   }
   
   /**
    * Parses the given uri using the route pattern
    */
-  public Map<String,String> parse(String pattern) {
-    Matcher m = parser.matcher(pattern);
-    Map<String,String> results = new HashMap<String,String>();
-    if (m.find()) {
-      for (int n = 1; n <= m.groupCount(); n++) {
-        String label = index[n-1];
-        results.put(label, m.group(n));
+  public Map<String,String> parse(String uri) {
+    HashMap<String, String> vars = new HashMap<String, String>();
+    Matcher matcher = VARIABLE.matcher(pattern);
+    int uriStart = 0;
+    int prevPatternEnd = 0;
+    int valueStart = -1;
+    int nonVarIdx = -1; 
+    String prevVar = null;
+    while (matcher.find()) {
+      int patternStart = matcher.start();
+      String varName = var(matcher.group());
+      
+      String nonVariableSection = pattern.substring(prevPatternEnd, patternStart);
+      if (prevPatternEnd == 0 && nonVariableSection.length() == 0) {
+        prevPatternEnd = matcher.end();
+        valueStart = 0;
+        continue;
       }
+
+      nonVarIdx = uri.indexOf(nonVariableSection, uriStart);
+      
+      if (valueStart != -1) {
+        vars.put(prevVar, uri.substring(valueStart, nonVarIdx));
+      }
+      
+      if ((nonVarIdx == -1 || nonVarIdx+1 == uri.length()) && (defaultValues == null || !defaultValues.containsKey(varName))) {
+        valueStart = -1;
+        break;
+      }
+
+      // TODO: ensure requirements are met
+      
+      valueStart = nonVarIdx + nonVariableSection.length();
+      
+      uriStart = valueStart + 1;
+      prevVar = varName;
+      prevPatternEnd = matcher.end();
     }
-    return results;
+    
+    int tailEnd = uri.length();
+    if (prevPatternEnd != pattern.length() && uri.endsWith(pattern.substring(prevPatternEnd))) {
+      tailEnd = tailEnd - (pattern.length() - prevPatternEnd);
+    }
+    
+    if (valueStart != uri.length() && valueStart != -1) {
+      vars.put(prevVar, uri.substring(valueStart, tailEnd));
+    }
+    
+    return vars;
   }
 
   /**
@@ -137,12 +177,11 @@ public class Route
     Context context) {
       String pattern = this.pattern;
       for(String token : this) {
+        String var = var(token);
         pattern = replace(
           pattern, 
           token, 
-          EVALUATOR.evaluate(
-            var(token), 
-            context));
+          EVALUATOR.evaluate(var, getDefaultValue(var), context));
       }
       StringBuffer buf = new StringBuffer(pattern);
       boolean qs = false;
@@ -161,6 +200,12 @@ public class Route
       }
       
       return buf.toString();
+  }
+
+  private String getDefaultValue(String var) {
+    if (defaultValues == null) return null;
+    
+    return defaultValues.get(var);
   }
   
   private String var(String token) {
@@ -195,8 +240,8 @@ public class Route
     String pattern, 
     String token, 
     String value) {
-      return pattern.replaceAll(
-        Pattern.quote(token),
+      return pattern.replace(
+        token,
         value);
   }
 

@@ -17,13 +17,9 @@
 */
 package org.apache.abdera.protocol.server.impl;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.abdera.i18n.templates.Context;
-import org.apache.abdera.i18n.templates.DelegatingContext;
 import org.apache.abdera.i18n.text.UrlEncoding;
 import org.apache.abdera.protocol.Request;
 import org.apache.abdera.protocol.Resolver;
@@ -40,27 +36,26 @@ import org.apache.abdera.protocol.server.RequestContext.Scope;
  * Resolves targets based on a simple assumed URI structure. 
  */
 public class StructuredTargetResolver
-  extends TemplateTargetBuilder
   implements Resolver<Target> {
 
-  public static final String COLLECTION_PROVIDER_ATTRIBUTE = "collectionProvider";
   public static final String URI_PARAMETER_ATTRIBUTE_PREFIX = "uriParameter";
 
   private Pattern servicesPattern = Pattern.compile("^/");
 
   private WorkspaceManager workspaceManager;
   
+
   public StructuredTargetResolver(WorkspaceManager workspaceManager) {
-    this.workspaceManager = workspaceManager;
-    setTemplate(TargetType.TYPE_SERVICE, "{target_base}");
-    setTemplate(TargetType.TYPE_COLLECTION, "{target_base}/{collection}");
-    setTemplate(TargetType.TYPE_CATEGORIES, "{target_base}/{collection};categories");
-    setTemplate(TargetType.TYPE_ENTRY, "{target_base}/{collection}/{entryid}");
+    this(workspaceManager, null);
   }
 
   public StructuredTargetResolver(WorkspaceManager workspaceManager, String servicesPattern) {
     this.workspaceManager = workspaceManager;
-    this.servicesPattern = Pattern.compile(servicesPattern);
+    if (servicesPattern != null) {
+      this.servicesPattern = Pattern.compile(servicesPattern);
+    }
+    
+
   }
 
   public Target resolve(Request request) {
@@ -79,9 +74,6 @@ public class StructuredTargetResolver
       uriMatcher.reset();
       if (uriMatcher.find()) {
         String path = uri.substring(uriMatcher.start());
-        if (path.startsWith("/")) {
-          path = path.substring(1);
-        }
         int q = path.indexOf("?");
         if (q != -1) {
           path = path.substring(0, q);
@@ -102,7 +94,7 @@ public class StructuredTargetResolver
         }
 
         if (collection != null) {
-          context.setAttribute(Scope.REQUEST, COLLECTION_PROVIDER_ATTRIBUTE, collection);
+          context.setAttribute(Scope.REQUEST, DefaultWorkspaceManager.COLLECTION_ADAPTER_ATTRIBUTE, collection);
 
           if (href.equals(path)) {
             tt = TargetType.TYPE_COLLECTION;
@@ -138,49 +130,5 @@ public class StructuredTargetResolver
     } else {
       return TargetType.TYPE_ENTRY;
     }
-  }
-
-  public String urlFor(
-    RequestContext request, 
-    Object key, 
-    Object param) {
-      CollectionInfo ci = 
-        (CollectionInfo) request.getAttribute(
-          Scope.REQUEST, 
-          COLLECTION_PROVIDER_ATTRIBUTE);
-      String collection = ci != null ? ci.getHref(request) : null;
-      Context context = 
-        new StructuredContext(
-          TemplateTargetBuilder.getContext(request, param), 
-          collection);
-      return super.urlFor(request, key, context);
-  }
-  
-  @SuppressWarnings("unchecked")
-  private static class StructuredContext 
-    extends DelegatingContext {
-
-    private static final long serialVersionUID = 1L;
-    private final String collection;
-    
-    protected StructuredContext(
-      Context subcontext,
-      String collection) {
-        super(subcontext);
-        this.collection = collection;
-    }
-
-    public Iterator<String> iterator() {
-      List<String> list = TemplateTargetBuilder.asList(super.iterator());
-      if (!list.contains("collection")) list.add("collection");
-      return list.iterator();
-    }
-
-    protected <T> T resolveActual(String var) {
-      if (var.equalsIgnoreCase("collection")) 
-        return (T)collection;
-      return (T)super.resolveActual(var);
-    }
-
   }
 }

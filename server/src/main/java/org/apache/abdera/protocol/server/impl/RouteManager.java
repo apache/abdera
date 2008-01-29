@@ -13,6 +13,7 @@ import org.apache.abdera.i18n.templates.ObjectContext;
 import org.apache.abdera.i18n.templates.Route;
 import org.apache.abdera.protocol.Request;
 import org.apache.abdera.protocol.Resolver;
+import org.apache.abdera.protocol.server.CollectionAdapter;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.TargetBuilder;
@@ -45,6 +46,9 @@ public class RouteManager
   protected Map<String,Route> routes = 
     new HashMap<String,Route>();
 
+  protected Map<Route,CollectionAdapter> route2CA = 
+    new HashMap<Route,CollectionAdapter>();
+  
   public RouteManager addRoute(
     Route route) {
       return addRoute(route,null);
@@ -79,11 +83,26 @@ public class RouteManager
         type);
   }
   
+  public RouteManager addRoute(
+    String name, 
+    String pattern, 
+    TargetType type,
+    CollectionAdapter collectionAdapter) {
+    
+    Route route = new Route(name,  pattern);
+    route2CA.put(route, collectionAdapter);
+    return addRoute(route, type);
+  }
+  
   public Target resolve(Request request) {
     RequestContext context = (RequestContext) request;
     String uri = context.getTargetPath();
     for(Map.Entry<Route, TargetType> entry : targets.entrySet()) {
       if (entry.getKey().match(uri)) {
+        CollectionAdapter ca = route2CA.get(entry.getKey());
+        if (ca != null) {
+          context.setAttribute(DefaultWorkspaceManager.COLLECTION_ADAPTER_ATTRIBUTE, ca);
+        }
         return getTarget(context, entry.getKey(), uri, entry.getValue());
       }
     }
@@ -111,6 +130,7 @@ public class RouteManager
         null;
   }
   
+  @SuppressWarnings("unchecked")
   private Context getContext(Object param) {
     Context context = null;
     if (param != null) {
@@ -157,6 +177,7 @@ public class RouteManager
           params.get(name) :
           super.getParameter(name);
       }
+      @SuppressWarnings("unchecked")
       public String[] getParameterNames() {
         List<String> names = new ArrayList(Arrays.asList(super.getParameterNames()));
         for (String name : params.keySet()) {

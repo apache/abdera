@@ -36,8 +36,10 @@ public class DefaultProviderDefinitionParser
 
     @Override
     protected void mapAttribute(BeanDefinitionBuilder bean, Element element, String name, String val) {
-        if (name.equals("servicesPattern")) {
+        if (name.equals("base")) {
             bean.addPropertyValue(name, val);
+        } else if (name.equals("class")) {
+            bean.addPropertyValue("providerClass", val);
         }
     }
 

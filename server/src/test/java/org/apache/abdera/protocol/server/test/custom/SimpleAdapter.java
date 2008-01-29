@@ -75,19 +75,12 @@ public class SimpleAdapter
     Feed feed = (Feed)context.getAttribute(Scope.SESSION, "feed");
     if (feed == null) {
       feed = createFeedBase(context);
-      feed.setBaseUri(getFeedBaseUri(context));
+      feed.setBaseUri(getHref(context));
       context.setAttribute(Scope.SESSION, "feed", feed);
     }
     return feed.getDocument();
   }
- 
-  private String getFeedBaseUri(RequestContext context) {
-    Map<String,String> params = new HashMap<String,String>();
-    params.put("collection", context.getTarget().getParameter("collection"));
-    String uri = context.urlFor(TargetType.TYPE_COLLECTION, params);
-    return context.getResolvedUri().resolve(uri).toString();
-  }
-  
+
   public ResponseContext getFeed(
     RequestContext request) {
       Document<Feed> feed;

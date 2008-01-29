@@ -13,7 +13,7 @@ import org.springframework.beans.factory.FactoryBean;
 
 public class ProviderFactoryBean implements FactoryBean {
     private Class providerClass = DefaultProvider.class;
-    private String servicesPattern;
+    private String base;
     private Collection<WorkspaceInfo> workspaces;
     private Resolver<Target> targetResolver;
     private Resolver<Subject> subjectResolver;
@@ -21,9 +21,9 @@ public class ProviderFactoryBean implements FactoryBean {
     public Object getObject() throws Exception {
         DefaultProvider p = null;
         
-        if (servicesPattern != null) {
+        if (base != null) {
             Constructor constructor = providerClass.getConstructor(String.class);
-            p = (DefaultProvider) constructor.newInstance(servicesPattern);
+            p = (DefaultProvider) constructor.newInstance(base);
         } else {
             p = (DefaultProvider) providerClass.newInstance();
         }
@@ -43,7 +43,7 @@ public class ProviderFactoryBean implements FactoryBean {
     }
 
     public Class getObjectType() {
-        return DefaultProvider.class;
+        return providerClass;
     }
 
     public boolean isSingleton() {
@@ -58,12 +58,12 @@ public class ProviderFactoryBean implements FactoryBean {
         this.providerClass = providerClass;
     }
 
-    public String getServicesPattern() {
-        return servicesPattern;
+    public String getBase() {
+        return base;
     }
 
-    public void setServicesPattern(String servicesPattern) {
-        this.servicesPattern = servicesPattern;
+    public void setBase(String base) {
+        this.base = base;
     }
 
     public Collection<WorkspaceInfo> getWorkspaces() {

@@ -67,7 +67,7 @@ public class CustomProviderTest extends Assert {
   }
 
   @Test
-  public void testGetService() {
+  public void testGetService() throws IOException {
     ClientResponse resp = client.get("http://localhost:9002/atom");
     assertNotNull(resp);
     assertEquals(ResponseType.SUCCESS, resp.getType());
@@ -77,6 +77,7 @@ try {
 prettyPrint(doc);
 } catch (Exception e) {}
     Service service = doc.getRoot();
+    prettyPrint(service);
     assertEquals(service.getWorkspaces().size(), 1);
     Workspace workspace = service.getWorkspaces().get(0);
     assertEquals(workspace.getCollections().size(), 1);

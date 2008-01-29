@@ -20,7 +20,9 @@ package org.apache.abdera.protocol.server.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.activation.MimeType;
 
@@ -36,6 +38,7 @@ import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.protocol.server.ProviderHelper;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
+import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.context.EmptyResponseContext;
 import org.apache.abdera.protocol.server.context.MediaResponseContext;
 import org.apache.abdera.protocol.server.context.ResponseContextException;
@@ -52,26 +55,13 @@ import org.apache.commons.logging.LogFactory;
 public abstract class AbstractEntityCollectionAdapter<T> 
   extends AbstractCollectionAdapter {
   private final static Log log = LogFactory.getLog(AbstractEntityCollectionAdapter.class);
-  private String href;
-  
-  public String getHref() {
-    return href;
-  }
-
-  public void setHref(String href) {
-    this.href = href;
-  }
-
-  public String getHref(RequestContext request) {
-    return getHref();
-  }
 
   public abstract T postEntry(String title, IRI id, String summary, Date updated, List<Person> authors, Content content, RequestContext request) throws ResponseContextException;
   
   @Override
   public ResponseContext postMedia(RequestContext request) {
     try {
-      T doc = postMediaEntry(request.getContentType(), request.getSlug(), 
+      T doc = postMedia(request.getContentType(), request.getSlug(), 
                              request.getInputStream(), request);
 
       IRI baseIri = ProviderHelper.resolveBase(request);
@@ -123,7 +113,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
     }
   }
 
-  public T postMediaEntry(MimeType mimeType, String slug, InputStream inputStream, RequestContext request) throws ResponseContextException {
+  public T postMedia(MimeType mimeType, String slug, InputStream inputStream, RequestContext request) throws ResponseContextException {
     throw new UnsupportedOperationException();
   }
 
@@ -162,7 +152,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
 
   public ResponseContext getEntry(RequestContext request) {
     try {
-      Entry entry = getEntryFromCollectionProvider(getFeedIRI(request),
+      Entry entry = getEntryFromCollectionProvider(new IRI(getHref(request)),
                                                    request);
       if (entry != null) {
         return buildGetEntryResponse(request, entry);
@@ -172,10 +162,6 @@ public abstract class AbstractEntityCollectionAdapter<T>
     } catch (ResponseContextException e) {
       return createErrorResponse(e);
     }
-  }
-
-  private IRI getFeedIRI(RequestContext request) {
-    return ProviderHelper.resolveBase(request).resolve("../..");
   }
 
   public abstract T getEntry(String resourceName, RequestContext request) throws ResponseContextException;
@@ -277,7 +263,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
         return new EmptyResponseContext(404);
       }
       
-      Entry orig_entry = getEntryFromCollectionProvider(entryObj, getFeedIRI(request), request);
+      Entry orig_entry = getEntryFromCollectionProvider(entryObj, new IRI(getHref(request)), request);
       if (orig_entry != null) {
 
         MimeType contentType = request.getContentType();
@@ -363,7 +349,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
 
   protected ResponseContext createMediaEntry(RequestContext request) {
     try {
-      T doc = postMediaEntry(request.getContentType(), request.getSlug(), 
+      T doc = postMedia(request.getContentType(), request.getSlug(), 
                                request.getInputStream(), request);
 
       IRI baseIri = ProviderHelper.resolveBase(request);

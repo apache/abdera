@@ -143,7 +143,7 @@
             <excludes>
               <exclude>**/*TestSuite*</exclude>
               <exclude>**/*$Test*</exclude>
-              <exclude>**/Test*</exclude>
+              <exclude>**/TestAdapter*</exclude>
             </excludes>
           </configuration>
         </plugin>

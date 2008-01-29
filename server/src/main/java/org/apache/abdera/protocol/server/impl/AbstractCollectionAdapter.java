@@ -4,6 +4,8 @@ import static org.apache.abdera.protocol.server.ProviderHelper.calculateEntityTa
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
@@ -22,6 +24,7 @@ import org.apache.abdera.protocol.server.MediaCollectionAdapter;
 import org.apache.abdera.protocol.server.ProviderHelper;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
+import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.Transactional;
 import org.apache.abdera.protocol.server.context.AbstractResponseContext;
 import org.apache.abdera.protocol.server.context.BaseResponseContext;
@@ -37,7 +40,27 @@ public abstract class AbstractCollectionAdapter
              CollectionInfo {
 
   private final static Log log = LogFactory.getLog(AbstractEntityCollectionAdapter.class);
+  
+  private String href;
+  private Map<String,Object> hrefParams = new HashMap<String,Object>();
+ 
+  public AbstractCollectionAdapter() {
+    super();
+  }
 
+  public String getHref() {
+    return href;
+  }
+
+  public void setHref(String href) {
+    this.href = href;
+    hrefParams.put("collection", href);
+  }
+  
+  public String getHref(RequestContext request) {
+    return request.urlFor("feed", hrefParams);
+  }
+  
   public void compensate(RequestContext request, Throwable t) {
   }
 

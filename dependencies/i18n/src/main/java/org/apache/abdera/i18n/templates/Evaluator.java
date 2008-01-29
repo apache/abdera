@@ -66,6 +66,7 @@ final class Evaluator {
    */
   String evaluate(
     String token, 
+    String defaultValue,
     Context context) {
       String value = null;
       Matcher matcher = PATTERN.matcher(token);
@@ -75,7 +76,18 @@ final class Evaluator {
         String var = matcher.group(3);
         value = Operation.get(op).evaluate(var, arg, context);        
       }
+      if (value == null) {
+        value = defaultValue;
+      }
       return value != null ? value : "";
   }
-
+  
+  /**
+   * Evaluates the template token and returns the resolved value
+   */
+  String evaluate(
+    String token, 
+    Context context) {
+      return evaluate(token, "", context);
+  }
 }

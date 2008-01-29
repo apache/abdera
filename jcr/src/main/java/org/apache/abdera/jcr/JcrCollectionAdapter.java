@@ -190,7 +190,7 @@ public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> 
   }
 
   @Override
-  public Node postMediaEntry(MimeType mimeType, String slug, 
+  public Node postMedia(MimeType mimeType, String slug, 
                                InputStream inputStream, RequestContext request)
     throws ResponseContextException {
     if (slug == null) {

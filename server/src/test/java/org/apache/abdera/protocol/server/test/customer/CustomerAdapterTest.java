@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.xml.namespace.QName;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.apache.abdera.Abdera;
@@ -22,23 +23,22 @@ import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.protocol.server.servlet.AbderaServlet;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
+import org.junit.After;
+import org.junit.Test;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 
-public class CustomerAdapterTest extends TestCase {
+public class CustomerAdapterTest extends Assert {
 
   private Server server;
   private DefaultProvider customerProvider;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    
-    customerProvider = new DefaultProvider("^/([^\\/])+/");
+  private void setupAbdera(String base) throws Exception {
+    customerProvider = new DefaultProvider(base);
     
     CustomerAdapter ca = new CustomerAdapter();
-    ca.setHref("foo/acme/customers");
+    ca.setHref("customers");
     
     SimpleWorkspaceInfo wi = new SimpleWorkspaceInfo();
     wi.setTitle("Customer Workspace");
@@ -49,18 +49,33 @@ public class CustomerAdapterTest extends TestCase {
     initializeJetty();
   }
 
+  @Test
   public void testCustomerProvider() throws Exception {
+    setupAbdera("/");
+    
+    String base = "http://localhost:9002/";
 
+    runTests(base);
+  }
+  
+  @Test
+  public void testCustomerProviderWithDifferentBase() throws Exception {
+    setupAbdera("/base/");
+    
+    String base = "http://localhost:9002/base/";
+
+    runTests(base);
+  }
+
+  private void runTests(String base) throws IOException {
     Abdera abdera = new Abdera();
     Factory factory = abdera.getFactory();
 
     AbderaClient client = new AbderaClient(abdera);
 
-    String base = "http://localhost:9002/";
-
     // Testing of entry creation
-    IRI colUri = new IRI(base).resolve("foo/acme/customers"); // base +
-                                                          // docCollection.getHref().toString();
+    IRI colUri = new IRI(base).resolve("customers"); 
+                                                          
     Entry entry = factory.newEntry();
     entry.setTitle("This is ignored right now");
     entry.setUpdated(new Date());
@@ -74,7 +89,7 @@ public class CustomerAdapterTest extends TestCase {
 
     RequestOptions opts = new RequestOptions();
     opts.setContentType("application/atom+xml;type=entry");
-    ClientResponse res = client.post(colUri.toString(), entry, opts);
+    ClientResponse res = client.post(colUri.toString() + "?test=foo", entry, opts);
     assertEquals(201, res.getStatus());
 
     // prettyPrint(abdera, res.getDocument());
@@ -89,6 +104,7 @@ public class CustomerAdapterTest extends TestCase {
 
     // prettyPrint(abdera, res.getDocument());
     org.apache.abdera.model.Document<Entry> entry_doc = res.getDocument();
+    prettyPrint(abdera, entry_doc);
     entry = entry_doc.getRoot();
 
     res = client.get(colUri + "/foobar");
@@ -118,8 +134,8 @@ public class CustomerAdapterTest extends TestCase {
     server.start();
   }
 
-  @Override
-  protected void tearDown() throws Exception {
+  @After
+  public void tearDown() throws Exception {
     if (server != null) server.stop();
   }
 

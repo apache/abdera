@@ -25,23 +25,39 @@ import org.apache.abdera.protocol.Resolver;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.TargetBuilder;
+import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.WorkspaceManager;
 
 public class DefaultProvider extends AbstractProvider {
 
-  private WorkspaceManager workspaceManager;
-  private Resolver<Target> targetResolver;
-  private Resolver<Subject> subjectResolver;
-
+  protected WorkspaceManager workspaceManager;
+  protected Resolver<Target> targetResolver;
+  protected Resolver<Subject> subjectResolver;
+  protected TargetBuilder targetBuilder;
+  protected RouteManager routeManager;
+  
   public DefaultProvider() {
-    workspaceManager = new DefaultWorkspaceManager();
-    targetResolver = new StructuredTargetResolver(workspaceManager);
+    this("/");
   }
 
   public DefaultProvider(String base) {
+    if (base == null) {
+      base = "/";
+    }
     workspaceManager = new DefaultWorkspaceManager();
-    targetResolver = new StructuredTargetResolver(workspaceManager, base);
+    routeManager = new RouteManager()
+      .addRoute("service", base, TargetType.TYPE_SERVICE)
+      .addRoute("feed", base + ":collection", TargetType.TYPE_COLLECTION)
+      .addRoute("entry", base + ":collection/:entry", TargetType.TYPE_ENTRY)
+      .addRoute("categories", base + ":collection/:entry;categories", TargetType.TYPE_CATEGORIES);
+    
+    targetBuilder = routeManager;
+    targetResolver = routeManager;
+  }
+
+  public RouteManager getRouteManager() {
+    return routeManager;
   }
 
   protected Resolver<Target> getTargetResolver(RequestContext request) {
@@ -78,6 +94,14 @@ public class DefaultProvider extends AbstractProvider {
 
   public void setWorkspaceManager(WorkspaceManager workspaceManager) {
     this.workspaceManager = workspaceManager;
+  }
+
+  public TargetBuilder getTargetBuilder() {
+    return targetBuilder;
+  }
+
+  public void setTargetBuilder(TargetBuilder targetBuilder) {
+    this.targetBuilder = targetBuilder;
   }
 
   public void addWorkspace(WorkspaceInfo workspace) {

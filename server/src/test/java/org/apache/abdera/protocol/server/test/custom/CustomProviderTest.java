@@ -73,6 +73,9 @@ public class CustomProviderTest extends Assert {
     assertEquals(ResponseType.SUCCESS, resp.getType());
     assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.APP_MEDIA_TYPE));
     Document<Service> doc = resp.getDocument();
+try {
+prettyPrint(doc);
+} catch (Exception e) {}
     Service service = doc.getRoot();
     assertEquals(service.getWorkspaces().size(), 1);
     Workspace workspace = service.getWorkspaces().get(0);

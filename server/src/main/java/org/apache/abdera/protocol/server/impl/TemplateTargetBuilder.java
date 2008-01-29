@@ -16,7 +16,6 @@ import org.apache.abdera.i18n.templates.Template;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.TargetBuilder;
-import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.RequestContext.Scope;
 
 @SuppressWarnings("unchecked") 
@@ -34,8 +33,10 @@ public class TemplateTargetBuilder
   
   public TemplateTargetBuilder() {}
   
-  public TemplateTargetBuilder(Map<TargetType,Template> templates) {
-    this.templates.putAll(templates);
+  public TemplateTargetBuilder(Map<Object,Template> templates) {
+    for (Map.Entry<Object, Template> entry : templates.entrySet()) {
+      setTemplate(entry.getKey(),entry.getValue());
+    }
   }
   
   public TemplateTargetBuilder setTemplate(Object key, String template) {
@@ -43,10 +44,21 @@ public class TemplateTargetBuilder
   }
   
   public TemplateTargetBuilder setTemplate(Object key, Template template) {
+    template = new Template(doReplacements(template.getPattern()));
     templates.put(key,template);
     return this;
   }
 
+  private String doReplacements(String template) {
+    for (Variable var : Variable.values()) {
+      String rep = var.getReplacement();
+      if (rep != null) {
+        template = template.replaceAll("\\Q{" + var.name().toLowerCase() + "}\\E",rep);
+      }
+    }
+    return template;
+  }
+  
   public static Context getContext(RequestContext request, Object param) {
     Context context = null;
     if (param != null) {
@@ -89,7 +101,13 @@ public class TemplateTargetBuilder
         super(subcontext);
         this.request = request;
     }
-
+    
+    private String[] split(String val) {
+      if (val.equals("")) return null;
+      String[] segments = val.split("/");
+      return segments.length > 0 ? segments : null;
+    }
+    
     protected <T> T resolveActual(
       String var) {
         Variable variable = Variable.get(var);
@@ -103,7 +121,7 @@ public class TemplateTargetBuilder
           case REQUEST_CONTENT_TYPE:
             return (T) request.getContentType().toString();
           case REQUEST_CONTEXT_PATH:
-            return (T) request.getContextPath();
+            return (T) split(request.getContextPath());
           case REQUEST_PARAMETER:
             String name = Variable.REQUEST_PARAMETER.label(var);
             return (T) request.getParameter(name);
@@ -129,9 +147,9 @@ public class TemplateTargetBuilder
           case TARGET_IDENTITY:
             return (T) request.getTarget().getIdentity();
           case TARGET_PATH:
-            return (T) request.getTargetPath();
+            return (T) split(request.getTargetPath());
           case TARGET_BASE:
-            return (T) request.getTargetBasePath();
+            return (T) split(request.getTargetBasePath());
           default: 
             return subcontext != null ? (T)subcontext.resolve(var) : null;
         }
@@ -171,7 +189,7 @@ public class TemplateTargetBuilder
   }
   
   public static enum Variable {
-    REQUEST_CONTEXT_PATH,
+    REQUEST_CONTEXT_PATH("{-opt|/|request_context_path}{-listjoin|/|request_context_path}"),
     REQUEST_CONTENT_TYPE,
     REQUEST_URI,
     REQUEST_RESOLVED_URI,
@@ -184,8 +202,8 @@ public class TemplateTargetBuilder
     REQUEST_HEADER,
     TARGET_PARAMETER,
     TARGET_IDENTITY,
-    TARGET_PATH,
-    TARGET_BASE,
+    TARGET_PATH("{-opt|/|target_path}{-listjoin|/|target_path}"),
+    TARGET_BASE("{-opt|/|target_base}{-listjoin|/|target_base}"),
     ;
     
     static Variable get(String var) {
@@ -209,9 +227,19 @@ public class TemplateTargetBuilder
     }
     
     private final Pattern p; 
-      
+    private final String replacement;
+    
     Variable() {
-      p = Pattern.compile("\\Q" + name() + "_\\E.*", Pattern.CASE_INSENSITIVE);
+      this(null);
+    }
+    
+    Variable(String replacement) {
+      this.p = Pattern.compile("\\Q" + name() + "_\\E.*", Pattern.CASE_INSENSITIVE);
+      this.replacement = replacement; 
+    }
+    
+    String getReplacement() {
+      return replacement;
     }
     
     boolean match(String var) {

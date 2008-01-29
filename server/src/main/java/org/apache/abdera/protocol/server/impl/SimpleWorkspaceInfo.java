@@ -36,6 +36,12 @@ public class SimpleWorkspaceInfo
   protected String title;
   protected Set<CollectionInfo> collections;
 
+  public SimpleWorkspaceInfo() {}
+  
+  public SimpleWorkspaceInfo(String title) {
+    this.title = title;
+  }
+  
   public String getTitle() {
     return title;
   }

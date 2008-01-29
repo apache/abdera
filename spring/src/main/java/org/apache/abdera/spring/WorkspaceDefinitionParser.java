@@ -18,33 +18,40 @@
  */
 package org.apache.abdera.spring;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.abdera.protocol.server.Provider;
-import org.apache.abdera.protocol.server.WorkspaceInfo;
-import org.apache.abdera.protocol.server.impl.DefaultProvider;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
-import org.springframework.beans.factory.BeanDefinitionStoreException;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.ManagedList;
 import org.springframework.beans.factory.xml.ParserContext;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class WorkspaceDefinitionParser 
     extends org.apache.abdera.spring.AbstractSingleBeanDefinitionParser {
 
     @Override
-    protected void mapAttribute(BeanDefinitionBuilder bean, Element element, String name, String val) {
-        if (name.equals("title")) {
-            bean.addPropertyValue(name, val);
-        }
-    }
+    protected void doParse(Element element, ParserContext ctx, BeanDefinitionBuilder bean) {
+        ManagedList collections = new ManagedList();
+        NodeList nodes = element.getChildNodes();
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Node n = nodes.item(i);
+            if (n.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
+                Element childElement = (Element)n;
+                BeanDefinitionHolder child = ctx.getDelegate().parseBeanDefinitionElement(childElement);
+                collections.add(child);
+            }
 
-    @Override
-    protected void mapElement(ParserContext ctx, BeanDefinitionBuilder bean, Element element, String name) {
-        bean.addPropertyValue("collections", ctx.getDelegate().parseBeanDefinitionElement(element));
+        }
+        bean.addPropertyValue("collections", collections);
+
+        NamedNodeMap atts = element.getAttributes();
+        Node title = atts.getNamedItem("title");
+        if (title != null) {
+            bean.addPropertyValue("title", title.getNodeValue());
+        }
     }
 
     @Override

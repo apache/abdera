@@ -47,6 +47,7 @@ public class ProviderDefinitionParserTest
         assertEquals(1, workspaces.size());
         
         WorkspaceInfo w = workspaces.iterator().next();
+        assertNotNull(w);
         assertEquals("Foo Workspace", w.getTitle(null));
         
         Collection<CollectionInfo> collections = w.getCollections(null);

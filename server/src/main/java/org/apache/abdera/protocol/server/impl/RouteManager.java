@@ -97,6 +97,10 @@ public class RouteManager
   public Target resolve(Request request) {
     RequestContext context = (RequestContext) request;
     String uri = context.getTargetPath();
+    int idx = uri.indexOf('?');
+    if (idx != -1) {
+      uri = uri.substring(0, idx);
+    }
     for(Map.Entry<Route, TargetType> entry : targets.entrySet()) {
       if (entry.getKey().match(uri)) {
         CollectionAdapter ca = route2CA.get(entry.getKey());

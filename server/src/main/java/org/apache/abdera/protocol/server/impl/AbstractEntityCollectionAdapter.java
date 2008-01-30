@@ -99,8 +99,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
                                  entry.getContentElement(), request);
           entry.getIdElement().setValue(getId(entryObj));
         
-          IRI entryBaseUri = getEntryBaseFromFeedIRI(ProviderHelper.resolveBase(request));
-          
+          IRI entryBaseUri = new IRI(getHref(request) + "/");          
           IRI entryIri = entryBaseUri.resolve(getName(entryObj));
           entry.addLink(entryIri.toString(), "edit");
     
@@ -352,16 +351,15 @@ public abstract class AbstractEntityCollectionAdapter<T>
       T doc = postMedia(request.getContentType(), request.getSlug(), 
                                request.getInputStream(), request);
 
-      IRI baseIri = ProviderHelper.resolveBase(request);
-      IRI entryIri = getEntryBaseFromFeedIRI(baseIri);
+      IRI feedUri = new IRI(getHref(request) + "/");
 
       Entry entry = request.getAbdera().getFactory().newEntry();
 
-      addEntryDetails(request, entry, entryIri, doc);
+      addEntryDetails(request, entry, feedUri, doc);
 
-      addMediaContent(entryIri, entry, doc);
+      addMediaContent(feedUri, entry, doc);
 
-      return buildCreateMediaEntryResponse(entryIri, entry);
+      return buildCreateMediaEntryResponse(feedUri, entry);
     } catch (IOException e) {
       return new EmptyResponseContext(500);
     } catch (ResponseContextException e) {
@@ -388,9 +386,9 @@ public abstract class AbstractEntityCollectionAdapter<T>
         
         entry.getIdElement().setValue(getId(entryObj));
 
-        IRI entryBaseUri = getEntryBaseFromFeedIRI(ProviderHelper.resolveBase(request));
+        IRI feedUri = new IRI(getHref(request) + "/");
 
-        IRI entryIri = entryBaseUri.resolve(getName(entryObj));
+        IRI entryIri = feedUri.resolve(getName(entryObj));
         entry.addLink(entryIri.toString(), "edit");
 
         return buildCreateEntryResponse(entryIri, entry);
@@ -400,10 +398,6 @@ public abstract class AbstractEntityCollectionAdapter<T>
     } catch (ResponseContextException e) {
       return createErrorResponse(e);
     }
-  }
-
-  protected IRI getEntryBaseFromFeedIRI(IRI baseIri) {
-    return new IRI(baseIri.toString() + "/");
   }
 
   protected Entry getEntryFromCollectionProvider(IRI feedIri, RequestContext request) throws ResponseContextException {

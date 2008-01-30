@@ -53,18 +53,14 @@ public class CustomerAdapterTest extends Assert {
   public void testCustomerProvider() throws Exception {
     setupAbdera("/");
     
-    String base = "http://localhost:9002/";
-
-    runTests(base);
+    runTests("/");
   }
   
   @Test
   public void testCustomerProviderWithDifferentBase() throws Exception {
     setupAbdera("/base/");
     
-    String base = "http://localhost:9002/base/";
-
-    runTests(base);
+    runTests("/base/");
   }
 
   private void runTests(String base) throws IOException {
@@ -73,8 +69,10 @@ public class CustomerAdapterTest extends Assert {
 
     AbderaClient client = new AbderaClient(abdera);
 
+    String uri = "http://localhost:9002" + base;
+    
     // Testing of entry creation
-    IRI colUri = new IRI(base).resolve("customers"); 
+    IRI colUri = new IRI(uri).resolve("customers"); 
                                                           
     Entry entry = factory.newEntry();
     entry.setTitle("This is ignored right now");
@@ -92,14 +90,14 @@ public class CustomerAdapterTest extends Assert {
     ClientResponse res = client.post(colUri.toString() + "?test=foo", entry, opts);
     assertEquals(201, res.getStatus());
 
-    // prettyPrint(abdera, res.getDocument());
+    prettyPrint(abdera, res.getDocument());
 
     IRI location = res.getLocation();
-    assertEquals(colUri + "/1001-Dan_Diephouse", 
+    assertEquals(base + "customers/1001-Dan_Diephouse", 
                  location.toString());
 
     // GET the entry
-    res = client.get(location.toString());
+    res = client.get(colUri.resolve(location.toString()).toString());
     assertEquals(200, res.getStatus());
 
     // prettyPrint(abdera, res.getDocument());

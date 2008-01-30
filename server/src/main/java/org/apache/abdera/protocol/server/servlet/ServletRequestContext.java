@@ -55,7 +55,7 @@ public class ServletRequestContext
       this.session = request.getSession(false);
       this.principal = request.getUserPrincipal();
       this.subject = provider.resolveSubject(this);
-      this.target = provider.resolveTarget(this);
+      this.target = initTarget();
   }
   
   public Object getProperty(Property property) {

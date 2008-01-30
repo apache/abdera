@@ -17,19 +17,21 @@
 */
 package org.apache.abdera.protocol.server.context;
 
+import org.apache.abdera.protocol.server.ResponseContext;
+
 
 public class ResponseContextException extends Exception {
 
   private static final long serialVersionUID = -3031651143835987024L;
 
-  private AbstractResponseContext responseContext;
+  private ResponseContext responseContext;
 
-  public ResponseContextException(AbstractResponseContext responseContext, Throwable t) {
+  public ResponseContextException(ResponseContext responseContext, Throwable t) {
     super(t);
     this.responseContext = responseContext;
   }
 
-  public ResponseContextException(AbstractResponseContext responseContext) {
+  public ResponseContextException(ResponseContext responseContext) {
     super();
     this.responseContext = responseContext;
   }
@@ -47,7 +49,7 @@ public class ResponseContextException extends Exception {
     this.responseContext.setStatusText(msg);
   }
 
-  public AbstractResponseContext getResponseContext() {
+  public ResponseContext getResponseContext() {
     return responseContext;
   }
 

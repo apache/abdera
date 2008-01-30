@@ -20,9 +20,7 @@ package org.apache.abdera.protocol.server.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.activation.MimeType;
 
@@ -38,7 +36,6 @@ import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.protocol.server.ProviderHelper;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
-import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.context.EmptyResponseContext;
 import org.apache.abdera.protocol.server.context.MediaResponseContext;
 import org.apache.abdera.protocol.server.context.ResponseContextException;
@@ -64,8 +61,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
       T doc = postMedia(request.getContentType(), request.getSlug(), 
                              request.getInputStream(), request);
 
-      IRI baseIri = ProviderHelper.resolveBase(request);
-      IRI entryIri = getEntryBaseFromFeedIRI(baseIri);
+      IRI entryIri = getFeedIRI(request);
 
       Entry entry = request.getAbdera().getFactory().newEntry();
 
@@ -99,7 +95,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
                                  entry.getContentElement(), request);
           entry.getIdElement().setValue(getId(entryObj));
         
-          IRI entryBaseUri = new IRI(getHref(request) + "/");          
+          IRI entryBaseUri = getFeedIRI(request);          
           IRI entryIri = entryBaseUri.resolve(getName(entryObj));
           entry.addLink(entryIri.toString(), "edit");
     
@@ -180,8 +176,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
   protected void addFeedDetails(Feed feed, RequestContext request) throws ResponseContextException {
     feed.setUpdated(new Date());
 
-    IRI baseIri = ProviderHelper.resolveBase(request);
-    IRI entryIri = getEntryBaseFromFeedIRI(baseIri);
+    IRI entryIri = getFeedIRI(request);
     
     Iterable<T> entries = getEntries(request);
     if (entries != null) {
@@ -197,6 +192,11 @@ public abstract class AbstractEntityCollectionAdapter<T>
         }
       }
     }
+  }
+
+  private IRI getFeedIRI(RequestContext request) {
+    IRI entryIri = new IRI(getHref(request) + "/");
+    return entryIri;
   }
   /**
    * Gets the UUID for the specified entry.
@@ -351,7 +351,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
       T doc = postMedia(request.getContentType(), request.getSlug(), 
                                request.getInputStream(), request);
 
-      IRI feedUri = new IRI(getHref(request) + "/");
+      IRI feedUri = getFeedIRI(request);
 
       Entry entry = request.getAbdera().getFactory().newEntry();
 
@@ -386,7 +386,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
         
         entry.getIdElement().setValue(getId(entryObj));
 
-        IRI feedUri = new IRI(getHref(request) + "/");
+        IRI feedUri = getFeedIRI(request);
 
         IRI entryIri = feedUri.resolve(getName(entryObj));
         entry.addLink(entryIri.toString(), "edit");

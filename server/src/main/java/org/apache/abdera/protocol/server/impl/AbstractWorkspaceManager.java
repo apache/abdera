@@ -33,6 +33,10 @@ public abstract class AbstractWorkspaceManager
     return workspaces;
   }
 
+  public void setWorkspaces(Collection<WorkspaceInfo> workspaces) {
+    this.workspaces = workspaces;
+  }
+
   public void addWorkspace(WorkspaceInfo workspace) {
     if (workspaces == null) {
       workspaces = new HashSet<WorkspaceInfo>();

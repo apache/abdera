@@ -19,6 +19,7 @@ package org.apache.abdera.protocol.server.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -58,16 +59,18 @@ public abstract class AbstractEntityCollectionAdapter<T>
   @Override
   public ResponseContext postMedia(RequestContext request) {
     try {
-      T doc = postMedia(request.getContentType(), request.getSlug(), 
-                             request.getInputStream(), request);
+      T entryObj = postMedia(request.getContentType(), 
+                             request.getSlug(), 
+                             request.getInputStream(), 
+                             request);
 
-      IRI entryIri = getFeedIRI(request);
+      IRI entryIri = getFeedIRI(entryObj, request);
 
       Entry entry = request.getAbdera().getFactory().newEntry();
 
-      addEntryDetails(request, entry, entryIri, doc);
+      addEntryDetails(request, entry, entryIri, entryObj);
 
-      addMediaContent(entryIri, entry, doc);
+      addMediaContent(entryIri, entry, entryObj);
 
       return buildCreateMediaEntryResponse(entryIri, entry);
     } catch (IOException e) {
@@ -75,6 +78,29 @@ public abstract class AbstractEntityCollectionAdapter<T>
     } catch (ResponseContextException e) {
       return createErrorResponse(e);
     }
+  }
+  
+  @Override
+  public ResponseContext putMedia(RequestContext request) {
+    try {
+      String id = getEntryID(request);
+      T entryObj = getEntry(id, request);
+      
+      putMedia(entryObj, request.getContentType(), request.getSlug(), 
+               request.getInputStream(), request);
+
+      return new EmptyResponseContext(200);
+    } catch (IOException e) {
+      return new EmptyResponseContext(500);
+    } catch (ResponseContextException e) {
+      return createErrorResponse(e);
+    }
+  }
+
+  public void putMedia(T entryObj, MimeType contentType, String slug,
+                       InputStream inputStream, RequestContext request)
+    throws ResponseContextException {
+    throw new ResponseContextException(ProviderHelper.notallowed(request));
   }
 
   public ResponseContext postEntry(RequestContext request) {
@@ -95,7 +121,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
                                  entry.getContentElement(), request);
           entry.getIdElement().setValue(getId(entryObj));
         
-          IRI entryBaseUri = getFeedIRI(request);          
+          IRI entryBaseUri = getFeedIRI(entryObj, request);          
           IRI entryIri = entryBaseUri.resolve(getName(entryObj));
           entry.addLink(entryIri.toString(), "edit");
     
@@ -175,18 +201,17 @@ public abstract class AbstractEntityCollectionAdapter<T>
 
   protected void addFeedDetails(Feed feed, RequestContext request) throws ResponseContextException {
     feed.setUpdated(new Date());
-
-    IRI entryIri = getFeedIRI(request);
     
     Iterable<T> entries = getEntries(request);
     if (entries != null) {
       for (T entryObj : entries) {
         Entry e = feed.addEntry();
   
-        addEntryDetails(request, e, entryIri, entryObj);
+        IRI feedIri = new IRI(getFeedIriForEntry(entryObj, request));
+        addEntryDetails(request, e, feedIri, entryObj);
 
         if (isMediaEntry(entryObj)) {
-          addMediaContent(entryIri, e, entryObj);
+          addMediaContent(feedIri, e, entryObj);
         } else {
           addContent(e, entryObj, request);
         }
@@ -194,10 +219,10 @@ public abstract class AbstractEntityCollectionAdapter<T>
     }
   }
 
-  private IRI getFeedIRI(RequestContext request) {
-    IRI entryIri = new IRI(getHref(request) + "/");
-    return entryIri;
+  private IRI getFeedIRI(T entryObj, RequestContext request) {
+    return new IRI(getFeedIriForEntry(entryObj, request) + "/");
   }
+  
   /**
    * Gets the UUID for the specified entry.
    * @param entry
@@ -262,7 +287,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
         return new EmptyResponseContext(404);
       }
       
-      Entry orig_entry = getEntryFromCollectionProvider(entryObj, new IRI(getHref(request)), request);
+      Entry orig_entry = getEntryFromCollectionProvider(entryObj, new IRI(getFeedIriForEntry(entryObj, request)), request);
       if (orig_entry != null) {
 
         MimeType contentType = request.getContentType();
@@ -299,6 +324,10 @@ public abstract class AbstractEntityCollectionAdapter<T>
     
   }
 
+  protected String getFeedIriForEntry(T entryObj, RequestContext request) {
+    return getHref(request);
+  }
+
   public abstract void putEntry(T entry, String title, Date updated, 
                                 List<Person> authors, String summary, 
                                 Content content, RequestContext request) throws ResponseContextException;
@@ -314,8 +343,8 @@ public abstract class AbstractEntityCollectionAdapter<T>
   }
 
   protected void addEntryDetails(RequestContext request, Entry e, 
-                               IRI entryBaseIri, T entryObj) throws ResponseContextException {
-    IRI entryIri = entryBaseIri.resolve(getName(entryObj));
+                                 IRI feedIri, T entryObj) throws ResponseContextException {
+    IRI entryIri = feedIri.resolve(getName(entryObj));
     e.addLink(entryIri.toString(), "edit");
     e.setId(getId(entryObj));
     e.setTitle(getTitle(entryObj));
@@ -348,16 +377,16 @@ public abstract class AbstractEntityCollectionAdapter<T>
 
   protected ResponseContext createMediaEntry(RequestContext request) {
     try {
-      T doc = postMedia(request.getContentType(), request.getSlug(), 
+      T entryObj = postMedia(request.getContentType(), request.getSlug(), 
                                request.getInputStream(), request);
 
-      IRI feedUri = getFeedIRI(request);
+      IRI feedUri = getFeedIRI(entryObj, request);
 
       Entry entry = request.getAbdera().getFactory().newEntry();
 
-      addEntryDetails(request, entry, feedUri, doc);
+      addEntryDetails(request, entry, feedUri, entryObj);
 
-      addMediaContent(feedUri, entry, doc);
+      addMediaContent(feedUri, entry, entryObj);
 
       return buildCreateMediaEntryResponse(feedUri, entry);
     } catch (IOException e) {
@@ -386,7 +415,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
         
         entry.getIdElement().setValue(getId(entryObj));
 
-        IRI feedUri = getFeedIRI(request);
+        IRI feedUri = getFeedIRI(entryObj, request);
 
         IRI entryIri = feedUri.resolve(getName(entryObj));
         entry.addLink(entryIri.toString(), "edit");

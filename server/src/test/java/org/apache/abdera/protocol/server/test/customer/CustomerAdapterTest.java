@@ -58,7 +58,7 @@ public class CustomerAdapterTest extends Assert {
   
   @Test
   public void testCustomerProviderWithDifferentBase() throws Exception {
-    setupAbdera("/base/");
+    setupAbdera("/:base/");
     
     runTests("/base/");
   }

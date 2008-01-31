@@ -121,17 +121,31 @@ public class RouteManager
       return new RouteTarget(type, context, route, uri);
   }
   
+  @SuppressWarnings("unchecked")
   public String urlFor(
     RequestContext context, 
     Object key, 
     Object param) {
       Route route = routes.get(key);
-//      return route != null ?
-//        route.expand(TemplateTargetBuilder.getContext(context,param)) :
-//        null;
-      return route != null ?
-        route.expand(getContext(param)) :
-        null;
+    // return route != null ?
+    // route.expand(TemplateTargetBuilder.getContext(context,param)) :
+    // null;
+    if (route != null) {
+      if (param instanceof Map) {
+        Map<String, Object> map = (Map<String, Object>)param;
+        for (String var : route.getVariables()) {
+          Object value = context.getTarget().getParameter(var);
+          if (!map.containsKey(var) && value != null) {
+            map.put(var, value);
+          }
+        }
+        return route.expand(getContext(map));
+      } else {
+        return route.expand(getContext(param));
+      }
+    } else {
+      return null;
+    }
   }
   
   @SuppressWarnings("unchecked")

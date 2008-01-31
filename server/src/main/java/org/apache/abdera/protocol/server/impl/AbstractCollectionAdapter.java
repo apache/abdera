@@ -58,7 +58,11 @@ public abstract class AbstractCollectionAdapter
   }
   
   public String getHref(RequestContext request) {
-    return request.urlFor("feed", hrefParams);
+    String href = request.urlFor("feed", hrefParams);
+    
+    System.out.println("CA HREF " + href);
+    
+    return href;
   }
   
   public void compensate(RequestContext request, Throwable t) {

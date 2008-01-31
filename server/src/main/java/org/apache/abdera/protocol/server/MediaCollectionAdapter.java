@@ -24,12 +24,25 @@ package org.apache.abdera.protocol.server;
 public interface MediaCollectionAdapter 
   extends CollectionAdapter {
 
+  /**
+   * Add a new media resource to the collection, resulting in the creation
+   * of a new Media Link Entry.
+   */
   ResponseContext postMedia(RequestContext request);
   
+  /**
+   * Delete a media resource from the collection
+   */
   ResponseContext deleteMedia(RequestContext request);
   
+  /**
+   * Get a media resource
+   */
   ResponseContext getMedia(RequestContext request);
   
+  /**
+   * Update a media resource
+   */
   ResponseContext putMedia(RequestContext request);
 
 }

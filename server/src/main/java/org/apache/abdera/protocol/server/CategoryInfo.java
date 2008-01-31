@@ -28,11 +28,26 @@ import org.apache.abdera.model.Category;
  */
 public interface CategoryInfo {
 
+  /**
+   * Return the value of the atom:category scheme attribute or null if the
+   * scheme should be omitted
+   */
   String getScheme(RequestContext request);
   
+  /**
+   * Return the value of the atom:category term attribute. This value MUST
+   * be provided
+   */
   String getTerm(RequestContext request);
   
+  /**
+   * Return the value of the atom:category label attribute or null if the 
+   * label should be omitted. This value is language-sensitive
+   */
   String getLabel(RequestContext request);
   
+  /**
+   * Convert this into an instance of the FOM Category interface
+   */
   Category asCategoryElement(RequestContext request);
 }

@@ -29,11 +29,25 @@ import org.apache.abdera.model.Categories;
 public interface CategoriesInfo 
   extends Iterable<CategoryInfo> {
 
+  /**
+   * Return true of the app:categories element fixed attribute should be set
+   */
   boolean isFixed(RequestContext request);
   
+  /**
+   * Return the value of the app:categories element scheme attribute or 
+   * null if the scheme should be omitted
+   */
   String getScheme(RequestContext request);
 
+  /**
+   * Return the value of the app:categories element href attribute or null
+   * if the href should be omitted
+   */
   String getHref(RequestContext request);
   
+  /**
+   * Convert this into an instance of the FOM Categories interface
+   */
   Categories asCategoriesElement(RequestContext request);
 }

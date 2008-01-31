@@ -28,22 +28,49 @@ import org.apache.abdera.Abdera;
  */
 public interface Provider {
   
+  /**
+   * Initialize the Provider.
+   */
   void init(Abdera abdera, Map<String,String> properties);
 
+  /**
+   * Retrieve the Abdera instance associated with this provider
+   */
   Abdera getAbdera();
   
+  /**
+   * Get the specified property
+   */
   String getProperty(String name);
   
+  /**
+   * Return a listing of all available properties
+   */
   String[] getPropertyNames();
 
+  /**
+   * Resolve the subject using the Provider's Subject Resolver
+   */
   Subject resolveSubject(RequestContext request);
   
+  /**
+   * Resolve the target using the Provider's Target Resolver
+   */
   Target resolveTarget(RequestContext request);
   
+  /**
+   * Construct a URL using to Provider's Target Builder
+   */
   String urlFor(RequestContext request, Object key, Object param);
  
+  /**
+   * Process the request
+   */
   ResponseContext process(RequestContext request);
   
+  /**
+   * Return the listing of filters for this request
+   */
   Filter[] getFilters(RequestContext request);
   
 }

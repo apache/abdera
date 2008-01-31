@@ -9,6 +9,9 @@ package org.apache.abdera.protocol.server;
  */
 public interface TargetBuilder {
 
+  /**
+   * Construct a URL for the specified key
+   */
   String urlFor(RequestContext context, Object key, Object param);
   
 }

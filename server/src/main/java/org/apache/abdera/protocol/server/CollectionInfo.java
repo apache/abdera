@@ -28,14 +28,34 @@ import org.apache.abdera.model.Collection;
  */
 public interface CollectionInfo {
 
+  /**
+   * Get the value of the app:collection element's href attribute. This must not be null
+   */
   String getHref(RequestContext request);
   
+  /**
+   * Get the value of the app:collection element's atom:title element. This assumes
+   * that the title will be type="text".  This must not be null;
+   */
   String getTitle(RequestContext request);
   
+  /**
+   * Returns an array of MIME media types for the app:collection element's 
+   * app:accept elements.  These tell a client which media types the collection
+   * will accept on a POST
+   */
   String[] getAccepts(RequestContext request);
   
+  /**
+   * Return the collection of CategoriesInfo objects for the app:collection
+   * element's app:categories elements.  These tell a client which atom:category
+   * elements are defined for use in the collections atom:entries
+   */
   CategoriesInfo[] getCategoriesInfo(RequestContext request);
   
+  /**
+   * Converts this to an instance of the FOM Collection interface
+   */
   Collection asCollectionElement(RequestContext request);
 
 }

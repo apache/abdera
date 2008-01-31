@@ -30,9 +30,19 @@ import org.apache.abdera.model.Workspace;
  */
 public interface WorkspaceInfo {
 
+  /**
+   * Return the value of the app:workspace element's atom:title. This assumes
+   * that the atom:title element uses type="text". This must not be null
+   */
   String getTitle(RequestContext requsest);
   
+  /**
+   * Return the listing of collections available as part of the workspace
+   */
   Collection<CollectionInfo> getCollections(RequestContext request);
   
+  /**
+   * Returns an instance of the FOM Workspace interface
+   */
   Workspace asWorkspaceElement(RequestContext request);
 }

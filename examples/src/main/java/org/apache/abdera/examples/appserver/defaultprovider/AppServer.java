@@ -6,7 +6,6 @@ import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.impl.DefaultProvider;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.protocol.server.servlet.AbderaServlet;
-import org.apache.abdera.protocol.server.test.customer.CustomerAdapter;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;

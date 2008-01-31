@@ -173,8 +173,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
 
   public ResponseContext getEntry(RequestContext request) {
     try {
-      Entry entry = getEntryFromCollectionProvider(new IRI(getHref(request)),
-                                                   request);
+      Entry entry = getEntryFromCollectionProvider(request);
       if (entry != null) {
         return buildGetEntryResponse(request, entry);
       } else {
@@ -429,7 +428,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
     }
   }
 
-  protected Entry getEntryFromCollectionProvider(IRI feedIri, RequestContext request) throws ResponseContextException {
+  protected Entry getEntryFromCollectionProvider(RequestContext request) throws ResponseContextException {
     String id = getEntryID(request);
     T entryObj = getEntry(id, request);
 
@@ -437,6 +436,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
       return null;
     }
 
+    IRI feedIri = new IRI(getFeedIriForEntry(entryObj, request));
     return getEntryFromCollectionProvider(entryObj, feedIri, request);
   }
 

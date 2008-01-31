@@ -1,4 +1,4 @@
-package org.apache.abdera.examples.appserver;
+package org.apache.abdera.examples.appserver.custom;
 
 import org.apache.abdera.protocol.server.ServiceManager;
 import org.apache.abdera.protocol.server.servlet.AbderaServlet;

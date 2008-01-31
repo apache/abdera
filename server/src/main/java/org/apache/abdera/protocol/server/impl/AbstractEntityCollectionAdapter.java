@@ -19,7 +19,6 @@ package org.apache.abdera.protocol.server.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Date;
 import java.util.List;
 

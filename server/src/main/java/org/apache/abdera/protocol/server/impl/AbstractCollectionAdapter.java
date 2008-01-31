@@ -24,7 +24,6 @@ import org.apache.abdera.protocol.server.MediaCollectionAdapter;
 import org.apache.abdera.protocol.server.ProviderHelper;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
-import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.Transactional;
 import org.apache.abdera.protocol.server.context.AbstractResponseContext;
 import org.apache.abdera.protocol.server.context.BaseResponseContext;

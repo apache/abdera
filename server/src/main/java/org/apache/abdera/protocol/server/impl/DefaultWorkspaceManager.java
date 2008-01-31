@@ -1,7 +1,5 @@
 package org.apache.abdera.protocol.server.impl;
 
-import java.util.Iterator;
-
 import org.apache.abdera.protocol.server.CollectionAdapter;
 import org.apache.abdera.protocol.server.CollectionInfo;
 import org.apache.abdera.protocol.server.RequestContext;

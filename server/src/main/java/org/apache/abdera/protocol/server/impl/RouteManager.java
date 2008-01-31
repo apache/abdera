@@ -165,6 +165,7 @@ public class RouteManager
 
   private static class EmptyContext 
     extends CachingContext {
+    private static final long serialVersionUID = 4681906592987534451L;
     protected <T> T resolveActual(String var) {
       return null;
     }

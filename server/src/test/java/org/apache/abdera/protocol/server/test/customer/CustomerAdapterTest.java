@@ -6,7 +6,6 @@ import java.util.Date;
 import javax.xml.namespace.QName;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;

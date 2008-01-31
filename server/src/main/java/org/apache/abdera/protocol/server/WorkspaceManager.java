@@ -26,8 +26,14 @@ import java.util.Collection;
  */
 public interface WorkspaceManager {
     
+  /**
+   * Get the Collection Adapter that will handle this request
+   */
   CollectionAdapter getCollectionAdapter(RequestContext request);
   
+  /**
+   * Return the list of available workspaces
+   */
   Collection<WorkspaceInfo> getWorkspaces(RequestContext request);
   
 }

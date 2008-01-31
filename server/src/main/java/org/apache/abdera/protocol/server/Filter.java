@@ -27,6 +27,10 @@ package org.apache.abdera.protocol.server;
  */
 public interface Filter {
   
+  /**
+   * Process the filter request.  The filter must call chain.next(request)
+   * to pass the request on to the next filter or the provider.  
+   */
   ResponseContext filter(RequestContext request, FilterChain chain);
   
 }

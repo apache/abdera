@@ -20,6 +20,9 @@ package org.apache.abdera.protocol.server;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+/**
+ * Identifies the type of resource being requests. 
+ */
 public final class TargetType {
 
   public static final String UNKNOWN = "UNKNOWN";
@@ -32,21 +35,49 @@ public final class TargetType {
   private static final Map<String,TargetType> types = 
     new WeakHashMap<String,TargetType>();
   
+  /**
+   * An unknown target type
+   */
   public static final TargetType TYPE_UNKNOWN = new TargetType(UNKNOWN);
+  /**
+   * An Atompub Service Document
+   */
   public static final TargetType TYPE_SERVICE = new TargetType(SERVICE);
+  /**
+   * An Atom Feed Document representing an Atompub Collection
+   */
   public static final TargetType TYPE_COLLECTION = new TargetType(COLLECTION);
+  /**
+   * An Atompub Collection member entry
+   */
   public static final TargetType TYPE_ENTRY = new TargetType(ENTRY);
+  /**
+   * An Atompub Collection media resource
+   */
   public static final TargetType TYPE_MEDIA = new TargetType(MEDIA);
+  /**
+   * An Atompub Categories Document
+   */
   public static final TargetType TYPE_CATEGORIES = new TargetType(CATEGORIES);
 
+  /**
+   * Return a listing of TargetTypes
+   */
   public static Iterable<TargetType> values() {
     return types.values();
   }
     
+  /**
+   * Get the specified target type
+   */
   public static TargetType get(String name) {
     return types.get(name.toUpperCase());
   }
   
+  /**
+   * Get the specified target type.  If the target type does not currently
+   * exist, and create = true, a new type will be created.
+   */
   public static TargetType get(String name, boolean create) {
     if (name == null) return null;
     TargetType type = get(name);
@@ -68,6 +99,9 @@ public final class TargetType {
     types.put(name, this);
   }
   
+  /**
+   * Return the target name
+   */
   public String name() {
     return name;
   }

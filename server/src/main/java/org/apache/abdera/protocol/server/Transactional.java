@@ -27,10 +27,19 @@ import org.apache.abdera.protocol.server.context.ResponseContextException;
  */
 public interface Transactional {
 
+  /**
+   * Called by the provider before dispatching the request to the adapter
+   */
   void start(RequestContext request) throws ResponseContextException;
   
+  /**
+   * Called by the provider after dispatching the request to the adapter
+   */
   void end(RequestContext request, ResponseContext response);
   
+  /**
+   * Called by the provider when a processing error occurs
+   */
   void compensate(RequestContext request, Throwable t);
   
 }

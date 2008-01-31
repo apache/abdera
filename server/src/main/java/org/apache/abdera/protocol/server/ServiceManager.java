@@ -26,6 +26,11 @@ import org.apache.abdera.util.ServiceUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * The ServiceManager is used by the AbderaServlet to bootstrap the server 
+ * instance.  There should be little to no reason why an end user would need
+ * to use this class directly.
+ */
 public class ServiceManager {
    
   public static final String PROVIDER =

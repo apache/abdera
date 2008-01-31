@@ -26,16 +26,34 @@ package org.apache.abdera.protocol.server;
  */
 public interface CollectionAdapter {
 
+  /**
+   * Post a new entry to the collection
+   */
   ResponseContext postEntry(RequestContext request);
   
+  /**
+   * Delete an entry from the collection
+   */
   ResponseContext deleteEntry(RequestContext request);
   
+  /**
+   * Get an entry from the collection
+   */
   ResponseContext getEntry(RequestContext request);
   
+  /**
+   * Update an existing entry
+   */
   ResponseContext putEntry(RequestContext request);
 
+  /**
+   * Get the collections Atom feed document
+   */
   ResponseContext getFeed(RequestContext request);
 
+  /**
+   * Get an Atompub Categories document
+   */
   ResponseContext getCategories(RequestContext request);
 
   /**

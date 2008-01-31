@@ -23,12 +23,25 @@ package org.apache.abdera.protocol.server;
 public interface Target 
   extends Iterable<String> {
 
+  /**
+   * Return the resolved Target Type
+   */
   TargetType getType();
   
+  /**
+   * Return the identity of this target. Usually this will just be
+   * the request URI
+   */
   String getIdentity();
   
+  /**
+   * Return the named target parameter
+   */
   String getParameter(String name);
   
+  /**
+   * Return a listing of all parameter names
+   */
   String[] getParameterNames();
   
 }

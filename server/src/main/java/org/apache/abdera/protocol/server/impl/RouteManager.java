@@ -132,7 +132,7 @@ public class RouteManager
     // null;
     if (route != null) {
       if (param instanceof Map) {
-        Map<String, Object> map = (Map<String, Object>)param;
+        Map<String, Object> map = new HashMap<String,Object>((Map<String, Object>)param);
         for (String var : route.getVariables()) {
           Object value = context.getTarget().getParameter(var);
           if (!map.containsKey(var) && value != null) {

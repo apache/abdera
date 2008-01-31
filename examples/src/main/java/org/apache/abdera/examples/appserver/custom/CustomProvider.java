@@ -15,7 +15,7 @@
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
  */
-package org.apache.abdera.examples.appserver;
+package org.apache.abdera.examples.appserver.custom;
 
 import org.apache.abdera.protocol.server.CollectionAdapter;
 import org.apache.abdera.protocol.server.Filter;

@@ -95,6 +95,10 @@ public abstract class AbstractRequestContext
       throws ParseException, 
              IOException {
     log.debug(Localizer.get("PARSING.REQUEST.DOCUMENT"));
+    if (parser == null)
+      parser = getAbdera().getParser();
+    if (parser == null)
+      throw new IllegalArgumentException("No Parser implementation was provided");
     if (document == null)
       document = getDocument(parser, parser.getDefaultParserOptions());
     return (Document<T>) document;
@@ -118,6 +122,10 @@ public abstract class AbstractRequestContext
       throws ParseException, 
              IOException {
     log.debug(Localizer.get("PARSING.REQUEST.DOCUMENT"));
+    if (parser == null)
+      parser = getAbdera().getParser();
+    if (parser == null)
+      throw new IllegalArgumentException("No Parser implementation was provided");
     if (document == null) {
       document = parser.parse(
         getInputStream(), 

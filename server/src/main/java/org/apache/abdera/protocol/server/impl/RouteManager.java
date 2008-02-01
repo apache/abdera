@@ -121,28 +121,24 @@ public class RouteManager
       return new RouteTarget(type, context, route, uri);
   }
   
-  @SuppressWarnings("unchecked")
   public String urlFor(
     RequestContext context, 
     Object key, 
     Object param) {
-      Route route = routes.get(key);
-    // return route != null ?
-    // route.expand(TemplateTargetBuilder.getContext(context,param)) :
-    // null;
+    Route route = routes.get(key);
     if (route != null) {
-      if (param instanceof Map) {
-        Map<String, Object> map = new HashMap<String,Object>((Map<String, Object>)param);
-        for (String var : route.getVariables()) {
-          Object value = context.getTarget().getParameter(var);
-          if (!map.containsKey(var) && value != null) {
-            map.put(var, value);
-          }
-        }
-        return route.expand(getContext(map));
-      } else {
-        return route.expand(getContext(param));
+      Map<String, Object> map = new HashMap<String,Object>();
+      Context ctx = getContext(param);
+      for (String var : ctx) {
+        map.put(var, ctx.resolve(var));
       }
+      for (String var : route.getVariables()) {
+        Object value = context.getTarget().getParameter(var);
+        if (!map.containsKey(var) && value != null) {
+          map.put(var, value);
+        }
+      }
+      return route.expand(getContext(map));
     } else {
       return null;
     }

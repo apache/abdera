@@ -15,21 +15,16 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.security.util.servlet;
+package org.apache.abdera.security.util.filters;
 
-import java.io.IOException;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.protocol.server.Filter;
+import org.apache.abdera.protocol.server.FilterChain;
+import org.apache.abdera.protocol.server.ProviderHelper;
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.security.AbderaSecurity;
 import org.apache.abdera.security.Signature;
 
@@ -38,43 +33,31 @@ import org.apache.abdera.security.Signature;
  * via PUT or POST contains a valid XML Digital Signature.  
  */
 public class SignedRequestFilter 
-  extends SecurityFilter {
+  implements Filter {
 
   public static final String VALID = "org.apache.abdera.security.util.servlet.SignedRequestFilter.valid";
   public static final String CERTS = "org.apache.abdera.security.util.servlet.SignedRequestFilter.certs";
   
-  public void doFilter(
-    ServletRequest request, 
-    ServletResponse response,
-    FilterChain filter) 
-      throws IOException, ServletException {
-    
-    HttpServletRequest req = (HttpServletRequest) request;
-    String method = req.getMethod();
+  public ResponseContext filter(
+    RequestContext request, 
+    FilterChain chain) {
+
+    AbderaSecurity security = new AbderaSecurity(request.getAbdera());
+    Signature sig = security.getSignature();
+    String method = request.getMethod();
     if (method.equals("POST") || method.equals("PUT")) {
-      BufferedRequestWrapper wrapper = 
-        new BufferedRequestWrapper((HttpServletRequest) request);
       try {
-        Abdera abdera = new Abdera();
-        AbderaSecurity absec = new AbderaSecurity(abdera);
-        Signature sig = absec.getSignature();
-        Document<Element> doc = abdera.getParser().parse(wrapper.getInputStream());
+        Document<Element> doc = request.getDocument();
         boolean valid = sig.verify(doc.getRoot(), null);
-        if (!valid) {
-          ((HttpServletResponse)response).sendError(
-            400, Localizer.get("VALID.SIGNATURE.REQUIRED"));
-          return;
-        }
-        wrapper.setAttribute(VALID, Boolean.valueOf(valid));
-        wrapper.setAttribute(CERTS, sig.getValidSignatureCertificates(doc.getRoot(), null));
-      } catch (Exception e) {
-        e.printStackTrace();
-      } 
-      wrapper.reset();
-      filter.doFilter(wrapper, response);
-    } else {
-      filter.doFilter(request, response);
+        if (!valid)
+          return ProviderHelper.badrequest(
+            request,
+            Localizer.get("VALID.SIGNATURE.REQUIRED"));
+        request.setAttribute(VALID, valid);
+        request.setAttribute(CERTS,sig.getValidSignatureCertificates(doc.getRoot(), null));
+      } catch (Exception e) {} 
     }
+    return chain.next(request);
   }
 
 }

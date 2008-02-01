@@ -15,13 +15,11 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.security.util.servlet;
+package org.apache.abdera.security.util.filters;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.apache.abdera.protocol.server.FilterChain;
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.security.Encryption;
 import org.apache.abdera.security.EncryptionOptions;
 import org.apache.abdera.security.util.Constants;
@@ -71,34 +69,47 @@ import org.apache.abdera.security.util.DHContext;
 public class DHEncryptedResponseFilter 
   extends AbstractEncryptedResponseFilter {
     
-  protected boolean doEncryption(ServletRequest request, Object arg) {
-    return arg != null;
+  protected boolean doEncryption(
+    RequestContext request, 
+    Object arg) {
+      return arg != null;
   }
   
-  protected Object initArg(ServletRequest request) {
-    return getDHContext((HttpServletRequest)request);
+  protected Object initArg(RequestContext request) {
+    return getDHContext(request);
   }
   
   protected EncryptionOptions initEncryptionOptions(
-      ServletRequest request, 
-      ServletResponse response,
+      RequestContext request, 
+      ResponseContext response,
       Encryption enc,
       Object arg) {
     EncryptionOptions options = null;
     try {
       DHContext context = (DHContext) arg;
       options = context.getEncryptionOptions(enc);
-      returnPublicKey((HttpServletResponse)response,context);
+      returnPublicKey(response,context);
     } catch (Exception e) {}
     return options;
     
   }
   
-  private void returnPublicKey(HttpServletResponse response, DHContext context) {
+  public ResponseContext filter(
+    RequestContext request,
+    FilterChain chain) {
+      ResponseContext response = super.filter(request,chain);
+      DHContext context = getDHContext(request);
+      response.setHeader(
+        Constants.CONTENT_ENCRYPTED,
+        context.getResponseString());
+      return response;
+  }
+
+  private void returnPublicKey(ResponseContext response, DHContext context) {
     response.setHeader(Constants.CONTENT_ENCRYPTED,context.getResponseString());
   }
   
-  private DHContext getDHContext(HttpServletRequest request) {
+  private DHContext getDHContext(RequestContext request) {
     try {
       String dh_req = request.getHeader(Constants.ACCEPT_ENCRYPTION);
       if (dh_req == null || dh_req.length() == 0) return null;

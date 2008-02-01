@@ -15,15 +15,12 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.security.util.servlet;
+package org.apache.abdera.security.util.filters;
 
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.apache.abdera.protocol.server.FilterChain;
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.ResponseContext;
+import org.apache.abdera.protocol.server.RequestContext.Scope;
 import org.apache.abdera.security.Encryption;
 import org.apache.abdera.security.EncryptionOptions;
 import org.apache.abdera.security.util.Constants;
@@ -40,51 +37,59 @@ import org.apache.abdera.security.util.DHContext;
 public class DHEncryptedRequestFilter 
   extends AbstractEncryptedRequestFilter {
   
-  @Override
-  public void init(FilterConfig config) throws ServletException {
-    super.init(config);
+  public DHEncryptedRequestFilter() {
+    super();
   }
   
-  @Override
+  public DHEncryptedRequestFilter(String... methods) {
+    super(methods);
+  }
+  
   public void bootstrap(
-    ServletRequest request, 
-    ServletResponse response ) {
-    String method = ((HttpServletRequest)request).getMethod();
-    // include a Accept-Encryption header in the response to GET, HEAD and OPTIONS requests
-    // the header will specify all the information the client needs to construct
-    // it's own DH context and encrypt the request
-    if ("GET".equalsIgnoreCase(method) || 
-        "HEAD".equalsIgnoreCase(method) || 
-        "OPTIONS".equalsIgnoreCase(method)) {
-      DHContext context = new DHContext();
-      ((HttpServletResponse)response).setHeader(
-        Constants.ACCEPT_ENCRYPTION, 
-        context.getRequestString());
-      ((HttpServletRequest) request).getSession(true).setAttribute(
-        "dhcontext", context);
-    } 
+    RequestContext request) {}
+
+  public ResponseContext filter(
+    RequestContext request,
+    FilterChain chain) {
+      ResponseContext response = super.filter(request, chain);
+      String method = request.getMethod();
+      // include a Accept-Encryption header in the response to GET, HEAD and OPTIONS requests
+      // the header will specify all the information the client needs to construct
+      // it's own DH context and encrypt the request
+      if ("GET".equalsIgnoreCase(method) || 
+          "HEAD".equalsIgnoreCase(method) || 
+          "OPTIONS".equalsIgnoreCase(method)) {
+        DHContext context = 
+          (DHContext) request.getAttribute(
+            Scope.SESSION, 
+            "dhcontext");
+        if (context == null) {
+          context = new DHContext();
+          request.setAttribute(Scope.SESSION, "dhcontext", context);
+        }
+        response.setHeader(
+          Constants.ACCEPT_ENCRYPTION, 
+          context.getRequestString());
+      } 
+      return response;
   }
 
-  @Override
-  protected Object initArg(ServletRequest request) {
+  protected Object initArg(RequestContext request) {
     DHContext context = 
-      (DHContext) ((HttpServletRequest)request).
-        getSession(true).getAttribute("dhcontext");
-    String dh = ((HttpServletRequest)request).getHeader(Constants.CONTENT_ENCRYPTED);
+      (DHContext) request.getAttribute(
+        Scope.SESSION, 
+        "dhcontext"); 
+    String dh = request.getHeader(Constants.CONTENT_ENCRYPTED);
     if (context != null && dh != null && dh.length() > 0) {
       try {
         context.setPublicKey(dh);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+      } catch (Exception e) {}
     }
     return context;
   }
 
-  @Override
   protected EncryptionOptions initEncryptionOptions(
-    ServletRequest request,
-    ServletResponse response, 
+    RequestContext request, 
     Encryption encryption, 
     Object arg) {
       EncryptionOptions options = null;

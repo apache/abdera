@@ -15,16 +15,15 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.security.util.servlet;
+package org.apache.abdera.security.util.filters;
 
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.ResponseContext;
+import org.apache.abdera.protocol.server.RequestContext.Scope;
 import org.apache.abdera.security.Encryption;
 import org.apache.abdera.security.EncryptionOptions;
 import org.apache.abdera.security.util.KeyHelper;
@@ -47,35 +46,35 @@ public class AESEncryptedResponseFilter
 
   public static final String PUBLICKEY = "X-PublicKey";
   
-  protected X509Certificate[] getCerts(ServletRequest request) {
+  protected X509Certificate[] getCerts(RequestContext request) {
     return (X509Certificate[]) request.getAttribute(
+      Scope.REQUEST,
       "javax.servlet.request.X509Certificate");
   }
   
-  protected PublicKey getPublicKey(ServletRequest request) {
-    HttpServletRequest servletrequest = (HttpServletRequest) request;
-    String header = servletrequest.getHeader(PUBLICKEY);
+  protected PublicKey getPublicKey(RequestContext request) {
+    String header = request.getHeader(PUBLICKEY);
     PublicKey pkey = KeyHelper.generatePublicKey(header);
     if (pkey == null) pkey = retrievePublicKey(request);
     return pkey;
   }
   
-  protected boolean doEncryption(ServletRequest request, Object arg) {
+  protected boolean doEncryption(RequestContext request, Object arg) {
     return arg != null && arg instanceof RSAPublicKey;
   }
   
-  protected Object initArg(ServletRequest request) {
+  protected Object initArg(RequestContext request) {
     return getPublicKey(request);
   }
   
-  protected PublicKey retrievePublicKey(ServletRequest request) {
+  protected PublicKey retrievePublicKey(RequestContext request) {
     X509Certificate[] cert = getCerts(request);
     return cert != null ? cert[0].getPublicKey() : null;
   }
   
   protected EncryptionOptions initEncryptionOptions(
-    ServletRequest request, 
-    ServletResponse response,
+    RequestContext request, 
+    ResponseContext response,
     Encryption enc,
     Object arg) {
     try {

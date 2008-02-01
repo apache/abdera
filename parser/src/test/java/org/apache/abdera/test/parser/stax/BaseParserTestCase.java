@@ -17,17 +17,17 @@
 */
 package org.apache.abdera.test.parser.stax;
 
-import junit.framework.TestCase;
+import java.io.InputStream;
+
+import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.Parser;
-import org.apache.abdera.i18n.iri.IRI;
 
-import java.io.InputStream;
-
-public abstract class BaseParserTestCase extends TestCase {
+public abstract class BaseParserTestCase extends Assert {
 
   private static Abdera abdera = new Abdera();
   

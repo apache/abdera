@@ -31,8 +31,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import junit.framework.Assert;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
@@ -42,21 +45,45 @@ import org.apache.abdera.model.Workspace;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.protocol.client.AbderaClient;
-import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.client.ClientResponse;
-import org.apache.abdera.test.client.JettyTest;
+import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.test.client.JettyUtil;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.writer.WriterOptions;
-import org.apache.abdera.i18n.iri.IRI;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Test to make sure that we can operate as a simple APP client
  */
 @SuppressWarnings("serial")
-public class AppTest extends JettyTest {
+public class AppTest extends Assert {
+  
+  protected static void getServletHandler(String... servletMappings) {
+    for (int n = 0; n < servletMappings.length; n = n + 2) {
+      String name = servletMappings[n];
+      String root = servletMappings[n+1];
+      JettyUtil.addServlet(name, root);
+    }
+  }
+    
+  protected String getBase() {
+    return "http://localhost:" + JettyUtil.getPort();
+  }
+  
+  @BeforeClass
+  public static void setUp() throws Exception {
+    getServletHandler();
+    JettyUtil.start();
+  }
 
+  @AfterClass
+  public static void tearDown() throws Exception {
+    JettyUtil.stop();
+  }
+  
   private static Abdera abdera = new Abdera();
   
   private static Factory getFactory() {
@@ -334,13 +361,14 @@ public class AppTest extends JettyTest {
     AppTest.INSTANCE = this;
   }
   
-  protected void getServletHandler() {
+  protected static void getServletHandler() {
       getServletHandler(
         ServiceDocumentServlet.class.getName(), "/service",
         CollectionServlet.class.getName(), "/collections/*"
       );
   }  
   
+  @Test
   public void testRequestOptions() throws Exception {
     AbderaClient abderaClient = new AbderaClient();
     RequestOptions options = abderaClient.getDefaultRequestOptions();
@@ -393,6 +421,7 @@ public class AppTest extends JettyTest {
     assertTrue(options.isUsePostOverride());
   }
   
+  @Test
   public void testAppClient() throws Exception {
     AbderaClient abderaClient = new AbderaClient();
     Entry entry = getFactory().newEntry();
@@ -653,6 +682,7 @@ public class AppTest extends JettyTest {
     // YAY! We can handle media link entries 
   }
   
+  @Test
   public void testEntityTag() throws Exception {
     EntityTag tag1 = new EntityTag("tag");
     EntityTag tag2 = new EntityTag("tag",true); // weak;

@@ -18,20 +18,16 @@
 package org.apache.abdera.test.client;
 
 import org.apache.abdera.test.client.app.AppTest;
-import org.apache.abdera.test.client.cache.*;
+import org.apache.abdera.test.client.cache.CacheTest;
+import org.junit.internal.runners.TextListener;
+import org.junit.runner.JUnitCore;
 
-public class TestSuite extends junit.framework.TestSuite {
+public class TestSuite {
   public static void main(String[] args)
   {
-    junit.textui.TestRunner.run(new TestSuite());
-    try {
-      JettyUtil.stop();
-    } catch (Exception e) {}
+    JUnitCore runner = new JUnitCore();
+    runner.addListener(new TextListener(System.out));
+    runner.run(CacheTest.class,AppTest.class); 
   }
 
-  public TestSuite()
-  {
-    addTestSuite(CacheTest.class);
-    addTestSuite(AppTest.class);
-  }
 }

@@ -18,25 +18,25 @@
 package org.apache.abdera.test.parser.stax;
 
 import org.apache.abdera.test.parser.EncodingTest;
-import org.apache.abdera.test.parser.stax.AtomConformanceTest;
-import org.apache.abdera.test.parser.stax.FeedParserTest;
-import org.apache.abdera.test.parser.stax.FeedValidatorTest;
-import org.apache.abdera.test.parser.stax.FOMTest;
-import org.apache.abdera.test.parser.stax.ParserTest;
+import org.apache.abdera.test.parser.ServiceDocumentTest;
+import org.junit.internal.runners.TextListener;
+import org.junit.runner.JUnitCore;
 
-public class TestSuite extends junit.framework.TestSuite {
+public class TestSuite {
+
   public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite());
-  }
-
-  public TestSuite() {
-    addTestSuite(AtomConformanceTest.class);
-    addTestSuite(FeedParserTest.class);
-    addTestSuite(FeedValidatorTest.class);
-    addTestSuite(FOMTest.class);
-    addTestSuite(ParserTest.class);
-    addTestSuite(ConcurrencyTest.class);
-    addTestSuite(XhtmlTest.class);
-    addTestSuite(EncodingTest.class);
+    JUnitCore runner = new JUnitCore();
+    runner.addListener(new TextListener(System.out));
+    runner.run(
+      AtomConformanceTest.class,
+      FeedParserTest.class,
+      FeedValidatorTest.class,
+      FOMTest.class,
+      ParserTest.class,
+      ConcurrencyTest.class,
+      XhtmlTest.class,
+      EncodingTest.class,
+      ServiceDocumentTest.class,
+      EntryLinkTest.class);
   }
 }

@@ -19,43 +19,46 @@ package org.apache.abdera.i18n.test.iri;
 
 import java.net.URI;
 
-import junit.framework.TestCase;
-
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.text.Normalizer;
+import org.junit.Test;
 
-public class TestIRI extends TestCase {
+public class TestIRI extends TestBase {
 
-  public static void testSimple() throws Exception {
+  @Test
+  public void testSimple() throws Exception {
     IRI iri = new IRI("http://validator.w3.org/check?uri=http%3A%2F%2Fr\u00E9sum\u00E9.example.org");
     assertEquals(iri.toString(),"http://validator.w3.org/check?uri=http%3A%2F%2Fr\u00E9sum\u00E9.example.org");
     assertEquals(iri.toURI().toString(),"http://validator.w3.org/check?uri=http%3A%2F%2Fr%C3%A9sum%C3%A9.example.org");   
   }
   
-  public static void testFile() throws Exception {
+  @Test
+  public void testFile() throws Exception {
     IRI iri = new IRI("file:///tmp/test/foo");
     assertEquals(iri.toURI().toString(),"file:///tmp/test/foo");
   }
 
-  public static void testSimple2() throws Exception {
+  @Test
+  public void testSimple2() throws Exception {
     IRI iri = new IRI("http://www.example.org/red%09ros\u00E9#red");
     assertEquals(iri.toURI().toString(),"http://www.example.org/red%09ros%C3%A9#red");
   }
   
-  
-  public static void testNotSoSimple() throws Exception {
+  @Test
+  public void testNotSoSimple() throws Exception {
     IRI iri = new IRI("http://example.com/\uD800\uDF00\uD800\uDF01\uD800\uDF02");
     assertEquals(iri.toURI().toString(),"http://example.com/%F0%90%8C%80%F0%90%8C%81%F0%90%8C%82");
   }
     
-  public static void testIRItoURI() throws Exception {
+  @Test
+  public void testIRItoURI() throws Exception {
     IRI iri = new IRI("http://\u7D0D\u8C46.example.org/%E2%80%AE");
     URI uri = iri.toURI();
     assertEquals(uri.toString(),"http://xn--99zt52a.example.org/%E2%80%AE");
   }
   
-
-  public static void testComparison() throws Exception {
+  @Test
+  public void testComparison() throws Exception {
     IRI iri1 = new IRI("http://www.example.org/");
     IRI iri2 = new IRI("http://www.example.org/..");
     IRI iri3 = new IRI("http://www.Example.org:80");
@@ -77,25 +80,28 @@ public class TestIRI extends TestCase {
     
   }
   
-  
-  public static void testUCN() throws Exception {
+  @Test
+  public void testUCN() throws Exception {
     IRI iri1 = new IRI("http://www.example.org/r\u00E9sum\u00E9.html");
     IRI iri2 = new IRI("http://www.example.org/re\u0301sume\u0301.html", Normalizer.Form.C);
     assertEquals(iri1,iri2);
   }
   
-  public static void testPercent() throws Exception {
+  @Test
+  public void testPercent() throws Exception {
       IRI iri1 = new IRI("http://example.org/%7e%2Fuser?%2f");
       IRI iri2 = new IRI("http://example.org/%7E%2fuser?/");
       assertTrue(iri1.normalize().equals(iri2.normalize()));
   }
   
-  public static void testIDN() throws Exception {
+  @Test
+  public void testIDN() throws Exception {
     IRI iri1 = new IRI("http://r\u00E9sum\u00E9.example.org");
     assertEquals(iri1.getASCIIHost(),"xn--rsum-bpad.example.org");
   }
   
-  public static void testRelative() throws Exception{
+  @Test
+  public void testRelative() throws Exception{
     IRI base = new IRI("http://example.org/foo/");
     
     assertEquals(base.resolve("/").toString(),"http://example.org/");
@@ -113,7 +119,8 @@ public class TestIRI extends TestCase {
    * Try a variety of URI schemes.  If any problematic schemes pop up, 
    * we should add a test for 'em here
    */
-  public static void testSchemes() throws Exception {
+  @Test
+  public void testSchemes() throws Exception {
     
     IRI iri = new IRI("http://a:b@c.org:80/d/e?f#g");
     assertEquals(iri.getScheme(), "http");

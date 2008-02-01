@@ -17,16 +17,18 @@
 */
 package org.apache.abdera.test.parser.stax;
 
+import junit.framework.Assert;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
+import org.junit.Test;
 
-import junit.framework.TestCase;
-
-public class XhtmlTest extends TestCase {
+public class XhtmlTest extends Assert {
  
+  @Test
   public void testXhtml() throws Exception {
     
     Abdera abdera = new Abdera();

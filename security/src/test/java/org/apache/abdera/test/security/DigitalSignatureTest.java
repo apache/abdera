@@ -26,7 +26,7 @@ import java.security.cert.X509Certificate;
 
 import javax.xml.namespace.QName;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
@@ -35,8 +35,9 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.security.AbderaSecurity;
 import org.apache.abdera.security.Signature;
 import org.apache.abdera.security.SignatureOptions;
+import org.junit.Test;
 
-public class DigitalSignatureTest extends TestCase {
+public class DigitalSignatureTest extends Assert {
 
   private static final String keystoreFile = "/key.jks";
   private static final String keystoreType = "JKS";
@@ -45,7 +46,8 @@ public class DigitalSignatureTest extends TestCase {
   private static final String privateKeyPass = "testing";
   private static final String certificateAlias = "James";
   
-  public static void testSignEntry() throws Exception {
+  @Test
+  public void testSignEntry() throws Exception {
     
     // Initialize the keystore
     KeyStore ks = KeyStore.getInstance(keystoreType);

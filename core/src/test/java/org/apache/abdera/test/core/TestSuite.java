@@ -17,14 +17,14 @@
 */
 package org.apache.abdera.test.core;
 
+import org.junit.internal.runners.TextListener;
+import org.junit.runner.JUnitCore;
 
-public class TestSuite extends junit.framework.TestSuite {
+
+public class TestSuite {
   public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite());
-  }
-
-  public TestSuite() {
-    addTestSuite(CoreTest.class);
-    addTestSuite(EntityTagTest.class);
+    JUnitCore runner = new JUnitCore();
+    runner.addListener(new TextListener(System.out));
+    runner.run(CoreTest.class, EntityTagTest.class); 
   }
 }

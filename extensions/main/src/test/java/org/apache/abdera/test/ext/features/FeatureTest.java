@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.test.ext.features;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.features.AcceptSelector;
@@ -32,10 +32,12 @@ import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
+import org.junit.Test;
 
-public class FeatureTest extends TestCase {
+public class FeatureTest extends Assert {
 
-  public static void testFeaturesDocument() throws Exception {
+  @Test
+  public void testFeaturesDocument() throws Exception {
     Abdera abdera = Abdera.getInstance();
     Features features = FeaturesHelper.newFeatures(abdera);
     assertNotNull(features);
@@ -44,7 +46,8 @@ public class FeatureTest extends TestCase {
     assertTrue(doc.getRoot() instanceof Features);
   }
   
-  public static void testFeatures() throws Exception {
+  @Test
+  public void testFeatures() throws Exception {
     Abdera abdera = Abdera.getInstance();
     Collection coll = abdera.getFactory().newCollection();
     Features features = FeaturesHelper.addFeaturesElement(coll);
@@ -65,8 +68,9 @@ public class FeatureTest extends TestCase {
       coll, "http://example.com/features/pez"));
 
   }
-  
-  public static void testSelectors() throws Exception {
+
+  @Test
+  public void testSelectors() throws Exception {
     
     Abdera abdera = Abdera.getInstance();
     Service service = abdera.newService();
@@ -102,7 +106,8 @@ public class FeatureTest extends TestCase {
   }
   
 
-  public static void testType() throws Exception {
+  @Test
+  public void testType() throws Exception {
     Abdera abdera = Abdera.getInstance();
      Feature feature = abdera.getFactory().newElement(FeaturesHelper.FEATURE);
      feature.addType("image/jpg","image/gif","image/png","image/*");

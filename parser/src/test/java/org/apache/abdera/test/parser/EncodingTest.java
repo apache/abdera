@@ -23,7 +23,7 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.Date;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Content;
@@ -35,10 +35,11 @@ import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.util.CompressionUtil;
 import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 import org.apache.abdera.writer.WriterOptions;
+import org.junit.Test;
 
-
-public class EncodingTest extends TestCase {
+public class EncodingTest extends Assert {
     
+  @Test
     public void testContentEncoding() throws Exception {
         Abdera abdera = new Abdera();
         Entry entry = abdera.newEntry();
@@ -57,6 +58,7 @@ public class EncodingTest extends TestCase {
     /**
      * Passes if the test does not throw a parse exception
      */
+  @Test
     public void testCompressionCodec() throws Exception {
       Abdera abdera = new Abdera();
       Entry entry = abdera.newEntry();
@@ -76,6 +78,7 @@ public class EncodingTest extends TestCase {
     /**
      * Passes if the test does not throw a parse exception
      */
+  @Test
     public void testXMLRestrictedChar() throws Exception {
       String s = "<?xml version='1.1'?><t t='\u007f' />";
       Abdera abdera = new Abdera();
@@ -89,6 +92,7 @@ public class EncodingTest extends TestCase {
     /**
      * Passes if the test does not throw a parse exception
      */
+  @Test
     public void testXMLRestrictedChar2() throws Exception {
       String s = "<?xml version='1.0'?><t t='\u0002' />";
       Abdera abdera = new Abdera();
@@ -103,6 +107,7 @@ public class EncodingTest extends TestCase {
     /**
      * Passes if the test does not throw any exceptions
      */
+  @Test
     public void testWriterOptions() throws Exception {
       Abdera abdera = new Abdera();
       Entry entry = abdera.newEntry();

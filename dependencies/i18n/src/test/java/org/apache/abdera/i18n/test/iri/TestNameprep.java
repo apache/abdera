@@ -20,7 +20,6 @@ package org.apache.abdera.i18n.test.iri;
 import org.apache.abdera.i18n.text.CharUtils;
 import org.apache.abdera.i18n.text.Nameprep;
 
-
 public class TestNameprep extends TestBase {
   
   enum Test {
@@ -144,7 +143,8 @@ public class TestNameprep extends TestBase {
     
   }
   
-  public static void testNameprep() throws Exception {
+  @org.junit.Test
+  public void testNameprep() throws Exception {
     for (Test test : Test.values()) {
       try {
         String out = Nameprep.prep(test.in);

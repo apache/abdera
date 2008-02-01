@@ -39,8 +39,6 @@ import org.apache.abdera.protocol.client.RequestOptions;
 import org.apache.abdera.protocol.server.test.JettyServer;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
-import org.apache.abdera.writer.Writer;
-import org.apache.abdera.writer.WriterFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -118,10 +116,10 @@ prettyPrint(doc);
   }
 
   protected void prettyPrint(Base doc) throws IOException {
-      WriterFactory writerFactory = abdera.getWriterFactory();
-      Writer writer = writerFactory.getWriter("prettyxml");
-      writer.writeTo(doc, System.out);
-      System.out.println();
+//      WriterFactory writerFactory = abdera.getWriterFactory();
+//      Writer writer = writerFactory.getWriter("prettyxml");
+//      writer.writeTo(doc, System.out);
+//      System.out.println();
   }
 
 

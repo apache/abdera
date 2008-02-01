@@ -17,25 +17,32 @@
 */
 package org.apache.abdera.test.ext.media;
 
-import junit.framework.TestCase;
-import org.apache.abdera.Abdera;
-import org.apache.abdera.factory.Factory;
-import org.apache.abdera.parser.Parser;
-import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Entry;
-import org.apache.abdera.ext.media.MediaGroup;
-import org.apache.abdera.ext.media.MediaContent;
-import org.apache.abdera.ext.media.MediaTitle;
+import static org.apache.abdera.ext.media.MediaConstants.CONTENT;
+import static org.apache.abdera.ext.media.MediaConstants.GROUP;
+import static org.apache.abdera.ext.media.MediaConstants.TITLE;
 
-import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
-import static org.apache.abdera.ext.media.MediaConstants.*;
+import junit.framework.Assert;
 
-public class MediaTest extends TestCase {
+import org.apache.abdera.Abdera;
+import org.apache.abdera.ext.media.MediaContent;
+import org.apache.abdera.ext.media.MediaGroup;
+import org.apache.abdera.ext.media.MediaTitle;
+import org.apache.abdera.ext.media.MediaConstants.Expression;
+import org.apache.abdera.ext.media.MediaConstants.Type;
+import org.apache.abdera.factory.Factory;
+import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Entry;
+import org.apache.abdera.parser.Parser;
+import org.junit.Test;
 
-  public static void testMedia() throws Exception {
+public class MediaTest extends Assert {
+
+  @Test
+  public void testMedia() throws Exception {
     
     Abdera abdera = new Abdera();
     Factory factory = abdera.getFactory();

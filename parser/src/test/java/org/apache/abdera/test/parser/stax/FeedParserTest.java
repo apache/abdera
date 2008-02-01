@@ -29,21 +29,24 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Person;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 public class FeedParserTest extends BaseParserTestCase {
 
   static IRI baseURI;
 
-  protected void setUp() throws Exception {
+  @BeforeClass
+  public static void setUp() throws Exception {
     baseURI = new IRI("http://www.feedparser.org/tests/wellformed/atom10/");
   }
 
-  public void testAtom10Namespace() throws Exception {
+  @Test public void testAtom10Namespace() throws Exception {
     Document doc = parse(baseURI.resolve("atom10_namespace.xml"));
     assertNotNull(doc);
   }
   
-  public void testEntryAuthorEmail() throws Exception {
+  @Test public void testEntryAuthorEmail() throws Exception {
     Document<Feed> doc = parse(baseURI.resolve("entry_author_email.xml"));
     Feed feed = doc.getRoot();
     Entry entry = feed.getEntries().get(0);
@@ -51,7 +54,7 @@ public class FeedParserTest extends BaseParserTestCase {
     assertEquals(person.getEmail(), "me@example.com");
   }
   
-  public void testEntryAuthorName() throws Exception {
+  @Test public void testEntryAuthorName() throws Exception {
     Document doc = parse(baseURI.resolve("entry_author_name.xml"));
     Feed feed = (Feed) doc.getRoot();
     Entry entry = feed.getEntries().get(0);
@@ -59,7 +62,7 @@ public class FeedParserTest extends BaseParserTestCase {
     assertEquals(person.getName(), "Example author");    
   }
   
-  public void testEntryContentBase64() throws Exception {
+  @Test public void testEntryContentBase64() throws Exception {
     Document doc = parse(baseURI.resolve("entry_content_base64.xml"));
     Feed feed = (Feed)doc.getRoot();
     Entry entry = feed.getEntries().get(0);
@@ -73,7 +76,7 @@ public class FeedParserTest extends BaseParserTestCase {
     assertEquals(baos.toString(), "Example <b>Atom</b>");
   }
   
-  public void testEntryContentBase642() throws Exception {
+  @Test public void testEntryContentBase642() throws Exception {
     Document doc = parse(baseURI.resolve("entry_content_base64_2.xml"));
     Feed feed = (Feed)doc.getRoot();
     Entry entry = feed.getEntries().get(0);

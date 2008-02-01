@@ -21,7 +21,7 @@ import java.io.StringReader;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.sharing.Conflicts;
@@ -37,11 +37,13 @@ import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
+import org.junit.Test;
 
 public class SharingTest
-    extends TestCase {
+    extends Assert {
   
-  public static void testSharingFactory() throws Exception {
+  @Test
+  public void testSharingFactory() throws Exception {
     Abdera abdera = new Abdera();
     Factory factory = abdera.getFactory();
     Conflicts conflicts = factory.newElement(SharingHelper.SSE_CONFLICTS);
@@ -58,7 +60,8 @@ public class SharingTest
     assertNotNull(unpub);
   }
 
-  public static void testSimpleExample() throws Exception {
+  @Test
+  public void testSimpleExample() throws Exception {
     
     String ex = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                 "<feed xmlns=\"http://www.w3.org/2005/Atom\" " +
@@ -145,6 +148,7 @@ public class SharingTest
     assertEquals(history.getBy(),"REO1750");
   }
   
+  @Test
   public void testCreateOperation() throws Exception  {
     Abdera abdera = new Abdera();
     Entry entry = SharingHelper.createEntry(abdera, "jms");
@@ -158,6 +162,7 @@ public class SharingTest
     assertEquals(history.getBy(),"jms");
   }
   
+  @Test
   public void testUpdateOperation() throws Exception {
     Abdera abdera = new Abdera();
     Entry entry = SharingHelper.createEntry(abdera, "jms");
@@ -172,6 +177,7 @@ public class SharingTest
     assertEquals(history.getBy(),"jms");
   }
   
+  @Test
   public void testDeleteOperation() throws Exception {
     Abdera abdera = new Abdera();
     Entry entry = SharingHelper.createEntry(abdera, "jms");
@@ -190,6 +196,7 @@ public class SharingTest
     assertEquals(history.getBy(),"jms");
   }
   
+  @Test
   public void testConflict() throws Exception  {
     
     Abdera abdera = new Abdera();
@@ -231,6 +238,7 @@ public class SharingTest
     
   }
   
+  @Test
   public void testUnpublish() throws Exception {
     
     Abdera abdera = new Abdera();

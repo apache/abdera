@@ -22,8 +22,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 
-import junit.framework.TestCase;
-
 import org.apache.abdera.i18n.text.Filter;
 import org.apache.abdera.i18n.text.io.CharsetSniffingInputStream;
 import org.apache.abdera.i18n.text.io.DynamicPushbackInputStream;
@@ -31,10 +29,12 @@ import org.apache.abdera.i18n.text.io.FilteredCharReader;
 import org.apache.abdera.i18n.text.io.PeekAheadInputStream;
 import org.apache.abdera.i18n.text.io.PipeChannel;
 import org.apache.abdera.i18n.text.io.RewindableInputStream;
+import org.junit.Test;
 
-public class TestIO extends TestCase {
+public class TestIO extends TestBase {
 
-  public static void testCharsetDetection() throws Exception {
+  @Test
+  public void testCharsetDetection() throws Exception {
     
     byte[] utf32be = {0x00,0x00,0xFFFFFFFE,0xFFFFFFFF, 0x01, 0x02, 0x03};
     byte[] utf32le = {0xFFFFFFFF,0xFFFFFFFE,0x00,0x00, 0x01, 0x02, 0x03};
@@ -94,7 +94,8 @@ public class TestIO extends TestCase {
     assertFalse(csis.isBomSet());
   }
   
-  public static void testDynamicPushbackInputStream() throws Exception {
+  @Test
+  public void testDynamicPushbackInputStream() throws Exception {
     ByteArrayInputStream in = new ByteArrayInputStream(new byte[] {0x01,0x02,0x03,0x04});
     DynamicPushbackInputStream dpis = new DynamicPushbackInputStream(in);
     int r = dpis.read();
@@ -107,7 +108,8 @@ public class TestIO extends TestCase {
     assertFalse(e == r);
   }
   
-  public static void testFilteredCharReader() throws Exception {
+  @Test
+  public void testFilteredCharReader() throws Exception {
     String string = "abcdefg";
     FilteredCharReader fcr = 
       new FilteredCharReader(
@@ -124,7 +126,8 @@ public class TestIO extends TestCase {
     assertEquals(new String(buf,0,r),"abfg");
   }
   
-  public static void testPeekAheadInputStream() throws Exception {
+  @Test
+  public void testPeekAheadInputStream() throws Exception {
     ByteArrayInputStream in = new ByteArrayInputStream(new byte[] {0x01,0x02,0x03,0x04});
     PeekAheadInputStream pais = new PeekAheadInputStream(in);
     byte[] peek = new byte[2];
@@ -138,7 +141,8 @@ public class TestIO extends TestCase {
     assertFalse(read[1] == newread[1]);    
   }
   
-  public static void testRewindableInputStream() throws Exception {
+  @Test
+  public void testRewindableInputStream() throws Exception {
     ByteArrayInputStream in = new ByteArrayInputStream(new byte[] {0x01,0x02,0x03,0x04});
     RewindableInputStream ris = new RewindableInputStream(in);
     byte[] buf1 = new byte[4];
@@ -150,7 +154,8 @@ public class TestIO extends TestCase {
       assertEquals(buf1[n],buf2[n]);
   }
   
-  public static void testPipeChannel() throws Exception {
+  @Test
+  public void testPipeChannel() throws Exception {
     PipeChannel pc = new PipeChannel();
     assertTrue(pc.isWritable());
     assertFalse(pc.isReadable());

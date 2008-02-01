@@ -19,15 +19,17 @@ package org.apache.abdera.test.ext.history;
 
 import javax.xml.namespace.QName;
 
+import junit.framework.Assert;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.history.FeedPagingHelper;
 import org.apache.abdera.model.Feed;
+import org.junit.Test;
 
-import junit.framework.TestCase;
+public class FeedPagingTest extends Assert {
 
-public class FeedPagingTest extends TestCase {
-
-  public static void testHistory() throws Exception {
+  @Test
+  public void testHistory() throws Exception {
     
     Abdera abdera = new Abdera();
     
@@ -72,7 +74,8 @@ public class FeedPagingTest extends TestCase {
     assertEquals(FeedPagingHelper.getNext(feed).toString(),"http://example.org/bar");
   }
   
-  public static void testHistory2() throws Exception {
+  @Test
+  public void testHistory2() throws Exception {
     Abdera abdera = new Abdera();
     Feed feed = abdera.newFeed();
     QName complete = new QName(FeedPagingHelper.FHNS, "complete","x");

@@ -23,16 +23,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
 import org.apache.abdera.i18n.templates.HashMapContext;
 import org.apache.abdera.i18n.templates.Template;
 import org.apache.abdera.i18n.templates.URITemplate;
+import org.junit.Test;
 
 public final class TestTemplate 
-  extends TestCase {
+  extends TestBase {
 
-  public static void test1() throws Exception {
+  @Test
+  public void test1() throws Exception {
     String t = "http://bitworking.org/news/{entry}";
     String e = "http://bitworking.org/news/RESTLog_Specification";
     HashMapContext c = new HashMapContext();
@@ -40,14 +40,16 @@ public final class TestTemplate
     eval(t,e,c);
   }
   
-  public static void test2() throws Exception {
+  @Test
+  public void test2() throws Exception {
     String t = "http://example.org/wiki/{entry=FrontPage}";
     String e = "http://example.org/wiki/FrontPage";
     HashMapContext c = new HashMapContext();
     eval(t,e,c);
   }
   
-  public static void test3() throws Exception {
+  @Test
+  public void test3() throws Exception {
     String t = "http://bitworking.org/news/{-listjoin|/|entry}";
     String e = "http://bitworking.org/news/240/Newsqueak";
     HashMapContext c = new HashMapContext();
@@ -55,7 +57,8 @@ public final class TestTemplate
     eval(t,e,c);
   }
   
-  public static void test4() throws Exception {
+  @Test
+  public void test4() throws Exception {
     String t = "http://technorati.com/search/{term}";
     String e = "http://technorati.com/search/240%2FNewsqueak";
     HashMapContext c = new HashMapContext();
@@ -63,7 +66,8 @@ public final class TestTemplate
     eval(t,e,c);
   }
   
-  public static void test5() throws Exception {
+  @Test
+  public void test5() throws Exception {
     String t = "http://example.org/{fruit=orange}/";
     String e = "http://example.org/apple/";
     String f = "http://example.org/orange/";
@@ -74,7 +78,8 @@ public final class TestTemplate
     eval(t,f,c);
   }
   
-  public static void test6() throws Exception {
+  @Test
+  public void test6() throws Exception {
     String t = "bar{-prefix|/|var}/";
     String e = "bar/foo/";
     HashMapContext c = new HashMapContext();
@@ -82,7 +87,8 @@ public final class TestTemplate
     eval(t,e,c);
   }
   
-  public static void test7() throws Exception {
+  @Test
+  public void test7() throws Exception {
     String t = "bar/{-append|#home|var}";
     String e = "bar/foo#home";
     HashMapContext c = new HashMapContext();
@@ -90,7 +96,8 @@ public final class TestTemplate
     eval(t,e,c);
   }  
 
-  public static void test8() throws Exception {
+  @Test
+  public void test8() throws Exception {
     String t = "{-join|&|name,location,age}";
     String e = "name=joe&location=NYC";
     HashMapContext c = new HashMapContext();
@@ -99,7 +106,8 @@ public final class TestTemplate
     eval(t,e,c);
   }  
 
-  public static void test9() throws Exception {
+  @Test
+  public void test9() throws Exception {
     String t = "{-listjoin|/|segments}";
     String e = "a/b/c";
     HashMapContext c = new HashMapContext();
@@ -107,7 +115,8 @@ public final class TestTemplate
     eval(t,e,c);
   }  
 
-  public static void test10() throws Exception {
+  @Test
+  public void test10() throws Exception {
     String t = "{-opt|/|segments}";
     String e = "/";
     HashMapContext c = new HashMapContext();
@@ -115,7 +124,8 @@ public final class TestTemplate
     eval(t,e,c);
   }
   
-  public static void test11() throws Exception {
+  @Test
+  public void test11() throws Exception {
     String t = "{-neg|/|segments}";
     String e = "";
     HashMapContext c = new HashMapContext();
@@ -123,7 +133,8 @@ public final class TestTemplate
     eval(t,e,c);    
   }  
   
-  public static void test12() throws Exception {
+  @Test
+  public void test12() throws Exception {
     String t = "http://www.google.com/search?q={term}";
     String e = "http://www.google.com/search?q=ben%26jerrys";
     HashMapContext c = new HashMapContext();
@@ -141,7 +152,8 @@ public final class TestTemplate
     eval(t,e,c);
   }
   
-  public static void test13() throws Exception {
+  @Test
+  public void test13() throws Exception {
     String t = "http://www.google.com/search?q={term}";
     String e = "http://www.google.com/search?q=%C3%8E%C3%B1%C5%A3%C3%A9r%C3%B1%C3%A5%C5%A3%C3%AE%C3%B6%C3%B1%C3%A5%C4%BC%C3%AE%C5%BE%C3%A5%C5%A3%C3%AE%C3%B6%C3%B1";
     HashMapContext c = new HashMapContext();
@@ -149,7 +161,8 @@ public final class TestTemplate
     eval(t,e,c);
   }
   
-  public static void test14() throws Exception {
+  @Test
+  public void test14() throws Exception {
     String t = "{-opt|/-/|categories}{-listjoin|/|categories}";
     String e = "/-/A%7C-B/-C";
     HashMapContext c = new HashMapContext();
@@ -157,7 +170,8 @@ public final class TestTemplate
     eval(t,e,c);
   }
   
-  public static void test15() throws Exception {
+  @Test
+  public void test15() throws Exception {
     String t = "http://www.google.com/notebook/feeds/{userID}{-prefix|/notebooks/|notebookID}{-opt|/-/|categories}{-listjoin|/|categories}?{-join|&|updated-min,updated-max,alt,start-index,max-results,entryID,orderby}";
     String e = "http://www.google.com/notebook/feeds/a/notebooks/b?updated-min=c&max-results=d";
     HashMapContext c = new HashMapContext();
@@ -168,7 +182,8 @@ public final class TestTemplate
     eval(t,e,c);
   }
 
-  public static void test16() throws Exception {
+  @Test
+  public void test16() throws Exception {
     String t = "http://www.google.com/search?q={term}";
     String e = "http://www.google.com/search?q=\u00ce\u00f1\u0163\u00e9\u0072\u00f1\u00e5\u0163\u00ee\u00f6\u00f1\u00e5\u013c\u00ee\u017e\u00e5\u0163\u00ee\u00f6\u00f1";
     HashMapContext c = new HashMapContext();
@@ -177,7 +192,8 @@ public final class TestTemplate
     eval(t,e,c);  // use the IriEvaluator so that pct-encoding is done correctly for IRI's
   }
   
-  public static void test17() throws Exception {
+  @Test
+  public void test17() throws Exception {
     String t = new String("bar{-prefix|/é/|var}/".getBytes("UTF-8"),"UTF-8");
     String e = new String("bar/é/foo/".getBytes("UTF-8"),"UTF-8");
     HashMapContext c = new HashMapContext();
@@ -186,7 +202,8 @@ public final class TestTemplate
     eval(t,e,c);
   }
   
-  public static void test18() throws Exception {
+  @Test
+  public void test18() throws Exception {
     String t = "http://www.google.com/notebook/feeds/{userID}{-prefix|/notebooks/|notebookID}{-opt|/-/|categories}{-listjoin|/|categories}?{-join|&|updated-min,updated-max,alt,start-index,max-results,entryID,orderby}";
     Template template = new Template(t);
     String[] variables = template.getVariables();
@@ -202,7 +219,8 @@ public final class TestTemplate
     assertEquals(variables[9],"orderby");
   }
 
-  public static void test19() throws Exception {
+  @Test
+  public void test19() throws Exception {
     String t = "http://www.google.com/notebook/feeds/{userID}{-prefix|/notebooks/|notebookID}{-opt|/-/|categories}{-listjoin|/|categories}?{-join|&|updated-min,updated-max,alt,start-index,max-results,entryID,orderby}";
     Template template = new Template(t);
     Template t2 = template.clone();
@@ -210,7 +228,8 @@ public final class TestTemplate
     assertEquals(template.hashCode(),t2.hashCode());
   }
   
-  public static void test20() throws Exception {
+  @Test
+  public void test20() throws Exception {
     Map<String,Object> map = new HashMap<String,Object>();
     map.put("a","foo");
     map.put("b","bar");
@@ -251,13 +270,15 @@ public final class TestTemplate
       assertEquals(Template.expand(t,map),tests.get(t));
   }
   
-  public static void test21() throws Exception {
+  @Test
+  public void test21() throws Exception {
     String t = "http://example.org/{foo}/{bar}{-opt|/|categories}{-listjoin|/|categories}?{-join|&|baz,tag}";
     String e = "http://example.org/abc/xyz/a/b?baz=true&tag=x&tag=y&tag=z";
     assertEquals(Template.expand(t,new MyObject()),e);
   }
 
-  public static void test22() throws Exception {
+  @Test
+  public void test22() throws Exception {
     String e = "http://example.org/abc/xyz/a/b?baz=true&tag=x&tag=y&tag=z";
     assertEquals(Template.expandAnnotated(new MyObject()),e);
   }

@@ -19,21 +19,23 @@ package org.apache.abdera.test.parser;
 
 import java.io.StringWriter;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
+import org.junit.Test;
 
 
 
-public class ServiceDocumentTest extends TestCase {
+public class ServiceDocumentTest extends Assert {
 
     /**
      * Test whether the Service Document includes <accept> for collections.
      */
+  @Test
     public void testCollectionAccepts() throws Exception {
         Abdera abdera = new Abdera();
         Factory factory = abdera.getFactory();

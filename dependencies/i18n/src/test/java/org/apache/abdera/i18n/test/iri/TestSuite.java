@@ -17,21 +17,25 @@
 */
 package org.apache.abdera.i18n.test.iri;
 
+import org.junit.internal.runners.TextListener;
+import org.junit.runner.JUnitCore;
 
-public class TestSuite extends junit.framework.TestSuite {
-  public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite());
-  }
 
-  public TestSuite() {
-    addTestSuite(TestIDNA.class);
-    addTestSuite(TestIRI.class);
-    addTestSuite(TestLang.class);
-    addTestSuite(TestNameprep.class);
-    addTestSuite(TestNFKC.class);
-    addTestSuite(TestPunycode.class);
-    addTestSuite(TestTemplate.class);
-    addTestSuite(TestIO.class);
-    addTestSuite(TestText.class);
+public class TestSuite {
+
+  public static void main(String[] args)
+  {
+    JUnitCore runner = new JUnitCore();
+    runner.addListener(new TextListener(System.out));
+    runner.run(
+    TestIDNA.class,
+    TestIRI.class,
+    TestLang.class,
+    TestNameprep.class,
+    TestNFKC.class,
+    TestPunycode.class,
+    TestTemplate.class,
+    TestIO.class,
+    TestText.class);
   }
 }

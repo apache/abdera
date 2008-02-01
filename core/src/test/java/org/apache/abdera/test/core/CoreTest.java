@@ -36,7 +36,7 @@ import javax.activation.DataHandler;
 import javax.activation.MimeType;
 import javax.xml.namespace.QName;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
@@ -68,10 +68,15 @@ import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.XmlRestrictedCharReader;
 import org.apache.abdera.writer.WriterOptions;
+import org.junit.Test;
 
-public class CoreTest extends TestCase implements Constants {
 
-  public static void testDefaultConfigurationProperties() {
+public class CoreTest 
+  extends Assert 
+  implements Constants {
+
+  @Test
+  public void testDefaultConfigurationProperties() {
     Configuration config = new AbderaConfiguration();
     assertEquals(
       config.getConfigurationOption(CONFIG_FACTORY, DEFAULT_FACTORY), 
@@ -84,7 +89,8 @@ public class CoreTest extends TestCase implements Constants {
       "org.apache.abdera.parser.stax.FOMXPath");
   }
   
-  public static void testUriNormalization() {
+  @Test
+  public void testUriNormalization() {
     try {
       assertEquals(
         IRI.normalizeString(
@@ -107,7 +113,8 @@ public class CoreTest extends TestCase implements Constants {
     }
   }
   
-  public static void testAtomDate() {
+  @Test
+  public void testAtomDate() {
     Date now = new Date();
     AtomDate atomNow = AtomDate.valueOf(now);
     String rfc3339 = atomNow.getValue();
@@ -116,7 +123,8 @@ public class CoreTest extends TestCase implements Constants {
     assertEquals(now, parsed);
   }
   
-  public static void testAtomDate2() {
+  @Test
+  public void testAtomDate2() {
     String date = "2007-12-13T14:15:16.123Z";
     AtomDate atomDate = new AtomDate(date);
     Calendar calendar = atomDate.getCalendar();
@@ -124,7 +132,8 @@ public class CoreTest extends TestCase implements Constants {
     assertEquals(date,atomDate.toString());
   }
   
-  public static void testAtomDate3() {
+  @Test
+  public void testAtomDate3() {
     long date = System.currentTimeMillis();
     AtomDate atomDate = new AtomDate(date);
     Calendar calendar = atomDate.getCalendar();
@@ -132,7 +141,8 @@ public class CoreTest extends TestCase implements Constants {
     assertEquals(date,atomDate.getTime());
   }
   
-  public static void testXmlRestrictedCharReader() throws Exception {
+  @Test
+  public void testXmlRestrictedCharReader() throws Exception {
     String s = "\u0001abcdefghijklmnop\u0002";
     StringReader r = new StringReader(s);
     XmlRestrictedCharReader x = new XmlRestrictedCharReader(r);
@@ -142,7 +152,8 @@ public class CoreTest extends TestCase implements Constants {
     assertEquals("abcdefghijklmnop",new String(chars,0,n));
   }
   
-  public static void testMimeTypeHelper() throws Exception {
+  @Test
+  public void testMimeTypeHelper() throws Exception {
     assertTrue(MimeTypeHelper.isApp("application/atomsvc+xml"));
     assertFalse(MimeTypeHelper.isApp("application/atomserv+xml"));
     assertTrue(MimeTypeHelper.isAtom("application/atom+xml"));
@@ -161,7 +172,8 @@ public class CoreTest extends TestCase implements Constants {
     assertTrue(MimeTypeHelper.isFeed(MimeTypeHelper.getMimeType(new EmptyFeed())));
   }
   
-  public static void testCompressionUtil() throws Exception {
+  @Test
+  public void testCompressionUtil() throws Exception {
     String s = "abcdefg";
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     OutputStream cout = CompressionUtil.getEncodedOutputStream(

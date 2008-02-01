@@ -17,14 +17,14 @@
 */
 package org.apache.abdera.test.ext.sharing;
 
-public class TestSuite extends junit.framework.TestSuite {
-  public static void main(String[] args)
-  {
-    junit.textui.TestRunner.run(new TestSuite());
-  }
+import org.junit.internal.runners.TextListener;
+import org.junit.runner.JUnitCore;
 
-  public TestSuite()
-  {
-    addTestSuite(SharingTest.class);
+public class TestSuite {
+  public static void main(String[] args) {
+    JUnitCore runner = new JUnitCore();
+    runner.addListener(new TextListener(System.out));
+    runner.run(
+      SharingTest.class);
   }
 }

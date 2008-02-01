@@ -22,16 +22,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.abdera.protocol.client.AbderaClient;
-import org.apache.abdera.protocol.client.RequestOptions;
-import org.apache.abdera.protocol.client.ClientResponse;
-import org.apache.abdera.protocol.client.cache.CachedResponse;
-import org.apache.abdera.test.client.JettyTest;
-
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
+
+import junit.framework.Assert;
+
+import org.apache.abdera.protocol.client.AbderaClient;
+import org.apache.abdera.protocol.client.ClientResponse;
+import org.apache.abdera.protocol.client.RequestOptions;
+import org.apache.abdera.protocol.client.cache.CachedResponse;
+import org.apache.abdera.test.client.JettyUtil;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * These cache tests were originally based on Mark Nottingham's javascript
@@ -45,7 +50,7 @@ import javax.servlet.ServletException;
  * caches, etc) if you try to talk to a remote server.
  */
 @SuppressWarnings("serial")
-public class CacheTest extends JettyTest {
+public class CacheTest extends Assert {
   
   private static String CHECK_CACHE_INVALIDATE;
   private static String CHECK_NO_CACHE;
@@ -60,7 +65,30 @@ public class CacheTest extends JettyTest {
     CHECK_MUST_REVALIDATE = base + "/must_revalidate";
   }
   
-  protected void getServletHandler() {
+  protected static void getServletHandler(String... servletMappings) {
+    for (int n = 0; n < servletMappings.length; n = n + 2) {
+      String name = servletMappings[n];
+      String root = servletMappings[n+1];
+      JettyUtil.addServlet(name, root);
+    }
+  }
+    
+  protected String getBase() {
+    return "http://localhost:" + JettyUtil.getPort();
+  }
+  
+  @BeforeClass
+  public static void setUp() throws Exception {
+    getServletHandler();
+    JettyUtil.start();
+  }
+
+  @AfterClass
+  public static void tearDown() throws Exception {
+    JettyUtil.stop();
+  }
+  
+  protected static void getServletHandler() {
     getServletHandler(
         "org.apache.abdera.test.client.cache.CacheTest$CheckCacheInvalidateServlet","/check_cache_invalidate",
         "org.apache.abdera.test.client.cache.CacheTest$NoCacheServlet", "/no_cache",
@@ -163,42 +191,52 @@ public class CacheTest extends JettyTest {
   private static final int DELETE = 4;
   private static final int PUT = 5;
   
+  @Test
   public void testRequestNoStore() throws Exception {
     _requestCacheInvalidation(NOSTORE);
   }
 
+  @Test
   public void testRequestNoCache() throws Exception {
     _requestCacheInvalidation(NOCACHE);    
   }
   
+  @Test
   public void testRequestMaxAge0() throws Exception {
     _requestCacheInvalidation(MAXAGE0);
   }
 
+  @Test
   public void testResponseNoStore() throws Exception {
     _responseNoCache(NOSTORE);
   }
 
+  @Test
   public void testResponseNoCache() throws Exception {
     _responseNoCache(NOCACHE);
   }
   
+  @Test
   public void testResponseMaxAge0() throws Exception {
     _responseNoCache(MAXAGE0);
   }
   
+  @Test
   public void testPostInvalidates() throws Exception {
     _methodInvalidates(POST);
   }
 
+  @Test
   public void testPutInvalidates() throws Exception {
     _methodInvalidates(PUT);
   }
   
+  @Test
   public void testDeleteInvalidates() throws Exception {
     _methodInvalidates(DELETE);
   }
   
+  @Test
   public void testAuthForcesRevalidation() throws Exception {
     
 //TODO: Actually need to rethink this.  Responses to authenticated requests 
@@ -257,6 +295,7 @@ public class CacheTest extends JettyTest {
 //    assertEquals(resp1, "5");
   }
   
+  @Test
   public void testResponseMustRevalidate() throws Exception {
     AbderaClient abderaClient = new AbderaClient();
     RequestOptions options = abderaClient.getDefaultRequestOptions();

@@ -18,10 +18,12 @@
 package org.apache.abdera.i18n.test.iri;
 
 import org.apache.abdera.i18n.iri.IDNA;
+import org.junit.Test;
 
 public class TestIDNA extends TestBase {
 
-  public static void testPunycode() throws Exception {
+  @Test
+  public void testPunycode() throws Exception {
     String o = "\u00e1\u00e9\u00ed\u00f1\u00f3\u00bd\u00a9";
     String i = "12-uda5tmbya2aq8623e";
     String out = IDNA.toASCII(o);

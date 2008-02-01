@@ -20,8 +20,6 @@ import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.impl.DefaultProvider;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.protocol.server.servlet.AbderaServlet;
-import org.apache.abdera.writer.Writer;
-import org.apache.abdera.writer.WriterFactory;
 import org.junit.After;
 import org.junit.Test;
 import org.mortbay.jetty.Server;
@@ -109,10 +107,10 @@ public class CustomerAdapterTest extends Assert {
   }
 
   protected void prettyPrint(Abdera abdera, Base doc) throws IOException {
-    WriterFactory factory = abdera.getWriterFactory();
-    Writer writer = factory.getWriter("prettyxml");
-    writer.writeTo(doc, System.out);
-    System.out.println();
+//    WriterFactory factory = abdera.getWriterFactory();
+//    Writer writer = factory.getWriter("prettyxml");
+//    writer.writeTo(doc, System.out);
+//    System.out.println();
   }
 
   @SuppressWarnings("serial") 

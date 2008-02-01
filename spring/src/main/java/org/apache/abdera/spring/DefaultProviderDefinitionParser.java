@@ -18,17 +18,11 @@
  */
 package org.apache.abdera.spring;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.abdera.protocol.server.Provider;
-import org.apache.abdera.protocol.server.WorkspaceInfo;
-import org.apache.abdera.protocol.server.impl.DefaultProvider;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
-
 import org.w3c.dom.Element;
 
 public class DefaultProviderDefinitionParser 

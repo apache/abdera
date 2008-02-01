@@ -29,7 +29,7 @@ import org.apache.xml.security.encryption.EncryptedKey;
 import org.apache.xml.security.encryption.XMLCipher;
 import org.apache.xml.security.keys.KeyInfo;
 
-
+@SuppressWarnings("unchecked")
 public class XmlEncryption 
   extends EncryptionBase {
 

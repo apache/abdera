@@ -27,6 +27,7 @@ import org.apache.abdera.factory.Factory;
  * ElementWrapper implementation that implements the ExtensibleElement interface.
  * This should be used to create static extension elements that support extensions
  */
+@SuppressWarnings("unchecked") 
 public abstract class ExtensibleElementWrapper 
   extends ElementWrapper 
   implements ExtensibleElement {
@@ -48,12 +49,10 @@ public abstract class ExtensibleElementWrapper
     return (T)this;
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Element> T addExtension(QName qname) {
     return (T) getExtInternal().addExtension(qname);
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Element> T addExtension(String namespace, String localPart, String prefix) {
     return (T) getExtInternal().addExtension(namespace, localPart, prefix);
   }
@@ -66,7 +65,6 @@ public abstract class ExtensibleElementWrapper
     return getExtInternal().addSimpleExtension(namespace, localPart, prefix, value);
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Element> T getExtension(QName qname) {
     return (T) getExtInternal().getExtension(qname);
   }
@@ -109,7 +107,6 @@ public abstract class ExtensibleElementWrapper
     return (T)this;
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Element> T addExtension(QName qname, QName before) {
     return (T)getExtInternal().addExtension(qname,before);
   }

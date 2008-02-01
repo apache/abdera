@@ -292,7 +292,7 @@ public class FOMDocument<T extends Element>
     return this;
   }
 
-  public <T extends Base>T addComment(String value) {
+  public <X extends Base>X addComment(String value) {
     OMComment comment =
       this.factory.createOMComment(null, value);
     if (this.getOMDocumentElement() != null) {
@@ -300,7 +300,7 @@ public class FOMDocument<T extends Element>
     } else {
       this.addChild(comment);
     }
-    return (T)this;
+    return (X)this;
   }
 
   public EntityTag getEntityTag() {
@@ -364,9 +364,9 @@ public class FOMDocument<T extends Element>
    * ensure that this particular object is fully parsed and ready 
    * to be modified.
    */
-  public <T extends Base>T complete() {
+  public <X extends Base>X complete() {
     if (!isComplete() && getRoot() != null) getRoot().complete();
-    return (T)this;
+    return (X)this;
   }
 
   public void writeTo(

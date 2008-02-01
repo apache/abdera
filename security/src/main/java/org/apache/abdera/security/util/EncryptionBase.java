@@ -23,7 +23,7 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.security.Encryption;
 import org.apache.abdera.security.SecurityException;
 
-
+@SuppressWarnings("unchecked")
 public abstract class EncryptionBase 
   extends SecurityBase
   implements Encryption {

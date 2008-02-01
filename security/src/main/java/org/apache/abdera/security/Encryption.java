@@ -22,6 +22,7 @@ import org.apache.abdera.model.Document;
 /**
  * Interface used for encrypting/decrypting Abdera documents.  
  */
+@SuppressWarnings("unchecked")
 public interface Encryption {
 
   /**

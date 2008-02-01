@@ -11,8 +11,9 @@ import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.impl.DefaultProvider;
 import org.springframework.beans.factory.FactoryBean;
 
+@SuppressWarnings("unchecked")
 public class ProviderFactoryBean implements FactoryBean {
-    private Class providerClass = DefaultProvider.class;
+    private Class<? extends DefaultProvider> providerClass = DefaultProvider.class;
     private String base;
     private Collection<WorkspaceInfo> workspaces;
     private Resolver<Target> targetResolver;
@@ -22,10 +23,11 @@ public class ProviderFactoryBean implements FactoryBean {
         DefaultProvider p = null;
         
         if (base != null) {
-            Constructor constructor = providerClass.getConstructor(String.class);
-            p = (DefaultProvider) constructor.newInstance(base);
+            Constructor<? extends DefaultProvider> constructor = 
+              providerClass.getConstructor(String.class);
+            p = constructor.newInstance(base);
         } else {
-            p = (DefaultProvider) providerClass.newInstance();
+            p = providerClass.newInstance();
         }
         
         if (workspaces != null && workspaces.size() > 0) {

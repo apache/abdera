@@ -191,6 +191,7 @@ public class CoreTest
   }
   
   /** dummy classes **/
+  @SuppressWarnings("unchecked") 
   private static class EmptyFeed implements Feed {
 
     public Object clone() {
@@ -816,6 +817,7 @@ public class CoreTest
     
   }
   
+  @SuppressWarnings("unchecked") 
   private static class EmptyEntry implements Entry {
 
     public Object clone() {

@@ -65,7 +65,7 @@ import org.apache.axiom.om.OMText;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.llom.factory.OMLinkedListImplFactory;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","deprecation"})
 public class FOMFactory 
   extends OMLinkedListImplFactory 
   implements Factory, Constants, ExtensionFactory {

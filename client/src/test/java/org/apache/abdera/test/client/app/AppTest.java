@@ -225,7 +225,7 @@ public class AppTest extends Assert {
             String uri = AppTest.INSTANCE.getBase() + "/collections/entries";
             ParserOptions options = getParser().getDefaultParserOptions();
             options.setCharset(charset);
-            Document doc = getParser().parse(request.getInputStream(), uri, options);
+            Document<?> doc = getParser().parse(request.getInputStream(), uri, options);
             if (doc.getRoot() instanceof Entry) {
               Entry entry = (Entry) doc.getRoot().clone();
               String newID = AppTest.INSTANCE.getBase() + "/collections/entries/" + feed.getRoot().getEntries().size();
@@ -291,7 +291,7 @@ public class AppTest extends Assert {
                 String uri = AppTest.INSTANCE.getBase() + "/collections/entries/" + target;
                 ParserOptions options = getParser().getDefaultParserOptions();
                 options.setCharset(charset);
-                Document doc = getParser().parse(request.getInputStream(), uri, options);
+                Document<?> doc = getParser().parse(request.getInputStream(), uri, options);
                 if (doc.getRoot() instanceof Entry) {
                   Entry newentry = (Entry) doc.getRoot().clone();
                   if (newentry.getId().equals(entry.getId())) {
@@ -589,7 +589,7 @@ public class AppTest extends Assert {
       media = entry_doc.getRoot().getContentElement().getSrc().toString();
     
       // edit the entry
-      Document doc = response.getDocument();
+      Document<Entry> doc = response.getDocument();
       entry = (Entry) doc.getRoot().clone();
       entry.setTitle("New title");
     } finally {

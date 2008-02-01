@@ -163,17 +163,7 @@ public class FOMTest extends Assert   {
     entry2.addLink("/2003/12/13/atom03/1");
     entry2.setId("urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b", false);
     entry2.setSummary("A response");
-    
-    //TODO: we can't compare the serializations.  different 
-    // stax impls serialize with slight variances
-    //String compare = "<?xml version='1.0' encoding='UTF-8'?><a:feed xmlns:a=\"http://www.w3.org/2005/Atom\" xml:base=\"http://example.org\" xml:lang=\"en-US\"><a:title type=\"text\">Example Feed</a:title><a:link href=\"http://example.org/\" /><a:author><a:name>John Doe</a:name></a:author><a:id>urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6</a:id><a:contributor><a:name>Bob Jones</a:name></a:contributor><a:category term=\"example\" /><a:entry><a:title type=\"text\">re: Atom-Powered Robots Run Amok</a:title><a:link href=\"/2003/12/13/atom03/1\" /><a:id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b</a:id><a:summary type=\"text\">A response</a:summary></a:entry><a:entry><a:title type=\"text\">Atom-Powered Robots Run Amok</a:title><a:link href=\"http://example.org/2003/12/13/atom03\" /><a:id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</a:id><a:summary type=\"text\">Some text.</a:summary></a:entry></a:feed>";
-    
-    //ByteArrayOutputStream out = new ByteArrayOutputStream(512);
-    //feed.getDocument().writeTo(out);
-    //String actual = out.toString();
-    
-    //assertEquals(actual, compare);
-    
+
     assertEquals(feed.getEntries().get(0).getId().toString(), "urn:uuid:1225c695-cfb8-4ebb-aaaa-80cb323feb5b");
     assertEquals(feed.getEntries().get(1).getId().toString(), "urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a");
     
@@ -371,7 +361,7 @@ public class FOMTest extends Assert   {
     assertEquals(generator.getUri().toString(), Version.URI);
     Div div = factory.newDiv();
     assertNotNull(div);
-    Document doc = factory.newDocument();
+    Document<?> doc = factory.newDocument();
     assertNotNull(doc);
     Element el = factory.newEmail();
     assertNotNull(el);
@@ -712,7 +702,7 @@ public class FOMTest extends Assert   {
     try {
       // Apply an XSLT transform to the entire Feed
       TransformerFactory factory = TransformerFactory.newInstance();
-      Document xslt = getParser().parse(FOMTest.class.getResourceAsStream("/test.xslt"));
+      Document<Element> xslt = getParser().parse(FOMTest.class.getResourceAsStream("/test.xslt"));
       AbderaSource xsltSource = new AbderaSource(xslt);
       Transformer transformer = factory.newTransformer(xsltSource);
       Document<Feed> feed = getParser().parse(FOMTest.class.getResourceAsStream("/simple.xml"));
@@ -745,7 +735,7 @@ public class FOMTest extends Assert   {
     ByteArrayInputStream in = new ByteArrayInputStream(s.getBytes());
     Abdera abdera = new Abdera();
     Parser parser = abdera.getParser();
-    Document doc = parser.parse(in);
+    Document<Entry> doc = parser.parse(in);
     Entry entry = (Entry)(doc.getRoot().clone());
     assertEquals(entry.getContentType(), Content.Type.HTML);
   }

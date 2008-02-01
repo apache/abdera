@@ -34,6 +34,7 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
+@SuppressWarnings("deprecation") 
 public class FOMService
   extends FOMExtensibleElement 
   implements Service {

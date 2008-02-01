@@ -46,7 +46,6 @@ import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.i18n.text.io.InputStreamDataSource;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.iri.IRIHelper;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -54,7 +53,7 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","deprecation"}) 
 public class FOMEntry
   extends FOMExtensibleElement 
   implements Entry {

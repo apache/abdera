@@ -42,7 +42,7 @@ public class FeedParserTest extends BaseParserTestCase {
   }
 
   @Test public void testAtom10Namespace() throws Exception {
-    Document doc = parse(baseURI.resolve("atom10_namespace.xml"));
+    Document<?> doc = parse(baseURI.resolve("atom10_namespace.xml"));
     assertNotNull(doc);
   }
   
@@ -55,16 +55,16 @@ public class FeedParserTest extends BaseParserTestCase {
   }
   
   @Test public void testEntryAuthorName() throws Exception {
-    Document doc = parse(baseURI.resolve("entry_author_name.xml"));
-    Feed feed = (Feed) doc.getRoot();
+    Document<Feed> doc = parse(baseURI.resolve("entry_author_name.xml"));
+    Feed feed = doc.getRoot();
     Entry entry = feed.getEntries().get(0);
     Person person = entry.getAuthor();
     assertEquals(person.getName(), "Example author");    
   }
   
   @Test public void testEntryContentBase64() throws Exception {
-    Document doc = parse(baseURI.resolve("entry_content_base64.xml"));
-    Feed feed = (Feed)doc.getRoot();
+    Document<Feed> doc = parse(baseURI.resolve("entry_content_base64.xml"));
+    Feed feed = doc.getRoot();
     Entry entry = feed.getEntries().get(0);
     Content mediaContent = entry.getContentElement();
     assertEquals(mediaContent.getMimeType().toString(), "application/octet-stream");
@@ -77,8 +77,8 @@ public class FeedParserTest extends BaseParserTestCase {
   }
   
   @Test public void testEntryContentBase642() throws Exception {
-    Document doc = parse(baseURI.resolve("entry_content_base64_2.xml"));
-    Feed feed = (Feed)doc.getRoot();
+    Document<Feed> doc = parse(baseURI.resolve("entry_content_base64_2.xml"));
+    Feed feed = doc.getRoot();
     Entry entry = feed.getEntries().get(0);
     Content mediaContent = entry.getContentElement();
     assertEquals(mediaContent.getMimeType().toString(), "application/octet-stream");

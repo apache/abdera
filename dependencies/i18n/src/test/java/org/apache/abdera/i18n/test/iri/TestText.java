@@ -58,8 +58,6 @@ public class TestText extends TestBase {
     assertTrue(CharUtils.isBidi(CharUtils.RLE));
     assertTrue(CharUtils.isBidi(CharUtils.RLM));
     assertTrue(CharUtils.isBidi(CharUtils.RLO));
-    
-    // TODO: other checks
   }
   
   @Test
@@ -114,9 +112,7 @@ public class TestText extends TestBase {
   public void testCodepointIterator() throws Exception {
     String s = "abcdefghijklmnop";
     CodepointIterator ci = CodepointIterator.forCharSequence(s);
-    while(ci.hasNext()) {
-      Codepoint cp = ci.next();
-    }
+    while(ci.hasNext()) ci.next();
   }
   
   @Test

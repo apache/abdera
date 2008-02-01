@@ -40,6 +40,7 @@ import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.StAXUtils;
 
+@SuppressWarnings("unchecked")
 public class PrettyWriter
   extends AbstractNamedWriter 
   implements NamedWriter {

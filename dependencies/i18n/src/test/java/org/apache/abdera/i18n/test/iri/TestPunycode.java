@@ -59,7 +59,8 @@ public class TestPunycode extends TestBase {
     }
   }
   
-  public static void testPunycode() throws Exception {
+  @org.junit.Test
+  public void testPunycode() throws Exception {
     
     for (Test test: Test.values()) {
       String out = Punycode.encode(test.in);

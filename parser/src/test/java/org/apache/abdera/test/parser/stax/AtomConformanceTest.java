@@ -21,14 +21,15 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.model.Text;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMElement;
+import org.junit.Test;
 
 public class AtomConformanceTest extends BaseParserTestCase {
   
@@ -36,7 +37,8 @@ public class AtomConformanceTest extends BaseParserTestCase {
    * Test to make sure that the parser properly detects the various kinds of
    * extended content types allowed by Atom
    */
-  public static void testContentTypes() throws Exception {
+  @Test 
+  public void testContentTypes() throws Exception {
     IRI uri = new IRI("http://www.snellspace.com/public/contentsummary.xml");
     Document<Feed> doc = parse(uri);
     Feed feed = doc.getRoot();
@@ -89,7 +91,8 @@ public class AtomConformanceTest extends BaseParserTestCase {
   /**
    * Tests the parsers support for various XML Namespace options 
    */
-  public static void testXmlNamespace() throws Exception {
+  @Test 
+  public void testXmlNamespace() throws Exception {
     String[] tests = {
       "http://www.snellspace.com/public/nondefaultnamespace.xml",
       "http://www.snellspace.com/public/nondefaultnamespace2.xml",
@@ -150,7 +153,8 @@ public class AtomConformanceTest extends BaseParserTestCase {
   /**
    * Test to ensure that the parser properly resolves relative URI
    */
-  public static void testXmlBase() throws Exception {
+  @Test 
+  public void testXmlBase() throws Exception {
     IRI uri = new IRI("http://www.snellspace.com/public/xmlbase.xml");
     Document<Feed> doc = parse(uri);
     assertNotNull(doc);
@@ -169,7 +173,8 @@ public class AtomConformanceTest extends BaseParserTestCase {
    * in the Atom feed/entry.  The parser should be able to properly select the
    * requested elements regardless of the order in which they appear
    */
-  public static void testOrder() throws Exception {
+  @Test 
+  public void testOrder() throws Exception {
     //http://www.snellspace.com/public/ordertest.xml
     IRI uri = new IRI("http://www.snellspace.com/public/ordertest.xml");
     Document<Feed> doc = parse(uri);
@@ -264,7 +269,8 @@ public class AtomConformanceTest extends BaseParserTestCase {
   /**
    * Tests the parsers support for the various link relation types
    */
-  public static void testLink() throws Exception {
+  @Test 
+  public void testLink() throws Exception {
     //http://www.snellspace.com/public/linktests.xml
     IRI uri = new IRI("http://www.snellspace.com/public/linktests.xml");
     Document<Feed> doc = parse(uri);

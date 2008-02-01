@@ -21,7 +21,6 @@ package org.apache.abdera.spring;
 
 import java.util.Collection;
 
-import org.apache.abdera.protocol.ItemManager;
 import org.apache.abdera.protocol.Resolver;
 import org.apache.abdera.protocol.server.CollectionInfo;
 import org.apache.abdera.protocol.server.Provider;
@@ -30,11 +29,13 @@ import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.WorkspaceManager;
 import org.apache.abdera.protocol.server.impl.DefaultProvider;
 import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
+import org.junit.Test;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
 public class ProviderDefinitionParserTest 
     extends AbstractDependencyInjectionSpringContextTests {
 
+  @Test
     public void testParser() throws Exception {
         DefaultProvider p = (DefaultProvider) applicationContext.getBean(Provider.class.getName());
         

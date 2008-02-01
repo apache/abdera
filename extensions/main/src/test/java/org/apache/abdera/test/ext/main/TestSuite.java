@@ -22,19 +22,19 @@ import org.apache.abdera.test.ext.features.FeatureTest;
 import org.apache.abdera.test.ext.history.FeedPagingTest;
 import org.apache.abdera.test.ext.license.LicenseTest;
 import org.apache.abdera.test.ext.thread.ThreadTest;
+import org.junit.internal.runners.TextListener;
+import org.junit.runner.JUnitCore;
 
-public class TestSuite extends junit.framework.TestSuite {
+public class TestSuite {
   public static void main(String[] args)
   {
-    junit.textui.TestRunner.run(new TestSuite());
-  }
-
-  public TestSuite()
-  {
-    addTestSuite(FeedPagingTest.class);
-    addTestSuite(ThreadTest.class);
-    addTestSuite(BidiTest.class);
-    addTestSuite(FeatureTest.class);
-    addTestSuite(LicenseTest.class);
+    JUnitCore runner = new JUnitCore();
+    runner.addListener(new TextListener(System.out));
+    runner.run(
+      BidiTest.class,
+      FeatureTest.class,
+      FeedPagingTest.class,
+      LicenseTest.class,
+      ThreadTest.class);
   }
 }

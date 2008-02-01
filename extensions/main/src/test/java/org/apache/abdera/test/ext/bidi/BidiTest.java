@@ -17,17 +17,19 @@
 */
 package org.apache.abdera.test.ext.bidi;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.bidi.BidiHelper;
 import org.apache.abdera.i18n.text.Bidi.Direction;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
+import org.junit.Test;
 
-public class BidiTest extends TestCase {
+public class BidiTest extends Assert {
 
-  public static void testBidi() throws Exception {
+  @Test
+  public void testBidi() throws Exception {
     
     Abdera abdera = new Abdera();
     Feed feed = abdera.getFactory().newFeed();

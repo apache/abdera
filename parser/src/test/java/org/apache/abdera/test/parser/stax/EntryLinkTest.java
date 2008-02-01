@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.test.parser.stax;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
@@ -26,10 +26,11 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.parser.Parser;
+import org.junit.Test;
 
 
 
-public class EntryLinkTest extends TestCase {
+public class EntryLinkTest extends Assert {
 
     /**
      * Link in entry disappears after adding entry to a feed.
@@ -39,7 +40,8 @@ public class EntryLinkTest extends TestCase {
      * FOM Objects should automatically complete the parse 
      * when modifications are made
      */
-    public void testEntryLinkInFeed() throws Exception {
+  @Test 
+  public void testEntryLinkInFeed() throws Exception {
         Abdera abdera = new Abdera();
         Factory factory = abdera.getFactory();
         Feed feed = factory.newFeed();

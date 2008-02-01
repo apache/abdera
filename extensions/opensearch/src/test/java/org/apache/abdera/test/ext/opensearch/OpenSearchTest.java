@@ -17,20 +17,20 @@
 */
 package org.apache.abdera.test.ext.opensearch;
 
-import junit.framework.TestCase;
-
-import org.apache.abdera.Abdera;
-import org.apache.abdera.model.Element;
-import org.apache.abdera.model.Document;
-
-import org.apache.abdera.parser.Parser;
-
-import org.apache.abdera.ext.opensearch.IntegerElement;
-import org.apache.abdera.ext.opensearch.OpenSearchConstants;
-
 import java.io.InputStream;
 
-public class OpenSearchTest extends TestCase {
+import junit.framework.Assert;
+
+import org.apache.abdera.Abdera;
+import org.apache.abdera.ext.opensearch.IntegerElement;
+import org.apache.abdera.ext.opensearch.OpenSearchConstants;
+import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Element;
+import org.apache.abdera.parser.Parser;
+import org.junit.Test;
+
+public class OpenSearchTest extends Assert {
+  @Test
   public void testBasics() throws Exception
   {
     Parser parser = Abdera.getNewParser();

@@ -17,13 +17,16 @@
 */
 package org.apache.abdera.test.core;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
 import org.apache.abdera.util.EntityTag;
+import org.junit.Test;
 
-public class EntityTagTest extends TestCase {
+public class EntityTagTest 
+  extends Assert {
 
-  public static void testEntityTag() throws Exception {
+  @Test
+  public void testEntityTag() throws Exception {
     String[] tags = {
       "hello",
       "\"hello\"",

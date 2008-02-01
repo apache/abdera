@@ -24,6 +24,8 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.xml.namespace.QName;
 
+import junit.framework.Assert;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Document;
@@ -31,16 +33,16 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.security.AbderaSecurity;
 import org.apache.abdera.security.Encryption;
 import org.apache.abdera.security.EncryptionOptions;
+import org.junit.Test;
 
-import junit.framework.TestCase;
-
-public class EncryptionTest extends TestCase {
+@SuppressWarnings("unchecked")
+public class EncryptionTest extends Assert {
 
   /**
    * The bouncy castle JCE provider is required to run this test
    */
-  @SuppressWarnings("unchecked")
-  public static void testEncryption() throws Exception {
+  @Test
+  public void testEncryption() throws Exception {
     
     Abdera abdera = new Abdera();
     

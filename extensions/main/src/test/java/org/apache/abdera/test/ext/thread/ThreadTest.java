@@ -17,18 +17,20 @@
 */
 package org.apache.abdera.test.ext.thread;
 
+import junit.framework.Assert;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.thread.InReplyTo;
 import org.apache.abdera.ext.thread.ThreadConstants;
 import org.apache.abdera.ext.thread.ThreadHelper;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
+import org.junit.Test;
 
-import junit.framework.TestCase;
+public class ThreadTest extends Assert {
 
-public class ThreadTest extends TestCase {
-
-  public static void testThread() throws Exception {
+  @Test
+  public void testThread() throws Exception {
     
     Abdera abdera = new Abdera();
     Factory factory = abdera.getFactory();

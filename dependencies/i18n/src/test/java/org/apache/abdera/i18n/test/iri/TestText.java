@@ -17,17 +17,17 @@
 */
 package org.apache.abdera.i18n.test.iri;
 
-import junit.framework.TestCase;
-
 import org.apache.abdera.i18n.text.CharUtils;
 import org.apache.abdera.i18n.text.Codepoint;
 import org.apache.abdera.i18n.text.CodepointIterator;
 import org.apache.abdera.i18n.text.Normalizer;
 import org.apache.abdera.i18n.text.Sanitizer;
+import org.junit.Test;
 
-public class TestText extends TestCase {
+public class TestText extends TestBase {
 
-  public static void testCodepoints() throws Exception {
+  @Test
+  public void testCodepoints() throws Exception {
     StringBuilder buf = new StringBuilder();
     CharUtils.append(buf, 0x10000);
     assertEquals(buf.length(),2);
@@ -43,7 +43,8 @@ public class TestText extends TestCase {
     assertEquals(codepoint.next(),CharUtils.codepointAt(buf, 0));
   }
   
-  public static void testSetChecks() throws Exception {
+  @Test
+  public void testSetChecks() throws Exception {
     assertTrue(CharUtils.inRange(new char[]{'a','b','c'}, 'a', 'c'));
     assertFalse(CharUtils.inRange(new char[]{'a','b','c'}, 'm', 'z'));
     
@@ -61,7 +62,8 @@ public class TestText extends TestCase {
     // TODO: other checks
   }
   
-  public static void testBidi() throws Exception {
+  @Test
+  public void testBidi() throws Exception {
     String s = "abc";
     String lre = CharUtils.wrapBidi(s, CharUtils.LRE);
     String lro = CharUtils.wrapBidi(s, CharUtils.LRO);
@@ -102,12 +104,14 @@ public class TestText extends TestCase {
     assertEquals(s,"abc");
   }
   
-  public static void testVerify() throws Exception {
+  @Test
+  public void testVerify() throws Exception {
     CharUtils.verify(new char[] {'a','b','c','d'}, CharUtils.Profile.ALPHA);
     CharUtils.verifyNot(new char [] {'1','2','3','4','-'}, CharUtils.Profile.ALPHA);
   }
   
-  public static void testCodepointIterator() throws Exception {
+  @Test
+  public void testCodepointIterator() throws Exception {
     String s = "abcdefghijklmnop";
     CodepointIterator ci = CodepointIterator.forCharSequence(s);
     while(ci.hasNext()) {
@@ -115,7 +119,8 @@ public class TestText extends TestCase {
     }
   }
   
-  public static void testSanitizer() throws Exception {
+  @Test
+  public void testSanitizer() throws Exception {
     String s = "\u0074\u0068\u00ed\u0073\u0020\u00ed\u0073\u0020\u00e0\u0020\u0074\u00e9\u0073\u0074";
     String t = Sanitizer.sanitize(s);
     assertEquals(t,"th%C3%ADs_%C3%ADs_%C3%A0_t%C3%A9st");

@@ -20,19 +20,20 @@ package org.apache.abdera.test.security;
 import java.security.Provider;
 import java.security.Security;
 
-public class TestSuite extends junit.framework.TestSuite {
+import org.apache.abdera.test.security.filter.SecurityFilterTest;
+import org.junit.internal.runners.TextListener;
+import org.junit.runner.JUnitCore;
+
+public class TestSuite {
 
   public static void main(String[] args) throws Exception {
-    
-    Security.addProvider(getProvider(args[0]));
-    
-    junit.textui.TestRunner.run(new TestSuite());
-  }  
-  
-  public TestSuite() {
-    addTestSuite(DigitalSignatureTest.class);
-    addTestSuite(EncryptionTest.class);
-    //addTestSuite(DSigThirdPartyVerifyTest.class);  // the server is currently not working
+    Security.addProvider(getProvider(args[0]));    
+    JUnitCore runner = new JUnitCore();
+    runner.addListener(new TextListener(System.out));
+    runner.run(
+      DigitalSignatureTest.class,
+      EncryptionTest.class,
+      SecurityFilterTest.class);
   }
   
   private static Provider getProvider(String provider) throws Exception {

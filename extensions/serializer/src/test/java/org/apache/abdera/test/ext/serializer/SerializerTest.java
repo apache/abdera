@@ -22,7 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 import java.util.Date;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.serializer.ConventionSerializationContext;
@@ -37,13 +37,15 @@ import org.apache.abdera.ext.serializer.impl.EntrySerializer;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.writer.StreamWriter;
+import org.junit.Test;
 
-public class SerializerTest extends TestCase {
+public class SerializerTest extends Assert {
 
   static Date date_now = new Date();
   static Calendar cal_now = Calendar.getInstance();
   
-  public static void testSimple() throws Exception {
+  @Test
+  public void testSimple() throws Exception {
     Abdera abdera = Abdera.getInstance();
     StreamWriter sw = abdera.newStreamWriter();
     ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -92,8 +94,8 @@ public class SerializerTest extends TestCase {
     }
   }
   
-  
-  public static void testAnnotated() throws Exception {
+  @Test
+  public void testAnnotated() throws Exception {
     Abdera abdera = Abdera.getInstance();
     StreamWriter sw = abdera.newStreamWriter();
     ByteArrayOutputStream out = new ByteArrayOutputStream();

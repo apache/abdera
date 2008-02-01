@@ -35,7 +35,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
@@ -73,8 +73,9 @@ import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
 import org.apache.abdera.xpath.XPath;
 import org.apache.axiom.attachments.ByteArrayDataSource;
+import org.junit.Test;
 
-public class FOMTest extends TestCase   {
+public class FOMTest extends Assert   {
 
   private static Abdera abdera = new Abdera();
   
@@ -102,7 +103,8 @@ public class FOMTest extends TestCase   {
     return abdera.getWriter();
   }
   
-  public static void testMinimalConfiguration() {
+  @Test
+  public void testMinimalConfiguration() {
     assertNotNull(getFactory());
     assertNotNull(getParser());
     assertNotNull(getXPath());
@@ -111,6 +113,7 @@ public class FOMTest extends TestCase   {
     assertNotNull(getWriter());
   }
   
+  @Test
   public void testParser() throws Exception {
     
     InputStream in = FOMTest.class.getResourceAsStream("/simple.xml");
@@ -136,6 +139,7 @@ public class FOMTest extends TestCase   {
     
   }
 
+  @Test
   public void testCreate() throws Exception {
     Feed feed = getFactory().newFeed();
     feed.setLanguage("en-US");
@@ -175,6 +179,7 @@ public class FOMTest extends TestCase   {
     
   }
 
+  @Test
   public void testWhiteListParseFilter() throws Exception {
     
     ListParseFilter filter = new WhiteListParseFilter();
@@ -209,6 +214,7 @@ public class FOMTest extends TestCase   {
     assertNull(entry.getSummaryType());
   }
   
+  @Test
   public void testBlackListParseFilter() throws Exception {
     
     ListParseFilter filter = new BlackListParseFilter();
@@ -241,6 +247,7 @@ public class FOMTest extends TestCase   {
 
   }
   
+  @Test
   public void testXPath() throws Exception {
     
     InputStream in = FOMTest.class.getResourceAsStream("/simple.xml");
@@ -259,6 +266,7 @@ public class FOMTest extends TestCase   {
     
   }
   
+  @Test
   public void testUriNormalization() throws Exception {
     String s1 = "HTTP://www.Example.ORG:80/./foo/%2d/../%2d/./foo";
     String s2 = "HTTP://www.Example.ORG:81/./foo/%2d/../%2d/./foo";
@@ -266,6 +274,7 @@ public class FOMTest extends TestCase   {
     assertEquals(IRI.normalizeString(s2), "http://www.example.org:81/foo/-/foo");
   }
   
+  @Test
   public void testFactory() throws Exception {
     Factory factory = getFactory();
     Person author = factory.newAuthor();
@@ -639,6 +648,7 @@ public class FOMTest extends TestCase   {
     assertEquals(text.getValueElement(), div);
   }
   
+  @Test
   public void testRoundtrip() throws Exception {
 
     Feed feed = getFactory().newFeed();
@@ -697,6 +707,7 @@ public class FOMTest extends TestCase   {
     assertEquals(entry.getSummary(), "Some text.");
   }
   
+  @Test
   public void testSourceResult() throws Exception {
     try {
       // Apply an XSLT transform to the entire Feed
@@ -728,6 +739,7 @@ public class FOMTest extends TestCase   {
     }
   }
   
+  @Test
   public void testContentClone() throws Exception {
     String s = "<entry xmlns='http://www.w3.org/2005/Atom'><content type='html'>test</content></entry>";
     ByteArrayInputStream in = new ByteArrayInputStream(s.getBytes());
@@ -738,6 +750,7 @@ public class FOMTest extends TestCase   {
     assertEquals(entry.getContentType(), Content.Type.HTML);
   }
   
+  @Test
   public void testSimpleExtension() throws Exception {
     Abdera abdera = new Abdera();
     Entry entry = abdera.newEntry();    
@@ -745,6 +758,7 @@ public class FOMTest extends TestCase   {
     assertNull(entry.getControl().getSimpleExtension(new QName("urn:foo", "foo")));
   }
   
+  @Test
   public void testLang() throws Exception {
     Abdera abdera = new Abdera();
     Entry entry = abdera.newEntry();
@@ -757,6 +771,7 @@ public class FOMTest extends TestCase   {
     assertEquals(lang.getLocale(), java.util.Locale.US);
   }
   
+  @Test
   public void testSetContent() throws Exception {
     
     Abdera abdera = new Abdera();
@@ -770,6 +785,7 @@ public class FOMTest extends TestCase   {
     
   }
   
+  @Test
   public void testSetContent2() throws Exception {
     
     Abdera abdera = new Abdera();

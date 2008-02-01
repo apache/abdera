@@ -1,4 +1,4 @@
-package org.apache.abdera.protocol.server.route;
+package org.apache.abdera.protocol.server.test.route;
 
 import java.util.HashMap;
 import java.util.Map;

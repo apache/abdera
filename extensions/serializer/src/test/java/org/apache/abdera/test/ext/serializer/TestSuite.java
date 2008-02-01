@@ -15,26 +15,16 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.i18n.test.iri;
+package org.apache.abdera.test.ext.serializer;
 
-import org.apache.abdera.i18n.text.Normalizer;
-import org.junit.Test;
+import org.junit.internal.runners.TextListener;
+import org.junit.runner.JUnitCore;
 
-public class TestNFKC extends TestBase {
-
-  @Test
-  public void testNFKC() throws Exception {
-    
-    // "\xC2\xB5", "\xCE\xBC"
-    String s1 = Normalizer.normalize(string(0xC2,0xB5)).toString();
-    String s2 = string(0xCE,0xBC);
-    assertEquals(s1,s2);
-    
-    // "\xC2\xAA", "\x61"
-    s1 = Normalizer.normalize(string(0xC2,0xAA)).toString();
-    s2 = string(0x61);
-    assertEquals(s1,s2);
-    
+public class TestSuite  {
+  public static void main(String[] args) {
+    JUnitCore runner = new JUnitCore();
+    runner.addListener(new TextListener(System.out));
+    runner.run(
+      SerializerTest.class);
   }
-  
 }

@@ -17,16 +17,18 @@
 */
 package org.apache.abdera.test.ext.license;
 
+import junit.framework.Assert;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.license.LicenseHelper;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
+import org.junit.Test;
 
-import junit.framework.TestCase;
+public class LicenseTest extends Assert {
 
-public class LicenseTest extends TestCase {
-
-  public static void testLicense() throws Exception {
+  @Test
+  public void testLicense() throws Exception {
     
     String license = "http://example.org";
     

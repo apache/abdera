@@ -19,15 +19,15 @@ package org.apache.abdera.i18n.test.iri;
 
 import java.util.Locale;
 
-import junit.framework.TestCase;
-
 import org.apache.abdera.i18n.rfc4646.Lang;
 import org.apache.abdera.i18n.rfc4646.Range;
+import org.junit.Test;
 
-public class TestLang extends TestCase {
+@SuppressWarnings("deprecation")
+public class TestLang extends TestBase {
 
-  @SuppressWarnings("deprecation") 
-  public static void testLang() throws Exception {
+  @Test
+  public void testLang() throws Exception {
     
     org.apache.abdera.i18n.lang.Lang lang = 
       new org.apache.abdera.i18n.lang.Lang("en-US-ca");
@@ -61,7 +61,8 @@ public class TestLang extends TestCase {
     assertNotNull(e);
   }
   
-  public static void test4646Lang() throws Exception {
+  @Test
+  public void test4646Lang() throws Exception {
     Lang lang = new Lang("en-Latn-US-valencia");
     assertEquals(lang.getLanguage().toString(),"en");
     assertEquals(lang.getRegion().toString(), "US");
@@ -77,7 +78,8 @@ public class TestLang extends TestCase {
     assertEquals(locale.getVariant(),"valencia");
   }
   
-  public static void test4647Matching() throws Exception {
+  @Test
+  public void test4647Matching() throws Exception {
     Lang lang = new Lang("en-Latn-US-valencia");
     Range range1 = new Range("*",true);
     Range range2 = new Range("en-*",true);

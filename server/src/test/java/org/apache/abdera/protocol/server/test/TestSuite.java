@@ -15,35 +15,24 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.test.client;
+package org.apache.abdera.protocol.server.test;
 
-import junit.framework.TestCase;
+import org.apache.abdera.protocol.server.test.basic.BasicTest;
+import org.apache.abdera.protocol.server.test.custom.CustomProviderTest;
+import org.apache.abdera.protocol.server.test.customer.CustomerAdapterTest;
+import org.apache.abdera.protocol.server.test.route.RouteTest;
+import org.junit.internal.runners.TextListener;
+import org.junit.runner.JUnitCore;
 
-public abstract class JettyTest extends TestCase {
-  
-  protected JettyTest() {}
-  
-  protected static void getServletHandler(String... servletMappings) {
-    for (int n = 0; n < servletMappings.length; n = n + 2) {
-      String name = servletMappings[n];
-      String root = servletMappings[n+1];
-      JettyUtil.addServlet(name, root);
-    }
-  }
-    
-  protected abstract void getServletHandler();
-  
-  protected String getBase() {
-    return "http://localhost:" + JettyUtil.getPort();
-  }
-  
-  @Override
-  protected void setUp() throws Exception {
-    getServletHandler();
-    JettyUtil.start();
-  }
+public class TestSuite {
 
-  public void tearDown() throws Exception {
-    //JettyUtil.stop();
+  public static void main(String[] args) {
+    JUnitCore runner = new JUnitCore();
+    runner.addListener(new TextListener(System.out));
+    runner.run(
+      RouteTest.class,
+      CustomerAdapterTest.class,
+      CustomProviderTest.class,
+      BasicTest.class);
   }
 }

@@ -17,15 +17,16 @@
  */
 package org.apache.abdera.test.parser.stax;
 
-import junit.framework.TestCase;
-
 import java.io.InputStream;
+
+import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.parser.Parser;
+import org.junit.Test;
 
 
 /**
@@ -33,7 +34,7 @@ import org.apache.abdera.parser.Parser;
  * 
  * @version $Id$
  */
-public class ConcurrencyTest extends TestCase {
+public class ConcurrencyTest extends Assert {
 
   private static final int N_THREADS = 100;
 
@@ -42,6 +43,7 @@ public class ConcurrencyTest extends TestCase {
    * in Abdera 0.1.0 but seems to be fixed in 0.2. We leave the test here to
    * prevent possible regressions.
    */
+  @Test 
   public void testSetContentMT() throws Exception {
     Thread t[] = new Thread[N_THREADS];
     final boolean failed[] = new boolean[t.length];

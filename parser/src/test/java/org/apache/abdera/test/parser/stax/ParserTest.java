@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
@@ -29,16 +29,18 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.parser.Parser;
+import org.junit.Test;
 
-public class ParserTest extends TestCase {
+public class ParserTest extends Assert {
 
   private static Abdera abdera = new Abdera();
   
   private static Parser getParser() {
     return abdera.getParser();
   }
-  
-  public static void testParse() throws Exception {
+
+  @Test
+  public void testParse() throws Exception {
     
     Document<Feed> feedDoc = getParser().parse(ParserTest.class.getResourceAsStream("/simpleFeed.xml"));
     assertTrue(feedDoc.getRoot() instanceof Feed);
@@ -54,7 +56,8 @@ public class ParserTest extends TestCase {
     
   }
   
-  public static void testParseReader() throws Exception {
+  @Test
+  public void testParseReader() throws Exception {
 
     InputStream is = ParserTest.class.getResourceAsStream("/simpleFeed.xml");
     Document<Feed> feedDoc = getParser().parse(new InputStreamReader(is), 
@@ -85,7 +88,8 @@ public class ParserTest extends TestCase {
    * 
    * @see https://issues.apache.org/jira/browse/ABDERA-22
    */
-  public static void testParseReaderNoBase() throws Exception {
+  @Test
+  public void testParseReaderNoBase() throws Exception {
 
     InputStream is = ParserTest.class.getResourceAsStream("/simpleEntry.xml");
     Reader reader = new InputStreamReader(is);
@@ -95,5 +99,4 @@ public class ParserTest extends TestCase {
     
   }
   
-  //TODO: need lots more unit tests
 }

@@ -191,10 +191,9 @@ public class SignedResponseFilter
       if (doc != null) {
         doc = signDocument(abdera,doc);
         doc.writeTo(aout);
+      } else {
+        super.writeTo(aout);
       }
-      else 
-        throw new RuntimeException(
-          "There was an error signing the response");
     }
   }
 

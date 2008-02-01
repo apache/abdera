@@ -17,15 +17,25 @@
  */
 package org.apache.abdera.test.security.filter;
 
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.cert.X509Certificate;
+import java.util.Date;
+
 import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.Entry;
+import org.apache.abdera.protocol.Response.ResponseType;
 import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.security.AbderaSecurity;
 import org.apache.abdera.security.Signature;
+import org.apache.abdera.security.SignatureOptions;
+import org.apache.abdera.test.security.DigitalSignatureTest;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -63,4 +73,56 @@ public class SecurityFilterTest
     assertTrue(sig.verify(root, sig.getDefaultSignatureOptions()));
   }
   
+  private static final String keystoreFile = "/key.jks";
+  private static final String keystoreType = "JKS";
+  private static final String keystorePass = "testing";
+  private static final String privateKeyAlias = "James";
+  private static final String privateKeyPass = "testing";
+  private static final String certificateAlias = "James";
+  
+ 
+  @Test
+  public void testSignedRequestFilter() throws Exception {
+    Entry entry = abdera.newEntry();
+    entry.setId("http://localhost:9002/feed/entries/1");
+    entry.setTitle("test entry");
+    entry.setContent("Test Content");
+    entry.addLink("http://example.org");
+    entry.setUpdated(new Date());
+    entry.addAuthor("James");
+    ClientResponse resp = client.post("http://localhost:9002/feed", entry);
+    assertNotNull(resp);
+    assertEquals(ResponseType.CLIENT_ERROR, resp.getType());
+
+    // Initialize the keystore
+    AbderaSecurity security = new AbderaSecurity(abdera);
+    KeyStore ks = KeyStore.getInstance(keystoreType);
+    assertNotNull(ks);
+    
+    InputStream in = DigitalSignatureTest.class.getResourceAsStream(keystoreFile);
+    assertNotNull(in);
+    
+    ks.load(in, keystorePass.toCharArray());
+    PrivateKey signingKey = 
+      (PrivateKey) ks.getKey(
+        privateKeyAlias,
+        privateKeyPass.toCharArray());
+    X509Certificate cert = 
+      (X509Certificate) ks.getCertificate(
+        certificateAlias);
+    assertNotNull(signingKey);
+    assertNotNull(cert);
+
+    Signature sig = security.getSignature();
+    SignatureOptions options = sig.getDefaultSignatureOptions();    
+    options.setCertificate(cert);
+    options.setSigningKey(signingKey);  
+
+    // Sign the entry
+    entry = sig.sign(entry, options);
+    
+    resp = client.post("http://localhost:9002/feed", entry);
+    assertNotNull(resp);
+    assertEquals(ResponseType.SUCCESS, resp.getType());
+  }
 }

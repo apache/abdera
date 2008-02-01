@@ -23,6 +23,7 @@ import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.impl.AbstractWorkspaceProvider;
 import org.apache.abdera.protocol.server.impl.RouteManager;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
+import org.apache.abdera.security.util.filters.SignedRequestFilter;
 import org.apache.abdera.security.util.filters.SignedResponseFilter;
 
 public class CustomProvider 
@@ -55,6 +56,7 @@ public class CustomProvider
     addWorkspace(workspace);
     
     addFilter(
+      new SignedRequestFilter(),
       new SignedResponseFilter(
         keystoreFile,
         keystorePass,

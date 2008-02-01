@@ -57,7 +57,7 @@ public class SimpleAdapter
   public String getHref(RequestContext request) {
     Map<String,Object> params = new HashMap<String,Object>();
     params.put("collection","feed");
-    return request.urlFor(TargetType.TYPE_COLLECTION, params);
+    return request.urlFor("feed", params);
   }
 
   public String getTitle(RequestContext request) {
@@ -184,7 +184,7 @@ public class SimpleAdapter
     Map<String,String> params = new HashMap<String,String>();
     params.put("collection", request.getTarget().getParameter("collection"));
     params.put("entry", entryid);
-    return request.urlFor(TargetType.TYPE_ENTRY, params);
+    return request.urlFor("entry", params);
   }
   
   public ResponseContext putEntry(

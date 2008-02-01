@@ -39,6 +39,7 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
+@SuppressWarnings("deprecation") 
 public class FOMCollection 
   extends FOMExtensibleElement 
   implements Collection {
@@ -148,7 +149,7 @@ public class FOMCollection
   
   public String[] getAccept(){
     List<String> accept = new ArrayList<String>();
-    Iterator i = getChildrenWithName(ACCEPT);
+    Iterator<?> i = getChildrenWithName(ACCEPT);
     if (i == null || !i.hasNext()) i = getChildrenWithName(PRE_RFC_ACCEPT);
     while(i.hasNext()) {
       Element e = (Element) i.next();

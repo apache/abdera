@@ -38,7 +38,6 @@ import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
-
 public class FOMFeed 
   extends FOMSource 
   implements Feed {
@@ -126,7 +125,7 @@ public class FOMFeed
 
   public Source getAsSource() {
     FOMSource source = (FOMSource) ((FOMFactory)factory).newSource(null);
-    for (Iterator i = this.getChildElements(); i.hasNext();) {
+    for (Iterator<?> i = this.getChildElements(); i.hasNext();) {
       FOMElement child = (FOMElement)i.next();
       if (!child.getQName().equals(ENTRY)) {
         source.addChild((OMNode)child.clone());

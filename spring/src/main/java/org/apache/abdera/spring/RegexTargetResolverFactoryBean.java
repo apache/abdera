@@ -23,6 +23,7 @@ import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
 import org.springframework.beans.factory.FactoryBean;
 
+@SuppressWarnings("unchecked")
 public class RegexTargetResolverFactoryBean implements FactoryBean {
     private List<String> services;
     private List<String> collections;

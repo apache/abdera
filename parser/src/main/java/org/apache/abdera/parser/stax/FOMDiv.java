@@ -135,7 +135,7 @@ public class FOMDiv
         baseUri = getResolvedBaseUri();
         element = (OMElement) _parse(value, baseUri);
       } catch (Exception e) {}
-      for (Iterator i = element.getChildren(); i.hasNext();) {
+      for (Iterator<?> i = element.getChildren(); i.hasNext();) {
         this.addChild((OMNode)i.next());
       }
     }
@@ -147,7 +147,7 @@ public class FOMDiv
       XMLStreamWriter writer = 
         XMLOutputFactory.newInstance().createXMLStreamWriter(out);
       writer.writeStartElement("");
-      for (Iterator nodes = this.getChildren(); nodes.hasNext();) {
+      for (Iterator<?> nodes = this.getChildren(); nodes.hasNext();) {
         OMNode node = (OMNode) nodes.next();
         node.serialize(writer);
       }

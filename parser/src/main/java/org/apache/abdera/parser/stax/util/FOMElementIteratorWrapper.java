@@ -22,12 +22,13 @@ import java.util.Iterator;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.stax.FOMFactory;
 
+@SuppressWarnings("unchecked") 
 public class FOMElementIteratorWrapper implements Iterator {
 
-  private final Iterator iterator;
+  private final Iterator<?> iterator;
   private final FOMFactory factory;
   
-  public FOMElementIteratorWrapper(FOMFactory factory, Iterator iterator) {
+  public FOMElementIteratorWrapper(FOMFactory factory, Iterator<?> iterator) {
     this.iterator = iterator;
     this.factory = factory;
   }

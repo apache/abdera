@@ -250,7 +250,7 @@ public class FeedValidatorTest
   @Test public void testSection12MissingNamespace() throws Exception {
     //http://feedvalidator.org/testcases/atom/1.2/missing-namespace.xml
     IRI uri = baseURI.resolve("1.2/missing-namespace.xml");
-    Document doc = null;
+    Document<?> doc = null;
     doc = get(uri);
     assertNotNull(doc);
     assertFalse(doc.getRoot() instanceof Feed);
@@ -269,7 +269,7 @@ public class FeedValidatorTest
   @Test public void testSection12WrongNamespaceCase() throws Exception {
     //http://feedvalidator.org/testcases/atom/1.2/wrong-namespace-case.xml
     IRI uri = baseURI.resolve("1.2/wrong-namespace-case.xml");
-    Document doc = null;
+    Document<?> doc = null;
     doc = get(uri);
     assertNotNull(doc);
     assertFalse(doc.getRoot() instanceof Feed);
@@ -278,7 +278,7 @@ public class FeedValidatorTest
   @Test public void testSection12WrongNamespace() throws Exception {
     //http://feedvalidator.org/testcases/atom/1.2/wrong-namespace.xml
     IRI uri = baseURI.resolve("1.2/wrong-namespace.xml");
-    Document doc = null;
+    Document<?> doc = null;
     doc = get(uri);
     assertNotNull(doc);
     assertFalse(doc.getRoot() instanceof Feed);

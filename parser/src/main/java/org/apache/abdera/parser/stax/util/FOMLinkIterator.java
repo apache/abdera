@@ -25,12 +25,26 @@ import org.apache.abdera.parser.stax.FOMLink;
 
 public class FOMLinkIterator extends FOMElementIterator {
 
-  public FOMLinkIterator(Element parent, Class _class, QName attribute, String value, String defaultValue) {
-    super(parent, _class, attribute, (value != null) ? FOMLink.getRelEquiv(value) : Link.REL_ALTERNATE, defaultValue);
+  public FOMLinkIterator(
+    Element parent, 
+    Class<?> _class, 
+    QName attribute, 
+    String value, 
+    String defaultValue) {
+      super(
+        parent, 
+        _class, 
+        attribute, 
+        value != null ? 
+          FOMLink.getRelEquiv(value) : 
+          Link.REL_ALTERNATE, 
+        defaultValue);
   }
 
-  public FOMLinkIterator(Element parent, Class _class) {
-    super(parent, _class);
+  public FOMLinkIterator(
+    Element parent, 
+    Class<?> _class) {
+      super(parent, _class);
   }
 
   protected boolean isMatch(Element el) {

@@ -32,6 +32,7 @@ import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
 
+@SuppressWarnings("unchecked") 
 public class FOMText 
   extends FOMElement 
   implements Text {

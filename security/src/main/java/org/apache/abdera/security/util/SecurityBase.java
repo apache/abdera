@@ -30,7 +30,7 @@ import org.apache.abdera.security.SecurityOptions;
 import org.apache.xml.serialize.Serializer;
 import org.apache.xml.serialize.XMLSerializer;
 
-
+@SuppressWarnings("unchecked")
 public abstract class SecurityBase {
   
   protected final Abdera abdera;

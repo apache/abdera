@@ -25,6 +25,7 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.model.ExtensibleElement;
 
+@SuppressWarnings("unchecked")
 public class Query 
   extends ElementWrapper {
 

@@ -54,14 +54,14 @@ public class CacheTest extends Assert {
   
   private static String CHECK_CACHE_INVALIDATE;
   private static String CHECK_NO_CACHE;
-  private static String CHECK_AUTH;
+  //private static String CHECK_AUTH;
   private static String CHECK_MUST_REVALIDATE;
   
   public CacheTest() {
     String base = getBase();
     CHECK_CACHE_INVALIDATE = base + "/check_cache_invalidate";
     CHECK_NO_CACHE = base + "/no_cache";
-    CHECK_AUTH = base + "/auth";
+    //CHECK_AUTH = base + "/auth";
     CHECK_MUST_REVALIDATE = base + "/must_revalidate";
   }
   

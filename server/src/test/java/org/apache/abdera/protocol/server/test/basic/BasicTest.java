@@ -39,7 +39,6 @@ import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class BasicTest extends Assert {
@@ -61,7 +60,6 @@ public class BasicTest extends Assert {
     server.stop();
   }
   @Test
-  @Ignore
   public void testGetService() {
     ClientResponse resp = client.get("http://localhost:9002/");
     assertNotNull(resp);

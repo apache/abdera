@@ -103,10 +103,6 @@
 
   <property name="dependencies" value="${basedir}/dependencies" />
   <property name="dependencies.work" value="${dependencies}/work" />
-  <property name="json.src" value="${dependencies}/json/src" />
-  <property name="json.src.java" value="${json.src}/main/java" />
-  <property name="json.version" value="1.0" />
-  <property name="json.jar" value="${dependencies}/json-${json.version}.jar" />
 
   <property name="i18n.src" value="${dependencies}/i18n/src" />
   <property name="i18n.src.java" value="${i18n.src}/main/java" />
@@ -119,18 +115,9 @@
   <path id="jar.dependencies">
     <fileset dir="${dependencies}" includes="**/*.jar" />
     <fileset file="${i18n.jar}" />
-    <fileset file="${json.jar}" />
   </path>
 
   <target name="compile.dependencies">
-    <mkdir dir="${dependencies.work}/json" />
-
-    <!-- build json -->
-    <javac srcdir="${json.src.java}" destdir="${dependencies.work}/json" debug="${debug}" />
-
-    <jar destfile="${json.jar}" basedir="${dependencies.work}/json" includes="org/json/*.class" />
-
-
     <mkdir dir="${dependencies.work}/i18n" />
     
     <javac srcdir="${i18n.src.java}" classpathref="jar.dependencies" destdir="${dependencies.work}/i18n" debug="${debug}" />
@@ -189,7 +176,6 @@ Working directory: ${work}
           <available file="${dependencies}/${jetty-util.jar}" />
           <available file="${dependencies}/${htmlparser.jar}" />
           <available file="${dependencies}/${htmlserializer.jar}" />
-          <available file="${dependencies}/${json.zip}" />
         </and>
       </not>
     </condition>
@@ -421,7 +407,6 @@ Working directory: ${work}
     <delete dir="${test}" />
     <delete dir="${dist}" />
     <delete dir="${dependencies.work}" />
-    <delete file="${json.jar}" />
     <delete file="${i18n.jar}" />
     <delete>
       <fileset dir="${basedir}" includes="*.zip" />
@@ -463,7 +448,6 @@ Working directory: ${work}
         <include name="**/*.jar" />
         <include name="**/legal/*" />
         <exclude name="**/legal/retroweaver-LICENSE.txt" />
-        <exclude name="**/json/*" />
         <exclude name="**/*.retro.jar" />
         <exclude name="**/${bouncycastle.jar}" />
         <exclude name="**/${geronimo.servlet.jar}" />
@@ -496,7 +480,6 @@ Working directory: ${work}
       <fileset dir="${dist}">
         <include name="**/*.jar" />
         <include name="**/legal/*" />
-        <exclude name="**/json/*" />
         <exclude name="**/*.${version}.jar" />
         <exclude name="**/abdera-i18n-${i18n.version}.jar" />
         <exclude name="**/${bouncycastle.jar}" />
@@ -536,7 +519,6 @@ Working directory: ${work}
         <exclude name="**/*.md5" />
         <exclude name="**/.project" />
         <exclude name="**/feedvalidator.org/**/*" />
-        <exclude name="dependencies/json/src/**/*" />
         <exclude name="dependencies/work/**/*" />
       </fileset>
     </copy>
@@ -577,14 +559,7 @@ Working directory: ${work}
       <get src="${jetty-util.dir}/${jetty-util.jar}" dest="${dependencies}/${jetty-util.jar}" usetimestamp="true" />
       <get src="${htmlparser.dir}/${htmlparser.jar}" dest="${dependencies}/${htmlparser.jar}" usetimestamp="true" />
       <get src="${htmlparser.dir}/${htmlserializer.jar}" dest="${dependencies}/${htmlserializer.jar}" usetimestamp="true" />
-      <get src="${json.dir}/${json.zip}" dest="${dependencies}/${json.zip}" usetimestamp="true" />
     </parallel>
-    <mkdir dir="${json.src}/main/java/org/json" />
-    <unzip src="${dependencies}/${json.zip}" dest="${json.src}" overwrite="true" />
-    <copy todir="${json.src}/main/java/org/json" overwrite="true">
-      <fileset dir="${json.src}/apache/json" />
-    </copy>
-    <delete dir="${json.src}/apache" />
   </target>
 
   <target name="clean-downloads" depends="init">

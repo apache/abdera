@@ -53,7 +53,7 @@ import org.apache.abdera.xpath.XPath;
  * taken when using Abdera in environments that utilize multiple classloaders
  * (such as Web application servers).
  */
-public final class Abdera {
+public class Abdera {
 
   /** A static instance of Abdera **/
   private static Abdera instance;

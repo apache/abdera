@@ -27,6 +27,9 @@ import javax.activation.MimeType;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.text.Filter;
+import org.apache.abdera.i18n.text.UrlEncoding;
+import org.apache.abdera.i18n.text.CharUtils.Profile;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
@@ -155,6 +158,27 @@ public abstract class AbstractEntityCollectionAdapter<T>
   }
 
   public abstract void deleteEntry(String resourceName, RequestContext request) throws ResponseContextException;
+
+  public ResponseContext deleteMedia(RequestContext request) {
+    String id = getEntryID(request);
+    if (id != null) {
+  
+      try {
+        deleteMedia(id, request);
+      } catch (ResponseContextException e) {
+        return createErrorResponse(e);
+      }
+      
+      return new EmptyResponseContext(204);
+    } else {
+      // TODO: is this right?
+      return new EmptyResponseContext(404);
+    }
+  }
+
+  public void deleteMedia(String resourceName, RequestContext request) throws ResponseContextException {
+    throw new ResponseContextException(ProviderHelper.notsupported(request));
+  }
 
   public List<Person> getAuthors(T entry, RequestContext request) throws ResponseContextException {
     return null;
@@ -342,7 +366,8 @@ public abstract class AbstractEntityCollectionAdapter<T>
 
   protected void addEntryDetails(RequestContext request, Entry e, 
                                  IRI feedIri, T entryObj) throws ResponseContextException {
-    IRI entryIri = feedIri.resolve(getName(entryObj));
+    String name = getName(entryObj);
+    IRI entryIri = feedIri.resolve(UrlEncoding.encode(name, Profile.PATH.filter()));
     e.addLink(entryIri.toString(), "edit");
     e.setId(getId(entryObj));
     e.setTitle(getTitle(entryObj));

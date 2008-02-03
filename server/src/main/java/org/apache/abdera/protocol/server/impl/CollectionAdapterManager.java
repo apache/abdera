@@ -79,7 +79,10 @@ public class CollectionAdapterManager {
         .getResources(PROPERTIES_PATH);
     while (e.hasMoreElements()) {
       URL url = e.nextElement();
-      File file = new File(url.getFile());
+      File file = new File(url.toURI());
+      if (!file.exists()) {
+        throw new RuntimeException("Could not convert properties path to a File! \"" + file.getAbsolutePath() + "\" does not exist.");
+      }
       File[] files = 
         file.listFiles(
           new FileFilter() {
@@ -88,14 +91,16 @@ public class CollectionAdapterManager {
             }
           }
         );
-      for (File _file : files) {
-        String name = _file.getName();
-        int i = name.indexOf(PROPERTIES_FILE_SUFFIX);
-        String id = i > -1 ? name.substring(0,i) : null;
-        if (id != null) {
-          Properties properties = loadFeedInfo(id);
-          if (properties != null)
-            results.put(id,properties);
+      if (files != null) {
+        for (File _file : files) {
+          String name = _file.getName();
+          int i = name.indexOf(PROPERTIES_FILE_SUFFIX);
+          String id = i > -1 ? name.substring(0,i) : null;
+          if (id != null) {
+            Properties properties = loadFeedInfo(id);
+            if (properties != null)
+              results.put(id,properties);
+          }
         }
       }
     }

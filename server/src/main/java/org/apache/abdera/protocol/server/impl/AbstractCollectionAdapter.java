@@ -101,17 +101,17 @@ public abstract class AbstractCollectionAdapter
 
   public abstract String getId(RequestContext request);
   
-  protected ResponseContext buildCreateEntryResponse(IRI entryIri, Entry entry) {
+  protected ResponseContext buildCreateEntryResponse(String link, Entry entry) {
     BaseResponseContext<Entry> rc = new BaseResponseContext<Entry>(entry);
-    rc.setLocation(entryIri.resolve(entry.getEditLinkResolvedHref()).toString());
+    rc.setLocation(link);
     rc.setContentLocation(rc.getLocation().toString());
     rc.setEntityTag(calculateEntityTag(entry));
     rc.setStatus(201);
     return rc;
   }
 
-  protected ResponseContext buildCreateMediaEntryResponse(IRI entryIri, Entry entry) {
-    return buildCreateEntryResponse(entryIri, entry);
+  protected ResponseContext buildPostMediaEntryResponse(String link, Entry entry) {
+    return buildCreateEntryResponse(link, entry);
   }
 
   protected ResponseContext buildGetEntryResponse(RequestContext request, Entry entry) throws ResponseContextException {

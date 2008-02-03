@@ -29,9 +29,7 @@ import org.apache.abdera.ext.html.HtmlHelper;
 import org.apache.abdera.ext.thread.InReplyTo;
 import org.apache.abdera.ext.thread.ThreadHelper;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.i18n.text.UrlEncoding;
 import org.apache.abdera.i18n.text.Bidi.Direction;
-import org.apache.abdera.i18n.text.CharUtils.Profile;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Categories;
 import org.apache.abdera.model.Category;
@@ -397,7 +395,11 @@ if (element instanceof Text) {
              "src".equalsIgnoreCase(name) || 
              "action".equalsIgnoreCase(name))) {
          IRI base = child.getResolvedBaseUri();
-         val = UrlEncoding.encode(val.trim(),Profile.IUNRESERVED.filter(),Profile.RESERVED.filter(),Profile.IPRIVATE.filter());
+//         val = UrlEncoding.encode(
+//           val.trim(),
+//           Profile.IUNRESERVED.filter(),
+//           Profile.RESERVED.filter(),
+//           Profile.IPRIVATE.filter());
          if (base != null) val = base.resolve(val).toASCIIString();
         }
         jstream.writeQuoted(val);

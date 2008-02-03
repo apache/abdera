@@ -608,4 +608,8 @@ public class RssItem
   public IRIElement setValue(String iri) {
     throw new UnsupportedOperationException("Modifications are not allowed");
   }
+
+  public Control addControl() {
+    throw new UnsupportedOperationException("Modifications are not allowed");
+  }
 }

@@ -1516,5 +1516,9 @@ public class CoreTest
       return null;
     }
     
+    public Control addControl() {
+      return null;
+    }
+    
   }
 }

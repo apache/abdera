@@ -241,7 +241,8 @@ if (element instanceof Text) {
       writeList("contributors",entry.getContributors(),jstream);
       writeList("links",entry.getLinks(),jstream);
       writeList("categories",entry.getCategories(),jstream);
-      writeList("inreplyto",ThreadHelper.getInReplyTos(entry),jstream);            
+      writeList("inreplyto",ThreadHelper.getInReplyTos(entry),jstream);  
+      writeElement("control", entry.getControl(), jstream);
       writeExtensions((ExtensibleElement)element,jstream);
       jstream.endObject();
     } else if (element instanceof Generator) {
@@ -555,7 +556,8 @@ if (element instanceof Text) {
     jstream.startArray();
     for (int n = 0; n < list.size(); n++) {
       Element el = (Element)list.get(n);
-      if (!(el instanceof InReplyTo)) {
+      if (!(el instanceof InReplyTo) && 
+          !(el instanceof Control)) {
         toJson(el,jstream);
         if (n < list.size()-1) jstream.writeSeparator();
       }

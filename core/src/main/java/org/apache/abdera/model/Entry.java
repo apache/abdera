@@ -937,5 +937,7 @@ public interface Entry
    * @throws IRISyntaxException if the href attribute is malformed
    */
   IRI getSelfLinkResolvedHref();
+  
+  Control addControl();
 }
 

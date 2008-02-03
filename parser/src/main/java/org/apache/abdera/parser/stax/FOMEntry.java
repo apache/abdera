@@ -907,4 +907,13 @@ public class FOMEntry
     Control control = getControl();
     return (control != null) ? control.isDraft() : false;
   }
+
+  public Control addControl() {
+    complete();
+    Control control = getControl();
+    if (control == null) {
+      control = ((FOMFactory)factory).newControl(this);
+    }
+    return control;
+  }
 }

@@ -42,6 +42,16 @@ public interface CollectionAdapter {
   ResponseContext getEntry(RequestContext request);
   
   /**
+   * Get metadata for an entry from the collection
+   */
+  ResponseContext headEntry(RequestContext request);
+  
+  /**
+   * Get options for an entry from the collection
+   */
+  ResponseContext optionsEntry(RequestContext request);
+  
+  /**
    * Update an existing entry
    */
   ResponseContext putEntry(RequestContext request);

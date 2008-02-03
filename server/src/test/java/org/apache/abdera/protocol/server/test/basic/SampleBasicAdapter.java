@@ -30,6 +30,8 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.context.ResponseContextException;
 import org.apache.abdera.protocol.server.provider.basic.BasicAdapter;
 
 public class SampleBasicAdapter 
@@ -136,6 +138,24 @@ public class SampleBasicAdapter
     Document<Entry> entryDoc = abdera.getParser().parse(in);
     Entry entry = entryDoc.getRoot();
     return entry;
+  }
+
+
+  @Override
+  public String getAuthor() throws ResponseContextException {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getId(RequestContext request) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public String getTitle(RequestContext request) {
+    // TODO Auto-generated method stub
+    return null;
   }
 }
 

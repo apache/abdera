@@ -18,11 +18,11 @@
 package org.apache.abdera.protocol.server.test.basic;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Date;
 
-import junit.framework.Assert;
-
 import org.apache.abdera.Abdera;
+import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
@@ -37,9 +37,13 @@ import org.apache.abdera.protocol.server.provider.basic.BasicProvider;
 import org.apache.abdera.protocol.server.test.JettyServer;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
+import org.apache.abdera.writer.Writer;
+import org.apache.abdera.writer.WriterFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import junit.framework.Assert;
 
 public class BasicTest extends Assert {
 
@@ -59,6 +63,14 @@ public class BasicTest extends Assert {
   public static void tearDown() throws Exception {
     server.stop();
   }
+
+  protected void prettyPrint(Base doc) throws IOException {
+    WriterFactory factory = abdera.getWriterFactory();
+    Writer writer = factory.getWriter("prettyxml");
+    writer.writeTo(doc, System.out);
+    System.out.println();
+  }
+
   @Test
   public void testGetService() {
     ClientResponse resp = client.get("http://localhost:9002/");

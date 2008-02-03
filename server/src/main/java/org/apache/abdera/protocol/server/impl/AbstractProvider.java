@@ -146,6 +146,10 @@ public abstract class AbstractProvider
             response = adapter.putEntry(request);
           else if (method.equalsIgnoreCase("DELETE")) 
             response = adapter.deleteEntry(request);
+          else if (method.equalsIgnoreCase("HEAD")) 
+            response = adapter.headEntry(request);
+          else if (method.equalsIgnoreCase("OPTIONS")) 
+            response = adapter.optionsEntry(request);
         } else if (type == TargetType.TYPE_MEDIA) {
           if (adapter instanceof MediaCollectionAdapter) {
             MediaCollectionAdapter mcadapter = 
@@ -155,7 +159,11 @@ public abstract class AbstractProvider
             else if (method.equalsIgnoreCase("PUT")) 
               response = mcadapter.putMedia(request);
             else if (method.equalsIgnoreCase("DELETE")) 
-              response = mcadapter.deleteMedia(request);        
+              response = mcadapter.deleteMedia(request);   
+            else if (method.equalsIgnoreCase("HEAD")) 
+              response = mcadapter.headMedia(request);   
+            else if (method.equalsIgnoreCase("OPTIONS")) 
+              response = mcadapter.optionsMedia(request);        
           } else {
             response = ProviderHelper.notsupported(request);
           }

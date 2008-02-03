@@ -96,14 +96,28 @@ public class CustomerAdapterTest extends Assert {
     // GET the entry
     res = client.get(colUri.resolve(location.toString()).toString());
     assertEquals(200, res.getStatus());
+    res.release();
 
     // prettyPrint(abdera, res.getDocument());
     org.apache.abdera.model.Document<Entry> entry_doc = res.getDocument();
     prettyPrint(abdera, entry_doc);
     entry = entry_doc.getRoot();
-
+    
+    // HEAD
+    res = client.head(colUri.resolve(location.toString()).toString());
+    assertEquals(200, res.getStatus());
+    assertEquals(0, res.getContentLength());
+    res.release();
+    
+    // Try invalid resources
     res = client.get(colUri + "/foobar");
     assertEquals(404, res.getStatus());
+    res.release();
+
+    res = client.head(colUri + "/foobar");
+    assertEquals(404, res.getStatus());
+    assertEquals(0, res.getContentLength());
+    res.release();
   }
 
   protected void prettyPrint(Abdera abdera, Base doc) throws IOException {

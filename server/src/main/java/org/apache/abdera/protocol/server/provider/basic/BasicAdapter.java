@@ -33,9 +33,11 @@ import org.apache.abdera.protocol.server.ProviderHelper;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.Target;
+import org.apache.abdera.protocol.server.impl.AbstractCollectionAdapter;
 import org.apache.abdera.util.MimeTypeHelper;
 
 public abstract class BasicAdapter 
+  extends AbstractCollectionAdapter
   implements CollectionAdapter {
 
   public static Logger logger =

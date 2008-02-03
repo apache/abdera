@@ -39,6 +39,16 @@ public interface MediaCollectionAdapter
    * Get a media resource
    */
   ResponseContext getMedia(RequestContext request);
+
+  /**
+   * Get metdata for a media resource
+   */
+  ResponseContext headMedia(RequestContext request);
+
+  /**
+   * Get a media resource's options.
+   */
+  ResponseContext optionsMedia(RequestContext request);
   
   /**
    * Update a media resource

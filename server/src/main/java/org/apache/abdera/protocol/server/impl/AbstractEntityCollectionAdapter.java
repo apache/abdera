@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.protocol.server.impl;
 
+import static org.apache.abdera.protocol.server.ProviderHelper.calculateEntityTag;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -27,6 +29,7 @@ import javax.activation.MimeType;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.i18n.text.Filter;
 import org.apache.abdera.i18n.text.UrlEncoding;
 import org.apache.abdera.i18n.text.CharUtils.Profile;
@@ -42,6 +45,7 @@ import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.context.EmptyResponseContext;
 import org.apache.abdera.protocol.server.context.MediaResponseContext;
 import org.apache.abdera.protocol.server.context.ResponseContextException;
+import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -85,7 +89,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
   @Override
   public ResponseContext putMedia(RequestContext request) {
     try {
-      String id = getEntryID(request);
+      String id = getResourceName(request);
       T entryObj = getEntry(id, request);
       
       putMedia(entryObj, request.getContentType(), request.getSlug(), 
@@ -167,7 +171,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
   }
 
   public ResponseContext deleteEntry(RequestContext request) {
-    String id = getEntryID(request);
+    String id = getResourceName(request);
     if (id != null) {
   
       try {
@@ -186,11 +190,11 @@ public abstract class AbstractEntityCollectionAdapter<T>
   public abstract void deleteEntry(String resourceName, RequestContext request) throws ResponseContextException;
 
   public ResponseContext deleteMedia(RequestContext request) {
-    String id = getEntryID(request);
-    if (id != null) {
+    String resourceName = getResourceName(request);
+    if (resourceName != null) {
   
       try {
-        deleteMedia(id, request);
+        deleteMedia(resourceName, request);
       } catch (ResponseContextException e) {
         return createErrorResponse(e);
       }
@@ -235,6 +239,35 @@ public abstract class AbstractEntityCollectionAdapter<T>
 
   public abstract T getEntry(String resourceName, RequestContext request) throws ResponseContextException;
 
+  public ResponseContext headEntry(RequestContext request) {
+    try {
+      String resourceName = getResourceName(request);
+      T entryObj = getEntry(resourceName, request);
+
+      if (entryObj != null) {
+        return buildHeadEntryResponse(request, resourceName, getUpdated(entryObj));
+      } else {
+        return new EmptyResponseContext(404);
+      }
+    } catch (ResponseContextException e) {
+      return createErrorResponse(e);
+    }
+  }
+
+  public ResponseContext headMedia(RequestContext request) {
+    try {
+      String resourceName = getResourceName(request);
+      T entryObj = getEntry(resourceName, request);
+
+      if (entryObj != null) {
+        return buildHeadEntryResponse(request, resourceName, getUpdated(entryObj));
+      } else {
+        return new EmptyResponseContext(404);
+      }
+    } catch (ResponseContextException e) {
+      return createErrorResponse(e);
+    }
+  }
   public ResponseContext getFeed(RequestContext request) {
     try {
       Feed feed = createFeedBase(request);
@@ -285,14 +318,14 @@ public abstract class AbstractEntityCollectionAdapter<T>
 
   public ResponseContext getMedia(RequestContext request) {
     try {
-      String id = getEntryID(request);
-      T entryObj = getEntry(id, request);
+      String resource = getResourceName(request);
+      T entryObj = getEntry(resource, request);
 
       if (entryObj == null) {
         return new EmptyResponseContext(404);
       }
 
-      return buildGetMediaResponse(entryObj);
+      return buildGetMediaResponse(resource, entryObj);
     } catch (ParseException pe) {
       return new EmptyResponseContext(415);
     } catch (ClassCastException cce) {
@@ -305,12 +338,13 @@ public abstract class AbstractEntityCollectionAdapter<T>
     }
   }
 
-  protected ResponseContext buildGetMediaResponse(T entryObj) throws ResponseContextException {
+  protected ResponseContext buildGetMediaResponse(String id, T entryObj) throws ResponseContextException {
+    Date updated = getUpdated(entryObj);
     MediaResponseContext ctx = new MediaResponseContext(getMediaStream(entryObj), 
-                                                        getUpdated(entryObj), 
+                                                        updated, 
                                                         200);
     ctx.setContentType(getContentType(entryObj));
-
+    ctx.setEntityTag(EntityTag.generate(id, AtomDate.format(updated)));
     return ctx;
   }
   public String getMediaName(T entry) throws ResponseContextException {
@@ -333,7 +367,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
   
   public ResponseContext putEntry(RequestContext request) {
     try {
-      String id = getEntryID(request);
+      String id = getResourceName(request);
       T entryObj = getEntry(id, request);
       
       if (entryObj == null) {
@@ -494,7 +528,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
   }
 
   protected Entry getEntryFromCollectionProvider(RequestContext request) throws ResponseContextException {
-    String id = getEntryID(request);
+    String id = getResourceName(request);
     T entryObj = getEntry(id, request);
 
     if (entryObj == null) {

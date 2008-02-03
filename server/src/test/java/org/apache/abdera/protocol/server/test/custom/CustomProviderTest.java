@@ -151,7 +151,7 @@ prettyPrint(doc);
     options.setContentType("application/octet-stream");
     ClientResponse resp = client.post("http://localhost:9002/atom/feed", in, options);
     assertEquals(resp.getType(), ResponseType.CLIENT_ERROR);
-    assertEquals(resp.getStatus(), 405);
+    assertEquals(resp.getStatus(), 415);
     resp.release();
   }
 

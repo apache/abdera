@@ -233,12 +233,12 @@ public class SimpleAdapter
           request)
             .getRoot()
             .getEntry(
-              getEntryID(request)); 
+              getResourceName(request)); 
       } catch (Exception e) {}
       return null;
   }
   
-  public String getEntryID(
+  public String getResourceName(
     RequestContext request) {
       if (request.getTarget().getType() != TargetType.TYPE_ENTRY) 
         return null;

@@ -11,6 +11,7 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.text.UrlEncoding;
+import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
@@ -29,6 +30,7 @@ import org.apache.abdera.protocol.server.context.AbstractResponseContext;
 import org.apache.abdera.protocol.server.context.BaseResponseContext;
 import org.apache.abdera.protocol.server.context.EmptyResponseContext;
 import org.apache.abdera.protocol.server.context.ResponseContextException;
+import org.apache.abdera.util.EntityTag;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -82,19 +84,35 @@ public abstract class AbstractCollectionAdapter
   }
 
   public ResponseContext deleteMedia(RequestContext request) {
-    return ProviderHelper.notallowed(request);
+    return ProviderHelper.notsupported(request);
   }
 
   public ResponseContext getMedia(RequestContext request) {
-    return ProviderHelper.notallowed(request);
+    return ProviderHelper.notsupported(request);
+  }
+
+  public ResponseContext headMedia(RequestContext request) {
+    return ProviderHelper.notsupported(request);
+  }
+
+  public ResponseContext optionsMedia(RequestContext request) {
+    return ProviderHelper.notsupported(request);
   }
 
   public ResponseContext putMedia(RequestContext request) {
-    return ProviderHelper.notallowed(request);
+    return ProviderHelper.notsupported(request);
   }
 
   public ResponseContext postMedia(RequestContext request) {
-    return ProviderHelper.notallowed(request);
+    return ProviderHelper.notsupported(request);
+  }
+
+  public ResponseContext headEntry(RequestContext request) {
+    return ProviderHelper.notsupported(request);
+  }
+
+  public ResponseContext optionsEntry(RequestContext request) {
+    return ProviderHelper.notsupported(request);
   }
 
   public abstract String getAuthor() throws ResponseContextException;
@@ -120,6 +138,14 @@ public abstract class AbstractCollectionAdapter
     Document<Entry> entry_doc = entry.getDocument();
     AbstractResponseContext rc = new BaseResponseContext<Document<Entry>>(entry_doc);
     rc.setEntityTag(calculateEntityTag(entry));
+    return rc;
+  }
+  
+  protected ResponseContext buildHeadEntryResponse(RequestContext request, 
+                                                   String id,
+                                                   Date updated) throws ResponseContextException {
+    EmptyResponseContext rc = new EmptyResponseContext(200);
+    rc.setEntityTag(EntityTag.generate(id, AtomDate.format(updated)));
     return rc;
   }
 
@@ -179,7 +205,7 @@ public abstract class AbstractCollectionAdapter
     return entry_doc.getRoot();
   }
 
-  protected String getEntryID(RequestContext request) {
+  protected String getResourceName(RequestContext request) {
     String path = request.getTargetPath();
     int q = path.indexOf("?");
     if (q != -1) {

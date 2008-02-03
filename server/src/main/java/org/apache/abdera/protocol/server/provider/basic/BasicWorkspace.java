@@ -51,7 +51,9 @@ class BasicWorkspace
         SimpleCollectionInfo col = new SimpleCollectionInfo(title,href,"application/atom+xml;type=entry");
         collections.add(col);
       }
-    } catch (Exception e) {}
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
     return collections;
   }
 

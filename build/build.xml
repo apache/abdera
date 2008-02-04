@@ -373,13 +373,9 @@ Working directory: ${work}
   </target>
 
   <target name="docs" depends="init">
-    <path id="ext.path">
-      <fileset dir="${extensions}" includes="**/src/main/java" />
-    </path>
     <javadoc 
       packagenames="org.apache.abdera.*" 
-      sourcepath="${core.src}:${security.src}:${server.src}:${client.src}:${protocol.src}:${spring.src}" 
-      sourcepathref="ext.path" 
+      sourcepath="${core.src}:${security.src}:${server.src}:${client.src}:${protocol.src}:${spring.src}:${i18n.src.java}:${extensions}/gdata/src/main/java:${extensions}/geo/src/main/java:${extensions}/html/src/main/java:${extensions}/json/src/main/java:${extensions}/main/src/main/java:${extensions}/media/src/main/java:${extensions}/oauth/src/main/java:${extensions}/opensearch/src/main/java:${extensions}/serializer/src/main/java:${extensions}/sharing/src/main/java:${extensions}/wsse/src/main/java" 
       destdir="${javadocs}" 
       windowtitle="Abdera" 
       classpathref="jar.dependencies" />

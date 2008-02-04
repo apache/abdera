@@ -17,12 +17,10 @@
 */
 package org.apache.abdera.ext.oauth;
 
-import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
 import java.util.Date;
 
 import javax.crypto.Cipher;

@@ -396,11 +396,6 @@ if (element instanceof Text) {
              "src".equalsIgnoreCase(name) || 
              "action".equalsIgnoreCase(name))) {
          IRI base = child.getResolvedBaseUri();
-//         val = UrlEncoding.encode(
-//           val.trim(),
-//           Profile.IUNRESERVED.filter(),
-//           Profile.RESERVED.filter(),
-//           Profile.IPRIVATE.filter());
          if (base != null) val = base.resolve(val).toASCIIString();
         }
         jstream.writeQuoted(val);

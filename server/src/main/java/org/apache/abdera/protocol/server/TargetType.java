@@ -26,6 +26,7 @@ import java.util.WeakHashMap;
 public final class TargetType {
 
   public static final String UNKNOWN = "UNKNOWN";
+  public static final String NOT_FOUND = "NOT_FOUND";
   public static final String SERVICE = "SERVICE";
   public static final String COLLECTION = "COLLECTION";
   public static final String ENTRY = "ENTRY";
@@ -39,6 +40,10 @@ public final class TargetType {
    * An unknown target type
    */
   public static final TargetType TYPE_UNKNOWN = new TargetType(UNKNOWN);
+  /**
+   * A not found target type
+   */
+  public static final TargetType TYPE_NOT_FOUND = new TargetType(NOT_FOUND);
   /**
    * An Atompub Service Document
    */

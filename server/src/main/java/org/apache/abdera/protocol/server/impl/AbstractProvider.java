@@ -167,6 +167,8 @@ public abstract class AbstractProvider
           } else {
             response = ProviderHelper.notsupported(request);
           }
+        } else if (type == TargetType.TYPE_NOT_FOUND) {
+          response = ProviderHelper.notfound(request);
         } else {
           response = adapter.extensionRequest(request);
         }

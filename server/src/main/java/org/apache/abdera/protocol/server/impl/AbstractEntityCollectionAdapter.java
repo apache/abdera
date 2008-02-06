@@ -17,8 +17,6 @@
 */
 package org.apache.abdera.protocol.server.impl;
 
-import static org.apache.abdera.protocol.server.ProviderHelper.calculateEntityTag;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -29,10 +27,9 @@ import javax.activation.MimeType;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.model.AtomDate;
-import org.apache.abdera.i18n.text.Filter;
 import org.apache.abdera.i18n.text.UrlEncoding;
 import org.apache.abdera.i18n.text.CharUtils.Profile;
+import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
@@ -146,6 +143,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
   }
 
   protected String getLink(String name, T entryObj, IRI feedIri, RequestContext request) {
+    feedIri = feedIri.trailingSlash();
     IRI entryIri = feedIri.resolve(UrlEncoding.encode(name, Profile.PATH.filter()));
     
     String link = entryIri.toString();
@@ -302,11 +300,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
 
   private IRI getFeedIRI(T entryObj, RequestContext request) {
     String feedIri = getFeedIriForEntry(entryObj, request);
-    if (!feedIri.endsWith("/")) {
-      feedIri += "/";
-    }
-    
-    return new IRI(feedIri);
+    return new IRI(feedIri).trailingSlash();
   }
   
   /**

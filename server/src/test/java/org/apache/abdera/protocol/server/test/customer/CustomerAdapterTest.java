@@ -102,6 +102,7 @@ public class CustomerAdapterTest extends Assert {
     org.apache.abdera.model.Document<Entry> entry_doc = res.getDocument();
     prettyPrint(abdera, entry_doc);
     entry = entry_doc.getRoot();
+    assertEquals(uri + "customers/1001-Dan_Diephouse", entry_doc.getRoot().getEditLinkResolvedHref().toString());
     
     // HEAD
     res = client.head(colUri.resolve(location.toString()).toString());

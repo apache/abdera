@@ -40,6 +40,7 @@ import org.apache.jackrabbit.core.nodetype.NodeTypeDef;
 import org.apache.jackrabbit.core.nodetype.NodeTypeManagerImpl;
 import org.apache.jackrabbit.core.nodetype.NodeTypeRegistry;
 import org.apache.jackrabbit.core.nodetype.xml.NodeTypeReader;
+import org.apache.jackrabbit.api.JackrabbitNodeTypeManager;
 
 public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> {
 
@@ -119,32 +120,22 @@ public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> 
     this.collectionNodeId = collectionNode.getUUID();
     this.id = "urn:" + collectionNodeId;
 
-    // UGH, Jackrabbit specific code
     Workspace workspace = session.getWorkspace();
-    try {
-      workspace.getNamespaceRegistry().getPrefix(NAMESPACE);
-    } catch (NamespaceException e) {
-      workspace.getNamespaceRegistry().registerNamespace("abdera", NAMESPACE);
-    }
-    
-    NodeTypeDef[] nodeTypes = NodeTypeReader.read(getClass().getResourceAsStream("/org/apache/abdera/jcr/nodeTypes.xml"));
 
     // Get the NodeTypeManager from the Workspace.
     // Note that it must be cast from the generic JCR NodeTypeManager to the
     // Jackrabbit-specific implementation.
-    NodeTypeManagerImpl ntmgr =(NodeTypeManagerImpl)workspace.getNodeTypeManager();
-    
-    // Acquire the NodeTypeRegistry
-    NodeTypeRegistry ntreg = ntmgr.getNodeTypeRegistry();
-
-    // Loop through the prepared NodeTypeDefs
-    for (NodeTypeDef ntd : nodeTypes) {
-        // ...and register it
-        if (!ntreg.isRegistered(ntd.getName())) {
-          ntreg.registerNodeType(ntd);
-        }
+    JackrabbitNodeTypeManager jntmgr = (JackrabbitNodeTypeManager) workspace.getNodeTypeManager();
+    if (!jntmgr.hasNodeType("abdera:entry")) {
+      InputStream in = getClass().getResourceAsStream("/org/apache/abdera/jcr/nodeTypes.xml");
+      try {
+        // register the node types and any referenced namespaces
+        jntmgr.registerNodeTypes(in, JackrabbitNodeTypeManager.TEXT_XML);
+      } finally {
+        in.close();
+      }
     }
-
+    
     session.logout();
     
     sessionPool = new SessionPoolManager(maxActiveSessions, repository, credentials);
@@ -177,7 +168,11 @@ public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> 
 
   @Override
   public String getContentType(Node entry) {
-    return getStringOrNull(entry, CONTENT_TYPE);
+    try {
+      return getStringOrNull(entry, CONTENT_TYPE);
+    } catch (ResponseContextException e) {
+      throw new UnsupportedOperationException();
+    }
   }
 
   @Override
@@ -212,7 +207,7 @@ public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> 
       return n;
     } catch (RepositoryException e) {
       try {
-        n.remove();
+        getSession(request).refresh(false);
       } catch (Throwable t) {
         log.warn(t);
       }
@@ -235,24 +230,20 @@ public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> 
   @Override
   public Node postEntry(String title, IRI id, String summary, Date updated, List<Person> authors,
                           Content content, RequestContext request) throws ResponseContextException {
-    Node entry = null;
+    Session session = getSession(request);
     try {
-      Session session = getSession(request);
 
       Node collectionNode = session.getNodeByUUID(collectionNodeId);
       String resourceName = Sanitizer.sanitize(title, "-");
-      entry = postEntry(title, summary, updated, authors, 
+      return postEntry(title, summary, updated, authors, 
                           content, session, collectionNode,
                           resourceName, 0);
-      
-      return entry;
     } catch (RepositoryException e) {
       try {
-        if (entry != null) entry.remove();
+        session.refresh(false);
       } catch (Throwable t) {
         log.warn(t);
-      }
-      
+      }      
       throw new ResponseContextException(500, e);
     }
   }
@@ -279,7 +270,7 @@ public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> 
     }
     catch (ItemExistsException e) 
     {
-      return postEntry(title, summary, updated, authors, content, session, collectionNode, resourceName, num++);
+      return postEntry(title, summary, updated, authors, content, session, collectionNode, resourceName, ++num);
     }
   }
 
@@ -328,16 +319,18 @@ public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> 
 
   @Override
   public void deleteEntry(String resourceName, RequestContext request) throws ResponseContextException {
+    Session session = getSession(request);
     try {
-      Session session = getSession(request);
-
-      Node node = getNode(session, resourceName);
-
-      node.remove();
+      getNode(session, resourceName).remove();
+      session.save();
     } catch (RepositoryException e) {
+      try {
+        session.refresh(false);
+      } catch (Throwable t) {
+        log.warn(t);
+      }            
       throw new ResponseContextException(500, e);
     }
-
   }
 
   private Node getNode(Session session, String resourceName) throws ResponseContextException,
@@ -461,12 +454,7 @@ public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> 
   public InputStream getMediaStream(Node entry) throws ResponseContextException {
     try {
       Value value = getValueOrNull(entry, MEDIA);
-      
-      if (value == null) return null;
-      
-      return value.getStream();
-    } catch (PathNotFoundException e) {
-      return null;
+      return (value != null) ? value.getStream() : null;
     } catch (RepositoryException e) {
       throw new ResponseContextException(500, e);
     }
@@ -483,7 +471,7 @@ public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> 
   }
 
   @Override
-  public Text getSummary(Node entry, RequestContext request) {
+  public Text getSummary(Node entry, RequestContext request) throws ResponseContextException {
     Text summary = request.getAbdera().getFactory().newSummary();
     summary.setText(getStringOrNull(entry, SUMMARY));
     return summary;
@@ -500,7 +488,8 @@ public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> 
 
   @Override
   public Date getUpdated(Node entry) throws ResponseContextException {
-    return getDateOrNull(entry, UPDATED).getTime();
+    Calendar updated = getDateOrNull(entry, UPDATED);
+    return (updated != null) ? updated.getTime() : null;
   }
 
   @Override
@@ -515,16 +504,12 @@ public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> 
     }
   }
 
-  public static String getStringOrNull(Node node, String propName) {
+  public static String getStringOrNull(Node node, String propName) throws ResponseContextException  {
     try {
       Value v = getValueOrNull(node, propName);
-      if (v != null) {
-        return v.getString();
-      }
-    } catch (ValueFormatException e) {
-      throw new RuntimeException(e);
+      return (v != null) ? v.getString() : null;
     } catch (RepositoryException e) {
-      throw new RuntimeException(e);
+      throw new ResponseContextException(500, e);
     }
 
     return null;
@@ -537,32 +522,15 @@ public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> 
   public static Calendar getDateOrNull(Node node, String propName) throws ResponseContextException {
     try {
       Value v = getValueOrNull(node, propName);
-      if (v != null) {
-        return v.getDate();
-      }
-    } catch (ValueFormatException e) {
-      throw new ResponseContextException(500, e);
+      return (v != null) ? v.getDate() : null;
     } catch (RepositoryException e) {
       throw new ResponseContextException(500, e);
     }
-
-    return null;
   }
 
-  public static Value getValueOrNull(Node node, String propName) throws PathNotFoundException,
-    RepositoryException {
-    Property p = null;
-    try {
-      p = node.getProperty(propName);
-    } catch (PathNotFoundException e) {
-      return null;
-    }
-
-    if (p == null) {
-      return null;
-    }
-
-    return p.getValue();
+  public static Value getValueOrNull(Node node, String propName) throws RepositoryException {
+    return node.hasProperty(propName)
+      ? node.getProperty(propName).getValue() : null;
   }
 
   public void setRepository(Repository repository) {

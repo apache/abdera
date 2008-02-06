@@ -36,6 +36,7 @@
             <xsd:element name="workspaceManager" type="xsd:anyType" minOccurs="0"/>
             <xsd:element name="targetResolver" type="xsd:anyType" minOccurs="0"/>
             <xsd:element name="subjectResolver" type="xsd:anyType" minOccurs="0"/>
+            <xsd:element name="filter" type="xsd:anyType" minOccurs="0" maxOccurs="unbounded"/>
           </xsd:sequence>
           <xsd:attribute name="class" type="xsd:string" />
           <xsd:attribute name="base" type="xsd:string"/>
@@ -69,6 +70,19 @@
             <xsd:element name="media" type="xsd:anyType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="service" type="xsd:anyType" minOccurs="0" maxOccurs="unbounded"/>
           </xsd:choice>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="filter">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="beans:identifiedType">
+          <xsd:sequence>
+            <xsd:element ref="beans:bean" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element ref="beans:ref" minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
         </xsd:extension>
       </xsd:complexContent>
     </xsd:complexType>

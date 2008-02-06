@@ -511,8 +511,6 @@ public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> 
     } catch (RepositoryException e) {
       throw new ResponseContextException(500, e);
     }
-
-    return null;
   }
 
   public ResponseContext getCategories(RequestContext request) {

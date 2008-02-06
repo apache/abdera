@@ -659,4 +659,22 @@ public final class IRI
     UnicodeCharacterDatabase.getCanonicalClass(1);
     Nameprep.prep("");
   }
+  
+  /**
+   * Returns a new IRI with a trailing slash appended to the path, if necessary
+   */
+  public IRI trailingSlash() {
+    return new IRI(
+      _scheme,
+      scheme,
+      authority,
+      userinfo,
+      host,
+      port,
+      path.endsWith("/") ? path : path + "/",
+      query,
+      fragment
+    );
+  }
+   
 }

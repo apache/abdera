@@ -49,6 +49,8 @@ public class CustomProviderTest extends Assert {
   private static Abdera abdera = Abdera.getInstance();
   private static AbderaClient client = new AbderaClient();
   
+  private static String BASE = "http://localhost:9002/atom";
+  
   @BeforeClass
   public static void setUp() throws Exception {
     try {
@@ -66,7 +68,7 @@ public class CustomProviderTest extends Assert {
 
   @Test
   public void testGetService() throws IOException {
-    ClientResponse resp = client.get("http://localhost:9002/atom");
+    ClientResponse resp = client.get(BASE);
     assertNotNull(resp);
     assertEquals(ResponseType.SUCCESS, resp.getType());
     assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.APP_MEDIA_TYPE));
@@ -80,14 +82,14 @@ prettyPrint(doc);
     Workspace workspace = service.getWorkspaces().get(0);
     assertEquals(workspace.getCollections().size(), 1);
     Collection collection = workspace.getCollections().get(0);
-    assertEquals(collection.getResolvedHref().toString(), "http://localhost:9002/atom/feed");
+    assertEquals(collection.getResolvedHref().toString(), BASE + "/feed");
     assertEquals(collection.getTitle().toString(), "A simple feed");
     resp.release();
   }
 
   @Test
   public void testGetCategories() {
-    ClientResponse resp = client.get("http://localhost:9002/atom/feed;categories");
+    ClientResponse resp = client.get(BASE + "/feed;categories");
     assertNotNull(resp);
     assertEquals(ResponseType.SUCCESS, resp.getType());
     assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.CAT_MEDIA_TYPE));
@@ -102,7 +104,7 @@ prettyPrint(doc);
 
   @Test
   public void testGetFeed() throws Exception {
-    ClientResponse resp = client.get("http://localhost:9002/atom/feed");
+    ClientResponse resp = client.get(BASE + "/feed");
     assertNotNull(resp);
     assertEquals(ResponseType.SUCCESS, resp.getType());
     assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.ATOM_MEDIA_TYPE));
@@ -126,19 +128,19 @@ prettyPrint(doc);
   @Test
   public void testPostEntry() {
     Entry entry = abdera.newEntry();
-    entry.setId("http://localhost:9002/atom/feed/entries/1");
+    entry.setId(BASE + "/feed/entries/1");
     entry.setTitle("test entry");
     entry.setContent("Test Content");
     entry.addLink("http://example.org");
     entry.setUpdated(new Date());
     entry.addAuthor("James");
-    ClientResponse resp = client.post("http://localhost:9002/atom/feed", entry);
+    ClientResponse resp = client.post(BASE + "/feed", entry);
     assertNotNull(resp);
     assertEquals(ResponseType.SUCCESS, resp.getType());
     assertEquals(resp.getStatus(), 201);
     assertNotNull(resp.getLocation());
     resp.release();
-    resp = client.get("http://localhost:9002/atom/feed");
+    resp = client.get(BASE + "/feed");
     Document<Feed> feed_doc = resp.getDocument();
     Feed feed = feed_doc.getRoot();
     assertEquals(feed.getEntries().size(), 1);
@@ -149,7 +151,7 @@ prettyPrint(doc);
     ByteArrayInputStream in = new ByteArrayInputStream(new byte[] {0x01, 0x02, 0x03, 0x04});
     RequestOptions options = client.getDefaultRequestOptions();
     options.setContentType("application/octet-stream");
-    ClientResponse resp = client.post("http://localhost:9002/atom/feed", in, options);
+    ClientResponse resp = client.post(BASE + "/feed", in, options);
     assertEquals(resp.getType(), ResponseType.CLIENT_ERROR);
     assertEquals(resp.getStatus(), 415);
     resp.release();
@@ -157,7 +159,7 @@ prettyPrint(doc);
 
   @Test
   public void testPutEntry() throws IOException {
-    ClientResponse resp = client.get("http://localhost:9002/atom/feed");
+    ClientResponse resp = client.get(BASE + "/feed");
     Document<Feed> feed_doc = resp.getDocument();
     Feed feed = feed_doc.getRoot();
     prettyPrint(feed);
@@ -180,7 +182,7 @@ prettyPrint(doc);
     entry = doc.getRoot();
     assertEquals(entry.getTitle(), "This is the modified title");
     resp.release();
-    resp = client.get("http://localhost:9002/atom/feed");
+    resp = client.get(BASE + "/feed");
     feed_doc = resp.getDocument();
     feed = feed_doc.getRoot();
     assertEquals(feed.getEntries().size(), 1);
@@ -189,7 +191,7 @@ prettyPrint(doc);
 
   @Test
   public void testDeleteEntry() {
-    ClientResponse resp = client.get("http://localhost:9002/atom/feed");
+    ClientResponse resp = client.get(BASE + "/feed");
     Document<Feed> feed_doc = resp.getDocument();
     Feed feed = feed_doc.getRoot();
     Entry entry = feed.getEntries().get(0);
@@ -198,7 +200,7 @@ prettyPrint(doc);
     resp = client.delete(edit);
     assertEquals(ResponseType.SUCCESS, resp.getType());
     resp.release();
-    resp = client.get("http://localhost:9002/atom/feed");
+    resp = client.get(BASE + "/feed");
     feed_doc = resp.getDocument();
     feed = feed_doc.getRoot();
     assertEquals(feed.getEntries().size(), 0);

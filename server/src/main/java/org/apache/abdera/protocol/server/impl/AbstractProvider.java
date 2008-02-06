@@ -172,6 +172,8 @@ public abstract class AbstractProvider
         } else {
           response = adapter.extensionRequest(request);
         }
+        if (response == null)
+          response = ProviderHelper.notsupported(request);
         return response;
       } catch (Throwable e) {
         if (transaction != null) 

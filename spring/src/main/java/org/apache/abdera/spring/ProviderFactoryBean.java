@@ -6,6 +6,7 @@ import java.util.Collection;
 import javax.security.auth.Subject;
 
 import org.apache.abdera.protocol.Resolver;
+import org.apache.abdera.protocol.server.Filter;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.impl.DefaultProvider;
@@ -18,6 +19,7 @@ public class ProviderFactoryBean implements FactoryBean {
     private Collection<WorkspaceInfo> workspaces;
     private Resolver<Target> targetResolver;
     private Resolver<Subject> subjectResolver;
+    private Filter[] filters;
     
     public Object getObject() throws Exception {
         DefaultProvider p = null;
@@ -39,6 +41,9 @@ public class ProviderFactoryBean implements FactoryBean {
         
         if (subjectResolver != null) {
             p.setSubjectResolver(subjectResolver);
+        }
+        if (filters != null && filters.length > 0) {
+            p.addFilter(filters);
         }
         
         return p;
@@ -90,6 +95,14 @@ public class ProviderFactoryBean implements FactoryBean {
 
     public void setSubjectResolver(Resolver<Subject> subjectResolver) {
         this.subjectResolver = subjectResolver;
+    }
+
+    public Filter[] getFilters() {
+        return filters;
+    }
+
+    public void setFilters(Filter[] filters) {
+        this.filters = filters;
     }
 
 }

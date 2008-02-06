@@ -22,8 +22,11 @@ import org.apache.abdera.protocol.server.Provider;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.ManagedList;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class DefaultProviderDefinitionParser 
     extends org.apache.abdera.spring.AbstractSingleBeanDefinitionParser {
@@ -45,6 +48,18 @@ public class DefaultProviderDefinitionParser
             setFirstChildAsProperty(element, ctx, bean, "targetResolver");
         } else if (name.equals("subjectResolver")) {
             setFirstChildAsProperty(element, ctx, bean, name);
+        } else if (name.equals("filter")) {
+            ManagedList filters = new ManagedList();
+            NodeList nodes = element.getChildNodes();
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Node n = nodes.item(i);
+                if (n.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
+                    Element childElement = (Element)n;
+                    Object child = ctx.getDelegate().parsePropertySubElement(childElement, bean.getRawBeanDefinition());
+                    filters.add(child);
+                }
+            }
+            bean.addPropertyValue("filters", filters);
         } else if (name.equals("workspace")) {
             String id = getAndRegister(ctx, bean, element);
             

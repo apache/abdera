@@ -38,9 +38,17 @@ public class WorkspaceDefinitionParser
         NodeList nodes = element.getChildNodes();
         for (int i = 0; i < nodes.getLength(); i++) {
             Node n = nodes.item(i);
-            if (n.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
+            if (n.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE
+//                &&
+//                n.getNodeName().equals("bean")) {
+//                Element childElement = (Element)n;
+//                BeanDefinitionHolder child = ctx.getDelegate().parseBeanDefinitionElement(childElement);
+//                collections.add(child);
+//            } else if (n.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE &&
+//                n.getNodeName().equals("ref")
+                ) {
                 Element childElement = (Element)n;
-                BeanDefinitionHolder child = ctx.getDelegate().parseBeanDefinitionElement(childElement);
+                Object child = ctx.getDelegate().parsePropertySubElement(childElement, bean.getRawBeanDefinition());
                 collections.add(child);
             }
 

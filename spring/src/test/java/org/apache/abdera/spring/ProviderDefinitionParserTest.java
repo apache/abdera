@@ -52,7 +52,9 @@ public class ProviderDefinitionParserTest
         assertEquals("Foo Workspace", w.getTitle(null));
         
         Collection<CollectionInfo> collections = w.getCollections(null);
-        assertEquals(1, collections.size());
+        assertEquals(2, collections.size());
+        
+        assertEquals(1, p.getFilters(null).length); //Parameter isn't used
         
     }
     

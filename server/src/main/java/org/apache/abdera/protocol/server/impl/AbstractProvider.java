@@ -176,7 +176,8 @@ public abstract class AbstractProvider
       } catch (Throwable e) {
         if (transaction != null) 
           transaction.compensate(request,e);
-        return ProviderHelper.servererror(request, e);
+        response = ProviderHelper.servererror(request, e);
+        return response;
       } finally {
         if (transaction != null) 
           transaction.end(request, response);

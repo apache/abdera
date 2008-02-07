@@ -416,6 +416,17 @@ Working directory: ${work}
       <arg line="${bouncycastle.provider}" />
     </java>
   </target>
+	
+	<target name="test.spring" depends="compile.spring" if="do.spring">
+		<echo>Running Spring Tests...</echo>
+		<path id="spring.dependencies">
+		      <path refid="jar.dependencies" />
+		      <fileset dir="${basedir}/build/tools/${spring.name}/dist" includes="**/*.jar" />
+		      <fileset dir="${basedir}/build/tools/${spring.name}/dist/modules" includes="**/*.jar" />
+		    </path>
+		<java classpathref="spring.dependencies" classpath="${core.work}:${parser.work}:${server.work}:${security.work}:${client.work}:${protocol.work}:${spring.work}:${test}" classname="org.apache.abdera.spring.TestSuite" fork="yes">
+	    </java>
+	</target>
 
   <target name="clean">
     <delete dir="${work}" />

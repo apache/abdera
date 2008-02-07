@@ -83,8 +83,9 @@
             <xsd:element ref="beans:bean" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element ref="beans:ref" minOccurs="0" maxOccurs="unbounded"/>
           </xsd:sequence>
+          <xsd:attribute name="ref" type="xsd:string"/>
         </xsd:extension>
-      </xsd:complexContent>
+      </xsd:complexContent>      
     </xsd:complexType>
   </xsd:element>
 </xsd:schema>

@@ -54,8 +54,7 @@ public class ProviderDefinitionParserTest
         Collection<CollectionInfo> collections = w.getCollections(null);
         assertEquals(2, collections.size());
         
-        assertEquals(1, p.getFilters(null).length); //Parameter isn't used
-        
+        assertEquals(2, p.getFilters(null).length); //Parameter isn't used
     }
     
     @Override

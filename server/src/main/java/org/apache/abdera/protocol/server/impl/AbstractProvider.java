@@ -247,6 +247,10 @@ public abstract class AbstractProvider
         .setContentType(Constants.APP_MEDIA_TYPE);
   }
 
+  public void setFilters(List<Filter> filters) {
+    this.filters = filters;
+  }
+  
   public Filter[] getFilters(RequestContext request) {
     return filters.toArray(new Filter[filters.size()]);
   }

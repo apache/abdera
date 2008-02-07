@@ -18,8 +18,13 @@
  */
 package org.apache.abdera.spring;
 
+import java.util.List;
+
 import org.apache.abdera.protocol.server.Provider;
+import org.springframework.beans.MutablePropertyValues;
+import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
+import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.ManagedList;
@@ -41,6 +46,7 @@ public class DefaultProviderDefinitionParser
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void mapElement(ParserContext ctx, BeanDefinitionBuilder bean, Element element, String name) {
         if (name.equals("workspaceManager")) {
             setFirstChildAsProperty(element, ctx, bean, "workspaceManager");
@@ -48,16 +54,26 @@ public class DefaultProviderDefinitionParser
             setFirstChildAsProperty(element, ctx, bean, "targetResolver");
         } else if (name.equals("subjectResolver")) {
             setFirstChildAsProperty(element, ctx, bean, name);
-        } else if (name.equals("filter")) {
-            ManagedList filters = new ManagedList();
+        } else if (name.equals("filter")) {        	
+        	MutablePropertyValues values = bean.getBeanDefinition().getPropertyValues();
+        	PropertyValue pv = values.getPropertyValue("filters");
+        	List filters = pv != null?(List) pv.getValue():new ManagedList();        	
             NodeList nodes = element.getChildNodes();
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Node n = nodes.item(i);
-                if (n.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
-                    Element childElement = (Element)n;
-                    Object child = ctx.getDelegate().parsePropertySubElement(childElement, bean.getRawBeanDefinition());
-                    filters.add(child);
-                }
+            Object child = null;
+            if (element.hasAttribute("ref")) {
+            	child = new RuntimeBeanReference(element.getAttribute("ref"));
+    			((RuntimeBeanReference)child).setSource(ctx.extractSource(element));    			
+            } else if (nodes != null) {            	
+	            for (int i = 0; i < nodes.getLength(); i++) {
+	                Node n = nodes.item(i);
+	                if (n.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
+	                    Element childElement = (Element)n;
+	                    child = ctx.getDelegate().parsePropertySubElement(childElement, bean.getRawBeanDefinition());	                    
+	                }
+	            }	            
+            }
+            if (child != null) {
+            	filters.add(child);
             }
             bean.addPropertyValue("filters", filters);
         } else if (name.equals("workspace")) {

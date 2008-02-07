@@ -210,7 +210,7 @@ public abstract class AbstractProvider
               sw.startWorkspace()
                 .writeTitle(wi.getTitle(request));
               for (CollectionInfo ci : wi.getCollections(request)) {
-                sw.startCollection(ci.getHref(request))
+                sw.startCollection(request.getTargetBasePath() + ci.getHref(request))
                   .writeTitle(ci.getTitle(request))
                   .writeAccepts(ci.getAccepts(request));
                 CategoriesInfo[] catinfos = ci.getCategoriesInfo(request);
@@ -219,7 +219,7 @@ public abstract class AbstractProvider
                     String href = catinfo.getHref(request);
                     if (href != null) {
                       sw.startCategories()
-                        .writeAttribute("href", href)
+                        .writeAttribute("href", request.getTargetBasePath() + href)
                         .endCategories();
                     } else {
                       sw.startCategories(

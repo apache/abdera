@@ -12,7 +12,7 @@ public class DefaultWorkspaceManager extends AbstractWorkspaceManager {
   public static final String COLLECTION_ADAPTER_ATTRIBUTE = "collectionProvider";
 
   public CollectionAdapter getCollectionAdapter(RequestContext request) {
-    String path = request.getTargetPath();
+    String path = request.getTargetBasePath() + request.getTargetPath();
     
     // Typically this happens when a Resolver wants to override the CollectionAdapter being used
     CollectionAdapter ca = (CollectionAdapter) request.getAttribute(Scope.REQUEST, COLLECTION_ADAPTER_ATTRIBUTE);

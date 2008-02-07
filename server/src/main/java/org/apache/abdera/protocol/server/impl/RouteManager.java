@@ -138,7 +138,7 @@ public class RouteManager
           map.put(var, value);
         }
       }
-      return route.expand(getContext(map));
+      return context.getTargetBasePath() + route.expand(getContext(map));
     } else {
       return null;
     }

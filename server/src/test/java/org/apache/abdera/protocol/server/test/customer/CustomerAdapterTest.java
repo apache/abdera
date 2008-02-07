@@ -42,20 +42,28 @@ public class CustomerAdapterTest extends Assert {
     wi.addCollection(ca);
     
     customerProvider.addWorkspace(wi);
-    
-    initializeJetty();
   }
 
   @Test
   public void testCustomerProvider() throws Exception {
     setupAbdera("/");
+    initializeJetty("/");
     
     runTests("/");
+  }  
+  
+  @Test
+  public void testCustomerProviderWithDifferentContextPath() throws Exception {
+    setupAbdera("/");
+    initializeJetty("/foo");
+    
+    runTests("/foo/");
   }
   
   @Test
   public void testCustomerProviderWithDifferentBase() throws Exception {
     setupAbdera("/:base/");
+    initializeJetty("/");
     
     runTests("/base/");
   }
@@ -129,10 +137,10 @@ public class CustomerAdapterTest extends Assert {
   }
 
   @SuppressWarnings("serial") 
-  private void initializeJetty() throws Exception {
+  private void initializeJetty(String contextPath) throws Exception {
 
     server = new Server(9002);
-    Context root = new Context(server, "/", Context.NO_SESSIONS);
+    Context root = new Context(server, contextPath, Context.NO_SESSIONS);
     root.addServlet(new ServletHolder(new AbderaServlet() {
 
       @Override

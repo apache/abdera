@@ -80,6 +80,7 @@ public class ServletRequestContext
       case LOCALNAME:         return request.getLocalName();
       case SERVERNAME:        return request.getServerName();
       case SERVERPORT:        return request.getServerPort();
+      case SECURE:            return request.isSecure();
       default:
         throw new UnsupportedOperationException(Localizer.get("PROPERTY.NOT.SUPPORTED")); 
     }

@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
-import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.text.UrlEncoding;
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Collection;

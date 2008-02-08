@@ -72,7 +72,8 @@ public interface RequestContext
     LOCALADDR, 
     LOCALNAME,
     SERVERNAME, 
-    SERVERPORT
+    SERVERPORT,
+    SECURE
   };
 
   /**

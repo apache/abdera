@@ -170,6 +170,15 @@ public class CustomerAdapterTest extends Assert {
     assertEquals(404, res.getStatus());
     assertEquals(0, res.getContentLength());
     res.release();
+    
+    IRI badColUri = new IRI(uri).resolve("customersbad"); 
+    // GET the service doc
+    res = client.get(colUri.toString());
+    assertEquals(200, res.getStatus());
+    res.release();
+    res = client.get(badColUri.toString());
+    assertEquals(404, res.getStatus());
+    res.release();
   }
 
   protected void prettyPrint(Abdera abdera, Base doc) throws IOException {

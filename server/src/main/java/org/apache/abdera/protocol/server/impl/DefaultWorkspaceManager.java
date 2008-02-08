@@ -8,7 +8,8 @@ import org.apache.abdera.protocol.server.RequestContext.Scope;
 
 
 public class DefaultWorkspaceManager extends AbstractWorkspaceManager {
-
+  // URI reserved delimiter characters (gen-delims) from RFC 3986 section 2.2
+  private static final String URI_GEN_DELIMS = ":/?#[]@";
   public static final String COLLECTION_ADAPTER_ATTRIBUTE = "collectionProvider";
 
   public CollectionAdapter getCollectionAdapter(RequestContext request) {
@@ -19,11 +20,13 @@ public class DefaultWorkspaceManager extends AbstractWorkspaceManager {
     if (ca != null) {
       return ca;
     }
-    
     for (WorkspaceInfo wi : workspaces) {
       for (CollectionInfo ci : wi.getCollections(request)) {
         String href = ci.getHref(request);
-        if (href != null && path.startsWith(href)) {
+        if (path.equals(href) ||
+          (href != null && 
+           path.startsWith(href) &&
+           URI_GEN_DELIMS.contains(path.substring(href.length(), href.length() + 1)))) {
           return (CollectionAdapter) ci;
         }
       }

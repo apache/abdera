@@ -21,7 +21,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -33,6 +32,7 @@ import org.apache.abdera.model.Feed;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.context.ResponseContextException;
 import org.apache.abdera.protocol.server.provider.basic.BasicAdapter;
+import org.apache.abdera.protocol.server.provider.managed.FeedConfiguration;
 
 public class SampleBasicAdapter 
   extends BasicAdapter {
@@ -43,9 +43,10 @@ public class SampleBasicAdapter
   public static Logger logger = Logger.getLogger(SampleBasicAdapter.class.getName());
   protected HashMap<String, byte[]> entries = new HashMap<String, byte[]>();
 
-  public SampleBasicAdapter(Abdera abdera, Properties feedProperties,
-    String feedId) {
-    super(abdera, feedProperties, feedId);
+  public SampleBasicAdapter(
+    Abdera abdera, 
+    FeedConfiguration config) {
+      super(abdera, config);
   }
 
   public Feed getFeed() throws Exception {
@@ -143,19 +144,16 @@ public class SampleBasicAdapter
 
   @Override
   public String getAuthor() throws ResponseContextException {
-    // TODO Auto-generated method stub
-    return null;
+    return config.getFeedAuthor();
   }
 
   @Override
   public String getId(RequestContext request) {
-    // TODO Auto-generated method stub
-    return null;
+    return config.getFeedId();
   }
 
   public String getTitle(RequestContext request) {
-    // TODO Auto-generated method stub
-    return null;
+    return config.getFeedTitle();
   }
 }
 

@@ -17,21 +17,26 @@
 */
 package org.apache.abdera.protocol.server.provider.basic;
 
-import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.server.CollectionAdapter;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.TargetType;
-import org.apache.abdera.protocol.server.impl.AbstractWorkspaceProvider;
-import org.apache.abdera.protocol.server.impl.CollectionAdapterManager;
 import org.apache.abdera.protocol.server.impl.RouteManager;
+import org.apache.abdera.protocol.server.provider.managed.BasicServerConfiguration;
+import org.apache.abdera.protocol.server.provider.managed.ManagedProvider;
+import org.apache.abdera.protocol.server.provider.managed.ServerConfiguration;
 
 public class BasicProvider 
-  extends AbstractWorkspaceProvider {
+  extends ManagedProvider {
 
   public static final String PARAM_FEED = "feed";
   public static final String PARAM_ENTRY = "entry";
   
   public BasicProvider() {
+    super();
+    init();
+  }
+  
+  private void init() {
     RouteManager routeManager = 
       new RouteManager()
         .addRoute("service", "/", TargetType.TYPE_SERVICE)
@@ -39,28 +44,23 @@ public class BasicProvider
         .addRoute("entry", "/:feed/:entry", TargetType.TYPE_ENTRY);
     setTargetBuilder(routeManager);
     setTargetResolver(routeManager);
-    addWorkspace(new BasicWorkspace(this));
-  }
-
-  protected CollectionAdapterManager cam;
-  
-  protected CollectionAdapterManager getCollectionAdapterManager(
-    Abdera abdera) {
-      if (cam == null) 
-        cam = new CollectionAdapterManager(abdera);
-    return cam;
   }
   
   public CollectionAdapter getCollectionAdapter(RequestContext request) {
     try {
-      return getCollectionAdapterManager(request.getAbdera())
+      return getCollectionAdapterManager(request)
         .getAdapter(
           request.getTarget()
             .getParameter(
-                BasicProvider.PARAM_FEED));
+              PARAM_FEED));
     } catch (Exception e) {
       return null;
     }
+  }
+
+  protected ServerConfiguration getServerConfiguration(
+    RequestContext request) {
+      return new BasicServerConfiguration(request);
   }
   
 }

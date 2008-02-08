@@ -18,7 +18,6 @@
 package org.apache.abdera.protocol.server.provider.basic;
 
 import java.util.Date;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.activation.MimeType;
@@ -28,59 +27,45 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.parser.Parser;
-import org.apache.abdera.protocol.server.CollectionAdapter;
 import org.apache.abdera.protocol.server.ProviderHelper;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.Target;
-import org.apache.abdera.protocol.server.impl.AbstractCollectionAdapter;
+import org.apache.abdera.protocol.server.provider.managed.FeedConfiguration;
+import org.apache.abdera.protocol.server.provider.managed.ManagedCollectionAdapter;
 import org.apache.abdera.util.MimeTypeHelper;
 
 public abstract class BasicAdapter 
-  extends AbstractCollectionAdapter
-  implements CollectionAdapter {
+  extends ManagedCollectionAdapter {
 
   public static Logger logger =
     Logger.getLogger(BasicAdapter.class.getName());
 
-  protected Properties feedProperties;
-  protected final String feedId;
-  protected final Abdera abdera;
-
-  protected static final String PROP_NAME_FEED_URI = "feedUri";
-  protected static final String PROP_NAME_TITLE = "title";
-  protected static final String PROP_NAME_AUTHOR = "author";
-
-  public static final String ENTRY_ELEM_NAME_ID = "id";
-  public static final String ENTRY_ELEM_NAME_TITLE = "title";
-  public static final String ENTRY_ELEM_NAME_AUTHOR = "author";
-  public static final String ENTRY_ELEM_NAME_UPDATED = "updated";
-
   protected BasicAdapter(
     Abdera abdera, 
-    Properties feedProperties,
-    String feedId) {
-      this.abdera = abdera;
-      this.feedProperties = feedProperties;
-      this.feedId = feedId;
+    FeedConfiguration config) {
+      super(abdera,config);
   }
 
   public String getProperty(String key) throws Exception {
-    String val = feedProperties.getProperty(key);
+    Object val = config.getProperty(key);
     if (val == null) {
       logger.warning("Cannot find property " + key +
-          "in Adapter properties file for feed " + feedId);
+        "in Adapter properties file for feed " +
+        config.getFeedId());
       throw new RuntimeException();
     }
-    return val;
+    if (val instanceof String)
+      return (String) val;
+    throw new RuntimeException();
   }
 
   protected Feed createFeed() throws Exception {
     Feed feed = abdera.newFeed();
-    feed.setId(getProperty(PROP_NAME_FEED_URI));
-    feed.setTitle(getProperty(PROP_NAME_TITLE));
+    feed.setId(config.getFeedUri());
+    feed.setTitle(config.getFeedTitle());
     feed.setUpdated(new Date());
-    feed.addAuthor(getProperty(PROP_NAME_AUTHOR));
+    feed.addAuthor(config.getFeedAuthor());
     return feed;
   }
 
@@ -102,7 +87,7 @@ public abstract class BasicAdapter
   }
 
   protected String createEntryIdUri(String entryId) throws Exception{
-    return getProperty(PROP_NAME_FEED_URI) + "/" + entryId;
+    return config.getFeedUri() + "/" + entryId;
   }
   
   private ResponseContext createOrUpdateEntry(

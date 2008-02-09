@@ -19,6 +19,8 @@ package org.apache.abdera.protocol.server.provider.managed;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 public class CollectionAdapterConfiguration 
   extends Configuration {
@@ -32,10 +34,19 @@ public class CollectionAdapterConfiguration
       this.serverConfiguration = serverConfiguration;
   }
 
-  FileInputStream getConfigAsFileInputStream() 
+  public FileInputStream getConfigAsFileInputStream() 
     throws IOException {
       String filePath
         = serverConfiguration.getAdapterConfigLocation() + fileLocation;
       return Configuration.loadFileAsInputStream(filePath);
+  }
+  
+  public Reader getAdapterConfigAsReader() 
+    throws IOException {
+      return new InputStreamReader(getConfigAsFileInputStream());
+  }
+  
+  public ServerConfiguration getServerConfiguration() {
+    return serverConfiguration;
   }
 }

@@ -166,4 +166,8 @@ public class FeedConfiguration
   public String getTitle(RequestContext request) {
     return getFeedTitle();
   }
+  
+  public ServerConfiguration getServerConfiguration() {
+    return adapterConfiguration.getServerConfiguration();
+  }
 }

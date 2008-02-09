@@ -19,6 +19,8 @@ package org.apache.abdera.protocol.server.provider.managed;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.protocol.server.CollectionAdapter;
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.context.ResponseContextException;
 import org.apache.abdera.protocol.server.impl.AbstractCollectionAdapter;
 
 public abstract class ManagedCollectionAdapter
@@ -41,5 +43,17 @@ public abstract class ManagedCollectionAdapter
   
   public FeedConfiguration getConfiguration() {
     return this.config;
+  }
+  
+  public String getAuthor() throws ResponseContextException {
+    return config.getFeedAuthor();
+  }
+
+  public String getId(RequestContext request) {
+    return config.getFeedId();
+  }
+
+  public String getTitle(RequestContext request) {
+    return config.getFeedTitle();
   }
 }

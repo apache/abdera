@@ -561,21 +561,23 @@ public class ProviderHelper {
     Entry entry) {
       String editUri = null;
       List<Link> editLinks = entry.getLinks("edit");
-      for (Link link : editLinks) {
-        // if there is more than one edit link, we should not automatically
-        // assume that it's always going to point to an Atom document
-        // representation.
-        if (link.getMimeType() != null) {
-          if (MimeTypeHelper.isMatch(
-                link.getMimeType().toString(), 
-                Constants.ATOM_MEDIA_TYPE)) {
+      if (editLinks != null) {
+        for (Link link : editLinks) {
+          // if there is more than one edit link, we should not automatically
+          // assume that it's always going to point to an Atom document
+          // representation.
+          if (link.getMimeType() != null) {
+            if (MimeTypeHelper.isMatch(
+                  link.getMimeType().toString(), 
+                  Constants.ATOM_MEDIA_TYPE)) {
+              editUri = link.getResolvedHref().toString();
+              break;
+            }
+          } else {
+            // edit link with no type attribute is the right one to use
             editUri = link.getResolvedHref().toString();
             break;
           }
-        } else {
-          // edit link with no type attribute is the right one to use
-          editUri = link.getResolvedHref().toString();
-          break;
         }
       }
      return editUri;

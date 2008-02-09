@@ -32,7 +32,7 @@ Jetty deployment example:
     Server server = new Server(9002);
     Context context = new Context(server, "/", Context.SESSIONS);
     ServletHolder servletHolder = new ServletHolder(new AbderaServlet());
-    servletHolder.setInitParameter(ServiceManager.PROVIDER, BasicAdapter.class.getName());
+    servletHolder.setInitParameter(ServiceManager.PROVIDER, BasicProvider.class.getName());
     context.addServlet(servletHolder, "/*");
     server.start();
     

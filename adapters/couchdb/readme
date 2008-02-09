@@ -1,0 +1,50 @@
+CouchDB Collection Adapter
+
+Dependencies: 
+
+  * Abdera Core, Parser, Protocol, Server modules
+  * CouchDb4J (http://www.couchdbwiki.com/index.php?title=Getting_Started_with_Java)
+  
+Using the Adapter:
+
+  The CouchDB adapter is based on Abdera Managed Adapter model.  To deploy an 
+  instance of the adapter, put a file called /abdera/adapter/[id].properties
+  in the classpath where [id] is the id of the service instance.  For instance,
+  /abdera/adapter/couchdb.properties
+  
+  
+Sample *.properties file
+
+  subUri=couchdb
+  adapterClassName=org.apache.abdera.protocol.server.adapters.couchdb.CouchDbAdapter
+  title=CouchDB Feed
+  author=james
+  configFile=dummyFileLocation
+
+  # uncomment to override the defaults
+  #couchdb.host=localhost
+  #couchdb.port=5984
+  
+Then, deploy the AbderaServlet using the BasicProvider in your Web application environment:
+
+Jetty deployment example:
+
+    Server server = new Server(9002);
+    Context context = new Context(server, "/", Context.SESSIONS);
+    ServletHolder servletHolder = new ServletHolder(new AbderaServlet());
+    servletHolder.setInitParameter(ServiceManager.PROVIDER, BasicAdapter.class.getName());
+    context.addServlet(servletHolder, "/*");
+    server.start();
+    
+Using this example, the following resources will be served:
+
+    http://localhost:9002/                ==>  Atompub Service Document
+    http://localhost:9002/couchdb         ==>  Atompub Collection Feed
+    http://localhost:9002/couchdb/{entry} ==>  Entry document
+    
+Limitations:
+
+  The adapter does not support media collections or feed paging. Persistence
+  of extension elements has not yet been fully tested.
+  
+  

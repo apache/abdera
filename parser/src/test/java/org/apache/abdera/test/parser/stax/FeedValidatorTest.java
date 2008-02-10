@@ -3034,7 +3034,7 @@ public class FeedValidatorTest
      assertNotNull(doc);
      Entry entry = doc.getRoot().getEntries().get(0);
      Link link = entry.getAlternateLink();
-     assertEquals(link.getLength(),0);
+     assertEquals(link.getLength(),-1);
    }
    
    @Test public void testSection428LogoInvalidUri() throws Exception {

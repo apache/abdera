@@ -29,11 +29,14 @@ public class Route
   
   private static final Evaluator EVALUATOR = new Evaluator();
   private static final Pattern VARIABLE = Pattern.compile("[\\*\\:](?:\\()?[0-9a-zA-Z]+(?:\\))?");
-  
+  private static final String VARIABLE_CONTENT_MATCH = "([^:/\\?#\\[\\]@!\\$&'\\(\\)\\*\\+,;\\=]+)";
+  private static final String VARIABLE_CONTENT_PARSE = "([^:/\\?#\\[\\]@!\\$&'\\(\\)\\*\\+,;\\=]*)";
   private final String name;
   private final String pattern;
   private final String[] tokens;
   private final String[] variables;
+  private final Pattern regexMatch;
+  private final Pattern regexParse;
 
   private Map<String, String> requirements;
 
@@ -50,6 +53,8 @@ public class Route
     this.variables = initVariables();
     this.defaultValues = defaultValues;
     this.requirements = requirements;
+    this.regexMatch = initRegexMatch();
+    this.regexParse = initRegexParse();
   }
   
   private String[] initTokens() {
@@ -73,47 +78,36 @@ public class Route
     Arrays.sort(vars);
     return vars;
   }
+
+  private Pattern initRegexMatch() {
+    StringBuffer match = new StringBuffer();
+    int cnt = 0;
+    for (String part : VARIABLE.split(pattern)) {
+      match.append(Pattern.quote(part));
+      if (cnt++ < tokens.length) {
+        match.append(VARIABLE_CONTENT_MATCH);
+      }
+    }
+    return Pattern.compile(match.toString());
+  }
+  private Pattern initRegexParse() {
+    StringBuffer parse = new StringBuffer();
+    int cnt = 0;
+    for (String part : VARIABLE.split(pattern)) {
+      parse.append(Pattern.quote(part));
+      if (cnt++ < tokens.length) {
+        parse.append(VARIABLE_CONTENT_PARSE);
+      }
+    }
+    return Pattern.compile(parse.toString());
+  }
+
   
   /**
    * Returns true if the given uri matches the route pattern
    */
   public boolean match(String uri) {
-    Matcher matcher = VARIABLE.matcher(pattern);
-    int uriStart = 0;
-    int prevPatternEnd = 0;
-    while (matcher.find()) {
-      int patternStart = matcher.start();
-      
-      String nonVariablePattern = pattern.substring(prevPatternEnd, patternStart);
-      if (prevPatternEnd == 0 && nonVariablePattern.length() == 0) {
-        prevPatternEnd = matcher.end();
-        continue;
-      }
-      
-      int idx = uri.indexOf(nonVariablePattern, uriStart);
-      if ((idx == -1 || idx+1 == uri.length()) && (defaultValues == null || !defaultValues.containsKey(var(matcher.group())))) {
-        return false;
-      } else {
-        uriStart = idx + 1 + nonVariablePattern.length();
-      }
-      
-      // TODO: ensure requirements are met
-      
-      prevPatternEnd = matcher.end();
-    }
-    
-    // Check if the non variable, end segment matches
-    if (prevPatternEnd != pattern.length()) {
-      if (!uri.endsWith(pattern.substring(prevPatternEnd))) {
-        return false;
-      } else {
-        return true;
-      }
-    } else if (uriStart > uri.length()) {
-      return false;
-    }
-    
-    return uri.indexOf('/', uriStart) == -1;
+    return regexMatch.matcher(uri).matches();
   }
   
   /**
@@ -121,50 +115,11 @@ public class Route
    */
   public Map<String,String> parse(String uri) {
     HashMap<String, String> vars = new HashMap<String, String>();
-    Matcher matcher = VARIABLE.matcher(pattern);
-    int uriStart = 0;
-    int prevPatternEnd = 0;
-    int valueStart = -1;
-    int nonVarIdx = -1; 
-    String prevVar = null;
-    while (matcher.find()) {
-      int patternStart = matcher.start();
-      String varName = var(matcher.group());
-      
-      String nonVariableSection = pattern.substring(prevPatternEnd, patternStart);
-      if (prevPatternEnd == 0 && nonVariableSection.length() == 0) {
-        prevPatternEnd = matcher.end();
-        valueStart = 0;
-        continue;
+    Matcher matcher = regexParse.matcher(uri);
+    if (matcher.matches()) {
+      for (int i = 0; i < matcher.groupCount(); i++) {
+        vars.put(var(tokens[i]), matcher.group(i+1).length() > 0 ? matcher.group(i+1) : null);
       }
-
-      nonVarIdx = uri.indexOf(nonVariableSection, uriStart);
-      
-      if (valueStart != -1) {
-        vars.put(prevVar, uri.substring(valueStart, nonVarIdx));
-      }
-      
-      if ((nonVarIdx == -1 || nonVarIdx+1 == uri.length()) && (defaultValues == null || !defaultValues.containsKey(varName))) {
-        valueStart = -1;
-        break;
-      }
-
-      // TODO: ensure requirements are met
-      
-      valueStart = nonVarIdx + nonVariableSection.length();
-      
-      uriStart = valueStart + 1;
-      prevVar = varName;
-      prevPatternEnd = matcher.end();
-    }
-    
-    int tailEnd = uri.length();
-    if (prevPatternEnd != pattern.length() && uri.endsWith(pattern.substring(prevPatternEnd))) {
-      tailEnd = tailEnd - (pattern.length() - prevPatternEnd);
-    }
-    
-    if (valueStart != uri.length() && valueStart != -1) {
-      vars.put(prevVar, uri.substring(valueStart, tailEnd));
     }
     
     return vars;

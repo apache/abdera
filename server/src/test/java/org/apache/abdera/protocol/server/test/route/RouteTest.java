@@ -3,11 +3,11 @@ package org.apache.abdera.protocol.server.test.route;
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.framework.Assert;
+
 import org.apache.abdera.i18n.templates.HashMapContext;
 import org.apache.abdera.i18n.templates.Route;
 import org.junit.Test;
-
-import junit.framework.Assert;
 
 public class RouteTest extends Assert {
   @Test
@@ -52,6 +52,7 @@ public class RouteTest extends Assert {
     assertFalse(route.match("/foo"));
     assertTrue(route.match("/foo/test"));
     assertFalse(route.match("foo"));
+    assertFalse(route.match("/foo/test/bar"));
 
     Map<String, String> vars = route.parse("/1/2");
     assertEquals("1", vars.get("collection"));
@@ -129,4 +130,26 @@ public class RouteTest extends Assert {
     assertEquals("1", vars.get("collection"));
     assertEquals("2", vars.get("entry"));
   }
+  @Test
+  public void testSubDelims() throws Exception {
+    Route route = new Route("entry", "/base/:collection/:entry");
+
+    assertTrue(route.match("/base/test/123"));
+    assertFalse(route.match("/base/test/123;categories"));
+    
+    Map<String, String> vars = route.parse("/base/test/123");
+    assertEquals("test", vars.get("collection"));
+    assertEquals("123", vars.get("entry"));
+  }
+  @Test
+  public void testGenDelims() throws Exception {
+    Route route = new Route("entry", "/base/:collection/");
+
+    assertTrue(route.match("/base/test/"));
+    assertFalse(route.match("/base/test/123/"));
+    
+    Map<String, String> vars = route.parse("/base/test/");
+    assertEquals("test", vars.get("collection"));
+  }
+
 }

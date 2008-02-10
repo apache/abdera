@@ -32,7 +32,8 @@
       <xsd:complexContent>
         <xsd:extension base="beans:identifiedType">
           <xsd:sequence>
-            <xsd:element name="workspace" type="xsd:anyType" minOccurs="0" maxOccurs="unbounded"/>
+          	<xsd:element ref="beans:property" minOccurs="0" maxOccurs="unbounded"/>
+          	<xsd:element name="workspace" type="xsd:anyType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="workspaceManager" type="xsd:anyType" minOccurs="0"/>
             <xsd:element name="targetResolver" type="xsd:anyType" minOccurs="0"/>
             <xsd:element name="subjectResolver" type="xsd:anyType" minOccurs="0"/>

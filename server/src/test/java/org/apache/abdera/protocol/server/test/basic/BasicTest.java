@@ -86,6 +86,7 @@ public class BasicTest extends Assert {
     assertNotNull(collection);
     assertTrue(collection.acceptsEntry());
     assertEquals(collection.getResolvedHref().toString(), "http://localhost:9002/sample");
+    resp.release();
   }
   @Test
   public void testGetFeed() {
@@ -115,6 +116,7 @@ public class BasicTest extends Assert {
     assertEquals(resp.getType(), ResponseType.SUCCESS);
     assertEquals(resp.getStatus(), 201);
     assertEquals(resp.getLocation().toString(), "http://localhost:9002/sample/foo");
+    resp.release();
     resp = client.get("http://localhost:9002/sample");
     Document<Feed> feed_doc = resp.getDocument();
     Feed feed = feed_doc.getRoot();

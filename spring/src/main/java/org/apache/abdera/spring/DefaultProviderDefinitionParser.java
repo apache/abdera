@@ -29,6 +29,7 @@ import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.ManagedList;
 import org.springframework.beans.factory.xml.ParserContext;
+import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -47,8 +48,8 @@ public class DefaultProviderDefinitionParser
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void mapElement(ParserContext ctx, BeanDefinitionBuilder bean, Element element, String name) {
-        if (name.equals("workspaceManager")) {
+    protected void mapElement(ParserContext ctx, BeanDefinitionBuilder bean, Element element, String name) {    	
+    	if (name.equals("workspaceManager")) {
             setFirstChildAsProperty(element, ctx, bean, "workspaceManager");
         } else if (name.equals("targetResolver")) {
             setFirstChildAsProperty(element, ctx, bean, "targetResolver");
@@ -61,11 +62,14 @@ public class DefaultProviderDefinitionParser
             NodeList nodes = element.getChildNodes();
             Object child = null;
             if (element.hasAttribute("ref")) {
+            	if (!StringUtils.hasText(element.getAttribute("ref"))) {
+            		ctx.getReaderContext().error(name + " contains empty 'ref' attribute", element);            		
+            	}
             	child = new RuntimeBeanReference(element.getAttribute("ref"));
-    			((RuntimeBeanReference)child).setSource(ctx.extractSource(element));    			
+        		((RuntimeBeanReference)child).setSource(ctx.extractSource(element));
             } else if (nodes != null) {            	
 	            for (int i = 0; i < nodes.getLength(); i++) {
-	                Node n = nodes.item(i);
+	                Node n = nodes.item(i);	                
 	                if (n.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
 	                    Element childElement = (Element)n;
 	                    child = ctx.getDelegate().parsePropertySubElement(childElement, bean.getRawBeanDefinition());	                    
@@ -77,9 +81,10 @@ public class DefaultProviderDefinitionParser
             }
             bean.addPropertyValue("filters", filters);
         } else if (name.equals("workspace")) {
-            String id = getAndRegister(ctx, bean, element);
-            
+            String id = getAndRegister(ctx, bean, element);            
             bean.addPropertyReference("workspaces", id);
+        } else if (name.equals("property")) {
+        	ctx.getDelegate().parsePropertyElement(element, bean.getRawBeanDefinition());
         }
     }
 

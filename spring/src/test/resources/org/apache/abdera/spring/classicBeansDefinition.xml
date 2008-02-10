@@ -8,12 +8,16 @@
 
   <!-- Abdera -->
   <a:provider>
-    <a:workspace title="Foo Workspace">
-      <!-- These are our collections -->
-      <bean class="org.apache.abdera.spring.TestAdapter"/>      
-      <ref bean="referencedAdapter"/>
-    </a:workspace>
-    
+  	<property name="filters">
+  		<list>
+  			<ref bean="referencedFilter"/>
+  			<bean class="org.apache.abdera.spring.DummyFilter"/>
+  		</list>
+  	</property>
+    <property name="workspaces">
+    	<ref bean="simpleWorkspace"/>
+    </property>
+     
     <!-- It is not necessary to specify this, but we're testing it -->
     <a:targetResolver>
       <a:regexTargetResolver>
@@ -21,14 +25,20 @@
         <a:entry>/atom/feed/([^/#?]+)(\?[^#]*)?</a:entry>
         <a:service>/atom(\?[^#]*)?</a:service>
       </a:regexTargetResolver>
-    </a:targetResolver>
-    <a:filter>
-      <bean class="org.apache.abdera.spring.DummyFilter"/>
-    </a:filter>
-    <a:filter ref="referencedFilter"/>
+    </a:targetResolver>    
   </a:provider>
   
   <bean id="referencedAdapter" class="org.apache.abdera.spring.TestAdapter"/>
   <bean id="referencedFilter" class="org.apache.abdera.spring.DummyFilter"/>
+
+  <bean id="simpleWorkspace" class="org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo">
+  	<property name="title" value="Foo Workspace"/>
+  	<property name="collections">
+  		<list>
+  			<bean class="org.apache.abdera.spring.TestAdapter"/>      
+      		<ref bean="referencedAdapter"/>
+  		</list>
+  	</property>
+  </bean>
 
 </beans>

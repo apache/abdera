@@ -428,7 +428,7 @@ if (element instanceof Text) {
       Object child = children[n];
       if (child instanceof Element) {
         writeElement((Element)child, parentqname, jstream);
-        if (n < children.length-2) jstream.writeSeparator();
+        if (n < children.length-1) jstream.writeSeparator();
       } else if (child instanceof TextValue) {
         TextValue textvalue = (TextValue) child;
         String value = textvalue.getText();

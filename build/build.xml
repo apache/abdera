@@ -467,6 +467,9 @@ Working directory: ${work}
   </target>
 
   <target name="zip" depends="retro">
+    
+    <antcall target="adapters" />
+    
     <mkdir dir="${work}/dist/${ant.project.name}.${version}" />
     <mkdir dir="${work}/dist/${ant.project.name}.${version}/examples" />
     <copy todir="${work}/dist/${ant.project.name}.${version}">
@@ -938,4 +941,11 @@ Working directory: ${work}
       <arg line="-jar &quot;${extensions.jar.base}.${ext}.${version}.jar&quot; &quot;${retro_ext.jar}&quot;" />
     </java>
   </target>
+  
+  <target name="adapters">
+    <ant antfile="${basedir}/adapters/couchdb/build.xml" target="dist" dir="${basedir}/adapters/couchdb" inheritall="false" />
+    <ant antfile="${basedir}/adapters/jcr/build.xml" target="dist" dir="${basedir}/adapters/jcr" inheritall="false" />
+    <ant antfile="${basedir}/adapters/jdbc/build.xml" target="dist" dir="${basedir}/adapters/jdbc" inheritall="false" />
+  </target>
+  
 </project>

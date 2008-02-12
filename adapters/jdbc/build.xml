@@ -1,0 +1,49 @@
+<project name="ibatis" default="compile">
+
+  <property name="version" value="0.4.0-incubating-SNAPSHOT" />
+  <property name="adapter.jar" value="abdera.adapter.${ant.project.name}.${version}.jar" />
+  <property name="retro.adapter.jar" value="abdera.adapter.${ant.project.name}.${version}.retro.jar" />
+  <property name="debug" value="on" />
+  
+  <property name="abdera" value="../../dist" />
+  <path id="abdera">
+    <fileset dir="${abdera}" includes="**/*.jar" />
+  </path>
+  <path id="retro">
+    <fileset dir="../../build/tools/retroweaver-2.0" includes="**/*.jar" />
+  </path>
+
+  <target name="dependencies">
+    <mkdir dir="${basedir}/lib" />
+    <parallel>      
+      <get src="http://ibiblio.org/pub/packages/maven2/org/apache/ibatis/ibatis-sqlmap/2.3.0/ibatis-sqlmap-2.3.0.jar" dest="${basedir}/lib/ibatis-sqlmap-2.3.0.jar" usetimestamp="true" />
+    </parallel>
+    <path id="dependencies">
+      <fileset dir="${basedir}/lib" includes="**/*.jar" />
+      <path refid="abdera" />
+    </path>
+  </target>
+  
+  <target name="compile" depends="dependencies">
+    <mkdir dir="${basedir}/build" />
+    <javac srcdir="src/main/java" classpathref="dependencies" destdir="${basedir}/build" debug="${debug}" />
+    <!--javac srcdir="src/test/java" classpathref="dependencies" destdir="${basedir}/build" debug="${debug}" /-->
+    <!--copy todir="${basedir}/build">
+      <fileset dir="src/test/resources" includes="**/*" />
+    </copy-->
+    <jar destfile="${basedir}/${adapter.jar}" basedir="${basedir}/build" includes="org/apache/abdera/protocol/server/adapters/**/*" />
+    <java classpathref="retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
+      <arg line="-jar &quot;${basedir}/${adapter.jar}&quot; &quot;${basedir}/${retro.adapter.jar}&quot;" />
+    </java>
+  </target>
+  
+  <target name="test">
+  </target>
+  
+  <target name="clean">
+    <delete dir="${basedir}/build" />
+    <delete file="${basedir}/${adapter.jar}" />
+    <delete file="${basedir}/${retro.adapter.jar}" />
+  </target>
+  
+</project>

@@ -212,7 +212,10 @@ public class CouchDbAdapter
       String entry = target.getParameter("entry");
       Session session = new Session(host,port);
       Database db = session.getDatabase(feed);
-      Document doc = db.getDocument(entry);
+      Document doc = null;
+      try {
+        doc = db.getDocument(entry);
+      } catch (Exception e) {}
       if (doc != null)
         return new JsonObjectResponseContext(
           request.getAbdera(),

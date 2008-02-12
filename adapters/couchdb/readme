@@ -3,6 +3,7 @@ CouchDB Collection Adapter
 Dependencies: 
 
   * Abdera Core, Parser, Protocol, Server modules
+  * Abdera json and html extensions
   * CouchDb4J (http://www.couchdbwiki.com/index.php?title=Getting_Started_with_Java)
   
 Using the Adapter:

@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.adapters.jdbc;
+package org.apache.abdera.protocol.server.adapters.ibatis;
 
 import java.io.ByteArrayInputStream;
 import java.util.Date;
@@ -49,7 +49,7 @@ import org.w3c.dom.Element;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.ibatis.sqlmap.client.SqlMapClientBuilder;
 
-public class JdbcCollectionAdapter 
+public class IBatisCollectionAdapter 
   extends BasicAdapter {
   
   private static final String ENTRY_AUTHOR = "feedserver";
@@ -58,7 +58,7 @@ public class JdbcCollectionAdapter
 
   // this class needs to be public - so that Adapter Manager can invoke it
   // to create an instance of this adapter
-  public JdbcCollectionAdapter(
+  public IBatisCollectionAdapter(
     Abdera abdera, 
     FeedConfiguration config) {
       super(abdera, config);

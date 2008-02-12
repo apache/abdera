@@ -46,4 +46,9 @@
     <delete file="${basedir}/${retro.adapter.jar}" />
   </target>
   
+  <target name="dist" depends="clean,compile">
+    <copy todir="../../dist/adapters" file="${basedir}/${adapter.jar}" />
+    <copy todir="../../dist/adapters" file="${basedir}/${retro.adapter.jar}" />
+  </target>
+  
 </project>

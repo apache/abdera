@@ -364,7 +364,7 @@ public class ProviderHelper {
         if ((content.getSrc() != null ||
             content.getContentType() == Content.Type.MEDIA || 
             content.getContentType() == Content.Type.XML) &&
-            entry.getSummary() == null) {
+            entry.getSummaryElement() == null) {
           log.debug(Localizer.sprintf("CHECKING.VALID.ENTRY",false));
           return false;
         }

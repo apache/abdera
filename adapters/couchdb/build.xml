@@ -54,6 +54,7 @@
   <target name="clean">
     <delete dir="${basedir}/build" />
     <delete file="${basedir}/${adapter.jar}" />
+    <delete file="${basedir}/${retro.adapter.jar}" />
   </target>
   
 </project>

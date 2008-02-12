@@ -1,4 +1,4 @@
-package org.apache.abdera.jcr;
+package org.apache.abdera.protocol.server.adapters.jcr;
 
 import javax.jcr.Credentials;
 import javax.jcr.Repository;

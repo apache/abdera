@@ -18,8 +18,9 @@ import org.apache.abdera.protocol.Response.ResponseType;
 import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.protocol.client.RequestOptions;
+import org.apache.abdera.protocol.server.ServiceManager;
 import org.apache.abdera.protocol.server.provider.basic.BasicProvider;
-import org.apache.abdera.protocol.server.test.JettyServer;
+import org.apache.abdera.protocol.server.servlet.AbderaServlet;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.writer.Writer;
@@ -27,18 +28,25 @@ import org.apache.abdera.writer.WriterFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mortbay.jetty.Server;
+import org.mortbay.jetty.servlet.Context;
+import org.mortbay.jetty.servlet.ServletHolder;
 
 public class CouchDbTest extends Assert {
 
-  private static JettyServer server;
+  private static Server server;
   private static Abdera abdera = Abdera.getInstance();
   private static AbderaClient client = new AbderaClient();
 
   @BeforeClass
   public static void setUp() throws Exception {
     if (server == null) {
-      server = new JettyServer();
-      server.start(BasicProvider.class);
+      server = new Server(9002);
+      Context context = new Context(server, "/", Context.SESSIONS);
+      ServletHolder servletHolder = new ServletHolder(new AbderaServlet());
+      servletHolder.setInitParameter(ServiceManager.PROVIDER, BasicProvider.class.getName());
+      context.addServlet(servletHolder, "/*");
+      server.start();
     }
   }
   

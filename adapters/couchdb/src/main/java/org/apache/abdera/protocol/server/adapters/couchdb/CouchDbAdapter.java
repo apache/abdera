@@ -91,7 +91,9 @@ public class CouchDbAdapter
       Database db = null;
       try {
         db = session.getDatabase(name);
-      } catch (Exception e) {}
+      } catch (Exception e) {
+        // error if the db is not found, ignore it, we're going to create it
+      }
       if (db == null)
         db = session.createDatabase(name);
       return db;
@@ -124,7 +126,12 @@ public class CouchDbAdapter
       String entry = target.getParameter("entry");
       Session session = new Session(host,port);
       Database db = session.getDatabase(feed);
-      Document doc = db.getDocument(entry);
+      Document doc = null;
+      try {
+        doc = db.getDocument(entry);
+      } catch (Exception e) {
+        // error if the doc isn't found, we deal with the null result below
+      }
       if (doc != null) {
         db.deleteDocument(doc);
         return ProviderHelper.nocontent();
@@ -166,7 +173,9 @@ public class CouchDbAdapter
         Document doc = null;
         try {
           doc = db.getDocument(key);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+          // error if the doc isn't found, we deal with the null result below
+        }
         if (doc != null) { 
           return ProviderHelper.conflict(
             request, 
@@ -215,7 +224,9 @@ public class CouchDbAdapter
       Document doc = null;
       try {
         doc = db.getDocument(entry);
-      } catch (Exception e) {}
+      } catch (Exception e) {
+        // error if the doc isn't found, we deal with the null result below
+      }
       if (doc != null)
         return new JsonObjectResponseContext(
           request.getAbdera(),
@@ -243,7 +254,9 @@ public class CouchDbAdapter
         Document doc = null;
         try {
           doc = db.getDocument(key);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+          // error if the doc isn't found, we deal with the null result below
+        }
         if (doc == null) { 
           return ProviderHelper.notfound(request);
         } else {

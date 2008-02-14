@@ -51,10 +51,6 @@ import com.ibatis.sqlmap.client.SqlMapClientBuilder;
 
 public class IBatisCollectionAdapter 
   extends BasicAdapter {
-  
-  private static final String ENTRY_AUTHOR = "feedserver";
-  private static final String ENTRY_TITLE = "jdbc entry title";
-
 
   // this class needs to be public - so that Adapter Manager can invoke it
   // to create an instance of this adapter
@@ -139,16 +135,16 @@ public class IBatisCollectionAdapter
         continue;
       }
       Object value = row.get(columnName);
-      if ("id".equals(columnName)) {
+      if (FeedConfiguration.ENTRY_ELEM_NAME_ID.equals(columnName)) {
         entry.setId(createEntryIdUri(value.toString()));
-      } else if ("title".equals(columnName)) {
+      } else if (FeedConfiguration.ENTRY_ELEM_NAME_TITLE.equals(columnName)) {
         entry.setTitle(value.toString());
-      } else if ("author".equals(columnName)) {
+      } else if (FeedConfiguration.ENTRY_ELEM_NAME_AUTHOR.equals(columnName)) {
         entry.addAuthor(value.toString());
-      } else if ("updated".equals(columnName) &&
+      } else if (FeedConfiguration.ENTRY_ELEM_NAME_UPDATED.equals(columnName) &&
           value instanceof java.util.Date) {
         entry.setUpdated((Date) value);
-      } else if ("link".equals(columnName)) {
+      } else if (FeedConfiguration.ENTRY_ELEM_NAME_LINK.equals(columnName)) {
         entry.addLink(value.toString());
       } else {
         Element node = doc.createElement(columnName);
@@ -160,10 +156,10 @@ public class IBatisCollectionAdapter
       entry.setUpdated(new Date());
     }
     if (entry.getAuthor() == null) {
-      entry.addAuthor(ENTRY_AUTHOR);
+      entry.addAuthor(config.getFeedAuthor());
     }
     if (entry.getTitle() == null) {
-      entry.setTitle(ENTRY_TITLE);
+      entry.setTitle((String) config.getProperty(FeedConfiguration.PROP_ENTRY_TITLE_NAME));
     }
     entry.setContent(getDocumentAsXml(doc),"text/xml");
     addEditLinkToEntry(entry);

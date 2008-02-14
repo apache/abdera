@@ -33,12 +33,14 @@ public class FeedConfiguration
   public static final String PROP_AUTHOR_NAME = "author";
   public static final String PROP_TITLE_NAME = "title";
   public static final String PROP_ACCEPTS = "accepts";
+  public static final String PROP_ENTRY_TITLE_NAME = "entryTitle";
   public static final String PROP_FEED_CONFIG_LOCATION_NAME = "configFile";
 
   public static final String ENTRY_ELEM_NAME_ID = "id";
   public static final String ENTRY_ELEM_NAME_TITLE = "title";
   public static final String ENTRY_ELEM_NAME_AUTHOR = "author";
   public static final String ENTRY_ELEM_NAME_UPDATED = "updated";
+  public static final String ENTRY_ELEM_NAME_LINK = "link";
 
   private final String feedId;
   private final String subUri;

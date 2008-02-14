@@ -125,7 +125,7 @@ public class FeedConfiguration
     return serverConfiguration.getServerUri() + "/" + getSubUri();
   }
 
-  public Object hasProperty(String key) {
+  public boolean hasProperty(String key) {
     return optionalProperties.containsKey(key);
   }
 

@@ -83,7 +83,9 @@ public class IBatisCollectionAdapter
     List<Map<String, Object>> rows = client.queryForList(queryId);
     Feed feed = createFeed();
     ServerConfiguration serverConfig = config.getServerConfiguration();
-    feed.declareNS(serverConfig.getFeedNamespace(), serverConfig.getFeedNamespacePrefix());
+    if (serverConfig.getFeedNamespacePrefix() != null && serverConfig.getFeedNamespacePrefix().length() > 0) {
+      feed.declareNS(serverConfig.getFeedNamespace(), serverConfig.getFeedNamespacePrefix());
+    }
     for (Map<String, Object> row : rows)
       createEntryFromRow(feed,row);
     return feed;

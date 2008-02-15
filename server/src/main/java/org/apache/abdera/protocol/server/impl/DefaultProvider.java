@@ -115,6 +115,6 @@ public class DefaultProvider extends AbstractProvider {
   }
 
   protected TargetBuilder getTargetBuilder(RequestContext request) {
-    return (TargetBuilder)targetResolver;
+    return (TargetBuilder)targetBuilder;
   }
 }

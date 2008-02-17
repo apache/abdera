@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+
+<hibernate-mapping package="com.oos.data.objects">
+	
+    <class name="org.apache.abdera.protocol.server.adapters.hibernate.DummyData" table="dummyData">
+        <id name="id" type="string" />
+        	    
+	    <property name="author" type="string"/>
+	    <property name="title" type="string"/>	    
+	    <property name="content" type="string"/>	    
+	    <property name="updated" type="timestamp"/>	    
+    </class>
+    
+    <query name="hibernate-get-feed">from DummyData</query>    
+    <query name="hibernate-get-entry">from DummyData where id = :id</query>
+    
+</hibernate-mapping>

@@ -1,0 +1,4 @@
+The Hibernate adapter is not yet included in the build.
+because of licensing restrictions, we cannot depend on hibernate for the 
+build and cannot ship the jars.  So while this code is included in the
+trunk, users will need to build it manually for now.

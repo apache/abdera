@@ -138,19 +138,19 @@ public class AbderaServlet
     Throwable t, 
     HttpServletResponse response) 
       throws IOException {
-    boolean reset = false;
+    boolean writeResponse = true;
     if (response.isCommitted()) {
       try {
         response.reset();
-        reset = true;
       } catch (Throwable resetT) {
+        writeResponse = false;
         log.error("Could not reset connection to write an error message.", resetT);
       }
     }
     if (t != null) log.error(message, t);
     else log.error(message);
     
-    if (reset) {
+    if (writeResponse) {
       response.setStatus(500);
       StreamWriter sw = 
         getAbdera().newStreamWriter()

@@ -63,7 +63,7 @@ public class CustomerAdapter extends AbstractEntityCollectionAdapter<Customer> {
     customers.remove(id);
   }
 
-  public String getAuthor() {
+  public String getAuthor(RequestContext request) {
     return "Acme Industries";
   }
 

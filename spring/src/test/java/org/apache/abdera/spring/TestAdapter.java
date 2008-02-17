@@ -8,7 +8,7 @@ import org.apache.abdera.protocol.server.impl.AbstractCollectionAdapter;
 public class TestAdapter extends AbstractCollectionAdapter {
 
     @Override
-    public String getAuthor() throws ResponseContextException {
+    public String getAuthor(RequestContext request) throws ResponseContextException {
         return null;
     }
 

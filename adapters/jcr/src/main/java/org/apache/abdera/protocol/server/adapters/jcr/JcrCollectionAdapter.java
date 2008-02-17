@@ -9,7 +9,6 @@ import java.util.List;
 import javax.activation.MimeType;
 import javax.jcr.Credentials;
 import javax.jcr.ItemExistsException;
-import javax.jcr.NamespaceException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
@@ -19,7 +18,6 @@ import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
-import javax.jcr.ValueFormatException;
 import javax.jcr.Workspace;
 
 import org.apache.abdera.i18n.iri.IRI;
@@ -36,10 +34,6 @@ import org.apache.abdera.protocol.server.impl.AbstractEntityCollectionAdapter;
 import org.apache.abdera.protocol.util.PoolManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.jackrabbit.core.nodetype.NodeTypeDef;
-import org.apache.jackrabbit.core.nodetype.NodeTypeManagerImpl;
-import org.apache.jackrabbit.core.nodetype.NodeTypeRegistry;
-import org.apache.jackrabbit.core.nodetype.xml.NodeTypeReader;
 import org.apache.jackrabbit.api.JackrabbitNodeTypeManager;
 
 public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> {
@@ -377,7 +371,7 @@ public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> 
   }
 
   @Override
-  public String getAuthor() throws ResponseContextException {
+  public String getAuthor(RequestContext request) throws ResponseContextException {
     return author;
   }
 

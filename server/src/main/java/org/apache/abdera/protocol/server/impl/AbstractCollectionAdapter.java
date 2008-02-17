@@ -114,7 +114,7 @@ public abstract class AbstractCollectionAdapter
     return ProviderHelper.notsupported(request);
   }
 
-  public abstract String getAuthor() throws ResponseContextException;
+  public abstract String getAuthor(RequestContext request) throws ResponseContextException;
 
   public abstract String getId(RequestContext request);
   
@@ -180,7 +180,7 @@ public abstract class AbstractCollectionAdapter
     feed.setTitle(getTitle(request));
     feed.addLink("");
     feed.addLink("", "self");
-    feed.addAuthor(getAuthor());
+    feed.addAuthor(getAuthor(request));
     feed.setUpdated(new Date());
     return feed;
   }

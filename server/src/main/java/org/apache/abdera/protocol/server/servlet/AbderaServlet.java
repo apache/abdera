@@ -138,17 +138,28 @@ public class AbderaServlet
     Throwable t, 
     HttpServletResponse response) 
       throws IOException {
-    if (response.isCommitted()) response.reset();
+    boolean reset = false;
+    if (response.isCommitted()) {
+      try {
+        response.reset();
+        reset = true;
+      } catch (Throwable resetT) {
+        log.error("Could not reset connection to write an error message.", resetT);
+      }
+    }
     if (t != null) log.error(message, t);
     else log.error(message);
-    response.setStatus(500);
-    StreamWriter sw = 
-      getAbdera().newStreamWriter()
-                 .setOutputStream(
-                   response.getOutputStream(),
-                   "UTF-8");
-    Error.create(sw, 500, message,t);
-    sw.close();
+    
+    if (reset) {
+      response.setStatus(500);
+      StreamWriter sw = 
+        getAbdera().newStreamWriter()
+                   .setOutputStream(
+                     response.getOutputStream(),
+                     "UTF-8");
+      Error.create(sw, 500, message,t);
+      sw.close();
+    }
   }
   
   protected Map<String,String> getProperties(ServletConfig config) {

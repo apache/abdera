@@ -314,6 +314,11 @@
       <url>scpexe://people.apache.org/www/people.apache.org/repo/m2-incubating-repository</url>
     </repository>
   </distributionManagement>
+
+  <properties>
+    <jetty.version>6.1.5</jetty.version>
+  </properties>
+
   <repositories>
     <repository>
       <id>apache.incubating</id>

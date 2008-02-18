@@ -38,6 +38,7 @@ public class FeedConfiguration
 
   public static final String ENTRY_ELEM_NAME_ID = "id";
   public static final String ENTRY_ELEM_NAME_TITLE = "title";
+  public static final String ENTRY_ELEM_NAME_CONTENT = "content";
   public static final String ENTRY_ELEM_NAME_AUTHOR = "author";
   public static final String ENTRY_ELEM_NAME_UPDATED = "updated";
   public static final String ENTRY_ELEM_NAME_LINK = "link";

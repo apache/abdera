@@ -64,6 +64,7 @@
   <property name="server.test.java" value="${server}/src/test/java" />
   <property name="server.test.resources" value="${server}/src/test/resources" />
 
+  <property name="complete.jar" value="${dist}/${ant.project.name}.complete.${version}.jar" />
   
   <property name="spring" value="${basedir}/spring" />
   <property name="spring.src" value="${spring}/src/main/java" />
@@ -443,6 +444,32 @@ Working directory: ${work}
   <target name="dist" depends="clean,build,test,docs">
     <mkdir dir="${dist}" />
     <mkdir dir="${dist_lib}" />
+   
+    <jar destfile="${complete.jar}" manifest="${work}/MANIFEST.MF">
+      <fileset dir="${core.work}" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${core.work}" includes="META-INF/LICENSE,META-INF/NOTICE"/>
+      <fileset dir="${parser.work}" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${protocol.work}" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${server.work}" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${client.work}" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${security.work}" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${dependencies.work}/i18n" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${extensions.work}/main" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${extensions.work}/json" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${extensions.work}/html" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${extensions.work}/html" includes="META-INF/*.htmlparser.txt,META-INF/*.serializer.txt" />
+      <fileset dir="${extensions.work}/geo" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${extensions.work}/gdata" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${extensions.work}/media" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${extensions.work}/oauth" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${extensions.work}/opensearch" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${extensions.work}/serializer" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${extensions.work}/sharing" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${extensions.work}/wsse" includes="**/*" excludes="META-INF/**/*"/>
+      <fileset dir="${extensions}/complete/resources" includes="**/*" />
+    </jar>
+      
+    
     <jar destfile="${core.jar}" basedir="${core.work}" manifest="${work}/MANIFEST.MF" />
     <jar destfile="${parser.jar}" basedir="${parser.work}" manifest="${work}/MANIFEST.MF" />
     <jar destfile="${protocol.jar}" basedir="${protocol.work}" manifest="${work}/MANIFEST.MF" />
@@ -614,7 +641,8 @@ Working directory: ${work}
     <property name="retro_server.jar" value="${dist}/${ant.project.name}.server.${version}.retro.jar" />
     <property name="retro_client.jar" value="${dist}/${ant.project.name}.client.${version}.retro.jar" />
     <property name="retro_spring.jar" value="${dist}/${ant.project.name}.spring.${version}.retro.jar" />
-    <property name="retro_i18n.jar" value="${dist}/lib/abdera-i18n-${i18n.version}.retro.jar" />
+    <property name="retro_i18n.jar" value="${dist}/lib/${ant.project.name}-i18n-${i18n.version}.retro.jar" />    
+    <property name="retro_complete.jar" value="${dist}/${ant.project.name}-complete-${version}.retro.jar" />
     
     <condition property="do.download.retroweaver">
       <not>
@@ -643,7 +671,10 @@ Working directory: ${work}
     </java>
     <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${i18n.jar}&quot; &quot;${retro_i18n.jar}&quot;" />
-    </java>    
+    </java>
+    <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
+      <arg line="-jar &quot;${complete.jar}&quot; &quot;${retro_complete.jar}&quot;" />
+    </java>
     <antcall target="retro.extensions" />
     <antcall target="retro.security" />
     <antcall target="retro.spring" />

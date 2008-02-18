@@ -7,7 +7,7 @@
   
   <property name="abdera" value="../../dist" />
   <path id="abdera">
-    <fileset dir="${abdera}" includes="**/*.jar" />
+    <fileset dir="${abdera}" includes="**/*.jar" excludes="**/*retro.jar"/>
   </path>
   <path id="retro">
     <fileset dir="../../build/tools/retroweaver-2.0" includes="**/*.jar" />

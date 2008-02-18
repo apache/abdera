@@ -23,7 +23,7 @@ import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.TargetType;
 
-public abstract class AbstractTarget 
+public class AbstractTarget
   implements Target {
 
   protected final TargetType type;

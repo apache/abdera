@@ -69,7 +69,7 @@ public abstract class AbstractRequestContext
   protected Target initTarget() {
     try {
       Target target = provider.resolveTarget(this);
-      return target != null ? target : new UnknownTarget(this);
+      return target != null ? target : new AbstractTarget(TargetType.TYPE_NOT_FOUND, this);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -189,11 +189,4 @@ public abstract class AbstractRequestContext
       return getResolvedUri().resolve(
         urlFor(key,param)).toString();
     }
-  
-  public static class UnknownTarget 
-    extends AbstractTarget {
-    public UnknownTarget(RequestContext context) {
-      super(TargetType.TYPE_UNKNOWN, context);
-    }
-  }
 }

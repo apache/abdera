@@ -1,0 +1,2 @@
+org.apache.abdera.ext.json.JSONWriter
+org.apache.abdera.parser.stax.util.PrettyWriter

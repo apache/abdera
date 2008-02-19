@@ -34,7 +34,7 @@ import org.apache.abdera.protocol.server.Provider;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.TargetType;
-import org.apache.abdera.protocol.server.impl.AbstractTarget;
+import org.apache.abdera.protocol.server.impl.SimpleTarget;
 import org.apache.abdera.protocol.util.AbstractRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -69,7 +69,7 @@ public abstract class AbstractRequestContext
   protected Target initTarget() {
     try {
       Target target = provider.resolveTarget(this);
-      return target != null ? target : new AbstractTarget(TargetType.TYPE_NOT_FOUND, this);
+      return target != null ? target : new SimpleTarget(TargetType.TYPE_NOT_FOUND, this);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

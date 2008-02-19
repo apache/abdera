@@ -365,7 +365,7 @@ public interface StreamWriter
    * @param hreflang The hreflang value
    * @param length The link length
    */
-  StreamWriter writeLink(String iri, String rel, String type, String title, String hreflang, int length);
+  StreamWriter writeLink(String iri, String rel, String type, String title, String hreflang, long length);
   
   /**
    * Start an atom:link element
@@ -397,7 +397,7 @@ public interface StreamWriter
    * @param hreflang The hreflang value
    * @param length The link length
    */
-  StreamWriter startLink(String iri, String rel, String type, String title, String hreflang, int length);
+  StreamWriter startLink(String iri, String rel, String type, String title, String hreflang, long length);
   
   /**
    * End the atom:category

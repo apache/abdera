@@ -354,7 +354,7 @@ public class StreamBuilder
   }
 
   public StreamBuilder startLink(String iri, String rel, String type,
-      String title, String hreflang, int length) {
+      String title, String hreflang, long length) {
     return (StreamBuilder)super.startLink(iri, rel, type, title, hreflang, length);
   }
 
@@ -721,7 +721,7 @@ public class StreamBuilder
   }
 
   public StreamBuilder writeLink(String iri, String rel, String type,
-      String title, String hreflang, int length) {
+      String title, String hreflang, long length) {
     return (StreamBuilder)super.writeLink(iri, rel, type, title, hreflang, length);
   }
 

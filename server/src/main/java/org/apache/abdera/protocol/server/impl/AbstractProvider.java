@@ -105,6 +105,9 @@ public abstract class AbstractProvider
   public ResponseContext process(
     RequestContext request) {    
       Target target = request.getTarget();
+      if (target == null || 
+          target.getType() == TargetType.TYPE_NOT_FOUND)
+        return ProviderHelper.notfound(request);
       String method = request.getMethod();
       TargetType type = target.getType();
       if (type == TargetType.TYPE_SERVICE && 

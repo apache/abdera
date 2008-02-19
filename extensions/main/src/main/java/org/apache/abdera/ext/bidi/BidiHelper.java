@@ -67,7 +67,7 @@ import org.apache.abdera.model.Element;
  */
 public final class BidiHelper {
 
-  private static final QName DIR = new QName("dir");
+  public static final QName DIR = new QName("dir");
   
   BidiHelper() {}
   

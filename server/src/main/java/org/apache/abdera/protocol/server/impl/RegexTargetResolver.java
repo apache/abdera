@@ -148,7 +148,7 @@ public class RegexTargetResolver
   }  
   
   public static class RegexTarget
-    extends AbstractTarget
+    extends SimpleTarget
     implements Target {
     
     private static final long serialVersionUID = 165211244926064449L;

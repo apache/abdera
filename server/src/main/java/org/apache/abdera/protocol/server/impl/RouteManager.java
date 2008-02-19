@@ -172,7 +172,7 @@ public class RouteManager
   }
   
   public static class RouteTarget 
-    extends AbstractTarget {
+    extends SimpleTarget {
       private final Map<String,String> params;
       private final Route route;      
       public RouteTarget(

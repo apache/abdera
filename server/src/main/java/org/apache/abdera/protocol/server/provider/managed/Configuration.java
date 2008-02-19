@@ -19,6 +19,7 @@ package org.apache.abdera.protocol.server.provider.managed;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public abstract class Configuration {
@@ -31,10 +32,12 @@ public abstract class Configuration {
     return props;
   }
 
-  static FileInputStream loadFileAsInputStream(
+  static InputStream loadFileAsInputStream(
     String fileLocation)
       throws IOException {
-    return new FileInputStream(fileLocation);
+    return Thread.currentThread()
+    	.getContextClassLoader()
+    	.getResourceAsStream(fileLocation);
   }
 
   static String getProperty(

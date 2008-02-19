@@ -17,8 +17,8 @@
 */
 package org.apache.abdera.protocol.server.provider.managed;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
@@ -34,7 +34,7 @@ public class CollectionAdapterConfiguration
       this.serverConfiguration = serverConfiguration;
   }
 
-  public FileInputStream getConfigAsFileInputStream() 
+  public InputStream getConfigAsFileInputStream() 
     throws IOException {
       String filePath
         = serverConfiguration.getAdapterConfigLocation() + fileLocation;

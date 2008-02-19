@@ -127,7 +127,7 @@ public abstract class AbstractStreamWriter
     String type, 
     String title,
     String hreflang, 
-    int length) {
+    long length) {
       return 
         startElement(Constants.LINK).
         writeAttribute("href",iri).
@@ -345,7 +345,7 @@ public abstract class AbstractStreamWriter
     String type, 
     String title,
     String hreflang, 
-    int length) {
+    long length) {
       return 
         startLink(iri, rel, type, title, hreflang, length).
         endLink();

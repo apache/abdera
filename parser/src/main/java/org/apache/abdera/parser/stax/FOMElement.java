@@ -18,6 +18,7 @@
 package org.apache.abdera.parser.stax;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -876,4 +877,13 @@ public class FOMElement
     writeTo(getFactory().getAbdera().getWriterFactory().getWriter(writer),out,options);
   }
 
+  public String toFormattedString() {
+    try {
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      writeTo("prettyxml",out);
+      return new String(out.toByteArray(),"UTF-8");
+    } catch (Exception e) {
+      return toString();
+    }
+  }
 }

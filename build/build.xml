@@ -445,14 +445,13 @@ Working directory: ${work}
     <mkdir dir="${dist}" />
     <mkdir dir="${dist_lib}" />
    
-    <jar destfile="${complete.jar}" manifest="${work}/MANIFEST.MF">
+    <jar destfile="${complete.jar}" manifest="${work}/MANIFEST.MF" >
       <fileset dir="${core.work}" includes="**/*" excludes="META-INF/**/*"/>
       <fileset dir="${core.work}" includes="META-INF/LICENSE,META-INF/NOTICE"/>
       <fileset dir="${parser.work}" includes="**/*" excludes="META-INF/**/*"/>
       <fileset dir="${protocol.work}" includes="**/*" excludes="META-INF/**/*"/>
       <fileset dir="${server.work}" includes="**/*" excludes="META-INF/**/*"/>
       <fileset dir="${client.work}" includes="**/*" excludes="META-INF/**/*"/>
-      <fileset dir="${security.work}" includes="**/*" excludes="META-INF/**/*"/>
       <fileset dir="${dependencies.work}/i18n" includes="**/*" excludes="META-INF/**/*"/>
       <fileset dir="${extensions.work}/main" includes="**/*" excludes="META-INF/**/*"/>
       <fileset dir="${extensions.work}/json" includes="**/*" excludes="META-INF/**/*"/>
@@ -487,6 +486,9 @@ Working directory: ${work}
 
   <target name="dist.security" if="do.security">
     <jar destfile="${security.jar}" basedir="${security.work}" manifest="${work}/MANIFEST.MF" />
+    <jar destfile="${complete.jar}" update="true">
+      <fileset dir="${security.work}" includes="**/*" excludes="META-INF/**/*" />
+    </jar>
   </target>
   
   <target name="dist.spring" if="do.spring">

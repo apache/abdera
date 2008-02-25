@@ -30,31 +30,25 @@
   <name>Abdera Core</name>
   <version>0.4.0-incubating-SNAPSHOT</version>
   <description>Atom Specification Implementation Core</description>
-  <inceptionYear>2006</inceptionYear>
-  <url>http://incubator.apache.org/abdera</url>
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/core/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/core/</developerConnection>
-    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/core/</url>
-  </scm>
+  
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-    </dependency>
-    <dependency>
-	<groupId>org.apache.abdera</groupId>
-	<artifactId>abdera-i18n</artifactId>
-	<version>0.4.0-incubating-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-activation_1.0.2_spec</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.3</version>
-    </dependency>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.apache.abdera</groupId>
+  		<artifactId>abdera-i18n</artifactId>
+  		<version>0.4.0-incubating-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.apache.geronimo.specs</groupId>
+  		<artifactId>geronimo-activation_1.0.2_spec</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>commons-codec</groupId>
+  		<artifactId>commons-codec</artifactId>
+  		<version>1.3</version>
+  	</dependency>
   </dependencies>
 </project>

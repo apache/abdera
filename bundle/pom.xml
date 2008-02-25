@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  The ASF licenses this file to You
+    under the Apache License, Version 2.0 (the "License"); you may not
+    use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    
+    http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.  For additional information regarding
+    copyright in this work, please see the NOTICE file in the top level
+    directory of this distribution. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>org.apache.abdera</groupId>
+        <artifactId>abdera</artifactId>
+        <version>0.4.0-incubating-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>abdera-bundle</artifactId>
+    <packaging>jar</packaging>
+    <name>Abdera Bundle Jar</name>
+    <version>0.4.0-incubating-SNAPSHOT</version>
+    <description>Bundle of all Abdera jars</description>
+    <inceptionYear>2006</inceptionYear>
+    <url>http://incubator.apache.org/abdera</url>
+
+    <properties>
+        <createSourcesJar>false</createSourcesJar>
+        <shade.version>1.0-beta-1</shade.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-client</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-spring</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-server</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-jcr</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-couchdb</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-jdbc</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-security</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-extensions-gdata</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-extensions-geo</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-extensions-html</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-extensions-json</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-extensions-main</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-extensions-media</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-extensions-oauth</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-extensions-opensearch</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-extensions-serializer</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-extensions-sharing</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-extensions-wsse</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${shade.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedGroupFilter>
+                                org.apache.abdera
+                            </shadedGroupFilter>
+                            <shadedArtifactAttached>
+                                false
+                            </shadedArtifactAttached>
+                            <createSourcesJar>
+                                ${createSourcesJar}
+                            </createSourcesJar>
+                            <promoteTransitiveDependencies>
+                                true
+                            </promoteTransitiveDependencies>
+                            <createDependencyReducedPom>
+                                true
+                            </createDependencyReducedPom>
+
+                            <transformers>
+                                <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
+                                    <projectName>
+                                        Apache Abdera
+                                    </projectName>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/org.apache.abdera.writer.NamedWriter</resource>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/org.apache.abdera.writer.NamedParser</resource>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/org.apache.abdera.factory.ExtensionFactory</resource>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>deploy</id>
+            <!--properties>
+                <createSourcesJar>true</createSourcesJar>                     
+                </properties-->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-sources</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>unpack-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <includeGroupIds>
+                                        org.apache.abdera
+                                    </includeGroupIds>
+                                    <classifier>sources</classifier>
+                                    <outputDirectory>
+                                        ${project.build.directory}/sources
+                                    </outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>package</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <header>Apache Abdera API</header>
+                            <footer>Apache Abdera API</footer>
+                            <sourcepath>
+                                ${project.build.directory}/sources
+                            </sourcepath>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

@@ -20,55 +20,16 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.apache.abdera</groupId>
-    <artifactId>abdera</artifactId>
+    <artifactId>abdera-adapters-parent</artifactId>
     <version>0.4.0-incubating-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>abdera-jdbc</artifactId>
   <packaging>jar</packaging>
-  <name>Abdera JDBC Collection Adapter</name>
+  <name>Abdera JDBC Adapter</name>
   <version>0.4.0-incubating-SNAPSHOT</version>
-  <description>JDBC Collection Adapter</description>
-  <inceptionYear>2006</inceptionYear>
-  <url>http://incubator.apache.org/abdera</url>
-  <scm>
-    <connection>
-      scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/jdbc/
-    </connection>
-    <developerConnection>
-      scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/jdbc/
-    </developerConnection>
-    <url>
-      http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/jdbc/
-    </url>
-  </scm>
   
   <dependencies>
-      
-    <dependency>
-      <groupId>org.mortbay.jetty</groupId>
-      <artifactId>jetty</artifactId>
-      <version>${jetty.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.abdera</groupId>
-      <artifactId>abdera-server</artifactId>
-      <version>0.4.0-incubating-SNAPSHOT</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.apache.abdera</groupId>
-      <artifactId>abdera-client</artifactId>
-      <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
     
     <dependency>
       <groupId>org.apache.ibatis</groupId>

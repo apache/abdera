@@ -26,6 +26,5 @@ public class TestSuite {
     JUnitCore runner = new JUnitCore();
     runner.addListener(new TextListener(System.out));
     runner.run(ProviderDefinitionParserTest.class);
-    runner.run(ClassicProviderDefinitionParserTest.class);
   }
 }

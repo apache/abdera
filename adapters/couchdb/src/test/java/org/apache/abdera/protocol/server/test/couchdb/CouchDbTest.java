@@ -10,6 +10,7 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Service;
@@ -27,11 +28,13 @@ import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 
+@Ignore
 public class CouchDbTest extends Assert {
 
   private static Server server;
@@ -63,7 +66,7 @@ public class CouchDbTest extends Assert {
   }
 
   @Test
-  public void testGetService() {
+  public void testGetService() throws Exception {
     ClientResponse resp = client.get("http://localhost:9002/");
     assertNotNull(resp);
     assertEquals(resp.getType(), ResponseType.SUCCESS);
@@ -77,6 +80,7 @@ public class CouchDbTest extends Assert {
     assertNotNull(collection);
     assertTrue(collection.acceptsEntry());
     assertEquals(collection.getResolvedHref().toString(), "http://localhost:9002/couchdb");
+    resp.release();
   }
   @Test
   public void testGetFeed() {

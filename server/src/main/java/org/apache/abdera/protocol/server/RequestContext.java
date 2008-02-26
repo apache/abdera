@@ -237,4 +237,6 @@ public interface RequestContext
    * are resolved against the base URI 
    */
   String absoluteUrlFor(Object key, Object param);
+  
+  boolean isAtom();
 }

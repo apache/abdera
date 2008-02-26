@@ -31,8 +31,13 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.protocol.client.AbderaClient;
 import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.protocol.client.RequestOptions;
-import org.apache.abdera.writer.Writer;
 
+/**
+ * Servlet that will do an HTTP GET to retrieve an Atom document then
+ * convert that into a JSON doc.  The URL pattern is simple:
+ * 
+ * http://.../servlet/path/{url}
+ */
 @SuppressWarnings("unchecked") 
 public class JSONServlet 
   extends HttpServlet {
@@ -69,8 +74,6 @@ public class JSONServlet
     Abdera abdera = getAbdera();
     AbderaClient client = new AbderaClient(abdera);
     
-    Writer json = abdera.getWriterFactory().getWriter("json");
-
     RequestOptions options = client.getDefaultRequestOptions();
     if (request.getHeader("If-Match") != null)
       options.setIfMatch(request.getHeader("If-Match"));
@@ -95,7 +98,7 @@ public class JSONServlet
           if (doc.getLastModified() != null)
             response.setDateHeader("Last-Modified", doc.getLastModified().getTime());
           OutputStream out = response.getOutputStream();
-          json.writeTo(doc.getRoot(), out);
+          doc.writeTo("json",out);
         } catch (Exception e) {
           response.sendError(500);
           return;

@@ -289,5 +289,9 @@ public class RequestContextWrapper
       return request.getResolvedUri().resolve(
         urlFor(key,param)).toString();
   }
+
+  public boolean isAtom() {
+    return request.isAtom();
+  }
   
 }

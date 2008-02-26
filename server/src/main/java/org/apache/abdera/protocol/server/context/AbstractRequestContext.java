@@ -36,6 +36,7 @@ import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.impl.SimpleTarget;
 import org.apache.abdera.protocol.util.AbstractRequest;
+import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -188,5 +189,13 @@ public abstract class AbstractRequestContext
     Object param) {
       return getResolvedUri().resolve(
         urlFor(key,param)).toString();
+  }
+  
+  public boolean isAtom() {
+    try {
+      return MimeTypeHelper.isAtom(getContentType().toString());
+    } catch (Exception e) {
+      return false;
     }
+  }
 }

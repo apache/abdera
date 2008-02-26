@@ -582,4 +582,39 @@ public class ProviderHelper {
       }
      return editUri;
   }
+  
+  public static String[] getAcceptableTypes(
+    RequestContext request) {
+      String accept = request.getAccept();
+      return orderByQ(accept);
+  }
+  
+  public static boolean isPreferred(
+    RequestContext request,
+    String s1,
+    String s2) {
+      return isPreferred(
+        getAcceptableTypes(request),
+        s1,s2);
+  }
+  
+  public static boolean isPreferred(
+    String[] accepts, 
+    String s1, 
+    String s2) {
+      int i1 = accepts.length, i2 = accepts.length;
+      for (int n = 0; n < accepts.length; n++) {
+        if (MimeTypeHelper.isMatch(s1, accepts[n])) {
+          i1 = n;
+          break;
+        }
+      }
+      for (int n = 0; n < accepts.length; n++) {
+        if (MimeTypeHelper.isMatch(s2, accepts[n])) {
+          i2 = n;
+          break;
+        }
+      }
+      return i1 < i2;
+  }
 }

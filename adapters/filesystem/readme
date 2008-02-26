@@ -1,0 +1,48 @@
+Filesystem Collection Adapter
+
+Dependencies: 
+
+  * Abdera Core, Parser, Protocol, Server modules
+  
+Using the Adapter:
+
+  The Filesystem adapter is based on Abdera Managed Adapter model.  To deploy an 
+  instance of the adapter, put a file called /abdera/adapter/[id].properties
+  in the classpath where [id] is the id of the service instance.  For instance,
+  /abdera/adapter/fs.properties
+  
+  
+Sample *.properties file
+
+  subUri=fs
+  adapterClassName=org.apache.abdera.protocol.server.adapters.filesystem.FilesystemAdapter
+  title=Filesystem Feed
+  author=james
+  configFile=dummyFileLocation
+  fs.root=/home/jasnell/tmp/fs
+  
+the fs.root property is required and must be set the location where the individual
+entry documents will be stored
+  
+Then, deploy the AbderaServlet using the BasicProvider in your Web application environment:
+
+Jetty deployment example:
+
+    Server server = new Server(9002);
+    Context context = new Context(server, "/", Context.SESSIONS);
+    ServletHolder servletHolder = new ServletHolder(new AbderaServlet());
+    servletHolder.setInitParameter(ServiceManager.PROVIDER, BasicProvider.class.getName());
+    context.addServlet(servletHolder, "/*");
+    server.start();
+    
+Using this example, the following resources will be served:
+
+    http://localhost:9002/                ==>  Atompub Service Document
+    http://localhost:9002/fs              ==>  Atompub Collection Feed
+    http://localhost:9002/fs/{entry}      ==>  Entry document
+    
+Limitations:
+
+  The adapter does not support media collections.
+  
+  

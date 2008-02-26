@@ -979,6 +979,7 @@ Working directory: ${work}
     <ant antfile="${basedir}/adapters/couchdb/build.xml" target="dist" dir="${basedir}/adapters/couchdb" inheritall="false" />
     <ant antfile="${basedir}/adapters/jcr/build.xml" target="dist" dir="${basedir}/adapters/jcr" inheritall="false" />
     <ant antfile="${basedir}/adapters/jdbc/build.xml" target="dist" dir="${basedir}/adapters/jdbc" inheritall="false" />
+    <ant antfile="${basedir}/adapters/filesystem/build.xml" target="dist" dir="${basedir}/adapters/filesystem" inheritall="false" />
   </target>
   
 </project>

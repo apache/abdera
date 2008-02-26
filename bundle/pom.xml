@@ -33,7 +33,9 @@
     <url>http://incubator.apache.org/abdera</url>
 
     <properties>
+        <!-- Not quite working yet... -->
         <createSourcesJar>false</createSourcesJar>
+        
         <shade.version>1.0-beta-1</shade.version>
     </properties>
 
@@ -152,21 +154,11 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <shadedGroupFilter>
-                                org.apache.abdera
-                            </shadedGroupFilter>
-                            <shadedArtifactAttached>
-                                false
-                            </shadedArtifactAttached>
-                            <createSourcesJar>
-                                ${createSourcesJar}
-                            </createSourcesJar>
-                            <promoteTransitiveDependencies>
-                                true
-                            </promoteTransitiveDependencies>
-                            <createDependencyReducedPom>
-                                true
-                            </createDependencyReducedPom>
+                            <shadedGroupFilter>org.apache.abdera</shadedGroupFilter>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <createSourcesJar>${createSourcesJar}</createSourcesJar>
+                            <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+                            <createDependencyReducedPom>true</createDependencyReducedPom>
 
                             <transformers>
                                 <transformer
@@ -211,9 +203,7 @@
                                     <goal>unpack-dependencies</goal>
                                 </goals>
                                 <configuration>
-                                    <includeGroupIds>
-                                        org.apache.abdera
-                                    </includeGroupIds>
+                                    <includeGroupIds>org.apache.abdera</includeGroupIds>
                                     <classifier>sources</classifier>
                                     <outputDirectory>
                                         ${project.build.directory}/sources
@@ -222,7 +212,7 @@
                             </execution>
                         </executions>
                     </plugin>
-
+        
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
@@ -243,6 +233,7 @@
                             </sourcepath>
                         </configuration>
                     </plugin>
+                    
                 </plugins>
             </build>
         </profile>

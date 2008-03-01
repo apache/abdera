@@ -43,7 +43,12 @@ import org.apache.abdera.protocol.server.provider.managed.FeedConfiguration;
 import org.apache.abdera.protocol.server.provider.managed.ManagedCollectionAdapter;
 
 /**
- * Simple Filesystem Adapter
+ * Simple Filesystem Adapter that uses a local directory to store Atompub 
+ * collection entries. As an extension of the ManagedCollectionAdapter 
+ * class, the Adapter is intended to be used with implementations of the
+ * ManagedProvider and are configured using /abdera/adapter/*.properties
+ * files.  The *.properties file MUST specify the fs.root property to specify
+ * the root directory used by the Adapter. 
  */
 public class FilesystemAdapter 
   extends ManagedCollectionAdapter {

@@ -49,6 +49,11 @@ import org.w3c.dom.Element;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.ibatis.sqlmap.client.SqlMapClientBuilder;
 
+/**
+ * Adapter that uses IBatis and a database to store Atompub collection entries.
+ * As an extension to BasicAdapter, the adapter is intended to be used with 
+ * BasicProvider and is configured using /abdera/adapter/*.properties files.
+ */
 public class IBatisCollectionAdapter 
   extends BasicAdapter {
 

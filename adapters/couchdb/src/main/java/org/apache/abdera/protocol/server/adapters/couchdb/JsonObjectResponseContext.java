@@ -36,6 +36,10 @@ import org.apache.abdera.writer.StreamWriter;
 
 import com.fourspaces.couchdb.Document;
 
+/**
+ * ResponseContext implementation that serializes a JSON Document from a 
+ * CouchDB database as an Atom document using the Abdera StreamWriter.
+ */
 public class JsonObjectResponseContext 
   extends StreamWriterResponseContext {
   

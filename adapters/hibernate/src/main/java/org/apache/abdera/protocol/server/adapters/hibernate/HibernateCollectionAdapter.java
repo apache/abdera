@@ -28,6 +28,12 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 
+/**
+ * An adapter implementation that uses Hibernate and a backend database to store
+ * Atompub collection entries.  As an extension of the BasicAdapter, the adapter 
+ * is intended to be used with the BasicProvider and is configured using an
+ * /abdera/adapter/*.properties file.
+ */
 public class HibernateCollectionAdapter extends BasicAdapter {
 
 	private static Log logger = LogFactory.getLog(HibernateCollectionAdapter.class);

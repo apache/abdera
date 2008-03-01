@@ -47,6 +47,19 @@ import com.fourspaces.couchdb.Document;
 import com.fourspaces.couchdb.Session;
 import com.fourspaces.couchdb.ViewResults;
 
+/**
+ * The CouchDB Adapter uses a CouchDB database as the backend storage for 
+ * an Atompub Collection.  As an extension of the ManagedCollectionAdapter 
+ * class, the Adapter is intended to be used with implementations of the
+ * ManagedProvider and are configured using /abdera/adapter/*.properties
+ * files.  By default, the CouchDbAdapter assumes that CouchDB is running
+ * on localhost on port 5984.  The host name and port can be changed by 
+ * setting the couchdb.host and couchdb.port values in the Adapter instance
+ * *.properties file.
+ * 
+ * The Adapter uses the Abdera Atom-to-JSON converter to store Collection
+ * entries as JSON documents in a CouchDB database.
+ */
 public class CouchDbAdapter 
   extends ManagedCollectionAdapter {
 
@@ -92,10 +105,10 @@ public class CouchDbAdapter
       try {
         db = session.getDatabase(name);
       } catch (Exception e) {
-        // error if the db is not found, ignore it, we're going to create it
-      }
-      if (db == null)
+        // error if the db is not found, ignore the error, 
+        // we're going to create it
         db = session.createDatabase(name);
+      }
       return db;
   }
   

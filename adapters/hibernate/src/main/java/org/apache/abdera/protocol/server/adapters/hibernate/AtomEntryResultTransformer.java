@@ -18,6 +18,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.transform.ResultTransformer;
 
+/**
+ * Converts Hibernate results into an Atom document using the Abdera Java Object Serializer
+ */
 public class AtomEntryResultTransformer implements ResultTransformer {
 	
 	private static Log logger = LogFactory.getLog(AtomEntryResultTransformer.class);

@@ -36,7 +36,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.api.JackrabbitNodeTypeManager;
 
-public class JcrCollectionAdapter extends AbstractEntityCollectionAdapter<Node> {
+/**
+ * Adapter implementation that uses a JCR Repository to store Atompub collection
+ * entries.  The adapter is intended to be used with the DefaultProvider implementation.
+ */
+public class JcrCollectionAdapter 
+  extends AbstractEntityCollectionAdapter<Node> {
 
   private final static Log log = LogFactory.getLog(JcrCollectionAdapter.class);
   

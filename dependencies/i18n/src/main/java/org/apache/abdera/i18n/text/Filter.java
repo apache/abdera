@@ -17,6 +17,9 @@
 */
 package org.apache.abdera.i18n.text;
 
+/**
+ * Filters are used in a variety of ways to filter or verify unicode codepoints
+ */
 public interface Filter {
 
   boolean accept(int c);

@@ -27,20 +27,32 @@ public final class CharUtils {
 
   private CharUtils() {}
  
+  /**
+   * True if the character is a valid unicode codepoint
+   */
   public static boolean isValid(int c) {
     return c >= 0x000000 && c <= 0x10ffff;
   }
-  
+
+  /**
+   * True if the character is a valid unicode codepoint
+   */
   public static boolean isValid(Codepoint c) {
     return isValid(c.getValue());
   }
   
+  /**
+   * True if all the characters in chars are within the set [low,high]
+   */
   public static boolean inRange(char[] chars, char low, char high) {
     for (int i = 0; i < chars.length; i++)
       if (chars[i] < low || chars[i] > high) return false;
     return true;
   }
 
+  /**
+   * True if all the characters in chars are within the set [low,high]
+   */
   public static boolean inRange(char[] chars, int low, int high) {
     for (int i = 0; i < chars.length; i++) {
       char n = chars[i];
@@ -55,14 +67,25 @@ public final class CharUtils {
     return true;
   }
   
+  /**
+   * True if the codepoint is within the set [low,high]
+   */
   public static boolean inRange(int codepoint, int low, int high) {
     return codepoint >= low && codepoint <= high;
   }
   
+  /**
+   * Append the specified codepoint to the buffer, automatically
+   * handling surrogate pairs
+   */
   public static void append(Appendable buf, Codepoint c) {
     append(buf,c.getValue());
   }
   
+  /**
+   * Append the specified codepoint to the buffer, automatically
+   * handling surrogate pairs
+   */
   public static void append(Appendable buf, int c) {
     try {
       if (isSupplementary(c)) {
@@ -74,32 +97,53 @@ public final class CharUtils {
     }
   }
 
+  /**
+   * Get the high surrogate for a particular unicode codepoint
+   */
   public static char getHighSurrogate(int c) {
     return (c >= 0x10000) ?
        (char)((0xD800 - (0x10000 >> 10)) + (c >> 10)) : 0;
   }
 
+  /**
+   * Get the low surrogate for a particular unicode codepoint
+   */
   public static char getLowSurrogate(int c) {    
     return (c >= 0x10000) ?
         (char)(0xDC00 + (c & 0x3FF)) : (char)c;
   }
   
+  /**
+   * True if the specified char is a high surrogate
+   */
   public static boolean isHighSurrogate(char c) {
     return c <= '\uDBFF' && c >= '\uD800';
   }
 
+  /**
+   * True if the specified char is a low surrogate
+   */
   public static boolean isLowSurrogate(char c) {
     return c <= '\uDFFF' && c >= '\uDC00';
   }
   
+  /**
+   * True if the specified character is supplemental
+   */
   public static boolean isSupplementary(int c) {
     return c <= 0x10ffff && c >= 0x010000;
   }
   
+  /**
+   * True if the two chars represent a surrogate pair
+   */
   public static boolean isSurrogatePair(char high, char low) {
     return isHighSurrogate(high) && isLowSurrogate(low);
   }
   
+  /**
+   * Converts the high and low surrogate into a supplementary codepoint
+   */
   public static Codepoint toSupplementary(char high, char low) {
     if (!isHighSurrogate(high)) 
       throw new IllegalArgumentException("Invalid High Surrogate");
@@ -108,6 +152,9 @@ public final class CharUtils {
     return new Codepoint(((high - '\uD800') << 10) + (low - '\uDC00') + 0x010000);    
   }
 
+  /**
+   * Return the codepoint at the given location, automatically dealing with surrogate pairs
+   */
   public static Codepoint codepointAt(String s, int i) {
     char c = s.charAt(i);
     if (c < 0xD800 || c > 0xDFFF) return new Codepoint(c);
@@ -125,6 +172,9 @@ public final class CharUtils {
     return new Codepoint(c);
   }
   
+  /**
+   * Return the codepoint at the given location, automatically dealing with surrogate pairs
+   */
   public static Codepoint codepointAt(CharSequence s, int i) {
     char c = s.charAt(i);
     if (c < 0xD800 || c > 0xDFFF) return new Codepoint(c);
@@ -142,10 +192,16 @@ public final class CharUtils {
     return new Codepoint(c);
   }
   
+  /**
+   * Insert a codepoint into the buffer, automatically dealing with surrogate pairs 
+   */
   public static void insert(CharSequence s, int i, Codepoint c) {
     insert(s,i,c.getValue());
   }
   
+  /**
+   * Insert a codepoint into the buffer, automatically dealing with surrogate pairs 
+   */
   public static void insert(CharSequence s, int i, int c) {
     if (!(s instanceof StringBuilder) && 
         !(s instanceof StringBuffer)) { 
@@ -167,10 +223,16 @@ public final class CharUtils {
     }
   }
   
+  /**
+   * Set the character at a given location, automatically dealing with surrogate pairs 
+   */
   public static void setChar(CharSequence s, int i, Codepoint c) {
     setChar(s,i,c.getValue());
   }
   
+  /**
+   * Set the character at a given location, automatically dealing with surrogate pairs 
+   */
   public static void setChar(CharSequence s, int i, int c) {
     if (!(s instanceof StringBuilder) && 
         !(s instanceof StringBuffer)) { 
@@ -195,18 +257,30 @@ public final class CharUtils {
     }
   }
   
+  /**
+   * Return the number of characters used to represent the codepoint (will return 1 or 2)
+   */
   public static int length(Codepoint c) {
     return c.getCharCount();
   }
   
+  /**
+   * Return the number of characters used to represent the codepoint (will return 1 or 2)
+   */
   public static int length(int c) {
     return new Codepoint(c).getCharCount();
   }
   
+  /**
+   * Return the total number of codepoints in the buffer.  Each surrogate pair counts as a single codepoint
+   */
   public static int length(CharSequence c) {
     return length(CodepointIterator.forCharSequence(c));
   }
   
+  /**
+   * Return the total number of codepoints in the buffer.  Each surrogate pair counts as a single codepoint
+   */
   public static int length(char[] c) {
     return length(CodepointIterator.forCharArray(c));
   }
@@ -226,6 +300,9 @@ public final class CharUtils {
     return buf.toString();
   }
   
+  /**
+   * Return the String representation of the codepoint, automatically dealing with surrogate pairs
+   */
   public static String toString(int c) {
     return (isSupplementary(c)) ? 
       supplementaryToString(c) : 
@@ -252,8 +329,10 @@ public final class CharUtils {
     return s;
   }
     
-  public static String stripBidiInternal(String s) {
-    
+  /**
+   * Removes bidi controls from within a string
+   */
+  public static String stripBidiInternal(String s) {    
     return s.replaceAll("[\u202A\u202B\u202D\u202E\u200E\u200F\u202C]", "");
   }
 
@@ -280,36 +359,60 @@ public final class CharUtils {
       default:  return s;
     }
   }
-  
+
+  /**
+   * True if the codepoint is a digit
+   */
   public static boolean isDigit(Codepoint codepoint) {
     return isDigit(codepoint.getValue());
   }
   
+  /**
+   * True if the codepoint is a digit
+   */
   public static boolean isDigit(int codepoint) {
     return CharUtils.inRange(codepoint, '0', '9');
   }
   
+  /**
+   * True if the codepoint is part of the ASCII alphabet (a-z, A-Z)
+   */
   public static boolean isAlpha(Codepoint codepoint) {
     return isAlpha(codepoint.getValue());
   }
   
+  /**
+   * True if the codepoint is part of the ASCII alphabet (a-z, A-Z)
+   */
   public static boolean isAlpha(int codepoint) {
     return CharUtils.inRange(codepoint, 'A', 'Z') ||
            CharUtils.inRange(codepoint, 'a', 'z');
   }
 
+  /**
+   * True if isAlpha and isDigit both return true
+   */
   public static boolean isAlphaDigit(Codepoint codepoint) {
     return isAlphaDigit(codepoint.getValue());
   }
   
+  /**
+   * True if isAlpha and isDigit both return true
+   */
   public static boolean isAlphaDigit(int codepoint) {
     return isDigit(codepoint) || isAlpha(codepoint);
   }
 
+  /**
+   * True if the codepoint is a bidi control character
+   */
   public static boolean isBidi(Codepoint codepoint) {
     return isBidi(codepoint.getValue());
   }
   
+  /**
+   * True if the codepoint is a bidi control character
+   */
   public static boolean isBidi(int codepoint) {
     return  codepoint == LRM || // Left-to-right mark
             codepoint == RLM || // Right-to-left mark
@@ -354,7 +457,6 @@ public final class CharUtils {
     }
     return ((s-1) & 1) == 0;    
   }
-  
   
   public static enum Profile {
     NONE(
@@ -797,36 +899,57 @@ public final class CharUtils {
            codepoint == '-';
   }
 
+  /**
+   * Verifies a sequence of codepoints using the specified filter
+   */
   public static void verify(CodepointIterator ci, Filter filter) throws InvalidCharacterException {
     CodepointIterator rci = CodepointIterator.restrict(ci, filter);
     while (rci.hasNext()) rci.next();
   }
   
+  /**
+   * Verifies a sequence of codepoints using the specified filter
+   */
   public static void verify(CodepointIterator ci, Profile profile) throws InvalidCharacterException {
     CodepointIterator rci = CodepointIterator.restrict(ci, profile.filter());
     while (rci.hasNext()) rci.next();
   }
   
+  /**
+   * Verifies a sequence of codepoints using the specified profile
+   */
   public static void verify(char[] s, Profile profile) throws InvalidCharacterException {
     if (s == null) return;
     verify(CodepointIterator.forCharArray(s),profile);
   }
   
+  /**
+   * Verifies a sequence of codepoints using the specified profile
+   */
   public static void verify(String s, Profile profile) throws InvalidCharacterException {
     if (s == null) return;
     verify(CodepointIterator.forCharSequence(s),profile);
   }
 
+  /**
+   * Verifies a sequence of codepoints using the specified filter
+   */
   public static void verifyNot(CodepointIterator ci, Filter filter) throws InvalidCharacterException {
     CodepointIterator rci = ci.restrict(filter,false,true);
     while (rci.hasNext()) rci.next();
   }
   
+  /**
+   * Verifies a sequence of codepoints using the specified profile
+   */
   public static void verifyNot(CodepointIterator ci, Profile profile) throws InvalidCharacterException {
     CodepointIterator rci = ci.restrict(profile.filter(),false,true);
     while (rci.hasNext()) rci.next();
   }
   
+  /**
+   * Verifies a sequence of codepoints using the specified profile
+   */
   public static void verifyNot(char[] array, Profile profile) throws InvalidCharacterException {
     CodepointIterator rci = 
       CodepointIterator.forCharArray(array)

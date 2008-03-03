@@ -10,6 +10,11 @@ import org.apache.abdera.protocol.server.TargetBuilder;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.WorkspaceManager;
 
+/**
+ * An abstract base Provider implementation that implements the WorkspaceManager
+ * interface.  This is intended to be used by Provider's that do not wish to 
+ * use a separate WorkspaceManager object. 
+ */
 public abstract class AbstractWorkspaceProvider 
   extends AbstractProvider 
   implements WorkspaceManager {

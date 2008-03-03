@@ -6,7 +6,9 @@ import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.RequestContext.Scope;
 
-
+/**
+ * The DefaultWorkspaceManager is used by the DefaultProvider
+ */
 public class DefaultWorkspaceManager extends AbstractWorkspaceManager {
   // URI reserved delimiter characters (gen-delims) from RFC 3986 section 2.2
   private static final String URI_GEN_DELIMS = ":/?#[]@";

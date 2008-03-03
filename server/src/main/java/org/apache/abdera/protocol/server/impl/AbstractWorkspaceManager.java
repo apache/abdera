@@ -24,6 +24,9 @@ import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.WorkspaceManager;
 
+/**
+ * Base implementation for WorkspaceManager implementations
+ */
 public abstract class AbstractWorkspaceManager 
   implements WorkspaceManager {
   

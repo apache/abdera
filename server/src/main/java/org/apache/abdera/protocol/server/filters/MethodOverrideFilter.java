@@ -25,6 +25,10 @@ import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.context.RequestContextWrapper;
 
+/**
+ * Abdera Filter implementation that supports the use of the X-HTTP-Method-Override
+ * header used by GData.
+ */
 public class MethodOverrideFilter 
   implements Filter {
   

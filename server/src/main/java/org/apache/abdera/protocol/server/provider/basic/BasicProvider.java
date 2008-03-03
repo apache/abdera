@@ -25,6 +25,9 @@ import org.apache.abdera.protocol.server.provider.managed.BasicServerConfigurati
 import org.apache.abdera.protocol.server.provider.managed.ManagedProvider;
 import org.apache.abdera.protocol.server.provider.managed.ServerConfiguration;
 
+/**
+ * Provider implementation intended to be used with BasicAdapter implementations
+ */
 public class BasicProvider 
   extends ManagedProvider {
 

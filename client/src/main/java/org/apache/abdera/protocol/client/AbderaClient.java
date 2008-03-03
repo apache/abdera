@@ -87,10 +87,19 @@ public class AbderaClient {
     this(new Abdera(),DEFAULT_USER_AGENT);
   }
   
+  /**
+   * Create an AbderaClient instance using the specified useragent name
+   * @param useragent
+   */
   public AbderaClient(String useragent) {
     this(new Abdera(), useragent);
   }
   
+  /**
+   * Create an AbderaClient instance using the specified Abdera instance and useragent name
+   * @param abdera
+   * @param useragent
+   */
   public AbderaClient(Abdera abdera, String useragent) {
     this.abdera = abdera;
     this.cache = initCache(initCacheFactory());
@@ -108,10 +117,14 @@ public class AbderaClient {
     setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
   }
   
+  /**
+   * Create an AbderaClient instance using the specified Abdera instance
+   * @param abdera
+   */
   public AbderaClient(Abdera abdera) {
     this(abdera,DEFAULT_USER_AGENT);
   }
-    
+
   private CacheFactory initCacheFactory() {
     CacheFactory cacheFactory = 
       (CacheFactory)ServiceUtil.newInstance(
@@ -120,29 +133,51 @@ public class AbderaClient {
         abdera);
     return cacheFactory;
   }
-  
+
+  /**
+   * Returns the client HTTP cache instance
+   */
   public Cache getCache() {
     return cache;
   }
   
+  /**
+   * Initializes the client HTTP cache
+   */
   public Cache initCache(CacheFactory factory) {
     Cache cache = null;
     if (factory != null) cache = factory.getCache(abdera);
     return (cache != null) ? cache : new LRUCache(abdera);
   }
   
+  /**
+   * Sends an HTTP HEAD request to the specified URI.
+   * @param uri The request URI
+   * @param options The request options
+   */
   public ClientResponse head(
     String uri, 
     RequestOptions options) {
       return execute("HEAD", uri, (RequestEntity)null, options);
   }
-  
+
+  /**
+   * Sends an HTTP GET request to the specified URI.
+   * @param uri The request URI
+   * @param options The request options
+   */
   public ClientResponse get(
     String uri, 
     RequestOptions options) {
       return execute("GET", uri, (RequestEntity)null, options);
   }
   
+  /**
+   * Sends an HTTP POST request to the specified URI.
+   * @param uri The request URI
+   * @param provider An EntityProvider implementation providing the payload of the request
+   * @param options The request options
+   */
   public ClientResponse post(
     String uri, 
     EntityProvider provider, 
@@ -156,7 +191,13 @@ public class AbderaClient {
         ), 
         options);
   }
-  
+
+  /**
+   * Sends an HTTP POST request to the specified URI.
+   * @param uri The request URI
+   * @param entity A RequestEntity object providing the payload of the request
+   * @param options The request options
+   */
   public ClientResponse post(
     String uri, 
     RequestEntity entity, 
@@ -164,6 +205,12 @@ public class AbderaClient {
       return execute("POST", uri, entity, options);
   }
 
+  /**
+   * Sends an HTTP POST request to the specified URI.
+   * @param uri The request URI
+   * @param in An InputStream providing the payload of the request
+   * @param options The request options
+   */
   public ClientResponse post(
     String uri, 
     InputStream in, 
@@ -171,6 +218,12 @@ public class AbderaClient {
       return execute("POST", uri, new InputStreamRequestEntity(in), options);
   }
 
+  /**
+   * Sends an HTTP POST request to the specified URI.
+   * @param uri The request URI
+   * @param base An Abdera FOM Document or Element object providing the payload of the request
+   * @param options The request options
+   */
   public ClientResponse post(
     String uri, 
     Base base, 
@@ -184,6 +237,12 @@ public class AbderaClient {
       return execute("POST", uri, new BaseRequestEntity(base, options.isUseChunked()), options);
   }
 
+  /**
+   * Sends an HTTP PUT request to the specified URI.
+   * @param uri The request URI
+   * @param provider An EntityProvider implementation providing the payload of the request
+   * @param options The request options
+   */
   public ClientResponse put(
     String uri, 
     EntityProvider provider, 
@@ -207,6 +266,12 @@ public class AbderaClient {
         options);
   }
   
+  /**
+   * Sends an HTTP PUT request to the specified URI.
+   * @param uri The request URI
+   * @param entity A RequestEntity object providing the payload of the request
+   * @param options The request options
+   */
   public ClientResponse put(
     String uri, 
     RequestEntity entity, 
@@ -214,6 +279,12 @@ public class AbderaClient {
       return execute("PUT", uri, entity, options);
   }
 
+  /**
+   * Sends an HTTP PUT request to the specified URI.
+   * @param uri The request URI
+   * @param in An InputStream providing the payload of the request 
+   * @param options The request options
+   */
   public ClientResponse put(
     String uri, 
     InputStream in, 
@@ -221,6 +292,12 @@ public class AbderaClient {
       return execute("PUT", uri, new InputStreamRequestEntity(in), options);
   }
 
+  /**
+   * Sends an HTTP PUT request to the specified URI.
+   * @param uri The request URI
+   * @param base A FOM Document or Element providing the payload of the request
+   * @param options The request options
+   */
   public ClientResponse put(
       String uri, 
       Base base, 
@@ -242,56 +319,125 @@ public class AbderaClient {
     return execute("PUT", uri, new BaseRequestEntity(base, options.isUseChunked()), options);
   }
       
+  /**
+   * Sends an HTTP DELETE request to the specified URI.
+   * @param uri The request URI
+   * @param options The request options
+   */
   public ClientResponse delete(
     String uri, 
     RequestOptions options) {
       return execute("DELETE", uri, (RequestEntity)null, options);
   }
   
+  /**
+   * Sends an HTTP HEAD request to the specified URI using the default options
+   * @param uri The request URI
+   */
   public ClientResponse head(String uri) {
     return head(uri, getDefaultRequestOptions());
   }
   
+  /**
+   * Sends an HTTP GET request to the specified URI using the default options
+   * @param uri The request URI
+   */
   public ClientResponse get(String uri) {
     return get(uri, getDefaultRequestOptions());
   }
     
+  /**
+   * Sends an HTTP POST request to the specified URI using the default options
+   * @param uri The request URI
+   * @param provider An EntityProvider implementation providing the payload the request
+   */
+  public ClientResponse post(
+    String uri,
+    EntityProvider provider) {
+      return post(uri,provider,getDefaultRequestOptions());
+  }
+  
+  /**
+   * Sends an HTTP POST request to the specified URI using the default options
+   * @param uri The request URI
+   * @param entity A RequestEntity object providing the payload of the request
+   */
   public ClientResponse post(
     String uri, 
     RequestEntity entity) {
     return post(uri, entity, getDefaultRequestOptions());
   }
-  
+
+  /**
+   * Sends an HTTP POST request to the specified URI using the default options
+   * @param uri The request URI
+   * @param in An InputStream providing the payload of the request
+   */
   public ClientResponse post(
     String uri, 
     InputStream in) {
       return post(uri, in, getDefaultRequestOptions());
   }
   
+  /**
+   * Sends an HTTP POST request to the specified URI using the default options
+   * @param uri The request URI
+   * @param base A FOM Document or Element providing the payload of the request
+   */
   public ClientResponse post(
     String uri, 
     Base base) {
       return post(uri, base, getDefaultRequestOptions());
   }
 
+  /**
+   * Sends an HTTP PUT request to the specified URI using the default options
+   * @param uri The request URI
+   * @param provider An EntityProvider implementation providing the payload of the request
+   */
+  public ClientResponse put(
+    String uri,
+    EntityProvider provider) {
+      return put(uri,provider,getDefaultRequestOptions());
+  }
+  
+  /**
+   * Sends an HTTP PUT request to the specified URI using the default options
+   * @param uri The request URI
+   * @param entity A RequestEntity object providing the payload of the request
+   */
   public ClientResponse put(
     String uri, 
     RequestEntity entity) {
       return put(uri, entity, getDefaultRequestOptions());
   }
   
+  /**
+   * Sends an HTTP PUT request to the specified URI using the default options
+   * @param uri The request URI
+   * @param in An InputStream providing the payload of the request 
+   */
   public ClientResponse put(
     String uri, 
     InputStream in) {
       return put(uri, in, getDefaultRequestOptions());
   }
   
+  /**
+   * Sends an HTTP PUT request to the specified URI using the default options
+   * @param uri The request URI
+   * @param base A FOM Document or Element providing the payload of the request
+   */
   public ClientResponse put(
     String uri, 
     Base base) {
       return put(uri, base, getDefaultRequestOptions());
   }
 
+  /**
+   * Sends an HTTP DELETE request to the specified URI using the default options
+   * @param uri The request URI
+   */
   public ClientResponse delete(
     String uri) {
       return delete(uri, getDefaultRequestOptions());
@@ -311,6 +457,7 @@ public class AbderaClient {
   
   /**
    * Unregister a specific authentication scheme
+   * @param name The name of the authentication scheme (e.g. "basic", "digest", etc)
    */
   public static void unregisterScheme(
     String name) {
@@ -318,21 +465,33 @@ public class AbderaClient {
   }
   
   /**
-   * Unregister multiple schemes
+   * Unregister multiple HTTP authentication schemes
    */
   public static void unregisterScheme(String... names) {
     for (String name : names) unregisterScheme(name);
   }
   
+  /**
+   * Register the specified TrustManager for SSL support on the default port (443)
+   * @param trustManager The TrustManager implementation
+   */
   public static void registerTrustManager(
     TrustManager trustManager) {
       registerTrustManager(trustManager,443);
   }
   
+  /**
+   * Register the default TrustManager for SSL support on the default port (443)
+   */
   public static void registerTrustManager() {
     registerTrustManager(443);
   }
   
+  /**
+   * Register the specified TrustManager for SSL support on the specified port
+   * @param trustManager The TrustManager implementation
+   * @param port The port 
+   */
   public static void registerTrustManager(
     TrustManager trustManager, 
     int port) {
@@ -341,12 +500,19 @@ public class AbderaClient {
       registerFactory(f,port);
   }
   
+  /**
+   * Register the default trust manager on the specified port
+   * @param port The port
+   */
   public static void registerTrustManager(int port) {
     SimpleSSLProtocolSocketFactory f = 
       new SimpleSSLProtocolSocketFactory();
     registerFactory(f,port);
   }
   
+  /**
+   * Register the specified secure socket factory on the specified port
+   */
   public static void registerFactory(
     SecureProtocolSocketFactory factory, 
     int port) {
@@ -386,6 +552,14 @@ public class AbderaClient {
     return false;
   }
   
+  /**
+   * Sends the specified method request to the specified URI. This can be used
+   * to send extension HTTP methods to a server (e.g. PATCH, LOCK, etc)
+   * @param method The HTTP method
+   * @param uri The request URI
+   * @param base A FOM Document and Element providing the payload for the request
+   * @param options The Request Options
+   */
   public ClientResponse execute(
     String method,
     String uri,
@@ -397,7 +571,42 @@ public class AbderaClient {
         new BaseRequestEntity(base),
         options);
   }
+
+  /**
+   * Sends the specified method request to the specified URI. This can be used
+   * to send extension HTTP methods to a server (e.g. PATCH, LOCK, etc)
+   * @param method The HTTP method
+   * @param uri The request URI
+   * @param provider An EntityProvider implementation providing the payload of the request
+   * @param options The Request Options
+   */
+  public ClientResponse execute(
+    String method,
+    String uri,
+    EntityProvider provider,
+    RequestOptions options) {
+      if (options == null) 
+        options = getDefaultRequestOptions();
+      return execute(
+        method,
+        uri,
+        new EntityProviderRequestEntity(
+          abdera,
+          provider,
+          options.isUseChunked()
+        ),
+        options
+      );
+  }
     
+  /**
+   * Sends the specified method request to the specified URI. This can be used
+   * to send extension HTTP methods to a server (e.g. PATCH, LOCK, etc)
+   * @param method The HTTP method
+   * @param uri The request URI
+   * @param in An InputStream providing the payload of the request
+   * @param options The Request Options
+   */
   public ClientResponse execute(
     String method,
     String uri,
@@ -433,6 +642,14 @@ public class AbderaClient {
     return disp;
   }
   
+  /**
+   * Sends the specified method request to the specified URI. This can be used
+   * to send extension HTTP methods to a server (e.g. PATCH, LOCK, etc)
+   * @param method The HTTP method
+   * @param uri The request URI
+   * @param entity A RequestEntity object providing the payload for the request
+   * @param options The Request Options
+   */
   public ClientResponse execute(
     String method, 
     String uri, 
@@ -517,10 +734,16 @@ public class AbderaClient {
       return response;
   }
   
+  /**
+   * Get a copy of the default request options
+   */
   public RequestOptions getDefaultRequestOptions() {
     return MethodHelper.createDefaultRequestOptions();
   }
   
+  /**
+   * Add authentication credentials
+   */
   public AbderaClient addCredentials(
     String target,
     String realm,
@@ -545,12 +768,21 @@ public class AbderaClient {
     return this;
   }
 
+  /**
+   * Configure the client to use the default authentication scheme settings
+   */
   public AbderaClient setAuthenticationSchemeDefaults() {
     List authPrefs = AuthPolicy.getDefaultAuthPrefs();
     client.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
     return this;
   }
   
+  /**
+   * When multiple authentication schemes are supported by a server, the client
+   * will automatically select a scheme based on the configured priority.  For 
+   * instance, to tell the client to prefer "digest" over "basic", set the 
+   * priority by calling setAuthenticationSchemePriority("digest","basic")
+   */
   public AbderaClient setAuthenticationSchemePriority(String... scheme) {
     List authPrefs = java.util.Arrays.asList(scheme);
     client.getParams().setParameter(
@@ -559,8 +791,14 @@ public class AbderaClient {
     return this;
   }
   
-  public List getAuthenticationSchemePriority() {
-    return (List)client.getParams().getParameter(AuthPolicy.AUTH_SCHEME_PRIORITY);
+  /**
+   * Returns the current listing of preferred authentication schemes, in order
+   * of preference
+   * @see setAuthenticationSchemePriority 
+   */
+  public String[] getAuthenticationSchemePriority() {
+    List list = (List)client.getParams().getParameter(AuthPolicy.AUTH_SCHEME_PRIORITY);
+    return (String[])list.toArray(new String[list.size()]);
   }
   
   /**
@@ -595,7 +833,6 @@ public class AbderaClient {
   /**
    * Return the maximum number of connections allowed for a single host
    */
-  
   @SuppressWarnings("unchecked")
   public int getMaxConnectionsPerHost() {
     Map<HostConfiguration,Integer> m = (Map<HostConfiguration,Integer>) 

@@ -20,6 +20,15 @@ package org.apache.abdera.protocol.server.provider.managed;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.impl.AbstractWorkspaceProvider;
 
+/**
+ * The ManagedProvider uses *.properties files discovered in the webapp classpath
+ * to configure CollectionAdapter instances.  The ManagedWorkspace implementation
+ * will automatically discover the *.properties files and will use those to create
+ * the appropriate CollectionAdapter objects.
+ * 
+ * Properties files must be located in the classpath at /abdera/adapter/*.properties.
+ * Refer to the Abdera Server Implementation Guide for additional details
+ */
 public abstract class ManagedProvider 
   extends AbstractWorkspaceProvider {
   

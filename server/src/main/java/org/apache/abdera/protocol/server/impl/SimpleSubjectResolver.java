@@ -26,6 +26,9 @@ import org.apache.abdera.protocol.Request;
 import org.apache.abdera.protocol.Resolver;
 import org.apache.abdera.protocol.server.RequestContext;
 
+/**
+ * The default subject resolver implementation
+ */
 public class SimpleSubjectResolver 
   implements Resolver<Subject> {
 

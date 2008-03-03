@@ -35,6 +35,12 @@ import org.apache.abdera.protocol.server.provider.managed.FeedConfiguration;
 import org.apache.abdera.protocol.server.provider.managed.ManagedCollectionAdapter;
 import org.apache.abdera.util.MimeTypeHelper;
 
+/**
+ * The BasicAdapter provides a simplistic interface for working with Atompub 
+ * collections with a restricted set of options/features. The idea of the 
+ * basic adapter is to make it easy to provide a minimally capable Atompub
+ * server
+ */
 public abstract class BasicAdapter 
   extends ManagedCollectionAdapter {
 
@@ -177,8 +183,7 @@ public abstract class BasicAdapter
 
   public ResponseContext extensionRequest(RequestContext request) {
     return ProviderHelper.notallowed(
-      request, 
-      "Method Not Allowed", 
+      request,  
       ProviderHelper.getDefaultMethods(request));
   }
   

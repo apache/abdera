@@ -29,6 +29,11 @@ import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.WorkspaceManager;
 
+/**
+ * The DefaultProvider is the default Provider implementation for Abdera.  It
+ * supports multiple collections and assumes a simple http://.../{collection}/{entry}
+ * URL structure.  Media-link entries are not supported.
+ */
 public class DefaultProvider extends AbstractProvider {
 
   protected WorkspaceManager workspaceManager;

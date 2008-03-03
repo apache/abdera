@@ -57,7 +57,25 @@ public abstract class AbstractEntityCollectionAdapter<T>
   extends AbstractCollectionAdapter {
   private final static Log log = LogFactory.getLog(AbstractEntityCollectionAdapter.class);
 
-  public abstract T postEntry(String title, IRI id, String summary, Date updated, List<Person> authors, Content content, RequestContext request) throws ResponseContextException;
+  /**
+   * Create a new entry
+   * @param title The title of the entry (assumes that type="text")
+   * @param id The value of the atom:id element
+   * @param summary The summary of the entry
+   * @param updated The value of the atom:updated element
+   * @param authors Listing of atom:author elements
+   * @param context The content of the entry
+   * @param request The request context
+   */
+  public abstract T postEntry(
+    String title, 
+    IRI id, 
+    String summary, 
+    Date updated, 
+    List<Person> authors, 
+    Content content, 
+    RequestContext request) 
+      throws ResponseContextException;
   
   @Override
   public ResponseContext postMedia(RequestContext request) {
@@ -100,9 +118,22 @@ public abstract class AbstractEntityCollectionAdapter<T>
     }
   }
 
-  public void putMedia(T entryObj, MimeType contentType, String slug,
-                       InputStream inputStream, RequestContext request)
-    throws ResponseContextException {
+  /**
+   * Update a media resource.  By default this method is not allowed. Implementations
+   * must override this method to support media resource updates
+   * @param entryObj
+   * @param contentType The mime-type of the media resource
+   * @param slug The value of the Slug request header
+   * @param inputStream An input stream providing access to the request payload
+   * @param request The request context
+   */
+  public void putMedia(
+    T entryObj, 
+    MimeType contentType, 
+    String slug,
+    InputStream inputStream, 
+    RequestContext request)
+      throws ResponseContextException {
     throw new ResponseContextException(ProviderHelper.notallowed(request));
   }
 
@@ -138,33 +169,55 @@ public abstract class AbstractEntityCollectionAdapter<T>
     }
   }
 
-  protected String getLink(T entryObj, IRI feedIri, RequestContext request) throws ResponseContextException {
+  protected String getLink(
+    T entryObj, 
+    IRI feedIri, 
+    RequestContext request) 
+      throws ResponseContextException {
     return getLink(getName(entryObj), entryObj, feedIri, request);
   }
 
-  protected String getLink(String name, T entryObj, IRI feedIri, RequestContext request) {
-    feedIri = feedIri.trailingSlash();
-    IRI entryIri = feedIri.resolve(UrlEncoding.encode(name, Profile.PATH.filter()));
+  protected String getLink(
+    String name, 
+    T entryObj, 
+    IRI feedIri, 
+    RequestContext request) {
+      feedIri = feedIri.trailingSlash();
+      IRI entryIri = feedIri.resolve(UrlEncoding.encode(name, Profile.PATH.filter()));
     
-    String link = entryIri.toString();
+      String link = entryIri.toString();
     
-    String qp = getQueryParameters(entryObj, request);
-    if (qp != null && !"".equals(qp)) {
-      StringBuilder sb = new StringBuilder();
-      sb.append(link)
-        .append("?")
-        .append(qp);
-      link = sb.toString();
-    }
+      String qp = getQueryParameters(entryObj, request);
+      if (qp != null && !"".equals(qp)) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(link)
+          .append("?")
+          .append(qp);
+        link = sb.toString();
+      }
     
-    return link;
+      return link;
   }
 
   protected String getQueryParameters(T entryObj, RequestContext request) {
     return null;
   }
 
-  public T postMedia(MimeType mimeType, String slug, InputStream inputStream, RequestContext request) throws ResponseContextException {
+  /**
+   * Post a new media resource to the collection.  By default, this method is
+   * not supported. Implementations must override this method to support posting
+   * media resources
+   * @param mimeType The mime-type of the resource
+   * @param slug The value of the Slug header
+   * @param inputStream An InputStream providing access to the request payload
+   * @param request The request context
+   */
+  public T postMedia(
+    MimeType mimeType, 
+    String slug, 
+    InputStream inputStream, 
+    RequestContext request) 
+      throws ResponseContextException {
     throw new UnsupportedOperationException();
   }
 
@@ -185,7 +238,15 @@ public abstract class AbstractEntityCollectionAdapter<T>
     }
   }
 
-  public abstract void deleteEntry(String resourceName, RequestContext request) throws ResponseContextException;
+  /**
+   * Delete an entry
+   * @param resourceName The entry to delete
+   * @param request The request context
+   */
+  public abstract void deleteEntry(
+    String resourceName, 
+    RequestContext request) 
+      throws ResponseContextException;
 
   public ResponseContext deleteMedia(RequestContext request) {
     String resourceName = getResourceName(request);
@@ -204,24 +265,52 @@ public abstract class AbstractEntityCollectionAdapter<T>
     }
   }
 
-  public void deleteMedia(String resourceName, RequestContext request) throws ResponseContextException {
+  /**
+   * Delete a media resource.  By default this method is not supported. Implementations
+   * must override this method to support deleting media resources
+   */
+  public void deleteMedia(
+    String resourceName, 
+    RequestContext request) 
+      throws ResponseContextException {
     throw new ResponseContextException(ProviderHelper.notsupported(request));
   }
 
-  public List<Person> getAuthors(T entry, RequestContext request) throws ResponseContextException {
+  /**
+   * Get the authors for an entry.  By default this returns null.  Implementations
+   * must override in order to providing a listing of authors for an entry
+   */
+  public List<Person> getAuthors(
+    T entry, 
+    RequestContext request) 
+      throws ResponseContextException {
     return null;
   }
   
-  public abstract Object getContent(T entry, RequestContext request) throws ResponseContextException;
+  /**
+   * Get the content for the entry.
+   */
+  public abstract Object getContent(
+    T entry, 
+    RequestContext request) 
+      throws ResponseContextException;
   
   // GET, POST, PUT, DELETE
   
+  /**
+   * Get the content-type for the entry. By default this operation is not supported.
+   */
   public String getContentType(T entry) {
     throw new UnsupportedOperationException();
   }
   
-  public abstract Iterable<T> getEntries(RequestContext request) throws ResponseContextException;
-
+  /**
+   * Get the listing of entries requested 
+   */
+  public abstract Iterable<T> getEntries(
+    RequestContext request) 
+      throws ResponseContextException;
+  
   public ResponseContext getEntry(RequestContext request) {
     try {
       Entry entry = getEntryFromCollectionProvider(request);
@@ -235,7 +324,15 @@ public abstract class AbstractEntityCollectionAdapter<T>
     }
   }
 
-  public abstract T getEntry(String resourceName, RequestContext request) throws ResponseContextException;
+  /**
+   * Get a specific entry
+   * @param resourceName The entry to get
+   * @param request The request context
+   */
+  public abstract T getEntry(
+    String resourceName, 
+    RequestContext request) 
+      throws ResponseContextException;
 
   public ResponseContext headEntry(RequestContext request) {
     try {
@@ -278,7 +375,14 @@ public abstract class AbstractEntityCollectionAdapter<T>
     }
   }
 
-  protected void addFeedDetails(Feed feed, RequestContext request) throws ResponseContextException {
+  /**
+   * Adds the selected entries to the Feed document. By default, this will set
+   * the feed's atom:updated element to the current date and time
+   */
+  protected void addFeedDetails(
+    Feed feed, 
+    RequestContext request) 
+      throws ResponseContextException {
     feed.setUpdated(new Date());
     
     Iterable<T> entries = getEntries(request);
@@ -332,7 +436,15 @@ public abstract class AbstractEntityCollectionAdapter<T>
     }
   }
 
-  protected ResponseContext buildGetMediaResponse(String id, T entryObj) throws ResponseContextException {
+  /**
+   * Creates a ResponseContext for a GET media request.  By default, this returns
+   * a MediaResponseContext containing the media resource.  The last-modified
+   * header will be set.
+   */
+  protected ResponseContext buildGetMediaResponse(
+    String id, 
+    T entryObj) 
+      throws ResponseContextException {
     Date updated = getUpdated(entryObj);
     MediaResponseContext ctx = new MediaResponseContext(getMediaStream(entryObj), 
                                                         updated, 
@@ -341,20 +453,42 @@ public abstract class AbstractEntityCollectionAdapter<T>
     ctx.setEntityTag(EntityTag.generate(id, AtomDate.format(updated)));
     return ctx;
   }
+  
+  /**
+   * Get the name of the media resource.  By default this method is unsupported.
+   * Implementations must override.
+   */
   public String getMediaName(T entry) throws ResponseContextException {
     throw new UnsupportedOperationException();
   }
 
+  /**
+   * Get an input stream for the media resource.  By default this method is unsupported.
+   * Implementations must override.
+   */
   public InputStream getMediaStream(T entry) throws ResponseContextException {
     throw new UnsupportedOperationException();
   }
   
+  /**
+   * Get the name of the entry resource (used to construct links)
+   */
   public abstract String getName(T entry) throws ResponseContextException;
 
+  /**
+   * Get the title fo the entry 
+   */
   public abstract String getTitle(T entry) throws ResponseContextException;
 
+  /**
+   * Get the value to use in the atom:updated element
+   */
   public abstract Date getUpdated(T entry) throws ResponseContextException;
 
+  /**
+   * True if this entry is a media-link entry. By default this always returns
+   * false. Implementations must override to support media link entries
+   */
   public boolean isMediaEntry(T entry) throws ResponseContextException {
     return false;
   }
@@ -405,15 +539,43 @@ public abstract class AbstractEntityCollectionAdapter<T>
     
   }
 
-  protected String getFeedIriForEntry(T entryObj, RequestContext request) {
-    return getHref(request);
+  /**
+   * Get the Feed IRI
+   */
+  protected String getFeedIriForEntry(
+    T entryObj, 
+    RequestContext request) {
+      return getHref(request);
   }
 
-  public abstract void putEntry(T entry, String title, Date updated, 
-                                List<Person> authors, String summary, 
-                                Content content, RequestContext request) throws ResponseContextException;
+  /**
+   * Update an entry.
+   * @param entry The entry to update
+   * @param title The new title of the entry
+   * @param updated The new value of atom:updated
+   * @param authors To new listing of authors
+   * @param summary The new summary
+   * @param content The new content
+   * @param request The request context
+   */
+  public abstract void putEntry(
+    T entry, 
+    String title, 
+    Date updated, 
+    List<Person> authors, 
+    String summary, 
+    Content content, 
+    RequestContext request) 
+      throws ResponseContextException;
 
-  protected void addContent(Entry e, T doc, RequestContext request) throws ResponseContextException {
+  /**
+   * Adds the atom:content element to an entry
+   */
+  protected void addContent(
+    Entry e, 
+    T doc, 
+    RequestContext request) 
+      throws ResponseContextException {
     Object content = getContent(doc, request);
 
     if (content instanceof Content) {
@@ -423,6 +585,13 @@ public abstract class AbstractEntityCollectionAdapter<T>
     }
   }
 
+  /**
+   * Add the details to an entry
+   * @param request The request context
+   * @param e The entry
+   * @param feedIri The feed IRI
+   * @param entryObj
+   */
   protected String addEntryDetails(RequestContext request, 
                                    Entry e, 
                                    IRI feedIri, 
@@ -448,11 +617,23 @@ public abstract class AbstractEntityCollectionAdapter<T>
     return link;
   }
 
-
-  public Text getSummary(T entry, RequestContext request) throws ResponseContextException {
+  /**
+   * Get the summary of the entry. By default this returns null.
+   */
+  public Text getSummary(
+    T entry, 
+    RequestContext request) 
+      throws ResponseContextException {
     return null;
   }
 
+  /**
+   * Add media content details to a media-link entry
+   * @param feedIri The feed iri
+   * @param entry The entry object
+   * @param entryObj
+   * @param request The request context
+   */
   protected String addMediaContent(IRI feedIri, 
                                    Entry entry, 
                                    T entryObj, 
@@ -467,6 +648,10 @@ public abstract class AbstractEntityCollectionAdapter<T>
     return mediaLink;
   }
 
+  /**
+   * Create a media entry
+   * @param request The request context
+   */
   protected ResponseContext createMediaEntry(RequestContext request) {
     try {
       T entryObj = postMedia(request.getContentType(), 
@@ -488,6 +673,10 @@ public abstract class AbstractEntityCollectionAdapter<T>
     }
   }
 
+  /**
+   * Create a regular entry
+   * @param request The request context
+   */
   protected ResponseContext createNonMediaEntry(RequestContext request) throws IOException {
     try {
       Entry entry = getEntryFromRequest(request);
@@ -542,6 +731,13 @@ public abstract class AbstractEntityCollectionAdapter<T>
     return buildEntry(entryObj, entry, feedIri, request);
   }
 
+  /**
+   * Build the entry from the source object
+   * @param entryObj The source object
+   * @param entry The entry to build
+   * @param feedIri The feed IRI
+   * @param request The request context
+   */
   private Entry buildEntry(T entryObj, Entry entry, IRI feedIri, RequestContext request)
     throws ResponseContextException {
     addEntryDetails(request, entry, feedIri, entryObj);

@@ -47,6 +47,10 @@ import org.apache.abdera.protocol.server.context.StreamWriterResponseContext;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.writer.StreamWriter;
 
+/**
+ * Base Provider implementation that provides the core implementation details 
+ * for all Providers.  This class provides the basic request routing logic
+ */
 public abstract class AbstractProvider 
   implements Provider {
   

@@ -32,6 +32,10 @@ import org.apache.abdera.util.CompressionUtil;
 import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 import org.apache.abdera.writer.Writer;
 
+/**
+ * Abdera Filter implementation that selectively applies compression to the 
+ * response payload
+ */
 public class CompressionFilter 
   implements Filter {
     

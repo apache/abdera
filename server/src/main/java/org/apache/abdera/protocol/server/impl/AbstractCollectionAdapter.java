@@ -33,6 +33,10 @@ import org.apache.abdera.util.EntityTag;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * Base CollectionAdapter implementation that provides a number of helper 
+ * utility methods for adapter implementations.
+ */
 public abstract class AbstractCollectionAdapter 
   implements CollectionAdapter, 
              MediaCollectionAdapter,
@@ -118,6 +122,11 @@ public abstract class AbstractCollectionAdapter
 
   public abstract String getId(RequestContext request);
   
+  /**
+   * Creates the ResponseContext for a newly created entry.  By default, a
+   * BaseResponseContext is returned.  The Location, Content-Location, Etag and
+   * status are set appropriately.
+   */
   protected ResponseContext buildCreateEntryResponse(String link, Entry entry) {
     BaseResponseContext<Entry> rc = new BaseResponseContext<Entry>(entry);
     rc.setLocation(link);
@@ -127,10 +136,20 @@ public abstract class AbstractCollectionAdapter
     return rc;
   }
 
+  /**
+   * Creates the ResponseContext for a newly created entry.  By default, a
+   * BaseResponseContext is returned.  The Location, Content-Location, Etag and
+   * status are set appropriately.
+   */
   protected ResponseContext buildPostMediaEntryResponse(String link, Entry entry) {
     return buildCreateEntryResponse(link, entry);
   }
 
+  /**
+   * Creates the ResponseContext for a GET entry request.  By default, a BaseResponseContext
+   * is returned.  The Entry will contain an appropriate atom:source element
+   * and the Etag header will be set.
+   */
   protected ResponseContext buildGetEntryResponse(RequestContext request, Entry entry) throws ResponseContextException {
     Feed feed = createFeedBase(request);
     entry.setSource(feed.getAsSource());
@@ -140,6 +159,10 @@ public abstract class AbstractCollectionAdapter
     return rc;
   }
   
+  /**
+   * Creates the ResponseContext for a HEAD entry request.  By default, an EmptyResponseContext
+   * is returned.  The Etag header will be set.
+   */  
   protected ResponseContext buildHeadEntryResponse(RequestContext request, 
                                                    String id,
                                                    Date updated) throws ResponseContextException {
@@ -148,6 +171,10 @@ public abstract class AbstractCollectionAdapter
     return rc;
   }
 
+  /**
+   * Creates the ResponseContext for a GET feed request.  By default, a BaseResponseContext
+   * is returned.  The Etag header will be set.
+   */
   protected ResponseContext buildGetFeedResponse(Feed feed) {
     Document<Feed> document = feed.getDocument();
     AbstractResponseContext rc = new BaseResponseContext<Document<Feed>>(document);
@@ -173,6 +200,9 @@ public abstract class AbstractCollectionAdapter
     return e.getResponseContext();
   }
 
+  /**
+   * Create the base feed for the requested collection.
+   */
   protected Feed createFeedBase(RequestContext request) throws ResponseContextException {
     Factory factory = request.getAbdera().getFactory();
     Feed feed = factory.newFeed();
@@ -185,6 +215,9 @@ public abstract class AbstractCollectionAdapter
     return feed;
   }
   
+  /**
+   * Retrieves the FOM Entry object from the request payload. 
+   */
   @SuppressWarnings("unchecked")
   protected Entry getEntryFromRequest(RequestContext request) throws ResponseContextException {
     Abdera abdera = request.getAbdera();
@@ -204,6 +237,9 @@ public abstract class AbstractCollectionAdapter
     return entry_doc.getRoot();
   }
 
+  /**
+   * Get's the name of the specific resource requested
+   */
   protected String getResourceName(RequestContext request) {
     String path = request.getTargetPath();
     int q = path.indexOf("?");

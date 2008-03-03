@@ -22,9 +22,15 @@ import java.util.Date;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.util.EntityTag;
 
+/**
+ * Base interface for an Atompub protocol response message
+ */
 public interface Response
   extends Message {
 
+  /**
+   * High level classifications of response types
+   */
   public static enum ResponseType {
     SUCCESS, REDIRECTION, CLIENT_ERROR, SERVER_ERROR, UNKNOWN;
     
@@ -38,34 +44,76 @@ public interface Response
     
   }
   
+  /**
+   * Get the Entity Tag returned by the server
+   */
   EntityTag getEntityTag();
     
+  /**
+   * Get the response type classification
+   */
   ResponseType getType();
   
+  /**
+   * Get the specific response status code
+   */
   int getStatus();
   
+  /**
+   * Get the response status text
+   */
   String getStatusText();
   
+  /**
+   * Get the value of the Last-Modified response header
+   */
   Date getLastModified();
   
+  /**
+   * Get the value of the Content-Length response header
+   */
   long getContentLength();
   
+  /**
+   * Get the value of the Allow response header
+   */
   String getAllow();
   
+  /**
+   * Get the value of the Location response header
+   */
   IRI getLocation();
   
+  /**
+   * True if the Cache-Control header specifies the private directive
+   */
   boolean isPrivate();
   
+  /**
+   * True if the Cache-Control header specified the public directive
+   */
   boolean isPublic();
   
+  /**
+   * True if the Cache-Control header specifies the must-revalidate directive
+   */
   boolean isMustRevalidate();
   
+  /**
+   * True if the Cache-Control header specifies the proxy-revalidate directive
+   */
   boolean isProxyRevalidate();
   
   long getSMaxAge();
   
+  /**
+   * Get the age of this response as specified by the server
+   */
   long getAge();
   
+  /**
+   * Get the date/time this response expires
+   */
   Date getExpires();
   
   String[] getNoCacheHeaders();

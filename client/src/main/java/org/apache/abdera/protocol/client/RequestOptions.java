@@ -39,6 +39,10 @@ import org.apache.abdera.util.EntityTag;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
 
+/**
+ * The RequestOptions class allows a variety of options affecting the execution
+ * of the request to be modified. 
+ */
 public class RequestOptions
   extends AbstractRequest 
   implements Request {
@@ -57,33 +61,59 @@ public class RequestOptions
   
   public RequestOptions() {}
 
+  /**
+   * Create the RequestOptions object with the specified If-Modified-Since header value
+   * @param ifModifiedSince
+   */
   public RequestOptions(Date ifModifiedSince) {
     this();
     setIfModifiedSince(ifModifiedSince);
   }
-  
+
+  /**
+   * Create the RequestOptions object with the specified If-None-Match header value
+   * @param IfNoneMatch
+   */
   public RequestOptions(String ifNoneMatch) {
     this();
     setIfNoneMatch(ifNoneMatch);
   }
   
+  /**
+   * Create the RequestOptions object with the specified If-None-Match header value
+   * @param IfNoneMatch
+   */
   public RequestOptions(String... ifNoneMatch) {
     this();
     setIfNoneMatch(ifNoneMatch);
   }
   
+  /**
+   * Create the RequestOptions object with the specified If-Modified-Since and If-None-Match header values
+   * @param ifModifiedSince
+   * @param IfNoneMatch
+   */
   public RequestOptions(Date ifModifiedSince, String ifNoneMatch) {
     this();
     setIfModifiedSince(ifModifiedSince);
     setIfNoneMatch(ifNoneMatch);
   }
   
+  /**
+   * Create the RequestOptions object with the specified If-Modified-Since and If-None-Match header values
+   * @param ifModifiedSince
+   * @param IfNoneMatch
+   */
   public RequestOptions(Date ifModifiedSince, String... ifNoneMatch) {
     this();
     setIfModifiedSince(ifModifiedSince);
     setIfNoneMatch(ifNoneMatch);
   }
   
+  /**
+   * Create the RequestOptions object
+   * @param no_cache True if the request will indicate that cached responses should not be returned
+   */
   public RequestOptions(boolean no_cache) {
     this();
     setNoCache(no_cache);

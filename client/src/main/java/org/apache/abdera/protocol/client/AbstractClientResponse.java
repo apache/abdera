@@ -38,6 +38,9 @@ import org.apache.abdera.util.EntityTag;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
 
+/**
+ * Abstract base class for a ClientResponse
+ */
 public abstract class AbstractClientResponse
   extends AbstractResponse
   implements ClientResponse {
@@ -63,23 +66,42 @@ public abstract class AbstractClientResponse
     return parser;
   }
   
+  /**
+   * Get the response payload as a parsed Abdera FOM Document
+   */
   public <T extends Element>Document<T> getDocument() 
     throws ParseException {
       return getDocument(getParser());
   }
   
+  /**
+   * Get the response payload as a parsed Abdera FOM Document using
+   * the specified parser options
+   * @param options The parser options
+   */
   public <T extends Element>Document<T> getDocument(
     ParserOptions options) 
       throws ParseException {
     return getDocument(getParser(), options);
   }
 
+  /**
+   * Get the response payload as a parsed Abdera FOM Document
+   * using the specified parser
+   * @param parser The parser
+   */
   public <T extends Element>Document<T> getDocument(
     Parser parser) 
       throws ParseException {
     return getDocument(parser, parser.getDefaultParserOptions());
   }
   
+  /**
+   * Get the response payload as a parsed Abdera FOM Document using
+   * the specified parser and parser options
+   * @param parser The parser
+   * @param options The parser options
+   */
   public <T extends Element>Document<T> getDocument(
     Parser parser, 
     ParserOptions options) 
@@ -110,25 +132,41 @@ public abstract class AbstractClientResponse
       throw new ParseException(e);
     }
   }
-  
+
+  /**
+   * Get the response payload as an input stream
+   */
   public InputStream getInputStream() throws IOException {
     return in;
   }
 
+  /**
+   * Set the response input stream (used internally by Abdera)
+   */
   public void setInputStream(InputStream in) {
     this.in = in;
   }
-  
+
+  /**
+   * Get the response payload as a reader (assumed UTF-8 charset)
+   */
   public Reader getReader() throws IOException {
     String charset = getCharacterEncoding();
     return getReader(charset != null ? charset : "UTF-8");
   }
   
+  /**
+   * Get the response payload as a reader using the specified charset
+   * @param charset The character set encoding
+   */
   public Reader getReader(String charset) throws IOException {
     if (charset == null) charset = "UTF-8";
     return new InputStreamReader(getInputStream(),charset);
   }
 
+  /**
+   * Return the date returned by the server in the response
+   */
   public Date getServerDate() {
     if (response_date == null) 
       response_date = initResponseDate();
@@ -141,6 +179,9 @@ public abstract class AbstractClientResponse
       CacheControlUtil.parseCacheControl(cc, this);
   }
   
+  /**
+   * Get the character set encoding specified by the server in the Content-Type header
+   */
   public String getCharacterEncoding() {
     String charset = null;
     try {

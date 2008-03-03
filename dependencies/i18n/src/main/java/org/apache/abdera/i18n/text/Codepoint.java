@@ -20,6 +20,9 @@ package org.apache.abdera.i18n.text;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 
+/**
+ * Represents a single Unicode Codepoint
+ */
 public class Codepoint
   implements Serializable, 
              Cloneable,
@@ -30,6 +33,9 @@ public class Codepoint
   private static final String DEFAULT_ENCODING = "UTF-8";
   private final int value;
 
+  /**
+   * Create a Codepoint from a byte array using the default encoding (UTF-8)
+   */
   public Codepoint(byte[] bytes) {
     try {
       this.value = valueFromCharSequence(new String(bytes,DEFAULT_ENCODING));
@@ -38,6 +44,9 @@ public class Codepoint
     }
   }
   
+  /**
+   * Create a Codepoint from a byte array with the specified charset encoding. Length must equal 1
+   */
   public Codepoint(
     byte[] bytes, 
     String encoding) 
@@ -45,6 +54,9 @@ public class Codepoint
     this.value = valueFromCharSequence(new String(bytes,encoding));
   }
   
+  /**
+   * Create a Codepoint from a CharSequence. Length must equal 1
+   */
   public Codepoint(CharSequence value) {
     this(valueFromCharSequence(value));
   }
@@ -61,18 +73,30 @@ public class Codepoint
     }
   }
   
+  /**
+   * Create a codepoint from a single char
+   */
   public Codepoint(char value) {
     this((int)value);
   }
-  
+
+  /**
+   * Create a codepoint from a surrogate pair
+   */
   public Codepoint(char high, char low) {
     this(CharUtils.toSupplementary(high, low).getValue());
   }
   
+  /**
+   * Create a codepoint as a copy of another codepoint
+   */
   public Codepoint(Codepoint codepoint) {
     this(codepoint.value);
   }
   
+  /**
+   * Create a codepoint from a specific integer value
+   */
   public Codepoint(int value) {
     if (value < 0) 
       throw new IllegalArgumentException(
@@ -80,20 +104,65 @@ public class Codepoint
     this.value = value;
   }
   
+  /**
+   * The codepoint value
+   */
   public int getValue() {
     return value;
   }
   
+  /**
+   * True if this codepoint is supplementary
+   */
   public boolean isSupplementary() {
     return CharUtils.isSupplementary(value);
   }
-  
+
+  /**
+   * True if this codepoint is a low surrogate
+   */
   public boolean isLowSurrogate() {
     return CharUtils.isLowSurrogate((char)value);
   }
   
+  /**
+   * True if this codepoint is a high surrogate
+   */
   public boolean isHighSurrogate() {
     return CharUtils.isHighSurrogate((char)value);
+  }
+  
+  /**
+   * Get the high surrogate of this Codepoint
+   */
+  public char getHighSurrogate() {
+    return CharUtils.getHighSurrogate(value);
+  }
+  
+  /**
+   * Get the low surrogate of this Codepoint
+   */
+  public char getLowSurrogate() {
+    return CharUtils.getLowSurrogate(value);
+  }
+  
+  /**
+   * True if this Codepoint is a bidi control char
+   */
+  public boolean isBidi() {
+    return CharUtils.isBidi(value);
+  }
+  
+  public boolean isDigit() {
+    return CharUtils.isDigit(value);
+  }
+
+  public boolean isAlpha() {
+    return CharUtils.isAlpha(value);
+  }
+  
+  public boolean isAlphaDigit() {
+    return CharUtils.isAlpha(value);
   }
   
   public int compareTo(Codepoint o) {
@@ -109,6 +178,10 @@ public class Codepoint
     return toString().toCharArray();
   }
   
+  /**
+   * Get the number of chars necessary to represent this codepoint.
+   * Returns 2 if this is a supplementary codepoint
+   */
   public int getCharCount() {
     return toChars().length;
   }
@@ -166,11 +239,17 @@ public class Codepoint
     }
   }
   
+  /**
+   * Get the next codepoint
+   */
   public Codepoint next() {
     if (value == 0x10ffff) throw new IndexOutOfBoundsException();
     return new Codepoint(value + 1);
   }
   
+  /**
+   * Get the previous codepoint
+   */
   public Codepoint previous() {
     if (value == 0) throw new IndexOutOfBoundsException();
     return new Codepoint(value - 1);

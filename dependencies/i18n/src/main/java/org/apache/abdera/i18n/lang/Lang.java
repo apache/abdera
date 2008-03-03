@@ -27,7 +27,7 @@ import org.apache.abdera.i18n.text.CharUtils.Profile;
 
 
 /**
- * rfc3066 implementation
+ * rfc3066 implementation. This has been deprecated. Use org.apache.abdera.i18n.rfc4646.Lang instead
  * @deprecated 
  * @see org.apache.abdera.i18n.rfc4646.Lang
  */

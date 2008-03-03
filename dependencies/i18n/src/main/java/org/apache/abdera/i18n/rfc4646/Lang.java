@@ -29,7 +29,7 @@ import org.apache.abdera.i18n.rfc4646.Subtag.Type;
 
 
 /**
- * Implementation of RFC 4646
+ * Implementation of RFC 4646 Language Tags
  */
 public final class Lang
   extends SubtagSet {

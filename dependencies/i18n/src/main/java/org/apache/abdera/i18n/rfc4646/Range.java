@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 import org.apache.abdera.i18n.rfc4646.Subtag.Type;
 
 /**
- * A language range used for matching
+ * A language range used for matching language tags
  */
 public class Range  
   extends SubtagSet {

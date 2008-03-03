@@ -63,6 +63,11 @@ public class Bidi {
     "cspc862latinhebrew"
   };
   
+  /**
+   * Algorithm that will determine text direction by looking at the 
+   * characteristics of the language tag.  If the tag uses a language
+   * or script that is known to be RTL, then Direction.RTL will be returned
+   */
   public static Direction guessDirectionFromLanguage(Lang lang) {
     if (lang.getScript() != null) {
       String script = lang.getScript().getName();
@@ -75,6 +80,11 @@ public class Bidi {
     return Direction.UNSPECIFIED;
   }
  
+  /**
+   * Algorithm that will determine text direction by looking at the 
+   * character set encoding.  If the charset is typically used for RTL 
+   * languages, Direction.RTL will be returned
+   */
   public static Direction guessDirectionFromEncoding(String charset) {
     if (charset == null) return Direction.UNSPECIFIED;
     charset = charset.replace('_', '-');
@@ -84,6 +94,11 @@ public class Bidi {
     return Direction.UNSPECIFIED;
   }
   
+  /**
+   * Algorithm that analyzes properties of the text to determine text direction.
+   * If the majority of characters in the text are RTL characters, then
+   * Direction.RTL will be returned.
+   */
   public static Direction guessDirectionFromTextProperties(String text) {
     if (text != null && text.length() > 0) {
       if (text.charAt(0) == 0x200F) return Direction.RTL; // if using the unicode right-to-left mark
@@ -99,6 +114,9 @@ public class Bidi {
     return Direction.UNSPECIFIED;
   }
   
+  /**
+   * Algorithm that defers to the Java Bidi implementation to determine text direction.
+   */
   public static Direction guessDirectionFromJavaBidi(String text) {
     if (text != null) {
       AttributedString s = new AttributedString(text);

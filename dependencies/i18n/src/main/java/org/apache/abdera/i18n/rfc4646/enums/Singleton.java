@@ -21,6 +21,9 @@ import java.util.Locale;
 
 import org.apache.abdera.i18n.rfc4646.Subtag;
 
+/**
+ * Enum constants used to validate language tags
+ */
 public enum Singleton {
   A("Undefined", -1, null, null),
   B("Undefined", -1, null, null),

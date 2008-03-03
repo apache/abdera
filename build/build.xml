@@ -44,11 +44,6 @@
   <property name="core.test.resources" value="${core}/src/test/resources" />
   <property name="core.work" value="${work}/core" />
   <property name="core.jar" value="${dist}/${ant.project.name}.core.${version}.jar" />
-  <property name="protocol" value="${basedir}/protocol" />
-  <property name="protocol.src" value="${protocol}/src/main/java" />
-  <property name="protocol.work" value="${work}/protocol" />
-  <property name="protocol.resources" value="${protocol}/src/main/resources" />
-  <property name="protocol.jar" value="${dist}/${ant.project.name}.protocol.${version}.jar" />
   <property name="parser" value="${basedir}/parser" />
   <property name="parser.src" value="${parser}/src/main/java" />
   <property name="parser.resources" value="${parser}/src/main/resources" />
@@ -253,21 +248,6 @@ Working directory: ${work}
     </copy>
   </target>
 
-  <target name="compile.protocol" depends="init,compile.core">
-    <mkdir dir="${protocol.work}" />
-    <javac srcdir="${protocol.src}" destdir="${protocol.work}" classpathref="jar.dependencies" classpath="${core.work}" debug="${debug}" />
-    <mkdir dir="${protocol.work}/META-INF" />
-    <copy todir="${protocol.work}">
-      <fileset dir="${protocol.resources}" includes="**/*" />
-    </copy>
-    <copy todir="${protocol.work}/META-INF">
-      <fileset dir="${basedir}">
-        <include name="LICENSE" />
-        <include name="NOTICE" />
-      </fileset>
-    </copy>
-  </target>
-
   <target name="compile.parser" depends="init,compile.core">
     <mkdir dir="${parser.work}" />
     <javac srcdir="${parser.src}" destdir="${parser.work}" classpathref="jar.dependencies" classpath="${core.work}" debug="${debug}" />
@@ -289,10 +269,10 @@ Working directory: ${work}
     </copy>
   </target>
 
-  <target name="compile.server" depends="init, compile.core, compile.protocol, compile.client">
+  <target name="compile.server" depends="init, compile.core, compile.client">
     <mkdir dir="${server.work}" />
-    <javac srcdir="${server.src}" destdir="${server.work}" classpathref="jar.dependencies" classpath="${core.work};${protocol.work}" debug="${debug}" />
-    <javac srcdir="${server.test.java}" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${server.work};${protocol.work};${client.work}" debug="${debug}" />
+    <javac srcdir="${server.src}" destdir="${server.work}" classpathref="jar.dependencies" classpath="${core.work}" debug="${debug}" />
+    <javac srcdir="${server.test.java}" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${server.work};${client.work}" debug="${debug}" />
     <mkdir dir="${server.work}/META-INF" />
     <copy todir="${server.work}/META-INF">
       <fileset dir="${basedir}">
@@ -314,8 +294,8 @@ Working directory: ${work}
       <fileset dir="${basedir}/build/tools/${spring.name}/dist/modules" includes="**/*.jar" />
     </path>
     <mkdir dir="${spring.work}" />
-    <javac srcdir="${spring.src}" destdir="${spring.work}" classpathref="spring.dependencies" classpath="${core.work};${protocol.work};${server.work}" debug="${debug}" />
-    <javac srcdir="${spring.test.src}" destdir="${test}" classpathref="spring.dependencies" classpath="${core.work};${parser.work};${spring.work};${protocol.work};${server.work}" debug="${debug}" />
+    <javac srcdir="${spring.src}" destdir="${spring.work}" classpathref="spring.dependencies" classpath="${core.work};${server.work}" debug="${debug}" />
+    <javac srcdir="${spring.test.src}" destdir="${test}" classpathref="spring.dependencies" classpath="${core.work};${parser.work};${spring.work};${server.work}" debug="${debug}" />
     <mkdir dir="${spring.work}/META-INF" />
     <copy todir="${spring.work}">
       <fileset dir="${spring.resources}" includes="**/*" />
@@ -333,8 +313,8 @@ Working directory: ${work}
 
   <target name="compile.security" depends="init, compile.core, compile.server" if="do.security">
     <mkdir dir="${security.work}" />
-    <javac srcdir="${security.src}" destdir="${security.work}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${protocol.work};${client.work};${server.work}" debug="${debug}" />
-    <javac srcdir="${security.test.java}" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${security.work};${protocol.work};${client.work};${server.work}" debug="${debug}" />
+    <javac srcdir="${security.src}" destdir="${security.work}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${client.work};${server.work}" debug="${debug}" />
+    <javac srcdir="${security.test.java}" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${security.work};${client.work};${server.work}" debug="${debug}" />
     <mkdir dir="${security.work}/META-INF" />
     <copy todir="${test}">
       <fileset dir="${security.test.resources}" includes="**/*" />
@@ -347,10 +327,10 @@ Working directory: ${work}
     </copy>
   </target>
 
-  <target name="compile.client" depends="init,compile.core, compile.protocol">
+  <target name="compile.client" depends="init,compile.core">
     <mkdir dir="${client.work}" />
-    <javac srcdir="${client.src}" destdir="${client.work}" classpathref="jar.dependencies" classpath="${core.work};${protocol.work}" debug="${debug}" />
-    <javac srcdir="${client.test.java}" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${extensions.work};${client.work};${protocol.work}" debug="${debug}" />
+    <javac srcdir="${client.src}" destdir="${client.work}" classpathref="jar.dependencies" classpath="${core.work};" debug="${debug}" />
+    <javac srcdir="${client.test.java}" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${extensions.work};${client.work}" debug="${debug}" />
     <mkdir dir="${client.work}/META-INF" />
     <copy todir="${client.work}/META-INF">
       <fileset dir="${basedir}">
@@ -360,23 +340,23 @@ Working directory: ${work}
     </copy>
   </target>
 
-  <target name="compile.examples" depends="init,compile.core,compile.parser,compile.protocol,compile.server,compile.extensions,compile.security">
+  <target name="compile.examples" depends="init,compile.core,compile.parser,compile.server,compile.extensions,compile.security">
     <echo>Make sure the example code compiles...</echo>
     <mkdir dir="${examples.work}" />
     <javac srcdir="${examples.src}" destdir="${examples.work}" classpathref="jar.dependencies" 
-      classpath="${core.work};${parser.work};${protocol.work};${client.work};${server.work};${extensions.work}/gdata;${extensions.work}/main;${security.work};${extensions.work}/sharing;${extensions.work}/geo;${extensions.work}/serializer" debug="${debug}">
+      classpath="${core.work};${parser.work};${client.work};${server.work};${extensions.work}/gdata;${extensions.work}/main;${security.work};${extensions.work}/sharing;${extensions.work}/geo;${extensions.work}/serializer" debug="${debug}">
       <exclude unless="do.security" name="**/security/*.java" />
     </javac>
     <delete dir="${examples.work}" />
   </target>
 
-  <target name="build" depends="init,compile.core,compile.parser,compile.protocol,compile.server,compile.extensions,compile.client,compile.security,compile.examples,compile.spring">
+  <target name="build" depends="init,compile.core,compile.parser,compile.server,compile.extensions,compile.client,compile.security,compile.examples,compile.spring">
   </target>
 
   <target name="docs" depends="init">
     <javadoc 
       packagenames="org.apache.abdera.*" 
-      sourcepath="${core.src}:${security.src}:${server.src}:${client.src}:${protocol.src}:${spring.src}:${i18n.src.java}:${extensions}/gdata/src/main/java:${extensions}/geo/src/main/java:${extensions}/html/src/main/java:${extensions}/json/src/main/java:${extensions}/main/src/main/java:${extensions}/media/src/main/java:${extensions}/oauth/src/main/java:${extensions}/opensearch/src/main/java:${extensions}/serializer/src/main/java:${extensions}/sharing/src/main/java:${extensions}/wsse/src/main/java" 
+      sourcepath="${core.src}:${security.src}:${server.src}:${client.src}:${spring.src}:${i18n.src.java}:${extensions}/gdata/src/main/java:${extensions}/geo/src/main/java:${extensions}/html/src/main/java:${extensions}/json/src/main/java:${extensions}/main/src/main/java:${extensions}/media/src/main/java:${extensions}/oauth/src/main/java:${extensions}/opensearch/src/main/java:${extensions}/serializer/src/main/java:${extensions}/sharing/src/main/java:${extensions}/wsse/src/main/java" 
       destdir="${javadocs}" 
       windowtitle="Abdera" 
       classpathref="jar.dependencies" />
@@ -400,10 +380,10 @@ Working directory: ${work}
     <java classpathref="jar.dependencies" classpath="${core.work}:${parser.work}:${server.work}:${test}" classname="org.apache.abdera.test.parser.stax.TestSuite" fork="yes" />
 
     <echo>Running Client Tests...</echo>
-    <java classpathref="jar.dependencies" classpath="${core.work}:${parser.work}:${server.work}:${client.work}:${protocol.work}:${test}" classname="org.apache.abdera.test.client.TestSuite" fork="yes" />
+    <java classpathref="jar.dependencies" classpath="${core.work}:${parser.work}:${server.work}:${client.work}:${test}" classname="org.apache.abdera.test.client.TestSuite" fork="yes" />
 
     <echo>Running Server Tests...</echo>
-    <java classpathref="jar.dependencies" classpath="${core.work}:${parser.work}:${server.work}:${client.work}:${protocol.work}:${test}" classname="org.apache.abdera.protocol.server.test.TestSuite" fork="yes" />
+    <java classpathref="jar.dependencies" classpath="${core.work}:${parser.work}:${server.work}:${client.work}:${test}" classname="org.apache.abdera.protocol.server.test.TestSuite" fork="yes" />
     
     <antcall target="test.extensions" />
     
@@ -413,7 +393,7 @@ Working directory: ${work}
 
   <target name="test.security" if="do.security">
     <echo>Running Security Tests...</echo>
-    <java classpathref="jar.dependencies" classpath="${core.work}:${parser.work}:${server.work}:${security.work}:${client.work}:${protocol.work}:${test}" classname="org.apache.abdera.test.security.TestSuite" fork="yes">
+    <java classpathref="jar.dependencies" classpath="${core.work}:${parser.work}:${server.work}:${security.work}:${client.work}:${test}" classname="org.apache.abdera.test.security.TestSuite" fork="yes">
       <arg line="${bouncycastle.provider}" />
     </java>
   </target>
@@ -425,7 +405,7 @@ Working directory: ${work}
 		      <fileset dir="${basedir}/build/tools/${spring.name}/dist" includes="**/*.jar" />
 		      <fileset dir="${basedir}/build/tools/${spring.name}/dist/modules" includes="**/*.jar" />
 		    </path>
-		<java classpathref="spring.dependencies" classpath="${core.work}:${parser.work}:${server.work}:${security.work}:${client.work}:${protocol.work}:${spring.work}:${test}" classname="org.apache.abdera.spring.TestSuite" fork="yes">
+		<java classpathref="spring.dependencies" classpath="${core.work}:${parser.work}:${server.work}:${security.work}:${client.work}:${spring.work}:${test}" classname="org.apache.abdera.spring.TestSuite" fork="yes">
 	    </java>
 	</target>
 
@@ -449,7 +429,6 @@ Working directory: ${work}
       <fileset dir="${core.work}" includes="**/*" excludes="META-INF/**/*"/>
       <fileset dir="${core.work}" includes="META-INF/LICENSE,META-INF/NOTICE"/>
       <fileset dir="${parser.work}" includes="**/*" excludes="META-INF/**/*"/>
-      <fileset dir="${protocol.work}" includes="**/*" excludes="META-INF/**/*"/>
       <fileset dir="${server.work}" includes="**/*" excludes="META-INF/**/*"/>
       <fileset dir="${client.work}" includes="**/*" excludes="META-INF/**/*"/>
       <fileset dir="${dependencies.work}/i18n" includes="**/*" excludes="META-INF/**/*"/>
@@ -471,7 +450,6 @@ Working directory: ${work}
     
     <jar destfile="${core.jar}" basedir="${core.work}" manifest="${work}/MANIFEST.MF" />
     <jar destfile="${parser.jar}" basedir="${parser.work}" manifest="${work}/MANIFEST.MF" />
-    <jar destfile="${protocol.jar}" basedir="${protocol.work}" manifest="${work}/MANIFEST.MF" />
     <jar destfile="${server.jar}" basedir="${server.work}" manifest="${work}/MANIFEST.MF" />
     <jar destfile="${client.jar}" basedir="${client.work}" manifest="${work}/MANIFEST.MF" />
     <antcall target="dist.extensions" />
@@ -638,7 +616,6 @@ Working directory: ${work}
     <property name="retro" value="${basedir}/build/tools/retroweaver-${retroweaver.version}" />
     <property name="retro_core.jar" value="${dist}/${ant.project.name}.core.${version}.retro.jar" />
     <property name="retro_parser.jar" value="${dist}/${ant.project.name}.parser.${version}.retro.jar" />
-    <property name="retro_protocol.jar" value="${dist}/${ant.project.name}.protocol.${version}.retro.jar" />
     <property name="retro_extensions.jar" value="${dist}/${ant.project.name}.extensions.${version}.retro.jar" />
     <property name="retro_server.jar" value="${dist}/${ant.project.name}.server.${version}.retro.jar" />
     <property name="retro_client.jar" value="${dist}/${ant.project.name}.client.${version}.retro.jar" />
@@ -661,9 +638,6 @@ Working directory: ${work}
     </java>
     <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${parser.jar}&quot; &quot;${retro_parser.jar}&quot;" />
-    </java>
-    <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
-      <arg line="-jar &quot;${protocol.jar}&quot; &quot;${retro_protocol.jar}&quot;" />
     </java>
     <java classpathref="jar.retro" classname="net.sourceforge.retroweaver.Weaver" fork="yes">
       <arg line="-jar &quot;${server.jar}&quot; &quot;${retro_server.jar}&quot;" />
@@ -773,7 +747,7 @@ Working directory: ${work}
     <echo>Compiling extension ${ext}...</echo>
     <mkdir dir="${extensions.work}/${ext}" />
     <mkdir dir="${extensions.work}/${ext}/META-INF" />
-    <javac srcdir="${extensions}/${ext}/src/main/java" destdir="${extensions.work}/${ext}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${client.work};${protocol.work};${server.work};${extensions.work}/main;${extensions.work}/html" debug="${debug}" />
+    <javac srcdir="${extensions}/${ext}/src/main/java" destdir="${extensions.work}/${ext}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${client.work};${server.work};${extensions.work}/main;${extensions.work}/html" debug="${debug}" />
 
     <available file="${extensions}/${ext}/src/test/java" property="is.available.${ext}.test" />
     
@@ -794,7 +768,7 @@ Working directory: ${work}
   
   <target name="compile.extension.test" if="is.available.${ext}.test">
     <echo>Compiling tests for extension ${ext}...</echo>
-    <javac srcdir="${extensions}/${ext}/src/test/java" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${extensions.work}/${ext};${client.work};${protocol.work}" debug="${debug}" />
+    <javac srcdir="${extensions}/${ext}/src/test/java" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${extensions.work}/${ext};${client.work}" debug="${debug}" />
       <copy todir="${test}">
         <fileset dir="${extensions}/${ext}/src/test/resources" includes="**/*" />
       </copy>

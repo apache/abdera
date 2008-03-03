@@ -52,12 +52,6 @@
     </dependency>   
     <dependency>
       <groupId>org.apache.abdera</groupId>
-      <artifactId>abdera-protocol</artifactId>
-      <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>  
-    <dependency>
-      <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-client</artifactId>
       <version>0.4.0-incubating-SNAPSHOT</version>
       <scope>compile</scope>

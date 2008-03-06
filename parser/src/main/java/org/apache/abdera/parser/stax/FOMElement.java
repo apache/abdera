@@ -342,7 +342,7 @@ public class FOMElement
     OutputStream out, 
     WriterOptions options) 
       throws IOException {
-    FOMWriter writer = new FOMWriter();
+    Writer writer = this.getFactory().getAbdera().getWriter();
     writer.writeTo(this,out,options);
   }
   
@@ -350,7 +350,7 @@ public class FOMElement
     java.io.Writer out, 
     WriterOptions options)
       throws IOException {
-    FOMWriter writer = new FOMWriter();
+    Writer writer = this.getFactory().getAbdera().getWriter();
     writer.writeTo(this,out,options);
   }
   
@@ -387,17 +387,23 @@ public class FOMElement
   public void writeTo(OutputStream out) throws IOException {
     Document doc = getDocument();
     String charset = doc != null ? doc.getCharset() : "UTF-8";
-    writeTo(new OutputStreamWriter(out,charset));
+    Writer writer = this.getFactory().getAbdera().getWriter();
+    writeTo(writer,new OutputStreamWriter(out,charset));
   }
 
   public void writeTo(java.io.Writer writer) throws IOException {
-    try { 
-      OMOutputFormat outputFormat = new OMOutputFormat();
-      if (getDocument() != null && getDocument().getCharset() != null)
-        outputFormat.setCharSetEncoding(getDocument().getCharset());
-      serialize(writer, outputFormat);
-    } catch (XMLStreamException e) {
-      throw new FOMException(e);
+    Writer out = getFactory().getAbdera().getWriter();
+    if (!(out instanceof FOMWriter)) {
+      out.writeTo(this,writer);
+    } else {
+      try { 
+        OMOutputFormat outputFormat = new OMOutputFormat();
+        if (getDocument() != null && getDocument().getCharset() != null)
+          outputFormat.setCharSetEncoding(getDocument().getCharset());
+        serialize(writer, outputFormat);
+      } catch (XMLStreamException e) {
+        throw new FOMException(e);
+      }
     }
   }
   

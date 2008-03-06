@@ -128,7 +128,7 @@ public class FOMDocument<T extends Element>
     OutputStream out, 
     WriterOptions options) 
       throws IOException {
-    FOMWriter writer = new FOMWriter();
+    Writer writer = this.getFactory().getAbdera().getWriter();
     writer.writeTo(this,out,options);
   }
   
@@ -136,7 +136,7 @@ public class FOMDocument<T extends Element>
     java.io.Writer out, 
     WriterOptions options)
       throws IOException {
-    FOMWriter writer = new FOMWriter();
+    Writer writer = this.getFactory().getAbdera().getWriter();
     writer.writeTo(this,out,options);
   }
   
@@ -173,22 +173,28 @@ public class FOMDocument<T extends Element>
   public void writeTo(OutputStream out) throws IOException {
     String charset = getCharset();
     if (charset == null) charset = "UTF-8";
-    writeTo(new OutputStreamWriter(out, charset));
+    Writer writer = getFactory().getAbdera().getWriter();
+    writeTo(writer,new OutputStreamWriter(out, charset));
   }
 
   public void writeTo(java.io.Writer writer) throws IOException {
-    try {      
-      OMOutputFormat outputFormat = new OMOutputFormat();
-      if (this.getCharsetEncoding() != null)
-        outputFormat.setCharSetEncoding(this.getCharsetEncoding());
-      MTOMXMLStreamWriter omwriter = 
-        new MTOMXMLStreamWriter(
-          StAXUtils.createXMLStreamWriter(writer));
-      omwriter.setOutputFormat(outputFormat);
-      this.internalSerialize(omwriter);
-      omwriter.flush();    
-    } catch (XMLStreamException e) {
-      throw new FOMException(e);
+    Writer out = getFactory().getAbdera().getWriter();
+    if (!(out instanceof FOMWriter)) {
+      out.writeTo(this,writer);
+    } else {
+      try {      
+        OMOutputFormat outputFormat = new OMOutputFormat();
+        if (this.getCharsetEncoding() != null)
+          outputFormat.setCharSetEncoding(this.getCharsetEncoding());
+        MTOMXMLStreamWriter omwriter = 
+          new MTOMXMLStreamWriter(
+            StAXUtils.createXMLStreamWriter(writer));
+        omwriter.setOutputFormat(outputFormat);
+        this.internalSerialize(omwriter);
+        omwriter.flush();    
+      } catch (XMLStreamException e) {
+        throw new FOMException(e);
+      }
     }
   }
   

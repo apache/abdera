@@ -11,7 +11,8 @@ import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 
 public class AppServer {
-  
+
+
   public static void main(String... args) throws Exception {
     int port = 9002;
     try {
@@ -19,29 +20,28 @@ public class AppServer {
     } catch (Exception e) {}
     Server server = new Server(port);
     Context context = new Context(server, "/", Context.SESSIONS);
-    ServletHolder servletHolder = new ServletHolder(initServlet());
+    ServletHolder servletHolder = new ServletHolder(new EmployeeProviderServlet());
     context.addServlet(servletHolder, "/*");
     server.start();
     server.join();
   }
   
-  private static HttpServlet initServlet() {
-    EmployeeCollectionAdapter ca = new EmployeeCollectionAdapter();
-    ca.setHref("employee");    
-    
-    SimpleWorkspaceInfo wi = new SimpleWorkspaceInfo();
-    wi.setTitle("Employee Directory Workspace");
-    wi.addCollection(ca);    
-    
-    final DefaultProvider p = new DefaultProvider("/");  
-    p.addWorkspace(wi);    
-    
-    return new AbderaServlet() {
-      private static final long serialVersionUID = 0L;
-      protected Provider createProvider() {
-        p.init(getAbdera(), null);
-        return p;
-      }
-    };
+  // START SNIPPET: servlet
+  public static final class EmployeeProviderServlet extends AbderaServlet {
+    protected Provider createProvider() {
+      EmployeeCollectionAdapter ca = new EmployeeCollectionAdapter();
+      ca.setHref("employee");    
+      
+      SimpleWorkspaceInfo wi = new SimpleWorkspaceInfo();
+      wi.setTitle("Employee Directory Workspace");
+      wi.addCollection(ca);    
+      
+      DefaultProvider provider = new DefaultProvider("/");  
+      provider.addWorkspace(wi);    
+      
+      provider.init(getAbdera(), null);
+      return provider;
+    }
   }
+  // END SNIPPET: servlet
 }

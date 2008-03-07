@@ -2,6 +2,7 @@ package org.apache.abdera.examples.appserver.employee;
 
 import java.util.Date;
 
+// START SNIPPET: employee
 public class Employee {
   private int id;
   private String name;
@@ -25,3 +26,4 @@ public class Employee {
     this.updated = updated;
   }
 }
+// END SNIPPET: employee

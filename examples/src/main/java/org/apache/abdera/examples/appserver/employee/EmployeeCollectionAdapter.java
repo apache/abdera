@@ -92,7 +92,7 @@ public class EmployeeCollectionAdapter extends AbstractEntityCollectionAdapter<E
 
   public Object getContent(Employee entry, RequestContext request) {
     Content content = factory.newContent();
-    Element employeeEl = factory.newElement(new QName("employee"));
+    Element employeeEl = factory.newElement(new QName("div"));
     employeeEl.setAttributeValue(new QName("name"), entry.getName());
    
     content.setValueElement(employeeEl);
@@ -103,34 +103,23 @@ public class EmployeeCollectionAdapter extends AbstractEntityCollectionAdapter<E
   public Employee postEntry(String title, IRI id, String summary, 
                             Date updated, List<Person> authors,
                             Content content, RequestContext request) throws ResponseContextException {   
-    Employee employee = contentToEmployee(content);
+    Employee employee = new Employee();
+    employee.setName(content.getText().trim());
+    employee.setId(nextId.getAndIncrement());
     employees.put(employee.getId(), employee);
     
     return employee;
   }
   
-  public void putEntry(Employee entry, String title, Date updated, 
+  public void putEntry(Employee employee, String title, Date updated, 
                        List<Person> authors, String summary,
                        Content content, RequestContext request) throws ResponseContextException {
-    contentToEmployee(content, entry);
+    employee.setName(content.getText().trim());
   }
 
   public void deleteEntry(String resourceName, RequestContext request) throws ResponseContextException {
     Integer id = getIdFromResourceName(resourceName);
     employees.remove(id);
-  }
-
-  private Employee contentToEmployee(Content content) {
-    Employee employee = new Employee();
-    
-    return contentToEmployee(content, employee);
-  }
-
-  private Employee contentToEmployee(Content content, Employee employee) {
-    Element firstChild = content.getFirstChild();
-    employee.setName(firstChild.getAttributeValue("name"));
-    employee.setId(nextId.incrementAndGet());
-    return employee;
   }
   // END SNIPPET: methods
 }

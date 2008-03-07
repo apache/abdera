@@ -91,11 +91,8 @@ public class EmployeeCollectionAdapter extends AbstractEntityCollectionAdapter<E
   }
 
   public Object getContent(Employee entry, RequestContext request) {
-    Content content = factory.newContent();
-    Element employeeEl = factory.newElement(new QName("div"));
-    employeeEl.setAttributeValue(new QName("name"), entry.getName());
-   
-    content.setValueElement(employeeEl);
+    Content content = factory.newContent(Content.Type.TEXT);
+    content.setText(entry.getName());
     return content;
   }
   // END SNIPPET: entryMetadata

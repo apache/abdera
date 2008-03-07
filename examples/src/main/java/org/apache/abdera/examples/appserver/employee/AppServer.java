@@ -1,4 +1,4 @@
-package org.apache.abdera.examples.appserver.defaultprovider;
+package org.apache.abdera.examples.appserver.employee;
 
 import javax.servlet.http.HttpServlet;
 
@@ -11,7 +11,7 @@ import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 
 public class AppServer {
-
+  
   public static void main(String... args) throws Exception {
     int port = 9002;
     try {
@@ -26,18 +26,21 @@ public class AppServer {
   }
   
   private static HttpServlet initServlet() {
-    final DefaultProvider customerProvider = new DefaultProvider("/");    
-    CustomerAdapter ca = new CustomerAdapter();
-    ca.setHref("customers");    
+    EmployeeCollectionAdapter ca = new EmployeeCollectionAdapter();
+    ca.setHref("employee");    
+    
     SimpleWorkspaceInfo wi = new SimpleWorkspaceInfo();
-    wi.setTitle("Customer Workspace");
+    wi.setTitle("Employee Directory Workspace");
     wi.addCollection(ca);    
-    customerProvider.addWorkspace(wi);    
+    
+    final DefaultProvider p = new DefaultProvider("/");  
+    p.addWorkspace(wi);    
+    
     return new AbderaServlet() {
       private static final long serialVersionUID = 0L;
       protected Provider createProvider() {
-        customerProvider.init(getAbdera(), null);
-        return customerProvider;
+        p.init(getAbdera(), null);
+        return p;
       }
     };
   }

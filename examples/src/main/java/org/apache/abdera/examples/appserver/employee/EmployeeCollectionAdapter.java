@@ -48,10 +48,11 @@ public class EmployeeCollectionAdapter extends AbstractEntityCollectionAdapter<E
     return "Acme Industries";
   }
   // END SNIPPET: feedmetadata
-  
+  // START SNIPPET: getEntries
   public Iterable<Employee> getEntries(RequestContext request) {
     return employees.values();
   }
+  // END SNIPPET: getEntries
   // START SNIPPET: getEntry
   public Employee getEntry(String resourceName, RequestContext request) throws ResponseContextException {
     Integer id = getIdFromResourceName(resourceName);
@@ -65,19 +66,20 @@ public class EmployeeCollectionAdapter extends AbstractEntityCollectionAdapter<E
     }
     return new Integer(resourceName.substring(0, idx));
   }
+
+  public String getName(Employee entry) {
+    return entry.getId() + "-" + entry.getName().replaceAll(" ", "_");
+  }
   // END SNIPPET: getEntry
   // START SNIPPET: entryMetadata
   public String getId(Employee entry) {
     return ID_PREFIX + entry.getId();
   }
-
-  public String getName(Employee entry) {
-    return entry.getId() + "-" + entry.getName().replaceAll(" ", "_");
-  }
+  
   public String getTitle(Employee entry) {
     return entry.getName();
   }
-
+  
   public Date getUpdated(Employee entry) {
     return entry.getUpdated();
   }

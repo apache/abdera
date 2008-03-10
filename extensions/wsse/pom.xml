@@ -30,29 +30,13 @@
   <name>Abdera Extensions - WSSE</name>
   <version>0.4.0-incubating-SNAPSHOT</version>
   <description>Atom Specification Extensions - WSSE</description>
-  <inceptionYear>2006</inceptionYear>
-  <url>http://incubator.apache.org/abdera</url>
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/extensions/wsse</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/extensions/wsse</developerConnection>
-    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/extensions/wsse</url>
-  </scm>
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.abdera</groupId>
-      <artifactId>abdera-core</artifactId>
-      <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>    
+
+  <dependencies> 
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-client</artifactId>
       <version>0.4.0-incubating-SNAPSHOT</version>
       <scope>compile</scope>
-    </dependency>  
-    <dependency>
-      <groupId>commons-httpclient</groupId>
-      <artifactId>commons-httpclient</artifactId>
     </dependency>
   </dependencies>
 </project>

@@ -25,40 +25,11 @@
     <version>0.4.0-incubating-SNAPSHOT</version>
   </parent>  
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>abdera-extensions-media</artifactId>
+  <artifactId>abdera-buildtools</artifactId>
   <packaging>jar</packaging>
-  <name>Abdera Extensions - Media</name>
+  <name>Abdera Buildtools</name>
   <version>0.4.0-incubating-SNAPSHOT</version>
-  <description>Atom Specification Extensions - Media</description>
-  <inceptionYear>2006</inceptionYear>
-  <url>http://incubator.apache.org/abdera</url>
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/extensions/media</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/extensions/media</developerConnection>
-    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/extensions/media</url>
-  </scm>
+  <description>Build tools for Abdera</description>
   <dependencies>
-    <dependency>
-      <groupId>org.apache.abdera</groupId>
-      <artifactId>abdera-core</artifactId>
-      <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>    
-    <dependency>
-      <groupId>org.apache.abdera</groupId>
-      <artifactId>abdera-client</artifactId>
-      <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>  
-    <dependency>
-      <groupId>org.apache.abdera</groupId>
-      <artifactId>json</artifactId>
-      <version>1.0</version>
-      <scope>compile</scope>
-    </dependency>   
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-    </dependency>
   </dependencies>
 </project>

@@ -30,77 +30,51 @@
   <name>Abdera Examples</name>
   <version>0.4.0-incubating-SNAPSHOT</version>
   <description>Atom Specification Implementation Examples</description>
-  <inceptionYear>2006</inceptionYear>
-  <url>http://incubator.apache.org/abdera</url>
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/examples/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/examples/</developerConnection>
-    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/examples/</url>
-  </scm>
+
   <dependencies>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-      </dependency>
     <dependency>
-      <groupId>org.apache.abdera</groupId>
-      <artifactId>abdera-core</artifactId>
-      <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.apache.abdera</groupId>
-      <artifactId>abdera-parser</artifactId>
-      <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>      
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-client</artifactId>
       <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-server</artifactId>
       <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-extensions-main</artifactId>
       <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-extensions-serializer</artifactId>
       <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-extensions-gdata</artifactId>
       <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-extensions-geo</artifactId>
       <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-extensions-sharing</artifactId>
       <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-security</artifactId>
       <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.mortbay.jetty</groupId>

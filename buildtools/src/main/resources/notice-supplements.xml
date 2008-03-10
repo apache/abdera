@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<supplementalDataModels>
+   <supplement>
+    <project>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <name>Servlet API</name>
+      <organization>
+        <name>Sun Microsystems</name>
+        <url>http://www.sun.com/</url>
+      </organization>
+      <licenses>
+        <license>
+          <name>COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0</name>
+          <url>http://www.sun.com/cddl/cddl.html</url>
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+  <supplement>
+    <project>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <name>Apache Commons Beanutils</name>
+      <organization>
+        <name>The Apache Software Foundation</name>
+        <url>http://www.apache.org</url>
+      </organization>
+      <licenses>
+        <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+  <supplement>
+    <project>
+      <groupId>xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <name>Apache Xalan-Java</name>
+      <organization>
+        <name>The Apache Software Foundation</name>
+        <url>http://www.apache.org</url>
+      </organization>
+      <licenses>
+        <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+  <supplement>
+    <project>
+      <groupId>xml-security</groupId>
+      <artifactId>xmlsec</artifactId>
+      <name>XML Security</name>
+      <organization>
+        <name>The Apache Software Foundation</name>
+        <url>http://www.apache.org</url>
+      </organization>
+      <licenses>
+        <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+  <supplement>
+    <project>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
+      <name>XML APIs</name>
+      <organization>
+        <name>The Apache Software Foundation</name>
+        <url>http://www.apache.org</url>
+      </organization>
+      <licenses>
+        <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+  <supplement>
+    <project>
+      <groupId>bouncycastle</groupId>
+      <artifactId>bcprov-jdk15</artifactId>
+      <name>Bouncy Castle Crypto APIs for Java</name>
+      <organization>
+        <name>The Legion of the Bouncy Castle</name>
+        <url>http://www.bouncycastle.org</url>
+      </organization>
+      <licenses>
+        <license>
+          <name>Bouncy Castle License</name>
+          <url>http://www.bouncycastle.org/licence.html</url>
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+  
+</supplementalDataModels>

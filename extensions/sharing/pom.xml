@@ -31,53 +31,14 @@
   <version>0.4.0-incubating-SNAPSHOT</version>
   <description>Atom Specification Extensions - Sharing</description>
   <inceptionYear>2006</inceptionYear>
-  <url>http://incubator.apache.org/abdera</url>
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/extensions/sharing</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/extensions/sharing</developerConnection>
-    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/extensions/sharing</url>
-  </scm>
+
   <dependencies>
-    <dependency>
-      <groupId>org.apache.abdera</groupId>
-      <artifactId>abdera-core</artifactId>
-      <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>    
-    <dependency>
-      <groupId>org.apache.abdera</groupId>
-      <artifactId>abdera-parser</artifactId>
-      <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>   
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-client</artifactId>
       <version>0.4.0-incubating-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>  
-    <dependency>
-      <groupId>org.apache.abdera</groupId>
-      <artifactId>json</artifactId>
-      <version>1.0</version>
-      <scope>compile</scope>
-    </dependency>   
-    <dependency>
-      <groupId>org.apache.ws.commons.axiom</groupId>
-      <artifactId>axiom-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.ws.commons.axiom</groupId>
-      <artifactId>axiom-impl</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>stax</groupId>
-      <artifactId>stax-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.woodstox</groupId>
-      <artifactId>wstx-asl</artifactId>
-    </dependency> 
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

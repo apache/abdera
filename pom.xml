@@ -155,6 +155,11 @@
       <plugin>
           <artifactId>maven-remote-resources-plugin</artifactId>
           <version>1.0-beta-2</version>
+          <dependencies>
+              <groupId>org.apache.abdera</groupId>
+              <artifactId>abdera-buildtools</artifactId>
+              <version>${project.ersion}</version>
+          </dependencies>
           <executions>
               <execution>
                   <goals>
@@ -283,20 +288,19 @@
       
       <dependency>
         <groupId>org.apache.ws.commons.axiom</groupId>
-        <artifactId>axiom-api</artifactId>
-        <version>1.2.5</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.apache.ws.commons.axiom</groupId>
         <artifactId>axiom-impl</artifactId>
         <version>1.2.5</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>stax</groupId>
-        <artifactId>stax-api</artifactId>
-        <version>1.0.1</version>
+
+      <exclusions>
+        <exclusion>
+          <groupId>javax.mail</groupId>
+          <artifactId>mail</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>stax</groupId>
+          <artifactId>stax-api</artifactId>
+        </exclusion>
+      </exclusions>
       </dependency>
       
       <dependency>
@@ -304,6 +308,12 @@
         <artifactId>wstx-asl</artifactId>
         <version>3.2.1</version>
         <scope>runtime</scope>	    
+      <exclusions>
+        <exclusion>
+          <groupId>stax</groupId>
+          <artifactId>stax-api</artifactId>
+        </exclusion>
+      </exclusions>
       </dependency>
       
       <dependency>
@@ -355,6 +365,7 @@
   
   <modules>
     <module>dependencies/i18n</module>
+    <module>buildtools</module>
     <module>bundle</module>
     <module>core</module>
     <module>parser</module>

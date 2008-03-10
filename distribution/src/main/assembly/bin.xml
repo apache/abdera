@@ -30,29 +30,36 @@
     <fileSets>
         <fileSet>
             <directory>../</directory>
-            <outputDirectory>apache-abdera-${abdera.version}</outputDirectory>
+            <outputDirectory>apache-abdera-${project.version}-incubating/</outputDirectory>
             <includes>
                 <include>LICENSE</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>../docs</directory>
-            <outputDirectory>apache-abdera-${abdera.version}/docs</outputDirectory>
+            <outputDirectory>apache-abdera-${project.version}-incubating/docs</outputDirectory>
             <includes>
                 <include>**/*.html</include>
             </includes>
         </fileSet>
         <fileSet>
+            <directory>../dependencies/legal</directory>
+            <outputDirectory>apache-abdera-${project.version}-incubating/lib</outputDirectory>
+            <includes>
+                <include>**/*.txt</include>
+            </includes>
+        </fileSet>
+        <fileSet>
             <directory>../examples/src/main/java</directory>
-            <outputDirectory>apache-abdera-${abdera.version}/examples</outputDirectory>
+            <outputDirectory>apache-abdera-${project.version}-incubating/examples</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../examples/src/main/resources</directory>
-            <outputDirectory>apache-abdera-${abdera.version}/examples</outputDirectory>
+            <outputDirectory>apache-abdera-${project.version}-incubating/examples</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../bundle/target/apidocs</directory>
-            <outputDirectory>apache-abdera-${abdera.version}/docs/api</outputDirectory>
+            <outputDirectory>apache-abdera-${project.version}-incubating/docs/api</outputDirectory>
             <includes>
                 <include>**/*</include>
             </includes>
@@ -61,16 +68,20 @@
     </fileSets>
     <dependencySets>
         <dependencySet>
-            <outputDirectory>apache-abdera-${abdera.version}/lib</outputDirectory>
+            <outputDirectory>apache-abdera-${project.version}-incubating/lib</outputDirectory>
             <unpack>false</unpack>
             <excludes>
                 <exclude>org.apache.abdera:*</exclude>
+                <exclude>javax.activation:activation</exclude>
+                <exclude>xerces:xercesImpl</exclude>
+                <exclude>xml-apis:*</exclude>
+                <exclude>javax.mail:mail</exclude>
             </excludes>
             <scope>runtime</scope>
         </dependencySet>
         <!-- We could uncomment this if we want to include individual jars -->
         <!-- dependencySet>
-            <outputDirectory>apache-abdera-${abdera.version}/modules</outputDirectory>
+            <outputDirectory>apache-abdera-${project.version}-incubating/modules</outputDirectory>
             <unpack>false</unpack>
             <includes>
                 <include>org.apache.abdera:*</include>
@@ -81,7 +92,7 @@
             <scope>runtime</scope>
         </dependencySet -->
         <dependencySet>
-            <outputDirectory>apache-abdera-${abdera.version}</outputDirectory>
+            <outputDirectory>apache-abdera-${project.version}-incubating</outputDirectory>
             <unpack>false</unpack>
             <includes>
                 <include>org.apache.abdera:abdera-bundle</include>

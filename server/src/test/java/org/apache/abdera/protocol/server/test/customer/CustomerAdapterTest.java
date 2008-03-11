@@ -5,8 +5,6 @@ import java.util.Date;
 
 import javax.xml.namespace.QName;
 
-import junit.framework.Assert;
-
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
@@ -27,11 +25,15 @@ import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.protocol.server.servlet.AbderaServlet;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
+import org.apache.abdera.writer.Writer;
+import org.apache.abdera.writer.WriterFactory;
 import org.junit.After;
 import org.junit.Test;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
+
+import junit.framework.Assert;
 
 public class CustomerAdapterTest extends Assert {
 
@@ -182,10 +184,10 @@ public class CustomerAdapterTest extends Assert {
   }
 
   protected void prettyPrint(Abdera abdera, Base doc) throws IOException {
-    // WriterFactory factory = abdera.getWriterFactory();
-    // Writer writer = factory.getWriter("prettyxml");
-    // writer.writeTo(doc, System.out);
-    // System.out.println();
+     WriterFactory factory = abdera.getWriterFactory();
+     Writer writer = factory.getWriter("prettyxml");
+     writer.writeTo(doc, System.out);
+     System.out.println();
   }
 
   @SuppressWarnings("serial")

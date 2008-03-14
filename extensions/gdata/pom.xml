@@ -30,7 +30,9 @@
   <name>Abdera Extensions - GData</name>
   <version>0.4.0-incubating-SNAPSHOT</version>
   <description>Atom Specification Extensions - GData</description>
-  
+  <properties>
+    <topDir>${basedir}/../..</topDir>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.apache.abdera</groupId>

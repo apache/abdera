@@ -30,13 +30,11 @@
   <name>Abdera Spring Integration</name>  
   <version>0.4.0-incubating-SNAPSHOT</version>
   <description>Spring Integration Code for Abdera</description>  
-  <inceptionYear>2006</inceptionYear>
-  <url>http://incubator.apache.org/abdera</url>
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/spring/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/spring/</developerConnection>
-    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/spring/</url>
-  </scm>
+
+  <properties>
+    <topDir>${basedir}/..</topDir>
+  </properties>
+  
   <dependencies>
       <dependency>
         <groupId>junit</groupId>

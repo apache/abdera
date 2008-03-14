@@ -30,13 +30,11 @@
   <name>Abdera Server</name>
   <version>0.4.0-incubating-SNAPSHOT</version>
   <description>Atom Publishing Protocol Specification Server-Side Implementation</description>
-  <inceptionYear>2006</inceptionYear>
-  <url>http://incubator.apache.org/abdera</url>
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/server/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/server/</developerConnection>
-    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/server/</url>
-  </scm>
+
+  <properties>
+    <topDir>${basedir}/..</topDir>
+  </properties>
+  
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

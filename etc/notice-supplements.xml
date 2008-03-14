@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <supplementalDataModels>
-   <supplement>
+
+  <supplement>
     <project>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
@@ -36,12 +37,46 @@
   </supplement>
   <supplement>
     <project>
+      <groupId>org.apache.ibatis</groupId>
+      <artifactId>ibatis-sqlmap</artifactId>
+      <name>Apache Ibatis</name>
+      <organization>
+        <name>The Apache Software Foundation</name>
+        <url>http://www.apache.org/</url>
+      </organization>
+      <licenses>
+        <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+  <supplement>
+    <project>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-core</artifactId>
+      <name>Apache Lucene</name>
+      <organization>
+        <name>The Apache Software Foundation</name>
+        <url>http://www.apache.org/</url>
+      </organization>
+      <licenses>
+        <license>
+          <name>The Apache Software License, Version 2.0</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+  <supplement>
+    <project>
       <groupId>xalan</groupId>
       <artifactId>xalan</artifactId>
       <name>Apache Xalan-Java</name>
       <organization>
         <name>The Apache Software Foundation</name>
-        <url>http://www.apache.org</url>
+        <url>http://www.apache.org/</url>
       </organization>
       <licenses>
         <license>
@@ -58,7 +93,7 @@
       <name>XML Security</name>
       <organization>
         <name>The Apache Software Foundation</name>
-        <url>http://www.apache.org</url>
+        <url>http://www.apache.org/</url>
       </organization>
       <licenses>
         <license>

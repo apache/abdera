@@ -24,31 +24,13 @@
         <version>0.4.0-incubating-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>abdera-couchdb</artifactId>
+    <artifactId>abdera-filesystem</artifactId>
     <packaging>jar</packaging>
-    <name>Abdera CouchDB Adapter</name>
+    <name>Abdera Filesystem Adapter</name>
     <version>0.4.0-incubating-SNAPSHOT</version>
 	      
 	  <properties>
 	    <topDir>${basedir}/../..</topDir>
 	  </properties>
 	  
-    <dependencies>
-        <dependency>
-            <groupId>net.sf.json-lib</groupId>
-            <artifactId>json-lib</artifactId>
-            <version>2.2.1</version>
-            <classifier>jdk15</classifier>
-        </dependency>
-
-        <dependency>
-            <groupId>couchdb4j</groupId>
-            <artifactId>couchdb4j</artifactId>
-            <version>0.1.2</version>
-            <scope>system</scope>
-            <systemPath>
-                ${basedir}/repository/couchdb4j-0.1.2.jar
-            </systemPath>
-        </dependency>
-    </dependencies>
 </project>

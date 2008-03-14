@@ -31,6 +31,10 @@
   <version>0.4.0-incubating-SNAPSHOT</version>
   <description>Atom Specification Implementation Parser</description>
 
+  <properties>
+    <topDir>${basedir}/..</topDir>
+  </properties>
+  
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

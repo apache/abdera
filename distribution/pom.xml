@@ -29,6 +29,10 @@
     <name>Abdera Distribution</name>
     <version>0.4.0-incubating-SNAPSHOT</version>
 
+    <properties>
+        <topDir>${basedir}/..</topDir>
+    </properties>
+    
     <dependencies>
         <dependency>
             <groupId>org.apache.abdera</groupId>
@@ -141,6 +145,7 @@
                         <configuration>
                             <descriptors>
                                 <descriptor>src/main/assembly/bin.xml</descriptor>
+                                <descriptor>src/main/assembly/src.xml</descriptor>
                             </descriptors>
                             <tarLongFileMode>gnu</tarLongFileMode>
                         </configuration>

@@ -27,6 +27,7 @@ import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;

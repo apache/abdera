@@ -29,6 +29,10 @@
   <name>Abdera JCR Adapter</name>
   <version>0.4.0-incubating-SNAPSHOT</version>
   <description>JCR AtomPub Server implementation Abdera</description>
+    
+  <properties>
+    <topDir>${basedir}/../..</topDir>
+  </properties>
   
   <dependencies>
     <dependency>
@@ -55,6 +59,24 @@
       <groupId>org.apache.jackrabbit</groupId>
       <artifactId>jackrabbit-core</artifactId>
       <version>1.4</version>
+      <exclusions>
+        <exclusion>
+          <groupId>pdfbox</groupId>
+          <artifactId>pdfbox</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>poi</groupId>
+          <artifactId>poi</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>nekohtml</groupId>
+          <artifactId>nekohtml</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.textmining</groupId>
+          <artifactId>tm-extractors</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     
     <dependency>

@@ -37,8 +37,8 @@
         <createSourcesJar>false</createSourcesJar>
         
         <shade.version>1.0-beta-1</shade.version>
-    </properties>
-
+	      <topDir>${basedir}/../</topDir>
+	  </properties>
     <dependencies>
         <dependency>
             <groupId>org.apache.abdera</groupId>
@@ -63,6 +63,11 @@
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-couchdb</artifactId>
+            <version>0.4.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.abdera</groupId>
+            <artifactId>abdera-filesystem</artifactId>
             <version>0.4.0-incubating-SNAPSHOT</version>
         </dependency>
         <dependency>

@@ -26,18 +26,16 @@
   <name>I18N Libraries</name>
   <version>0.4.0-incubating-SNAPSHOT</version>
   <description>RFC 3987 (Internationlaized Resource Identifier) libraries.</description>
-  <inceptionYear>2007</inceptionYear>
   <url>http://incubator.apache.org/abdera</url>
   <parent>
     <groupId>org.apache.abdera</groupId>
     <artifactId>abdera</artifactId>
     <version>0.4.0-incubating-SNAPSHOT</version>
-  </parent>  
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/dependencies/i18n/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/dependencies/i18n/</developerConnection>
-    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/dependencies/i18n/</url>
-  </scm>
+  </parent>
+          
+   <properties>
+     <topDir>${basedir}/../..</topDir>
+   </properties>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -51,38 +49,5 @@
       <scope>compile</scope>
     </dependency>
   </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
-      </plugin>
-      
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <excludes>
-            <exclude>**/*TestSuite*</exclude>
-            <exclude>**/*$*</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-  <distributionManagement>
-    <snapshotRepository>
-      <id>apache.snapshots</id>
-      <name>Apache SNAPSHOT Repository</name>
-      <url>scpexe://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</url>
-    </snapshotRepository>
-    <repository>
-      <id>apache.incubating</id>
-      <name>Apache Incubating Repository</name>
-      <url>scpexe://people.apache.org/www/people.apache.org/repo/m2-incubating-repository</url>
-    </repository>
-  </distributionManagement>
+
 </project>

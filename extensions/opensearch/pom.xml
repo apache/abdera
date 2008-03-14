@@ -30,7 +30,11 @@
   <name>Abdera Extensions - OpenSearch</name>
   <version>0.4.0-incubating-SNAPSHOT</version>
   <description>Atom Specification Extensions - OpenSearch</description>
-
+  
+  <properties>
+    <topDir>${basedir}/../..</topDir>
+  </properties>
+  
   <dependencies>
     <dependency>
       <groupId>org.apache.abdera</groupId>

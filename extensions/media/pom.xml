@@ -30,13 +30,11 @@
   <name>Abdera Extensions - Media</name>
   <version>0.4.0-incubating-SNAPSHOT</version>
   <description>Atom Specification Extensions - Media</description>
-  <inceptionYear>2006</inceptionYear>
-  <url>http://incubator.apache.org/abdera</url>
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/extensions/media</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/extensions/media</developerConnection>
-    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/extensions/media</url>
-  </scm>
+  
+  <properties>
+    <topDir>${basedir}/../..</topDir>
+  </properties>
+  
   <dependencies>
     <dependency>
       <groupId>org.apache.abdera</groupId>
@@ -51,11 +49,11 @@
       <scope>compile</scope>
     </dependency>  
     <dependency>
-      <groupId>org.apache.abdera</groupId>
-      <artifactId>json</artifactId>
-      <version>1.0</version>
-      <scope>compile</scope>
-    </dependency>   
+      <groupId>net.sf.json-lib</groupId>
+      <artifactId>json-lib</artifactId>
+      <version>2.2.1</version>
+      <classifier>jdk15</classifier>
+    </dependency>  
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

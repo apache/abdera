@@ -30,7 +30,11 @@
   <name>Abdera Extensions - JSON</name>
   <version>0.4.0-incubating-SNAPSHOT</version>
   <description>Atom Specification Extensions - JSON</description>
-
+  
+  <properties>
+    <topDir>${basedir}/../../</topDir>
+  </properties>
+  
   <dependencies>
     <dependency>
       <groupId>org.apache.abdera</groupId>
@@ -46,11 +50,6 @@
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-extensions-html</artifactId>
       <version>0.4.0-incubating-SNAPSHOT</version>
-    </dependency> 
-    <dependency>
-      <groupId>org.apache.abdera</groupId>
-      <artifactId>json</artifactId>
-      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

@@ -24,49 +24,27 @@
 		<version>0.4.0-incubating-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>abdera-adapters-parent</artifactId>
+	<artifactId>abdera-extensions-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>Abdera Adapters</name>
+	<name>Abdera Extensions</name>
 	<version>0.4.0-incubating-SNAPSHOT</version>
-	<description>Abdera Adapters</description>
+	<description>Abdera Extensions</description>
 
   <properties>
     <topDir>${basedir}/..</topDir>
   </properties>
   
-  <modules>
-    <module>couchdb</module>
-    <module>filesystem</module>
-    <module>jcr</module>
-    <module>jdbc</module>
-  </modules>
-
-	<dependencies>
-      
-    <dependency>
-      <groupId>org.mortbay.jetty</groupId>
-      <artifactId>jetty</artifactId>
-      <version>${jetty.version}</version>
-      <scope>test</scope>
-    </dependency>
-	
-		<dependency>
-			<groupId>org.apache.abdera</groupId>
-			<artifactId>abdera-server</artifactId>
-			<version>0.4.0-incubating-SNAPSHOT</version>
-		</dependency>
-		
-    <dependency>
-      <groupId>org.apache.abdera</groupId>
-      <artifactId>abdera-client</artifactId>
-      <version>0.4.0-incubating-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-    </dependency>
-	</dependencies>
+	<modules>
+    <module>gdata</module>
+		<module>geo</module>
+    <module>html</module>
+    <module>json</module>
+    <module>main</module>
+    <module>media</module>
+    <module>oauth</module>
+    <module>opensearch</module>
+    <module>serializer</module>
+    <module>sharing</module>
+    <module>wsse</module>	</modules>
 
 </project>

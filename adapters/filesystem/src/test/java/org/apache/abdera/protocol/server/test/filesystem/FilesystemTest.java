@@ -33,6 +33,7 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 
+@Ignore
 public class FilesystemTest extends Assert {
 
   private static Server server;

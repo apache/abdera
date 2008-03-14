@@ -98,6 +98,17 @@
             <scope>test</scope>
             <outputFileNameMapping>abdera-${version}.jar</outputFileNameMapping>
         </dependencySet>
+        <dependencySet>
+            <outputDirectory>apache-abdera-${version}/modules</outputDirectory>
+            <unpack>false</unpack>
+            <includes>
+                <include>org.apache.abdera:*</include>
+            </includes>
+            <excludes>
+                <exclude>org.apache.abdera:abdera-bundle</exclude>
+            </excludes>
+            <scope>test</scope>
+        </dependencySet>
 
     </dependencySets>
 

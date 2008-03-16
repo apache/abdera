@@ -22,11 +22,7 @@ Getting Started
 
 See the Getting Started Guide @ 
   
-  http://incubator.apache.org/abdera/docs/gettingstarted.html
-
-Building
-
-  http://incubator.apache.org/abdera/docs/building.html
+  http://incubator.apache.org/
 
 We welcome contributions of all kinds, for details of how you can help
 http://incubator.apache.org/abdera/faq.html
@@ -42,6 +38,15 @@ you may have.
 
 Changes
 ============================
+0.4.0 - A simplified server side framework and API for implementing
+        services.
+      - Sever side filter API for intercepting requests and 
+        implementing concerns such as security.
+      - A collection of pre-bundled Atom Publishing Protocol adapters 
+        for JDBC, JCR, filesystems, and CouchDB.
+      - An improved JSON serialization mechanism.
+      - New extensions such as OAuth support.
+      - Many API improvements and bug fixes!
 0.3.0 - Support for the Atompub final draft 
       - Refactored and simplified Server framework
       - Refactored and simplified AbderaClient

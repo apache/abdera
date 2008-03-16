@@ -29,12 +29,19 @@
 
     <fileSets>
         <fileSet>
-            <directory>src/main/release</directory>
+            <directory></directory>
             <outputDirectory>apache-abdera-${version}-src</outputDirectory>
             <includes>
                 <include>dependencies/legal/*.*</include>
                 <include>README</include>
                 <include>BUILDING</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/release</directory>
+            <outputDirectory>apache-abdera-${version}/</outputDirectory>
+            <includes>
+                <include>**/*.txt</include>
             </includes>
         </fileSet>
         <fileSet>

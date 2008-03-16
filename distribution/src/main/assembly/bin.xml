@@ -29,6 +29,13 @@
 
     <fileSets>
         <fileSet>
+            <directory>../</directory>
+            <outputDirectory>apache-abdera-${version}/</outputDirectory>
+            <includes>
+                <include>README</include>
+            </includes>
+        </fileSet>
+        <fileSet>
             <directory>target/maven-shared-archive-resources/META-INF</directory>
             <outputDirectory>apache-abdera-${version}/</outputDirectory>
             <includes>
@@ -72,6 +79,7 @@
             <unpack>false</unpack>
             <excludes>
                 <exclude>org.apache.abdera:*</exclude>
+                <exclude>javax.servlet:servlet-api</exclude>
                 <exclude>xerces:xercesImpl</exclude>
                 <exclude>xml-apis:*</exclude>
             </excludes>

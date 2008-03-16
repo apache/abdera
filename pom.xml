@@ -1,31 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one or more
-  contributor license agreements.  The ASF licenses this file to You
-  under the Apache License, Version 2.0 (the "License"); you may not
-  use this file except in compliance with the License.
-  You may obtain a copy of the License at
- 
-      http://www.apache.org/licenses/LICENSE-2.0
- 
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.  For additional information regarding
-  copyright in this work, please see the NOTICE file in the top level
-  directory of this distribution. -->
-<project 
-  xmlns="http://maven.apache.org/POM/4.0.0" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.abdera</groupId>
   <artifactId>abdera</artifactId>
   <packaging>pom</packaging>
   <name>Apache Abdera</name>  
-  <version>0.4.0-incubating-SNAPSHOT</version>  
+  <version>0.4.0-incubating</version>  
   <description>Atom Specification Implementation</description>
   <inceptionYear>2006</inceptionYear>
   <url>http://incubator.apache.org/abdera</url>
@@ -72,9 +52,9 @@
   </licenses>
   
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/</developerConnection>
-    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/tags/abdera-0.4.0-incubating</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/tags/abdera-0.4.0-incubating</developerConnection>
+    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/tags/abdera-0.4.0-incubating</url>
   </scm>
   
   <reporting>
@@ -144,11 +124,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
           <configuration>
-              <tagBase>https://svn.apache.org/repos/asf/incubator/abdera/tags</tagBase>
+              <tagBase>https://svn.apache.org/repos/asf/incubator/abdera/java/tags</tagBase>
               <useReleaseProfile>false</useReleaseProfile>
               <preparationGoals>clean install</preparationGoals>
               <goals>deploy</goals>
-              <arguments>-Pdeploy</arguments>
+              <arguments>-Pdeploy,release</arguments>
               <autoVersionSubmodules>true</autoVersionSubmodules>
           </configuration>
       </plugin>
@@ -220,7 +200,7 @@
       </plugins>
     </pluginManagement>    
   </build>
-
+  
   <profiles>
   	<profile>
   		<id>deploy</id>
@@ -228,15 +208,21 @@
   			<module>distribution</module>
   		</modules>
   	</profile>
-    <profile>
-      <id>only-parent</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-        <property>
-          <name>remote-resources</name>
-          <value>true</value>
-        </property>
-      </activation>
+  	<profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <inherited>true</inherited>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <configuration>
+              <altDeploymentRepository>${deploy.altRepository}</altDeploymentRepository>
+              <updateReleaseInfo>true</updateReleaseInfo>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   	<profile>
   		<id>no-online-tests</id>

@@ -227,6 +227,19 @@
   		<modules>
   			<module>distribution</module>
   		</modules>
+                <build>
+                     <plugins>
+      <plugin>
+        <inherited>true</inherited>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <altDeploymentRepository>${deploy.altRepository}</altDeploymentRepository>
+          <updateReleaseInfo>true</updateReleaseInfo>
+        </configuration>
+      </plugin>
+                     </plugins>
+                 </build>
   	</profile>
     <profile>
       <id>only-parent</id>

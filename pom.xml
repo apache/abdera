@@ -148,7 +148,7 @@
               <useReleaseProfile>false</useReleaseProfile>
               <preparationGoals>clean install</preparationGoals>
               <goals>deploy</goals>
-              <arguments>-Pdeploy</arguments>
+              <arguments>-Pdeploy,release</arguments>
               <autoVersionSubmodules>true</autoVersionSubmodules>
           </configuration>
       </plugin>
@@ -220,36 +220,29 @@
       </plugins>
     </pluginManagement>    
   </build>
-
+  
   <profiles>
   	<profile>
   		<id>deploy</id>
   		<modules>
   			<module>distribution</module>
   		</modules>
-                <build>
-                     <plugins>
-      <plugin>
-        <inherited>true</inherited>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <configuration>
-          <altDeploymentRepository>${deploy.altRepository}</altDeploymentRepository>
-          <updateReleaseInfo>true</updateReleaseInfo>
-        </configuration>
-      </plugin>
-                     </plugins>
-                 </build>
   	</profile>
-    <profile>
-      <id>only-parent</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-        <property>
-          <name>remote-resources</name>
-          <value>true</value>
-        </property>
-      </activation>
+  	<profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <inherited>true</inherited>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <configuration>
+              <altDeploymentRepository>${deploy.altRepository}</altDeploymentRepository>
+              <updateReleaseInfo>true</updateReleaseInfo>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   	<profile>
   		<id>no-online-tests</id>

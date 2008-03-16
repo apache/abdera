@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.apache.abdera</groupId>
     <artifactId>abdera</artifactId>
-    <version>0.4.0-incubating</version>
+    <version>0.5.0-incubating-SNAPSHOT</version>
   </parent>  
   <modelVersion>4.0.0</modelVersion>
   <artifactId>abdera-examples</artifactId>
   <packaging>jar</packaging>
   <name>Abdera Examples</name>
-  <version>0.4.0-incubating</version>
+  <version>0.5.0-incubating-SNAPSHOT</version>
   <description>Atom Specification Implementation Examples</description>
 
   <properties>
@@ -23,42 +23,42 @@
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-client</artifactId>
-      <version>0.4.0-incubating</version>
+      <version>0.5.0-incubating-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-server</artifactId>
-      <version>0.4.0-incubating</version>
+      <version>0.5.0-incubating-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-extensions-main</artifactId>
-      <version>0.4.0-incubating</version>
+      <version>0.5.0-incubating-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-extensions-serializer</artifactId>
-      <version>0.4.0-incubating</version>
+      <version>0.5.0-incubating-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-extensions-gdata</artifactId>
-      <version>0.4.0-incubating</version>
+      <version>0.5.0-incubating-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-extensions-geo</artifactId>
-      <version>0.4.0-incubating</version>
+      <version>0.5.0-incubating-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-extensions-sharing</artifactId>
-      <version>0.4.0-incubating</version>
+      <version>0.5.0-incubating-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-security</artifactId>
-      <version>0.4.0-incubating</version>
+      <version>0.5.0-incubating-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.mortbay.jetty</groupId>

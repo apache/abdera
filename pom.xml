@@ -5,7 +5,7 @@
   <artifactId>abdera</artifactId>
   <packaging>pom</packaging>
   <name>Apache Abdera</name>  
-  <version>0.4.0-incubating</version>  
+  <version>0.5.0-incubating-SNAPSHOT</version>  
   <description>Atom Specification Implementation</description>
   <inceptionYear>2006</inceptionYear>
   <url>http://incubator.apache.org/abdera</url>
@@ -52,9 +52,9 @@
   </licenses>
   
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/tags/abdera-0.4.0-incubating</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/tags/abdera-0.4.0-incubating</developerConnection>
-    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/tags/abdera-0.4.0-incubating</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/trunk/</developerConnection>
+    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/trunk/</url>
   </scm>
   
   <reporting>

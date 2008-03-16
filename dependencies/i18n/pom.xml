@@ -4,13 +4,13 @@
   <artifactId>abdera-i18n</artifactId>
   <packaging>jar</packaging>
   <name>I18N Libraries</name>
-  <version>0.4.0-incubating</version>
+  <version>0.5.0-incubating-SNAPSHOT</version>
   <description>RFC 3987 (Internationlaized Resource Identifier) libraries.</description>
   <url>http://incubator.apache.org/abdera</url>
   <parent>
     <groupId>org.apache.abdera</groupId>
     <artifactId>abdera</artifactId>
-    <version>0.4.0-incubating</version>
+    <version>0.5.0-incubating-SNAPSHOT</version>
   </parent>
           
    <properties>

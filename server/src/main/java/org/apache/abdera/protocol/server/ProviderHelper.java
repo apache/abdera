@@ -362,8 +362,7 @@ public class ProviderHelper {
         if (entry.getAlternateLink() == null) return false;
       } else {
         if ((content.getSrc() != null ||
-            content.getContentType() == Content.Type.MEDIA || 
-            content.getContentType() == Content.Type.XML) &&
+            content.getContentType() == Content.Type.MEDIA) &&
             entry.getSummaryElement() == null) {
           log.debug(Localizer.sprintf("CHECKING.VALID.ENTRY",false));
           return false;

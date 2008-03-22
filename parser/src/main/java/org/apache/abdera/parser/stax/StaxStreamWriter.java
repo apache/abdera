@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -150,6 +151,12 @@ public class StaxStreamWriter
     }
   }
   
+  private boolean needToWriteNamespace(String prefix, String namespace) {
+    NamespaceContext nc = writer.getNamespaceContext();
+      String uri = nc.getNamespaceURI(prefix);
+      return uri != null ? !uri.equals(namespace) : true;
+  }
+  
   public StreamWriter startElement(
     String name, 
     String namespace, 
@@ -162,13 +169,15 @@ public class StaxStreamWriter
           prefix,
           name,
           namespace);
-        writeNamespace(prefix,namespace,false);
+        if (needToWriteNamespace(prefix,namespace))
+          writeNamespace(prefix,namespace,false);
       } else if (namespace != null) {
         writer.writeStartElement(
           "",
           name, 
           namespace);
-        writer.writeDefaultNamespace(namespace);
+        if (needToWriteNamespace(prefix,namespace))
+          writer.writeDefaultNamespace(namespace);
       } else {
         writer.writeStartElement("",name,"");
         writer.writeDefaultNamespace("");

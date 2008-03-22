@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -150,6 +151,12 @@ public class StaxStreamWriter
     }
   }
   
+  private boolean needToWriteNamespace(String prefix, String namespace) {
+    NamespaceContext nc = writer.getNamespaceContext();
+      String uri = nc.getNamespaceURI(prefix);
+      return uri != null ? !uri.equals(namespace) : true;
+  }
+  
   public StreamWriter startElement(
     String name, 
     String namespace, 
@@ -157,21 +164,24 @@ public class StaxStreamWriter
     try {
       if (autoindent && textwritten == 0) indent();
       push();
-      if (prefix != null) {
+      if (prefix != null && !prefix.equals("")) {
         writer.writeStartElement(
           prefix,
           name,
           namespace);
+        if (needToWriteNamespace(prefix,namespace))
+          writeNamespace(prefix,namespace,false);
       } else if (namespace != null) {
         writer.writeStartElement(
           "",
           name, 
           namespace);
+        if (needToWriteNamespace(prefix,namespace))
+          writer.writeDefaultNamespace(namespace);
       } else {
         writer.writeStartElement("",name,"");
         writer.writeDefaultNamespace("");
       }
-      writeNamespace(prefix,namespace,false);
       if (autoflush) writer.flush();
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);
@@ -227,6 +237,26 @@ public class StaxStreamWriter
     return writeId(FOMHelper.generateUuid());
   }
 
+  public StreamWriter writeDefaultNamespace(String uri) {
+    try {
+      writer.writeDefaultNamespace(uri);
+    } catch (XMLStreamException e) {
+      throw new RuntimeException(e);
+    }
+    return this;
+  }
+  
+  public StreamWriter writeNamespace(
+    String prefix,
+    String uri) {
+      try {
+        writer.writeNamespace(prefix, uri);
+      } catch (XMLStreamException e) {
+        throw new RuntimeException(e);
+      }
+      return this;
+  }
+  
   public StreamWriter writeAttribute(
     String name, 
     String namespace,

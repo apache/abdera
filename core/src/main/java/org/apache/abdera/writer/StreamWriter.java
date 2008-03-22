@@ -1101,5 +1101,18 @@ public interface StreamWriter
    * Write the xml:lang attribute
    */
   StreamWriter writeLanguage(Locale locale);
+  
+  /**
+   * Write a namespace declaration to an element
+   */
+  StreamWriter writeNamespace(
+      String prefix,
+      String uri);
+  
+  /**
+   * Write the default namespace declaration to an element
+   */
+  StreamWriter writeDefaultNamespace(String uri);
+  
 }
 

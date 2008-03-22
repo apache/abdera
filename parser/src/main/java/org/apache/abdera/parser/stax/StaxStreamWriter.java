@@ -157,21 +157,22 @@ public class StaxStreamWriter
     try {
       if (autoindent && textwritten == 0) indent();
       push();
-      if (prefix != null) {
+      if (prefix != null && !prefix.equals("")) {
         writer.writeStartElement(
           prefix,
           name,
           namespace);
+        writeNamespace(prefix,namespace,false);
       } else if (namespace != null) {
         writer.writeStartElement(
           "",
           name, 
           namespace);
+        writer.writeDefaultNamespace(namespace);
       } else {
         writer.writeStartElement("",name,"");
         writer.writeDefaultNamespace("");
       }
-      writeNamespace(prefix,namespace,false);
       if (autoflush) writer.flush();
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);

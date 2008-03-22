@@ -227,6 +227,26 @@ public class StaxStreamWriter
     return writeId(FOMHelper.generateUuid());
   }
 
+  public StreamWriter writeDefaultNamespace(String uri) {
+    try {
+      writer.writeDefaultNamespace(uri);
+    } catch (XMLStreamException e) {
+      throw new RuntimeException(e);
+    }
+    return this;
+  }
+  
+  public StreamWriter writeNamespace(
+    String prefix,
+    String uri) {
+      try {
+        writer.writeNamespace(prefix, uri);
+      } catch (XMLStreamException e) {
+        throw new RuntimeException(e);
+      }
+      return this;
+  }
+  
   public StreamWriter writeAttribute(
     String name, 
     String namespace,

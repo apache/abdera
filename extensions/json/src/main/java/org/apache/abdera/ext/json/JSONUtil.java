@@ -15,6 +15,8 @@
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
  */
+package org.apache.abdera.ext.json;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;

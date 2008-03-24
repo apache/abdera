@@ -1,16 +1,3 @@
-package org.apache.abdera.protocol.client.util;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-
-import org.apache.abdera.i18n.rfc4646.Lang;
-import org.apache.abdera.i18n.rfc4646.Range;
-import org.apache.abdera.model.Entry;
-import org.apache.abdera.model.Link;
-import org.apache.abdera.model.Source;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  The ASF licenses this file to You
@@ -28,6 +15,19 @@ import org.apache.abdera.model.Source;
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
  */
+package org.apache.abdera.protocol.client.util;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+
+import org.apache.abdera.i18n.rfc4646.Lang;
+import org.apache.abdera.i18n.rfc4646.Range;
+import org.apache.abdera.model.Entry;
+import org.apache.abdera.model.Link;
+import org.apache.abdera.model.Source;
 
 public final class LocalizationHelper {
 

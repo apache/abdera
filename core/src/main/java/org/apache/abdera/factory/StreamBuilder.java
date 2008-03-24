@@ -1,4 +1,3 @@
-package org.apache.abdera.factory;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  The ASF licenses this file to You
@@ -16,6 +15,8 @@ package org.apache.abdera.factory;
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
  */
+package org.apache.abdera.factory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

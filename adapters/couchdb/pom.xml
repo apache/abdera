@@ -23,13 +23,17 @@
         </dependency>
 
         <dependency>
-            <groupId>couchdb4j</groupId>
+            <groupId>com.google.code</groupId>
             <artifactId>couchdb4j</artifactId>
             <version>0.1.2</version>
-            <scope>system</scope>
-            <systemPath>
-                ${basedir}/repository/couchdb4j-0.1.2.jar
-            </systemPath>
         </dependency>
     </dependencies>
+    
+    <repositories>
+      <repository>
+        <id>dandiep.apache</id>
+        <name>Temporary repo for couchdb4j until it ends up on central.</name>
+        <url>http://people.apache.org/~dandiep/repo/</url>
+      </repository> 
+    </repositories>
 </project>

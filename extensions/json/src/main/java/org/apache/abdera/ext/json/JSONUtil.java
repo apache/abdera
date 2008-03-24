@@ -1,4 +1,3 @@
-package org.apache.abdera.ext.json;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  The ASF licenses this file to You

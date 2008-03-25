@@ -358,7 +358,7 @@
     <repository>
       <id>apache.snapshots</id>
       <name>Apache Incubating Repository</name>
-      <url>scpexe://people.apache.org/home/dandiep/public_html/abdera-take2</url>
+      <url>scpexe://people.apache.org/home/dandiep/public_html/abdera-take5</url>
     </repository>
   </distributionManagement>
 
@@ -368,11 +368,6 @@
   </properties>
 
   <repositories>
-    <repository>
-	    <id>scriptlandia-maven2</id>
-	    <name>scriptlandia-maven2</name>
-	    <url>http://scriptlandia-repository.googlecode.com/svn/trunk/languages</url>
-	  </repository>
     <repository>
       <id>apache.incubating</id>
       <name>Apache Incubating Repository</name>

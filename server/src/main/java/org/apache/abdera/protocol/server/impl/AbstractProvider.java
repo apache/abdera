@@ -46,6 +46,8 @@ import org.apache.abdera.protocol.server.WorkspaceManager;
 import org.apache.abdera.protocol.server.context.StreamWriterResponseContext;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.writer.StreamWriter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Base Provider implementation that provides the core implementation details 
@@ -53,6 +55,8 @@ import org.apache.abdera.writer.StreamWriter;
  */
 public abstract class AbstractProvider 
   implements Provider {
+  
+  private final static Log log = LogFactory.getLog(AbstractProvider.class);
   
   protected Abdera abdera;
   protected Map<String,String> properties;
@@ -183,6 +187,7 @@ public abstract class AbstractProvider
           response = ProviderHelper.notsupported(request);
         return response;
       } catch (Throwable e) {
+        log.error(e);
         if (transaction != null) 
           transaction.compensate(request,e);
         response = ProviderHelper.servererror(request, e);

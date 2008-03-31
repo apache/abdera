@@ -128,7 +128,7 @@
               <useReleaseProfile>false</useReleaseProfile>
               <preparationGoals>clean install</preparationGoals>
               <goals>deploy</goals>
-              <arguments>-Pdeploy,release</arguments>
+              <arguments>-Pdeploy</arguments>
               <autoVersionSubmodules>true</autoVersionSubmodules>
           </configuration>
       </plugin>
@@ -208,22 +208,6 @@
   			<module>distribution</module>
   		</modules>
   	</profile>
-  	<profile>
-      <id>release</id>
-      <build>
-        <plugins>
-          <plugin>
-            <inherited>true</inherited>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-deploy-plugin</artifactId>
-            <configuration>
-              <altDeploymentRepository>${deploy.altRepository}</altDeploymentRepository>
-              <updateReleaseInfo>true</updateReleaseInfo>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
   	<profile>
   		<id>no-online-tests</id>
   		<activation>
@@ -371,15 +355,10 @@
   </modules>
   
   <distributionManagement>
-    <snapshotRepository>
-      <id>apache.snapshots</id>
-      <name>Apache SNAPSHOT Repository</name>
-      <url>scpexe://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</url>
-    </snapshotRepository>
     <repository>
-      <id>apache.incubating</id>
+      <id>apache.snapshots</id>
       <name>Apache Incubating Repository</name>
-      <url>scpexe://people.apache.org/www/people.apache.org/repo/m2-incubating-repository</url>
+      <url>scpexe://people.apache.org/home/dandiep/public_html/abdera-take5</url>
     </repository>
   </distributionManagement>
 
@@ -389,11 +368,6 @@
   </properties>
 
   <repositories>
-    <repository>
-	    <id>scriptlandia-maven2</id>
-	    <name>scriptlandia-maven2</name>
-	    <url>http://scriptlandia-repository.googlecode.com/svn/trunk/languages</url>
-	  </repository>
     <repository>
       <id>apache.incubating</id>
       <name>Apache Incubating Repository</name>

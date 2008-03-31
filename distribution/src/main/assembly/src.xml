@@ -29,26 +29,10 @@
 
     <fileSets>
         <fileSet>
-            <directory></directory>
-            <outputDirectory>apache-abdera-${version}-src</outputDirectory>
-            <includes>
-                <include>dependencies/legal/*.*</include>
-                <include>README</include>
-                <include>BUILDING</include>
-            </includes>
-        </fileSet>
-        <fileSet>
             <directory>src/main/release</directory>
             <outputDirectory>apache-abdera-${version}/</outputDirectory>
             <includes>
                 <include>**/*.txt</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>target/maven-shared-archive-resources/META-INF</directory>
-            <outputDirectory>apache-abdera-${version}-src</outputDirectory>
-            <includes>
-                <include>*</include>
             </includes>
         </fileSet>
         <fileSet>
@@ -60,6 +44,9 @@
             <excludes>
                 <exclude>**/target</exclude>
                 <exclude>**/target/**/*</exclude>
+                <exclude>**/repository</exclude>
+                <exclude>**/repository/**/*</exclude>
+                <exclude>**/derby.log</exclude>
                 <exclude>**/.settings</exclude>
                 <exclude>**/.pmd</exclude>
                 <exclude>**/.checkstyle</exclude>

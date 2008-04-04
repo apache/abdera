@@ -64,6 +64,7 @@
                 <exclude>**/var/journal</exclude>
                 <exclude>**/build.out*</exclude>
                 <exclude>STATUS</exclude>
+                <exclude>LICENSE</exclude>
             </excludes>
         </fileSet>
     </fileSets>

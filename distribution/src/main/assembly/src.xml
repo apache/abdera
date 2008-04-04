@@ -30,10 +30,20 @@
     <fileSets>
         <fileSet>
             <directory>src/main/release</directory>
-            <outputDirectory>apache-abdera-${version}/</outputDirectory>
+            <outputDirectory>apache-abdera-${version}-src/</outputDirectory>
             <includes>
                 <include>**/*.txt</include>
             </includes>
+        </fileSet>
+        <fileSet>
+            <directory>target/maven-shared-archive-resources/META-INF</directory>
+            <outputDirectory>apache-abdera-${version}-src/</outputDirectory>
+            <includes>
+                <include>*</include>
+            </includes>
+            <excludes>
+                <exclude>DEPENDENCIES</exclude>
+            </excludes>
         </fileSet>
         <fileSet>
             <directory>..</directory>
@@ -64,7 +74,8 @@
                 <exclude>**/var/journal</exclude>
                 <exclude>**/build.out*</exclude>
                 <exclude>STATUS</exclude>
-                <exclude>LICENSE</exclude>
+                <!-- This is generated -->
+                <exclude>**/LICENSE</exclude>
             </excludes>
         </fileSet>
     </fileSets>

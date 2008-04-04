@@ -150,7 +150,7 @@
       </plugin>
       <plugin>
           <artifactId>maven-remote-resources-plugin</artifactId>
-          <version>1.0-beta-2</version>
+          <version>1.0</version>
           <executions>
               <execution>
                   <id>compile</id>
@@ -160,7 +160,7 @@
                   <configuration>
                       <resourceBundles>
                           <resourceBundle>org.apache:apache-incubator-disclaimer-resource-bundle:1.1</resourceBundle>
-                          <resourceBundle>org.apache:apache-jar-resource-bundle:1.3</resourceBundle>
+                          <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
                       </resourceBundles>
                       <supplementalModels>
                           <supplementalModel>${topDir}/etc/notice-supplements.xml</supplementalModel>
@@ -213,6 +213,19 @@
             </excludes>
           </configuration>
         </plugin>
+              <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin> 
       </plugins>
     </pluginManagement>    
   </build>
@@ -374,7 +387,7 @@
     <repository>
       <id>apache.snapshots</id>
       <name>Apache Incubating Repository</name>
-      <url>scpexe://people.apache.org/home/dandiep/public_html/abdera-take5</url>
+      <url>scpexe://netzooid.com/home/dan/public_html/abdera-take7</url>
     </repository>
   </distributionManagement>
 

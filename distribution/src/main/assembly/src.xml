@@ -56,6 +56,7 @@
                 <exclude>**/.project</exclude>
                 <exclude>**/.wtpmodules</exclude>
                 <exclude>**/surefire*</exclude>
+                <exclude>**/velocity.log</exclude>
                 <exclude>**/cobertura.ser</exclude>
                 <exclude>**/.svn</exclude>
                 <exclude>bin</exclude>

@@ -61,7 +61,7 @@
   
   <licenses>
     <license>
-      <name>Apache License 2.0</name>
+      <name>The Apache Software License, Version 2.0</name>
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
       <distribution>repo</distribution>
     </license>
@@ -109,6 +109,7 @@
   </reporting>
   
   <build>
+ 
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -166,8 +167,6 @@
                           <supplementalModel>${topDir}/etc/notice-supplements.xml</supplementalModel>
                       </supplementalModels>
                       <properties>
-                          <addLicense>true</addLicense>
-                          <addArtifact>true</addArtifact>
                           <projectName>Apache Abdera</projectName>
                       </properties>
                   </configuration>
@@ -387,7 +386,7 @@
     <repository>
       <id>apache.snapshots</id>
       <name>Apache Incubating Repository</name>
-      <url>scpexe://netzooid.com/home/dan/public_html/abdera-take7</url>
+      <url>scp://people.apache.org/home/dandiep/public_html/abdera-take7</url>
     </repository>
   </distributionManagement>
 

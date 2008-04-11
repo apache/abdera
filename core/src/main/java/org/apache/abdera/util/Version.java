@@ -20,7 +20,7 @@ package org.apache.abdera.util;
 public abstract interface Version {
 
   public static final String APP_NAME = "Abdera";
-  public static final String VERSION = "v0.4.0-incubating-SNAPSHOT";
+  public static final String VERSION = "v0.5.0-incubating-SNAPSHOT";
   public static final String URI = "http://incubator.apache.org/abdera";
   
 }

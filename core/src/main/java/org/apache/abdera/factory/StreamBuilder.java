@@ -36,7 +36,6 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Content.Type;
 import org.apache.abdera.util.AbstractStreamWriter;
-import org.apache.abdera.writer.StreamWriter;
 
 /**
  * StreamBuilder is a special implementation of the StreamWriter interface that
@@ -849,18 +848,6 @@ public class StreamBuilder
 
   public StreamBuilder writeUpdated(String date) {
     return (StreamBuilder)super.writeUpdated(date);
-  }
-
-  public StreamWriter writeDefaultNamespace(String uri) {
-    if (!(current instanceof Element)) throw new IllegalStateException("Not currently an element");
-    ((Element)current).declareNS(uri, "");
-    return this;
-  }
-
-  public StreamWriter writeNamespace(String prefix, String uri) {
-    if (!(current instanceof Element)) throw new IllegalStateException("Not currently an element");
-    ((Element)current).declareNS(uri, prefix);
-    return this;
   }
   
 }

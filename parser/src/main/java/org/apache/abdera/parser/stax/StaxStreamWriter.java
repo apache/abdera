@@ -265,11 +265,11 @@ public class StaxStreamWriter
       if (value == null) return this;
       try {
         if (prefix != null) {
-          if (!prefix.equals("xml") && needToWriteNamespace(prefix, namespace))
+          if (!prefix.equals("xml"))
             writeNamespace(prefix,namespace,true);
           writer.writeAttribute(prefix, namespace, name, value);
         } else if (namespace != null) {
-          if (!namespace.equals(Constants.XML_NS) && needToWriteNamespace(prefix, namespace));
+          if (!namespace.equals(Constants.XML_NS));
             writeNamespace(prefix,namespace,true);
           writer.writeAttribute(namespace, name, value);
         } else { 

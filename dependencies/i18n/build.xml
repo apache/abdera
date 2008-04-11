@@ -16,7 +16,7 @@
   directory of this distribution. -->
 <project name="i18n" default="dist" basedir=".">
  <description>RFC 3987 (IRI) support library for Apache Abdera</description>
- <property name="version" value="0.4.0-incubating-SNAPSHOT"/>
+ <property name="version" value="0.5.0-incubating-SNAPSHOT"/>
 
  <property file="${basedir}/build.properties"/>
 

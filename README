@@ -46,6 +46,10 @@ Changes
         for JDBC, JCR, filesystems, and CouchDB.
       - An improved JSON serialization mechanism.
       - New extensions such as OAuth support.
+      - New StreamWriter interface for fast Atom document serialization
+      - Improved Unicode performance for IRI implementation
+      - URI Template Support
+      - HTML Parser 
       - Many API improvements and bug fixes!
 0.3.0 - Support for the Atompub final draft 
       - Refactored and simplified Server framework

@@ -39,10 +39,11 @@
             <directory>target/maven-shared-archive-resources/META-INF</directory>
             <outputDirectory>apache-abdera-${version}/</outputDirectory>
             <includes>
-                <include>NOTICE</include>
-                <include>DISCLAIMER</include>
-                <include>LICENSE</include>
+                <include>*</include>
             </includes>
+            <excludes>
+                <exclude>DEPENDENCIES</exclude>
+            </excludes>
         </fileSet>
         <fileSet>
             <directory>../docs</directory>

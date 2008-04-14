@@ -244,7 +244,7 @@ public abstract class AbstractCollectionAdapter
     try {
       entry_doc = (Document<Entry>)request.getDocument(parser).clone();
     } catch (ParseException e) {
-      throw new ResponseContextException(500, e);
+      throw new ResponseContextException(400, e);
     } catch (IOException e) {
       throw new ResponseContextException(500, e);
     }

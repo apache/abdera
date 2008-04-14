@@ -43,6 +43,7 @@ import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.Transactional;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.WorkspaceManager;
+import org.apache.abdera.protocol.server.context.ResponseContextException;
 import org.apache.abdera.protocol.server.context.StreamWriterResponseContext;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.writer.StreamWriter;
@@ -116,20 +117,14 @@ public abstract class AbstractProvider
       if (target == null || 
           target.getType() == TargetType.TYPE_NOT_FOUND)
         return ProviderHelper.notfound(request);
-      String method = request.getMethod();
       TargetType type = target.getType();
-      if (type == TargetType.TYPE_SERVICE && 
-          method.equalsIgnoreCase("GET")) {
-          return getServiceDocument(request);
-      }
-      WorkspaceManager wm = getWorkspaceManager(request);
-      
+      if (type == TargetType.TYPE_SERVICE)
+        return processService(request);
+      WorkspaceManager wm = getWorkspaceManager(request);      
       CollectionAdapter adapter = 
         wm.getCollectionAdapter(request);
-      if (adapter == null) {
-        return ProviderHelper.notfound(
-          request);
-      }
+      if (adapter == null)
+        return ProviderHelper.notfound(request);
       
       Transactional transaction = 
         adapter instanceof Transactional ? 
@@ -137,67 +132,144 @@ public abstract class AbstractProvider
       ResponseContext response = null;
       try {
         if (transaction != null) transaction.start(request);
-        if (type == TargetType.TYPE_CATEGORIES) {
-          if (method.equalsIgnoreCase("GET"))
-            response = adapter.getCategories(request);
-        } else if (type == TargetType.TYPE_COLLECTION) {
-          if (method.equalsIgnoreCase("GET")) 
-            response = adapter.getFeed(request);
-          else if (method.equalsIgnoreCase("POST")) {
-            response = ProviderHelper.isAtom(request) ?
-              adapter.postEntry(request) :
-              adapter instanceof MediaCollectionAdapter ?
-                ((MediaCollectionAdapter)adapter).postMedia(request) :
-                ProviderHelper.notsupported(request);
-          }
-        } else if (type == TargetType.TYPE_ENTRY) {
-          if (method.equalsIgnoreCase("GET")) 
-            response = adapter.getEntry(request);
-          else if (method.equalsIgnoreCase("PUT")) 
-            response = adapter.putEntry(request);
-          else if (method.equalsIgnoreCase("DELETE")) 
-            response = adapter.deleteEntry(request);
-          else if (method.equalsIgnoreCase("HEAD")) 
-            response = adapter.headEntry(request);
-          else if (method.equalsIgnoreCase("OPTIONS")) 
-            response = adapter.optionsEntry(request);
-        } else if (type == TargetType.TYPE_MEDIA) {
-          if (adapter instanceof MediaCollectionAdapter) {
-            MediaCollectionAdapter mcadapter = 
-              (MediaCollectionAdapter) adapter;
-            if (method.equalsIgnoreCase("GET")) 
-              response = mcadapter.getMedia(request);
-            else if (method.equalsIgnoreCase("PUT")) 
-              response = mcadapter.putMedia(request);
-            else if (method.equalsIgnoreCase("DELETE")) 
-              response = mcadapter.deleteMedia(request);   
-            else if (method.equalsIgnoreCase("HEAD")) 
-              response = mcadapter.headMedia(request);   
-            else if (method.equalsIgnoreCase("OPTIONS")) 
-              response = mcadapter.optionsMedia(request);        
-          } else {
-            response = ProviderHelper.notsupported(request);
-          }
-        } else if (type == TargetType.TYPE_NOT_FOUND) {
-          response = ProviderHelper.notfound(request);
-        } else {
-          response = adapter.extensionRequest(request);
-        }
-        if (response == null)
-          response = ProviderHelper.notsupported(request);
-        return response;
+        if (type == TargetType.TYPE_CATEGORIES)
+          response = processCategories(request, adapter);
+        else if (type == TargetType.TYPE_COLLECTION)
+          response = processCollection(request, adapter);
+        else if (type == TargetType.TYPE_ENTRY)
+          response = processEntry(request, adapter);
+        else if (type == TargetType.TYPE_MEDIA)
+          response = processMedia(request, adapter);
+        response = 
+          response != null ? 
+            response : 
+            processExtensionRequest(
+              request, 
+              adapter);
+        return 
+          response != null ? 
+            response :
+            ProviderHelper.badrequest(request);
       } catch (Throwable e) {
-        log.error(e);
-        if (transaction != null) 
-          transaction.compensate(request,e);
+        if (e instanceof ResponseContextException) {
+          ResponseContextException rce = (ResponseContextException) e;
+          if (rce.getStatusCode() >= 400 && rce.getStatusCode() < 500) {
+            // don't report routine 4xx HTTP errors
+            log.info(e);
+          } else {
+            log.error(e);
+          }
+        } else {
+          log.error(e);
+        }
+        transactionCompensate(transaction, request, e);
         response = ProviderHelper.servererror(request, e);
         return response;
       } finally {
-        if (transaction != null) 
-          transaction.end(request, response);
+        transactionEnd(transaction,request,response);
       }
   }
-   
+
+  protected void transactionCompensate(
+    Transactional transactional,
+    RequestContext request,
+    Throwable e) {
+      if (transactional != null) 
+        transactional.compensate(request,e);      
+  }
+  
+  protected void transactionEnd(
+    Transactional transactional, 
+    RequestContext request,
+    ResponseContext response) {
+    if (transactional != null)
+      transactional.end(request,response);
+  }
+  
+  protected void transactionStart(
+    Transactional transactional, 
+    RequestContext request) 
+      throws ResponseContextException {
+    if (transactional != null)
+      transactional.start(request);
+  }
+  
+  protected ResponseContext processService(
+    RequestContext context) {
+      String method = context.getMethod(); 
+      if (method.equalsIgnoreCase("GET"))
+        return getServiceDocument(context);
+      else return null;
+  }
+  
+  protected ResponseContext processExtensionRequest(
+    RequestContext context, 
+    CollectionAdapter adapter) {    
+      return adapter.extensionRequest(context);
+  }
+  
+  protected ResponseContext processCategories(
+    RequestContext context, 
+    CollectionAdapter adapter) {
+      return context.getMethod().equalsIgnoreCase("GET") ?
+        adapter.getCategories(context) : null;
+  }
+  
+  protected ResponseContext processCollection(
+    RequestContext context,
+    CollectionAdapter adapter) {
+      String method = context.getMethod();
+      if (method.equalsIgnoreCase("GET")) 
+        return adapter.getFeed(context);
+      else if (method.equalsIgnoreCase("POST")) {
+        return ProviderHelper.isAtom(context) ?
+          adapter.postEntry(context) :
+          adapter instanceof MediaCollectionAdapter ?
+            ((MediaCollectionAdapter)adapter).postMedia(context) :
+            ProviderHelper.notsupported(context);
+      } else return null;
+  }
+  
+  protected ResponseContext processEntry(
+    RequestContext context,
+    CollectionAdapter adapter) {
+      String method = context.getMethod();
+      if (method.equalsIgnoreCase("GET")) 
+        return adapter.getEntry(context);
+      else if (method.equalsIgnoreCase("PUT")) 
+        return adapter.putEntry(context);
+      else if (method.equalsIgnoreCase("DELETE")) 
+        return adapter.deleteEntry(context);
+      else if (method.equalsIgnoreCase("HEAD")) 
+        return adapter.headEntry(context);
+      else if (method.equalsIgnoreCase("OPTIONS")) 
+        return adapter.optionsEntry(context);
+      else return null;
+  }
+  
+  protected ResponseContext processMedia(
+    RequestContext context,
+    CollectionAdapter adapter) {
+      String method = context.getMethod();
+      if (adapter instanceof MediaCollectionAdapter) {
+        MediaCollectionAdapter mcadapter = 
+          (MediaCollectionAdapter) adapter;
+        if (method.equalsIgnoreCase("GET")) 
+          return mcadapter.getMedia(context);
+        else if (method.equalsIgnoreCase("PUT")) 
+          return mcadapter.putMedia(context);
+        else if (method.equalsIgnoreCase("DELETE")) 
+          return mcadapter.deleteMedia(context);   
+        else if (method.equalsIgnoreCase("HEAD")) 
+          return mcadapter.headMedia(context);   
+        else if (method.equalsIgnoreCase("OPTIONS")) 
+          return mcadapter.optionsMedia(context);
+        else return null;
+      } else {
+        return ProviderHelper.notsupported(context);
+      }
+  }
+  
   protected abstract WorkspaceManager getWorkspaceManager(
     RequestContext request);
   

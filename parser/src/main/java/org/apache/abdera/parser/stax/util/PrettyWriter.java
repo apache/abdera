@@ -70,12 +70,8 @@ public class PrettyWriter
     WriterOptions options) 
       throws IOException {
     out = getCompressedOutputStream(out, options);
-    String charset = options.getCharset();
-    if (charset != null) {
-      writeTo(base,new OutputStreamWriter(out,charset),options);
-    } else {
-      writeTo(base,new OutputStreamWriter(out),options);
-    }
+    String charset = options.getCharset() != null?options.getCharset():"UTF-8";
+    writeTo(base,new OutputStreamWriter(out,charset),options);
     finishCompressedOutputStream(out, options);
     if (options.getAutoClose()) out.close();
   }

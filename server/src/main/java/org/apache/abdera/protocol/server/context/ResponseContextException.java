@@ -58,4 +58,7 @@ public class ResponseContextException extends Exception {
     return responseContext.getStatusText();
   }
   
+  public int getStatusCode() {
+    return responseContext.getStatus();
+  }
 }

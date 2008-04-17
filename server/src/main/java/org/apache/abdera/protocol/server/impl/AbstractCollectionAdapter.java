@@ -207,8 +207,8 @@ public abstract class AbstractCollectionAdapter
    * @return
    */
   protected ResponseContext createErrorResponse(ResponseContextException e) {
-    if (log.isInfoEnabled()) {
-      log.info("A ResponseException was thrown.", e);
+    if (log.isDebugEnabled()) {
+      log.debug("A ResponseException was thrown.", e);
     } else if (e.getResponseContext() instanceof EmptyResponseContext
                && ((EmptyResponseContext)e.getResponseContext()).getStatus() >= 500) {
       log.warn("A ResponseException was thrown.", e);

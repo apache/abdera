@@ -154,8 +154,8 @@ public class RouteManager
         if (!map.containsKey(var) && value != null) {
           map.put(var, value);
         }
-      }
-      return context.getTargetBasePath() + route.expand(getContext(map));
+      }            
+      return context.getContextPath() + route.expand(getContext(map));
     } else {
       return null;
     }

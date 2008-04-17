@@ -595,6 +595,9 @@ Working directory: ${work}
       <get src="${jetty-util.dir}/${jetty-util.jar}" dest="${dependencies}/${jetty-util.jar}" usetimestamp="true" />
       <get src="${htmlparser.dir}/${htmlparser.jar}" dest="${dependencies}/${htmlparser.jar}" usetimestamp="true" />
       <get src="${htmlparser.dir}/${htmlserializer.jar}" dest="${dependencies}/${htmlserializer.jar}" usetimestamp="true" />
+      <get src="${easymock.dir}/${easymock.jar}" dest="${dependencies}/${easymock.jar}" usetimestamp="true" />
+      <get src="${easymockclassextension.dir}/${easymockclassextension.jar}" dest="${dependencies}/${easymockclassextension.jar}" usetimestamp="true" />
+       <get src="${cglib.dir}/${cglib.jar}" dest="${dependencies}/${cglib.jar}" usetimestamp="true" />
     </parallel>
   </target>
 

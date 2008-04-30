@@ -17,6 +17,10 @@
  */
 package org.apache.abdera.protocol.server.test.route;
 
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.easymock.classextension.EasyMock.replay;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +28,10 @@ import junit.framework.Assert;
 
 import org.apache.abdera.i18n.templates.HashMapContext;
 import org.apache.abdera.i18n.templates.Route;
+import org.apache.abdera.protocol.server.RequestContext;
+import org.apache.abdera.protocol.server.Target;
+import org.apache.abdera.protocol.server.context.RequestContextWrapper;
+import org.apache.abdera.protocol.server.impl.RouteManager;
 import org.junit.Test;
 
 public class RouteTest extends Assert {
@@ -168,5 +176,20 @@ public class RouteTest extends Assert {
     Map<String, String> vars = route.parse("/base/test/");
     assertEquals("test", vars.get("collection"));
   }
+    
+  @Test
+  public void testUrlFor() throws Exception {
+    RouteManager manager = new RouteManager().addRoute(new Route("entry", "/base/:collection/:entry"));
 
+    Target targetMock = createMock(Target.class);
+    expect(targetMock.getParameter("collection")).andReturn("entries");
+    expect(targetMock.getParameter("entry")).andReturn("123");
+    replay(targetMock);
+    RequestContext contextMock = createMock(RequestContextWrapper.class);
+    expect(contextMock.getContextPath()).andReturn("/appBase");
+    expect(contextMock.getTarget()).andReturn(targetMock).times(2);
+    replay(contextMock);
+
+    assertEquals(manager.urlFor(contextMock, "entry", null), "/appBase/base/entries/123");
+  }
 }

@@ -33,7 +33,7 @@ import org.apache.abdera.util.Constants;
 public class GeoHelper {
 
   public static final String W3C_GEO_NS           = "http://www.w3.org/2003/01/geo/wgs84_pos#";
-  public static final String SIMPLE_GEO_NS        = "http://www.georss.org/georss/10";
+  public static final String SIMPLE_GEO_NS        = "http://www.georss.org/georss";
   public static final String GML_NS               = "http://www.opengis.net/gml";
   
   public static final QName QNAME_W3C_POINT       = new QName(W3C_GEO_NS, "Point", "geo");

@@ -39,6 +39,8 @@ import org.apache.abdera.writer.StreamWriter;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
 import org.apache.abdera.xpath.XPath;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Provides the basic configuration for the Abdera default implementation.  This
@@ -48,6 +50,7 @@ public final class AbderaConfiguration
   implements Constants, Configuration {
   
   private static final long serialVersionUID = 7460203853824337559L;
+  private final static Log log = LogFactory.getLog(AbderaConfiguration.class);
 
   /**
    * Returns the default configuration. Every call to this method returns
@@ -138,8 +141,11 @@ public final class AbderaConfiguration
    */
   public AbderaConfiguration addExtensionFactory(ExtensionFactory factory) {
     List<ExtensionFactory> factories = getExtensionFactories();
-    if (!factories.contains(factory))
+    if (!factories.contains(factory)) {
       factories.add(factory);
+    } else {
+    	log.warn("These extensions are already registered: " + factory.getNamespaces());
+    }
     return this;
   }
   
@@ -155,7 +161,11 @@ public final class AbderaConfiguration
    */
   public AbderaConfiguration addNamedWriter(NamedWriter writer) {
     Map<String,NamedWriter> writers = getNamedWriters();
-    writers.put(writer.getName(), writer);
+    if (!writers.containsKey(writer.getName())) {
+    	writers.put(writer.getName(), writer);
+    } else {
+    	log.warn("The NamedWriter is already registered: " + writer.getName());
+    }
     return this;
   }
   
@@ -222,7 +232,11 @@ public final class AbderaConfiguration
    */
   public AbderaConfiguration addNamedParser(NamedParser parser) {
     Map<String,NamedParser> parsers = getNamedParsers();
-    parsers.put(parser.getName(), parser);
+    if (!parsers.containsKey(parser.getName())) {
+    	parsers.put(parser.getName(), parser);
+    } else {
+    	log.warn("The NamedParser is already registered: " + parser.getName());
+    }
     return this;
   }
 
@@ -230,7 +244,13 @@ public final class AbderaConfiguration
    * Registers a StreamWriter implementation
    */
   public AbderaConfiguration addStreamWriter(Class<? extends StreamWriter> sw) {
-    getStreamWriters().put(getName(sw), sw);
+	Map<String,Class<? extends StreamWriter>> streamWriters = getStreamWriters();
+	String swName = getName(sw);
+	if (!streamWriters.containsKey(swName)) {
+		streamWriters.put(swName, sw);
+	} else {
+		log.warn("The StreamWriter is already registered: " + swName);
+	}
     return this;
   }
   

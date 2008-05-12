@@ -106,4 +106,32 @@ public interface Configuration
   
   
   public abstract Object clone();
+  
+  /**
+   * Registers a new NamedParser, this method doesn't override a parser if already exists.
+   * @param parser is the new NamedParser to add
+   * @return the instance of the configuration class
+   */
+  public Configuration addNamedParser(NamedParser parser);
+  
+  /**
+   * Registers a new NamedWriter, this method doesn't override a writer if already exists.
+   * @param writer is the new NamedWriter to add
+   * @return the instance of the configuration class
+   */
+  public Configuration addNamedWriter(NamedWriter writer);
+  
+  /**
+   * Registers a new ExtensionFactory, this method doesn't override an extensionFactory if already exists.
+   * @param factory is the new ExtensionFactory to add
+   * @return the instance of the configuration class
+   */
+  public Configuration addExtensionFactory(ExtensionFactory factory);
+  
+  /**
+   * Registers a new StreamWriter, this method doesn't override a streamWriter if already exists.
+   * @param sw is the new StreamWriter to add
+   * @return the instance of the configuration class
+   */
+  public Configuration addStreamWriter(Class<? extends StreamWriter> sw);
 }

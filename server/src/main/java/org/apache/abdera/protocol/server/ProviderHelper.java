@@ -373,7 +373,7 @@ public class ProviderHelper {
       if (entry.getUpdated() == null) return false;
       if (entry.getAuthor() == null && 
           (entry.getSource() != null && 
-           entry.getAuthor() == null)) return false;
+           entry.getSource().getAuthor() == null)) return false;
       Content content = entry.getContentElement();
       if (content == null) {
         if (entry.getAlternateLink() == null) return false;

@@ -47,7 +47,8 @@ public class JSONFilter
     FilterChain chain) {
       ResponseContext resp = chain.next(request);
       String format = request.getParameter("format");
-      return jsonPreferred(request,resp.getContentType().toString()) ||
+      return (resp.getContentType() != null &&
+        jsonPreferred(request,resp.getContentType().toString())) ||
         (format != null && format.equalsIgnoreCase("json")) ?
         new JsonResponseContext(resp,request.getAbdera()) :
         resp;

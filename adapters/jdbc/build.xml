@@ -32,7 +32,7 @@
   <target name="dependencies">
     <mkdir dir="${basedir}/lib" />
     <parallel>      
-      <get src="http://ibiblio.org/pub/packages/maven2/org/apache/ibatis/ibatis-sqlmap/2.3.0/ibatis-sqlmap-2.3.0.jar" dest="${basedir}/lib/ibatis-sqlmap-2.3.0.jar" usetimestamp="true" />
+      <get src="http://repo1.maven.org/maven2/org/apache/ibatis/ibatis-sqlmap/2.3.0/ibatis-sqlmap-2.3.0.jar" dest="${basedir}/lib/ibatis-sqlmap-2.3.0.jar" usetimestamp="true" />
     </parallel>
     <path id="dependencies">
       <fileset dir="${basedir}/lib" includes="**/*.jar" />

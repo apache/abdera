@@ -67,12 +67,12 @@ public class Abdera {
   }
   
   private final Configuration config;
-  private final Factory factory;
-  private final Parser parser;
-  private final XPath xpath;
-  private final ParserFactory parserFactory;
-  private final WriterFactory writerFactory;
-  private final Writer writer;
+  private Factory factory;
+  private Parser parser;
+  private XPath xpath;
+  private ParserFactory parserFactory;
+  private WriterFactory writerFactory;
+  private Writer writer;
   
   /**
    * Initialize using the default Abdera Configuration
@@ -87,12 +87,6 @@ public class Abdera {
    */
   public Abdera(Configuration config) {
     this.config = config;
-    factory = newFactory();
-    parser = newParser();
-    xpath = newXPath();
-    parserFactory = newParserFactory();
-    writerFactory = newWriterFactory();
-    writer = newWriter();
     IRI.preinit();  // initializes the IRI stuff to improve performance later
   }
   
@@ -147,7 +141,9 @@ public class Abdera {
    * 
    * @return The factory instance
    */
-  public Factory getFactory() {
+  public synchronized Factory getFactory() {
+    if (factory == null)
+      factory = newFactory();
     return factory;
   }
   
@@ -156,7 +152,9 @@ public class Abdera {
    * 
    * @return The parser instance
    */
-  public Parser getParser() {
+  public synchronized Parser getParser() {
+    if (parser == null)
+      parser = newParser();
     return parser;
   }
   
@@ -165,7 +163,9 @@ public class Abdera {
    * 
    * @return The XPath instance
    */
-  public XPath getXPath() {
+  public synchronized XPath getXPath() {
+    if (xpath == null)
+      xpath = newXPath();
     return xpath;
   }
   
@@ -176,7 +176,9 @@ public class Abdera {
    * 
    * @return The ParserFactory instance
    */
-  public ParserFactory getParserFactory() {
+  public synchronized ParserFactory getParserFactory() {
+    if (parserFactory == null)
+      parserFactory = newParserFactory();
     return parserFactory;
   }
   
@@ -187,7 +189,9 @@ public class Abdera {
    * 
    * @return The WriterFactory instance
    */
-  public WriterFactory getWriterFactory() {
+  public synchronized WriterFactory getWriterFactory() {
+    if (writerFactory == null)
+      writerFactory = newWriterFactory();
     return writerFactory;
   }
   
@@ -197,7 +201,9 @@ public class Abdera {
    * 
    * @return The default writer implementation
    */
-  public Writer getWriter() {
+  public synchronized Writer getWriter() {
+    if (writer == null)
+      writer = newWriter();
     return writer;
   }
   

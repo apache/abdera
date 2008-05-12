@@ -163,13 +163,20 @@ public abstract class AbstractProvider
           log.error(e);
         }
         transactionCompensate(transaction, request, e);
-        response = ProviderHelper.servererror(request, e);
+        response = createErrorResponse(request,e);
         return response;
       } finally {
         transactionEnd(transaction,request,response);
       }
   }
 
+  /**
+   * Subclass to customize the kind of error response to return
+   */
+  protected ResponseContext createErrorResponse(RequestContext request, Throwable e) {
+    return ProviderHelper.servererror(request, e);
+  }
+  
   protected void transactionCompensate(
     Transactional transactional,
     RequestContext request,

@@ -44,4 +44,10 @@ public interface Target
    */
   String[] getParameterNames();
   
+  /**
+   * Return the object that matches with the uri
+   * @return
+   */
+  public <T>T getMatcher();
+  
 }

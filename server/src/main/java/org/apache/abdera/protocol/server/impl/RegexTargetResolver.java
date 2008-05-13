@@ -181,6 +181,11 @@ public class RegexTargetResolver
       if (fields != null) list.addAll(Arrays.asList(fields));
       return list.toArray(new String[list.size()]);
     }
+    
+    @Override
+    public <T>T getMatcher() {
+    	return (T)matcher.pattern();
+    }
 
     @Override
     public int hashCode() {

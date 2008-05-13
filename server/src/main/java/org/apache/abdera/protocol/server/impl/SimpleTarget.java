@@ -64,6 +64,10 @@ public class SimpleTarget
   public String toString() {
     return getType() + " - " + getIdentity();
   }
+  
+  public <T>T getMatcher() {
+	  return (T)null;
+  }
 
   @Override
   public int hashCode() {

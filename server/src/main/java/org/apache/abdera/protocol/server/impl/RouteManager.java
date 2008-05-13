@@ -204,6 +204,12 @@ public class RouteManager
       public Route getRoute() {
         return route;
       }
+      
+      @Override
+      public <T>T getMatcher() {
+    	  return (T)getRoute();
+      }
+      
       public String getParameter(String name) {
         return params.containsKey(name) ?
           params.get(name) :

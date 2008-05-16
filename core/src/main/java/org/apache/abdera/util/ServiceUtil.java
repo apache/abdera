@@ -44,6 +44,8 @@ import org.apache.abdera.xpath.XPath;
 public final class ServiceUtil 
   implements Constants {
   
+  private static ClassLoader classLoader = null;
+  
   ServiceUtil() {}
   
   /**
@@ -132,7 +134,13 @@ public final class ServiceUtil
    * Get the context class loader for this thread
    */
   public static ClassLoader getClassLoader() {
-    return Thread.currentThread().getContextClassLoader();
+    if (classLoader == null)
+      classLoader = Thread.currentThread().getContextClassLoader();
+    return classLoader;
+  }
+  
+  public static void setClassLoader(ClassLoader classLoader) {
+    ServiceUtil.classLoader = classLoader;
   }
   
   public static Object locate(

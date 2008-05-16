@@ -45,9 +45,10 @@ public interface RequestContext
    * RequestContext attributes can either have Session or Request scope.
    * Request scope attributes are only valid within the context of the current 
    * request.  Session scope attributes, however, will remain valid as long 
-   * as the Session is active
+   * as the Session is active. Container scope attributes are set on the 
+   * Web container (e.g. the ServletContext)
    */
-  public enum Scope { REQUEST, SESSION };
+  public enum Scope { REQUEST, SESSION, CONTAINER };
   
   /**
    * Special properties provided by the server

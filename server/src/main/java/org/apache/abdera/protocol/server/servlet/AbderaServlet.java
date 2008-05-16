@@ -84,7 +84,7 @@ public class AbderaServlet
     HttpServletResponse response) 
       throws ServletException, IOException {
     RequestContext reqcontext = 
-      new ServletRequestContext(provider, request);
+      new ServletRequestContext(provider, request, getServletContext());
     FilterChain chain = new FilterChain(provider,reqcontext);
     try {
       output(
@@ -159,7 +159,7 @@ public class AbderaServlet
     Map<String,String> properties = new HashMap<String,String>();
     Enumeration<String> e = config.getInitParameterNames();
     while(e.hasMoreElements()) {
-      String key = (String) e.nextElement();
+      String key = e.nextElement();
       String val = config.getInitParameter(key);
       properties.put(key, val);
     }

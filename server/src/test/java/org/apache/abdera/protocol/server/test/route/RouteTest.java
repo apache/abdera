@@ -17,9 +17,9 @@
  */
 package org.apache.abdera.protocol.server.test.route;
 
+import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.EasyMock.replay;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +30,6 @@ import org.apache.abdera.i18n.templates.HashMapContext;
 import org.apache.abdera.i18n.templates.Route;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.Target;
-import org.apache.abdera.protocol.server.context.RequestContextWrapper;
 import org.apache.abdera.protocol.server.impl.RouteManager;
 import org.junit.Test;
 
@@ -185,11 +184,30 @@ public class RouteTest extends Assert {
     expect(targetMock.getParameter("collection")).andReturn("entries");
     expect(targetMock.getParameter("entry")).andReturn("123");
     replay(targetMock);
-    RequestContext contextMock = createMock(RequestContextWrapper.class);
-    expect(contextMock.getContextPath()).andReturn("/appBase");
+    RequestContext contextMock = createMock(RequestContext.class);
+    expect(contextMock.getContextPath()).andReturn("/app");
     expect(contextMock.getTarget()).andReturn(targetMock).times(2);
     replay(contextMock);
 
-    assertEquals(manager.urlFor(contextMock, "entry", null), "/appBase/base/entries/123");
+    assertEquals("/app/base/entries/123", manager.urlFor(contextMock, "entry", null));
+  }
+  
+  @Test
+  @SuppressWarnings("serial")
+  public void testUrlForNotAddQueryParams() throws Exception {
+    RouteManager manager = new RouteManager().addRoute("entry", "/base/:entry");
+
+    Target targetMock = createMock(Target.class);    
+    expect(targetMock.getParameter("entry")).andReturn(null);    
+    replay(targetMock);
+    RequestContext contextMock = createMock(RequestContext.class);
+    expect(contextMock.getContextPath()).andReturn("/app");
+    expect(contextMock.getTarget()).andReturn(targetMock).times(2);    
+    replay(contextMock);
+
+    Map<String, String> context = new HashMap<String, String>() {{
+    	put(":entry", null);
+    }};
+    assertEquals("/app/base/", manager.urlFor(contextMock, "entry", context));
   }
 }

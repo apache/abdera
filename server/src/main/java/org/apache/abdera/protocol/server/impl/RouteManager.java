@@ -166,7 +166,7 @@ public class RouteManager
     Context context = null;
     if (param != null) {
       if (param instanceof Map) {
-        context = new HashMapContext((Map<String,Object>)param, true);
+        context = new HashMapContext(cleanMapCtx(param), true);
       } else if (param instanceof Context) {
         context = (Context)param;
       } else {
@@ -174,6 +174,17 @@ public class RouteManager
       }
     } else context = new EmptyContext();
     return context;
+  }
+  
+  @SuppressWarnings("unchecked")
+  private Map<String, Object> cleanMapCtx(Object param) {
+	  Map<String, Object> map = new HashMap<String, Object>();
+	  for (Map.Entry<String, Object> entry : ((Map<String,Object>) param).entrySet()) {
+		  map.put(entry.getKey().replaceFirst("^:", ""), entry.getValue());		  
+	  }
+	  ((Map<String,Object>) param).clear();
+	  ((Map<String,Object>) param).putAll(map);
+	  return (Map<String,Object>) param;
   }
 
   private static class EmptyContext 

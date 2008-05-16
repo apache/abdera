@@ -19,6 +19,7 @@ package org.apache.abdera.parser.stax;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +34,7 @@ import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Control;
 import org.apache.abdera.model.DateTime;
 import org.apache.abdera.model.Div;
+import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
@@ -44,6 +46,7 @@ import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Content.Type;
 import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.Constants;
+import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.i18n.text.io.InputStreamDataSource;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.axiom.om.OMContainer;
@@ -240,6 +243,8 @@ public class FOMEntry
    */
   public Content setContent(Element element, String mediaType){
     try {
+      if (MimeTypeHelper.isText(mediaType))
+        throw new IllegalArgumentException();
       FOMFactory factory = (FOMFactory) this.factory;
       Content content = factory.newContent(new MimeType(mediaType));
       content.setValueElement(element);
@@ -263,12 +268,20 @@ public class FOMEntry
    * @throws MimeTypeParseException 
    */
   public Content setContent(DataHandler dataHandler, String mediatype) {
-    FOMFactory factory = (FOMFactory) this.factory;
-    Content content = factory.newContent(Content.Type.MEDIA);
-    content.setDataHandler(dataHandler);
-    if (mediatype != null) content.setMimeType(mediatype);
-    setContentElement(content);
-    return content;
+    if (MimeTypeHelper.isText(mediatype)) {
+      try {
+        return setContent(dataHandler.getInputStream(),mediatype);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    } else {
+      FOMFactory factory = (FOMFactory) this.factory;
+      Content content = factory.newContent(Content.Type.MEDIA);
+      content.setDataHandler(dataHandler);
+      if (mediatype != null) content.setMimeType(mediatype);
+      setContentElement(content);
+      return content;
+    }
   }
   
   /**
@@ -285,9 +298,27 @@ public class FOMEntry
    * Sets the content for this entry
    */
   public Content setContent(InputStream in, String mediatype){
-    InputStreamDataSource ds = new InputStreamDataSource(in, mediatype);
-    DataHandler dh = new DataHandler(ds);
-    return setContent(dh, mediatype);
+    if (MimeTypeHelper.isText(mediatype)) {
+      try {
+        StringBuilder buf = new StringBuilder();
+        Document doc = this.getDocument();
+        String charset = doc != null ? doc.getCharset() : null;
+        charset = charset != null ? charset : "UTF-8";
+        InputStreamReader isr = new InputStreamReader(in);
+        char[] data = new char[500];
+        int r = -1;
+        while ((r = isr.read(data)) != -1) {
+          buf.append(data,0,r);
+        }
+        return setContent(buf.toString(), mediatype);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    } else {
+      InputStreamDataSource ds = new InputStreamDataSource(in, mediatype);
+      DataHandler dh = new DataHandler(ds);
+      return setContent(dh, mediatype);
+    }
   }
   
   /**

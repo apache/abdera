@@ -19,6 +19,7 @@ package org.apache.abdera.protocol.server.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -300,33 +301,36 @@ public abstract class AbstractProvider
             for (WorkspaceInfo wi : getWorkspaceManager(request).getWorkspaces(request)) {
               sw.startWorkspace()
                 .writeTitle(wi.getTitle(request));
-              for (CollectionInfo ci : wi.getCollections(request)) {
-                sw.startCollection(ci.getHref(request))
-                  .writeTitle(ci.getTitle(request))
-                  .writeAccepts(ci.getAccepts(request));
-                CategoriesInfo[] catinfos = ci.getCategoriesInfo(request);
-                if (catinfos != null) {
-                  for (CategoriesInfo catinfo : catinfos) {
-                    String cathref = catinfo.getHref(request);
-                    if (cathref != null) {
-                      sw.startCategories()
-                        .writeAttribute("href", request.getTargetBasePath() + cathref)
-                        .endCategories();
-                    } else {
-                      sw.startCategories(
-                        catinfo.isFixed(request), 
-                        catinfo.getScheme(request));
-                      for (CategoryInfo cat : catinfo) {
-                        sw.writeCategory(
-                          cat.getTerm(request), 
-                          cat.getScheme(request), 
-                          cat.getLabel(request));
+              Collection<CollectionInfo> collections = wi.getCollections(request);
+              if (collections != null) {
+                for (CollectionInfo ci : collections) {
+                  sw.startCollection(ci.getHref(request))
+                    .writeTitle(ci.getTitle(request))
+                    .writeAccepts(ci.getAccepts(request));
+                  CategoriesInfo[] catinfos = ci.getCategoriesInfo(request);
+                  if (catinfos != null) {
+                    for (CategoriesInfo catinfo : catinfos) {
+                      String cathref = catinfo.getHref(request);
+                      if (cathref != null) {
+                        sw.startCategories()
+                          .writeAttribute("href", request.getTargetBasePath() + cathref)
+                          .endCategories();
+                      } else {
+                        sw.startCategories(
+                          catinfo.isFixed(request), 
+                          catinfo.getScheme(request));
+                        for (CategoryInfo cat : catinfo) {
+                          sw.writeCategory(
+                            cat.getTerm(request), 
+                            cat.getScheme(request), 
+                            cat.getLabel(request));
+                        }
+                        sw.endCategories();
                       }
-                      sw.endCategories();
                     }
                   }
+                  sw.endCollection();
                 }
-                sw.endCollection();
               }
               sw.endWorkspace();
             }

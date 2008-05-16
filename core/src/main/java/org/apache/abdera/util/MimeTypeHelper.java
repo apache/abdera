@@ -41,6 +41,15 @@ public class MimeTypeHelper {
    
   private static final MimeType WILDCARD = createWildcard();
   
+  public static String getCharset(String mediatype) {
+    try {
+      MimeType mt = new MimeType(mediatype);
+      return mt.getParameter("charset");
+    } catch (Exception e) {
+      return null;
+    }
+  }
+  
   private static MimeType createWildcard() {
     try {
       return new MimeType("*/*");

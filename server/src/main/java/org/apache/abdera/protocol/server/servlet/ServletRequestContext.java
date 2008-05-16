@@ -26,6 +26,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -41,17 +42,20 @@ public class ServletRequestContext
   implements RequestContext {
 
   private final HttpServletRequest request;
+  private final ServletContext servletContext;
   private HttpSession session;
   
   public ServletRequestContext(
     Provider provider,
-    HttpServletRequest request) {
+    HttpServletRequest request,
+    ServletContext servletContext) {
       super(
         provider, 
         request.getMethod(), 
         initRequestUri(request),
         initBaseUri(provider,request));
       this.request = request;
+      this.servletContext = servletContext;
       this.session = request.getSession(false);
       this.principal = request.getUserPrincipal();
       this.subject = provider.resolveSubject(this);
@@ -97,6 +101,10 @@ public class ServletRequestContext
   public HttpServletRequest getRequest() {
     return request;
   }
+
+  public ServletContext getServletContext() {
+    return servletContext;
+  }
   
   public synchronized HttpSession getSession() {
     return getSession(false);
@@ -111,6 +119,11 @@ public class ServletRequestContext
     switch(scope) {
       case REQUEST: request.setAttribute(name, value); break;
       case SESSION: getSession(true).setAttribute(name, value); break;
+      case CONTAINER: {
+        ServletContext scontext = getServletContext();
+        if (scontext != null) 
+          scontext.setAttribute(name, value);
+      }
     }
     return this;
   }
@@ -119,6 +132,10 @@ public class ServletRequestContext
     switch(scope) {
       case REQUEST: return request.getAttribute(name);
       case SESSION: return (session != null) ? session.getAttribute(name) : null;
+      case CONTAINER: {
+        ServletContext scontext = getServletContext();
+        return scontext != null ? scontext.getAttribute(name) : null;
+      }
     }
     return null;
   }
@@ -128,6 +145,10 @@ public class ServletRequestContext
     switch(scope) {
       case REQUEST: return enum2array(request.getAttributeNames());
       case SESSION: return (session != null) ? enum2array(session.getAttributeNames()) : null;
+      case CONTAINER: {
+        ServletContext scontext = getServletContext();
+        return scontext != null ? enum2array(scontext.getAttributeNames()) : null;
+      }
     }
     return null;
   }
@@ -216,13 +237,13 @@ public class ServletRequestContext
   }
   
   private static IRI initRequestUri(HttpServletRequest request) {
-    IRI uri = null;
+    IRI uri;
     StringBuilder buf = 
       new StringBuilder(
         request.getRequestURI());
     String qs = request.getQueryString();
     if (qs != null && qs.length() != 0)
-      buf.append("?" + request.getQueryString());
+        buf.append("?").append(request.getQueryString());
     uri = new IRI(buf.toString());
     return uri;
   }

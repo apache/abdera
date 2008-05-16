@@ -17,11 +17,9 @@
 */
 package org.apache.abdera.test.parser.stax;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.util.Calendar;
@@ -794,12 +792,7 @@ public class FOMTest extends Assert   {
     in = new ByteArrayInputStream(out.toByteArray());
 
     entry = (Entry) abdera.getParser().parse(in).getRoot();
-    
-    in = entry.getContentStream();
-    
-    InputStreamReader r = new InputStreamReader(in,entry.getContentMimeType().getParameter("charset"));
-    BufferedReader b = new BufferedReader(r);
-    assertEquals(b.readLine(),"tóst");
-    
+
+    assertEquals(entry.getContent(),"tóst");
   }
 }

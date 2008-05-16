@@ -301,10 +301,11 @@ public class FOMEntry
     if (MimeTypeHelper.isText(mediatype)) {
       try {
         StringBuilder buf = new StringBuilder();
+        String charset = MimeTypeHelper.getCharset(mediatype);
         Document doc = this.getDocument();
-        String charset = doc != null ? doc.getCharset() : null;
+        charset = charset != null ? charset : doc != null ? doc.getCharset() : null;
         charset = charset != null ? charset : "UTF-8";
-        InputStreamReader isr = new InputStreamReader(in);
+        InputStreamReader isr = new InputStreamReader(in,charset);
         char[] data = new char[500];
         int r = -1;
         while ((r = isr.read(data)) != -1) {
@@ -330,6 +331,7 @@ public class FOMEntry
       FOMFactory factory = (FOMFactory) this.factory;
       Content content = factory.newContent(new MimeType(mediatype));
       content.setValue(value);
+      content.setMimeType(mediatype);
       setContentElement(content);
       return content;
     } catch (javax.activation.MimeTypeParseException e) {

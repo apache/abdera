@@ -44,16 +44,6 @@ public interface Context
   void setIri(boolean isiri);
   
   /**
-   * True if replacement values are to be Unicode NFC normalized
-   */
-  boolean isNormalizing();
-  
-  /**
-   * True if replacement values are to be Unicode NFC normalized
-   */
-  void setNormalizing(boolean normalizing);
-  
-  /**
    * Clear this context
    */
   void clear();

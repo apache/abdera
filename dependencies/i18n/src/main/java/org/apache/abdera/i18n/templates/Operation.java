@@ -75,11 +75,13 @@ public abstract class Operation
     Map<String,Operation> ops = new HashMap<String,Operation>();
     ops.put("", new DefaultOperation());
     ops.put("prefix", new PrefixOperation());
-    ops.put("append", new AppendOperation());
+    ops.put("suffix", new AppendOperation());
     ops.put("join", new JoinOperation());
-    ops.put("listjoin", new ListJoinOperation());
+    ops.put("list", new ListJoinOperation());
     ops.put("opt", new OptOperation());
     ops.put("neg", new NegOperation());
+    ops.put("append", ops.get("suffix")); // for backwards compatibility
+    ops.put("listjoin", ops.get("list")); // for backwards compatibility
     return ops;
   }
   
@@ -105,13 +107,13 @@ public abstract class Operation
     if (value != null) {
       if (value instanceof String) {
         String val = toString(value,context);
-        if (val != null && val.length() > 0)
+        if (val != null)
           buf.append(val);
       } else if (value.getClass().isArray()) {
         Object[] values = (Object[])value;
         for (Object obj : values) {
           String val = toString(obj,context);
-          if (val != null && val.length() > 0) {
+          if (val != null) {
             if (buf.length() > 0) buf.append(sep);
             buf.append(val);
           }
@@ -120,13 +122,13 @@ public abstract class Operation
         Iterable iterable = (Iterable)value;
         for (Object obj : iterable) {
           String val = toString(obj,context);
-          if (val != null && val.length() > 0) {
+          if (val != null) {
             if (buf.length() > 0) buf.append(sep);
             buf.append(val);
           }          
         }
       }
-    }
+    } else return null;
     return buf.toString();
   }
   
@@ -136,7 +138,7 @@ public abstract class Operation
     String def = vardef.length > 1 ? vardef[1] : null;
     Object rep = context.resolve(var);
     String val = toString(rep,context);
-    return val != null && val.length() > 0 ? 
+    return val != null ? 
         val : def != null ? def : null;
   }
   
@@ -147,49 +149,60 @@ public abstract class Operation
         return UrlEncoding.encode((byte[])val);
       } else if (val instanceof char[]) {
         String chars = new String((char[])val);
-        return UrlEncoding.encode(
-            !context.isNormalizing() ? chars : 
+        return UrlEncoding.encode( 
             Normalizer.normalize(
               chars, 
-              Normalizer.Form.C).toString(), 
+              Normalizer.Form.KC).toString(), 
             context.isIri() ? 
               CharUtils.Profile.IUNRESERVED.filter() : 
               CharUtils.Profile.UNRESERVED.filter());
       } else if (val instanceof short[]) {
         StringBuilder buf = new StringBuilder();
         short[] array = (short[]) val;
-        for (short obj : array)
+        for (short obj : array) {
+          if (buf.length() > 0) buf.append("%2C");
           buf.append(String.valueOf(obj));
+        }
         return buf.toString();
       } else if (val instanceof int[]) {
         StringBuilder buf = new StringBuilder();
         int[] array = (int[]) val;
-        for (int obj : array)
+        for (int obj : array) {
+          if (buf.length() > 0) buf.append("%2C");
           buf.append(String.valueOf(obj));
+        }
         return buf.toString();
       } else if (val instanceof long[]) {
         StringBuilder buf = new StringBuilder();
         long[] array = (long[]) val;
-        for (long obj : array)
+        for (long obj : array) {
+          if (buf.length() > 0) buf.append("%2C");
           buf.append(String.valueOf(obj));
+        }
         return buf.toString();
       } else if (val instanceof double[]) {
         StringBuilder buf = new StringBuilder();
         double[] array = (double[]) val;
-        for (double obj : array)
+        for (double obj : array) {
+          if (buf.length() > 0) buf.append("%2C");
           buf.append(String.valueOf(obj));
+        }
         return buf.toString();
       } else if (val instanceof float[]) {
         StringBuilder buf = new StringBuilder();
         float[] array = (float[]) val;
-        for (float obj : array)
+        for (float obj : array) {
+          if (buf.length() > 0) buf.append("%2C");
           buf.append(String.valueOf(obj));
+        }
         return buf.toString();
       } else if (val instanceof boolean[]) {
         StringBuilder buf = new StringBuilder();
         boolean[] array = (boolean[]) val;
-        for (boolean obj : array)
+        for (boolean obj : array) {
+          if (buf.length() > 0) buf.append("%2C");
           buf.append(String.valueOf(obj));
+        }
         return buf.toString();
       } else {
         StringBuilder buf = new StringBuilder();
@@ -220,8 +233,7 @@ public abstract class Operation
     } else if (val instanceof CharSequence) {
       return encode(
         (CharSequence)val,
-        context.isIri(),
-        context.isNormalizing());
+        context.isIri());
     } else if (val instanceof Byte) {
       return UrlEncoding.encode(((Byte)val).byteValue());
     } else if (val instanceof Iterable) {
@@ -235,8 +247,7 @@ public abstract class Operation
         val != null ? 
           val.toString() : 
           null,
-        context.isIri(),
-        context.isNormalizing());
+        context.isIri());
     }
   }
   
@@ -248,21 +259,79 @@ public abstract class Operation
     if (rep != null) {
       StringBuilder buf = new StringBuilder();
       if (rep.getClass().isArray()) {
-        Object[] array = (Object[]) rep;
-        for (Object obj : array) {
-          String val = toString(obj,context);
-          if (val != null && val.length() > 0) {
-            if (buf.length() > 0) buf.append(arg);
+        if (rep instanceof byte[]) {
+          String val = toString(rep,context);
+          if (val != null) {
             buf.append(var);
             buf.append("=");
             buf.append(val);
+          }
+        } else if (rep instanceof char[]) {
+          String val = toString(rep,context);
+          if (val != null) {
+            buf.append(var);
+            buf.append("=");
+            buf.append(val);
+          }
+        } else if (rep instanceof short[]) {
+          String val = toString(rep,context);
+          if (val != null) {
+            buf.append(var);
+            buf.append("=");
+            buf.append(val);
+          }
+        } else if (rep instanceof int[]) {
+          String val = toString(rep,context);
+          if (val != null) {
+            buf.append(var);
+            buf.append("=");
+            buf.append(val);
+          }
+        } else if (rep instanceof long[]) {
+          String val = toString(rep,context);
+          if (val != null) {
+            buf.append(var);
+            buf.append("=");
+            buf.append(val);
+          }
+        } else if (rep instanceof double[]) {
+          String val = toString(rep,context);
+          if (val != null) {
+            buf.append(var);
+            buf.append("=");
+            buf.append(val);
+          }
+        } else if (rep instanceof float[]) {
+          String val = toString(rep,context);
+          if (val != null) {
+            buf.append(var);
+            buf.append("=");
+            buf.append(val);
+          }
+        } else if (rep instanceof boolean[]) {
+          String val = toString(rep,context);
+          if (val != null) {
+            buf.append(var);
+            buf.append("=");
+            buf.append(val);
+          }
+        } else {
+          Object[] array = (Object[]) rep;
+          for (Object obj : array) {
+            String val = toString(obj,context);
+            if (val != null) {
+              if (buf.length() > 0) buf.append(arg);
+              buf.append(var);
+              buf.append("=");
+              buf.append(val);
+            }
           }
         }
       } else if (rep instanceof Iterable) {
         Iterable list = (Iterable)rep;
         for (Object obj : list) {
           String val = toString(obj,context);
-          if (val != null && val.length() > 0) {
+          if (val != null) {
             if (buf.length() > 0) buf.append(arg);
             buf.append(var);
             buf.append("=");
@@ -271,7 +340,7 @@ public abstract class Operation
         }
       } else {
         String val = toString(rep,context);
-        if (val != null && val.length() > 0) {
+        if (val != null) {
           buf.append(var);
           buf.append("=");
           buf.append(val);
@@ -295,20 +364,35 @@ public abstract class Operation
     if (rep == null) rep = def;
     if (rep == null) return false;
     if (rep.getClass().isArray()) {
-      Object[] a = (Object[])rep;
-      return a.length > 0;
-    } else return toString(rep,context).length() > 0;
+      if (rep instanceof byte[]) 
+        return ((byte[])rep).length > 0;
+      else if (rep instanceof short[]) 
+        return ((short[])rep).length > 0;
+      else if (rep instanceof char[]) 
+        return ((char[])rep).length > 0;
+      else if (rep instanceof int[]) 
+        return ((int[])rep).length > 0;
+      else if (rep instanceof long[]) 
+        return ((long[])rep).length > 0;
+      else if (rep instanceof double[]) 
+        return ((double[])rep).length > 0;
+      else if (rep instanceof float[]) 
+        return ((float[])rep).length > 0;
+      else if (rep instanceof boolean[]) 
+        return ((boolean[])rep).length > 0;
+      else if (rep instanceof Object[]) 
+        return ((Object[])rep).length > 0;
+    }
+    return true;
   }
   
   private static String encode(
     CharSequence val, 
-    boolean isiri, 
-    boolean normalizing) {
+    boolean isiri) {
       return UrlEncoding.encode(
-          !normalizing ? val : 
           Normalizer.normalize(
             val, 
-            Normalizer.Form.C).toString(), 
+            Normalizer.Form.KC).toString(), 
           isiri ? 
             CharUtils.Profile.IUNRESERVED.filter() : 
             CharUtils.Profile.UNRESERVED.filter());
@@ -331,7 +415,7 @@ public abstract class Operation
     private static final long serialVersionUID = 2738115969196268525L;
     public PrefixOperation() { super("prefix"); }    
     public String evaluate(String var, String arg, Context context) {
-      String value = eval(var,context);
+      String value = evallist(var,context,arg);
       return value == null || value.length() == 0 ? "" : arg != null ? arg + value : value;
     }
     public void explain(String var, String arg, Appendable buf) throws IOException {
@@ -347,10 +431,10 @@ public abstract class Operation
   
   private static final class AppendOperation extends Operation {
     private static final long serialVersionUID = -2742793539643289075L;
-    public AppendOperation() { super("append"); }    
+    public AppendOperation() { super("suffix"); }    
     public String evaluate(String var, String arg, Context context) {
-      String value = eval(var,context);
-      return value == null || value.length() == 0 ? "" : arg != null ? value + arg : value;
+      String value = evallist(var,context,arg);
+      return value == null || value.length() == 0  ? "" : arg != null ? value + arg : value;
     }
     public void explain(String var, String arg, Appendable buf) throws IOException {
       buf.append("If '")
@@ -373,7 +457,7 @@ public abstract class Operation
       for (int n = 0; n < vardefs.length; n++) {
         String vardef = vardefs[n];
         val = eval(vardef,arg,context);
-        if (val != null && val.length() > 0) {
+        if (val != null) {
           if (buf.length() > 0) buf.append(arg);
           buf.append(val);
         }
@@ -398,7 +482,7 @@ public abstract class Operation
   
   private static final class ListJoinOperation extends Operation {
     private static final long serialVersionUID = -8314383556644740425L;
-    public ListJoinOperation() { super("listjoin"); }
+    public ListJoinOperation() { super("list"); }
     public String evaluate(String var, String arg, Context context) {
       return evallist(var,context,arg);
     }

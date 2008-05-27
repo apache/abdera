@@ -50,7 +50,7 @@ public final class TestTemplate
   
   @Test
   public void test3() throws Exception {
-    String t = "http://bitworking.org/news/{-listjoin|/|entry}";
+    String t = "http://bitworking.org/news/{-list|/|entry}";
     String e = "http://bitworking.org/news/240/Newsqueak";
     HashMapContext c = new HashMapContext();
     c.put("entry", new String[] {"240","Newsqueak"});
@@ -89,7 +89,7 @@ public final class TestTemplate
   
   @Test
   public void test7() throws Exception {
-    String t = "bar/{-append|#home|var}";
+    String t = "bar/{-suffix|#home|var}";
     String e = "bar/foo#home";
     HashMapContext c = new HashMapContext();
     c.put("var","foo");
@@ -108,7 +108,7 @@ public final class TestTemplate
 
   @Test
   public void test9() throws Exception {
-    String t = "{-listjoin|/|segments}";
+    String t = "{-list|/|segments}";
     String e = "a/b/c";
     HashMapContext c = new HashMapContext();
     c.put("segments",new String[] {"a","b","c"});
@@ -163,7 +163,7 @@ public final class TestTemplate
   
   @Test
   public void test14() throws Exception {
-    String t = "{-opt|/-/|categories}{-listjoin|/|categories}";
+    String t = "{-opt|/-/|categories}{-list|/|categories}";
     String e = "/-/A%7C-B/-C";
     HashMapContext c = new HashMapContext();
     c.put("categories", new String[] {"A|-B","-C"});
@@ -172,7 +172,7 @@ public final class TestTemplate
   
   @Test
   public void test15() throws Exception {
-    String t = "http://www.google.com/notebook/feeds/{userID}{-prefix|/notebooks/|notebookID}{-opt|/-/|categories}{-listjoin|/|categories}?{-join|&|updated-min,updated-max,alt,start-index,max-results,entryID,orderby}";
+    String t = "http://www.google.com/notebook/feeds/{userID}{-prefix|/notebooks/|notebookID}{-opt|/-/|categories}{-list|/|categories}?{-join|&|updated-min,updated-max,alt,start-index,max-results,entryID,orderby}";
     String e = "http://www.google.com/notebook/feeds/a/notebooks/b?updated-min=c&max-results=d";
     HashMapContext c = new HashMapContext();
     c.put("userID", "a");
@@ -204,7 +204,7 @@ public final class TestTemplate
   
   @Test
   public void test18() throws Exception {
-    String t = "http://www.google.com/notebook/feeds/{userID}{-prefix|/notebooks/|notebookID}{-opt|/-/|categories}{-listjoin|/|categories}?{-join|&|updated-min,updated-max,alt,start-index,max-results,entryID,orderby}";
+    String t = "http://www.google.com/notebook/feeds/{userID}{-prefix|/notebooks/|notebookID}{-opt|/-/|categories}{-list|/|categories}?{-join|&|updated-min,updated-max,alt,start-index,max-results,entryID,orderby}";
     Template template = new Template(t);
     String[] variables = template.getVariables();
     assertEquals(variables[0],"userID");
@@ -221,7 +221,7 @@ public final class TestTemplate
 
   @Test
   public void test19() throws Exception {
-    String t = "http://www.google.com/notebook/feeds/{userID}{-prefix|/notebooks/|notebookID}{-opt|/-/|categories}{-listjoin|/|categories}?{-join|&|updated-min,updated-max,alt,start-index,max-results,entryID,orderby}";
+    String t = "http://www.google.com/notebook/feeds/{userID}{-prefix|/notebooks/|notebookID}{-opt|/-/|categories}{-list|/|categories}?{-join|&|updated-min,updated-max,alt,start-index,max-results,entryID,orderby}";
     Template template = new Template(t);
     Template t2 = template.clone();
     assertEquals(template,t2);
@@ -253,18 +253,18 @@ public final class TestTemplate
     tests.put("http://example.org/{foo=%25}/","http://example.org/%25/");
     tests.put("/{-prefix|#|foo}","/");
     tests.put("./{-prefix|#|str0}","./");
-    tests.put("/{-append|/|a}{-opt|data|points}{-neg|@|a}{-prefix|#|b}","/foo/data#bar");
+    tests.put("/{-suffix|/|a}{-opt|data|points}{-neg|@|a}{-prefix|#|b}","/foo/data#bar");
     tests.put("http://example.org/q={u}","http://example.org/q=%E2%99%94%E2%99%95");
     tests.put("http://example.org/?{-join|&|a,data}","http://example.org/?a=foo&data=10%2C20%2C30");
-    tests.put("http://example.org/?d={-listjoin|,|points}&{-join|&|a,b}","http://example.org/?d=10,20,30&a=foo&b=bar");
-    tests.put("http://example.org/?d={-listjoin|,|list0}&{-join|&|foo}","http://example.org/?d=&");
-    tests.put("http://example.org/?d={-listjoin|&d=|points}","http://example.org/?d=10&d=20&d=30");
+    tests.put("http://example.org/?d={-list|,|points}&{-join|&|a,b}","http://example.org/?d=10,20,30&a=foo&b=bar");
+    tests.put("http://example.org/?d={-list|,|list0}&{-join|&|foo}","http://example.org/?d=&");
+    tests.put("http://example.org/?d={-list|&d=|points}","http://example.org/?d=10&d=20&d=30");
     tests.put("http://example.org/{a}{b}/{a_b}","http://example.org/foobar/baz");
     tests.put("http://example.org/{a}{-prefix|/-/|a}/","http://example.org/foo/-/foo/");
     tests.put("{bytes}","%61%62%63");
     tests.put("{stream}","%61%62%63");
     tests.put("{chars}","abc%2F");
-    tests.put("{ints}","123");
+    tests.put("{ints}","1%2C2%2C3");
     
     for (String t : tests.keySet())
       assertEquals(Template.expand(t,map),tests.get(t));
@@ -272,7 +272,7 @@ public final class TestTemplate
   
   @Test
   public void test21() throws Exception {
-    String t = "http://example.org/{foo}/{bar}{-opt|/|categories}{-listjoin|/|categories}?{-join|&|baz,tag}";
+    String t = "http://example.org/{foo}/{bar}{-opt|/|categories}{-list|/|categories}?{-join|&|baz,tag}";
     String e = "http://example.org/abc/xyz/a/b?baz=true&tag=x&tag=y&tag=z";
     assertEquals(Template.expand(t,new MyObject()),e);
   }
@@ -283,7 +283,99 @@ public final class TestTemplate
     assertEquals(Template.expandAnnotated(new MyObject()),e);
   }
   
-  @URITemplate("http://example.org/{foo}/{bar}{-opt|/|categories}{-listjoin|/|categories}?{-join|&|baz,tag}")
+  @Test
+  public void test23() throws Exception {
+    Map<String,Object> map = new HashMap<String,Object>();
+    
+    map.put("foo", "\u03d3");
+    map.put("bar", "fred");
+    map.put("baz", new int[] {10,20,30});
+    map.put("qux", new String[] {"10","20","30"});
+    map.put("corge", new String[0]);
+    map.put("garply", "a/b/c");
+    map.put("grault", "");
+    map.put("waldo", "ben & jerrys");
+    map.put("fred", new String[] {"fred", "", "wilma"});
+    map.put("plugh", new String[] {"\u017F\u0307", "\u0073\u0307"});
+    map.put("1-a_b.c", 200);
+
+    String[] templates = {
+      "http://example.org/?q={bar}",
+      "http://example.org/?q=fred",
+
+      "/{xyzzy}",
+      "/",
+
+      "http://example.org/?{-join|&|foo,bar,xyzzy,baz}",
+      "http://example.org/?foo=%CE%8E&bar=fred&baz=10%2C20%2C30",
+
+      "http://example.org/?d={-list|,|qux}",
+      "http://example.org/?d=10,20,30",
+
+      "http://example.org/?d={-list|&d=|qux}",
+      "http://example.org/?d=10&d=20&d=30",
+
+      "http://example.org/{bar}{bar}/{garply}",
+      "http://example.org/fredfred/a%2Fb%2Fc",
+
+      "http://example.org/{bar}{-prefix|/|fred}",
+      "http://example.org/fred/fred//wilma",
+
+      "{-neg|:|corge}{-suffix|:|plugh}",
+      ":%E1%B9%A1:%E1%B9%A1:",
+
+      "../{waldo}/",
+      "../ben%20%26%20jerrys/",
+
+      "telnet:192.0.2.16{-opt|:80|grault}",
+      "telnet:192.0.2.16:80",
+
+      ":{1-a_b.c}:",
+      ":200:"
+    };
+    
+    for (int n = 0; n < templates.length; n = n + 2) {
+      assertEquals(Template.expand(templates[n], map), templates[n+1]);
+    }
+  }
+  
+  @Test 
+  public void test24() throws Exception {
+    Map<String,Object> map = new HashMap<String,Object>();
+    map.put("foo", "fred");
+    map.put("bar", new String[] {"fee","fi","fo","fum"});
+    map.put("baz", new String[0]);
+    String[] templates = {
+      "{-suffix|/|foo}","fred/",
+      "{-suffix|/|bar}","fee/fi/fo/fum/",
+      "{-suffix|/|baz}","",
+      "{-suffix|/|qux}",""
+    };
+      
+      for (int n = 0; n < templates.length; n = n + 2) {
+        assertEquals(Template.expand(templates[n], map), templates[n+1]);
+      }
+  }
+    
+  @Test 
+  public void test25() throws Exception {
+    Map<String,Object> map = new HashMap<String,Object>();
+    map.put("foo", "fred");
+    map.put("bar", new String[] {"fee","fi","fo","fum"});
+    map.put("baz", new String[0]);
+    String[] templates = {
+      "{-prefix|/|foo}","/fred",
+      "{-prefix|/|bar}","/fee/fi/fo/fum",
+      "{-prefix|/|baz}","",
+      "{-prefix|/|qux}",""
+    };
+      
+      for (int n = 0; n < templates.length; n = n + 2) {
+        assertEquals(Template.expand(templates[n], map), templates[n+1]);
+      }
+  }
+  
+  @URITemplate("http://example.org/{foo}/{bar}{-opt|/|categories}{-list|/|categories}?{-join|&|baz,tag}")
   public static class MyObject {
     public String foo = "abc";
     public String getBar() {

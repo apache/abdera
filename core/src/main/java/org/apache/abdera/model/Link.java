@@ -62,6 +62,7 @@ public interface Link
   public static final String REL_LICENSE = "license";
   public static final String REL_EDIT = "edit";
   public static final String REL_EDIT_MEDIA = "edit-media";
+  public static final String REL_SERVICE = "service";
   
   public static final String IANA_BASE = "http://www.iana.org/assignments/relation/";
   
@@ -80,6 +81,7 @@ public interface Link
   public static final String REL_LICENSE_IANA = IANA_BASE + REL_LICENSE;
   public static final String REL_EDIT_IANA = IANA_BASE + REL_EDIT;
   public static final String REL_EDIT_MEDIA_IANA = IANA_BASE + REL_EDIT_MEDIA;
+  public static final String REL_SERVICE_IANA = IANA_BASE + REL_SERVICE;
   
   /**
    * RFC4287: The "href" attribute contains the link's IRI. atom:link 

@@ -212,6 +212,7 @@ public class FOMLink
     REL_EQUIVS.put(REL_LICENSE_IANA, REL_LICENSE);
     REL_EQUIVS.put(REL_EDIT_IANA, REL_EDIT);
     REL_EQUIVS.put(REL_EDIT_MEDIA_IANA, REL_EDIT_MEDIA);
+    REL_EQUIVS.put(REL_SERVICE_IANA, REL_SERVICE);
   }
   public static final String getRelEquiv(String val) {
     try {

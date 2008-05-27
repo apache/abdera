@@ -15,12 +15,8 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.test.ext.main;
+package org.apache.abdera.test.ext.features;
 
-import org.apache.abdera.test.ext.bidi.BidiTest;
-import org.apache.abdera.test.ext.history.FeedPagingTest;
-import org.apache.abdera.test.ext.license.LicenseTest;
-import org.apache.abdera.test.ext.thread.ThreadTest;
 import org.junit.internal.runners.TextListener;
 import org.junit.runner.JUnitCore;
 
@@ -30,9 +26,6 @@ public class TestSuite {
     JUnitCore runner = new JUnitCore();
     runner.addListener(new TextListener(System.out));
     runner.run(
-      BidiTest.class,
-      FeedPagingTest.class,
-      LicenseTest.class,
-      ThreadTest.class);
+      FeatureTest.class);
   }
 }

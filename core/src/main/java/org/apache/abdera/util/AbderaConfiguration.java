@@ -68,7 +68,6 @@ public final class AbderaConfiguration
   }
   
   private static ResourceBundle getBundle(
-    ClassLoader loader, 
     Locale locale) {
       ResourceBundle bundle = null;
       try {
@@ -76,7 +75,7 @@ public final class AbderaConfiguration
           ResourceBundle.getBundle(
             "abdera", 
             locale, 
-            loader);
+            Thread.currentThread().getContextClassLoader());
       } catch (Exception e) {
         // Do nothing
       }
@@ -95,8 +94,7 @@ public final class AbderaConfiguration
   
   protected AbderaConfiguration(ResourceBundle bundle) {
     this.bundle = (bundle != null) ? bundle : 
-      AbderaConfiguration.getBundle(
-        ServiceUtil.getClassLoader(), 
+      AbderaConfiguration.getBundle( 
         Locale.getDefault());
     factories = ServiceUtil.loadExtensionFactories();
     writers = initNamedWriters();

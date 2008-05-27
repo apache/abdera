@@ -143,27 +143,13 @@ public class RouteManager
     Object key, 
     Object param) {
     Route route = routes.get(key);
-    if (route != null) {
-      Map<String, Object> map = new HashMap<String,Object>();
-      Context ctx = getContext(param);
-      for (String var : ctx) {
-        map.put(var, ctx.resolve(var));
-      }
-      for (String var : route.getVariables()) {
-        Object value = context.getTarget().getParameter(var);
-        if (!map.containsKey(var) && value != null) {
-          map.put(var, value);
-        }
-      }            
-      return context.getContextPath() + route.expand(getContext(map));
-    } else {
-      return null;
-    }
+		return route != null?
+    	context.getContextPath() + route.expand(getContext(param)) : null;
   }
   
   @SuppressWarnings("unchecked")
   private Context getContext(Object param) {
-    Context context = null;
+    Context context = new EmptyContext();
     if (param != null) {
       if (param instanceof Map) {
         context = new HashMapContext(cleanMapCtx(param), true);
@@ -172,7 +158,7 @@ public class RouteManager
       } else {
         context = new ObjectContext(param,true);
       }
-    } else context = new EmptyContext();
+    }
     return context;
   }
   

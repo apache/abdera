@@ -177,37 +177,36 @@ public class RouteTest extends Assert {
   }
     
   @Test
+	@SuppressWarnings("serial")
   public void testUrlFor() throws Exception {
-    RouteManager manager = new RouteManager().addRoute(new Route("entry", "/base/:collection/:entry"));
-
-    Target targetMock = createMock(Target.class);
-    expect(targetMock.getParameter("collection")).andReturn("entries");
-    expect(targetMock.getParameter("entry")).andReturn("123");
-    replay(targetMock);
-    RequestContext contextMock = createMock(RequestContext.class);
-    expect(contextMock.getContextPath()).andReturn("/app");
-    expect(contextMock.getTarget()).andReturn(targetMock).times(2);
-    replay(contextMock);
-
-    assertEquals("/app/base/entries/123", manager.urlFor(contextMock, "entry", null));
+		Map<String, String> context = new HashMap<String, String>() {{
+			put("entry", "123");
+		}};
+    runTestUrlFor("/app/base/123", context);
   }
   
   @Test
   @SuppressWarnings("serial")
-  public void testUrlForNotAddQueryParams() throws Exception {
-    RouteManager manager = new RouteManager().addRoute("entry", "/base/:entry");
-
-    Target targetMock = createMock(Target.class);    
-    expect(targetMock.getParameter("entry")).andReturn(null);    
-    replay(targetMock);
-    RequestContext contextMock = createMock(RequestContext.class);
-    expect(contextMock.getContextPath()).andReturn("/app");
-    expect(contextMock.getTarget()).andReturn(targetMock).times(2);    
-    replay(contextMock);
-
+  public void testUrlForSupportsParamsWithColon() throws Exception {
     Map<String, String> context = new HashMap<String, String>() {{
     	put(":entry", null);
     }};
-    assertEquals("/app/base/", manager.urlFor(contextMock, "entry", context));
+    runTestUrlFor("/app/base/", context);
   }
+
+	@Test
+	@SuppressWarnings("serial")
+	public void testUrlForEmptyContext() throws Exception {
+		runTestUrlFor("/app/base/", null);
+	}
+	
+	private void runTestUrlFor(String expected, Map<String, String> context) {
+		RouteManager manager = new RouteManager().addRoute(new Route("entry", "/base/:entry"));
+
+    RequestContext request = createMock(RequestContext.class);
+    expect(request.getContextPath()).andReturn("/app");
+    replay(request);
+
+		assertEquals(expected, manager.urlFor(request, "entry", context));
+	}
 }

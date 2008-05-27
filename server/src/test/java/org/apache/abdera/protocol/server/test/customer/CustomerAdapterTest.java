@@ -86,22 +86,6 @@ public class CustomerAdapterTest extends Assert {
     runTests("/foo/");
   }
 
-  @Test
-  public void testCustomerProviderWithNonRootBase() throws Exception {
-    setupAbdera("/:base/");
-    initializeJetty("/");
-
-    runTests("/base/");
-  }
-
-  @Test
-  public void testCustomerProviderWithNonRootContextBaseAndBase() throws Exception {
-    setupAbdera("/:base/");
-    initializeJetty("/foo");
-
-    runTests("/foo/base/");
-  }
-
   private void runTests(String base) throws IOException {
     Abdera abdera = new Abdera();
     Factory factory = abdera.getFactory();
@@ -158,7 +142,7 @@ public class CustomerAdapterTest extends Assert {
     res = client.post(colUri.toString() + "?test=foo", entry, opts);
     assertEquals(201, res.getStatus());
 
-    prettyPrint(abdera, res.getDocument());
+    //prettyPrint(abdera, res.getDocument());
 
     IRI location = res.getLocation();
     assertEquals(base + "customers/1001-Dan_Diephouse", location.toString());
@@ -170,7 +154,7 @@ public class CustomerAdapterTest extends Assert {
 
     // prettyPrint(abdera, res.getDocument());
     org.apache.abdera.model.Document<Entry> entry_doc = res.getDocument();
-    prettyPrint(abdera, entry_doc);
+    //prettyPrint(abdera, entry_doc);
     entry = entry_doc.getRoot();
     assertEquals(uri + "customers/1001-Dan_Diephouse", entry_doc.getRoot().getEditLinkResolvedHref().toString());
 

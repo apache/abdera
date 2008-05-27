@@ -44,8 +44,6 @@ import org.apache.abdera.xpath.XPath;
 public final class ServiceUtil 
   implements Constants {
   
-  private static ClassLoader classLoader = null;
-  
   ServiceUtil() {}
   
   /**
@@ -130,26 +128,13 @@ public final class ServiceUtil
       abdera);    
   }
   
-  /**
-   * Get the context class loader for this thread
-   */
-  public static ClassLoader getClassLoader() {
-    if (classLoader == null)
-      classLoader = Thread.currentThread().getContextClassLoader();
-    return classLoader;
-  }
-  
-  public static void setClassLoader(ClassLoader classLoader) {
-    ServiceUtil.classLoader = classLoader;
-  }
-  
   public static Object locate(
     String id, 
     String _default, 
     Abdera abdera) {
       Object object = locate(id, abdera);
       if (object == null && _default != null) {
-        object = locateInstance(getClassLoader(), _default, abdera);
+        object = locateInstance(_default, abdera);
       }
       return object;
   }
@@ -161,7 +146,7 @@ public final class ServiceUtil
     Object... args) {
       Object object = locate(id, abdera);
       if (object == null && _default != null) {
-        object = locateInstance(getClassLoader(), _default, abdera, args);
+        object = locateInstance(_default, abdera, args);
       }
       return object;
   }
@@ -226,14 +211,14 @@ public final class ServiceUtil
     return null;
   }
   
-  public static Object locateInstance(ClassLoader loader, String id, Abdera abdera) {
-    return locateInstance(loader,id,abdera,false);
+  public static Object locateInstance(String id, Abdera abdera) {
+    return locateInstance(id,abdera,false);
   }
   
   @SuppressWarnings("unchecked")
-  public static Object locateInstance(ClassLoader loader, String id, Abdera abdera, boolean classesonly) {
+  public static Object locateInstance(String id, Abdera abdera, boolean classesonly) {
     try {
-      Class _class = loader.loadClass(id);
+      Class _class = loadClass(id, ServiceUtil.class);
       return classesonly ? _class : _create(_class, abdera);
     } catch (Exception e) {
       // Nothing
@@ -248,9 +233,9 @@ public final class ServiceUtil
   }
   
   @SuppressWarnings("unchecked")
-  public static Object locateInstance(ClassLoader loader, String id, Abdera abdera, Object... args) {
+  public static Object locateInstance(String id, Abdera abdera, Object... args) {
     try {
-      Class _class = loader.loadClass(id);
+      Class _class = loadClass(id, ServiceUtil.class);
       return _create(_class, abdera, args);
     } catch (Exception e) {
       // Nothing
@@ -264,14 +249,14 @@ public final class ServiceUtil
     return null;
   }
   
-  public static InputStream locateStream(ClassLoader loader, String id) {
-    InputStream in = loader.getResourceAsStream(id);
+  public static InputStream locateStream(String id) {
+    InputStream in = getResourceAsStream(id, ServiceUtil.class);
     return (in != null) ? in : ClassLoader.getSystemResourceAsStream(id);
   }
   
-  public static Enumeration<URL> locateResources(ClassLoader loader, String id) {
+  public static Enumeration<URL> locateResources(String id) {
     try {
-      return loader.getResources(id);
+      return getResources(id,ServiceUtil.class);
     } catch (Exception e) {
       // Nothing
     }
@@ -286,22 +271,21 @@ public final class ServiceUtil
   @SuppressWarnings("unchecked")
   private static Object checkAbderaConfiguration(String id, Abdera abdera) {
     String s = abdera.getConfiguration().getConfigurationOption(id);
-    return (s != null) ? locateInstance(getClassLoader(), id, abdera) : null;
+    return (s != null) ? locateInstance(id, abdera) : null;
   }
   
   private static Object checkMetaInfServices(String id, Abdera abdera) {
     Object object = null;
     String sid = "META-INF/services/" + id;
-    ClassLoader loader = getClassLoader();
     BufferedReader buf = null;
     try {
-      InputStream is = locateStream(loader,sid);
+      InputStream is = locateStream(sid);
       if (is != null) {
         buf = new BufferedReader(new InputStreamReader(is));
         String line = buf.readLine();
         if (line != null) {
           String s = line.split("#",2)[0].trim();
-          object = locateInstance(loader,s, abdera);
+          object = locateInstance(s, abdera);
         }
       }
     } catch (Exception e) {
@@ -336,9 +320,8 @@ public final class ServiceUtil
   @SuppressWarnings("unchecked")
   protected static <T>List<T> _loadimpls(String sid, boolean classesonly) {
     List<T> impls = Collections.synchronizedList(new ArrayList<T>());
-    ClassLoader loader = getClassLoader();
     try {
-      Enumeration<URL> e = locateResources(loader,sid);
+      Enumeration<URL> e = locateResources(sid);
       for (;e.hasMoreElements();) {
         BufferedReader buf = null;
         try {
@@ -350,7 +333,7 @@ public final class ServiceUtil
             while ((line = buf.readLine()) != null) {
               String s = line.split("#",2)[0].trim();
               if (!"".equals(s)) { 
-                T impl = (T) locateInstance(loader,s, null);
+                T impl = (T) locateInstance(s, null);
                 if (impl != null)
                   impls.add(impl);
               }
@@ -379,4 +362,166 @@ public final class ServiceUtil
   protected static <T>List<T> _loadimpls(String sid) {
     return _loadimpls(sid,false);
   }
+  
+  
+  // The following class loader functions were adopted from 
+  // http://svn.apache.org/repos/asf/cxf/trunk/common/common/src/main/java/org/apache/cxf/common/classloader/ClassLoaderUtils.java
+  // CXF is an Apache project licensed under the ASF License 2.0
+  // License statement from the file:
+  /**
+   * Licensed to the Apache Software Foundation (ASF) under one
+   * or more contributor license agreements. See the NOTICE file
+   * distributed with this work for additional information
+   * regarding copyright ownership. The ASF licenses this file
+   * to you under the Apache License, Version 2.0 (the
+   * "License"); you may not use this file except in compliance
+   * with the License. You may obtain a copy of the License at
+   *
+   * http://www.apache.org/licenses/LICENSE-2.0
+   *
+   * Unless required by applicable law or agreed to in writing,
+   * software distributed under the License is distributed on an
+   * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   * KIND, either express or implied. See the License for the
+   * specific language governing permissions and limitations
+   * under the License.
+   */
+
+  
+  /**
+   * Load a given resource. <p/> This method will try to load the resource
+   * using the following methods (in order):
+   * <ul>
+   * <li>From Thread.currentThread().getContextClassLoader()
+   * <li>From ClassLoaderUtil.class.getClassLoader()
+   * <li>callingClass.getClassLoader()
+   * </ul>
+   * 
+   * @param resourceName The name of the resource to load
+   * @param callingClass The Class object of the calling object
+   */
+  public static URL getResource(
+    String resourceName, 
+    Class callingClass) {
+      URL url = Thread.currentThread().getContextClassLoader().getResource(resourceName);
+      if (url == null && resourceName.startsWith("/")) {
+        //certain classloaders need it without the leading /
+        url = Thread.currentThread().getContextClassLoader()
+            .getResource(resourceName.substring(1));
+      }
+      if (url == null) {
+        url = ServiceUtil.class.getClassLoader().getResource(resourceName);
+      }
+      if (url == null && resourceName.startsWith("/")) {
+        //certain classloaders need it without the leading /
+        url = ServiceUtil.class.getClassLoader()
+            .getResource(resourceName.substring(1));
+      }
+      if (url == null) {
+        ClassLoader cl = callingClass.getClassLoader();
+        if (cl != null) {
+          url = cl.getResource(resourceName);
+        }
+      }
+      if (url == null) {
+        url = callingClass.getResource(resourceName);
+      }      
+      if ((url == null) && (resourceName != null) && (resourceName.charAt(0) != '/')) {
+        return getResource('/' + resourceName, callingClass);
+      }
+      return url;
+  }
+
+  public static Enumeration<URL> getResources(
+    String resourceName, 
+    Class callingClass) 
+      throws IOException {
+    Enumeration<URL> url = Thread.currentThread().getContextClassLoader().getResources(resourceName);
+    if (url == null && resourceName.startsWith("/")) {
+      //certain classloaders need it without the leading /
+      url = Thread.currentThread().getContextClassLoader()
+          .getResources(resourceName.substring(1));
+    }
+    if (url == null) {
+      url = ServiceUtil.class.getClassLoader().getResources(resourceName);
+    }
+    if (url == null && resourceName.startsWith("/")) {
+      //certain classloaders need it without the leading /
+      url = ServiceUtil.class.getClassLoader()
+          .getResources(resourceName.substring(1));
+    }
+    if (url == null) {
+      ClassLoader cl = callingClass.getClassLoader();
+      if (cl != null) {
+        url = cl.getResources(resourceName);
+      }
+    }      
+    if ((url == null) && (resourceName != null) && (resourceName.charAt(0) != '/')) {
+      return getResources('/' + resourceName, callingClass);
+    }
+    return url;
+  }
+  
+  /**
+   * This is a convenience method to load a resource as a stream. <p/> The
+   * algorithm used to find the resource is given in getResource()
+   * 
+   * @param resourceName The name of the resource to load
+   * @param callingClass The Class object of the calling object
+   */
+  public static InputStream getResourceAsStream(
+    String resourceName, 
+    Class callingClass) {
+      URL url = getResource(resourceName, callingClass);
+      try {
+        return (url != null) ? url.openStream() : null;
+      } catch (IOException e) {
+        return null;
+      }
+  }
+
+  /**
+   * Load a class with a given name. <p/> It will try to load the class in the
+   * following order:
+   * <ul>
+   * <li>From Thread.currentThread().getContextClassLoader()
+   * <li>Using the basic Class.forName()
+   * <li>From ClassLoaderUtil.class.getClassLoader()
+   * <li>From the callingClass.getClassLoader()
+   * </ul>
+   * 
+   * @param className The name of the class to load
+   * @param callingClass The Class object of the calling object
+   * @throws ClassNotFoundException If the class cannot be found anywhere.
+   */
+  public static Class loadClass(
+    String className, 
+    Class callingClass) 
+      throws ClassNotFoundException {
+    try {
+      ClassLoader cl = Thread.currentThread().getContextClassLoader();
+      if (cl != null) {
+        return cl.loadClass(className);
+      }      
+      return loadClass2(className, callingClass);
+    } catch (ClassNotFoundException e) {
+      return loadClass2(className, callingClass);
+    }
+  }
+
+  private static Class loadClass2(
+    String className, 
+    Class callingClass) 
+      throws ClassNotFoundException {
+    try {
+      return Class.forName(className);
+    } catch (ClassNotFoundException ex) {
+      try {
+        return ServiceUtil.class.getClassLoader().loadClass(className);
+      } catch (ClassNotFoundException exc) {
+        return callingClass.getClassLoader().loadClass(className);
+      }
+    }
+  }
+
 }

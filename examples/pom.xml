@@ -73,6 +73,11 @@
     </dependency>
     <dependency>
       <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-extensions-features</artifactId>
+      <version>0.5.0-incubating-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-security</artifactId>
       <version>0.5.0-incubating-SNAPSHOT</version>
     </dependency>

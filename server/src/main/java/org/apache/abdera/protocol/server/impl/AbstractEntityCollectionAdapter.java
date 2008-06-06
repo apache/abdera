@@ -79,26 +79,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
   
   @Override
   public ResponseContext postMedia(RequestContext request) {
-    try {
-      T entryObj = postMedia(request.getContentType(), 
-                             request.getSlug(), 
-                             request.getInputStream(), 
-                             request);
-
-      IRI feedIri = getFeedIRI(entryObj, request);
-
-      Entry entry = request.getAbdera().getFactory().newEntry();
-
-      addEntryDetails(request, entry, feedIri, entryObj);
-
-      String mediaLink = addMediaContent(feedIri, entry, entryObj, request);
-
-      return buildPostMediaEntryResponse(mediaLink, entry);
-    } catch (IOException e) {
-      return new EmptyResponseContext(500);
-    } catch (ResponseContextException e) {
-      return createErrorResponse(e);
-    }
+      return createMediaEntry(request);
   }
   
   @Override

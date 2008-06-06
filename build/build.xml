@@ -178,6 +178,8 @@ Working directory: ${work}
           <available file="${dependencies}/${jetty-util.jar}" />
           <available file="${dependencies}/${htmlparser.jar}" />
           <available file="${dependencies}/${htmlserializer.jar}" />
+          <available file="${dependencies}/${easymock.jar}" />
+          <available file="${dependencies}/${easymockclassextension.jar}" />
         </and>
       </not>
     </condition>
@@ -344,7 +346,7 @@ Working directory: ${work}
     <echo>Make sure the example code compiles...</echo>
     <mkdir dir="${examples.work}" />
     <javac srcdir="${examples.src}" destdir="${examples.work}" classpathref="jar.dependencies" 
-      classpath="${core.work};${parser.work};${client.work};${server.work};${extensions.work}/gdata;${extensions.work}/main;${security.work};${extensions.work}/sharing;${extensions.work}/geo;${extensions.work}/serializer" debug="${debug}">
+      classpath="${core.work};${parser.work};${client.work};${server.work};${extensions.work}/gdata;${extensions.work}/main;${security.work};${extensions.work}/sharing;${extensions.work}/geo;${extensions.work}/serializer;${extensions.work}/features" debug="${debug}">
       <exclude unless="do.security" name="**/security/*.java" />
     </javac>
     <delete dir="${examples.work}" />
@@ -690,7 +692,7 @@ Working directory: ${work}
   </target>
   
   
-  <target name="compile.extensions" depends="init, compile.core, compile.parser, compile.dependencies, compile.client">
+  <target name="compile.extensions" depends="init, compile.core, compile.parser, compile.dependencies, compile.client, compile.server">
     <mkdir dir="${extensions.work}" />
     
     <antcall target="compile.extension">
@@ -735,6 +737,10 @@ Working directory: ${work}
 
     <antcall target="compile.extension">
       <param name="ext" value="serializer" />
+    </antcall>
+
+    <antcall target="compile.extension">
+      <param name="ext" value="features" />
     </antcall>
     
   </target>
@@ -823,6 +829,10 @@ Working directory: ${work}
     <antcall target="dist.extension">
       <param name="ext" value="serializer" />
     </antcall>
+
+    <antcall target="dist.extension">
+      <param name="ext" value="features" />
+    </antcall>
     
   </target>
   
@@ -885,6 +895,10 @@ Working directory: ${work}
     <antcall target="test.extension">
       <param name="ext" value="serializer" />
     </antcall>
+
+    <antcall target="test.extension">
+      <param name="ext" value="features" />
+    </antcall>
     
   </target>
   
@@ -940,6 +954,10 @@ Working directory: ${work}
 
     <antcall target="retro.extension">
       <param name="ext" value="serializer" />
+    </antcall>
+
+    <antcall target="retro.extension">
+      <param name="ext" value="features" />
     </antcall>
     
   </target>

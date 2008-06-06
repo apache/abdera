@@ -33,7 +33,7 @@
   
 	<modules>
     <module>gdata</module>
-		<module>geo</module>
+    <module>geo</module>
     <module>html</module>
     <module>json</module>
     <module>main</module>
@@ -42,6 +42,8 @@
     <module>opensearch</module>
     <module>serializer</module>
     <module>sharing</module>
-    <module>wsse</module>	</modules>
+    <module>wsse</module>
+    <module>features</module>
+	</modules>
 
 </project>

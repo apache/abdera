@@ -786,13 +786,13 @@ public class FOMTest extends Assert   {
     entry.setContent(in,"text/plain;charset=\"utf-16\"");
     
     ByteArrayOutputStream out = new ByteArrayOutputStream();
-    OutputStreamWriter w = new OutputStreamWriter(out);
+    OutputStreamWriter w = new OutputStreamWriter(out, "utf-16");
     edoc.writeTo(w);
     
     in = new ByteArrayInputStream(out.toByteArray());
 
     entry = (Entry) abdera.getParser().parse(in).getRoot();
 
-    assertEquals(entry.getContent(),"tóst");
+    assertEquals("tóst", entry.getContent());
   }
 }

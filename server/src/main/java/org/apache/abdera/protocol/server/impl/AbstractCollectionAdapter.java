@@ -104,35 +104,35 @@ public abstract class AbstractCollectionAdapter
   }
 
   public ResponseContext deleteMedia(RequestContext request) {
-    return ProviderHelper.notsupported(request);
+    return ProviderHelper.notallowed(request);
   }
 
   public ResponseContext getMedia(RequestContext request) {
-    return ProviderHelper.notsupported(request);
+    return ProviderHelper.notallowed(request);
   }
 
   public ResponseContext headMedia(RequestContext request) {
-    return ProviderHelper.notsupported(request);
+    return ProviderHelper.notallowed(request);
   }
 
   public ResponseContext optionsMedia(RequestContext request) {
-    return ProviderHelper.notsupported(request);
+    return ProviderHelper.notallowed(request);
   }
 
   public ResponseContext putMedia(RequestContext request) {
-    return ProviderHelper.notsupported(request);
+    return ProviderHelper.notallowed(request);
   }
 
   public ResponseContext postMedia(RequestContext request) {
-    return ProviderHelper.notsupported(request);
+    return ProviderHelper.notallowed(request);
   }
 
   public ResponseContext headEntry(RequestContext request) {
-    return ProviderHelper.notsupported(request);
+    return ProviderHelper.notallowed(request);
   }
 
   public ResponseContext optionsEntry(RequestContext request) {
-    return ProviderHelper.notsupported(request);
+    return ProviderHelper.notallowed(request);
   }
 
   public abstract String getAuthor(RequestContext request) throws ResponseContextException;

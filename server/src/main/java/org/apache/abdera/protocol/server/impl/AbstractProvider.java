@@ -234,7 +234,7 @@ public abstract class AbstractProvider
           adapter.postEntry(context) :
           adapter instanceof MediaCollectionAdapter ?
             ((MediaCollectionAdapter)adapter).postMedia(context) :
-            ProviderHelper.notsupported(context);
+            ProviderHelper.notallowed(context);
       } else return null;
   }
   
@@ -274,7 +274,7 @@ public abstract class AbstractProvider
           return mcadapter.optionsMedia(context);
         else return null;
       } else {
-        return ProviderHelper.notsupported(context);
+        return ProviderHelper.notallowed(context);
       }
   }
   

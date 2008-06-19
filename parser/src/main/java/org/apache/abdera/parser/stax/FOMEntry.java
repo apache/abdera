@@ -565,7 +565,8 @@ public class FOMEntry
   
   public Text setRights(Div value) {
     FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newRights(value);
+    Text text = factory.newRights(Text.Type.XHTML);
+    text.setValueElement(value);
     setRightsElement(text);
     return text;
   }
@@ -625,9 +626,10 @@ public class FOMEntry
     return text;
   }
   
-  public Text setSummary(Div value) {
+  public Text setSummary(Div value){
     FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newSummary(value);
+    Text text = factory.newSummary(Text.Type.XHTML);
+    text.setValueElement(value);
     setSummaryElement(text);
     return text;
   }
@@ -673,7 +675,8 @@ public class FOMEntry
   
   public Text setTitle(Div value) {
     FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newTitle(value);
+    Text text = factory.newTitle(Text.Type.XHTML);
+    text.setValueElement(value);
     setTitleElement(text);
     return text;
   }

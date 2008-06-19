@@ -331,7 +331,8 @@ public class FOMSource
   
   public Text setRights(Div value) {
     FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newRights(value);
+    Text text = factory.newRights(Text.Type.XHTML);
+    text.setValueElement(value);
     setRightsElement(text);
     return text;
   }
@@ -377,7 +378,8 @@ public class FOMSource
   
   public Text setSubtitle(Div value) {
     FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newSubtitle(value);
+    Text text = factory.newSubtitle(Text.Type.XHTML);
+    text.setValueElement(value);
     setSubtitleElement(text);
     return text;
   }
@@ -423,7 +425,8 @@ public class FOMSource
   
   public Text setTitle(Div value) {
     FOMFactory factory = (FOMFactory)this.factory;
-    Text text = factory.newTitle(value);
+    Text text = factory.newTitle(Text.Type.XHTML);
+    text.setValueElement(value);
     setTitleElement(text);
     return text;
   }

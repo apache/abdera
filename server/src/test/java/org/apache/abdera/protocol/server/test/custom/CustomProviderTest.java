@@ -153,7 +153,7 @@ prettyPrint(doc);
     options.setContentType("application/octet-stream");
     ClientResponse resp = client.post(BASE + "/feed", in, options);
     assertEquals(resp.getType(), ResponseType.CLIENT_ERROR);
-    assertEquals(resp.getStatus(), 415);
+    assertEquals(resp.getStatus(), 405);
     resp.release();
   }
 

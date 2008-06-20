@@ -251,7 +251,8 @@
   					<configuration>
   						<excludes>
   							<exclude>**/*TestSuite*</exclude>
-  							<exclude>**/*$Test*</exclude>
+  							<exclude>**/*$*</exclude>
+  							<exclude>**/*TestAdapter*</exclude>
   							<exclude>**/FeedValidatorTest.java</exclude>
   							<exclude>**/DSigThirdPartyVerifyTest.java</exclude>
   							<exclude>**/AtomConformanceTest.java</exclude>

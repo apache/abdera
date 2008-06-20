@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Collection;
 
 import org.apache.abdera.i18n.templates.CachingContext;
 import org.apache.abdera.i18n.templates.Context;
@@ -57,6 +58,9 @@ public class RouteManager
   implements Resolver<Target>,
              TargetBuilder {
 
+  protected Collection<Route> orderedTargets =
+    new ArrayList<Route>();
+    
   protected Map<Route,TargetType> targets = 
     new HashMap<Route,TargetType>();
   
@@ -84,8 +88,10 @@ public class RouteManager
     Route route, 
     TargetType type) {
       routes.put(route.getName(), route);
-      if (type != null) 
+      if (type != null) {
         targets.put(route, type);
+        orderedTargets.add(route);
+      }
       return this;
   }
   
@@ -118,13 +124,13 @@ public class RouteManager
     if (idx != -1) {
       uri = uri.substring(0, idx);
     }
-    for(Map.Entry<Route, TargetType> entry : targets.entrySet()) {
-      if (entry.getKey().match(uri)) {
-        CollectionAdapter ca = route2CA.get(entry.getKey());
+    for (Route route : orderedTargets) {
+      if (route.match(uri)) {
+        CollectionAdapter ca = route2CA.get(route);
         if (ca != null) {
           context.setAttribute(DefaultWorkspaceManager.COLLECTION_ADAPTER_ATTRIBUTE, ca);
         }
-        return getTarget(context, entry.getKey(), uri, entry.getValue());
+        return getTarget(context, route, uri, targets.get(route));
       }
     }
     return null;

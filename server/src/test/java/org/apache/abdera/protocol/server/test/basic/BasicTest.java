@@ -130,7 +130,7 @@ public class BasicTest extends Assert {
     options.setContentType("application/octet-stream");
     ClientResponse resp = client.post("http://localhost:9002/sample", in, options);
     assertEquals(resp.getType(), ResponseType.CLIENT_ERROR);
-    assertEquals(resp.getStatus(), 415);
+    assertEquals(resp.getStatus(), 405);
     resp.release();
   }
   @Test

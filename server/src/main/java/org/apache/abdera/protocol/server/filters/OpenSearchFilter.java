@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.protocol.server.test.custom;
+package org.apache.abdera.protocol.server.filters;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -137,20 +137,20 @@ public class OpenSearchFilter
           StreamWriter sw) 
             throws IOException {
           sw.startDocument()
-            .startElement("OpenSearchDescription", OSDNS)
-              .startElement("ShortName", OSDNS)
+            .startElement("OpenSearchDescription", OSDNS, "")
+              .startElement("ShortName", OSDNS, "")
                 .writeElementText(getShortName())
               .endElement()
-              .startElement("Description", OSDNS)
+              .startElement("Description", OSDNS, "")
                 .writeElementText(getDescription())
               .endElement()
-              .startElement("Tags", OSDNS)
+              .startElement("Tags", OSDNS, "")
                 .writeElementText(combineTags())
               .endElement()
-              .startElement("Contact", OSDNS)
+              .startElement("Contact", OSDNS, "")
                 .writeElementText(getContact())
               .endElement()
-              .startElement("Url", OSDNS)
+              .startElement("Url", OSDNS, "")
                 .writeAttribute("type", "application/atom+xml")
                 .writeAttribute("template",getTemplate())
               .endElement()

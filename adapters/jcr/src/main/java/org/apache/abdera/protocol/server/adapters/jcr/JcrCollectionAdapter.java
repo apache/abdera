@@ -295,7 +295,7 @@ public class JcrCollectionAdapter
     }
   }
 
-  private Node mapEntryToNode(Node entry, String title, String summary, Date updated, List<Person> authors,
+  protected Node mapEntryToNode(Node entry, String title, String summary, Date updated, List<Person> authors,
                               Content content, Session session)
     throws ResponseContextException, RepositoryException {
     if (title == null) {

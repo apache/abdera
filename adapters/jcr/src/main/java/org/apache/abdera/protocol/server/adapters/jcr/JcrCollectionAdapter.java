@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.protocol.server.adapters.jcr;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,11 +39,14 @@ import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.Workspace;
 
+import org.apache.abdera.Abdera;
+import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.text.Sanitizer;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Text;
+import org.apache.abdera.model.Content.Type;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.RequestContext.Scope;
@@ -319,7 +324,18 @@ public class JcrCollectionAdapter
     }
 
     if (content != null) {
-      entry.setProperty(CONTENT, content.getText());
+      switch(content.getContentType()) {
+      case TEXT:
+	entry.setProperty(CONTENT, content.getText());
+	entry.setProperty(CONTENT_TYPE, Type.TEXT.toString());
+	break;
+      case XHTML:
+	entry.setProperty(CONTENT, asString(content));
+	entry.setProperty(CONTENT_TYPE, Type.XHTML.toString());
+	break;
+      default:
+	throw new ResponseContextException("Invalid content element type.", 500);
+      }
     }
 
     if (summary != null) {
@@ -329,7 +345,17 @@ public class JcrCollectionAdapter
     return entry;
   }
 
-  private Session getSession(RequestContext request) {
+  private String asString(Content content2) throws ResponseContextException {
+    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    try {
+      content2.getFirstChild().writeTo(bos);
+    } catch (IOException e) {
+      throw new ResponseContextException(500, e);
+    }
+    return new String(bos.toByteArray());
+  }
+
+  protected Session getSession(RequestContext request) {
     return (Session)request.getAttribute(Scope.REQUEST, SESSION_KEY);
   }
 
@@ -420,7 +446,22 @@ public class JcrCollectionAdapter
 
   @Override
   public Object getContent(Node entry, RequestContext request) throws ResponseContextException {
-    return getStringOrNull(entry, CONTENT);
+    
+    String typeStr = getStringOrNull(entry, CONTENT_TYPE);
+    Factory factory = Abdera.getInstance().getFactory();
+    String textContent = getStringOrNull(entry, CONTENT);
+    Type type = Type.valueOf(typeStr);
+    Content content = factory.newContent(type);
+    switch (type) {
+      case TEXT:
+        content.setValue(textContent);
+        return content;
+      case XHTML:
+        content.setWrappedValue(textContent);
+        return content;
+      default:	
+    }
+    return null;
   }
 
   @Override

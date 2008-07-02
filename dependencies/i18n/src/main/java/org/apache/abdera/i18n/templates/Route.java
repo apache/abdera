@@ -174,12 +174,18 @@ public class Route
       return buf.toString();
   }
 
-  private String getDefaultValue(String var) {
+  public String getDefaultValue(String var) {
     if (defaultValues == null) return null;
     
     return defaultValues.get(var);
   }
-  
+
+  public String getRequirement(String var) {
+    if (requirements == null) return null;
+    
+    return requirements.get(var);
+  }
+
   private String var(String token) {
     token = token.substring(1);
     if (token.startsWith("("))
@@ -233,7 +239,15 @@ public class Route
   public String[] getVariables() {
     return variables;
   }
-  
+
+  public Map<String, String> getDefaultValues(){
+    return defaultValues;
+  }
+
+  public Map<String, String> getRequirements(){
+    return requirements;
+  }
+
   public Route clone() {
     try {
       return (Route)super.clone();

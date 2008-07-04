@@ -44,6 +44,7 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.text.Sanitizer;
 import org.apache.abdera.model.Content;
+import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Content.Type;
@@ -348,7 +349,7 @@ public class JcrCollectionAdapter
   private String asString(Content content2) throws ResponseContextException {
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     try {
-      content2.getFirstChild().writeTo(bos);
+	content2.<Element>getFirstChild().writeTo(bos);
     } catch (IOException e) {
       throw new ResponseContextException(500, e);
     }

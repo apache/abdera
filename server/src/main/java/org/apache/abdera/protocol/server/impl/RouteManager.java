@@ -65,6 +65,14 @@ public class RouteManager
       this.route = route;
       this.targetType = targetType;
     }
+
+    public Route getRoute() {
+      return route;
+    }
+
+    public TargetType getTargetType() {
+      return targetType;
+    }
   }
 
   protected List<RouteTargetType> targets =

@@ -24,7 +24,9 @@ import javax.security.auth.Subject;
 import org.apache.abdera.Abdera;
 
 /**
- * Providers are responsible for processing all requests to the Atompub server.
+ * Providers are responsible for processing all requests to the Atompub server.<br>
+ * Actual request processing is delegated to {@link RequestProcessor} implementations, depending
+ * on the request {@link TargetType}.
  */
 public interface Provider {
   
@@ -73,4 +75,19 @@ public interface Provider {
    */
   Filter[] getFilters(RequestContext request);
   
+  /**
+   * Set a map of {@link RequestProcessor}s to register on this provider, overriding already registered ones.
+   */
+  void setRequestProcessors(Map<TargetType, RequestProcessor> requestProcessors);
+  
+  /**
+   * Add a map of {@link RequestProcessor}s to register on this provider, without overriding already registered ones.<br>
+   * Named after a "setter" method in order to be Dependency Injection friendly.
+   */
+  void addRequestProcessors(Map<TargetType, RequestProcessor> requestProcessors);
+  
+  /**
+   * Return a map of registered {@link RequestProcessor}s with related {@link TargetType}.
+   */
+  Map<TargetType, RequestProcessor> getRequestProcessors();
 }

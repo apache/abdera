@@ -62,15 +62,18 @@ public abstract class AbstractProvider implements Provider {
     protected List<Filter> filters = new ArrayList<Filter>();
     protected Map<TargetType, RequestProcessor> requestProcessors = new HashMap<TargetType, RequestProcessor>();
 
+    protected AbstractProvider() {
+      // Setting default request processors:
+      this.requestProcessors.put(TargetType.TYPE_SERVICE, new ServiceRequestProcessor());
+      this.requestProcessors.put(TargetType.TYPE_CATEGORIES, new CategoriesRequestProcessor());
+      this.requestProcessors.put(TargetType.TYPE_COLLECTION, new CollectionRequestProcessor());
+      this.requestProcessors.put(TargetType.TYPE_ENTRY, new EntryRequestProcessor());
+      this.requestProcessors.put(TargetType.TYPE_MEDIA, new MediaRequestProcessor());
+    }
+
     public void init(Abdera abdera, Map<String, String> properties) {
         this.abdera = abdera;
         this.properties = properties;
-        // Setting default request processors:
-        this.requestProcessors.put(TargetType.TYPE_SERVICE, new ServiceRequestProcessor());
-        this.requestProcessors.put(TargetType.TYPE_CATEGORIES, new CategoriesRequestProcessor());
-        this.requestProcessors.put(TargetType.TYPE_COLLECTION, new CollectionRequestProcessor());
-        this.requestProcessors.put(TargetType.TYPE_ENTRY, new EntryRequestProcessor());
-        this.requestProcessors.put(TargetType.TYPE_MEDIA, new MediaRequestProcessor());
     }
 
     public String getProperty(String name) {

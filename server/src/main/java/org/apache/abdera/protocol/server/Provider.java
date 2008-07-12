@@ -81,8 +81,7 @@ public interface Provider {
   void setRequestProcessors(Map<TargetType, RequestProcessor> requestProcessors);
   
   /**
-   * Add a map of {@link RequestProcessor}s to register on this provider, without overriding already registered ones.<br>
-   * Named after a "setter" method in order to be Dependency Injection friendly.
+   * Add a map of {@link RequestProcessor}s to register on this provider, without overriding already registered ones.<br>Å
    */
   void addRequestProcessors(Map<TargetType, RequestProcessor> requestProcessors);
   

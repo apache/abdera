@@ -32,6 +32,7 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
+import org.apache.abdera.model.Entry;
 import org.apache.abdera.protocol.EntityProvider;
 import org.apache.abdera.protocol.Response.ResponseType;
 import org.apache.abdera.protocol.client.cache.Cache;
@@ -42,6 +43,7 @@ import org.apache.abdera.protocol.client.cache.Cache.Disposition;
 import org.apache.abdera.protocol.client.util.BaseRequestEntity;
 import org.apache.abdera.protocol.client.util.EntityProviderRequestEntity;
 import org.apache.abdera.protocol.client.util.MethodHelper;
+import org.apache.abdera.protocol.client.util.MultimediaRelatedRequestEntity;
 import org.apache.abdera.protocol.client.util.SimpleSSLProtocolSocketFactory;
 import org.apache.abdera.protocol.error.Error;
 import org.apache.abdera.protocol.error.ProtocolException;
@@ -235,6 +237,47 @@ public class AbderaClient {
           options.setSlug(d.getSlug());
       }
       return execute("POST", uri, new BaseRequestEntity(base, options.isUseChunked()), options);
+  }
+  
+  /**
+   * Sends an HTTP POST request to the specified URI. 
+   * It uses the media and entry parameters to create a multipart/related object.
+   * If the contentType is not provided this method tries to get it from the type attribute of the entry content.
+   * 
+   * @param uri The request URI
+   * @param entry The entry that will be sent as the first element of the multipart/related object
+   * @param media The media object that will be sent as the second element of the multipart/related object
+   */
+  public ClientResponse post(String uri, Entry entry, InputStream media) {
+      return post(uri, entry, media, getDefaultRequestOptions());
+  }
+  
+  /**
+   * Sends an HTTP POST request to the specified URI. 
+   * It uses the media and entry parameters to create a multipart/related object.
+   * If the contentType is not provided this method tries to get it from the type attribute of the entry content.
+   * 
+   * @param uri The request URI
+   * @param entry The entry that will be sent as the first element of the multipart/related object
+   * @param media The media object that will be sent as the second element of the multipart/related object
+   * @param options The request options
+   */
+  public ClientResponse post(String uri, Entry entry, InputStream media, RequestOptions options) {
+	  return post(uri, entry, media, null, options); 
+  }
+  
+  /**
+   * Sends an HTTP POST request to the specified URI. 
+   * It uses the media and entry parameters to create a multipart/related object.
+   * 
+   * @param uri The request URI
+   * @param entry The entry that will be sent as the first element of the multipart/related object
+   * @param media The media object that will be sent as the second element of the multipart/related object
+   * @param contentType the content type of the media object
+   * @param options The request options
+   */
+  public ClientResponse post(String uri, Entry entry, InputStream media, String contentType, RequestOptions options) {
+	  return execute("POST", uri, new MultimediaRelatedRequestEntity(entry, media, contentType), options);
   }
 
   /**

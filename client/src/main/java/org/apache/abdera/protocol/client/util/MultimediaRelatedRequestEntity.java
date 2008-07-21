@@ -89,7 +89,7 @@ public class MultimediaRelatedRequestEntity implements RequestEntity {
 	}
 
 	public String getContentType() {		
-		return "Multipart/Related; boundary=\"--" + boundary 
+		return "Multipart/Related; boundary=\"" + boundary 
 			+ "\";type=\"" + MimeTypeHelper.getMimeType(entry) + "\"";
 	}
 

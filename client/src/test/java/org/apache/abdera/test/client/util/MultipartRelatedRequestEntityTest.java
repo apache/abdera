@@ -64,9 +64,9 @@ public class MultipartRelatedRequestEntityTest extends Assert {
 	
 	@Test
 	public void testMultimediaRelatedContentType() throws Exception {
-		MimeType type = new MimeType("Multipart/Related;boundary=\"--35245352345sdfg\"");
+		MimeType type = new MimeType("Multipart/Related;boundary=\"35245352345sdfg\"");
 		assertTrue(MimeTypeHelper.isMatch("Multipart/Related", type.toString()));
-		assertEquals("--35245352345sdfg", type.getParameter("boundary"));
+		assertEquals("35245352345sdfg", type.getParameter("boundary"));
 	}
 	
 	//@Test

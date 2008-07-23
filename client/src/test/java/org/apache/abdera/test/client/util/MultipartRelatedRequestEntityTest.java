@@ -50,7 +50,8 @@ public class MultipartRelatedRequestEntityTest extends Assert {
 		entry.setId("tag:apache.org,2008:234534344");
 		entry.setSummary("multipart test");
 		entry.setContent(new IRI("cid:234234@example.com"), "image/jpg");
-		RequestEntity request = new MultimediaRelatedRequestEntity(entry, this.getClass().getResourceAsStream("info.png"));
+		RequestEntity request = new MultimediaRelatedRequestEntity(entry, this.getClass().getResourceAsStream("info.png"),
+				"image/jpg", "asdfasdfasdf");
 		
 		StringWriter sw = new StringWriter();
 		WriterOutputStream os = new WriterOutputStream(sw);
@@ -58,6 +59,7 @@ public class MultipartRelatedRequestEntityTest extends Assert {
 		
 		String multipart = sw.toString();
 		//System.out.println(sw.toString());
+		
 		assertTrue(multipart.contains("content-id: <234234@example.com>"));
 		assertTrue(multipart.contains("content-type: image/jpg"));
 	}

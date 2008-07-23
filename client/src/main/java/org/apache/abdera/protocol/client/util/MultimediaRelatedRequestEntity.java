@@ -60,9 +60,9 @@ public class MultimediaRelatedRequestEntity implements RequestEntity {
 	}
 	
 	private void writeEntry(DataOutputStream out) throws IOException {
-		out.writeBytes("content-type: " + MimeTypeHelper.getMimeType(entry) + "\r\n\r\n");
+		out.writeBytes("content-type: " + MimeTypeHelper.getMimeType(entry) + "\r\n\r\n");		
 		entry.writeTo(out);
-		out.writeBytes("\r\n" + "--" + boundary + "\r\n");
+		out.writeBytes("--" + boundary + "\r\n");
 	}
 	
 	private void writeInput(DataOutputStream out) throws IOException {
@@ -81,7 +81,7 @@ public class MultimediaRelatedRequestEntity implements RequestEntity {
 		while ((end = input.read(buffer)) != -1) {
 			out.writeBytes(new BASE64Encoder().encode(buffer));
 		}	
-		out.writeBytes("\r\n" + "--" + boundary + "\r\n");
+		out.writeBytes("\r\n" + "--" + boundary + "--");
 	}
 
 	public long getContentLength() {		

@@ -180,6 +180,7 @@ Working directory: ${work}
           <available file="${dependencies}/${htmlserializer.jar}" />
           <available file="${dependencies}/${easymock.jar}" />
           <available file="${dependencies}/${easymockclassextension.jar}" />
+          <available file="${dependencies}/${javamail.jar}" />
         </and>
       </not>
     </condition>
@@ -600,6 +601,7 @@ Working directory: ${work}
       <get src="${easymock.dir}/${easymock.jar}" dest="${dependencies}/${easymock.jar}" usetimestamp="true" />
       <get src="${easymockclassextension.dir}/${easymockclassextension.jar}" dest="${dependencies}/${easymockclassextension.jar}" usetimestamp="true" />
        <get src="${cglib.dir}/${cglib.jar}" dest="${dependencies}/${cglib.jar}" usetimestamp="true" />
+      <get src="${javamail.dir}/${javamail.jar}" dest="${dependencies}/${javamail.jar}" usetimestamp="true" />
     </parallel>
   </target>
 

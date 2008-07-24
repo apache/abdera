@@ -46,6 +46,7 @@ public interface Constants {
   public static final String APP_MEDIA_TYPE       = "application/atomsvc+xml";
   public static final String XML_MEDIA_TYPE       = "application/xml";
   public static final String CAT_MEDIA_TYPE       = "application/atomcat+xml";
+  public static final String MULTIPART_RELATED_TYPE = "Multipart/Related";
   
   public static final String ATOM_NS              = "http://www.w3.org/2005/Atom";
   public static final String APP_NS               = "http://www.w3.org/2007/app";
@@ -103,6 +104,8 @@ public interface Constants {
   public static final String LN_DRAFT             = "draft";
   public static final String LN_CATEGORIES        = "categories";
   public static final String LN_FIXED             = "fixed";
+  public static final String LN_ALTERNATE = "alternate";
+  public static final String LN_ALTERNATE_MULTIPART_RELATED = "multipart-related";
   
   public static final QName DIV                   = new QName(XHTML_NS, LN_DIV, "");
   
@@ -172,6 +175,7 @@ public interface Constants {
   public static final QName SRC                   = new QName(LN_SRC);
   public static final QName AID                   = new QName(LN_ID);
   public static final QName CLASS                 = new QName(LN_CLASS);
+  public static final QName ALTERNATE = new QName(LN_ALTERNATE);
   
   public static final String TEXT  = "text";
   public static final String HTML  = "html";

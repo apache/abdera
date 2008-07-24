@@ -160,6 +160,10 @@ public class FOMFactory
     Element parent) {
       return new FOMCollection((OMContainer)parent,this);
   }
+  
+  public Collection newMultipartCollection(Element parent) {
+	  return new FOMMultipartCollection((OMContainer)parent,this);
+  }
 
   public Feed newFeed() {
     Document<Feed> doc = newDocument();

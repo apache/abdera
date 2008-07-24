@@ -154,6 +154,15 @@ public class FOMWorkspace
     return collection;
   }
   
+  public Collection addMultipartCollection(String title, String href) {
+	    complete();
+	    FOMFactory fomfactory = (FOMFactory) factory;
+	    Collection collection = fomfactory.newMultipartCollection(this);
+	    collection.setTitle(title);
+	    collection.setHref(href);
+	    return collection;
+	  }
+  
   public Collection getCollectionThatAccepts(MimeType... types) {
     Collection collection = null;
     for (Collection coll : getCollections()) {

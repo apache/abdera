@@ -26,6 +26,7 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
+import org.apache.abdera.parser.stax.FOMMultipartCollection;
 import org.junit.Test;
 
 
@@ -53,4 +54,28 @@ public class ServiceDocumentTest extends Assert {
         assertTrue("Service document does not specify acceptance of entries.", s.contains("application/atom+xml; type=entry"));
         assertTrue("Service document does not specify acceptance of apples.", s.contains("application/apples"));
     }
+  
+  /**
+   * Test whether the <accept> element includes the multipart attribute.
+   */
+  @Test
+  public void testCollectionAcceptsMultipart() throws Exception {
+      Abdera abdera = new Abdera();
+      Factory factory = abdera.getFactory();
+      Service svc = factory.newService();
+      Workspace ws = svc.addWorkspace("test-ws");
+      FOMMultipartCollection coll = (FOMMultipartCollection) ws.addMultipartCollection("test multipart coll", "/test-coll");   
+      coll.setAcceptsEntry();
+      coll.addAccepts("image/*", "multipart-related");            
+      
+      assertTrue("Collection does not accept entries.", coll.acceptsEntry());
+      assertTrue("Collection does not accept multipart related images", coll.acceptsMultipart("image/*"));
+      
+      StringWriter sw = new StringWriter();
+      svc.writeTo(sw);      
+      
+      String s = sw.toString();
+      assertTrue("Service document does not specify acceptance of entries.", s.contains("application/atom+xml; type=entry"));
+      assertTrue("Service document does not specify acceptance of apples.", s.contains("image/*"));
+  }
 }

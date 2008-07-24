@@ -184,8 +184,7 @@ public class MimeTypeHelper {
    * Returns true if media type a matches text/*
    */
   public static boolean isText(String a) {
-    boolean answer = isMatch("text/*", a);
-    return answer;
+    return isMatch("text/*", a);    
   }
   
   /**
@@ -306,6 +305,13 @@ public class MimeTypeHelper {
       return compare(mt1,mt2);
     } catch (Exception e) {}
     return 0;
+  }
+  
+  /**
+   * Returns true if media type is a multiparted file.
+   */
+  public static boolean isMultipart(String a) {
+    return isMatch(Constants.MULTIPART_RELATED_TYPE, a);    
   }
 
 }

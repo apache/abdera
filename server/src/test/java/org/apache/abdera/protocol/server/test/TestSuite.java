@@ -20,6 +20,7 @@ package org.apache.abdera.protocol.server.test;
 import org.apache.abdera.protocol.server.test.basic.BasicTest;
 import org.apache.abdera.protocol.server.test.custom.CustomProviderTest;
 import org.apache.abdera.protocol.server.test.customer.CustomerAdapterTest;
+import org.apache.abdera.protocol.server.test.multipart.MultipartRelatedTest;
 import org.apache.abdera.protocol.server.test.route.RouteTest;
 import org.junit.internal.runners.TextListener;
 import org.junit.runner.JUnitCore;
@@ -33,6 +34,7 @@ public class TestSuite {
       RouteTest.class,
       CustomerAdapterTest.class,
       CustomProviderTest.class,
-      BasicTest.class);
+      BasicTest.class,
+      MultipartRelatedTest.class);
   }
 }

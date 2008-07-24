@@ -110,6 +110,15 @@ public interface Workspace
     String href);
   
   /**
+   * Adds a multipart collection to this workspace
+   * @param title The collection title
+   * @param href The collection HREF
+   * @return The newly created app:collection
+   * @throws IRISyntaxException if the href is malformed
+   */
+  public Collection addMultipartCollection(String title, String href);
+  
+  /**
    * Returns a collection that accepts the specified media types
    * @param a listing of media types the collection must accept
    * @return A matching app:collection element

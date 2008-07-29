@@ -1,0 +1,7 @@
+<os:OpenSearchDescription xmlns:os="http://a9.com/-/spec/opensearch/1.1/">
+    <os:ShortName>This is a short name</os:ShortName>
+    <os:Description>This is a description</os:Description>
+    <os:Tags>FirstTag SecondTag</os:Tags>
+    <os:Url indexOffset="1" pageOffset="1" type="application/atom+xml" template="http://example.com/?q={searchTerms}"/>
+    <os:Query role="example" searchTerms="term1 term2" />
+</os:OpenSearchDescription>

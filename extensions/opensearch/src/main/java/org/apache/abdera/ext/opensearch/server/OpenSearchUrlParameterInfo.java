@@ -15,32 +15,25 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.ext.opensearch;
+package org.apache.abdera.ext.opensearch.server;
 
-import javax.xml.namespace.QName;
-
-import org.apache.abdera.factory.Factory;
-import org.apache.abdera.model.Element;
-import org.apache.abdera.model.ElementWrapper;
-
-public class IntegerElement 
-  extends ElementWrapper {
-
-  public IntegerElement(Element internal) {
-    super(internal);
-  }
-
-  public IntegerElement(Factory factory, QName qname) {
-    super(factory, qname);
-  }
-
-  public int getValue() {
-    String val = getText();
-    return (val != null) ? Integer.parseInt(val) : -1;
-  }
-  
-  public void setValue(int value) {
-    setText(String.valueOf(value));
-  }
-  
+/**
+ * Metadata interface holding information about an Open Search URL parameter.
+ */
+public interface OpenSearchUrlParameterInfo {
+    
+    /**
+     * Get the parameter name.
+     */
+    String getName();
+    
+    /**
+     * Get the parameter value.
+     */
+    String getValue();
+    
+    /**
+     * Return true if the parameter is optional, false otherwise.
+     */
+    boolean isOptional();
 }

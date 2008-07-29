@@ -15,26 +15,28 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.ext.opensearch;
+package org.apache.abdera.ext.opensearch.server;
 
-import org.apache.abdera.util.AbstractExtensionFactory;
+import org.apache.abdera.ext.opensearch.model.Query;
+import org.apache.abdera.protocol.server.RequestContext;
 
-public final class OpenSearchExtensionFactory 
-  extends AbstractExtensionFactory
-  implements OpenSearchConstants {
+/**
+ * Metadata interface holding (limited) information about the Open Search query element.
+ */
+public interface OpenSearchQueryInfo {
 
-  public OpenSearchExtensionFactory() {
-    super(
-      OpenSearchConstants.OPENSEARCH_NS, 
-      OpenSearchConstants.OPENSEARCH_V10_NS);
-    addImpl(QUERY,Query.class);
-    addImpl(QUERY_V10,Query.class);
-    addImpl(ITEMS_PER_PAGE, IntegerElement.class);
-    addImpl(START_INDEX, IntegerElement.class);
-    addImpl(TOTAL_RESULTS, IntegerElement.class);
-    addImpl(ITEMS_PER_PAGE_V10, IntegerElement.class);
-    addImpl(START_INDEX_V10, IntegerElement.class);
-    addImpl(TOTAL_RESULTS_V10, IntegerElement.class);
-  }
-  
+    /**
+     * Get the query role type.
+     */
+    Query.Role getRole();
+    
+    /**
+     * Get the query search terms.
+     */
+    String getSearchTerms();
+    
+    /**
+     * Create the related {@link org.apache.abdera.ext.opensearch.model.Query} element.
+     */
+    Query asQueryElement(RequestContext request);
 }

@@ -30,7 +30,6 @@ import org.apache.abdera.model.Element;
  * It maintains the collection ExtensionFactory instances discovered on 
  * the classpath and a cache of Internal-Wrapper mappings.
  */
-@SuppressWarnings("unchecked") 
 public class ExtensionFactoryMap 
   implements ExtensionFactory {
 
@@ -84,7 +83,7 @@ public class ExtensionFactoryMap
   }
 
   public <T extends Base> String getMimeType(T base) {
-    Element element = base instanceof Element ? (Element)base : ((Document)base).getRoot();
+    Element element = base instanceof Element ? (Element)base : ((Document<?>)base).getRoot();
     String namespace = element.getQName().getNamespaceURI();
     synchronized(factories) {
       for (ExtensionFactory factory : factories) {

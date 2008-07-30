@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.protocol.client.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,11 +25,10 @@ import java.io.OutputStream;
 
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.util.MimeTypeHelper;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.methods.RequestEntity;
 
-import sun.misc.BASE64Encoder;
-
-public class MultimediaRelatedRequestEntity implements RequestEntity {
+public class MultipartRelatedRequestEntity implements RequestEntity {
 
 	static final int BUFF_SIZE = 1024;
     static final byte[] buffer = new byte[BUFF_SIZE];
@@ -37,15 +37,15 @@ public class MultimediaRelatedRequestEntity implements RequestEntity {
     private final String contentType;
 	private String boundary;
 	
-	public MultimediaRelatedRequestEntity(Entry entry, InputStream input) {
+	public MultipartRelatedRequestEntity(Entry entry, InputStream input) {
 		this(entry, input, null);
 	}	
 	
-	public MultimediaRelatedRequestEntity(Entry entry, InputStream input, String contentType) {
+	public MultipartRelatedRequestEntity(Entry entry, InputStream input, String contentType) {
 		this(entry, input, contentType, null);
 	}
 	
-	public MultimediaRelatedRequestEntity(Entry entry, InputStream input, String contentType, String boundary) {		
+	public MultipartRelatedRequestEntity(Entry entry, InputStream input, String contentType, String boundary) {		
 		this.input = input;		
 		this.entry = entry;
 		this.contentType = contentType != null?contentType:entry.getContentMimeType().toString()	;
@@ -77,10 +77,13 @@ public class MultimediaRelatedRequestEntity implements RequestEntity {
 		}
 		out.writeBytes("content-id: <" + contentId.substring(4) + ">\r\n\r\n");
 		
-		int end;
-		while ((end = input.read(buffer)) != -1) {
-			out.writeBytes(new BASE64Encoder().encode(buffer));
-		}	
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		while (input.read(buffer) != -1) {
+			output.write(buffer);
+		}		
+		
+		Base64 base64 = new Base64();
+	    out.write(base64.encode(output.toByteArray()));	
 		out.writeBytes("\r\n" + "--" + boundary + "--");
 	}
 

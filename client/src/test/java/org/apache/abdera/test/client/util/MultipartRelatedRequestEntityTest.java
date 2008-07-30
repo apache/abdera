@@ -18,6 +18,7 @@
 package org.apache.abdera.test.client.util;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,8 +32,9 @@ import junit.framework.Assert;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.parser.stax.FOMEntry;
-import org.apache.abdera.protocol.client.util.MultimediaRelatedRequestEntity;
+import org.apache.abdera.protocol.client.util.MultipartRelatedRequestEntity;
 import org.apache.abdera.util.MimeTypeHelper;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.junit.Test;
 import org.mortbay.io.WriterOutputStream;
@@ -50,7 +52,7 @@ public class MultipartRelatedRequestEntityTest extends Assert {
 		entry.setId("tag:apache.org,2008:234534344");
 		entry.setSummary("multipart test");
 		entry.setContent(new IRI("cid:234234@example.com"), "image/jpg");
-		RequestEntity request = new MultimediaRelatedRequestEntity(entry, this.getClass().getResourceAsStream("info.png"),
+		RequestEntity request = new MultipartRelatedRequestEntity(entry, this.getClass().getResourceAsStream("info.png"),
 				"image/jpg", "asdfasdfasdf");
 		
 		StringWriter sw = new StringWriter();
@@ -77,18 +79,21 @@ public class MultipartRelatedRequestEntityTest extends Assert {
 		int BUFF_SIZE = 1024;
 		
 		byte[] line = new byte[BUFF_SIZE];
-		int end;
-		String s = "";
-		while ((end = input.read(line)) != -1) {
-			s += new BASE64Encoder().encode(line);
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		while (input.read(line) != -1) {
+			output.write(line);
 		}		
-	    		
-		ByteArrayInputStream bi = new ByteArrayInputStream(new BASE64Decoder().decodeBuffer(s));
+		
+		Base64 base64 = new Base64();
+	    byte[] encoded = base64.encode(output.toByteArray());
+		ByteArrayInputStream bi = new ByteArrayInputStream(base64.decode(encoded));
+		
 		File f = new File("info-out.png");
 		if (f.exists()) f.delete();
 		f.createNewFile();
 		FileOutputStream fo = new FileOutputStream(f);		
-				
+			
+		int end;
 		while ((end = bi.read(line)) != -1) {
 			fo.write(line, 0, end);
 		}

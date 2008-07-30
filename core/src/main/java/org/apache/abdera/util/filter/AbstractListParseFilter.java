@@ -17,8 +17,10 @@
 */
 package org.apache.abdera.util.filter;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,43 +38,103 @@ public abstract class AbstractListParseFilter
   extends AbstractParseFilter
   implements Cloneable, ListParseFilter {
   
-  private final List<QName> qnames = Collections.synchronizedList(new ArrayList<QName>());
-  private final Map<QName,List<QName>> attributes = Collections.synchronizedMap(new HashMap<QName,List<QName>>());
+  private static final long serialVersionUID = -758691949740569208L;
+
+  private transient List<QName> qnames = new ArrayList<QName>();
+  private transient Map<QName,List<QName>> attributes = new HashMap<QName,List<QName>>();
   
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
   }
   
   public ListParseFilter add(QName qname) {
-    if (!contains(qname)) qnames.add(qname);
+	  synchronized (qnames) {
+      if (!contains(qname)) qnames.add(qname);
+    }
     return this;
   }
 
   public boolean contains(QName qname) {
-    return qnames.contains(qname);
+    synchronized (qnames) {
+      return qnames.contains(qname);
+    }
   }
 
   public ListParseFilter add(QName parent, QName attribute) {
-    if (attributes.containsKey(parent)) {
-      List<QName> attrs = attributes.get(parent);
-      if (!attrs.contains(attribute)) attrs.add(attribute);
-    } else {
-      List<QName> attrs = new ArrayList<QName>();
-      attrs.add(attribute);
-      attributes.put(parent, attrs);
+    synchronized (attributes) {
+      if (attributes.containsKey(parent)) {
+        List<QName> attrs = attributes.get(parent);
+        if (!attrs.contains(attribute))
+          attrs.add(attribute);
+      } else {
+        List<QName> attrs = new ArrayList<QName>();
+        attrs.add(attribute);
+        attributes.put(parent, attrs);
+      }
     }
     return this;
   }
 
   public boolean contains(QName qname, QName attribute) {
-    if (attributes.containsKey(qname)) {
-      List<QName> attrs = attributes.get(qname);
-      return attrs.contains(attribute);
-    } else {
-      return false;
+    synchronized (attributes) {
+      if (attributes.containsKey(qname)) {
+        List<QName> attrs = attributes.get(qname);
+        return attrs.contains(attribute);
+      } else {
+        return false;
+      }
     }
   }
 
   public abstract boolean acceptable(QName qname);
   public abstract boolean acceptable(QName qname, QName attribute);
+  
+  private void writeObject(ObjectOutputStream out) throws IOException {
+    out.defaultWriteObject();
+
+    // qnames field
+    assert qnames != null;
+    out.writeInt(qnames.size());
+    for (QName q : qnames) {
+      out.writeObject(q);
+    }
+
+    // attributes field
+    assert attributes != null;
+    out.writeInt(attributes.size());
+    for (Map.Entry<QName, List<QName>> e : attributes.entrySet()) {
+      out.writeObject(e.getKey());
+      final List<QName> v = e.getValue();
+      assert v != null;
+      out.writeInt(v.size());
+      for (QName q : v) {
+        out.writeObject(q);
+      }
+    }
+  }
+
+  private void readObject(ObjectInputStream in) throws IOException,
+      ClassNotFoundException {
+    in.defaultReadObject();
+
+    // qnames field
+    final int qnamesSize = in.readInt();
+    qnames = new ArrayList<QName>(qnamesSize);
+    for (int i = 0; i < qnamesSize; i++) {
+      qnames.add((QName) in.readObject());
+    }
+
+    // attributes field
+    final int attributesSize = in.readInt();
+    attributes = new HashMap<QName, List<QName>>(attributesSize);
+    for (int i = 0; i < attributesSize; i++) {
+      final QName k = (QName) in.readObject();
+      final int vSize = in.readInt();
+      final List<QName> v = new ArrayList<QName>(vSize);
+      for (int j = 0; j < vSize; j++) {
+        v.add((QName) in.readObject());
+      }
+      attributes.put(k, v);
+    }
+  }
 }

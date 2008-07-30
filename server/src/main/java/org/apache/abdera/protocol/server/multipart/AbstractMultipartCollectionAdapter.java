@@ -18,6 +18,7 @@
 package org.apache.abdera.protocol.server.multipart;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
@@ -39,8 +40,7 @@ import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.impl.AbstractCollectionAdapter;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
-
-import sun.misc.BASE64Decoder;
+import org.apache.commons.codec.binary.Base64;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractMultipartCollectionAdapter extends AbstractCollectionAdapter
@@ -96,8 +96,9 @@ public abstract class AbstractMultipartCollectionAdapter extends AbstractCollect
 		if (!isContentTypeAccepted(dataHeaders.get("content-type"), request)) {
 			throw new ParseException("multipart/related stream invalid, content-type not accepted into a multipart file");
 		}
-		ByteArrayInputStream data = new ByteArrayInputStream(new BASE64Decoder().decodeBuffer(multipart));;		
-
+		
+		InputStream data = getDataInputStream(multipart);				
+		
 		return new MultipartRelatedPost(entry, data, entryHeaders, dataHeaders);
 	}
 	
@@ -147,6 +148,17 @@ public abstract class AbstractMultipartCollectionAdapter extends AbstractCollect
 			}
 		}
 		return false;
+	}
+	
+	private InputStream getDataInputStream(InputStream stream) throws IOException {
+		Base64 base64 = new Base64();
+		ByteArrayOutputStream bo = new ByteArrayOutputStream();
+		
+		byte[] buffer = new byte[1024]; 
+		while (stream.read(buffer) != -1) {
+			bo.write(buffer);
+		}
+		return new ByteArrayInputStream(base64.decode(bo.toByteArray()));
 	}
 
 	private <T extends Element> Document<T> getEntry(InputStream stream,

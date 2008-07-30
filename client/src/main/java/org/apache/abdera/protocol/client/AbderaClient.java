@@ -43,7 +43,7 @@ import org.apache.abdera.protocol.client.cache.Cache.Disposition;
 import org.apache.abdera.protocol.client.util.BaseRequestEntity;
 import org.apache.abdera.protocol.client.util.EntityProviderRequestEntity;
 import org.apache.abdera.protocol.client.util.MethodHelper;
-import org.apache.abdera.protocol.client.util.MultimediaRelatedRequestEntity;
+import org.apache.abdera.protocol.client.util.MultipartRelatedRequestEntity;
 import org.apache.abdera.protocol.client.util.SimpleSSLProtocolSocketFactory;
 import org.apache.abdera.protocol.error.Error;
 import org.apache.abdera.protocol.error.ProtocolException;
@@ -277,7 +277,7 @@ public class AbderaClient {
    * @param options The request options
    */
   public ClientResponse post(String uri, Entry entry, InputStream media, String contentType, RequestOptions options) {
-	  return execute("POST", uri, new MultimediaRelatedRequestEntity(entry, media, contentType), options);
+	  return execute("POST", uri, new MultipartRelatedRequestEntity(entry, media, contentType), options);
   }
 
   /**

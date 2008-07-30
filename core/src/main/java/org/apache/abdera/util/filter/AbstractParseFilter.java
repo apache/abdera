@@ -22,6 +22,8 @@ import org.apache.abdera.filter.ParseFilter;
 public abstract class AbstractParseFilter 
   implements ParseFilter {
 
+  private static final long serialVersionUID = -1866308276050148524L;
+
   private static final byte COMMENTS = 1;
   private static final byte WHITESPACE = 2;
   private static final byte PI = 4;

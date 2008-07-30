@@ -154,7 +154,6 @@ public final class ServiceUtil
   /**
    * Locate a class instance for the given id
    */
-  @SuppressWarnings("unchecked")
   public static Object locate(String id, Abdera abdera) {
     Object service = checkAbderaConfiguration(id, abdera);
     return ((service != null) ? service : checkMetaInfServices(id, abdera));
@@ -268,7 +267,6 @@ public final class ServiceUtil
     return null;
   }
   
-  @SuppressWarnings("unchecked")
   private static Object checkAbderaConfiguration(String id, Abdera abdera) {
     String s = abdera.getConfiguration().getConfigurationOption(id);
     return (s != null) ? locateInstance(id, abdera) : null;
@@ -358,7 +356,6 @@ public final class ServiceUtil
     return impls;
   }
  
-  @SuppressWarnings("unchecked")
   protected static <T>List<T> _loadimpls(String sid) {
     return _loadimpls(sid,false);
   }
@@ -402,7 +399,7 @@ public final class ServiceUtil
    */
   public static URL getResource(
     String resourceName, 
-    Class callingClass) {
+    Class<?> callingClass) {
       URL url = Thread.currentThread().getContextClassLoader().getResource(resourceName);
       if (url == null && resourceName.startsWith("/")) {
         //certain classloaders need it without the leading /
@@ -434,7 +431,7 @@ public final class ServiceUtil
 
   public static Enumeration<URL> getResources(
     String resourceName, 
-    Class callingClass) 
+    Class<?> callingClass) 
       throws IOException {
     Enumeration<URL> url = Thread.currentThread().getContextClassLoader().getResources(resourceName);
     if (url == null && resourceName.startsWith("/")) {
@@ -471,7 +468,7 @@ public final class ServiceUtil
    */
   public static InputStream getResourceAsStream(
     String resourceName, 
-    Class callingClass) {
+    Class<?> callingClass) {
       URL url = getResource(resourceName, callingClass);
       try {
         return (url != null) ? url.openStream() : null;
@@ -494,9 +491,9 @@ public final class ServiceUtil
    * @param callingClass The Class object of the calling object
    * @throws ClassNotFoundException If the class cannot be found anywhere.
    */
-  public static Class loadClass(
+  public static Class<?> loadClass(
     String className, 
-    Class callingClass) 
+    Class<?> callingClass) 
       throws ClassNotFoundException {
     try {
       ClassLoader cl = Thread.currentThread().getContextClassLoader();
@@ -509,9 +506,9 @@ public final class ServiceUtil
     }
   }
 
-  private static Class loadClass2(
+  private static Class<?> loadClass2(
     String className, 
-    Class callingClass) 
+    Class<?> callingClass) 
       throws ClassNotFoundException {
     try {
       return Class.forName(className);

@@ -38,15 +38,14 @@ import org.apache.abdera.model.Element;
  * 
  * Only use this once per transform!!!
  */
-@SuppressWarnings("unchecked")
 public final class AbderaResult 
   extends StreamResult 
   implements Result {
 
   private final Abdera abdera;
-  private PipedOutputStream pipeout = null;
-  private PipedInputStream pipein = null;
-  private Document doc = null;
+  private PipedOutputStream pipeout;
+  private PipedInputStream pipein;
+  private Document<?> doc;
   
   public AbderaResult() {
     this(new Abdera());
@@ -62,7 +61,7 @@ public final class AbderaResult
       if (pipein == null) return null;
       doc = abdera.getParser().parse(pipein);
     } 
-    return doc;
+    return (Document<T>) doc;
   }
   
   @Override

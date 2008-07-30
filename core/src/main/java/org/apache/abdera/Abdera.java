@@ -131,7 +131,6 @@ public class Abdera {
    * 
    * @return The Abdera configuration
    */
-  @SuppressWarnings("unchecked") 
   public Configuration getConfiguration() {
     return config;
   }

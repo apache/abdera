@@ -69,7 +69,7 @@ public final class AtomDate
 
   private static final long serialVersionUID = -7062139688635877771L;
 
-  private Date value = null;
+  private Date value;
   
   /**
    * Create an AtomDate using the current date and time
@@ -89,14 +89,16 @@ public final class AtomDate
   /**
    * Create an AtomDate using a java.util.Date
    * @param value The java.util.Date value
+   * @throws NullPointerException if {@code date} is {@code null}
    */
   public AtomDate(Date value) {
-    this.value = value;
+    this.value = (Date) value.clone();
   }
   
   /**
    * Create an AtomDate using a java.util.Calendar.
    * @param value The java.util.Calendar value
+   * @throws NullPointerException if {@code value} is {@code null}
    */
   public AtomDate(Calendar value) {
     this(value.getTime());
@@ -130,9 +132,10 @@ public final class AtomDate
   /**
    * Sets the value of the Atom date using java.util.Date
    * @param date A java.util.Date
+   * @throws NullPointerException if {@code date} is {@code null}
    */
   public AtomDate setValue(Date date) {
-    this.value = date;
+    this.value = (Date) date.clone();
     return this;
   }
 
@@ -159,7 +162,7 @@ public final class AtomDate
    * @return A java.util.Date representing this Atom Date
    */
   public Date getDate() {
-    return value;
+    return (Date) value.clone();
   }
   
   /**
@@ -185,10 +188,11 @@ public final class AtomDate
     return getValue();
   }
   
-  @Override public int hashCode() {
+  @Override 
+  public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((value == null) ? 0 : value.hashCode());
+    result = prime * result + value.hashCode();
     return result;
   }
 
@@ -216,7 +220,7 @@ public final class AtomDate
     try {
       return super.clone();
     } catch (CloneNotSupportedException e) {
-      throw new RuntimeException(e);
+      throw new AssertionError(e);
     }
   }
   
@@ -231,7 +235,7 @@ public final class AtomDate
   public static Date parse(String date) {
     Matcher m = PATTERN.matcher(date);
     if (m.find()) {
-      Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+      Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
       int hoff = 0, moff = 0, doff = -1;
       if (m.group(9) != null) {
         doff = m.group(9).equals("-") ? 1 : -1;
@@ -258,7 +262,7 @@ public final class AtomDate
    */
   public static String format(Date date) {
     StringBuilder sb = new StringBuilder();
-    Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+    Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     c.setTime(date);
     sb.append(c.get(Calendar.YEAR));
     sb.append('-');

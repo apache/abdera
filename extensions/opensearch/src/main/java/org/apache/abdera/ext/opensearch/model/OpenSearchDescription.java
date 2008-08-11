@@ -68,7 +68,7 @@ public class OpenSearchDescription extends ExtensibleElementWrapper {
     }
 
     public void setTags(String... tags) {
-        if (tags.length > 0) {
+        if (tags != null && tags.length > 0) {
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < tags.length - 1; i++) {
                 builder.append(tags[i]).append(" ");
@@ -86,7 +86,7 @@ public class OpenSearchDescription extends ExtensibleElementWrapper {
     }
     
     public void addUrls(Url... urls) {
-        if (urls.length > 0) {
+        if (urls != null && urls.length > 0) {
             for (Url url : urls) {
                 this.addExtension(url);
             }
@@ -98,7 +98,7 @@ public class OpenSearchDescription extends ExtensibleElementWrapper {
     }
     
     public void addQueries(Query... queries) {
-        if (queries.length > 0) {
+        if (queries != null && queries.length > 0) {
             for (Query query : queries) {
                 this.addExtension(query);
             }

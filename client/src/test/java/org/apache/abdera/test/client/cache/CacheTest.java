@@ -444,4 +444,10 @@ public class CacheTest extends Assert {
     String resp = new String(out.toByteArray());
     return resp.trim();
   }
+  
+  @Test
+  public void testInitCache() {	  
+	  AbderaClient client = new AbderaClient();	  
+	  assertNotNull(client.getCache());
+  }
 }

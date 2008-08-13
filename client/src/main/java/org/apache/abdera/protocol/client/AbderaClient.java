@@ -39,6 +39,7 @@ import org.apache.abdera.protocol.client.cache.Cache;
 import org.apache.abdera.protocol.client.cache.CacheFactory;
 import org.apache.abdera.protocol.client.cache.CachedResponse;
 import org.apache.abdera.protocol.client.cache.LRUCache;
+import org.apache.abdera.protocol.client.cache.LRUCacheFactory;
 import org.apache.abdera.protocol.client.cache.Cache.Disposition;
 import org.apache.abdera.protocol.client.util.BaseRequestEntity;
 import org.apache.abdera.protocol.client.util.EntityProviderRequestEntity;
@@ -130,8 +131,8 @@ public class AbderaClient {
   private CacheFactory initCacheFactory() {
     CacheFactory cacheFactory = 
       (CacheFactory)ServiceUtil.newInstance(
-        "org.apache.abdera.protocol.cache.CacheFactory",
-        "org.apache.abdera.protocol.cache.LRUCacheFactory", 
+        CacheFactory.class.getName(),
+        LRUCacheFactory.class.getName(), 
         abdera);
     return cacheFactory;
   }

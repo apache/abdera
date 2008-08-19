@@ -107,4 +107,24 @@ public class OpenSearchAtomTest extends XMLAssert {
         assertEquals(Query.Role.REQUEST, q.getRole());
         assertEquals(QUERY_TERMS, q.getSearchTerms());
     }
+    
+    @Test
+    public void testFeedSimpleExtension() throws Exception {    	
+    	Feed feed = Abdera.getInstance().getFactory().newFeed();
+        
+        feed.setId("http://example.com/opensearch+example");
+        feed.setTitle("An OpenSearch Example");
+        feed.setUpdated(new Date());
+        
+        feed.addSimpleExtension(OpenSearchConstants.TOTAL_RESULTS, String.valueOf(TOTAL_RESULTS));        
+        feed.addSimpleExtension(OpenSearchConstants.ITEMS_PER_PAGE, String.valueOf(ITEMS_PER_PAGE));
+        
+        StringWriter writer = new StringWriter();
+        feed.writeTo(writer);        
+        String result = writer.toString();        
+        
+        assertXpathEvaluatesTo(String.valueOf(TOTAL_RESULTS), "//os:totalResults", result);
+        assertXpathEvaluatesTo(String.valueOf(ITEMS_PER_PAGE), "//os:itemsPerPage", result);        
+        
+    }
 }

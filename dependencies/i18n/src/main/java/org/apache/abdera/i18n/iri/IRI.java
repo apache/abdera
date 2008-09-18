@@ -653,7 +653,7 @@ public final class IRI
       "^(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*)(?:\\?([^#]*))?(?:#(.*))?");
   
   private static final Pattern AUTHORITYPATTERN =
-    Pattern.compile("^(?:(.*)?@)?((?:\\[.*\\])|(?:[^:]*))?(?::(\\d*))?");
+    Pattern.compile("^(?:(.*)?@)?((?:\\[.*\\])|(?:[^:]*))?(?::(\\d+))?");
   
   public static void preinit() {
     UnicodeCharacterDatabase.getCanonicalClass(1);
@@ -676,5 +676,5 @@ public final class IRI
       fragment
     );
   }
-   
+  
 }

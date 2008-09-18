@@ -225,7 +225,7 @@ public final class AtomDate
   }
   
   private static final Pattern PATTERN = Pattern.compile(
-    "(\\d{4})(?:-(\\d{2}))?(?:-(\\d{2}))?(?:[Tt](?:(\\d{2}))?(?::(\\d{2}))?(?::(\\d{2}))?(?:\\.(\\d{3}))?)?([Zz])?(?:([+-])(\\d{2}):(\\d{2}))?");
+    "(\\d{4})(?:-(\\d{2}))?(?:-(\\d{2}))?(?:([Tt])?(?:(\\d{2}))?(?::(\\d{2}))?(?::(\\d{2}))?(?:\\.(\\d{3}))?)?([Zz])?(?:([+-])(\\d{2}):(\\d{2}))?");
    
   /**
    * Parse the serialized string form into a java.util.Date
@@ -235,20 +235,22 @@ public final class AtomDate
   public static Date parse(String date) {
     Matcher m = PATTERN.matcher(date);
     if (m.find()) {
+    	if(m.group(4)==null || m.group(9)==null) 
+    		throw new IllegalArgumentException("Invalid Date Format");
       Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
       int hoff = 0, moff = 0, doff = -1;
-      if (m.group(9) != null) {
-        doff = m.group(9).equals("-") ? 1 : -1;
-        hoff = doff * (m.group(10) != null ? Integer.parseInt(m.group(10)) : 0);
-        moff = doff * (m.group(11) != null ? Integer.parseInt(m.group(11)) : 0);
+      if (m.group(10) != null) {
+        doff = m.group(10).equals("-") ? 1 : -1;
+        hoff = doff * (m.group(11) != null ? Integer.parseInt(m.group(11)) : 0);
+        moff = doff * (m.group(12) != null ? Integer.parseInt(m.group(12)) : 0);
       }
       c.set(Calendar.YEAR,        Integer.parseInt(m.group(1)));
       c.set(Calendar.MONTH,       m.group(2) != null ? Integer.parseInt(m.group(2))-1 : 0);
       c.set(Calendar.DATE,        m.group(3) != null ? Integer.parseInt(m.group(3)) : 1);
-      c.set(Calendar.HOUR_OF_DAY, m.group(4) != null ? Integer.parseInt(m.group(4)) + hoff: 0);
-      c.set(Calendar.MINUTE,      m.group(5) != null ? Integer.parseInt(m.group(5)) + moff: 0);
-      c.set(Calendar.SECOND,      m.group(6) != null ? Integer.parseInt(m.group(6)) : 0);
-      c.set(Calendar.MILLISECOND, m.group(7) != null ? Integer.parseInt(m.group(7)) : 0);
+      c.set(Calendar.HOUR_OF_DAY, m.group(5) != null ? Integer.parseInt(m.group(5)) + hoff: 0);
+      c.set(Calendar.MINUTE,      m.group(6) != null ? Integer.parseInt(m.group(6)) + moff: 0);
+      c.set(Calendar.SECOND,      m.group(7) != null ? Integer.parseInt(m.group(7)) : 0);
+      c.set(Calendar.MILLISECOND, m.group(8) != null ? Integer.parseInt(m.group(8)) : 0);
       return c.getTime();
     } else {
       throw new IllegalArgumentException("Invalid Date Format");

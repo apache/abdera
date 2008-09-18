@@ -113,6 +113,7 @@ public class StaxStreamWriter
   public StreamWriter endDocument() {
     try {
       writer.writeEndDocument();
+      writer.flush();
       if (autoclose) writer.close();
     } catch(XMLStreamException e) {
       throw new RuntimeException(e);

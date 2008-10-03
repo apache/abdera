@@ -108,11 +108,10 @@ public class JcrCollectionAdapterTest extends TestCase {
     //prettyPrint(abdera, res.getDocument());
 
     IRI location = res.getLocation();
-    assertEquals("/feed/Some_Entry", location.toString());
+    assertEquals(base + "feed/Some_Entry", location.toString());
 
     // GET the entry
-    IRI entryIri = colUri.resolve(location);
-    res = client.get(entryIri.toString());
+    res = client.get(location.toString());
     assertEquals(200, res.getStatus());
 
     //prettyPrint(abdera, res.getDocument());
@@ -130,7 +129,7 @@ public class JcrCollectionAdapterTest extends TestCase {
     entry.setSummary("New Summary");
     entry.setContent("New Content");
 
-    res = client.put(entryIri.resolve(location).toString(), entry, opts);
+    res = client.put(location.toString(), entry, opts);
     assertEquals(204, res.getStatus());
 
     res = client.get(colUri.toString());
@@ -141,7 +140,7 @@ public class JcrCollectionAdapterTest extends TestCase {
     //prettyPrint(abdera, feed_doc);
 
     // test 404 not found
-    res = client.get(colUri.resolve(location).toString() + "Invalid");
+    res = client.get(location.toString() + "Invalid");
     assertEquals(404, res.getStatus());
   }
 

@@ -119,35 +119,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
   }
 
   public ResponseContext postEntry(RequestContext request) {
-    try {
-      Entry entry = getEntryFromRequest(request);
-      if (entry != null) {
-        if (!ProviderHelper.isValidEntry(entry))
-          return new EmptyResponseContext(400);
-  
-        entry.setUpdated(new Date());
-        
-        
-          T entryObj = postEntry(entry.getTitle(),
-                                 entry.getId(),
-                                 entry.getSummary(),
-                                 entry.getUpdated(),
-                                 entry.getAuthors(),
-                                 entry.getContentElement(), request);
-          entry.getIdElement().setValue(getId(entryObj));
-        
-          IRI feedIri = getFeedIRI(entryObj, request);    
-          String link = getLink(entryObj, feedIri, request);
-          
-          entry.addLink(link, "edit");
-    
-          return buildCreateEntryResponse(link, entry);
-      } else {
-        return new EmptyResponseContext(400);
-      }
-    } catch (ResponseContextException e) {
-      return createErrorResponse(e);
-    }
+    return createNonMediaEntry(request);
   }
 
   protected String getLink(
@@ -155,7 +127,16 @@ public abstract class AbstractEntityCollectionAdapter<T>
     IRI feedIri, 
     RequestContext request) 
       throws ResponseContextException {
-    return getLink(getName(entryObj), entryObj, feedIri, request);
+    return getLink(entryObj, feedIri, request, false);
+  }
+
+  protected String getLink(
+    T entryObj, 
+    IRI feedIri, 
+    RequestContext request,
+    boolean absolute)
+      throws ResponseContextException {
+    return getLink(getName(entryObj), entryObj, feedIri, request, absolute);
   }
 
   protected String getLink(
@@ -163,9 +144,22 @@ public abstract class AbstractEntityCollectionAdapter<T>
     T entryObj, 
     IRI feedIri, 
     RequestContext request) {
+    return getLink(name, entryObj, feedIri, request, false);
+  }
+
+  protected String getLink(
+    String name, 
+    T entryObj, 
+    IRI feedIri, 
+    RequestContext request,
+    boolean absolute) {
       feedIri = feedIri.trailingSlash();
       IRI entryIri = feedIri.resolve(UrlEncoding.encode(name, Profile.PATH.filter()));
     
+      if (absolute) {
+          entryIri = request.getResolvedUri().resolve(entryIri);
+      }
+
       String link = entryIri.toString();
     
       String qp = getQueryParameters(entryObj, request);
@@ -646,7 +640,8 @@ public abstract class AbstractEntityCollectionAdapter<T>
       String link = addEntryDetails(request, entry, feedUri, entryObj);
       addMediaContent(feedUri, entry, entryObj, request);
 
-      return buildPostMediaEntryResponse(link, entry);
+      String location = getLink(entryObj, feedUri, request, true);
+      return buildPostMediaEntryResponse(location, entry);
     } catch (IOException e) {
       return new EmptyResponseContext(500);
     } catch (ResponseContextException e) {
@@ -658,7 +653,7 @@ public abstract class AbstractEntityCollectionAdapter<T>
    * Create a regular entry
    * @param request The request context
    */
-  protected ResponseContext createNonMediaEntry(RequestContext request) throws IOException {
+  protected ResponseContext createNonMediaEntry(RequestContext request) {
     try {
       Entry entry = getEntryFromRequest(request);
       if (entry != null) {
@@ -682,7 +677,8 @@ public abstract class AbstractEntityCollectionAdapter<T>
         String link = getLink(entryObj, feedUri, request);
         entry.addLink(link, "edit");
 
-        return buildCreateEntryResponse(link, entry);
+        String location = getLink(entryObj, feedUri, request, true);
+        return buildCreateEntryResponse(location, entry);
       } else {
         return new EmptyResponseContext(400);
       }

@@ -145,10 +145,10 @@ public class CustomerAdapterTest extends Assert {
     //prettyPrint(abdera, res.getDocument());
 
     IRI location = res.getLocation();
-    assertEquals(base + "customers/1001-Dan_Diephouse", location.toString());
+    assertEquals(uri + "customers/1001-Dan_Diephouse", location.toString());
 
     // GET the entry
-    res = client.get(colUri.resolve(location.toString()).toString());
+    res = client.get(location.toString());
     assertEquals(200, res.getStatus());
     res.release();
 
@@ -159,7 +159,7 @@ public class CustomerAdapterTest extends Assert {
     assertEquals(uri + "customers/1001-Dan_Diephouse", entry_doc.getRoot().getEditLinkResolvedHref().toString());
 
     // HEAD
-    res = client.head(colUri.resolve(location.toString()).toString());
+    res = client.head(location.toString());
     assertEquals(200, res.getStatus());
     assertEquals(0, res.getContentLength());
     res.release();

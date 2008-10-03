@@ -235,7 +235,7 @@ public final class AtomDate
   public static Date parse(String date) {
     Matcher m = PATTERN.matcher(date);
     if (m.find()) {
-    	if(m.group(4)==null || m.group(9)==null) 
+    	if(m.group(4)==null) 
     		throw new IllegalArgumentException("Invalid Date Format");
       Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
       int hoff = 0, moff = 0, doff = -1;

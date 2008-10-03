@@ -136,16 +136,43 @@ public class RouteManager
     if (idx != -1) {
       uri = uri.substring(0, idx);
     }
-    for(RouteTargetType target : targets) {
-      if (target.route.match(uri)) {
-        CollectionAdapter ca = route2CA.get(target.route);
-        if (ca != null) {
-          context.setAttribute(DefaultWorkspaceManager.COLLECTION_ADAPTER_ATTRIBUTE, ca);
-        }
-        return getTarget(context, target.route, uri, target.targetType);
-      }
+    
+    RouteTargetType target = get(uri);
+    if (target == null) {    
+    	target = match(uri);
     }
+    
+    if (target != null) {    	
+        return getTarget(context, target, uri);
+    }    
+    
     return null;
+  }
+  
+  private RouteTargetType get(String uri) {	  
+	  for(RouteTargetType target : targets) {		  
+		  if (target.route.getPattern().equals(uri)) {
+			  return target;
+		  }
+	  }	  
+	  return null;
+  }
+  
+  private RouteTargetType match(String uri) {
+	  for(RouteTargetType target : targets) {
+	      if (target.route.match(uri)) {
+	    	  return target;
+	      }
+	  }
+	  return null;
+  }
+  
+  private Target getTarget(RequestContext context, RouteTargetType target, String uri) {
+	  CollectionAdapter ca = route2CA.get(target.route);
+      if (ca != null) {
+        context.setAttribute(DefaultWorkspaceManager.COLLECTION_ADAPTER_ATTRIBUTE, ca);
+      }
+      return getTarget(context, target.route, uri, target.targetType);
   }
 
   private Target getTarget(

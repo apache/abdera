@@ -46,6 +46,12 @@ import org.apache.commons.codec.binary.Base64;
 public abstract class AbstractMultipartCollectionAdapter extends AbstractCollectionAdapter
 		implements MultipartRelatedCollectionInfo {	
 	
+	private static final String CONTENT_TYPE_HEADER = "content-type";
+	private static final String CONTENT_ID_HEADER = "content-id";
+	private static final String START_PARAM = "start";
+	private static final String TYPE_PARAM = "type";
+	private static final String BOUNDARY_PARAM = "boundary";
+	
 	protected Map<String, String> accepts;
 	
 	public String[] getAccepts(RequestContext request) {
@@ -57,7 +63,7 @@ public abstract class AbstractMultipartCollectionAdapter extends AbstractCollect
 			RequestContext request) throws IOException, ParseException,
 			MessagingException {
 
-		String boundary = request.getContentType().getParameter("boundary");
+		String boundary = request.getContentType().getParameter(BOUNDARY_PARAM);
 
 		if (boundary == null) {
 			throw new IllegalArgumentException("multipart/related stream invalid, boundary parameter is missing.");
@@ -65,11 +71,13 @@ public abstract class AbstractMultipartCollectionAdapter extends AbstractCollect
 
 		boundary = "--" + boundary;
 
-		String type = request.getContentType().getParameter("type");
+		String type = request.getContentType().getParameter(TYPE_PARAM);
 		if (!(type != null && MimeTypeHelper.isAtom(type))) {
 			throw new ParseException("multipart/related stream invalid, type parameter should be "
 							+ Constants.ATOM_MEDIA_TYPE);
 		}
+		
+		String start = request.getContentType().getParameter(START_PARAM);
 
 		PushbackInputStream pushBackInput = new PushbackInputStream(request.getInputStream(), 2);
 		pushBackInput.unread("\r\n".getBytes());
@@ -77,29 +85,54 @@ public abstract class AbstractMultipartCollectionAdapter extends AbstractCollect
 		MultipartInputStream multipart = new MultipartInputStream(pushBackInput, boundary.getBytes());
 
 		multipart.skipBoundary();
-
-		//get the media link entry
-		Map<String, String> entryHeaders = getHeaders(multipart);
-		if (!(entryHeaders.get("content-type") != null &&
-				MimeTypeHelper.isAtom(entryHeaders.get("content-type")))) {
-			throw new ParseException("multipart/related stream invalid, media link entry content-type is missing");				
+		
+		Document<Entry> entry = null;
+		Map<String, String> entryHeaders = new HashMap<String, String>();
+		InputStream data = null;
+		Map<String, String> dataHeaders = new HashMap<String, String>();
+		
+		Map<String, String> headers = getHeaders(multipart);
+		
+		//check if the first boundary is the media link entry		
+		if (start == null || start.length() == 0 || (headers.containsKey(CONTENT_ID_HEADER) && start.equals(headers.get(CONTENT_ID_HEADER)))
+				|| (headers.containsKey(CONTENT_TYPE_HEADER) && MimeTypeHelper.isAtom(headers.get(CONTENT_TYPE_HEADER))) ) {
+			entry = getEntry(multipart, request);
+			entryHeaders.putAll(headers);
+		} else {
+			data = getDataInputStream(multipart);
+			dataHeaders.putAll(headers);
 		}
-		Document<Entry> entry = getEntry(multipart, request);
 		
 		multipart.skipBoundary();
 		
-		//get the media resource
-		Map<String, String> dataHeaders = getHeaders(multipart);
-		if (dataHeaders.get("content-type") == null) {
-			throw new ParseException("multipart/related stream invalid, data content-type is missing");				
-		}
-		if (!isContentTypeAccepted(dataHeaders.get("content-type"), request)) {
-			throw new ParseException("multipart/related stream invalid, content-type not accepted into a multipart file");
+		headers = getHeaders(multipart);
+				
+		if (start != null && (headers.containsKey(CONTENT_ID_HEADER) && start.equals(headers.get(CONTENT_ID_HEADER)))
+				&& (headers.containsKey(CONTENT_TYPE_HEADER) && MimeTypeHelper.isAtom(headers.get(CONTENT_TYPE_HEADER))) ) {
+			entry = getEntry(multipart, request);
+			entryHeaders.putAll(headers);
+		} else {
+			data = getDataInputStream(multipart);
+			dataHeaders.putAll(headers);
 		}
 		
-		InputStream data = getDataInputStream(multipart);				
+		checkMultipartContent(entry, dataHeaders, request);	
 		
 		return new MultipartRelatedPost(entry, data, entryHeaders, dataHeaders);
+	}
+	
+	private void checkMultipartContent(Document<Entry> entry, Map<String, String> dataHeaders,
+			RequestContext request) throws ParseException {
+		if (entry == null) {
+			throw new ParseException("multipart/related stream invalid, media link entry is missing");
+		}
+		if (!dataHeaders.containsKey(CONTENT_TYPE_HEADER)) {
+			throw new ParseException("multipart/related stream invalid, data content-type is missing");				
+		}
+		if (!isContentTypeAccepted(dataHeaders.get(CONTENT_TYPE_HEADER), request)) {
+			throw new ParseException("multipart/related stream invalid, content-type "
+					+ dataHeaders.get(CONTENT_TYPE_HEADER) + " not accepted into this multipart file");
+		}
 	}
 	
 	private Map<String, String> getHeaders(MultipartInputStream multipart) throws IOException, MessagingException {

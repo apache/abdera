@@ -63,28 +63,10 @@ public abstract class AbstractMultipartCollectionAdapter extends AbstractCollect
 			RequestContext request) throws IOException, ParseException,
 			MessagingException {
 
-		String boundary = request.getContentType().getParameter(BOUNDARY_PARAM);
-
-		if (boundary == null) {
-			throw new IllegalArgumentException("multipart/related stream invalid, boundary parameter is missing.");
-		}
-
-		boundary = "--" + boundary;
-
-		String type = request.getContentType().getParameter(TYPE_PARAM);
-		if (!(type != null && MimeTypeHelper.isAtom(type))) {
-			throw new ParseException("multipart/related stream invalid, type parameter should be "
-							+ Constants.ATOM_MEDIA_TYPE);
-		}
+		MultipartInputStream multipart = getMultipartStream(request);
+		multipart.skipBoundary();
 		
 		String start = request.getContentType().getParameter(START_PARAM);
-
-		PushbackInputStream pushBackInput = new PushbackInputStream(request.getInputStream(), 2);
-		pushBackInput.unread("\r\n".getBytes());
-
-		MultipartInputStream multipart = new MultipartInputStream(pushBackInput, boundary.getBytes());
-
-		multipart.skipBoundary();
 		
 		Document<Entry> entry = null;
 		Map<String, String> entryHeaders = new HashMap<String, String>();
@@ -119,6 +101,28 @@ public abstract class AbstractMultipartCollectionAdapter extends AbstractCollect
 		checkMultipartContent(entry, dataHeaders, request);	
 		
 		return new MultipartRelatedPost(entry, data, entryHeaders, dataHeaders);
+	}
+	
+	private MultipartInputStream getMultipartStream(RequestContext request) 
+			throws IOException, ParseException, IllegalArgumentException {
+		String boundary = request.getContentType().getParameter(BOUNDARY_PARAM);
+
+		if (boundary == null) {
+			throw new IllegalArgumentException("multipart/related stream invalid, boundary parameter is missing.");
+		}
+
+		boundary = "--" + boundary;
+
+		String type = request.getContentType().getParameter(TYPE_PARAM);
+		if (!(type != null && MimeTypeHelper.isAtom(type))) {
+			throw new ParseException("multipart/related stream invalid, type parameter should be "
+							+ Constants.ATOM_MEDIA_TYPE);
+		}
+
+		PushbackInputStream pushBackInput = new PushbackInputStream(request.getInputStream(), 2);
+		pushBackInput.unread("\r\n".getBytes());
+
+		return new MultipartInputStream(pushBackInput, boundary.getBytes());
 	}
 	
 	private void checkMultipartContent(Document<Entry> entry, Map<String, String> dataHeaders,

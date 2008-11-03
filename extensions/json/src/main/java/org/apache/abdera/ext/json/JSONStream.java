@@ -112,10 +112,12 @@ public class JSONStream {
   }
   
   public void writeQuoted(String value) throws IOException {
-    writer.write('"');
-    writer.write(escape(value));
-    writer.write('"');
-    writer.flush();
+      if (value != null) {
+        writer.write('"');
+        writer.write(escape(value));
+        writer.write('"');
+        writer.flush();
+      }
   }
 
   public void writeField(String name) throws IOException {

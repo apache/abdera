@@ -225,4 +225,24 @@ public class RouteTest extends Assert {
 	    RouteTarget target = (RouteTarget) manager.resolve(request);
 	    assertEquals("/openSearch.xml", target.getRoute().getPattern());
 	}
+	
+	@Test	
+	public void testRouteRequirementsMatches() {		
+		Route route = getRouteWithRequirements();
+		assertTrue(route.match("/base/collection/1234"));
+	}
+		
+	@Test	
+	public void testRouteRequirementsNotMatch() throws Exception {
+		Route route = getRouteWithRequirements();
+		assertFalse(route.match("/base/collection/entry"));
+	}
+		
+	@SuppressWarnings("serial")
+	private Route getRouteWithRequirements() {
+		Map<String, String> requirements = new HashMap<String, String>() {{
+			put("entry", "\\d+");
+		}};
+		return new Route("entry", "/base/:collection/:entry", null, requirements);
+	}
 }

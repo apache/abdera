@@ -124,7 +124,7 @@ public class Route
    * Returns true if the given uri matches the route pattern
    */
   public boolean match(String uri) {
-    return regexMatch.matcher(uri).matches();
+    return regexMatch.matcher(uri).matches() && matchRequirements(uri);
   }
   
   /**
@@ -307,6 +307,20 @@ public class Route
     } else {
       throw new IllegalArgumentException("No Route provided");
     }
+  }
+  
+  private boolean matchRequirements(String uri) {
+	  if (requirements != null && !requirements.isEmpty()) {
+		  Map<String, String> parsedUri = parse(uri);
+		  for (Map.Entry<String, String> requirement : requirements.entrySet()) {
+			Pattern patt = Pattern.compile(requirement.getValue());
+			if (parsedUri.containsKey(requirement.getKey()) && 
+					!patt.matcher(parsedUri.get(requirement.getKey())).matches()) {
+				return false;
+			}
+		  }
+	  }
+	  return true;
   }
 
 }

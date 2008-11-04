@@ -201,7 +201,7 @@ public abstract class AbstractClientResponse
         return DateUtil.parseDate(value);
       else return null;
     } catch (DateParseException e) {
-      throw new RuntimeException(e); // server likely returned a bad date format
+      return null; //treat other invalid date formats, especially including the value "0", as in the past
     }
   }
 }

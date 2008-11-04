@@ -585,9 +585,14 @@ public abstract class AbstractStreamWriter
   }
   
   public StreamWriter startCategories(boolean fixed, String scheme) {
-    return startElement(Constants.CATEGORIES).
-      writeAttribute("fixed",fixed?"yes":"no").
-      writeAttribute("scheme",scheme);
+	  startElement(Constants.CATEGORIES);
+	  if (fixed) {
+		  writeAttribute("fixed", "yes");
+	  }
+	  if (scheme != null && scheme.length() > 0) {
+		  writeAttribute("scheme",scheme);
+	  }
+	  return this;
   }
   
   public StreamWriter endCategories() {

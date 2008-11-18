@@ -25,6 +25,7 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Base;
+import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.parser.stax.util.ResolveFunction;
 import org.apache.abdera.util.AbstractXPath;
 import org.apache.abdera.xpath.XPathException;
@@ -157,6 +158,7 @@ public class FOMXPath extends AbstractXPath {
     Map<QName,Object> variables) 
       throws XPathException {
     try {
+      base = getElementWrapped(base);
       List nodes = new ArrayList();
       XPath xpath = getXPath(path, namespaces, functions, variables);
       List results = xpath.selectNodes(base);
@@ -187,6 +189,7 @@ public class FOMXPath extends AbstractXPath {
     Map<QName,Function> functions,
     Map<QName,Object> variables) throws XPathException {
     try {
+      base = getElementWrapped(base);
       XPath xpath = getXPath(path, namespaces, functions, variables);
       Object obj = xpath.selectSingleNode(base);
       if (obj instanceof OMAttribute) obj = new FOMAttribute((OMAttribute) obj);
@@ -210,6 +213,7 @@ public class FOMXPath extends AbstractXPath {
     Map<QName,Function> functions,
     Map<QName,Object> variables) throws XPathException {
     try {
+      base = getElementWrapped(base);
       XPath xpath = getXPath(path, namespaces, functions, variables);
       return xpath.evaluate(base);
     } catch (JaxenException e) {
@@ -232,6 +236,7 @@ public class FOMXPath extends AbstractXPath {
     Map<QName,Object> variables) 
       throws XPathException {
     try {
+      base = getElementWrapped(base);
       XPath xpath = getXPath(path, namespaces, functions, variables);
       return xpath.stringValueOf(base);
     } catch (JaxenException e) {
@@ -255,6 +260,7 @@ public class FOMXPath extends AbstractXPath {
     Map<QName,Object> variables) 
       throws XPathException {
     try {
+      base = getElementWrapped(base);
       XPath xpath = getXPath(path, namespaces, functions, variables);
       return xpath.booleanValueOf(base);
     } catch (JaxenException e) {
@@ -278,6 +284,7 @@ public class FOMXPath extends AbstractXPath {
     Map<QName,Object> variables) 
       throws XPathException {
     try {
+      base = getElementWrapped(base);
       XPath xpath = getXPath(path, namespaces, functions, variables);
       return xpath.numberValueOf(base);
     } catch (JaxenException e) {
@@ -309,5 +316,12 @@ public class FOMXPath extends AbstractXPath {
   public synchronized void setDefaultVariables(Map<QName,Object> variables) {
     this.variables.clear();
     this.variables.putAll(variables);
+  }
+  
+  private Base getElementWrapped(Base base) {
+	  if (base instanceof ElementWrapper) {
+		  base = ((ElementWrapper)base).getInternal();
+	  }
+	  return base;
   }
 }

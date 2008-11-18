@@ -516,7 +516,7 @@ public class FOMElement
     return text;
   }
   
-  public <T extends Element>T setText(String text) {
+  public void setText(String text) {
     complete();
     if (text != null) {
       OMNode child = this.getFirstOMChild();
@@ -529,7 +529,7 @@ public class FOMElement
       getOMFactory().createOMText(this, text);
     } else 
       _removeAllChildren();
-    return (T)this;
+    //return (T)this;
   }
 
   public String getText() {

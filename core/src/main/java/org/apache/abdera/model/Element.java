@@ -218,7 +218,7 @@ public interface Element
    * Set the Text value of this element
    * @param text The text value
    */
-  <T extends Element>T setText(String text);
+  void setText(String text);
   
   /**
    * Set the Text value of this element using the data handler

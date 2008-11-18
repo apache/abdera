@@ -206,9 +206,8 @@ public abstract class ElementWrapper
     return (T)this;
   }
 
-  public <T extends Element>T setText(String text) {
+  public void setText(String text) {
     internal.setText(text);
-    return (T)this;
   }
 
   public <T extends Element>T setText(DataHandler handler) {

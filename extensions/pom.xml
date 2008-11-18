@@ -40,6 +40,7 @@
     <module>media</module>
     <module>oauth</module>
     <module>opensearch</module>
+	<module>rss</module>
     <module>serializer</module>
     <module>sharing</module>
     <module>wsse</module>

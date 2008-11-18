@@ -19,6 +19,7 @@ package org.apache.abdera.test.ext.opensearch;
 
 import org.apache.abdera.test.ext.opensearch.model.OpenSearchAtomTest;
 import org.apache.abdera.test.ext.opensearch.model.OpenSearchDescriptionTest;
+import org.apache.abdera.test.ext.opensearch.model.TestSelectNodes;
 import org.apache.abdera.test.ext.opensearch.server.impl.AbstractOpenSearchUrlAdapterTest;
 import org.apache.abdera.test.ext.opensearch.server.impl.SimpleOpenSearchInfoTest;
 import org.apache.abdera.test.ext.opensearch.server.processors.OpenSearchDescriptionRequestProcessorTest;
@@ -36,6 +37,7 @@ public class TestSuite  {
       AbstractOpenSearchUrlAdapterTest.class,
       SimpleOpenSearchInfoTest.class,
       OpenSearchDescriptionRequestProcessorTest.class,
-      OpenSearchUrlRequestProcessorTest.class);
+      OpenSearchUrlRequestProcessorTest.class,
+      TestSelectNodes.class);
   }
 }

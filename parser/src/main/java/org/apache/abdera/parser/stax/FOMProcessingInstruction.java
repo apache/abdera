@@ -72,9 +72,8 @@ public class FOMProcessingInstruction
     return w.toString();
   }
 
-  public <T extends ProcessingInstruction>T setTarget(String target) {
-    super.setTarget(target);
-    return (T)this;
+  public void setTarget(String target) {
+    super.setTarget(target);    
   }
   
 }

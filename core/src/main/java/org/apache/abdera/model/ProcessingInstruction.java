@@ -50,7 +50,7 @@ public interface ProcessingInstruction {
   /**
    * The PI target
    */
-  <T extends ProcessingInstruction>T setTarget(String target);
+  void setTarget(String target);
   
   /**
    * The PI text

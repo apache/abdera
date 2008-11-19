@@ -460,13 +460,13 @@ public class RssFeed
     return (T)this;
   }
 
-  public <T extends Element> T addExtension(QName qname) {
-    return getChannel().addExtension(qname);
+  public <T extends Element>T addExtension(QName qname) {
+    return (T) getChannel().addExtension(qname);
   }
 
   public <T extends Element> T addExtension(String namespace, String localPart,
       String prefix) {
-    return getChannel().addExtension(namespace, localPart, prefix);
+    return (T) getChannel().addExtension(namespace, localPart, prefix);
   }
 
   public Element addSimpleExtension(QName qname, String value) {
@@ -479,7 +479,7 @@ public class RssFeed
   }
 
   public <T extends Element> T getExtension(QName qname) {
-    return getChannel().getExtension(qname);
+    return (T) getChannel().getExtension(qname);
   }
 
   public <T extends Element> T getExtension(Class<T> _class) {

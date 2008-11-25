@@ -33,7 +33,7 @@ import org.apache.abdera.writer.StreamWriter;
 public class Error
   extends ExtensibleElementWrapper {
 
-  public static final String NS        = "http://incubator.apache.org/abdera";
+  public static final String NS        = "http://abdera.apache.org";
   public static final QName ERROR         = new QName(NS, "error");
   public static final QName CODE          = new QName(NS, "code");
   public static final QName MESSAGE       = new QName(NS, "message");

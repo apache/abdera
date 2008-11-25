@@ -70,7 +70,7 @@ public class XPathFunctionsExample {
 
     public static final QName QNAME = 
       new QName(
-        "http://incubator.apache.org/abdera", 
+        "http://abdera.apache.org", 
         "altlinks");
     
     @SuppressWarnings("unchecked") 

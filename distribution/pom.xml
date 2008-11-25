@@ -21,13 +21,13 @@
     <parent>
         <groupId>org.apache.abdera</groupId>
         <artifactId>abdera</artifactId>
-        <version>0.5.0-incubating-SNAPSHOT</version>
+        <version>0.5.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>apache-abdera</artifactId>
     <packaging>pom</packaging>
     <name>Abdera Distribution</name>
-    <version>0.5.0-incubating-SNAPSHOT</version>
+    <version>0.5.0-SNAPSHOT</version>
 
     <properties>
         <topDir>${basedir}/..</topDir>
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-bundle</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
             <!-- Silly hack because only want to include this in some dependency sets -->
             <scope>test</scope>
         </dependency>
@@ -46,47 +46,47 @@
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-client</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-server</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-spring</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-jcr</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-couchdb</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-filesystem</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-jdbc</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-security</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
             <exclusions>
               <exclusion>
                 <groupId>bouncycastle</groupId>
@@ -97,57 +97,57 @@
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-extensions-gdata</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-extensions-geo</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-extensions-html</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-extensions-json</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-extensions-main</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-extensions-media</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-extensions-oauth</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-extensions-opensearch</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-extensions-serializer</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-extensions-sharing</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-extensions-wsse</artifactId>
-            <version>0.5.0-incubating-SNAPSHOT</version>
+            <version>0.5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.mortbay.jetty</groupId>

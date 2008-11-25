@@ -21,10 +21,10 @@
   <artifactId>abdera</artifactId>
   <packaging>pom</packaging>
   <name>Apache Abdera</name>  
-  <version>0.5.0-incubating-SNAPSHOT</version>  
+  <version>0.5.0-SNAPSHOT</version>  
   <description>Atom Specification Implementation</description>
   <inceptionYear>2006</inceptionYear>
-  <url>http://incubator.apache.org/abdera</url>
+  <url>http://abdera.apache.org</url>
   
   <organization>
     <name>Apache Software Foundation</name>
@@ -68,9 +68,9 @@
   </licenses>
   
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/tags/abdera-0.5.0-incubating</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/tags/abdera-0.5.0-incubating</developerConnection>
-    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/tags/abdera-0.5.0-incubating</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/abdera/java/tags/abdera-0.5.0</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/abdera/java/tags/abdera-0.5.0</developerConnection>
+    <url>http://svn.apache.org/repos/asf/incubator/abdera/java/tags/abdera-0.5.0</url>
   </scm>
   
   <reporting>
@@ -432,7 +432,7 @@
     <repository>
       <id>apache.releases</id>
       <name>Apache Incubating Repository</name>
-      <url>scpexe://people.apache.org/www/people.apache.org/repo/m2-incubating-repository</url>
+      <url>scpexe://people.apache.org/www/people.apache.org/repo/m2-repository</url>
     </repository>
   </distributionManagement>
 
@@ -445,7 +445,7 @@
     <repository>
       <id>apache.incubating</id>
       <name>Apache Incubating Repository</name>
-      <url>http://people.apache.org/repo/m2-incubating-repository</url>
+      <url>http://people.apache.org/repo/m2-repository</url>
     </repository>
   </repositories> 
 </project>

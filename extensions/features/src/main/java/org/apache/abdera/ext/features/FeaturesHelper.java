@@ -53,8 +53,8 @@ public final class FeaturesHelper {
   public static final QName TYPE = new QName(FNS, "type", "f");
   
   private static final String FEATURE_BASE                   = "http://www.w3.org/2007/app/";
-  private static final String ABDERA_FEATURE_BASE            = "http://incubator.apache.org/abdera/features/";
-  private static final String BLOG_FEATURE_BASE              = "http://incubator.apache.org/abdera/features/blog/";
+  private static final String ABDERA_FEATURE_BASE            = "http://abdera.apache.org/features/";
+  private static final String BLOG_FEATURE_BASE              = "http://abdera.apache.org/features/blog/";
   public static final String FEATURE_SUPPORTS_DRAFTS         = FEATURE_BASE + "supportsDraft";
   public static final String FEATURE_IGNORES_DRAFTS          = FEATURE_BASE + "ignoresDraft";
    

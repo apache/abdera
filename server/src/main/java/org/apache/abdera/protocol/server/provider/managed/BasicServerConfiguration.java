@@ -18,6 +18,7 @@
 package org.apache.abdera.protocol.server.provider.managed;
 
 import org.apache.abdera.protocol.server.RequestContext;
+import static org.apache.abdera.util.Version.*;
 
 public class BasicServerConfiguration 
   extends AbstractServerConfiguration {
@@ -28,7 +29,7 @@ public class BasicServerConfiguration
 
   @Override
   public String getFeedNamespace() {
-    return "http://abdera.apache.org/0.4/";
+    return URI + "/" + VERSION + "/";
   }
 
   @Override

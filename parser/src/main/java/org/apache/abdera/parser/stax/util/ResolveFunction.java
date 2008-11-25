@@ -36,7 +36,7 @@ import org.jaxen.function.StringFunction;
 
 public class ResolveFunction implements Function {
   
-  public static final QName QNAME = new QName("http://incubator.apache.org/abdera", "resolve");
+  public static final QName QNAME = new QName("http://abdera.apache.org", "resolve");
   
   @SuppressWarnings("unchecked") 
   public Object call(Context context, List args) throws FunctionCallException {

@@ -69,7 +69,7 @@ public class FOMXPath extends AbstractXPath {
   
   protected Map<String, String> initDefaultNamespaces() {
     Map<String,String> namespaces = super.initDefaultNamespaces();
-    namespaces.put("abdera", "http://incubator.apache.org/abdera");
+    namespaces.put("abdera", "http://abdera.apache.org");
     return namespaces;
   }
   

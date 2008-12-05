@@ -93,8 +93,8 @@ public class BasicTest extends Assert {
     ClientResponse resp = client.get("http://localhost:9002/sample");
     assertNotNull(resp);
     assertEquals(resp.getType(), ResponseType.SUCCESS);
-    assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.ATOM_MEDIA_TYPE));
-    Document<Feed> doc = resp.getDocument();
+    assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.FEED_MEDIA_TYPE));    
+    Document<Feed> doc = resp.getDocument();    
     Feed feed = doc.getRoot();
     assertEquals(feed.getId().toString(), "http://localhost:9002/sample");
     assertEquals(feed.getTitle(), "title for any sample feed");
@@ -136,6 +136,7 @@ public class BasicTest extends Assert {
   @Test
   public void testPutEntry() {
     ClientResponse resp = client.get("http://localhost:9002/sample/foo");
+    assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.ENTRY_MEDIA_TYPE));
     Document<Entry> doc = resp.getDocument();
     Entry entry = doc.getRoot();
     entry.setTitle("This is the modified title");

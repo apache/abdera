@@ -116,6 +116,10 @@ public class MimeTypeHelper {
     return false;
   }
   
+  private static boolean isMatchType(String actual, String expected) {
+	  return (actual != null && actual.equalsIgnoreCase(expected) || true);
+  }
+  
   /**
    * Returns true if media type a matches application/atomsrv+xml
    */
@@ -138,10 +142,8 @@ public class MimeTypeHelper {
     try {
       MimeType mta = new MimeType(a.toLowerCase());
       MimeType mtb = new MimeType(Constants.ATOM_MEDIA_TYPE);
-      if (isMatch(mta,mtb)) {
-        String type = mta.getParameter("type");
-        return (type != null && type.equalsIgnoreCase("entry"));
-      }
+      MimeType mtc = new MimeType(Constants.ENTRY_MEDIA_TYPE);
+      return isMatch(mta, mtc) || (isMatch(mta, mtb) && isMatchType(mta.getParameter("type"), "entry"));      
     } catch (Exception e) {}
     return false;
   }
@@ -153,10 +155,8 @@ public class MimeTypeHelper {
     try {
       MimeType mta = new MimeType(a.toLowerCase());
       MimeType mtb = new MimeType(Constants.ATOM_MEDIA_TYPE);
-      if (isMatch(mta,mtb)) {
-        String type = mta.getParameter("type");
-        return type != null ? type.equalsIgnoreCase("feed") : true;
-      }
+      MimeType mtc = new MimeType(Constants.FEED_MEDIA_TYPE);
+      return isMatch(mta, mtc) || (isMatch(mta, mtb) && isMatchType(mta.getParameter("type"), "feed"));
     } catch (Exception e) {}
     return false;
   }
@@ -208,7 +208,7 @@ public class MimeTypeHelper {
   public static <T extends Base>String getMimeType(T base) {
     String type = null;
     if (base instanceof Document) {
-      Document doc = (Document)base;
+      Document doc = (Document)base;      
       MimeType mt = doc.getContentType();
       type = (mt != null) ? mt.toString() : getMimeType(doc.getRoot());
     } else if (base instanceof Element) {
@@ -216,12 +216,12 @@ public class MimeTypeHelper {
       if (el.getDocument() != null) {
         MimeType mt = el.getDocument().getContentType();
         type = (mt != null) ? mt.toString() : null;
-      }
+      }     
       if (type == null) {
         if (el instanceof Feed)
-          type = Constants.ATOM_MEDIA_TYPE;
+          type = Constants.FEED_MEDIA_TYPE;
         else if (el instanceof Entry)
-          type = Constants.ATOM_MEDIA_TYPE + ";type=entry";
+          type = Constants.ENTRY_MEDIA_TYPE;
         else if (el instanceof Service)
           type = Constants.APP_MEDIA_TYPE;
         else if (el instanceof Categories)

@@ -54,8 +54,7 @@ public class FeedValidatorTest
   private static IRI baseURI = null;
   
   private static <T extends Element> Document<T> get(IRI uri) {
-    try {
-      //return Parser.INSTANCE.parse(uri.toURL().openStream(), uri);
+    try {      
       return parse(uri);
     } catch (Exception e) {}
     return null;

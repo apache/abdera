@@ -18,13 +18,13 @@
   <parent>
     <groupId>org.apache.abdera</groupId>
     <artifactId>abdera</artifactId>
-    <version>0.5.0-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
   </parent>  
   <modelVersion>4.0.0</modelVersion>
   <artifactId>abdera-extensions-gdata</artifactId>
   <packaging>jar</packaging>
   <name>Abdera Extensions - GData</name>
-  <version>0.5.0-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <description>Atom Specification Extensions - GData</description>
   <properties>
     <topDir>${basedir}/../..</topDir>
@@ -33,7 +33,7 @@
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-client</artifactId>
-      <version>0.5.0-SNAPSHOT</version>
+      <version>1.0-SNAPSHOT</version>
     </dependency>    
     <dependency>
       <groupId>junit</groupId>

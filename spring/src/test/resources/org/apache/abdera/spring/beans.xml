@@ -7,6 +7,13 @@
     http://abdera.apache.org http://abdera.apache.org/schemas/abdera-spring.xsd">
 
   <!-- Abdera -->
+
+  <a:provider>
+    <a:workspaceManager>
+      <bean class="org.apache.abdera.protocol.server.provider.basic.BasicProvider"/>
+    </a:workspaceManager>
+  </a:provider>
+
   <a:provider>
     <a:workspace title="Foo Workspace">
       <!-- These are our collections -->

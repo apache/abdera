@@ -26,6 +26,7 @@ import org.apache.abdera.protocol.Resolver;
 import org.apache.abdera.protocol.server.Filter;
 import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
+import org.apache.abdera.protocol.server.WorkspaceManager;
 import org.apache.abdera.protocol.server.impl.DefaultProvider;
 import org.springframework.beans.factory.FactoryBean;
 
@@ -33,6 +34,7 @@ import org.springframework.beans.factory.FactoryBean;
 public class ProviderFactoryBean implements FactoryBean {
     private Class<? extends DefaultProvider> providerClass = DefaultProvider.class;
     private String base;
+    private WorkspaceManager workspaceManager;
     private Collection<WorkspaceInfo> workspaces;
     private Resolver<Target> targetResolver;
     private Resolver<Subject> subjectResolver;
@@ -49,6 +51,10 @@ public class ProviderFactoryBean implements FactoryBean {
             p = providerClass.newInstance();
         }
         
+        if( workspaceManager != null ) {
+            p.setWorkspaceManager( workspaceManager );
+        }
+
         if (workspaces != null && workspaces.size() > 0) {
             p.addWorkspaces(workspaces);
         }
@@ -88,6 +94,14 @@ public class ProviderFactoryBean implements FactoryBean {
 
     public void setBase(String base) {
         this.base = base;
+    }
+
+    public WorkspaceManager getWorkspaceManager() {
+        return workspaceManager;
+    }
+
+    public void setWorkspaceManager( WorkspaceManager workspaceManager ) {
+      this.workspaceManager = workspaceManager;
     }
 
     public Collection<WorkspaceInfo> getWorkspaces() {

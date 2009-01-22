@@ -5,22 +5,10 @@ Apache Abdera is a high-performance, functionally complete
 implementation of the IETF Atom Syndication Format (RFC 4287) and Atom
 Publishing Protocol specifications.
 
-Incubation Disclaimer
-============================
-
-Abdera is an effort undergoing incubation at the Apache Software
-Foundation (ASF), sponsored by the Apache Incubator PMC. Incubation is
-required of all newly accepted projects until a further review
-indicates that the infrastructure, communications, and decision making
-process have stabilized in a manner consistent with other successful
-ASF projects.  While incubation status is not necessarily a reflection
-of the completeness or stability of the code, it does indicate that
-the project has yet to be fully endorsed by the ASF.
-
 Getting Started
 ============================
 
-See the Getting Started Guide @ 
+See the Getting Started Guide @
   
   http://incubator.apache.org/
 
@@ -38,6 +26,11 @@ you may have.
 
 Changes
 ============================
+1.0   - Full implementation of the AtomPub Multipart Media Creation draft.
+      - Java 6 complete support.
+      - OpenSearch extension rewritten and completed.
+      - Improved server extensibiility through RequestProcessors.
+      - Many improvements and bug fixes.
 0.4.0 - A simplified server side framework and API for implementing
         services.
       - Sever side filter API for intercepting requests and 

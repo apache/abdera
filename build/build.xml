@@ -216,10 +216,10 @@ Working directory: ${work}
     <manifest file="${work}/MANIFEST.MF">
       <attribute name="Specification-Title" value="Apache Abdera" />
       <attribute name="Specification-Version" value="${version}" />
-      <attribute name="Specification-Vendor" value="The Apache Software Foundation - Incubator" />
+      <attribute name="Specification-Vendor" value="The Apache Software Foundation" />
       <attribute name="Implementation-Title" value="org.apache.abdera" />
       <attribute name="Implementation-Version" value="${version}" />
-      <attribute name="Implementation-Vendor" value="The Apache Software Foundation - Incubator" />
+      <attribute name="Implementation-Vendor" value="The Apache Software Foundation" />
     </manifest>
 
     <echo>Building Security? ${do.security}</echo>

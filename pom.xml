@@ -39,23 +39,23 @@
   <mailingLists>
     <mailingList>
      <name>Abdera Developer List</name>
-     <subscribe>abdera-dev-subscribe@incubator.apache.org</subscribe>
-     <unsubscribe>abdera-dev-unsubscribe@incubator.apache.org</unsubscribe>
-     <post>abdera-dev@incubator.apache.org</post>
-     <archive>http://mail-archives.apache.org/mod_mbox/incubator-abdera-dev/</archive>
+     <subscribe>dev-subscribe@abdera.apache.org</subscribe>
+     <unsubscribe>dev-unsubscribe@abdera.apache.org</unsubscribe>
+     <post>dev@abdera.apache.org</post>
+     <archive>http://mail-archives.apache.org/mod_mbox/abdera-dev/</archive>
    </mailingList>
    <mailingList>
      <name>Abdera User List</name>
-     <subscribe>abdera-user-subscribe@incubator.apache.org</subscribe>
-     <unsubscribe>abdera-user-unsubscribe@incubator.apache.org</unsubscribe>
-     <post>abdera-user@incubator.apache.org</post>
-     <archive>http://mail-archives.apache.org/mod_mbox/incubator-abdera-user/</archive>
+     <subscribe>user-subscribe@abdera.apache.org</subscribe>
+     <unsubscribe>user-unsubscribe@abdera.apache.org</unsubscribe>
+     <post>user@abdera.apache.org</post>
+     <archive>http://mail-archives.apache.org/mod_mbox/abdera-user/</archive>
    </mailingList>
    <mailingList>
      <name>Abdera Source Control List</name>
-     <subscribe>abdera-commits-subscribe@incubator.apache.org</subscribe>
-     <unsubscribe>abdera-commits-unsubscribe@incubator.apache.org</unsubscribe>
-     <archive>http://mail-archives.apache.org/mod_mbox/incubator-abdera-commits/</archive>
+     <subscribe>commits-subscribe@abdera.apache.org</subscribe>
+     <unsubscribe>commits-unsubscribe@abdera.apache.org</unsubscribe>
+     <archive>http://mail-archives.apache.org/mod_mbox/abdera-commits/</archive>
    </mailingList>
   </mailingLists>
   

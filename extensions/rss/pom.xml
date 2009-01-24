@@ -18,13 +18,13 @@
     <parent>
         <groupId>org.apache.abdera</groupId>
         <artifactId>abdera</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>  
     <modelVersion>4.0.0</modelVersion>
     <artifactId>abdera-extensions-rss</artifactId>
     <packaging>jar</packaging>
     <name>Abdera Extensions - RSS</name>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <description>Abdera Specification Extensions - RSS</description>
     <properties>
         <topDir>${basedir}/../..</topDir>
@@ -33,12 +33,12 @@
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.abdera</groupId>
             <artifactId>abdera-parser</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

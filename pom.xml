@@ -68,9 +68,9 @@
   </licenses>
   
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/abdera/java/tags/abdera-0.5.0</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/abdera/java/tags/abdera-0.5.0</developerConnection>
-    <url>http://svn.apache.org/repos/asf/abdera/java/tags/abdera-0.5.0</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/abdera/java/tags/abdera-1.0</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/abdera/java/tags/abdera-1.0</developerConnection>
+    <url>http://svn.apache.org/repos/asf/abdera/java/tags/abdera-1.0</url>
   </scm>
   
   <reporting>

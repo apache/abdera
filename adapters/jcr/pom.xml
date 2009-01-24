@@ -18,13 +18,13 @@
   <parent>
     <groupId>org.apache.abdera</groupId>
     <artifactId>abdera-adapters-parent</artifactId>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>abdera-jcr</artifactId>
   <packaging>jar</packaging>
   <name>Abdera JCR Adapter</name>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
   <description>JCR AtomPub Server implementation Abdera</description>
     
   <properties>
@@ -42,7 +42,7 @@
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-spring</artifactId>
-      <version>1.0</version>
+      <version>1.1-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     

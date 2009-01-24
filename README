@@ -30,6 +30,7 @@ Changes
       - Java 6 complete support.
       - OpenSearch extension rewritten and completed.
       - Improved server extensibiility through RequestProcessors.
+      - New RSS extension.
       - Many improvements and bug fixes.
 0.4.0 - A simplified server side framework and API for implementing
         services.

@@ -153,5 +153,59 @@
       </licenses>
     </project>
   </supplement>
+  <supplement>
+    <project>
+      <groupId>nu.validator.htmlparser</groupId>
+      <artifactId>htmlparser</artifactId>
+      <name>The Validator.nu HTML Parser</name>
+      <organization>
+        <name>Validator.nu</name>
+        <url>http://about.validator.nu/htmlparser</url>
+      </organization>
+      <licenses>
+        <license>
+          <name>Htmlparser License</name>
+          <url>http://about.validator.nu/htmlparser</url>
+        </license>
+      </licenses>
+    </project>
+  </supplement>
+    <supplement>
+      <project>
+        <groupId>jaxen</groupId>
+        <artifactId>jaxen</artifactId>
+        <name>Jaxen</name>
+        <organization>
+          <name>The Werken Company</name>
+          <url>http://jaxen.codehaus.org</url>
+        </organization>
+        <licenses>
+          <license>
+            <name>Jaxen License</name>
+            <url>http://jaxen.codehaus.org/license.html</url>
+          </license>
+        </licenses>
+      </project>
+  </supplement>
+  
+    <supplement>
+      <project>
+        <groupId>org.apache.ws.commons.axiom</groupId>
+        <artifactId>axiom-impl</artifactId>
+        <name>Axiom Impl</name>
+        <organization>
+          <name>The Apache Software Foundation</name>
+          <url>http://www.apache.org/</url>
+        </organization>
+        <licenses>
+          <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          </license>
+        </licenses>
+      </project>
+  </supplement>
+  
+  
   
 </supplementalDataModels>

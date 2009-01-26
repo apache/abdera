@@ -5,7 +5,7 @@
   <artifactId>abdera</artifactId>
   <packaging>pom</packaging>
   <name>Apache Abdera</name>  
-  <version>1.1-SNAPSHOT</version>  
+  <version>1.0-SNAPSHOT</version>  
   <description>Atom Specification Implementation</description>
   <inceptionYear>2006</inceptionYear>
   <url>http://abdera.apache.org</url>
@@ -207,7 +207,25 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rat-maven-plugin</artifactId>
+        <version>1.0-alpha-3</version>
       </plugin> 
+      
+        <plugin>
+          <groupId>com.google.code.maven-license-plugin</groupId>
+          <artifactId>maven-license-plugin</artifactId>
+          <version>1.4.0</version>
+          <configuration>
+            <basedir>${basedir}</basedir>
+            <header>${basedir}/etc/license.txt</header>
+            <quiet>false</quiet>
+            <failIfMissing>true</failIfMissing>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
@@ -424,5 +442,11 @@
     <jetty.version>6.1.5</jetty.version>
     <topDir>${basedir}</topDir>
   </properties>
-
+  
+  <reposiories>
+  <repository>
+      <id>mc-release</id>
+      <url>http://mc-repo.googlecode.com/svn/maven2/releases</url>
+  </repository>
+  </reposiories>
 </project>

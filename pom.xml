@@ -443,10 +443,4 @@
     <topDir>${basedir}</topDir>
   </properties>
   
-  <reposiories>
-  <repository>
-      <id>mc-release</id>
-      <url>http://mc-repo.googlecode.com/svn/maven2/releases</url>
-  </repository>
-  </reposiories>
 </project>

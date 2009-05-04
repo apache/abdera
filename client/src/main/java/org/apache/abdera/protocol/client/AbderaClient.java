@@ -119,6 +119,30 @@ public class AbderaClient {
     setAuthenticationSchemeDefaults();
     setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
   }
+
+  /**
+   * Create an Abdera using a preconfigured HttpClient object
+   * @param client An Apache HttpClient object
+   */
+  public AbderaClient( 
+    HttpClient client) {
+      this(new Abdera(),client);
+  }
+
+  /**
+   * Create an Abdera using a preconfigured HttpClient object
+   * @param abdera
+   * @param client An Apache HttpClient object
+   */
+  public AbderaClient(
+    Abdera abdera, 
+    HttpClient client) {
+      this.abdera = abdera;
+      this.cache = initCache(initCacheFactory());
+      this.client = client;
+      setAuthenticationSchemeDefaults();
+      setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
+  }
   
   /**
    * Create an AbderaClient instance using the specified Abdera instance

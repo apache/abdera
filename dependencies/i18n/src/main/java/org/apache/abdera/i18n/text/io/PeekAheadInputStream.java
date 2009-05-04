@@ -68,7 +68,7 @@ public class PeekAheadInputStream
     int len) 
       throws IOException {
     int r = read(buf, off, len);
-    unread(buf,off,len);
+    unread(buf,off,r);
     return r;
   }
 

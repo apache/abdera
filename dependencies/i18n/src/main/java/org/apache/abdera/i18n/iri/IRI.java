@@ -334,11 +334,11 @@ public final class IRI
       if (path != null && path.length() != 0) {
         buf.append(path);
       }
-      if (query != null && query.length() != 0) {
+      if (query != null) {
         buf.append('?');
         buf.append(query);
       }
-      if (fragment != null && fragment.length() != 0) {
+      if (fragment != null) {
         buf.append('#');
         buf.append(fragment);
       }

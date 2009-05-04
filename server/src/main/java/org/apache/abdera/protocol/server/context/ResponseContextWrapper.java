@@ -42,22 +42,26 @@ public class ResponseContextWrapper
     String name, 
     String charset,
     String value) {
-      return response.addEncodedHeader(name, charset, value);
+      response.addEncodedHeader(name, charset, value);
+      return this;
   }
   
   public ResponseContext addEncodedHeaders(
     String name, 
     String charset,
     String... vals) {
-      return response.addEncodedHeaders(name, charset, vals);
+      response.addEncodedHeaders(name, charset, vals);
+      return this;
   }
   
   public ResponseContext addHeader(String name, Object value) {
-    return response.addHeader(name, value);
+    response.addHeader(name, value);
+    return this;
   }
   
   public ResponseContext addHeaders(String name, Object... vals) {
-    return response.addHeaders(name, vals);
+    response.addHeaders(name, vals);
+    return this;
   }
   
   public boolean hasEntity() {
@@ -65,104 +69,127 @@ public class ResponseContextWrapper
   }
   
   public ResponseContext removeHeader(String name) {
-    return response.removeHeader(name);
+    response.removeHeader(name);
+    return this;
   }
   
   public ResponseContext setAge(long age) {
-    return response.setAge(age);
+    response.setAge(age);
+    return this;
   }
   
   public ResponseContext setAllow(String method) {
-    return response.setAllow(method);
+    response.setAllow(method);
+    return this;
   }
   
   public ResponseContext setAllow(String... methods) {
-    return response.setAllow(methods);
+    response.setAllow(methods);
+    return this;
   }
   
   public ResponseContext setContentLanguage(String language) {
-    return response.setContentLanguage(language);
+    response.setContentLanguage(language);
+    return this;
   }
   
   public ResponseContext setContentLength(long length) {
-    return response.setContentLength(length);
+    response.setContentLength(length);
+    return this;
   }
   
   public ResponseContext setContentLocation(String uri) {
-    return response.setContentLocation(uri);
+    response.setContentLocation(uri);
+    return this;
   }
   
   public ResponseContext setContentType(String type) {
-    return response.setContentType(type);
+    response.setContentType(type);
+    return this;
   }
   
   public ResponseContext setContentType(String type, String charset) {
-    return response.setContentType(type, charset);
+    response.setContentType(type, charset);
+    return this;
   }
   
   public ResponseContext setEncodedHeader(
     String name, 
     String charset,
     String value) {
-      return response.setEncodedHeader(name, charset, value);
+      response.setEncodedHeader(name, charset, value);
+      return this;
   }
   
   public ResponseContext setEncodedHeader(
     String name, 
     String charset,
     String... vals) {
-      return response.setEncodedHeader(name, charset, vals);
+      response.setEncodedHeader(name, charset, vals);
+      return this;
   }
   
   public ResponseContext setEntityTag(String etag) {
-    return response.setEntityTag(etag);
+    response.setEntityTag(etag);
+    return this;
   }
   
   public ResponseContext setEntityTag(EntityTag etag) {
-    return response.setEntityTag(etag);
+    response.setEntityTag(etag);
+    return this;
   }
   
   public ResponseContext setEscapedHeader(
     String name, 
     Profile profile,
     String value) {
-      return response.setEscapedHeader(name, profile, value);
+      response.setEscapedHeader(name, profile, value);
+      return this;
   }
   
   public ResponseContext setExpires(Date date) {
-    return response.setExpires(date);
+    response.setExpires(date);
+    return this;
   }
   
   public ResponseContext setHeader(String name, Object value) {
-    return response.setHeader(name, value);
+    response.setHeader(name, value);
+    return this;
   }
   
   public ResponseContext setHeader(String name, Object... vals) {
-    return response.setHeader(name, vals);
+    response.setHeader(name, vals);
+    return this;
   }
   
   public ResponseContext setLastModified(Date date) {
-    return response.setLastModified(date);
+    response.setLastModified(date);
+    return this;
   }
   
   public ResponseContext setLocation(String uri) {
-    return response.setLocation(uri);
+    response.setLocation(uri);
+    return this;
   }
   
   public ResponseContext setSlug(String slug) {
-    return response.setSlug(slug);
+    response.setSlug(slug);
+    return this;
   }
   
   public ResponseContext setStatus(int status) {
-    return response.setStatus(status);
+    response.setStatus(status);
+    return this;
   }
   
   public ResponseContext setStatusText(String text) {
-    return response.setStatusText(text);
+    response.setStatusText(text);
+    return this;
   }
   
   public ResponseContext setWriter(Writer writer) {
-    return response.setWriter(writer);
+    response.setWriter(writer);
+    return this;
   }
   
   public void writeTo(OutputStream out) throws IOException {
@@ -308,6 +335,15 @@ public class ResponseContextWrapper
   
   public boolean isNoTransform() {
     return response.isNoTransform();
+  }
+
+  public boolean isBinary() {
+    return response.isBinary();
+  }
+  
+  public ResponseContext setBinary(boolean binary) {
+    response.setBinary(true);
+    return this;
   }
   
 }

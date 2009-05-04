@@ -44,9 +44,19 @@ public abstract class AbstractResponseContext
   protected int status = 0;
   protected String status_text = null;
   protected Writer writer = null;
+  protected boolean binary = false;
   
   protected Map<String,Object[]> headers = null;
 
+  public ResponseContext setBinary(boolean binary) {
+    this.binary = binary;
+    return this;
+  }
+  
+  public boolean isBinary() {
+    return binary;
+  }
+  
   public ResponseContext removeHeader(String name) {
     Map<String,Object[]> headers = getHeaders();
     headers.remove(name);

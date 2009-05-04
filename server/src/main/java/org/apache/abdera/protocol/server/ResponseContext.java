@@ -33,6 +33,22 @@ public interface ResponseContext
   extends Response {
 
   /**
+   * True if the response contains a binary entity as opposed to a character
+   * based entity. Default is false.  If true, the AbderaServlet will pass 
+   * in the OutputStream for writing out, if false, the AbderaServlet will pass
+   * in the Writer.
+   */
+  boolean isBinary();
+  
+  /**
+   * True if the response contains a binary entity as opposed to a character
+   * based entity. Default is false.  If true, the AbderaServlet will pass 
+   * in the OutputStream for writing out, if false, the AbderaServlet will pass
+   * in the Writer.
+   */
+  ResponseContext setBinary(boolean binary);
+  
+  /**
    * True if the response contains an entity
    */
   boolean hasEntity();

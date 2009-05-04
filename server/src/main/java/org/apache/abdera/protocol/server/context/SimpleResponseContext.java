@@ -40,13 +40,18 @@ public abstract class SimpleResponseContext
     this(null);
   }
   
-  protected SimpleResponseContext(String encoding) {
-    this.encoding = encoding != null ? encoding : "UTF-8";
+  protected SimpleResponseContext(
+    String encoding) {
+      this.encoding = 
+        encoding != null ? 
+          encoding : 
+          "UTF-8";
   }
   
-  protected SimpleResponseContext setEncoding(String encoding) {
-    this.encoding = encoding;
-    return this;
+  protected SimpleResponseContext setEncoding(
+    String encoding) {
+      this.encoding = encoding;
+      return this;
   }
   
   protected String getEncoding() {
@@ -56,8 +61,13 @@ public abstract class SimpleResponseContext
   public void writeTo(
     OutputStream out) 
       throws IOException {
-    if (hasEntity())
-      writeTo(new OutputStreamWriter(out,encoding));
+    if (hasEntity()) {
+      OutputStreamWriter writer = 
+        new OutputStreamWriter(
+          out,encoding);
+      writeTo(writer);
+      writer.flush();
+    }
   }
   
   public void writeTo(

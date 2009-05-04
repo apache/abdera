@@ -124,9 +124,12 @@ public class AbderaServlet
             response.setHeader(name, value.toString());
         }
       }
-      
       if (!request.getMethod().equals("HEAD") && context.hasEntity()) {
-        context.writeTo(response.getOutputStream());
+        if (context.isBinary()) {
+          context.writeTo(response.getOutputStream());
+        } else {
+          context.writeTo(response.getWriter());
+        }
       }  
     } else {
       error("Internal Server Error", null, response);

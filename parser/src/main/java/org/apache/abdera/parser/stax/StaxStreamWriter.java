@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import javax.xml.namespace.NamespaceContext;
+import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -69,27 +70,79 @@ public class StaxStreamWriter
 
   public StreamWriter setWriter(java.io.Writer writer) {
     try {
-      this.writer = StAXUtils.createXMLStreamWriter(writer);
+      this.writer = createXMLStreamWriter(writer);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
     return this;
   }
-  public StreamWriter setOutputStream(java.io.OutputStream out) {
-    try {
-      this.writer = StAXUtils.createXMLStreamWriter(out,"UTF-8");
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    return this;
+  
+  private static XMLStreamWriter createXMLStreamWriter(
+    Writer out)
+      throws XMLStreamException {
+        XMLOutputFactory outputFactory = 
+          StAXUtils.getXMLOutputFactory();
+        Object curval = 
+          outputFactory.getProperty(
+            XMLOutputFactory.IS_REPAIRING_NAMESPACES);
+        try {
+          outputFactory.setProperty(
+            XMLOutputFactory.IS_REPAIRING_NAMESPACES, 
+            true);
+          XMLStreamWriter writer = 
+            outputFactory.createXMLStreamWriter(out);          
+          return writer;
+        } finally {
+          outputFactory.setProperty(
+            XMLOutputFactory.IS_REPAIRING_NAMESPACES, 
+            curval);
+          StAXUtils.releaseXMLOutputFactory(outputFactory);
+        }
   }
-  public StreamWriter setOutputStream(java.io.OutputStream out, String charset) {
-    try {
-      this.writer = StAXUtils.createXMLStreamWriter(out,charset);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    return this;
+  
+  public StreamWriter setOutputStream(
+    java.io.OutputStream out) {
+      try {
+        this.writer = createXMLStreamWriter(out,"UTF-8");
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+      return this;
+  }
+  
+  private static XMLStreamWriter createXMLStreamWriter(
+    OutputStream out, 
+    String encoding)
+      throws XMLStreamException {
+        XMLOutputFactory outputFactory = 
+          StAXUtils.getXMLOutputFactory();
+        Object curval = 
+          outputFactory.getProperty(
+            XMLOutputFactory.IS_REPAIRING_NAMESPACES);
+        try {
+          outputFactory.setProperty(
+              XMLOutputFactory.IS_REPAIRING_NAMESPACES, 
+              true);
+          XMLStreamWriter writer = 
+            outputFactory.createXMLStreamWriter(out, encoding);
+          return writer;
+        } finally {
+          outputFactory.setProperty(
+              XMLOutputFactory.IS_REPAIRING_NAMESPACES, 
+              curval);
+          StAXUtils.releaseXMLOutputFactory(outputFactory);
+        }
+  }
+  
+  public StreamWriter setOutputStream(
+    java.io.OutputStream out, 
+    String charset) {
+      try {
+        this.writer = createXMLStreamWriter(out,charset);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+      return this;
   }
   
   public StreamWriter startDocument(String xmlversion, String charset) {
@@ -154,8 +207,8 @@ public class StaxStreamWriter
   
   private boolean needToWriteNamespace(String prefix, String namespace) {
     NamespaceContext nc = writer.getNamespaceContext();
-      String uri = nc.getNamespaceURI(prefix);
-      return uri != null ? !uri.equals(namespace) : true;
+    String uri = nc.getNamespaceURI(prefix);
+    return uri != null ? !uri.equals(namespace) : true;
   }
   
   public StreamWriter startElement(
@@ -163,6 +216,8 @@ public class StaxStreamWriter
     String namespace, 
     String prefix) {
     try {
+      if (prefix == null || prefix.equals(""))
+        prefix = writer.getPrefix(namespace);
       if (autoindent && textwritten == 0) indent();
       push();
       if (prefix != null && !prefix.equals("")) {
@@ -178,7 +233,7 @@ public class StaxStreamWriter
           name, 
           namespace);
         if (needToWriteNamespace(prefix,namespace))
-          writer.writeDefaultNamespace(namespace);
+          writeNamespace(prefix,namespace,false);
       } else {
         writer.writeStartElement("",name,"");
         writer.writeDefaultNamespace("");
@@ -343,4 +398,16 @@ public class StaxStreamWriter
       throw new RuntimeException(e);
     }
   }
+
+  public StreamWriter setPrefix(
+    String prefix, 
+    String uri) {   
+      try {
+        writer.setPrefix(prefix, uri);
+      } catch (XMLStreamException e) {
+        throw new RuntimeException(e);
+      }
+      return this;
+  }
+
 }

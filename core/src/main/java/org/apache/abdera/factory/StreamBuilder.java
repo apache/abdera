@@ -849,5 +849,15 @@ public class StreamBuilder
   public StreamBuilder writeUpdated(String date) {
     return (StreamBuilder)super.writeUpdated(date);
   }
+
+  public StreamBuilder setPrefix(String prefix, String uri) {
+    if (!(current instanceof Element)) throw new IllegalStateException("Not currently an element");
+    ((Element)current).declareNS(uri, prefix);
+    return this;
+  }
+
+  public StreamBuilder writeNamespace(String prefix, String uri) {
+    return setPrefix(prefix,uri);
+  }
   
 }

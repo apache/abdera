@@ -23,6 +23,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.util.zip.DeflaterOutputStream;
 
+import org.apache.abdera.i18n.text.io.CompressionUtil;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;

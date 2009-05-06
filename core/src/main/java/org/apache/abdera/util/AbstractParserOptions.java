@@ -24,8 +24,8 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.filter.ParseFilter;
+import org.apache.abdera.i18n.text.io.CompressionUtil.CompressionCodec;
 import org.apache.abdera.parser.ParserOptions;
-import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 
 /**
  * Non thread-safe abstract implementation of ParserOptions

@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.util;
+package org.apache.abdera.i18n.text.io;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +27,18 @@ import java.util.zip.InflaterInputStream;
 
 public class CompressionUtil {
 
-  public enum CompressionCodec { GZIP, XGZIP, DEFLATE }
+  public enum CompressionCodec { 
+    GZIP, 
+    XGZIP, 
+    DEFLATE;
+  
+    public static CompressionCodec value(String encoding) {
+      if (encoding == null)
+        throw new IllegalArgumentException();
+      return valueOf(encoding.toUpperCase().replaceAll("-", ""));
+    }
+  
+  }
   
   public static CompressionCodec getCodec(String name) {
     CompressionCodec codec = null;
@@ -83,5 +94,37 @@ public class CompressionUtil {
       in = getDecodingInputStream(in, codec);
     }
     return in;
+  }
+  
+  public static InputStream getDecodingInputStream(
+    InputStream in, 
+    String ce) 
+      throws IOException {
+    String[] encodings = splitAndTrim(ce, ",", false);
+    for (int n = encodings.length -1; n >= 0; n--) {
+      CompressionCodec encoding = 
+        CompressionCodec.value(encodings[n]);
+      in = CompressionUtil
+        .getDecodingInputStream(
+          in, 
+          encoding);
+    }
+    return in;
+  }
+  
+  private static String unquote(String s) {
+    if (s == null || s.length() == 0) return s;
+    if (s.startsWith("\"")) s = s.substring(1);
+    if (s.endsWith("\"")) s = s.substring(0, s.length() - 1);
+    return s;
+  }
+
+  
+  public static String[] splitAndTrim(String value, String delim, boolean unquote) {
+    String[] headers = (unquote) ? unquote(value).split(delim) : value.split(delim);
+    for (int n = 0; n < headers.length; n++) {
+      headers[n] = headers[n].trim();
+    }
+    return headers;
   }
 }

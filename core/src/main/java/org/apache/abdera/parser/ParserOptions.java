@@ -23,7 +23,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.filter.ParseFilter;
-import org.apache.abdera.util.CompressionUtil.CompressionCodec;
+import org.apache.abdera.i18n.text.io.CompressionUtil.CompressionCodec;
 
 /**
  * Parser options are used to modify the behavior of the parser. 

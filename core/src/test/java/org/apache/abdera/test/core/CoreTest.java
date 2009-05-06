@@ -28,11 +28,11 @@ import java.util.Date;
 import junit.framework.Assert;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.text.io.CompressionUtil;
 import org.apache.abdera.model.AtomDate;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.util.AbderaConfiguration;
-import org.apache.abdera.util.CompressionUtil;
 import org.apache.abdera.util.Configuration;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;

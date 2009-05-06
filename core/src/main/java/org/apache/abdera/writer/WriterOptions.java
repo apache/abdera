@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.writer;
 
-import org.apache.abdera.util.CompressionUtil.CompressionCodec;
+import org.apache.abdera.i18n.text.io.CompressionUtil.CompressionCodec;
 
 public interface WriterOptions extends Cloneable {
 

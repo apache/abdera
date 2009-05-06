@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.abdera.i18n.text.io.CompressionUtil;
+
 /**
  * Provides parsing and properly handling of the HTTP Cache-Control header.
  */
@@ -189,25 +191,10 @@ public class CacheControlUtil {
     public String[] getValues(Directive directive) {
       String value = getValue(directive);
       if (value != null) {
-        return splitAndTrim(value, ",", true);
+        return CompressionUtil.splitAndTrim(value, ",", true);
       }
       return null;
     }
     
-    private static String unquote(String s) {
-      if (s == null || s.length() == 0) return s;
-      if (s.startsWith("\"")) s = s.substring(1);
-      if (s.endsWith("\"")) s = s.substring(0, s.length() - 1);
-      return s;
-    }
-      
-    public static String[] splitAndTrim(String value, String delim, boolean unquote) {
-      String[] headers = (unquote) ? unquote(value).split(delim) : value.split(delim);
-      for (int n = 0; n < headers.length; n++) {
-        headers[n] = headers[n].trim();
-      }
-      return headers;
-    }
-
   }
 }

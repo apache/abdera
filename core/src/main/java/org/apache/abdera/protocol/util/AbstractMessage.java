@@ -20,6 +20,7 @@ package org.apache.abdera.protocol.util;
 import javax.activation.MimeType;
 
 import org.apache.abdera.i18n.iri.IRI;
+import org.apache.abdera.i18n.text.Rfc2047Helper;
 import org.apache.abdera.i18n.text.UrlEncoding;
 import org.apache.abdera.protocol.Message;
 
@@ -58,13 +59,13 @@ public abstract class AbstractMessage
   }
   
   public String getDecodedHeader(String header) {
-    return UrlEncoding.decode(EncodingUtil.decode(getHeader(header)));
+    return UrlEncoding.decode(Rfc2047Helper.decode(getHeader(header)));
   }
   
   public String[] getDecodedHeaders(String header) {
     Object[] headers = getHeaders(header);
     for (int n = 0; n < headers.length; n++) {
-      headers[n] = UrlEncoding.decode(EncodingUtil.decode(headers[n].toString()));
+      headers[n] = UrlEncoding.decode(Rfc2047Helper.decode(headers[n].toString()));
     }
     return (String[])headers;
   }

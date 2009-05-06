@@ -29,12 +29,12 @@ import javax.activation.MimeType;
 
 import org.apache.abdera.i18n.rfc4646.Lang;
 import org.apache.abdera.i18n.text.Localizer;
+import org.apache.abdera.i18n.text.Rfc2047Helper;
 import org.apache.abdera.i18n.text.UrlEncoding;
 import org.apache.abdera.i18n.text.CharUtils.Profile;
 import org.apache.abdera.protocol.Request;
 import org.apache.abdera.protocol.util.AbstractRequest;
 import org.apache.abdera.protocol.util.CacheControlUtil;
-import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.util.EntityTag;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
@@ -179,7 +179,7 @@ public class RequestOptions
    * Set the value of a header using proper encoding of non-ascii characters
    */
   public RequestOptions setEncodedHeader(String header, String charset, String value) {
-    return setHeader(header, EncodingUtil.encode(value,charset));
+    return setHeader(header, Rfc2047Helper.encode(value,charset));
   }
   
   /**
@@ -188,7 +188,7 @@ public class RequestOptions
   public RequestOptions setEncodedHeader(String header, String charset, String... values) {
     if (values != null && values.length > 0) {
       for (int n = 0; n < values.length; n++) {
-        values[n] = EncodingUtil.encode(values[n], charset);
+        values[n] = Rfc2047Helper.encode(values[n], charset);
       }
       getHeaders().put(header, new String[] {combine(values)});
     } else {
@@ -232,7 +232,7 @@ public class RequestOptions
    * specified header
    */
   public RequestOptions addEncodedHeader(String header, String charset, String value) {
-    return addHeader(header, EncodingUtil.encode(value, charset));
+    return addHeader(header, Rfc2047Helper.encode(value, charset));
   }
   
   /**
@@ -242,7 +242,7 @@ public class RequestOptions
   public RequestOptions addEncodedHeader(String header, String charset, String... values) {
     if (values == null || values.length == 0) return this;
     for (int n = 0; n < values.length; n++) {
-      values[n] = EncodingUtil.encode(values[n], charset);
+      values[n] = Rfc2047Helper.encode(values[n], charset);
     }
     List<String> list = Arrays.asList(getHeaders().get(header));
     String value = combine(values);

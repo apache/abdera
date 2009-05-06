@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.util;
 
-import org.apache.abdera.util.CompressionUtil.CompressionCodec;
+import org.apache.abdera.i18n.text.io.CompressionUtil.CompressionCodec;
 import org.apache.abdera.writer.WriterOptions;
 
 public abstract class AbstractWriterOptions 

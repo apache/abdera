@@ -22,14 +22,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.zip.DeflaterOutputStream;
 
+import org.apache.abdera.i18n.text.io.CompressionUtil;
+import org.apache.abdera.i18n.text.io.CompressionUtil.CompressionCodec;
 import org.apache.abdera.protocol.server.Filter;
 import org.apache.abdera.protocol.server.FilterChain;
 import org.apache.abdera.protocol.server.ProviderHelper;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.context.ResponseContextWrapper;
-import org.apache.abdera.util.CompressionUtil;
-import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 import org.apache.abdera.writer.Writer;
 
 /**

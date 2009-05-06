@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.i18n.text.io.CompressionUtil;
 import org.apache.abdera.protocol.client.util.AutoReleasingInputStream;
-import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URIException;
@@ -153,7 +153,7 @@ public class CommonsResponse
       String ce = getHeader("Content-Encoding");
       in = method.getResponseBodyAsStream();
       if (ce != null)
-        in = EncodingUtil.getDecodingInputStream(in, ce);
+        in = CompressionUtil.getDecodingInputStream(in, ce);
       in = new AutoReleasingInputStream(method,in);
     }
     return in;

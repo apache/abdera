@@ -26,14 +26,14 @@ import java.util.Date;
 import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
+import org.apache.abdera.i18n.text.io.CompressionUtil;
+import org.apache.abdera.i18n.text.io.CompressionUtil.CompressionCodec;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
-import org.apache.abdera.util.CompressionUtil;
-import org.apache.abdera.util.CompressionUtil.CompressionCodec;
 import org.apache.abdera.writer.WriterOptions;
 import org.junit.Test;
 

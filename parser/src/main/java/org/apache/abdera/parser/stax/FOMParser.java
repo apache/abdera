@@ -28,6 +28,7 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.text.Localizer;
+import org.apache.abdera.i18n.text.io.CompressionUtil;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.ParseException;
@@ -36,7 +37,6 @@ import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.parser.stax.util.FOMSniffingInputStream;
 import org.apache.abdera.parser.stax.util.FOMXmlRestrictedCharReader;
 import org.apache.abdera.util.AbstractParser;
-import org.apache.abdera.util.CompressionUtil;
 import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.util.StAXUtils;
 

@@ -27,11 +27,11 @@ import java.util.Map;
 import javax.activation.MimeType;
 
 import org.apache.abdera.i18n.text.Localizer;
+import org.apache.abdera.i18n.text.Rfc2047Helper;
 import org.apache.abdera.i18n.text.UrlEncoding;
 import org.apache.abdera.i18n.text.CharUtils.Profile;
 import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.util.AbstractResponse;
-import org.apache.abdera.protocol.util.EncodingUtil;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.writer.Writer;
 
@@ -64,13 +64,13 @@ public abstract class AbstractResponseContext
   }
   
   public ResponseContext setEncodedHeader(String name, String charset, String value) {
-    return setHeader(name, EncodingUtil.encode(value, charset));
+    return setHeader(name, Rfc2047Helper.encode(value, charset));
   }
   
   public ResponseContext setEncodedHeader(String name, String charset, String... vals) {
     Object[] evals = new Object[vals.length];
     for (int n = 0; n < vals.length; n++) {
-      evals[n] = EncodingUtil.encode(vals[n], charset);
+      evals[n] = Rfc2047Helper.encode(vals[n], charset);
     }
     return setHeader(name, evals);
   }
@@ -94,12 +94,12 @@ public abstract class AbstractResponseContext
   }
   
   public ResponseContext addEncodedHeader(String name, String charset, String value) {
-    return addHeader(name, EncodingUtil.encode(value, charset));
+    return addHeader(name, Rfc2047Helper.encode(value, charset));
   }
   
   public ResponseContext addEncodedHeaders(String name, String charset, String... vals) {
     for (String value : vals) {
-      addHeader(name,EncodingUtil.encode(value, charset));
+      addHeader(name,Rfc2047Helper.encode(value, charset));
     }
     return this;
   }

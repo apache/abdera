@@ -17,11 +17,10 @@
 */
 package org.apache.abdera.ext.serializer;
 
-import java.util.List;
 import java.util.Map;
 
 import org.apache.abdera.Abdera;
-import org.apache.abdera.util.ServiceUtil;
+import org.apache.abdera.util.Discover;
 import org.apache.abdera.writer.StreamWriter;
 
 @SuppressWarnings("unchecked")
@@ -30,7 +29,7 @@ public class DefaultSerializationContext
 
   private static final long serialVersionUID = 740460842415905883L;
 
-  private final List<SerializerProvider> providers;
+  private final Iterable<SerializerProvider> providers;
   
   public DefaultSerializationContext(StreamWriter streamWriter) {
     super(streamWriter);
@@ -45,7 +44,7 @@ public class DefaultSerializationContext
   }
    
   private void initSerializers() {
-    SerializerProvider[] providers = getConverterProviders();
+    Iterable<SerializerProvider> providers = getConverterProviders();
     for (SerializerProvider provider : providers) {
       for (Map.Entry<Class,Serializer> entry : provider) {
         setSerializer(entry.getKey(), entry.getValue());
@@ -56,17 +55,19 @@ public class DefaultSerializationContext
   /**
    * Returns the listing of registered ConverterProvider implementations
    */
-  public SerializerProvider[] getConverterProviders() {
-    return providers != null ? 
-      providers.toArray(
-        new SerializerProvider[providers.size()]) : 
-          new SerializerProvider[0];
+  public Iterable<SerializerProvider> getConverterProviders() {
+    return providers;
+//    return providers != null ? 
+//      providers.toArray(
+//        new SerializerProvider[providers.size()]) : 
+//          new SerializerProvider[0];
   }
   
-  protected static synchronized List<SerializerProvider> loadConverterProviders() {
-    List<SerializerProvider> providers =
-      ServiceUtil.loadimpls(
-        "META-INF/services/org.apache.abdera.converter.ConverterProvider");
+  protected static synchronized Iterable<SerializerProvider> loadConverterProviders() {
+    Iterable<SerializerProvider> providers =
+      Discover.locate("org.apache.abdera.converter.ConverterProvider");
+//      ServiceUtil.loadimpls(
+//        "META-INF/services/org.apache.abdera.converter.ConverterProvider");
     return providers;    
   }
   

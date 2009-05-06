@@ -181,6 +181,7 @@ Working directory: ${work}
           <available file="${dependencies}/${easymock.jar}" />
           <available file="${dependencies}/${easymockclassextension.jar}" />
           <available file="${dependencies}/${javamail.jar}" />
+          <available file="${dependencies}/${xmlunit.jar}" />
         </and>
       </not>
     </condition>
@@ -600,8 +601,9 @@ Working directory: ${work}
       <get src="${htmlparser.dir}/${htmlserializer.jar}" dest="${dependencies}/${htmlserializer.jar}" usetimestamp="true" />
       <get src="${easymock.dir}/${easymock.jar}" dest="${dependencies}/${easymock.jar}" usetimestamp="true" />
       <get src="${easymockclassextension.dir}/${easymockclassextension.jar}" dest="${dependencies}/${easymockclassextension.jar}" usetimestamp="true" />
-       <get src="${cglib.dir}/${cglib.jar}" dest="${dependencies}/${cglib.jar}" usetimestamp="true" />
+      <get src="${cglib.dir}/${cglib.jar}" dest="${dependencies}/${cglib.jar}" usetimestamp="true" />
       <get src="${javamail.dir}/${javamail.jar}" dest="${dependencies}/${javamail.jar}" usetimestamp="true" />
+      <get src="${xmlunit.dir}/${xmlunit.jar}" dest="${dependencies}/${xmlunit.jar}" usetimestamp="true" />
     </parallel>
   </target>
 
@@ -779,7 +781,7 @@ Working directory: ${work}
   
   <target name="compile.extension.test" if="is.available.${ext}.test">
     <echo>Compiling tests for extension ${ext}...</echo>
-    <javac srcdir="${extensions}/${ext}/src/test/java" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${extensions.work}/${ext};${client.work}" debug="${debug}" />
+    <javac srcdir="${extensions}/${ext}/src/test/java" destdir="${test}" classpathref="jar.dependencies" classpath="${core.work};${parser.work};${extensions.work}/${ext};${client.work};${server.work}" debug="${debug}" />
       <copy todir="${test}">
         <fileset dir="${extensions}/${ext}/src/test/resources" includes="**/*" />
       </copy>

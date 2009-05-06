@@ -367,7 +367,7 @@ public final class UrlEncoding {
     String enc, 
     Filter... filters) 
       throws UnsupportedEncodingException {
-    if (s == null) return s.toString();
+    if (s == null) return null;
     StringBuilder sb = new StringBuilder();
 
     for (int n = 0; n < s.length(); n++) {

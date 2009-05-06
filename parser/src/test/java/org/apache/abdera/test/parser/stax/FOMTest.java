@@ -790,7 +790,7 @@ public class FOMTest extends Assert   {
     edoc.writeTo(w);
     
     in = new ByteArrayInputStream(out.toByteArray());
-
+    
     entry = (Entry) abdera.getParser().parse(in).getRoot();
 
     assertEquals("tóst", entry.getContent());

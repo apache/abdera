@@ -19,6 +19,7 @@ package org.apache.abdera.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -96,11 +97,21 @@ public final class AbderaConfiguration
     this.bundle = (bundle != null) ? bundle : 
       AbderaConfiguration.getBundle( 
         Locale.getDefault());
-    factories = ServiceUtil.loadExtensionFactories();
+    factories = loadExtensionFactories();
     writers = initNamedWriters();
     parsers = initNamedParsers();
     streamwriters = initStreamWriters();
   }  
+  
+  private static synchronized List<ExtensionFactory> loadExtensionFactories() {
+    List<ExtensionFactory> list = 
+      new ArrayList<ExtensionFactory>();
+    Iterable<ExtensionFactory> factories =
+      Discover.locate("org.apache.abdera.factory.ExtensionFactory");
+    for (ExtensionFactory factory : factories)
+      list.add(factory);
+    return list;
+  }
   
   private ResourceBundle getBundle() {
     return bundle;
@@ -173,8 +184,8 @@ public final class AbderaConfiguration
    */
   private Map<String,NamedWriter> initNamedWriters() {
     Map<String,NamedWriter> writers = null;
-    List<NamedWriter> _writers = 
-      ServiceUtil._loadimpls(NAMED_WRITER);
+    Iterable<NamedWriter> _writers = 
+      Discover.locate(NAMED_WRITER);
     writers = Collections.synchronizedMap(new HashMap<String,NamedWriter>());
     for (NamedWriter writer : _writers) {
       writers.put(writer.getName().toLowerCase(), writer);
@@ -188,8 +199,8 @@ public final class AbderaConfiguration
    */
   private Map<String,Class<? extends StreamWriter>> initStreamWriters() {
     Map<String,Class<? extends StreamWriter>> writers = null;
-    List<Class<? extends StreamWriter>> _writers = 
-      ServiceUtil._loadimpls(STREAM_WRITER,true);
+    Iterable<Class<? extends StreamWriter>> _writers =
+      Discover.locate(STREAM_WRITER, true);
     writers = Collections.synchronizedMap(new HashMap<String,Class<? extends StreamWriter>>());
     for (Class<? extends StreamWriter> writer : _writers) {
       String name = getName(writer);
@@ -258,7 +269,7 @@ public final class AbderaConfiguration
    */
   private Map<String,NamedParser> initNamedParsers() {
     Map<String,NamedParser> parsers = null;
-    List<NamedParser> _parsers = ServiceUtil._loadimpls(NAMED_PARSER);
+    Iterable<NamedParser> _parsers = Discover.locate(NAMED_PARSER);
     parsers = Collections.synchronizedMap(new HashMap<String,NamedParser>());
     for (NamedParser parser : _parsers) {
       parsers.put(parser.getName().toLowerCase(), parser);
@@ -287,8 +298,16 @@ public final class AbderaConfiguration
    * 
    * @return A new factory instance
    */
-  public Factory newFactoryInstance(Abdera abdera) {
-    return ServiceUtil.newFactoryInstance(abdera);
+  public Factory newFactoryInstance(
+    Abdera abdera) {
+      return (Factory) Discover.locate(
+          CONFIG_FACTORY, 
+          abdera
+            .getConfiguration()
+            .getConfigurationOption(
+              CONFIG_FACTORY, 
+              DEFAULT_FACTORY),
+          abdera);
   }
     
   /**
@@ -296,8 +315,16 @@ public final class AbderaConfiguration
    * 
    * @return A new parser instance
    */
-  public Parser newParserInstance(Abdera abdera) {
-    return ServiceUtil.newParserInstance(abdera);
+  public Parser newParserInstance(
+    Abdera abdera) {
+      return (Parser) Discover.locate(
+          CONFIG_PARSER, 
+          abdera
+            .getConfiguration()
+            .getConfigurationOption(
+              CONFIG_PARSER, 
+              DEFAULT_PARSER),
+          abdera);
   }
     
   /**
@@ -305,12 +332,22 @@ public final class AbderaConfiguration
    * 
    * @return A new XPath instance
    */
-  public XPath newXPathInstance(Abdera abdera) {
-    try {
-      return ServiceUtil.newXPathInstance(abdera);
-    } catch (NoClassDefFoundError n) {
-      throw new RuntimeException(Localizer.sprintf("IMPLEMENTATION.NOT.AVAILABLE","XPath"),n);
-    }
+  public XPath newXPathInstance(
+    Abdera abdera) {
+      try {
+        return (XPath) Discover.locate(
+            CONFIG_XPATH,
+            abdera
+              .getConfiguration()
+              .getConfigurationOption(
+                CONFIG_XPATH, 
+                DEFAULT_XPATH), 
+            abdera);
+      } catch (Throwable n) {
+        throw throwex(
+          "IMPLEMENTATION.NOT.AVAILABLE",
+          "XPath",n);
+      }
   }
     
   /**
@@ -318,12 +355,22 @@ public final class AbderaConfiguration
    * 
    * @return A new ParserFactory instance
    */
-  public ParserFactory newParserFactoryInstance(Abdera abdera) {
-    try {
-      return ServiceUtil.newParserFactoryInstance(abdera);
-    } catch (NoClassDefFoundError n) {
-      throw new RuntimeException(Localizer.sprintf("IMPLEMENTATION.NOT.AVAILABLE","Parser"),n);
-    }
+  public ParserFactory newParserFactoryInstance(
+    Abdera abdera) {
+      try {
+        return (ParserFactory) Discover.locate(
+            CONFIG_PARSERFACTORY,
+            abdera
+              .getConfiguration()
+              .getConfigurationOption(
+                CONFIG_PARSERFACTORY, 
+                DEFAULT_PARSERFACTORY),
+            abdera);
+      } catch (Throwable n) {
+        throw throwex(
+          "IMPLEMENTATION.NOT.AVAILABLE",
+          "Parser",n);
+      }
   }
     
   /**
@@ -331,12 +378,22 @@ public final class AbderaConfiguration
    * 
    * @return A new WriterFactory instance
    */
-  public WriterFactory newWriterFactoryInstance(Abdera abdera) {
-    try {
-      return ServiceUtil.newWriterFactoryInstance(abdera);
-    } catch (NoClassDefFoundError n) {
-      throw new RuntimeException(Localizer.sprintf("IMPLEMENTATION.NOT.AVAILABLE","WriterFactory"),n);
-    }
+  public WriterFactory newWriterFactoryInstance(
+    Abdera abdera) {
+      try {
+        return (WriterFactory) Discover.locate(
+            CONFIG_WRITERFACTORY,
+            abdera
+              .getConfiguration()
+              .getConfigurationOption(
+                CONFIG_WRITERFACTORY, 
+                DEFAULT_WRITERFACTORY),
+            abdera) ;
+      } catch (Throwable n) {
+        throw throwex(
+          "IMPLEMENTATION.NOT.AVAILABLE",
+          "WriterFactory",n);
+      }
   }
     
   /**
@@ -344,12 +401,22 @@ public final class AbderaConfiguration
    * 
    * @return A new default writer implementation instance
    */
-  public Writer newWriterInstance(Abdera abdera) {
-    try {
-      return ServiceUtil.newWriterInstance(abdera);
-    } catch (NoClassDefFoundError n) {
-      throw new RuntimeException(Localizer.sprintf("IMPLEMENTATION.NOT.AVAILABLE","Writer"),n);
-    }
+  public Writer newWriterInstance(
+    Abdera abdera) {
+      try {
+        return (Writer) Discover.locate(
+            CONFIG_WRITER,
+            abdera
+              .getConfiguration()
+              .getConfigurationOption(
+                CONFIG_WRITER, 
+                DEFAULT_WRITER),
+            abdera);
+      } catch (Throwable n) {
+        throw throwex(
+            "IMPLEMENTATION.NOT.AVAILABLE",
+            "Writer",n);
+      }
   }
   
   /**
@@ -357,12 +424,31 @@ public final class AbderaConfiguration
    * 
    * @return A new default writer implementation instance
    */
-  public StreamWriter newStreamWriterInstance(Abdera abdera) {
-    try {
-      return ServiceUtil.newStreamWriterInstance(abdera);
-    } catch (NoClassDefFoundError n) {
-      throw new RuntimeException(Localizer.sprintf("IMPLEMENTATION.NOT.AVAILABLE","StreamWriter"),n);
-    }
+  public StreamWriter newStreamWriterInstance(
+    Abdera abdera) {
+      try {
+        return (StreamWriter) Discover.locate(
+            CONFIG_STREAMWRITER,
+            abdera
+              .getConfiguration()
+              .getConfigurationOption(
+                CONFIG_STREAMWRITER, 
+                DEFAULT_STREAMWRITER),
+            abdera);    
+      } catch (Throwable n) {
+        throw throwex(
+         "IMPLEMENTATION.NOT.AVAILABLE",
+         "StreamWriter",n);
+      }
   }  
 
+  private RuntimeException throwex(
+    String id, 
+    String arg, 
+    Throwable t) {
+      return new RuntimeException(
+        Localizer.sprintf(
+          id,arg),t);
+  }
+  
 }

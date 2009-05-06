@@ -29,6 +29,7 @@ import java.util.Locale;
 import javax.activation.DataHandler;
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.rfc4646.Lang;
 import org.apache.abdera.model.AtomDate;
@@ -41,13 +42,17 @@ import org.apache.commons.codec.binary.Base64;
 public abstract class AbstractStreamWriter 
   implements StreamWriter {
   
+  protected final Abdera abdera;
   protected final String name;
   protected boolean autoflush = false;
   protected boolean autoclose = false;
   protected boolean autoindent = false;
   
-  protected AbstractStreamWriter(String name) {
-    this.name = name;
+  protected AbstractStreamWriter(
+    Abdera abdera, 
+    String name) {
+      this.abdera = abdera;
+      this.name = name;
   }
   
   public StreamWriter setAutoflush(boolean auto) {

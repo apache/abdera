@@ -19,7 +19,7 @@ package org.apache.abdera.security;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.util.Configuration;
-import org.apache.abdera.util.ServiceUtil;
+import org.apache.abdera.util.Discover;
 
 /**
  * The AbderaSecurity class provides the entry point for using XML Digital
@@ -54,7 +54,7 @@ public class AbderaSecurity {
    */
   public Encryption newEncryption() {
     return
-      (Encryption) ServiceUtil.newInstance(
+      (Encryption) Discover.locate(
           "org.apache.abdera.security.Encryption", 
           "org.apache.abdera.security.xmlsec.XmlEncryption",
           getAbdera());
@@ -72,7 +72,7 @@ public class AbderaSecurity {
    */
   public Signature newSignature() {
     return
-      (Signature) ServiceUtil.newInstance(
+      (Signature) Discover.locate(
         "org.apache.abdera.security.Signature", 
         "org.apache.abdera.security.xmlsec.XmlSignature",
         getAbdera());

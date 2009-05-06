@@ -24,6 +24,7 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.parser.stax.util.ResolveFunction;
@@ -46,7 +47,7 @@ public class FOMXPath extends AbstractXPath {
   private final Map<QName,Function> functions;
   private final Map<QName,Object> variables;
   
-  public FOMXPath() {
+  public FOMXPath(Abdera abdera) {
     this(null,null,null);
   }
   

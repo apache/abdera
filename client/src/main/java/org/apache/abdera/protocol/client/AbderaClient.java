@@ -49,8 +49,8 @@ import org.apache.abdera.protocol.client.util.SimpleSSLProtocolSocketFactory;
 import org.apache.abdera.protocol.error.Error;
 import org.apache.abdera.protocol.error.ProtocolException;
 import org.apache.abdera.protocol.util.CacheControlUtil;
+import org.apache.abdera.util.Discover;
 import org.apache.abdera.util.EntityTag;
-import org.apache.abdera.util.ServiceUtil;
 import org.apache.abdera.util.Version;
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.Credentials;
@@ -154,7 +154,7 @@ public class AbderaClient {
 
   private CacheFactory initCacheFactory() {
     CacheFactory cacheFactory = 
-      (CacheFactory)ServiceUtil.newInstance(
+      (CacheFactory)Discover.locate(
         CacheFactory.class.getName(),
         LRUCacheFactory.class.getName(), 
         abdera);

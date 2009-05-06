@@ -30,6 +30,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.AbstractStreamWriter;
 import org.apache.abdera.util.Constants;
@@ -45,26 +46,30 @@ public class StaxStreamWriter
   private int depth = 0;
   private int textwritten = 0;
   
-  public StaxStreamWriter() {
-    super(NAME);
+  public StaxStreamWriter(
+    Abdera abdera) {
+      super(abdera,NAME);
   }
   
   public StaxStreamWriter(
+    Abdera abdera,
     Writer writer) {
-    super(NAME);
+    super(abdera,NAME);
     setWriter(writer);
   }
 
   public StaxStreamWriter(
+    Abdera abdera,
     OutputStream out) {
-      super(NAME);
+      super(abdera,NAME);
       setOutputStream(out);
   }
   
   public StaxStreamWriter(
+    Abdera abdera,
     OutputStream out, 
     String charset) {
-    super(NAME);
+    super(abdera,NAME);
     setOutputStream(out,charset);
   }
 

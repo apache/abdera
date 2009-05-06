@@ -22,7 +22,7 @@ import java.util.Map;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.text.Localizer;
 import org.apache.abdera.protocol.server.impl.DefaultProvider;
-import org.apache.abdera.util.ServiceUtil;
+import org.apache.abdera.util.Discover;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -65,7 +65,7 @@ public class ServiceManager {
     String instance = properties.get(PROVIDER);
     log.debug(Localizer.sprintf("CREATING.NEW.INSTANCE","Provider"));
     Provider provider = 
-      (Provider) ServiceUtil.newInstance(
+      (Provider) Discover.locate(
         PROVIDER, 
         (instance != null) ? 
           instance : 

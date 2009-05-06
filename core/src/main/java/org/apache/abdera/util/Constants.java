@@ -35,9 +35,9 @@ public interface Constants {
   public static final String DEFAULT_WRITERFACTORY= "org.apache.abdera.parser.stax.FOMWriterFactory";
   public static final String DEFAULT_WRITER       = "org.apache.abdera.parser.stax.FOMWriter";
   public static final String DEFAULT_STREAMWRITER = "org.apache.abdera.parser.stax.StaxStreamWriter";
-  public static final String NAMED_WRITER         = "META-INF/services/org.apache.abdera.writer.NamedWriter";
-  public static final String NAMED_PARSER         = "META-INF/services/org.apache.abdera.parser.NamedParser";
-  public static final String STREAM_WRITER        = "META-INF/services/org.apache.abdera.writer.StreamWriter";
+  public static final String NAMED_WRITER         = "org.apache.abdera.writer.NamedWriter";
+  public static final String NAMED_PARSER         = "org.apache.abdera.parser.NamedParser";
+  public static final String STREAM_WRITER        = "org.apache.abdera.writer.StreamWriter";
   public static final String PREFIX               = "";
   public static final String APP_PREFIX           = "";
   public static final String CONTROL_PREFIX       = "";

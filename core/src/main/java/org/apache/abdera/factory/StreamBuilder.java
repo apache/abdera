@@ -74,7 +74,7 @@ public class StreamBuilder
   }
   
   public StreamBuilder(Abdera abdera) {
-    super("fom");
+    super(abdera,"fom");
     this.abdera = abdera;
   }
 

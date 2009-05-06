@@ -107,12 +107,10 @@ public abstract class ElementWrapper
     return internal.getFactory();
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Element> T getFirstChild() {
     return (T) internal.getFirstChild();
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Element> T getFirstChild(QName qname) {
     return (T) internal.getFirstChild(qname);
   }
@@ -129,27 +127,22 @@ public abstract class ElementWrapper
     return internal.getLocale();
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Element> T getNextSibling() {
     return (T) internal.getNextSibling();
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Element> T getNextSibling(QName qname) {
     return (T) internal.getNextSibling(qname);
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Base> T getParentElement() {
     return (T) internal.getParentElement();
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Element> T getPreviousSibling() {
     return (T) internal.getPreviousSibling();
   }
 
-  @SuppressWarnings("unchecked")
   public <T extends Element> T getPreviousSibling(QName qname) {
     return (T) internal.getPreviousSibling(qname);
   }

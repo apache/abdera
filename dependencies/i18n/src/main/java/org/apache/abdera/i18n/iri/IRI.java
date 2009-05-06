@@ -529,7 +529,7 @@ public final class IRI
             UrlEncoding.encode(
                 UrlEncoding.decode(
               segments[n]),
-              Profile.IPATHNODELIMS.filter()));
+              Profile.IPATHNODELIMS_SEG.filter()));
       }
     }
     if (path.endsWith("/") || path.endsWith("/.")) 

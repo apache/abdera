@@ -557,6 +557,15 @@ public final class CharUtils {
         }
       }
     ),
+    IPATHNODELIMS_SEG(
+      new Filter() {
+        public boolean accept(int codepoint) {
+          return !is_ipathnodelims(codepoint) && 
+            codepoint != '@' && 
+            codepoint != ':';
+        }
+      }
+    ),
     IREGNAME(
       new Filter() {
         public boolean accept(int codepoint) {

@@ -17,6 +17,7 @@
 */
 package org.apache.abdera.protocol.client;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -258,24 +259,40 @@ public class RequestOptions
   /**
    * Similar to setHeader but allows for multiple instances of the specified header
    */
-  public RequestOptions addHeader(String header, String value) {
-    if (value != null)
-      addHeader(header, new String[] {value});
-    return this;
+  public RequestOptions addHeader(
+    String header, 
+    String value) {
+      if (value != null)
+        addHeader(
+          header, 
+          new String[] {value});
+      return this;
   }
   
   /**
-   * Similar to setHeader but allows for multiple instances of the specified header
+   * Similar to setHeader but allows for 
+   * multiple instances of the specified header
    */
-  public RequestOptions addHeader(String header, String... values) {
-    if (values == null || values.length == 0) return this;
-    List<String> list = Arrays.asList(getHeaders().get(header));
+  public RequestOptions addHeader(
+    String header, 
+    String... values) {
+      if (values == null || 
+          values.length == 0) 
+        return this;
+    String[] headers = 
+      getHeaders().get(header);
+    List<String> list = 
+      headers != null ? 
+        Arrays.asList(headers) : 
+        new ArrayList<String>();
     String value = combine(values);
     if (list != null) {
       if (!list.contains(value)) 
         list.add(value);
     } else {
-      setHeader(header, new String[] {value});
+      setHeader(
+        header, 
+        new String[] {value});
     }
     return this;
   }

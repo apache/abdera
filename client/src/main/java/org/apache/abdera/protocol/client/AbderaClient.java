@@ -901,7 +901,6 @@ public class AbderaClient {
   /**
    * Return the maximum number of connections allowed for a single host
    */
-  @SuppressWarnings("unchecked")
   public int getMaxConnectionsPerHost() {
     Map<HostConfiguration,Integer> m = (Map<HostConfiguration,Integer>) 
       client.getHttpConnectionManager().getParams().getParameter(

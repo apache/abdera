@@ -20,7 +20,7 @@ public final class Discover {
     String id, 
     String defaultImpl, 
     Object... args) {
-      return locate(
+      return (T)locate(
         id,
         defaultImpl,
         getLoader(),
@@ -45,7 +45,7 @@ public final class Discover {
         }
         if (instance == null) {
           instance = 
-            load(
+            (T)load(
               loader,
               defaultImpl,
               false,
@@ -189,7 +189,7 @@ public final class Discover {
     } 
     protected T create(String spec, Object[] args) {
       try {
-        return load(cl,spec,classesonly,args);
+        return (T)load(cl,spec,classesonly,args);
       } catch (RuntimeException e) {
         throw e;
       } catch (Throwable t) {

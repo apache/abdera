@@ -212,7 +212,7 @@ public class StaxStreamWriter
   
   private boolean needToWriteNamespace(String prefix, String namespace) {
     NamespaceContext nc = writer.getNamespaceContext();
-    String uri = nc.getNamespaceURI(prefix);
+    String uri = nc.getNamespaceURI(prefix != null ? prefix : "");
     return uri != null ? !uri.equals(namespace) : true;
   }
   

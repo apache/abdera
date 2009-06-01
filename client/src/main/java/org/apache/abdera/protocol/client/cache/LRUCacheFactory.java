@@ -22,6 +22,12 @@ import org.apache.abdera.Abdera;
 public class LRUCacheFactory 
   implements CacheFactory {
 
+  public LRUCacheFactory(Abdera abdera) {
+  }
+  
+  public LRUCacheFactory() {
+  }
+  
   public Cache getCache(Abdera abdera) {
     return new LRUCache(abdera);
   }

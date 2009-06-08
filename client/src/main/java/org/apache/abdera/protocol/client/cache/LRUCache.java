@@ -19,7 +19,6 @@ package org.apache.abdera.protocol.client.cache;
 
 import org.apache.abdera.Abdera;
 
-@SuppressWarnings("serial")
 public class LRUCache
   extends InMemoryCache
   implements Cache {

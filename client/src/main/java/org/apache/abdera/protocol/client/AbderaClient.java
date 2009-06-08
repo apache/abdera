@@ -39,7 +39,6 @@ import org.apache.abdera.protocol.client.cache.Cache;
 import org.apache.abdera.protocol.client.cache.CacheFactory;
 import org.apache.abdera.protocol.client.cache.CachedResponse;
 import org.apache.abdera.protocol.client.cache.LRUCache;
-import org.apache.abdera.protocol.client.cache.LRUCacheFactory;
 import org.apache.abdera.protocol.client.cache.Cache.Disposition;
 import org.apache.abdera.protocol.client.util.BaseRequestEntity;
 import org.apache.abdera.protocol.client.util.EntityProviderRequestEntity;
@@ -49,7 +48,6 @@ import org.apache.abdera.protocol.client.util.SimpleSSLProtocolSocketFactory;
 import org.apache.abdera.protocol.error.Error;
 import org.apache.abdera.protocol.error.ProtocolException;
 import org.apache.abdera.protocol.util.CacheControlUtil;
-import org.apache.abdera.util.Discover;
 import org.apache.abdera.util.EntityTag;
 import org.apache.abdera.util.Version;
 import org.apache.commons.httpclient.Cookie;
@@ -74,7 +72,7 @@ import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
 /**
  * An Atom Publishing Protocol client.
  */
-@SuppressWarnings("unchecked") 
+@SuppressWarnings({ "unchecked", "deprecation" }) 
 public class AbderaClient {
 
   public static final String DEFAULT_USER_AGENT = 
@@ -97,27 +95,41 @@ public class AbderaClient {
   public AbderaClient(String useragent) {
     this(new Abdera(), useragent);
   }
+
+  /**
+   * Create an AbderaClient instance using the specified Abdera instance and useragent name
+   * @param abdera
+   * @param useragent
+   */
+  public AbderaClient(
+    Abdera abdera, 
+    String useragent) {
+      this(abdera,useragent,initCache(abdera));
+  }
   
   /**
    * Create an AbderaClient instance using the specified Abdera instance and useragent name
    * @param abdera
    * @param useragent
    */
-  public AbderaClient(Abdera abdera, String useragent) {
-    this.abdera = abdera;
-    this.cache = initCache(initCacheFactory());
-    MultiThreadedHttpConnectionManager connManager = 
-      new MultiThreadedHttpConnectionManager();
-    client = new HttpClient(connManager);
-    client.getParams().setParameter(
-      HttpClientParams.USER_AGENT, 
-      useragent);
-    client.getParams().setBooleanParameter(
-      HttpClientParams.USE_EXPECT_CONTINUE, true);  
-    client.getParams().setCookiePolicy(
-      CookiePolicy.BROWSER_COMPATIBILITY);
-    setAuthenticationSchemeDefaults();
-    setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
+  public AbderaClient(
+    Abdera abdera, 
+    String useragent,
+    Cache cache) {
+      this.abdera = abdera;
+      this.cache = cache;
+      MultiThreadedHttpConnectionManager connManager = 
+        new MultiThreadedHttpConnectionManager();
+      client = new HttpClient(connManager);
+      client.getParams().setParameter(
+        HttpClientParams.USER_AGENT, 
+        useragent);
+      client.getParams().setBooleanParameter(
+        HttpClientParams.USE_EXPECT_CONTINUE, true);  
+      client.getParams().setCookiePolicy(
+        CookiePolicy.BROWSER_COMPATIBILITY);
+      setAuthenticationSchemeDefaults();
+      setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
   }
 
   /**
@@ -137,8 +149,20 @@ public class AbderaClient {
   public AbderaClient(
     Abdera abdera, 
     HttpClient client) {
+      this(abdera,client,initCache(abdera));
+  }
+  
+  /**
+   * Create an Abdera using a preconfigured HttpClient object
+   * @param abdera
+   * @param client An Apache HttpClient object
+   */
+  public AbderaClient(
+    Abdera abdera, 
+    HttpClient client,
+    Cache cache) {
       this.abdera = abdera;
-      this.cache = initCache(initCacheFactory());
+      this.cache = cache;
       this.client = client;
       setAuthenticationSchemeDefaults();
       setMaximumRedirects(DEFAULT_MAX_REDIRECTS);
@@ -149,18 +173,24 @@ public class AbderaClient {
    * @param abdera
    */
   public AbderaClient(Abdera abdera) {
-    this(abdera,DEFAULT_USER_AGENT);
+    this(
+      abdera,
+      DEFAULT_USER_AGENT);
   }
 
-  private CacheFactory initCacheFactory() {
-    CacheFactory cacheFactory = 
-      (CacheFactory)Discover.locate(
-        CacheFactory.class.getName(),
-        LRUCacheFactory.class.getName(), 
-        abdera);
-    return cacheFactory;
+  /**
+   * Create an AbderaClient instance using the specified Abdera instance
+   * @param abdera
+   */
+  public AbderaClient(
+    Abdera abdera, 
+    Cache cache) {
+      this(
+        abdera,
+        DEFAULT_USER_AGENT,
+        cache);
   }
-
+  
   /**
    * Returns the client HTTP cache instance
    */
@@ -169,12 +199,17 @@ public class AbderaClient {
   }
   
   /**
-   * Initializes the client HTTP cache
+   * @deprecated The CacheFactory interface is no longer used.
    */
   public Cache initCache(CacheFactory factory) {
-    Cache cache = null;
-    if (factory != null) cache = factory.getCache(abdera);
-    return (cache != null) ? cache : new LRUCache(abdera);
+    return initCache(abdera);
+  }
+  
+  /**
+   * Initializes the client HTTP cache
+   */
+  public static Cache initCache(Abdera abdera) {
+    return new LRUCache(abdera);
   }
   
   /**

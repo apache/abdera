@@ -19,6 +19,9 @@ package org.apache.abdera.protocol.client.cache;
 
 import org.apache.abdera.Abdera;
 
+/**
+ * @deprecated No longer used
+ */
 public interface CacheFactory {
 
   Cache getCache(Abdera abdera);

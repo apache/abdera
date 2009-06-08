@@ -19,6 +19,9 @@ package org.apache.abdera.protocol.client.cache;
 
 import org.apache.abdera.Abdera;
 
+/**
+ * @deprecated No longer used
+ */
 public class LRUCacheFactory 
   implements CacheFactory {
 

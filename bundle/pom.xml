@@ -33,7 +33,7 @@
         <!-- Not quite working yet... -->
         <createSourcesJar>false</createSourcesJar>
         
-        <shade.version>1.0-beta-1</shade.version>
+        <shade.version>1.2.1</shade.version>
 	      <topDir>${basedir}/../</topDir>
 	  </properties>
     <dependencies>

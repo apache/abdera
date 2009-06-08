@@ -6,7 +6,7 @@
   </parent>  
   <modelVersion>4.0.0</modelVersion>
   <artifactId>abdera-extensions-html</artifactId>
-  <packaging>jar</packaging>
+  <packaging>bundle</packaging>
   <name>Abdera Extensions - HTML</name>
   <version>1.0-SNAPSHOT</version>
   <description>Atom Specification Extensions - HTML</description>
@@ -31,4 +31,13 @@
       <version>1.0.5</version>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+        </plugin>
+    </plugins>
+  </build>
 </project>

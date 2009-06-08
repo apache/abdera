@@ -2,7 +2,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>abdera-i18n</artifactId>
-  <packaging>jar</packaging>
+  <packaging>bundle</packaging>
   <name>I18N Libraries</name>
   <version>1.0-SNAPSHOT</version>
   <description>RFC 3987 (Internationlaized Resource Identifier) libraries.</description>
@@ -12,7 +12,22 @@
     <artifactId>abdera</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-          
+  <build>
+    <plugins>
+      <plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Export-Package>
+              org.apache.abdera.i18n.*;version=${pom.version}
+            </Export-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
    <properties>
      <topDir>${basedir}/../..</topDir>
    </properties>
@@ -32,6 +47,10 @@
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
     </dependency>
+    <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+      </dependency>
   </dependencies>
 
 </project>

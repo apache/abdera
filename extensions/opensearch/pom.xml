@@ -22,13 +22,29 @@
     </parent>  
     <modelVersion>4.0.0</modelVersion>
     <artifactId>abdera-extensions-opensearch</artifactId>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     <name>Abdera Extensions - OpenSearch</name>
     <version>1.0-SNAPSHOT</version>
     <description>Atom Specification Extensions - OpenSearch</description>
     <properties>
         <topDir>${basedir}/../..</topDir>
     </properties>
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <extensions>true</extensions>
+          <configuration>
+					<instructions>
+						<Export-Package>
+              org.apache.abdera.ext.opensearch.*;version=${pom.version}
+            </Export-Package>
+          </instructions>
+        </configuration>
+          </plugin>
+      </plugins>
+    </build>
     <dependencies>
         <dependency>
             <groupId>org.apache.abdera</groupId>

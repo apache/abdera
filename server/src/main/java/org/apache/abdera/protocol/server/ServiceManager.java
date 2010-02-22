@@ -63,14 +63,11 @@ public class ServiceManager {
     Map<String,String> properties) {
     Abdera abdera = getAbdera();
     String instance = properties.get(PROVIDER);
+    if (instance == null) {
+    	instance = DefaultProvider.class.getName();
+    }
     log.debug(Localizer.sprintf("CREATING.NEW.INSTANCE","Provider"));
-    Provider provider = 
-      (Provider) Discover.locate(
-        PROVIDER, 
-        (instance != null) ? 
-          instance : 
-          DefaultProvider.class.getName(),
-        abdera);
+    Provider provider = (Provider) Discover.locate(PROVIDER, instance);
     log.debug(Localizer.sprintf("INITIALIZING.INSTANCE", "Provider"));
     provider.init(abdera, properties);
     return provider;

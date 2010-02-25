@@ -179,7 +179,7 @@ public class ProviderHelper {
    * Return a 204 No Content response
    */
   public static ResponseContext nocontent(String reason) {
-    return new EmptyResponseContext(204,reason);
+    return new EmptyResponseContext(204, reason);
   }
 
   public static ResponseContext nocontent() {
@@ -337,7 +337,7 @@ public class ProviderHelper {
       BaseResponseContext response = new BaseResponseContext(base);
       response.setStatus(status);
       if (lastModified != null) response.setLastModified(lastModified);
-      response.setContentType(MimeTypeHelper.getMimeType(base));
+//      response.setContentType(MimeTypeHelper.getMimeType(base));
       Document doc = base instanceof Document ? (Document)base : ((Element)base).getDocument();
       if (doc.getEntityTag() != null) {
         response.setEntityTag(doc.getEntityTag());

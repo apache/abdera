@@ -40,16 +40,13 @@ public abstract class SimpleResponseContext
     this(null);
   }
   
-  protected SimpleResponseContext(
-    String encoding) {
-      this.encoding = 
-        encoding != null ? 
-          encoding : 
-          "UTF-8";
+  protected SimpleResponseContext(String encoding) {
+      if (encoding != null) {
+    	  this.encoding = encoding;
+      }
   }
   
-  protected SimpleResponseContext setEncoding(
-    String encoding) {
+  protected SimpleResponseContext setEncoding(String encoding) {
       this.encoding = encoding;
       return this;
   }

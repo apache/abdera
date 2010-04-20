@@ -33,14 +33,14 @@ public class DefaultSerializationContext
   
   public DefaultSerializationContext(StreamWriter streamWriter) {
     super(streamWriter);
-    initSerializers();
     providers = loadConverterProviders();
+    initSerializers();
   }
   
   public DefaultSerializationContext(Abdera abdera, StreamWriter streamWriter) {
     super(abdera, streamWriter);
-    initSerializers();
     providers = loadConverterProviders();
+    initSerializers();
   }
    
   private void initSerializers() {

@@ -19,6 +19,8 @@ package org.apache.abdera.ext.html;
 
 import java.io.Reader;
 
+import javax.xml.stream.XMLStreamReader;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Document;
@@ -64,5 +66,14 @@ public class HtmlParser
     if (base != null) doc.setBaseUri(base);
     return doc;
   }
+
+    public <T extends Element>Document<T> parse(
+        XMLStreamReader reader) throws ParseException {
+        return null;
+    }
+
+    public <T extends Element>Document<T> parse(XMLStreamReader reader, String base, ParserOptions options) throws ParseException {
+        return null;
+    }
  
 }

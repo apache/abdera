@@ -193,7 +193,7 @@ public class FOMParser
     }    
   }
   
-  private <T extends Element> Document<T> parse(
+  public <T extends Element> Document<T> parse(
     XMLStreamReader reader, 
     String base,
     ParserOptions options)

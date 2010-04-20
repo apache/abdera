@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.nio.channels.ReadableByteChannel;
 
+import javax.xml.stream.XMLStreamReader;
+
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 
@@ -36,6 +38,16 @@ public interface Parser {
     InputStream in) 
       throws ParseException;
   
+  /**
+   * Parse the input stream using the default character set encoding (UTF-8)
+   * @param reader The XMLStreamReader to use to parse
+   * @return The parsed Abdera Document
+   * @throws ParseException if the parse failed
+   */
+  <T extends Element>Document<T> parse(
+    XMLStreamReader reader) 
+      throws ParseException;
+	  
   /**
    * Parse the input stream using the default character set encoding (UTF-8).
    * The specified Base URI is used to resolve relative references contained
@@ -172,6 +184,20 @@ public interface Parser {
    * @throws ParseException if the parse failed
    */
   <T extends Element>Document<T> parse(ReadableByteChannel buf, String base, ParserOptions options) throws ParseException;
+  
+  /**
+   * Parse the channel using using the specified Parse options.  The 
+   * parse options can be used to control various aspects of the parsing
+   * process such as the character set encoding to use and whether certain
+   * elements should be ignored.  The specified Base URI is used to resolve
+   * relative references contained in the document.
+   * @param reader the XMLStreamReader parser to use to parse
+   * @param base The Base URI of the document
+   * @param options The Parse Options
+   * @return The parsed Abdera Document
+   * @throws ParseException if the parse failed
+   */
+  <T extends Element>Document<T> parse(XMLStreamReader reader, String base, ParserOptions options) throws ParseException;
   
   /**
    * Parse the channel using using the specified Parse options.  The 

@@ -23,6 +23,8 @@ import java.io.Reader;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
+import javax.xml.stream.XMLStreamReader;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Document;
@@ -65,7 +67,13 @@ public abstract class AbstractParser
       throws ParseException {
     return parse(in, null, getDefaultParserOptions());
   }
-
+  
+  public <T extends Element>Document<T> parse(
+    XMLStreamReader reader) 
+      throws ParseException {
+    return parse(reader, null, getDefaultParserOptions());
+  }
+  
   public <T extends Element>Document<T> parse(
     InputStream in, 
     String base) 

@@ -125,11 +125,7 @@ public class AbderaServlet
         }
       }
       if (!request.getMethod().equals("HEAD") && context.hasEntity()) {
-        if (context.isBinary()) {
           context.writeTo(response.getOutputStream());
-        } else {
-          context.writeTo(response.getWriter());
-        }
       }  
     } else {
       error("Internal Server Error", null, response);

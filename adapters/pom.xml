@@ -18,13 +18,13 @@
 	<parent>
 		<groupId>org.apache.abdera</groupId>
 		<artifactId>abdera</artifactId>
-		<version>1.0-SNAPSHOT</version>  
+		<version>1.1-SNAPSHOT</version>  
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>abdera-adapters-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Abdera Adapters</name>
-	<version>1.0-SNAPSHOT</version>  
+	<version>1.1-SNAPSHOT</version>  
 	<description>Abdera Adapters</description>
 
   <properties>
@@ -50,13 +50,13 @@
 		<dependency>
 			<groupId>org.apache.abdera</groupId>
 			<artifactId>abdera-server</artifactId>
-			<version>1.0-SNAPSHOT</version>  
+			<version>1.1-SNAPSHOT</version>  
 		</dependency>
 		
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-client</artifactId>
-      <version>1.0-SNAPSHOT</version>  
+      <version>1.1-SNAPSHOT</version>  
       <scope>test</scope>
     </dependency>
 

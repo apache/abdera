@@ -46,8 +46,10 @@ import org.apache.abdera.model.Text;
 import org.apache.abdera.util.MimeTypeParseException;
 import org.apache.axiom.om.OMException;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore("ABDERA-256")
 public class FeedValidatorTest 
   extends BaseParserTestCase { //extends TestCase {
 

@@ -226,7 +226,7 @@ public class ServletRequestContext
       buffer.append("://");
       buffer.append(getHost(provider,request));
       int port = getPort(provider,request);
-      if (port != 80) {
+      if ((port != 80) && (port != 443)) {
         buffer.append(":");
         buffer.append(port);
       }

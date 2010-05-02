@@ -119,7 +119,7 @@ public abstract class Multiple
   }
   
   private void check179(double d1, double d2) {
-    if (Math.max(d1, d2)-Math.min(d1,d2) > 179) 
+    if (Math.abs(Math.max(d1, d2))-Math.abs(Math.min(d1,d2)) > 179) 
       throw new RuntimeException("Values are greater than 179 degrees");
   }
 }

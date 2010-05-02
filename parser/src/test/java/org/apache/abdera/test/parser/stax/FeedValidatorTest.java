@@ -49,7 +49,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore("ABDERA-256")
+//@Ignore("ABDERA-256")
 public class FeedValidatorTest 
   extends BaseParserTestCase { //extends TestCase {
 

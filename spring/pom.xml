@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.apache.abdera</groupId>
     <artifactId>abdera</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>  
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>abdera-spring</artifactId>
   <packaging>jar</packaging>  
   <name>Abdera Spring Integration</name>  
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>  
   <description>Spring Integration Code for Abdera</description>  
 
   <properties>
@@ -23,22 +23,22 @@
     <dependency>
       <groupId>org.apache.abdera</groupId>
       <artifactId>abdera-server</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0-SNAPSHOT</version>  
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
-      <version>2.4</version>
+      <version>2.4</version>  
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
-      <version>2.0.6</version>
+      <version>2.0.6</version>  
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-mock</artifactId>
-      <version>2.0.6</version>
+      <version>2.0.6</version>  
       <scope>test</scope>
     </dependency>
   </dependencies>

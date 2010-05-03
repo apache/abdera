@@ -17,13 +17,14 @@
 */
 package org.apache.abdera.test.core;
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.abdera.util.EntityTag;
 import org.junit.Test;
 
-public class EntityTagTest 
-  extends Assert {
+public class EntityTagTest {
 
   @Test
   public void testEntityTag() throws Exception {
@@ -45,14 +46,14 @@ public class EntityTagTest
     assertFalse(etags[2].isWild());
     assertFalse(etags[3].isWeak());
     assertTrue(etags[3].isWild());
-    assertEquals(etags[0].getTag(),"hello");
-    assertEquals(etags[1].getTag(),"hello");
-    assertEquals(etags[2].getTag(),"hello");
-    assertEquals(etags[3].getTag(),"*");
-    assertEquals(etags[0].toString(),tags[1]);
-    assertEquals(etags[1].toString(),tags[1]);
-    assertEquals(etags[2].toString(),tags[2]);
-    assertEquals(etags[3].toString(),tags[3]);
+    assertEquals("hello", etags[0].getTag());
+    assertEquals("hello", etags[1].getTag());
+    assertEquals("hello", etags[2].getTag());
+    assertEquals("*", etags[3].getTag());
+    assertEquals(tags[1], etags[0].toString());
+    assertEquals(tags[1], etags[1].toString());
+    assertEquals(tags[2], etags[2].toString());
+    assertEquals(tags[3], etags[3].toString());
     
     assertTrue(EntityTag.matches(etags[3], etags[0]));
     assertTrue(EntityTag.matches(etags[3], etags[1]));
@@ -68,12 +69,12 @@ public class EntityTagTest
     assertTrue(EntityTag.matchesAny(etags[2], new EntityTag[] {etags[0], etags[1], etags[3]}));
     
     java.util.Arrays.sort(etags);
-    assertEquals(etags[0].toString(),tags[3]);
-    assertEquals(etags[1].toString(),tags[1]);
-    assertEquals(etags[2].toString(),tags[1]);
-    assertEquals(etags[3].toString(),tags[2]);
+    assertEquals(tags[3],etags[0].toString());
+    assertEquals(tags[1],etags[1].toString());
+    assertEquals(tags[1],etags[2].toString());
+    assertEquals(tags[2],etags[3].toString());
     EntityTag etag = EntityTag.generate("a","b","c","d");
-    assertEquals(etag.toString(),"\"e2fc714c4727ee9395f324cd2e7f331f\"");
+    assertEquals("\"e2fc714c4727ee9395f324cd2e7f331f\"", etag.toString());
   }
   
 }

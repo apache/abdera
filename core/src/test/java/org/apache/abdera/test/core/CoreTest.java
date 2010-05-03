@@ -17,6 +17,10 @@
 */
 package org.apache.abdera.test.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -24,8 +28,6 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.Calendar;
 import java.util.Date;
-
-import junit.framework.Assert;
 
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.text.io.CompressionUtil;
@@ -41,43 +43,41 @@ import org.easymock.EasyMock;
 import org.junit.Test;
 
 
-public class CoreTest 
-  extends Assert 
-  implements Constants {
+public class CoreTest implements Constants {
 
   @Test
   public void testDefaultConfigurationProperties() {
     Configuration config = new AbderaConfiguration();
-    assertEquals(
-      config.getConfigurationOption(CONFIG_FACTORY, DEFAULT_FACTORY), 
-      "org.apache.abdera.parser.stax.FOMFactory");
-    assertEquals(
-      config.getConfigurationOption(CONFIG_PARSER, DEFAULT_PARSER),
-      "org.apache.abdera.parser.stax.FOMParser");
-    assertEquals(
-      config.getConfigurationOption(CONFIG_XPATH, DEFAULT_XPATH),
-      "org.apache.abdera.parser.stax.FOMXPath");
+    assertEquals("org.apache.abdera.parser.stax.FOMFactory",
+      config.getConfigurationOption(CONFIG_FACTORY, DEFAULT_FACTORY)
+      );
+    assertEquals("org.apache.abdera.parser.stax.FOMParser",
+      config.getConfigurationOption(CONFIG_PARSER, DEFAULT_PARSER)
+      );
+    assertEquals("org.apache.abdera.parser.stax.FOMXPath",
+      config.getConfigurationOption(CONFIG_XPATH, DEFAULT_XPATH)
+      );
   }
   
   @Test
   public void testUriNormalization() {
     try {
-      assertEquals(
+      assertEquals("http://www.example.org/Bar/%3F/foo/",
         IRI.normalizeString(
-          "HTTP://www.EXAMPLE.org:80/foo/../Bar/%3f/./foo/."), 
-        "http://www.example.org/Bar/%3F/foo/");
-      assertEquals(
+          "HTTP://www.EXAMPLE.org:80/foo/../Bar/%3f/./foo/.") 
+        );
+      assertEquals("https://www.example.org/Bar/%3F/foo/",
           IRI.normalizeString(
-          "HTTPs://www.EXAMPLE.org:443/foo/../Bar/%3f/./foo/."), 
-        "https://www.example.org/Bar/%3F/foo/");
-      assertEquals(
+          "HTTPs://www.EXAMPLE.org:443/foo/../Bar/%3f/./foo/.") 
+        );
+      assertEquals("http://www.example.org:81/Bar/%3F/foo/",
         IRI.normalizeString(
-          "HTTP://www.EXAMPLE.org:81/foo/../Bar/%3f/./foo/."), 
-        "http://www.example.org:81/Bar/%3F/foo/");
-      assertEquals(
+          "HTTP://www.EXAMPLE.org:81/foo/../Bar/%3f/./foo/.")
+        );
+      assertEquals("https://www.example.org:444/Bar/%3F/foo/",
         IRI.normalizeString(
-          "HTTPs://www.EXAMPLE.org:444/foo/../Bar/%3f/./foo/."), 
-        "https://www.example.org:444/Bar/%3F/foo/");
+          "HTTPs://www.EXAMPLE.org:444/foo/../Bar/%3f/./foo/.") 
+        );
     } catch (Exception e) {
       e.printStackTrace();
     }

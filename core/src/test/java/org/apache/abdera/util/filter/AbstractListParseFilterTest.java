@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.util.filter;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

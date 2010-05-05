@@ -1,0 +1,43 @@
+Apache Abdera: Changes in XXX Release
+---------------------------------------
+
+r940380: ABDERA-102: Apply patch from Christine Koppelt for Unit tests equality assertions, params in wrong order
+r940218: Fix GeoRSS extension from Nathan Reese on ML - http://www.mail-archive.com/dev@abdera.apache.org/msg00259.html
+r940215: ABDERA-233: initBaseUri() in the class ServletRequestContext will append the port 443 to https requests, fixed as suggested in JIRA by J G
+r940195: Update jaxen license text
+r936036: Allowing to use a custom XMLReader to parse documents. Thanks to Dan Beaulieu.
+r936030: reverting ABDERA-210, since had other side effects. Thanks to Ck
+r936027: fixing a bug initializing providers
+r916287: fixes redundant assignation of mimeType. Thanks to Pascal Christoph
+r914998: fixing providers discovering errors. Now we just need to fix the failing tests
+r782732: Don't use the discovery mechanism for cache impls. for now, this means the AbderaClient is hard coded to use the LRUCache in-memory cache implementation. The original design meant for the cache implementation to be pluggable. Ideally, however, the HttpClient would incorporate some kind of cache so we wouldn't have to do this at all. I'm wondering if there's some way we could separate all the http client related stuff out to a distinct subproject?
+r782570: Applied patch from ABDERA-236
+r780662: LRUCacheFactory needs a constructor that takes an Abdera parameter
+r780661: Added dependency on commons-codec for i18n build
+r774027: avoid potential NPE
+r773610: Fix compiler error
+r773298: remove unnecessary compiler warning
+r773297: Fix for https://issues.apache.org/jira/browse/ABDERA-231
+r772446: Refactoring of some of the base level class discovery code. The moves things to a more logical location, improves the reliability of the implementation and simplifies the code structure a bit.
+r772439: Fix NPE waiting to happen
+r772417: Refactoring of some of the base level class discovery code. The moves things to a more logical location, improves the reliability of the implementation and simplifies the code structure a bit.
+r772409: remove unnecessary compiler warnings
+r772343: Some refactoring. the EncodingUtil class isn't strictly required, was mostly deprecated... moved the still relevant code to other areas and removed the EncodingUtil class.
+r772324: Fix for https://issues.apache.org/jira/browse/ABDERA-225
+r772316: Fixing the ant build
+r771562: Ignore eclipse artifacts
+r771487: Fix for https://issues.apache.org/jira/browse/ABDERA-222 The PeekAheadInputStream was writing too much back to the buffer, which introduces 0x0 chars to the stream
+r771450: For https://issues.apache.org/jira/browse/ABDERA-210
+
+   ResponseContext needs to be able to support non-Atom binary resources so we cannot assume that 
+   AbderaServlet should always use a Writer. This adds a new method to ResponseContext called isBinary,
+   which defaults to false.  If true, the AbderaServlet will pass the OutputStream to ResponseContext,
+   if false, the servlet will pass the Writer to ResponseContext. 
+
+   This also fixes a bug in ResponseContextWrapper.
+r771446: One fix for two issues: ABDERA-213, ABDERA-211: No way to explicitly declare namespaces using StreamWriter interface
+         StreamWriter interface not outputting correct namespace for atom:link element in service docs
+r771444: IRI.toString() does not preserve empty fragment identifiers and queries Per https://issues.apache.org/jira/browse/ABDERA-218
+r771442: Creating AbderaClient using preconfigured HttpClient
+r749155: Remove mis-spelled <reposiories> element.
+r737883: htmlParser notice added to notice-supplement

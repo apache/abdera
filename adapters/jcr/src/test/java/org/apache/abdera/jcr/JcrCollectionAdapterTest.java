@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.jcr;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -45,21 +47,21 @@ import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.protocol.server.servlet.AbderaServlet;
 import org.apache.abdera.writer.Writer;
 import org.apache.jackrabbit.core.TransientRepository;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 
-import junit.framework.TestCase;
-
-public class JcrCollectionAdapterTest extends TestCase {
+public class JcrCollectionAdapterTest {
 
   private Server server;
   private DefaultProvider jcrProvider;
   private Repository repository;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+  @Before
+  public void setUp() throws Exception {
 
     jcrProvider = new DefaultProvider();
 
@@ -82,6 +84,7 @@ public class JcrCollectionAdapterTest extends TestCase {
     initializeJetty();
   }
 
+  @Test
   public void testJCRAdapter() throws Exception {
     Abdera abdera = new Abdera();
     Factory factory = abdera.getFactory();
@@ -185,8 +188,8 @@ public class JcrCollectionAdapterTest extends TestCase {
     server.start();
   }
 
-  @Override
-  protected void tearDown() throws Exception {
+  @After
+  public void tearDown() throws Exception {
     clearJcrRepository();
 
     if (server != null)

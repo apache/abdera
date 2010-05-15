@@ -17,17 +17,19 @@
 */
 package org.apache.abdera.ext.oauth;
 
-import org.apache.commons.httpclient.auth.AuthenticationException;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 
-public class OAuthSchemeTest extends TestCase {
+public class OAuthSchemeTest {
 	
 	OAuthScheme scheme = new OAuthScheme();	
 	OAuthCredentials credentials;
 	
-	public void testAuthenticate() {
+	@Test
+	public void testAuthenticate() throws Exception {
 		
 		credentials = 
 		  new OAuthCredentials(
@@ -36,7 +38,6 @@ public class OAuthSchemeTest extends TestCase {
 		    "HMAC-SHA1", 
 		    "http://photos.example.net/");
 		
-		try {
 			String header = 
 			  scheme.authenticate(
 			    credentials, 
@@ -49,9 +50,7 @@ public class OAuthSchemeTest extends TestCase {
 				"oauth_timestamp=\"[^\"]+\", oauth_nonce=\"[^\"]+\"(, oauth_version=\"[^\"]+\")?";
 			
 			assertTrue( header.matches( regex ));
-		} catch (AuthenticationException e) {
-			e.printStackTrace();
-		}
+
 	}
 	
 }

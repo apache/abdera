@@ -18,14 +18,11 @@
 package org.apache.abdera.ext.json;
 
 
-import org.apache.abdera.ext.json.JSONStream;
 import org.apache.abdera.Abdera;
-import org.apache.abdera.writer.Writer;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Entry;
+import org.apache.abdera.writer.Writer;
 import org.junit.Test;
-import org.junit.Assert;
-import junit.framework.TestCase;
 
 
 /**
@@ -34,7 +31,7 @@ import junit.framework.TestCase;
  * @author David Calavera
  * @since 11/01/08
  */
-public class JSONStreamTest extends TestCase {
+public class JSONStreamTest {
 
 	@Test
 	public void testJSONStreamContent() throws Exception {

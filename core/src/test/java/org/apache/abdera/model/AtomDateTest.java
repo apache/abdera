@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Test;
@@ -66,5 +67,40 @@ public class AtomDateTest {
     assertEquals(ad, adClone);
     assertNotSame(ad, adClone);
   }
-
+  
+  @Test
+  public void testAtomDate() {
+    Date now = new Date();
+    AtomDate atomNow = AtomDate.valueOf(now);
+    String rfc3339 = atomNow.getValue();
+    atomNow = AtomDate.valueOf(rfc3339);
+    Date parsed = atomNow.getDate();
+    assertEquals(now, parsed);
+  }
+  
+  @Test
+  public void testAtomDate2() {
+    String date = "2007-12-13T14:15:16.123Z";
+    AtomDate atomDate = new AtomDate(date);
+    Calendar calendar = atomDate.getCalendar();
+    atomDate = new AtomDate(calendar);
+    assertEquals(date,atomDate.toString());
+  }
+  
+  
+  @Test
+  public void testAtomDate3() {
+    long date = System.currentTimeMillis();
+    AtomDate atomDate = new AtomDate(date);
+    Calendar calendar = atomDate.getCalendar();
+    atomDate = new AtomDate(calendar);
+    assertEquals(date,atomDate.getTime());
+  }
+  
+  @Test (expected=IllegalArgumentException.class)
+  public void testIllegalDateFormat() {
+    String date = "";
+    AtomDate atomDate = new AtomDate(date);
+  }
+  
 }

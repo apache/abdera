@@ -15,7 +15,7 @@
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
 */
-package org.apache.abdera.test.core;
+package org.apache.abdera.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

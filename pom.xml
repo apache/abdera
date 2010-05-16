@@ -440,6 +440,7 @@
 
   <properties>
     <jetty.version>6.1.5</jetty.version>
+    <easymock.version>2.5.2</easymock.version>
     <topDir>${basedir}</topDir>
   </properties>
   

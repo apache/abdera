@@ -112,11 +112,10 @@ public class AtomConformanceTest extends BaseParserTestCase {
       switch(n) {
         case 1:
           assertNotNull(entry.getTitleElement());
-          assertEquals(entry.getIdElement().getValue(), 
-              new IRI("tag:example.org,2007:bar"));
+          assertEquals(new IRI("tag:example.org,2007:bar"), entry.getIdElement().getValue());
           Text summary = entry.getSummaryElement();
           assertNotNull(summary);
-          assertEquals(summary.getTextType(), Text.Type.XHTML);
+          assertEquals( Text.Type.XHTML, summary.getTextType());
           OMElement element = (OMElement)summary;
           OMElement div = 
             element.getFirstChildWithName(
@@ -125,11 +124,10 @@ public class AtomConformanceTest extends BaseParserTestCase {
           break;
         case 2:
           assertNotNull(entry.getTitleElement());
-          assertEquals(entry.getIdElement().getValue(), 
-              new IRI("tag:example.org,2007:bar"));
+          assertEquals(new IRI("tag:example.org,2007:bar"), entry.getIdElement().getValue());
           summary = entry.getSummaryElement();
           assertNotNull(summary);
-          assertEquals(summary.getTextType(), Text.Type.XHTML);
+          assertEquals( Text.Type.XHTML, summary.getTextType());
           element = (OMElement)summary;
           div = 
             element.getFirstChildWithName(
@@ -138,11 +136,10 @@ public class AtomConformanceTest extends BaseParserTestCase {
           break;
         case 3:
           assertNotNull(entry.getTitleElement());
-          assertEquals(entry.getIdElement().getValue(), 
-              new IRI("tag:example.org,2007:bar"));
+          assertEquals(new IRI("tag:example.org,2007:bar"), entry.getIdElement().getValue());
           summary = entry.getSummaryElement();
           assertNotNull(summary);
-          assertEquals(summary.getTextType(), Text.Type.XHTML);
+          assertEquals( Text.Type.XHTML, summary.getTextType());
           element = (OMElement)summary;
           div = 
             element.getFirstChildWithName(
@@ -163,12 +160,12 @@ public class AtomConformanceTest extends BaseParserTestCase {
     Document<Feed> doc = parse(uri);
     assertNotNull(doc);
     Feed feed = doc.getRoot();
-    assertEquals(feed.getBaseUri(), new IRI("http://www.snellspace.com/public/xmlbase.xml"));
-    assertEquals(feed.getLogoElement().getResolvedValue(), new IRI("http://www.snellspace.com/public/atom-logo.png"));
-    assertEquals(feed.getIconElement().getResolvedValue(),new IRI("http://www.snellspace.com/public/atom-icon.png"));
+    assertEquals( new IRI("http://www.snellspace.com/public/xmlbase.xml"), feed.getBaseUri());
+    assertEquals( new IRI("http://www.snellspace.com/public/atom-logo.png"), feed.getLogoElement().getResolvedValue());
+    assertEquals(new IRI("http://www.snellspace.com/public/atom-icon.png"), feed.getIconElement().getResolvedValue());
     
     Entry entry = feed.getEntries().get(0);
-    assertEquals(entry.getAlternateLinkResolvedHref().toString(), "http://www.snellspace.com/wp");
+    assertEquals( "http://www.snellspace.com/wp", entry.getAlternateLinkResolvedHref().toString());
   }
   
   
@@ -189,81 +186,71 @@ public class AtomConformanceTest extends BaseParserTestCase {
     for (Entry entry : entries ) {
       switch(n) {
         case 1:
-          assertEquals(entry.getIdElement().getValue(), new IRI("tag:example.org,2006:atom/conformance/element_order/1"));
-          assertEquals(entry.getTitleType(), Text.Type.TEXT);
-          assertEquals(entry.getSummaryType(), Text.Type.TEXT);
+          assertEquals(new IRI("tag:example.org,2006:atom/conformance/element_order/1"), entry.getIdElement().getValue());
+          assertEquals( Text.Type.TEXT, entry.getTitleType());
+          assertEquals( Text.Type.TEXT, entry.getSummaryType());
           assertNotNull(entry.getUpdatedElement().getValue());
-          assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
+          assertEquals(1, entry.getLinks(Link.REL_ALTERNATE).size());
           break;
         case 2:
-          assertEquals(entry.getIdElement().getValue(), new IRI("tag:example.org,2006:atom/conformance/element_order/2"));
-          assertEquals(entry.getTitleType(), Text.Type.TEXT);
-          assertEquals(entry.getSummaryType(), Text.Type.TEXT);
+          assertEquals(new IRI("tag:example.org,2006:atom/conformance/element_order/2"), entry.getIdElement().getValue());
+          assertEquals( Text.Type.TEXT, entry.getTitleType());
+          assertEquals( Text.Type.TEXT, entry.getSummaryType());
           assertNotNull(entry.getUpdatedElement().getValue());
-          assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
+          assertEquals(1, entry.getLinks(Link.REL_ALTERNATE).size());
           break;
         case 3:
-          assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),2);
-          assertEquals(
-            entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-            new IRI("http://www.snellspace.com/public/alternate"));
-          assertEquals(
-              entry.getLinks(Link.REL_ALTERNATE).get(1).getHref(), 
-              new IRI("http://www.snellspace.com/public/alternate2"));
+          assertEquals(2, entry.getLinks(Link.REL_ALTERNATE).size());
+          assertEquals(new IRI("http://www.snellspace.com/public/alternate"), entry.getLinks(Link.REL_ALTERNATE).get(0).getHref());
+          assertEquals(new IRI("http://www.snellspace.com/public/alternate2"), entry.getLinks(Link.REL_ALTERNATE).get(1).getHref());
           break;
         case 4:
-          assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
-          assertEquals(
-              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/alternate"));
+          assertEquals(1, entry.getLinks(Link.REL_ALTERNATE).size());
+          assertEquals(new IRI("http://www.snellspace.com/public/alternate"),
+              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref());
           break;
         case 5:
           Text title = entry.getTitleElement();
-          assertEquals(entry.getTitleType(), Text.Type.TEXT);
+          assertEquals( Text.Type.TEXT, entry.getTitleType());
           String value = title.getValue();
-          assertEquals(value, "Entry with a source first");
-          assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
-          assertEquals(
-              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/alternate"));          
+          assertEquals( "Entry with a source first", value);
+          assertEquals(1, entry.getLinks(Link.REL_ALTERNATE).size());
+          assertEquals(new IRI("http://www.snellspace.com/public/alternate"),
+              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref());          
           break;
         case 6:
           title = entry.getTitleElement();
-          assertEquals(entry.getTitleType(), Text.Type.TEXT);
+          assertEquals( Text.Type.TEXT, entry.getTitleType());
           value = title.getValue();
-          assertEquals(value, "Entry with a source last");
-          assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
-          assertEquals(
-              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/alternate"));
+          assertEquals( "Entry with a source last", value);
+          assertEquals(1, entry.getLinks(Link.REL_ALTERNATE).size());
+          assertEquals(new IRI("http://www.snellspace.com/public/alternate"),
+              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref());
           break;
         case 7:
           title = entry.getTitleElement();
-          assertEquals(entry.getTitleType(), Text.Type.TEXT);
+          assertEquals( Text.Type.TEXT, entry.getTitleType());
           value = title.getValue();
-          assertEquals(value, "Entry with a source in the middle");
-          assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
-          assertEquals(
-              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/alternate"));          
+          assertEquals( "Entry with a source in the middle", value);
+          assertEquals(1, entry.getLinks(Link.REL_ALTERNATE).size());
+          assertEquals(new IRI("http://www.snellspace.com/public/alternate"),
+              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref());          
           break;
         case 8:
           title = entry.getTitleElement();
-          assertEquals(entry.getTitleType(), Text.Type.TEXT);
+          assertEquals( Text.Type.TEXT, entry.getTitleType());
           value = title.getValue();
-          assertEquals(value, "Atom elements in an extension element");
-          assertEquals(
-            entry.getIdElement().getValue(), 
-            new IRI("tag:example.org,2006:atom/conformance/element_order/8"));
+          assertEquals( "Atom elements in an extension element", value);
+          assertEquals(new IRI("tag:example.org,2006:atom/conformance/element_order/8"),
+            entry.getIdElement().getValue());
           break;
         case 9:
           title = entry.getTitleElement();
-          assertEquals(entry.getTitleType(), Text.Type.TEXT);
+          assertEquals( Text.Type.TEXT, entry.getTitleType());
           value = title.getValue();
-          assertEquals(value, "Atom elements in an extension element");
-          assertEquals(
-            entry.getIdElement().getValue(), 
-            new IRI("tag:example.org,2006:atom/conformance/element_order/9"));
+          assertEquals( "Atom elements in an extension element", value);
+          assertEquals(new IRI("tag:example.org,2006:atom/conformance/element_order/9"),
+            entry.getIdElement().getValue());
           break;
       }
       n++;
@@ -285,86 +272,68 @@ public class AtomConformanceTest extends BaseParserTestCase {
     for (Entry entry : entries) {
       switch(n) {
         case 1:
-          assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
-          assertEquals(
-            entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-            new IRI("http://www.snellspace.com/public/linktests/alternate"));
+          assertEquals(1, entry.getLinks(Link.REL_ALTERNATE).size());
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/alternate"),
+            entry.getLinks(Link.REL_ALTERNATE).get(0).getHref());
           break;
         case 2:
-          assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),4);
-          assertEquals(
-              entry.getLinks(Link.REL_ALTERNATE).get(1).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/alternate"));          
-          assertEquals(
-              entry.getLinks(Link.REL_ALTERNATE).get(2).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/alternate2"));
+          assertEquals(4, entry.getLinks(Link.REL_ALTERNATE).size());
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/alternate"),
+              entry.getLinks(Link.REL_ALTERNATE).get(1).getHref());          
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/alternate2"),
+              entry.getLinks(Link.REL_ALTERNATE).get(2).getHref());
           break;
         case 3:
-          assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
-          assertEquals(entry.getLinks(Link.REL_ENCLOSURE).size(),1);
-          assertEquals(entry.getLinks(Link.REL_RELATED).size(),1);
-          assertEquals(entry.getLinks(Link.REL_SELF).size(),1);
-          assertEquals(entry.getLinks(Link.REL_VIA).size(),1);    
-          assertEquals(
-              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/alternate"));
-          assertEquals(
-              entry.getLinks(Link.REL_ENCLOSURE).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/enclosure"));
-          assertEquals(
-              entry.getLinks(Link.REL_RELATED).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/related"));
-          assertEquals(
-              entry.getLinks(Link.REL_SELF).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/self"));
-          assertEquals(
-              entry.getLinks(Link.REL_VIA).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/via"));
+          assertEquals(1, entry.getLinks(Link.REL_ALTERNATE).size());
+          assertEquals(1, entry.getLinks(Link.REL_ENCLOSURE).size());
+          assertEquals(1, entry.getLinks(Link.REL_RELATED).size());
+          assertEquals(1, entry.getLinks(Link.REL_SELF).size());
+          assertEquals(1, entry.getLinks(Link.REL_VIA).size());    
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/alternate"),
+              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref());
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/enclosure"),
+              entry.getLinks(Link.REL_ENCLOSURE).get(0).getHref());
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/related"),
+              entry.getLinks(Link.REL_RELATED).get(0).getHref());
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/self"),
+              entry.getLinks(Link.REL_SELF).get(0).getHref());
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/via"),
+              entry.getLinks(Link.REL_VIA).get(0).getHref());
           break;
         case 4:
-          assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),2);
-          assertEquals(entry.getLinks(Link.REL_ENCLOSURE).size(),1);
-          assertEquals(entry.getLinks(Link.REL_RELATED).size(),1);
-          assertEquals(entry.getLinks(Link.REL_SELF).size(),1);
-          assertEquals(entry.getLinks(Link.REL_VIA).size(),1);          
-          assertEquals(
-              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/alternate"));
-          assertEquals(
-              entry.getLinks(Link.REL_ALTERNATE).get(1).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/alternate2"));
-          assertEquals(
-              entry.getLinks(Link.REL_ENCLOSURE).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/enclosure"));
-          assertEquals(
-              entry.getLinks(Link.REL_RELATED).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/related"));
-          assertEquals(
-              entry.getLinks(Link.REL_SELF).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/self"));
-          assertEquals(
-              entry.getLinks(Link.REL_VIA).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/via"));
+          assertEquals(2, entry.getLinks(Link.REL_ALTERNATE).size());
+          assertEquals(1, entry.getLinks(Link.REL_ENCLOSURE).size());
+          assertEquals(1, entry.getLinks(Link.REL_RELATED).size());
+          assertEquals(1, entry.getLinks(Link.REL_SELF).size());
+          assertEquals(1, entry.getLinks(Link.REL_VIA).size());          
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/alternate"),
+              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref());
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/alternate2"),
+              entry.getLinks(Link.REL_ALTERNATE).get(1).getHref());
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/enclosure"),
+              entry.getLinks(Link.REL_ENCLOSURE).get(0).getHref());
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/related"),
+              entry.getLinks(Link.REL_RELATED).get(0).getHref());
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/self"),
+              entry.getLinks(Link.REL_SELF).get(0).getHref());
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/via"),
+              entry.getLinks(Link.REL_VIA).get(0).getHref());
           break;
         case 5:
-          assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
-          assertEquals(entry.getLinks(Link.REL_LICENSE).size(),1);  
-          assertEquals(
-              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/alternate"));
-          assertEquals(
-              entry.getLinks(Link.REL_LICENSE).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/license"));
+          assertEquals(1, entry.getLinks(Link.REL_ALTERNATE).size());
+          assertEquals(1, entry.getLinks(Link.REL_LICENSE).size());  
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/alternate"),
+              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref());
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/license"),
+              entry.getLinks(Link.REL_LICENSE).get(0).getHref());
           break;
         case 6:
-          assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),1);
-          assertEquals(entry.getLinks("http://example.org").size(),1);
-          assertEquals(
-              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/alternate"));
-          assertEquals(
-              entry.getLinks("http://example.org").get(0).getHref(), 
-              new IRI("http://www.snellspace.com/public/linktests/example"));
+          assertEquals(1, entry.getLinks(Link.REL_ALTERNATE).size());
+          assertEquals(1, entry.getLinks("http://example.org").size());
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/alternate"),
+              entry.getLinks(Link.REL_ALTERNATE).get(0).getHref());
+          assertEquals(new IRI("http://www.snellspace.com/public/linktests/example"),
+              entry.getLinks("http://example.org").get(0).getHref());
           break;
       }
       n++;

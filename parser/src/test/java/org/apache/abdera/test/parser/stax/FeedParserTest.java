@@ -54,7 +54,7 @@ public class FeedParserTest extends BaseParserTestCase {
     Feed feed = doc.getRoot();
     Entry entry = feed.getEntries().get(0);
     Person person = entry.getAuthor();
-    assertEquals(person.getEmail(), "me@example.com");
+    assertEquals( "me@example.com", person.getEmail());
   }
   
   @Test public void testEntryAuthorName() throws Exception {
@@ -62,7 +62,7 @@ public class FeedParserTest extends BaseParserTestCase {
     Feed feed = doc.getRoot();
     Entry entry = feed.getEntries().get(0);
     Person person = entry.getAuthor();
-    assertEquals(person.getName(), "Example author");    
+    assertEquals( "Example author", person.getName());    
   }
   
   @Test public void testEntryContentBase64() throws Exception {
@@ -70,13 +70,13 @@ public class FeedParserTest extends BaseParserTestCase {
     Feed feed = doc.getRoot();
     Entry entry = feed.getEntries().get(0);
     Content mediaContent = entry.getContentElement();
-    assertEquals(mediaContent.getMimeType().toString(), "application/octet-stream");
+    assertEquals( "application/octet-stream", mediaContent.getMimeType().toString());
     DataHandler dataHandler = mediaContent.getDataHandler();
     InputStream in = (ByteArrayInputStream) dataHandler.getContent();
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     int n = -1;
     while ((n = in.read()) > -1) { baos.write(n); }
-    assertEquals(baos.toString(), "Example <b>Atom</b>");
+    assertEquals( "Example <b>Atom</b>", baos.toString());
   }
   
   @Test public void testEntryContentBase642() throws Exception {
@@ -84,13 +84,13 @@ public class FeedParserTest extends BaseParserTestCase {
     Feed feed = doc.getRoot();
     Entry entry = feed.getEntries().get(0);
     Content mediaContent = entry.getContentElement();
-    assertEquals(mediaContent.getMimeType().toString(), "application/octet-stream");
+    assertEquals( "application/octet-stream", mediaContent.getMimeType().toString());
     DataHandler dataHandler = mediaContent.getDataHandler();
     InputStream in = (ByteArrayInputStream) dataHandler.getContent();
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     int n = -1;
     while ((n = in.read()) > -1) { baos.write(n); }
-    assertEquals(baos.toString(), "<p>History of the &lt;blink&gt; tag</p>");
+    assertEquals( "<p>History of the &lt;blink&gt; tag</p>", baos.toString());
   }
   
   

@@ -45,15 +45,15 @@ public class ParserTest {
     
     Document<Feed> feedDoc = getParser().parse(ParserTest.class.getResourceAsStream("/simpleFeed.xml"));
     assertTrue(feedDoc.getRoot() instanceof Feed);
-    assertEquals(feedDoc.getCharset(), "utf-8");
+    assertEquals( "utf-8", feedDoc.getCharset());
     
     Document<Entry> entryDoc = getParser().parse(ParserTest.class.getResourceAsStream("/simpleEntry.xml"));
     assertTrue(entryDoc.getRoot() instanceof Entry);
-    assertEquals(entryDoc.getCharset(), "utf-8");
+    assertEquals( "utf-8", entryDoc.getCharset());
     
     Document<Service> serviceDoc = getParser().parse(ParserTest.class.getResourceAsStream("/simpleService.xml"));
     assertTrue(serviceDoc.getRoot() instanceof Service);
-    assertEquals(serviceDoc.getCharset(), "utf-8");
+    assertEquals( "utf-8", serviceDoc.getCharset());
     
   }
   
@@ -64,19 +64,19 @@ public class ParserTest {
     Document<Feed> feedDoc = getParser().parse(new InputStreamReader(is), 
         getResourceName("/simpleEntry.xml"));
     assertTrue(feedDoc.getRoot() instanceof Feed);
-    assertEquals(feedDoc.getCharset(), "utf-8");
+    assertEquals( "utf-8", feedDoc.getCharset());
 
     is = ParserTest.class.getResourceAsStream("/simpleEntry.xml");
     Document<Entry> entryDoc = getParser().parse(new InputStreamReader(is),
         getResourceName("/simpleEntry.xml"));
     assertTrue(entryDoc.getRoot() instanceof Entry);
-    assertEquals(entryDoc.getCharset(), "utf-8");
+    assertEquals( "utf-8", entryDoc.getCharset());
 
     is = ParserTest.class.getResourceAsStream("/simpleService.xml");
     Document<Service> serviceDoc = getParser().parse(new InputStreamReader(is),
         getResourceName("/simpleEntry.xml"));
     assertTrue(serviceDoc.getRoot() instanceof Service);
-    assertEquals(serviceDoc.getCharset(), "utf-8");
+    assertEquals( "utf-8", serviceDoc.getCharset());
     
   }
 
@@ -96,7 +96,7 @@ public class ParserTest {
     Reader reader = new InputStreamReader(is);
     Document<Entry> entryDoc = getParser().parse(reader);
     assertTrue(entryDoc.getRoot() instanceof Entry);
-    assertEquals(entryDoc.getCharset(), "utf-8");
+    assertEquals( "utf-8", entryDoc.getCharset());
     
   }
   

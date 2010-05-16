@@ -37,14 +37,14 @@ public class XhtmlTest {
     Entry entry = abdera.newEntry();
     entry.setContentAsXhtml("<p>Test</p>");
     assertNotNull(entry.getContent());
-    assertEquals(entry.getContentType(), Content.Type.XHTML);
+    assertEquals( Content.Type.XHTML, entry.getContentType());
     Element el = entry.getContentElement().getValueElement();
     assertTrue(el instanceof Div);
     
     entry = abdera.newEntry();
     entry.setContent("<a><b><c/></b></a>", Content.Type.XML);
     assertNotNull(entry.getContent());
-    assertEquals(entry.getContentType(), Content.Type.XML);
+    assertEquals( Content.Type.XML, entry.getContentType());
     assertNotNull(entry.getContentElement().getValueElement());
     
   }

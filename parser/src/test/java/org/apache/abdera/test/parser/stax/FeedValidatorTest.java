@@ -56,7 +56,7 @@ import org.junit.Test;
 
 //@Ignore("ABDERA-256")
 public class FeedValidatorTest 
-  extends BaseParserTestCase { //extends TestCase {
+  extends BaseParserTestCase { 
 
   private static IRI baseURI = null;
   
@@ -84,24 +84,24 @@ public class FeedValidatorTest
     assertNotNull(feed);
     Text title = feed.getTitleElement();
     assertNotNull(title);
-    assertEquals(title.getTextType(), Text.Type.TEXT);
+    assertEquals( Text.Type.TEXT, title.getTextType());
     String value = title.getValue();
     assertNotNull(value);
-    assertEquals(value, "Example Feed");
+    assertEquals( "Example Feed", value);
     List<Link> links = feed.getLinks();
     assertEquals(1, links.size());
     for (Link link : links) {
       assertNull(link.getRel()); // it's an alternate link
-      assertEquals(link.getHref(), new IRI("http://example.org/"));
+      assertEquals( new IRI("http://example.org/"), link.getHref());
       assertNull(link.getHrefLang());
       assertNull(link.getMimeType());
       assertNull(link.getTitle());
-      assertEquals(link.getLength(),-1);
+      assertEquals(-1, link.getLength());
     }
     links = feed.getLinks(Link.REL_ALTERNATE);
-    assertEquals(links.size(),1);
+    assertEquals(1, links.size());
     links = feed.getLinks(Link.REL_RELATED);
-    assertEquals(links.size(),0);
+    assertEquals(0, links.size());
     assertNotNull(feed.getUpdatedElement());
     DateTime dte = feed.getUpdatedElement();
     AtomDate dt = dte.getValue();
@@ -111,49 +111,49 @@ public class FeedValidatorTest
     assertEquals(dt.getTime(), cdt.getTime());
     Person person = feed.getAuthor();
     assertNotNull(person);
-    assertEquals(person.getName(), "John Doe");
+    assertEquals( "John Doe", person.getName());
     assertNull(person.getEmail());
     assertNull(person.getUri());
     IRIElement id = feed.getIdElement();
     assertNotNull(id);
-    assertEquals(id.getValue(), new IRI("urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6"));
+    assertEquals( new IRI("urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6"), id.getValue());
     List<Entry> entries = feed.getEntries();
-    assertEquals(entries.size(), 1);
+    assertEquals( 1, entries.size());
     for (Entry entry : entries) {
       title = entry.getTitleElement();
       assertNotNull(title);
-      assertEquals(title.getTextType(), Text.Type.TEXT);
+      assertEquals( Text.Type.TEXT, title.getTextType());
       value = title.getValue();
-      assertEquals(value, "Atom-Powered Robots Run Amok");
+      assertEquals( "Atom-Powered Robots Run Amok", value);
       links = entry.getLinks();
       assertEquals(1, links.size());
       for (Link link : links) {
         assertNull(link.getRel()); // it's an alternate link
-        assertEquals(link.getHref(), new IRI("http://example.org/2003/12/13/atom03"));
+        assertEquals( new IRI("http://example.org/2003/12/13/atom03"), link.getHref());
         assertNull(link.getHrefLang());
         assertNull(link.getMimeType());
         assertNull(link.getTitle());
-        assertEquals(link.getLength(),-1);
+        assertEquals(-1, link.getLength());
       }
       links = entry.getLinks(Link.REL_ALTERNATE);
-      assertEquals(links.size(),1);
+      assertEquals(1, links.size());
       links = entry.getLinks(Link.REL_RELATED);
-      assertEquals(links.size(),0);
+      assertEquals(0, links.size());
       id = entry.getIdElement();
       assertNotNull(id);
-      assertEquals(id.getValue(), new IRI("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a"));
+      assertEquals( new IRI("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a"), id.getValue());
       assertNotNull(entry.getUpdatedElement());
       dte = entry.getUpdatedElement();
       dt = dte.getValue();
       assertNotNull(dt);
       c = dt.getCalendar();
       cdt = new AtomDate(c);
-      assertEquals(dt.getTime(), cdt.getTime());
+      assertEquals( cdt.getTime(), dt.getTime());
       Text summary = entry.getSummaryElement();
       assertNotNull(summary);
-      assertEquals(summary.getTextType(), Text.Type.TEXT);
+      assertEquals( Text.Type.TEXT, summary.getTextType());
       value = summary.getValue();
-      assertEquals(value, "Some text.");
+      assertEquals( "Some text.", value);
     }
   }
   
@@ -166,90 +166,90 @@ public class FeedValidatorTest
     Feed feed = doc.getRoot();
     assertNotNull(feed);
     assertNotNull(feed.getTitleElement());
-    assertEquals(feed.getTitleElement().getTextType(), Text.Type.TEXT);
-    assertEquals(feed.getTitleElement().getValue(), "dive into mark");
+    assertEquals( Text.Type.TEXT, feed.getTitleElement().getTextType());
+    assertEquals( "dive into mark", feed.getTitleElement().getValue());
     assertNotNull(feed.getSubtitleElement());
-    assertEquals(feed.getTitleElement().getTextType(), Text.Type.TEXT);
+    assertEquals( Text.Type.TEXT, feed.getTitleElement().getTextType());
     assertNotNull(feed.getSubtitleElement().getValue());
     assertNotNull(feed.getUpdatedElement());
     assertNotNull(feed.getUpdatedElement().getValue());
     assertNotNull(feed.getUpdatedElement().getValue().getDate());
     assertNotNull(feed.getIdElement());
     assertTrue(feed.getIdElement() instanceof IRIElement);
-    assertEquals(feed.getIdElement().getValue(), new IRI("tag:example.org,2003:3"));
+    assertEquals(new IRI("tag:example.org,2003:3"), feed.getIdElement().getValue());
     List<Link> links = feed.getLinks(Link.REL_ALTERNATE);
-    assertEquals(links.size(), 1);
+    assertEquals( 1, links.size());
     for (Link link : links) {
-      assertEquals(link.getRel(), "alternate");
-      assertEquals(link.getMimeType().toString(), "text/html");
-      assertEquals(link.getHrefLang(), "en");
-      assertEquals(link.getHref(), new IRI("http://example.org/"));
+      assertEquals( "alternate", link.getRel());
+      assertEquals( "text/html", link.getMimeType().toString());
+      assertEquals( "en", link.getHrefLang());
+      assertEquals( new IRI("http://example.org/"), link.getHref());
       assertNull(link.getTitle());
-      assertEquals(link.getLength(),-1);
+      assertEquals(-1, link.getLength());
     }
     links = feed.getLinks(Link.REL_SELF);
-    assertEquals(links.size(), 1);
+    assertEquals( 1, links.size());
     for (Link link : links) {
-      assertEquals(link.getRel(), "self");
-      assertEquals(link.getMimeType().toString(), "application/atom+xml");
-      assertEquals(link.getHref(), new IRI("http://example.org/feed.atom"));
+      assertEquals( "self", link.getRel());
+      assertEquals( "application/atom+xml", link.getMimeType().toString());
+      assertEquals( new IRI("http://example.org/feed.atom"), link.getHref());
       assertNull(link.getHrefLang());
       assertNull(link.getTitle());
-      assertEquals(link.getLength(),-1);
+      assertEquals(-1, link.getLength());
     }
     assertNotNull(feed.getRightsElement());
-    assertEquals(feed.getRightsElement().getTextType(), Text.Type.TEXT);
-    assertEquals(feed.getRightsElement().getValue(), "Copyright (c) 2003, Mark Pilgrim");
+    assertEquals( Text.Type.TEXT, feed.getRightsElement().getTextType());
+    assertEquals("Copyright (c) 2003, Mark Pilgrim", feed.getRightsElement().getValue());
     assertNotNull(feed.getGenerator());
     Generator generator = feed.getGenerator();
-    assertEquals(generator.getUri(), new IRI("http://www.example.com/"));
-    assertEquals(generator.getVersion(), "1.0");
+    assertEquals( new IRI("http://www.example.com/"), generator.getUri());
+    assertEquals( "1.0", generator.getVersion());
     assertNotNull(generator.getText());
-    assertEquals(generator.getText().trim(), "Example Toolkit");
+    assertEquals( "Example Toolkit", generator.getText().trim());
     List<Entry> entries = feed.getEntries();
     assertNotNull(entries);
-    assertEquals(entries.size(), 1);
+    assertEquals( 1, entries.size());
     for (Entry entry : entries) {
       assertNotNull(entry.getTitleElement());
-      assertEquals(entry.getTitleElement().getTextType(), Text.Type.TEXT);
-      assertEquals(entry.getTitleElement().getValue(), "Atom draft-07 snapshot");
+      assertEquals( Text.Type.TEXT, entry.getTitleElement().getTextType());
+      assertEquals( "Atom draft-07 snapshot", entry.getTitleElement().getValue());
       links = entry.getLinks(Link.REL_ALTERNATE);
-      assertEquals(links.size(), 1);
+      assertEquals( 1, links.size());
       for (Link link : links) {
-        assertEquals(link.getRel(), "alternate");
-        assertEquals(link.getMimeType().toString(), "text/html");
-        assertEquals(link.getHref(), new IRI("http://example.org/2005/04/02/atom"));
+        assertEquals( "alternate", link.getRel());
+        assertEquals( "text/html", link.getMimeType().toString());
+        assertEquals( new IRI("http://example.org/2005/04/02/atom"), link.getHref());
         assertNull(link.getHrefLang());
         assertNull(link.getTitle());
-        assertEquals(link.getLength(),-1);
+        assertEquals(-1, link.getLength());
       }
       links = entry.getLinks(Link.REL_ENCLOSURE);
-      assertEquals(links.size(), 1);
+      assertEquals( 1, links.size());
       for (Link link : links) {
-        assertEquals(link.getRel(), "enclosure");
-        assertEquals(link.getMimeType().toString(), "audio/mpeg");
-        assertEquals(link.getHref(), new IRI("http://example.org/audio/ph34r_my_podcast.mp3"));
-        assertEquals(link.getLength(),1337);
+        assertEquals( "enclosure", link.getRel());
+        assertEquals( "audio/mpeg", link.getMimeType().toString());
+        assertEquals( new IRI("http://example.org/audio/ph34r_my_podcast.mp3"), link.getHref());
+        assertEquals(1337, link.getLength());
         assertNull(link.getHrefLang());
         assertNull(link.getTitle());
       }
       assertNotNull(entry.getIdElement());
-      assertEquals(entry.getIdElement().getValue(), new IRI("tag:example.org,2003:3.2397"));
+      assertEquals(new IRI("tag:example.org,2003:3.2397"), entry.getIdElement().getValue());
       assertNotNull(entry.getUpdatedElement());
       assertNotNull(entry.getPublishedElement());
       Person person = entry.getAuthor();
       assertNotNull(person);
-      assertEquals(person.getName(),"Mark Pilgrim");
-      assertEquals(person.getEmail(), "f8dy@example.com");
+      assertEquals("Mark Pilgrim", person.getName());
+      assertEquals( "f8dy@example.com", person.getEmail());
       assertNotNull(person.getUriElement());
-      assertEquals(person.getUriElement().getValue(), new IRI("http://example.org/"));
+      assertEquals( new IRI("http://example.org/"), person.getUriElement().getValue());
       List<Person> contributors = entry.getContributors();
       assertNotNull(contributors);
-      assertEquals(contributors.size(),2);
+      assertEquals(2, contributors.size());
       assertNotNull(entry.getContentElement());
-      assertEquals(entry.getContentElement().getContentType(), Content.Type.XHTML);
-      assertEquals(entry.getContentElement().getLanguage(), "en");
-      assertEquals(entry.getContentElement().getBaseUri(), new IRI("http://diveintomark.org/"));
+      assertEquals( Content.Type.XHTML, entry.getContentElement().getContentType());
+      assertEquals( "en", entry.getContentElement().getLanguage());
+      assertEquals( new IRI("http://diveintomark.org/"), entry.getContentElement().getBaseUri());
     }
   }
   
@@ -298,16 +298,16 @@ public class FeedValidatorTest
     Entry entry = doc.getRoot();
     assertNotNull(entry);
     assertNotNull(entry.getTitleElement());
-    assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(), 1);
+    assertEquals( 1, entry.getLinks(Link.REL_ALTERNATE).size());
     assertNotNull(entry.getIdElement());
     assertNotNull(entry.getIdElement().getValue());
     assertNotNull(entry.getUpdatedElement());
     assertNotNull(entry.getUpdatedElement().getValue());
     assertNotNull(entry.getUpdatedElement().getValue().getDate());
     assertNotNull(entry.getSummaryElement());
-    assertEquals(entry.getSummaryElement().getTextType(), Text.Type.TEXT);
+    assertEquals( Text.Type.TEXT, entry.getSummaryElement().getTextType());
     assertNotNull(entry.getAuthor());
-    assertEquals(entry.getAuthor().getName(), "John Doe");
+    assertEquals( "John Doe", entry.getAuthor().getName());
   }
   
   @Test public void testSection2InfosetAttrOrder() throws Exception {
@@ -318,9 +318,9 @@ public class FeedValidatorTest
     Feed feed = doc.getRoot();
     assertNotNull(feed);
     List<Link> links = feed.getLinks(Link.REL_ALTERNATE);
-    assertEquals(links.size(),2);
+    assertEquals(2, links.size());
     for (Link link : links) {
-      assertEquals(link.getRel(), "alternate");
+      assertEquals( "alternate", link.getRel());
       assertNotNull(link.getHref());
     }
   }
@@ -335,9 +335,9 @@ public class FeedValidatorTest
     for (Entry entry : entries) {
       Text summary = entry.getSummaryElement();
       assertNotNull(summary);
-      assertEquals(summary.getTextType(), Text.Type.TEXT);
+      assertEquals( Text.Type.TEXT, summary.getTextType());
       String value = summary.getValue();
-      assertEquals(value, "Some <b>bold</b> text.");
+      assertEquals( "Some <b>bold</b> text.", value);
     }
   }
   
@@ -354,7 +354,7 @@ public class FeedValidatorTest
       assertNotNull(updated);
       assertNotNull(updated.getValue());
       assertNotNull(updated.getValue().getDate());
-      assertEquals(updated.getValue().getDate().getYear(), 103);
+      assertEquals( 103, updated.getValue().getDate().getYear());
     }
   }
   
@@ -366,7 +366,7 @@ public class FeedValidatorTest
     Feed feed = doc.getRoot();
     assertNotNull(feed);
     Link link = feed.getAlternateLink();
-    assertEquals(link.getResolvedHref(), new IRI("http://example.org/"));
+    assertEquals( new IRI("http://example.org/"), link.getResolvedHref());
     // the feed has a second alternate link that we will ignore
   }
   
@@ -378,7 +378,7 @@ public class FeedValidatorTest
     Feed feed = doc.getRoot();
     assertNotNull(feed);
     Entry entry = feed.getEntries().get(0);
-    assertEquals(entry.getTitle(),"");
+    assertEquals("", entry.getTitle());
   }
   
   @Test public void testSection2InfosetEmpty2() throws Exception {
@@ -389,7 +389,7 @@ public class FeedValidatorTest
     Feed feed = doc.getRoot();
     assertNotNull(feed);
     Entry entry = feed.getEntries().get(0);
-    assertEquals(entry.getTitle(),"");
+    assertEquals("", entry.getTitle());
   }
   
   @Test public void testSection2InfosetSingleQuote() throws Exception {
@@ -397,7 +397,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("2/infoset-quote-single.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getAlternateLink().getResolvedHref(), new IRI("http://example.org/"));
+    assertEquals( new IRI("http://example.org/"), doc.getRoot().getAlternateLink().getResolvedHref());
   }
   
   @Test public void testSection2InvalidXmlBase() throws Exception {
@@ -439,7 +439,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("2/xml-base-ambiguous.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getAlternateLink().getResolvedHref(), new IRI("http://example.org/"));
+    assertEquals( new IRI("http://example.org/"), doc.getRoot().getAlternateLink().getResolvedHref());
   }
   
   @Test public void testSection2XmlBaseElemEqDoc() throws Exception {
@@ -448,7 +448,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Entry entry = doc.getRoot().getEntries().get(0);
-    assertEquals(entry.getAlternateLink().getResolvedHref(), new IRI("http://www.feedvalidator.org/2003/12/13/atom03"));
+    assertEquals( new IRI("http://www.feedvalidator.org/2003/12/13/atom03"), entry.getAlternateLink().getResolvedHref());
   }
   
   @Test public void testSection2XmlBaseElemNeDoc() throws Exception {
@@ -456,7 +456,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("2/xml-base-elem-ne-doc.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getSelfLink().getResolvedHref(),new IRI("http://www.feedvalidator.org/testcases/atom/2/xml-base-elem-ne-doc.xml"));
+    assertEquals(new IRI("http://www.feedvalidator.org/testcases/atom/2/xml-base-elem-ne-doc.xml"), doc.getRoot().getSelfLink().getResolvedHref());
   }
   
   @Test public void xtestSection2XmlBase() throws Exception {
@@ -469,7 +469,7 @@ public class FeedValidatorTest
     assertNotNull(feed);
     List<Link> links = feed.getLinks();
     for (Link link : links) {
-      assertEquals(link.getResolvedHref(), new IRI("http://example.org/index.html"));
+      assertEquals( new IRI("http://example.org/index.html"), link.getResolvedHref());
     }
   }
   
@@ -489,7 +489,7 @@ public class FeedValidatorTest
     
     Feed feed = doc.getRoot();
     assertNotNull(feed);
-    assertEquals(feed.getLanguage(), "en-us");
+    assertEquals( "en-us", feed.getLanguage());
     assertTrue(feed.getLocale().equals(java.util.Locale.US));
   }
   
@@ -759,9 +759,9 @@ public class FeedValidatorTest
     for (Entry entry : entries) {
       Text text = entry.getSummaryElement();
       assertNotNull(text);
-      assertEquals(text.getTextType(), Text.Type.TEXT);
+      assertEquals( Text.Type.TEXT, text.getTextType());
       String value = text.getValue();
-      assertEquals(value, "Some&nbsp;escaped&nbsp;html");
+      assertEquals( "Some&nbsp;escaped&nbsp;html", value);
     }
   }
   
@@ -777,9 +777,9 @@ public class FeedValidatorTest
     for (Entry entry : entries) {
       Text title = entry.getTitleElement();
       assertNotNull(title);
-      assertEquals(title.getTextType(), Text.Type.TEXT);
+      assertEquals( Text.Type.TEXT, title.getTextType());
       String value = title.getValue();
-      assertEquals(value.trim(), "Less: <");
+      assertEquals( "Less: <", value.trim());
     }
   }
   
@@ -809,9 +809,9 @@ public class FeedValidatorTest
     List<Entry> entries = feed.getEntries();
     for (Entry entry : entries) {
       Text title = entry.getTitleElement();
-      assertEquals(title.getTextType(), Text.Type.HTML);
+      assertEquals( Text.Type.HTML, title.getTextType());
       String value = title.getValue();
-      assertEquals(value.trim(), "Less: <em> &lt; </em>");
+      assertEquals( "Less: <em> &lt; </em>", value.trim());
     }
   }
   
@@ -821,7 +821,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Entry entry = doc.getRoot().getEntries().get(0);
-    assertEquals(entry.getSummary().trim(), "<a");
+    assertEquals( "<a", entry.getSummary().trim());
   }
   
   @Test public void testSection3112TextWithEscapedHtml() throws Exception {
@@ -830,7 +830,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Entry entry = doc.getRoot().getEntries().get(0);
-    assertEquals(entry.getSummary().trim(), "So I was reading <a href=\"http://example.com/\">example.com</a> the other day, it's really interesting.");
+    assertEquals("So I was reading <a href=\"http://example.com/\">example.com</a> the other day, it's really interesting.", entry.getSummary().trim());
   }
   
   @Test public void testSection3112ValidHtml() throws Exception {
@@ -839,7 +839,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Entry entry = doc.getRoot().getEntries().get(0);
-    assertEquals(entry.getSummary().trim(), "<h3>Heading</h3>");
+    assertEquals( "<h3>Heading</h3>", entry.getSummary().trim());
 
   }
   
@@ -855,7 +855,7 @@ public class FeedValidatorTest
     for (Entry entry : entries) {
       Text summary = entry.getSummaryElement();
       assertNotNull(summary);
-      assertEquals(summary.getTextType(), Text.Type.XHTML);
+      assertEquals( Text.Type.XHTML, summary.getTextType());
       Div div = summary.getValueElement();
       assertNotNull(div);
     }
@@ -873,7 +873,7 @@ public class FeedValidatorTest
     for (Entry entry : entries) {
       Text summary = entry.getSummaryElement();
       assertNotNull(summary);
-      assertEquals(summary.getTextType(), Text.Type.XHTML);
+      assertEquals( Text.Type.XHTML, summary.getTextType());
       Div div = summary.getValueElement();
       assertNotNull(div);
     }
@@ -891,7 +891,7 @@ public class FeedValidatorTest
     for (Entry entry : entries) {
       Text summary = entry.getSummaryElement();
       assertNotNull(summary);
-      assertEquals(summary.getTextType(), Text.Type.XHTML);
+      assertEquals( Text.Type.XHTML, summary.getTextType());
       Div div = summary.getValueElement();
       assertNotNull(div);
     }
@@ -909,7 +909,7 @@ public class FeedValidatorTest
     for (Entry entry : entries) {
       Text summary = entry.getSummaryElement();
       assertNotNull(summary);
-      assertEquals(summary.getTextType(), Text.Type.XHTML);
+      assertEquals( Text.Type.XHTML, summary.getTextType());
       Div div = summary.getValueElement();
       assertNull(div);
     }
@@ -939,7 +939,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("3.2.1/multiple-names.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getContributors().get(0).getName(),"George Washington");
+    assertEquals("George Washington", doc.getRoot().getContributors().get(0).getName());
   }
   
   @Test public void testSection321NoName() throws Exception {
@@ -973,7 +973,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("3.2.2/multiple-uris.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getContributors().get(0).getUri(), new IRI("http://example.com/~jane/"));
+    assertEquals( new IRI("http://example.com/~jane/"), doc.getRoot().getContributors().get(0).getUri());
   }
   
   @Test public void testSection322RelativeRef() throws Exception {
@@ -986,8 +986,8 @@ public class FeedValidatorTest
     assertNotNull(feed);
     List<Person> contr = feed.getContributors();
     for (Person person : contr) {
-      assertEquals(person.getUriElement().getValue(), new IRI("~jane/"));
-      assertEquals(person.getUriElement().getResolvedValue(), uri.resolve("~jane/"));
+      assertEquals( new IRI("~jane/"), person.getUriElement().getValue());
+      assertEquals( uri.resolve("~jane/"), person.getUriElement().getResolvedValue());
     }
   }
   
@@ -1064,7 +1064,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("3.2.3/multiple-emails.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getContributors().get(0).getEmail(), "jane@example.com");
+    assertEquals( "jane@example.com", doc.getRoot().getContributors().get(0).getEmail());
   }
   
   @Test public void testSection33DuplicateUpdated() throws Exception {
@@ -1075,7 +1075,7 @@ public class FeedValidatorTest
     Date d = AtomDate.parse("2003-12-13T18:30:02Z");
     for (Entry entry : doc.getRoot().getEntries()) {
       Date date = entry.getUpdated();
-      assertEquals(date,d);
+      assertEquals(d, date);
     }
   }
   
@@ -1100,7 +1100,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Date d = AtomDate.parse("2003-07-32T15:51:30-05:00");
-    assertEquals(doc.getRoot().getEntries().get(0).getPublished(),d);
+    assertEquals(d, doc.getRoot().getEntries().get(0).getPublished());
   }
   
   @Test public void testSection33PublishedBadDay2() throws Exception {
@@ -1111,7 +1111,7 @@ public class FeedValidatorTest
     // this is an invalid date, but we don't care because we're not doing
     // validation.  Better run those feeds through the feed validator :-)
     Date d = AtomDate.parse("2003-06-31T15:51:30-05:00");
-    assertEquals(doc.getRoot().getEntries().get(0).getPublished(),d);
+    assertEquals(d, doc.getRoot().getEntries().get(0).getPublished());
   }
   
   @Test public void testSection33PublishedBadHours() throws Exception {
@@ -1120,7 +1120,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Date d = AtomDate.parse("2003-07-01T25:51:30-05:00");
-    assertEquals(doc.getRoot().getEntries().get(0).getPublished(),d);
+    assertEquals(d, doc.getRoot().getEntries().get(0).getPublished());
   }
   
   @Test public void testSecton33PublishedBadMinutes() throws Exception {
@@ -1129,7 +1129,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Date d = AtomDate.parse("2003-07-01T01:61:30-05:00");
-    assertEquals(doc.getRoot().getEntries().get(0).getPublished(),d);
+    assertEquals(d, doc.getRoot().getEntries().get(0).getPublished());
   }
   
   @Test public void testSection33PublishedBadMonth() throws Exception {
@@ -1138,7 +1138,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Date d = AtomDate.parse("2003-13-01T15:51:30-05:00");
-    assertEquals(doc.getRoot().getEntries().get(0).getPublished(),d);
+    assertEquals(d, doc.getRoot().getEntries().get(0).getPublished());
   }
   
   @Test public void testSection33PublishedBadSeconds() throws Exception {
@@ -1147,7 +1147,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Date d = AtomDate.parse("2003-07-01T01:55:61-05:00");
-    assertEquals(doc.getRoot().getEntries().get(0).getPublished(),d);
+    assertEquals(d, doc.getRoot().getEntries().get(0).getPublished());
   }
   
   @Test public void testSection33PublishedDateOnly() throws Exception {
@@ -1510,7 +1510,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;    
     Date d = AtomDate.parse("2103-12-13T18:30:02Z");
-    assertEquals(doc.getRoot().getEntries().get(0).getUpdated(),d);
+    assertEquals(d, doc.getRoot().getEntries().get(0).getUpdated());
   }
   
   @Test public void testSection33UpdatedPast() throws Exception {
@@ -1519,7 +1519,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;    
     Date d = AtomDate.parse("0103-12-13T18:30:02Z");
-    assertEquals(doc.getRoot().getEntries().get(0).getUpdated(),d);
+    assertEquals(d, doc.getRoot().getEntries().get(0).getUpdated());
   }
   
   @Test public void testSection411AuthorAtEntryOnly() throws Exception {
@@ -1610,7 +1610,7 @@ public class FeedValidatorTest
     if (doc == null) return;
     Link link = doc.getRoot().getLink("http://xmlns.com/foaf/0.1/");
     assertNotNull(link);
-    assertEquals(link.getResolvedHref(), new IRI("http://example.org/foaf"));
+    assertEquals( new IRI("http://example.org/foaf"), link.getResolvedHref());
   }
   
   @Test public void testSection411MisplacedMetadata() throws Exception {
@@ -1618,7 +1618,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("4.1.1/misplaced-metadata.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getId(),new IRI("urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6"));
+    assertEquals(new IRI("urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6"), doc.getRoot().getId());
   }
   
   @Test public void testSection411MissingId() throws Exception {
@@ -1662,7 +1662,7 @@ public class FeedValidatorTest
     Feed feed = doc.getRoot();
     assertNotNull(feed);
     List<Link> links = feed.getLinks(Link.REL_ALTERNATE);
-    assertEquals(links.size(), 2);
+    assertEquals( 2, links.size());
   }
   
   @Test public void testSection411MultipleAlternatesMatching() throws Exception {
@@ -1670,7 +1670,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("4.1.1/multiple-alternates-matching.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getAlternateLink().getResolvedHref(), new IRI("http://example.org/front-page.html"));
+    assertEquals( new IRI("http://example.org/front-page.html"), doc.getRoot().getAlternateLink().getResolvedHref());
   }
   
   @Test public void testSection411MultipleAuthors() throws Exception {
@@ -1682,7 +1682,7 @@ public class FeedValidatorTest
     Feed feed = doc.getRoot();
     assertNotNull(feed);
     List<Person> authors = feed.getAuthors();
-    assertEquals(authors.size(),2);
+    assertEquals(2, authors.size());
   }
   
   @Test public void testSection411MultipleCategories() throws Exception {
@@ -1694,7 +1694,7 @@ public class FeedValidatorTest
     Feed feed = doc.getRoot();
     assertNotNull(feed);
     List<Category> cats = feed.getCategories();
-    assertEquals(cats.size(),2);
+    assertEquals(2, cats.size());
   }
   
   @Test public void testSection411MultipleContributors() throws Exception {
@@ -1706,7 +1706,7 @@ public class FeedValidatorTest
     Feed feed = doc.getRoot();
     assertNotNull(feed);
     List<Person> contr = feed.getContributors();
-    assertEquals(contr.size(),2);
+    assertEquals(2, contr.size());
   }  
   
   @Test public void testSection411MultipleGenerators() throws Exception {
@@ -1715,8 +1715,8 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Generator g = doc.getRoot().getGenerator();
-    assertEquals(g.getResolvedUri(), new IRI("http://www.example.com/"));
-    assertEquals(g.getText().trim(), "Example Toolkit");
+    assertEquals( new IRI("http://www.example.com/"), g.getResolvedUri());
+    assertEquals( "Example Toolkit", g.getText().trim());
   }
   
   @Test public void testSection411MultipleIcons() throws Exception {
@@ -1724,7 +1724,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("4.1.1/multiple-icons.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getIcon(),new IRI("http://feedvalidator.org/big.icon"));
+    assertEquals(new IRI("http://feedvalidator.org/big.icon"), doc.getRoot().getIcon());
   }
   
   @Test public void testSection411MultipleIds() throws Exception {
@@ -1732,7 +1732,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("4.1.1/multiple-ids.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getId(), new IRI("urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6"));
+    assertEquals( new IRI("urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6"), doc.getRoot().getId());
   }  
   
   @Test public void testSection411MultipleLogos() throws Exception {
@@ -1740,7 +1740,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("4.1.1/multiple-logos.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getLogo(),new IRI("http://feedvalidator.org/small.jpg"));
+    assertEquals(new IRI("http://feedvalidator.org/small.jpg"), doc.getRoot().getLogo());
   }
   
   @Test public void testSection411MultipleRelatedMatching() throws Exception {
@@ -1749,9 +1749,9 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     List<Link> links = doc.getRoot().getLinks("related");
-    assertEquals(links.size(),2);
-    assertEquals(links.get(0).getResolvedHref(), new IRI("http://example.org/front-page.html"));
-    assertEquals(links.get(1).getResolvedHref(), new IRI("http://example.org/second-page.html"));
+    assertEquals(2, links.size());
+    assertEquals( new IRI("http://example.org/front-page.html"), links.get(0).getResolvedHref());
+    assertEquals( new IRI("http://example.org/second-page.html"), links.get(1).getResolvedHref());
   }
   
   @Test public void testSection411MultipleRights() throws Exception {
@@ -1759,7 +1759,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("4.1.1/multiple-rights.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getRights(),"Public Domain");
+    assertEquals("Public Domain", doc.getRoot().getRights());
   }
   
   @Test public void testSection411MultipleSubtitles() throws Exception {
@@ -1767,7 +1767,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("4.1.1/multiple-subtitles.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getSubtitle(), "A unique feed, just like all the others");
+    assertEquals( "A unique feed, just like all the others", doc.getRoot().getSubtitle());
   }
   
   @Test public void testSection411MultipleTitles() throws Exception {
@@ -1775,7 +1775,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("4.1.1/multiple-titles.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getTitle(), "Example Feed");
+    assertEquals( "Example Feed", doc.getRoot().getTitle());
   }
   
   @Test public void testSection411MultipleUpdateds() throws Exception {
@@ -1784,7 +1784,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Date d = AtomDate.parse("2003-12-13T18:30:02Z");
-    assertEquals(doc.getRoot().getUpdated(), d);
+    assertEquals( d, doc.getRoot().getUpdated());
   }
   
   @Test public void testSection411ZeroEntries() throws Exception {
@@ -1795,7 +1795,7 @@ public class FeedValidatorTest
     
     Feed feed = doc.getRoot();
     assertNotNull(feed);
-    assertEquals(feed.getEntries().size(),0);
+    assertEquals(0, feed.getEntries().size());
   }
   
   @Test public void testSection4111ContentSrc() throws Exception {
@@ -1818,7 +1818,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("4.1.1.1/empty-content.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getEntries().get(0).getContent(),"");
+    assertEquals("", doc.getRoot().getEntries().get(0).getContent());
   }
   
   @Test public void testSection4111EmptyTitle() throws Exception {
@@ -1826,7 +1826,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("4.1.1.1/empty-title.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getEntries().get(0).getTitle(),"");
+    assertEquals("", doc.getRoot().getEntries().get(0).getTitle());
   }  
   
   @Test public void testSection4111NoContentOrSummary() throws Exception {
@@ -1849,7 +1849,7 @@ public class FeedValidatorTest
     assertNotNull(feed);
     List<Entry> entries = feed.getEntries();
     for (Entry entry : entries) {
-      assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(), 1);
+      assertEquals( 1, entry.getLinks(Link.REL_ALTERNATE).size());
       assertNotNull(entry.getSummaryElement());
     }
   }
@@ -1872,7 +1872,7 @@ public class FeedValidatorTest
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       int n = -1;
       while ((n = in.read()) > -1) { baos.write(n); }
-      assertEquals(baos.toString(), "Some more text.");
+      assertEquals( "Some more text.", baos.toString());
     }
   }
   
@@ -1886,7 +1886,7 @@ public class FeedValidatorTest
     assertNotNull(feed);
     List<Entry> entries = feed.getEntries();
     for (Entry entry : entries) {
-      assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(),0);
+      assertEquals(0, entry.getLinks(Link.REL_ALTERNATE).size());
       assertNotNull(entry.getContentElement());
     }
   }
@@ -1898,7 +1898,7 @@ public class FeedValidatorTest
     if (doc == null) return;
     Entry entry = doc.getRoot().getEntries().get(0);
     assertNull(entry.getSummary());
-    assertEquals(entry.getContentElement().getResolvedSrc(), new IRI("http://example.org/2003/12/13/atom03"));
+    assertEquals( new IRI("http://example.org/2003/12/13/atom03"), entry.getContentElement().getResolvedSrc());
   }
   
   @Test public void testSection412EntrySourceAuthor() throws Exception {
@@ -1923,7 +1923,7 @@ public class FeedValidatorTest
     List<Entry> entries = feed.getEntries();
     for (Entry entry : entries) {
       List<Link> links = entry.getLinks("http://xmlns.com/foaf/0.1/");
-      assertEquals(links.size(),1);
+      assertEquals(1, links.size());
     }
   }
   
@@ -1938,7 +1938,7 @@ public class FeedValidatorTest
     List<Entry> entries = feed.getEntries();
     for (Entry entry : entries) {
       List<Link> links = entry.getLinks(Link.REL_ALTERNATE);
-      assertEquals(links.size(),2);
+      assertEquals(2, links.size());
     }
   }
   
@@ -1948,9 +1948,9 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     List<Link> links = doc.getRoot().getEntries().get(0).getLinks("alternate");
-    assertEquals(links.size(),2);
-    assertEquals(links.get(0).getHrefLang(), "es-es");
-    assertEquals(links.get(1).getHrefLang(), "en-us");
+    assertEquals(2, links.size());
+    assertEquals( "es-es", links.get(0).getHrefLang());
+    assertEquals( "en-us", links.get(1).getHrefLang());
   }
   
   @Test public void testSection412LinkSameRelTypeHreflang() throws Exception {
@@ -1959,7 +1959,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Entry entry = doc.getRoot().getEntries().get(0);
-    assertEquals(entry.getAlternateLink().getResolvedHref(), new IRI("http://example.org/2003/12/13/atom02"));
+    assertEquals( new IRI("http://example.org/2003/12/13/atom02"), entry.getAlternateLink().getResolvedHref());
   }
   
   @Test public void testSection412LinkSameRelTypeNoHreflang() throws Exception {
@@ -1968,7 +1968,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Entry entry = doc.getRoot().getEntries().get(0);
-    assertEquals(entry.getAlternateLink().getResolvedHref(), new IRI("http://example.org/2003/12/13/atom02"));
+    assertEquals( new IRI("http://example.org/2003/12/13/atom02"), entry.getAlternateLink().getResolvedHref());
   }
   
   @Test public void testSection412MissingId() throws Exception {
@@ -2009,7 +2009,7 @@ public class FeedValidatorTest
     List<Entry> entries = feed.getEntries();
     for (Entry entry : entries) {
       List<Link> enclosures = entry.getLinks(Link.REL_ENCLOSURE);
-      assertEquals(enclosures.size(),2);
+      assertEquals(2, enclosures.size());
     }
   }  
   
@@ -2024,7 +2024,7 @@ public class FeedValidatorTest
     List<Entry> entries = feed.getEntries();
     for (Entry entry : entries) {
       List<Category> cats = entry.getCategories();
-      assertEquals(cats.size(),2);
+      assertEquals(2, cats.size());
     }
   }   
 
@@ -2035,7 +2035,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Entry entry = doc.getRoot().getEntries().get(0);
-    assertEquals(entry.getContent(), "No big deal");
+    assertEquals( "No big deal", entry.getContent());
   }   
   
   @Test public void testSection412MultipleContributors() throws Exception {
@@ -2049,7 +2049,7 @@ public class FeedValidatorTest
     List<Entry> entries = feed.getEntries();
     for (Entry entry : entries) {
       List<Person> contr = entry.getContributors();
-      assertEquals(contr.size(),2);
+      assertEquals(2, contr.size());
     }
   }
   
@@ -2058,7 +2058,7 @@ public class FeedValidatorTest
     IRI uri = baseURI.resolve("4.1.2/multiple-ids.xml");
     Document<Feed> doc = get(uri);
     if (doc == null) return;
-    assertEquals(doc.getRoot().getEntries().get(0).getId(), new IRI("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a"));
+    assertEquals( new IRI("urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a"), doc.getRoot().getEntries().get(0).getId());
   }   
   
   @Test public void testSection412MultiplePublished() throws Exception {
@@ -2067,7 +2067,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Date d = AtomDate.parse("2003-12-11T11:13:56Z");
-    assertEquals(doc.getRoot().getEntries().get(0).getPublished(), d);
+    assertEquals( d, doc.getRoot().getEntries().get(0).getPublished());
   }   
   
   @Test public void testSection412MultipleRights() throws Exception {
@@ -2076,7 +2076,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Entry entry = doc.getRoot().getEntries().get(0);
-    assertEquals(entry.getRights(), "Public Domain");
+    assertEquals( "Public Domain", entry.getRights());
   }   
   
   @Test public void testSection412MultipleSources() throws Exception {
@@ -2086,7 +2086,7 @@ public class FeedValidatorTest
     if (doc == null) return;
     Entry entry = doc.getRoot().getEntries().get(0);
     Source source = entry.getSource();
-    assertEquals(source.getId(), new IRI("urn:uuid:9b056ae0-f778-11d9-8cd6-0800200c9a66"));
+    assertEquals( new IRI("urn:uuid:9b056ae0-f778-11d9-8cd6-0800200c9a66"), source.getId());
   }   
   
   @Test public void testSection412MultipleSummaries() throws Exception {
@@ -2095,7 +2095,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Entry entry = doc.getRoot().getEntries().get(0);
-    assertEquals(entry.getSummary(), "Some text.");
+    assertEquals( "Some text.", entry.getSummary());
   }   
   
   @Test public void testSection412MultipleTitles() throws Exception {
@@ -2104,7 +2104,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Entry entry = doc.getRoot().getEntries().get(0);
-    assertEquals(entry.getTitle(), "Atom-Powered Robots Run Amok");
+    assertEquals( "Atom-Powered Robots Run Amok", entry.getTitle());
   }   
   
   @Test public void testSection412MultipleUpdated() throws Exception {
@@ -2114,7 +2114,7 @@ public class FeedValidatorTest
     if (doc == null) return;
     Entry entry = doc.getRoot().getEntries().get(0);
     Date d = AtomDate.parse("2003-12-13T18:30:02Z");
-    assertEquals(entry.getUpdated(), d);
+    assertEquals( d, entry.getUpdated());
   }   
   
   @Test public void testSection412NoContentOrAlternate() throws Exception {
@@ -2134,9 +2134,9 @@ public class FeedValidatorTest
     if (doc == null) return;
     Entry entry = doc.getRoot().getEntries().get(0);
     List<Link> links = entry.getLinks("related");
-    assertEquals(links.size(),2);
-    assertEquals(links.get(0).getResolvedHref(), new IRI("http://example.org/2003/12/13/atom02"));
-    assertEquals(links.get(1).getResolvedHref(), new IRI("http://example.org/2003/12/13/atom03"));
+    assertEquals(2, links.size());
+    assertEquals( new IRI("http://example.org/2003/12/13/atom02"), links.get(0).getResolvedHref());
+    assertEquals( new IRI("http://example.org/2003/12/13/atom03"), links.get(1).getResolvedHref());
   }   
       
   @Test public void testSection412SummaryContentBase64() throws Exception {
@@ -2150,9 +2150,9 @@ public class FeedValidatorTest
     List<Entry> entries = feed.getEntries();
     for (Entry entry : entries) {
       assertNotNull(entry.getSummaryElement());
-      assertEquals(entry.getSummaryElement().getTextType(), Text.Type.TEXT);
+      assertEquals( Text.Type.TEXT, entry.getSummaryElement().getTextType());
       assertNotNull(entry.getContentElement());
-      assertEquals(entry.getContentElement().getContentType(), Content.Type.MEDIA);
+      assertEquals( Content.Type.MEDIA, entry.getContentElement().getContentType());
     }
   }
   
@@ -2167,12 +2167,12 @@ public class FeedValidatorTest
     List<Entry> entries = feed.getEntries();
     for (Entry entry : entries) {
       assertNotNull(entry.getSummaryElement());
-      assertEquals(entry.getSummaryElement().getTextType(), Text.Type.TEXT);
+      assertEquals( Text.Type.TEXT, entry.getSummaryElement().getTextType());
       assertNotNull(entry.getContentElement());
-      assertEquals(entry.getContentElement().getContentType(), Content.Type.MEDIA);
+      assertEquals( Content.Type.MEDIA, entry.getContentElement().getContentType());
       Content mediaContent = entry.getContentElement();
       assertNotNull(mediaContent.getSrc());
-      assertEquals(mediaContent.getMimeType().toString(), "application/pdf");
+      assertEquals( "application/pdf", mediaContent.getMimeType().toString());
     }
   }  
   
@@ -2187,7 +2187,7 @@ public class FeedValidatorTest
     List<Entry> entries = feed.getEntries();
     for (Entry entry : entries) {
       assertNotNull(entry.getContentElement());
-      assertEquals(entry.getContentElement().getContentType(), Content.Type.HTML);
+      assertEquals( Content.Type.HTML, entry.getContentElement().getContentType());
     }
   }
   
@@ -2197,7 +2197,7 @@ public class FeedValidatorTest
     Document<Feed> doc = get(uri);
     if (doc == null) return;
     Entry entry = doc.getRoot().getEntries().get(0);
-    assertEquals(entry.getContentElement().getMimeType().toString(), "multipart/alternative");
+    assertEquals( "multipart/alternative", entry.getContentElement().getMimeType().toString());
   }
   
   @Test public void testSection4131TypeTextHtml() throws Exception {
@@ -2211,9 +2211,9 @@ public class FeedValidatorTest
      List<Entry> entries = feed.getEntries();
      for (Entry entry : entries) {
        assertNotNull(entry.getContentElement());
-       assertEquals(entry.getContentElement().getContentType(), Content.Type.MEDIA);
+       assertEquals( Content.Type.MEDIA, entry.getContentElement().getContentType());
        Content mediaContent = entry.getContentElement();
-       assertEquals(mediaContent.getMimeType().toString(), "text/html");
+       assertEquals( "text/html", mediaContent.getMimeType().toString());
      }
    }  
   
@@ -2228,7 +2228,7 @@ public class FeedValidatorTest
      List<Entry> entries = feed.getEntries();
      for (Entry entry : entries) {
        assertNotNull(entry.getContentElement());
-       assertEquals(entry.getContentElement().getContentType(), Content.Type.TEXT);
+       assertEquals( Content.Type.TEXT, entry.getContentElement().getContentType());
      }
    }
   
@@ -2243,7 +2243,7 @@ public class FeedValidatorTest
      List<Entry> entries = feed.getEntries();
      for (Entry entry : entries) {
        assertNotNull(entry.getContentElement());
-       assertEquals(entry.getContentElement().getContentType(), Content.Type.XHTML);
+       assertEquals( Content.Type.XHTML, entry.getContentElement().getContentType());
      }
    }
   
@@ -2269,8 +2269,8 @@ public class FeedValidatorTest
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
      Content content = entry.getContentElement();
-     assertEquals(content.getResolvedSrc(), new IRI("http://example.org/2003/12/13/atom03"));
-     assertEquals(entry.getContent().trim(), "extraneous text");
+     assertEquals( new IRI("http://example.org/2003/12/13/atom03"), content.getResolvedSrc());
+     assertEquals( "extraneous text", entry.getContent().trim());
    }
    
    @Test public void testSection4132ContentSrcExtraText() throws Exception {
@@ -2281,7 +2281,7 @@ public class FeedValidatorTest
        if (doc == null) return;
        Entry entry = doc.getRoot().getEntries().get(0);
        Content content = entry.getContentElement();
-       assertEquals(content.getResolvedSrc(), new IRI("http://example.org/2003/12/13/atom03"));
+       assertEquals( new IRI("http://example.org/2003/12/13/atom03"), content.getResolvedSrc());
      } catch (Exception e) {}
    }
    
@@ -2312,7 +2312,7 @@ public class FeedValidatorTest
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
      Content content = entry.getContentElement();
-     assertEquals(content.getResolvedSrc(), new IRI("http://example.org/2003/12/13/atom03"));
+     assertEquals( new IRI("http://example.org/2003/12/13/atom03"), content.getResolvedSrc());
      assertNull(content.getMimeType());
    }
    
@@ -2323,7 +2323,7 @@ public class FeedValidatorTest
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
      Content content = entry.getContentElement();
-     assertEquals(content.getResolvedSrc(), new IRI("http://example.org/2003/12/13/atom03"));
+     assertEquals( new IRI("http://example.org/2003/12/13/atom03"), content.getResolvedSrc());
      assertNull(content.getMimeType());
    }
    
@@ -2339,8 +2339,8 @@ public class FeedValidatorTest
      for (Entry entry : entries) {
        Content content = entry.getContentElement();
        assertNotNull(content);
-       assertEquals(content.getContentType(), Content.Type.MEDIA);
-       assertEquals(content.getResolvedSrc(), uri.resolve("2003/12/12/atom03.pdf"));
+       assertEquals( Content.Type.MEDIA, content.getContentType());
+       assertEquals( uri.resolve("2003/12/12/atom03.pdf"), content.getResolvedSrc());
      }
    }
    
@@ -2350,9 +2350,9 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContent(),"");
-     assertEquals(entry.getContentType(), Content.Type.HTML);
-     assertEquals(entry.getContentElement().getResolvedSrc(), new IRI("http://example.org/2003/12/13/atom03"));
+     assertEquals("", entry.getContent());
+     assertEquals( Content.Type.HTML, entry.getContentType());
+     assertEquals( new IRI("http://example.org/2003/12/13/atom03"), entry.getContentElement().getResolvedSrc());
    }
    
    @Test public void testSection4132ContentSrcTypeTextHtml() throws Exception {
@@ -2361,9 +2361,9 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContent(),"");
-     assertEquals(entry.getContentType(), Content.Type.MEDIA);
-     assertEquals(entry.getContentElement().getResolvedSrc(), new IRI("http://example.org/2003/12/13/atom03"));
+     assertEquals("", entry.getContent());
+     assertEquals( Content.Type.MEDIA, entry.getContentType());
+     assertEquals( new IRI("http://example.org/2003/12/13/atom03"), entry.getContentElement().getResolvedSrc());
    }
    
    @Test public void testSection4132ContentSrcTypeText() throws Exception {
@@ -2372,9 +2372,9 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContent(),"");
-     assertEquals(entry.getContentType(), Content.Type.TEXT);
-     assertEquals(entry.getContentElement().getResolvedSrc(), new IRI("http://example.org/2003/12/13/atom03"));
+     assertEquals("", entry.getContent());
+     assertEquals( Content.Type.TEXT, entry.getContentType());
+     assertEquals( new IRI("http://example.org/2003/12/13/atom03"), entry.getContentElement().getResolvedSrc());
    }
    
    @Test public void testSection4132ContentSrcTypeXhtml() throws Exception {
@@ -2384,8 +2384,8 @@ public class FeedValidatorTest
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
      assertNull(entry.getContent());
-     assertEquals(entry.getContentType(), Content.Type.XHTML);
-     assertEquals(entry.getContentElement().getResolvedSrc(), new IRI("http://example.org/2003/12/13/atom03"));
+     assertEquals( Content.Type.XHTML, entry.getContentType());
+     assertEquals( new IRI("http://example.org/2003/12/13/atom03"), entry.getContentElement().getResolvedSrc());
    }
    
    @Test public void testSection4133ContentApplicationXhtml() throws Exception {
@@ -2400,7 +2400,7 @@ public class FeedValidatorTest
      for (Entry entry : entries) {
        Content content = entry.getContentElement();
        assertNotNull(content);
-       assertEquals(entry.getContentElement().getContentType(), Content.Type.XML);
+       assertEquals( Content.Type.XML, entry.getContentElement().getContentType());
      }
    }
    
@@ -2410,8 +2410,8 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContent(), "Some  text.");
-     assertEquals(entry.getContentType(), Content.Type.HTML);
+     assertEquals( "Some  text.", entry.getContent());
+     assertEquals( Content.Type.HTML, entry.getContentType());
    }
    
    @Test public void testSection4133ContentJpegInvalidBase64() throws Exception {
@@ -2420,8 +2420,8 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContentType(), Content.Type.MEDIA);
-     assertEquals(entry.getContent(),"insert image here");
+     assertEquals( Content.Type.MEDIA, entry.getContentType());
+     assertEquals("insert image here", entry.getContent());
    }
    
    @Test public void testSection4133ContentJpegValidBase64() throws Exception {
@@ -2430,15 +2430,15 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContentType(), Content.Type.MEDIA);
+     assertEquals( Content.Type.MEDIA, entry.getContentType());
      DataHandler dh = entry.getContentElement().getDataHandler();
      ByteArrayInputStream in = (ByteArrayInputStream) dh.getContent();
      ByteArrayOutputStream out = new ByteArrayOutputStream();
      int n = -1;
      while ((n = in.read()) != -1) { out.write(n); }
      out.flush();
-     assertEquals(out.toByteArray().length,1538);
-     assertEquals(dh.getContentType(), "image/jpeg");
+     assertEquals(1538, out.toByteArray().length);
+     assertEquals( "image/jpeg", dh.getContentType());
    }
    
    @Test public void testSection4133ContentNoTypeEscapedHtml() throws Exception {
@@ -2447,8 +2447,8 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContent(), "Some <b>bold</b> text.");
-     assertEquals(entry.getContentType(), Content.Type.TEXT);
+     assertEquals( "Some <b>bold</b> text.", entry.getContent());
+     assertEquals( Content.Type.TEXT, entry.getContentType());
    }
    
    @Test public void testSection4133ContentNoTypeWithChildren() throws Exception {
@@ -2457,8 +2457,8 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContent().trim(), "Some  text");
-     assertEquals(entry.getContentType(), Content.Type.TEXT);
+     assertEquals( "Some  text", entry.getContent().trim());
+     assertEquals( Content.Type.TEXT, entry.getContentType());
    }   
    
    @Test public void testSection4133ContentPlainWithChildren() throws Exception {
@@ -2467,8 +2467,8 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContent().trim(), "Some  text.");
-     assertEquals(entry.getContentType(), Content.Type.MEDIA);
+     assertEquals( "Some  text.", entry.getContent().trim());
+     assertEquals( Content.Type.MEDIA, entry.getContentType());
    }   
    
    @Test public void testSection4133ContentSvgMixed() throws Exception {
@@ -2479,7 +2479,7 @@ public class FeedValidatorTest
      Entry entry = doc.getRoot().getEntries().get(0);
      Content content = entry.getContentElement();
      assertNotNull(content.getValueElement()); // we're pretty forgiving
-     assertEquals(content.getContentType(), Content.Type.XML);
+     assertEquals( Content.Type.XML, content.getContentType());
    }
    
    @Test public void testSection4133ContentSvg() throws Exception {
@@ -2494,7 +2494,7 @@ public class FeedValidatorTest
      for (Entry entry : entries) {
        Content content = entry.getContentElement();
        assertNotNull(content);
-       assertEquals(entry.getContentElement().getContentType(), Content.Type.XML);
+       assertEquals( Content.Type.XML, entry.getContentElement().getContentType());
      }
    }
    
@@ -2504,7 +2504,7 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContentType(), Content.Type.MEDIA);
+     assertEquals( Content.Type.MEDIA, entry.getContentType());
    }
    
    @Test public void testSection4133ContentTextWithChildren() throws Exception {
@@ -2513,8 +2513,8 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContentType(), Content.Type.TEXT);
-     assertEquals(entry.getContent().trim(), "Some  text");
+     assertEquals( Content.Type.TEXT, entry.getContentType());
+     assertEquals( "Some  text", entry.getContent().trim());
    }
    
    @Test public void testSection4133ContentXhtmlEscaped() throws Exception {
@@ -2523,10 +2523,10 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContentType(), Content.Type.XHTML);
+     assertEquals( Content.Type.XHTML, entry.getContentType());
      String c = entry.getContent().trim();
      c = c.replaceAll(">", "&gt;");
-     assertEquals(c, "Some &lt;b&gt;bold&lt;/b&gt; text.");
+     assertEquals( "Some &lt;b&gt;bold&lt;/b&gt; text.", c);
    }
    
    @Test public void testSection4133ContentXhtmlMixed() throws Exception {
@@ -2535,10 +2535,10 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContentType(), Content.Type.XHTML);
+     assertEquals( Content.Type.XHTML, entry.getContentType());
      String c = entry.getContent().trim();
      c = c.replaceAll("Some &lt;b>bold&lt;/b>", "Some &lt;b&gt;bold&lt;/b&gt;");
-     assertEquals(c, "<b xmlns=\"http://www.w3.org/1999/xhtml\">Example:</b> Some &lt;b&gt;bold&lt;/b&gt; text.");
+     assertEquals( "<b xmlns=\"http://www.w3.org/1999/xhtml\">Example:</b> Some &lt;b&gt;bold&lt;/b&gt; text.", c);
    }
    
    @Test public void testSection4133ContentXhtmlNoXhtmlDiv() throws Exception {
@@ -2547,7 +2547,7 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContentType(), Content.Type.XHTML);
+     assertEquals( Content.Type.XHTML, entry.getContentType());
      assertNull(entry.getContent());
    }
    
@@ -2557,10 +2557,10 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContentType(), Content.Type.XHTML);
+     assertEquals( Content.Type.XHTML, entry.getContentType());
      String c = entry.getContent();
      c = c.replaceAll(">", "&gt;");
-     assertEquals(c,"Some &lt;x&gt;bold&lt;/x&gt; text.");
+     assertEquals("Some &lt;x&gt;bold&lt;/x&gt; text.", c);
    }
    
    @Test public void testSection4133ContentXhtmlTextChildren() throws Exception {
@@ -2569,7 +2569,7 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getContentType(), Content.Type.XHTML);
+     assertEquals( Content.Type.XHTML, entry.getContentType());
      assertNull(entry.getContent());
    }
    
@@ -2580,7 +2580,7 @@ public class FeedValidatorTest
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
      List<Category> cats = entry.getCategories();
-     assertEquals(cats.size(),1);
+     assertEquals(1, cats.size());
      assertNull(cats.get(0).getTerm());
    }
    
@@ -2591,7 +2591,7 @@ public class FeedValidatorTest
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
      List<Category> cats = entry.getCategories();
-     assertEquals(cats.size(),1);
+     assertEquals(1, cats.size());
      assertNull(cats.get(0).getScheme());
    }
    
@@ -2623,7 +2623,7 @@ public class FeedValidatorTest
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
      Category cat = entry.getCategories().get(0);
-     assertEquals(cat.getScheme(), new IRI("mine"));
+     assertEquals( new IRI("mine"), cat.getScheme());
    }
    
    @Test public void testSection4223CategoryLabelEscapedHtml() throws Exception {
@@ -2633,7 +2633,7 @@ public class FeedValidatorTest
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
      Category cat = entry.getCategories().get(0);
-     assertEquals(cat.getLabel(), "<b>business</b>");
+     assertEquals( "<b>business</b>", cat.getLabel());
    }
    
    @Test public void testSection4223CategoryNoLabel() throws Exception {
@@ -2654,7 +2654,7 @@ public class FeedValidatorTest
      Feed feed = doc.getRoot();
      assertNotNull(feed);
      Generator generator = feed.getGenerator();
-     assertEquals(generator.getText(),"<b>The</b> generator");
+     assertEquals("<b>The</b> generator", generator.getText());
    }
    
    @Test public void testSection424GeneratorInvalidIri() throws Exception {
@@ -2681,7 +2681,7 @@ public class FeedValidatorTest
      Feed feed = doc.getRoot();
      assertNotNull(feed);
      Generator generator = feed.getGenerator();
-     assertEquals(generator.getText(),"");
+     assertEquals("", generator.getText());
    }
    
    @Test public void testSection424GeneratorWithChild() throws Exception {
@@ -2692,7 +2692,7 @@ public class FeedValidatorTest
      Feed feed = doc.getRoot();
      assertNotNull(feed);
      Generator generator = feed.getGenerator();
-     assertEquals(generator.getText(),"");
+     assertEquals("", generator.getText());
    }
    
    @Test public void testSection424GeneratorRelativeRef() throws Exception {
@@ -2704,7 +2704,7 @@ public class FeedValidatorTest
      assertNotNull(feed);
      Generator generator = feed.getGenerator();
      assertNotNull(generator);
-     assertEquals(generator.getResolvedUri(), uri.resolve("misc/Colophon"));
+     assertEquals( uri.resolve("misc/Colophon"), generator.getResolvedUri());
    }
    
    @Test public void testSection425IconInvalidUri() throws Exception {
@@ -2730,7 +2730,7 @@ public class FeedValidatorTest
      Feed feed = doc.getRoot();
      assertNotNull(feed);
      assertNotNull(feed.getIconElement());
-     assertEquals(feed.getIconElement().getResolvedValue(), uri.resolve("favicon.ico"));
+     assertEquals( uri.resolve("favicon.ico"), feed.getIconElement().getResolvedValue());
    }
    
    @Test public void testSection426IdDotSegments() throws Exception {
@@ -2738,8 +2738,8 @@ public class FeedValidatorTest
      IRI uri = baseURI.resolve("4.2.6/id-dot-segments.xml");
      Document<Feed> doc = get(uri);
      if (doc == null) return;
-     assertEquals(doc.getRoot().getId(), new IRI("http://example.org/./id/1234"));
-     assertEquals(IRI.normalize(doc.getRoot().getId()), new IRI("http://example.org/id/1234"));
+     assertEquals( new IRI("http://example.org/./id/1234"), doc.getRoot().getId());
+     assertEquals( new IRI("http://example.org/id/1234"), IRI.normalize(doc.getRoot().getId()));
    }
    
    @Test public void testSection426IdEmptyFragmentId() throws Exception {
@@ -2756,7 +2756,7 @@ public class FeedValidatorTest
      IRI uri = baseURI.resolve("4.2.6/id-empty-path.xml");
      Document<Feed> doc = get(uri);
      if (doc == null) return;
-     assertEquals(doc.getRoot().getId(),new IRI("http://example.org"));
+     assertEquals(new IRI("http://example.org"), doc.getRoot().getId());
    }
    
    @Test public void testSection426IdEmptyQuery() throws Exception {
@@ -2764,7 +2764,7 @@ public class FeedValidatorTest
      IRI uri = baseURI.resolve("4.2.6/id-empty-query.xml");
      Document<Feed> doc = get(uri);
      if (doc == null) return;
-     assertEquals(doc.getRoot().getId(),new IRI("http://example.org/id/1234?"));
+     assertEquals(new IRI("http://example.org/id/1234?"), doc.getRoot().getId());
    }
    
    @Test public void testSection426IdExplicitAuthority() throws Exception {
@@ -2772,7 +2772,7 @@ public class FeedValidatorTest
      IRI uri = baseURI.resolve("4.2.6/id-explicit-authority.xml");
      Document<Feed> doc = get(uri);
      if (doc == null) return;
-     assertEquals(doc.getRoot().getId(),new IRI("http://:@example.org/id/1234"));
+     assertEquals(new IRI("http://:@example.org/id/1234"), doc.getRoot().getId());
    }
    
    @Test public void testSection426IdExplicitDefaultPort() throws Exception {
@@ -2780,7 +2780,7 @@ public class FeedValidatorTest
      IRI uri = baseURI.resolve("4.2.6/id-explicit-default-port.xml");
      Document<Feed> doc = get(uri);
      if (doc == null) return;
-     assertEquals(doc.getRoot().getId(),new IRI("http://example.org:80/id/1234"));
+     assertEquals(new IRI("http://example.org:80/id/1234"), doc.getRoot().getId());
    }
    
    @Test public void testSection426IdHostUppercase() throws Exception {
@@ -2788,7 +2788,7 @@ public class FeedValidatorTest
      IRI uri = baseURI.resolve("4.2.6/id-host-uppercase.xml");
      Document<Feed> doc = get(uri);
      if (doc == null) return;
-     assertEquals(doc.getRoot().getId(),new IRI("http://Example.org/id/1234"));
+     assertEquals(new IRI("http://Example.org/id/1234"), doc.getRoot().getId());
    }
    
    @Test public void testSection426IdNotUri() throws Exception {
@@ -2809,7 +2809,7 @@ public class FeedValidatorTest
      IRI uri = baseURI.resolve("4.2.6/id-percent-encoded-lower.xml");
      Document<Feed> doc = get(uri);
      if (doc == null) return;
-     assertEquals(doc.getRoot().getId(),new IRI("http://example.org/id/1234?q=%5c"));
+     assertEquals(new IRI("http://example.org/id/1234?q=%5c"), doc.getRoot().getId());
    }
    
    @Test public void testSection426IdPercentEncoded() throws Exception {
@@ -2817,7 +2817,7 @@ public class FeedValidatorTest
      IRI uri = baseURI.resolve("4.2.6/id-percent-encoded.xml");
      Document<Feed> doc = get(uri);
      if (doc == null) return;
-     assertEquals(doc.getRoot().getId(),new IRI("http://example.org/%69%64/1234"));     
+     assertEquals(new IRI("http://example.org/%69%64/1234"), doc.getRoot().getId());     
    }
    
    @Test public void testSection426IdRelativeUri() throws Exception {
@@ -2825,7 +2825,7 @@ public class FeedValidatorTest
      IRI uri = baseURI.resolve("4.2.6/id-relative-uri.xml");
      Document<Feed> doc = get(uri);
      if (doc == null) return;
-     assertEquals(doc.getRoot().getId(),new IRI("/id/1234"));
+     assertEquals(new IRI("/id/1234"), doc.getRoot().getId());
    }
    
    @Test public void testSection426IdUppercaseScheme() throws Exception {
@@ -2833,7 +2833,7 @@ public class FeedValidatorTest
      IRI uri = baseURI.resolve("4.2.6/id-uppercase-scheme.xml");
      Document<Feed> doc = get(uri);
      if (doc == null) return;
-     assertEquals(doc.getRoot().getId(),new IRI("Http://example.org/id/1234"));
+     assertEquals(new IRI("Http://example.org/id/1234"), doc.getRoot().getId());
    }
    
    @Test public void testSection426IdValidTagUris() throws Exception {
@@ -2842,7 +2842,7 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      // we don't care that they're invalid, at least for now
-     assertEquals(doc.getRoot().getId(),new IRI("tag:example.com,2000:"));
+     assertEquals(new IRI("tag:example.com,2000:"), doc.getRoot().getId());
    }
    
    @Test public void testSection4271LinkHrefInvalid() throws Exception {
@@ -2874,7 +2874,7 @@ public class FeedValidatorTest
      for (Entry entry : entries) {
        List<Link> links = entry.getLinks();
        for (Link link : links) {
-         assertEquals(link.getResolvedHref(), uri.resolve("/2003/12/13/atom03"));
+         assertEquals( uri.resolve("/2003/12/13/atom03"), link.getResolvedHref());
        }
      }
    }
@@ -2895,10 +2895,10 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Feed feed = doc.getRoot();
-     assertEquals(feed.getLinks(Link.REL_ALTERNATE).size(), 1);
+     assertEquals( 1, feed.getLinks(Link.REL_ALTERNATE).size());
      List<Entry> entries = feed.getEntries();
      for (Entry entry : entries) {
-       assertEquals(entry.getLinks(Link.REL_ALTERNATE).size(), 1);
+       assertEquals( 1, entry.getLinks(Link.REL_ALTERNATE).size());
      }
    }
    
@@ -2910,7 +2910,7 @@ public class FeedValidatorTest
      Feed feed = doc.getRoot();
      List<Link> links = feed.getLinks(Link.REL_ALTERNATE);
      for (Link link : links) {
-       assertEquals(link.getResolvedHref(), uri);
+       assertEquals( uri, link.getResolvedHref());
      }
    }
    
@@ -2938,7 +2938,7 @@ public class FeedValidatorTest
      IRI uri = baseURI.resolve("4.2.7.2/link-rel-self-match.xml");
      Document<Feed> doc = get(uri);
      if (doc == null) return;
-     assertEquals(doc.getRoot().getSelfLink().getResolvedHref(), new IRI("http://www.feedvalidator.org/testcases/atom/4.2.7.2/link-rel-self-match.xml"));
+     assertEquals( new IRI("http://www.feedvalidator.org/testcases/atom/4.2.7.2/link-rel-self-match.xml"), doc.getRoot().getSelfLink().getResolvedHref());
    }
    
    @Test public void testSection4272LinkRelSelfNoMatch() throws Exception {
@@ -2946,7 +2946,7 @@ public class FeedValidatorTest
      IRI uri = baseURI.resolve("4.2.7.2/link-rel-self-nomatch.xml");
      Document<Feed> doc = get(uri);
      if (doc == null) return;
-     assertEquals(doc.getRoot().getSelfLink().getResolvedHref(), new IRI("http://www.feedvalidator.org/testcases/atom/4.2.7.2/link-rel-self-match.xml"));
+     assertEquals( new IRI("http://www.feedvalidator.org/testcases/atom/4.2.7.2/link-rel-self-match.xml"), doc.getRoot().getSelfLink().getResolvedHref());
    }
    
    @Test public void testSection4272SelfVsAlternate() throws Exception {
@@ -2957,7 +2957,7 @@ public class FeedValidatorTest
      Entry entry = doc.getRoot().getEntries().get(0);
      assertNull(entry.getAlternateLink());
      Link self = entry.getLink("self");
-     assertEquals(self.getMimeType().toString(), "text/html");
+     assertEquals( "text/html", self.getMimeType().toString());
    }
    
    @Test public void testSection4272UnregisteredRel() throws Exception {
@@ -2997,8 +2997,8 @@ public class FeedValidatorTest
      for (Entry entry : entries) {
        List<Link> links = entry.getLinks();
        for (Link link : links) {
-         assertEquals(link.getMimeType().getBaseType(), "text/html");
-         assertEquals(link.getMimeType().getParameter("charset"), "utf-8");
+         assertEquals( "text/html", link.getMimeType().getBaseType());
+         assertEquals( "utf-8", link.getMimeType().getParameter("charset"));
        }
      }
    }
@@ -3010,7 +3010,7 @@ public class FeedValidatorTest
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
      Link link = entry.getAlternateLink();
-     assertEquals(link.getHrefLang(), "insert language here");
+     assertEquals( "insert language here", link.getHrefLang());
    }
    
    @Test public void testSection4275LinkTitleWithBadchars() throws Exception {
@@ -3020,7 +3020,7 @@ public class FeedValidatorTest
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
      Link link = entry.getAlternateLink();
-     assertEquals(link.getTitle(),"This is a \u00A3\u0093test.\u0094");
+     assertEquals("This is a \u00A3\u0093test.\u0094", link.getTitle());
    }
    
    @Test public void testSection4275LinkTitleWithHtml() throws Exception {
@@ -3030,7 +3030,7 @@ public class FeedValidatorTest
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
      Link link = entry.getAlternateLink();
-     assertEquals(link.getTitle(),"very, <b>very</b>, scary indeed");
+     assertEquals("very, <b>very</b>, scary indeed", link.getTitle());
    }
    
    @Test public void testSection4276LinkLengthNotPositive() throws Exception {
@@ -3040,7 +3040,7 @@ public class FeedValidatorTest
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
      Link link = entry.getAlternateLink();
-     assertEquals(link.getLength(),-1);
+     assertEquals(-1, link.getLength());
    }
    
    @Test public void testSection428LogoInvalidUri() throws Exception {
@@ -3065,7 +3065,7 @@ public class FeedValidatorTest
      
      Feed feed = doc.getRoot();
      assertNotNull(feed.getLogoElement());
-     assertEquals(feed.getLogoElement().getResolvedValue(), uri.resolve("atomlogo.png"));
+     assertEquals( uri.resolve("atomlogo.png"), feed.getLogoElement().getResolvedValue());
    }
    
    @Test public void testSection429PublishedInvalidDate() throws Exception {
@@ -3100,7 +3100,7 @@ public class FeedValidatorTest
      IRI uri = baseURI.resolve("4.2.10/rights-text-with-escaped-html.xml");
      Document<Feed> doc = get(uri);
      if (doc == null) return;
-     assertEquals(doc.getRoot().getRights(),"Copyright &copy; 2005");
+     assertEquals("Copyright &copy; 2005", doc.getRoot().getRights());
    }
    
    @Test public void testSection4210RightsXhtmlNoXmldiv() throws Exception {
@@ -3149,9 +3149,9 @@ public class FeedValidatorTest
      Entry entry = doc.getRoot().getEntries().get(0);
      Source source = entry.getSource();
      List<Link> links = source.getLinks("alternate");
-     assertEquals(links.size(),2);
-     assertEquals(links.get(0).getResolvedHref(), new IRI("http://example.org/"));
-     assertEquals(links.get(1).getResolvedHref(), new IRI("http://example.es/"));
+     assertEquals(2, links.size());
+     assertEquals( new IRI("http://example.org/"), links.get(0).getResolvedHref());
+     assertEquals( new IRI("http://example.es/"), links.get(1).getResolvedHref());
    }
    
    @Test public void testSection4211MultipleAlternatesMatching() throws Exception {
@@ -3161,7 +3161,7 @@ public class FeedValidatorTest
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
      Source source = entry.getSource();
-     assertEquals(source.getAlternateLink().getResolvedHref(), new IRI("http://example.org/front-page.html"));
+     assertEquals( new IRI("http://example.org/front-page.html"), source.getAlternateLink().getResolvedHref());
    }   
    
    @Test public void testSection4211MultipleAuthors() throws Exception {
@@ -3175,7 +3175,7 @@ public class FeedValidatorTest
      for (Entry entry : entries) {
        Source source = entry.getSource();
        assertNotNull(source);
-       assertEquals(source.getAuthors().size(),2);
+       assertEquals(2, source.getAuthors().size());
      }
    }
    
@@ -3190,7 +3190,7 @@ public class FeedValidatorTest
      for (Entry entry : entries) {
        Source source = entry.getSource();
        assertNotNull(source);
-       assertEquals(source.getCategories().size(),2);
+       assertEquals(2, source.getCategories().size());
      }
    }   
    
@@ -3205,7 +3205,7 @@ public class FeedValidatorTest
      for (Entry entry : entries) {
        Source source = entry.getSource();
        assertNotNull(source);
-       assertEquals(source.getContributors().size(),2);
+       assertEquals(2, source.getContributors().size());
      }
    }
    
@@ -3216,7 +3216,7 @@ public class FeedValidatorTest
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
      Generator g = entry.getSource().getGenerator();
-     assertEquals(g.getResolvedUri(), new IRI("http://www.example.com/"));
+     assertEquals( new IRI("http://www.example.com/"), g.getResolvedUri());
    }
    
    @Test public void testSection4211MultipleIcons() throws Exception {
@@ -3225,7 +3225,7 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getSource().getIcon(), new IRI("http://feedvalidator.org/big.icon"));
+     assertEquals( new IRI("http://feedvalidator.org/big.icon"), entry.getSource().getIcon());
    }
    
    @Test public void testSection4211MultipleIds() throws Exception {
@@ -3234,7 +3234,7 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getSource().getId(), new IRI("urn:uuid:28213c50-f84c-11d9-8cd6-0800200c9a66"));
+     assertEquals( new IRI("urn:uuid:28213c50-f84c-11d9-8cd6-0800200c9a66"), entry.getSource().getId());
    }   
    
    @Test public void testSection4211MultipleLogos() throws Exception {
@@ -3243,7 +3243,7 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getSource().getLogo(), new IRI("http://feedvalidator.org/small.jpg"));
+     assertEquals( new IRI("http://feedvalidator.org/small.jpg"), entry.getSource().getLogo());
    }
    
    @Test public void testSection4211MultipleRights() throws Exception {
@@ -3252,7 +3252,7 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getSource().getRights().trim(), "Public Domain");
+     assertEquals( "Public Domain", entry.getSource().getRights().trim());
    }
    
    @Test public void testSection4211MultipleSubtitles() throws Exception {
@@ -3261,7 +3261,7 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getSource().getSubtitle().trim(), "A unique feed, just like all the others");
+     assertEquals("A unique feed, just like all the others", entry.getSource().getSubtitle().trim());
    }
    
    @Test public void testSection4211MultipleTitles() throws Exception {
@@ -3270,7 +3270,7 @@ public class FeedValidatorTest
      Document<Feed> doc = get(uri);
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
-     assertEquals(entry.getSource().getTitle().trim(), "Source of all knowledge");
+     assertEquals( "Source of all knowledge", entry.getSource().getTitle().trim());
    }
    
    @Test public void testSection4211MultipleUpdateds() throws Exception {
@@ -3280,7 +3280,7 @@ public class FeedValidatorTest
      if (doc == null) return;
      Entry entry = doc.getRoot().getEntries().get(0);
      Date d = AtomDate.parse("2003-12-13T17:46:27Z");
-     assertEquals(entry.getSource().getUpdated(), d);
+     assertEquals( d, entry.getSource().getUpdated());
    }
    
    @Test public void testSection4211SourceEntry() throws Exception {
@@ -3298,7 +3298,7 @@ public class FeedValidatorTest
      IRI uri = baseURI.resolve("4.2.12/subtitle-blank.xml");
      Document<Feed> doc = get(uri);
      if (doc == null) return;
-     assertEquals(doc.getRoot().getSubtitle(),"");
+     assertEquals("", doc.getRoot().getSubtitle());
    }
    
    @Test public void testSection4214TitleBlank() throws Exception {
@@ -3306,7 +3306,7 @@ public class FeedValidatorTest
      IRI uri = baseURI.resolve("4.2.14/title-blank.xml");
      Document<Feed> doc = get(uri);
      if (doc == null) return;
-     assertEquals(doc.getRoot().getTitle(),"");
+     assertEquals("", doc.getRoot().getTitle());
    }
    
    @Test public void testSection4215UpdatedInvalidDate() throws Exception {

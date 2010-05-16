@@ -44,7 +44,7 @@ public class ThreadTest {
     ThreadHelper.addInReplyTo(e2,e1); // e2 is a response to e1
     assertNotNull(e2.getExtension(ThreadConstants.IN_REPLY_TO));
     InReplyTo irt = e2.getExtension(ThreadConstants.IN_REPLY_TO);
-    assertEquals(irt.getRef(), e1.getId());
+    assertEquals(e1.getId(), irt.getRef());
     
   }
   

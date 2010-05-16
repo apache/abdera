@@ -73,7 +73,7 @@ public class FeedPagingTest {
     assertNotNull(FeedPagingHelper.getPreviousArchive(feed));
     assertNotNull(FeedPagingHelper.getCurrent(feed));
     
-    assertEquals(FeedPagingHelper.getNext(feed).toString(),"http://example.org/bar");
+    assertEquals("http://example.org/bar", FeedPagingHelper.getNext(feed).toString());
   }
   
   @Test

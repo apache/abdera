@@ -40,24 +40,24 @@ public class BidiTest {
     BidiHelper.setDirection(Direction.LTR, feed.getSubtitleElement());
     
     assertNotNull(feed.getAttributeValue("dir"));
-    assertEquals(BidiHelper.getDirection(feed), Direction.RTL);
-    assertEquals(BidiHelper.getDirection(feed.getTitleElement()), Direction.RTL);
-    assertEquals(BidiHelper.getDirection(feed.getSubtitleElement()), Direction.LTR);
-    assertEquals(BidiHelper.getBidiElementText(feed.getTitleElement()), BidiHelper.getBidiText(Direction.RTL, "Testing"));
-    assertEquals(BidiHelper.getBidiElementText(feed.getSubtitleElement()), BidiHelper.getBidiText(Direction.LTR, "Testing"));
+    assertEquals(Direction.RTL, BidiHelper.getDirection(feed));
+    assertEquals(Direction.RTL, BidiHelper.getDirection(feed.getTitleElement()));
+    assertEquals(Direction.LTR, BidiHelper.getDirection(feed.getSubtitleElement()));
+    assertEquals(BidiHelper.getBidiText(Direction.RTL, "Testing"), BidiHelper.getBidiElementText(feed.getTitleElement()));
+    assertEquals(BidiHelper.getBidiText(Direction.LTR, "Testing"), BidiHelper.getBidiElementText(feed.getSubtitleElement()));
     
     Entry entry = abdera.newEntry();
     entry.setLanguage("az-arab");
-    assertEquals(BidiHelper.guessDirectionFromLanguage(entry), Direction.RTL);
+    assertEquals(Direction.RTL, BidiHelper.guessDirectionFromLanguage(entry));
     
     entry.setLanguage("az-latn");
-    assertEquals(BidiHelper.guessDirectionFromLanguage(entry), Direction.UNSPECIFIED);
+    assertEquals(Direction.UNSPECIFIED, BidiHelper.guessDirectionFromLanguage(entry));
     
     
-    assertEquals(BidiHelper.guessDirectionFromEncoding(entry), Direction.UNSPECIFIED);
+    assertEquals(Direction.UNSPECIFIED, BidiHelper.guessDirectionFromEncoding(entry));
     
     entry.getDocument().setCharset("iso-8859-6");
-    assertEquals(BidiHelper.guessDirectionFromEncoding(entry), Direction.RTL);
+    assertEquals(Direction.RTL, BidiHelper.guessDirectionFromEncoding(entry));
   }
   
 }

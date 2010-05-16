@@ -17,6 +17,11 @@
 */
 package org.apache.abdera.test.security;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -25,8 +30,6 @@ import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
 import javax.xml.namespace.QName;
-
-import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
@@ -37,7 +40,7 @@ import org.apache.abdera.security.Signature;
 import org.apache.abdera.security.SignatureOptions;
 import org.junit.Test;
 
-public class DigitalSignatureTest extends Assert {
+public class DigitalSignatureTest {
 
   private static final String keystoreFile = "/key.jks";
   private static final String keystoreType = "JKS";

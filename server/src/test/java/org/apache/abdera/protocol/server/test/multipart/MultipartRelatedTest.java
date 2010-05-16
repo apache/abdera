@@ -1,9 +1,10 @@
 package org.apache.abdera.protocol.server.test.multipart;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.StringWriter;
 import java.util.HashMap;
-
-import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
@@ -25,7 +26,7 @@ import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 
 @SuppressWarnings("serial")
-public class MultipartRelatedTest extends Assert {
+public class MultipartRelatedTest {
 
 	private Server server;
 

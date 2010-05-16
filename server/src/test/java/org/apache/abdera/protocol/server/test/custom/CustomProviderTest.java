@@ -17,11 +17,14 @@
  */
 package org.apache.abdera.protocol.server.test.custom;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Date;
-
-import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
@@ -43,7 +46,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class CustomProviderTest extends Assert {
+public class CustomProviderTest {
 
   private static JettyServer server;
   private static Abdera abdera = Abdera.getInstance();

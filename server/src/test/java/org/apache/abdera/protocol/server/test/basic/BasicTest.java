@@ -17,6 +17,10 @@
  */
 package org.apache.abdera.protocol.server.test.basic;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Date;
@@ -45,7 +49,7 @@ import org.junit.Test;
 
 import junit.framework.Assert;
 
-public class BasicTest extends Assert {
+public class BasicTest {
 
   private static JettyServer server;
   private static Abdera abdera = Abdera.getInstance();

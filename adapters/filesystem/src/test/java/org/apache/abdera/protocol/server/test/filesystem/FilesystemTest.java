@@ -17,6 +17,10 @@
 */
 package org.apache.abdera.protocol.server.test.filesystem;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Date;
@@ -51,7 +55,7 @@ import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 
 @Ignore
-public class FilesystemTest extends Assert {
+public class FilesystemTest {
 
   private static Server server;
   private static Abdera abdera = Abdera.getInstance();

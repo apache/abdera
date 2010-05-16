@@ -17,6 +17,10 @@
 */
 package org.apache.abdera.test.client.cache;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -50,7 +54,7 @@ import org.junit.Test;
  * caches, etc) if you try to talk to a remote server.
  */
 @SuppressWarnings("serial")
-public class CacheTest extends Assert {
+public class CacheTest {
   
   private static String CHECK_CACHE_INVALIDATE;
   private static String CHECK_NO_CACHE;

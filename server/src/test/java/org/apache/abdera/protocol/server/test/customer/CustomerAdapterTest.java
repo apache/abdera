@@ -17,6 +17,10 @@
  */
 package org.apache.abdera.protocol.server.test.customer;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.util.Date;
 
@@ -50,9 +54,7 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 
-import junit.framework.Assert;
-
-public class CustomerAdapterTest extends Assert {
+public class CustomerAdapterTest {
 
   private Server server;
   private DefaultProvider customerProvider;

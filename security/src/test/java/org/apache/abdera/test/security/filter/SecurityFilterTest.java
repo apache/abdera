@@ -17,13 +17,15 @@
  */
 package org.apache.abdera.test.security.filter;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.Date;
-
-import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
@@ -40,8 +42,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class SecurityFilterTest 
-  extends Assert {
+public class SecurityFilterTest {
 
   private static JettyServer server;
   private static Abdera abdera = Abdera.getInstance();

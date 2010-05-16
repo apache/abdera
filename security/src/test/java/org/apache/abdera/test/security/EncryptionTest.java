@@ -17,14 +17,15 @@
 */
 package org.apache.abdera.test.security;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.security.Provider;
 import java.security.Security;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.xml.namespace.QName;
-
-import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
@@ -36,7 +37,7 @@ import org.apache.abdera.security.EncryptionOptions;
 import org.junit.Test;
 
 @SuppressWarnings("unchecked")
-public class EncryptionTest extends Assert {
+public class EncryptionTest {
 
   /**
    * The bouncy castle JCE provider is required to run this test

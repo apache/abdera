@@ -17,6 +17,9 @@
 */
 package org.apache.abdera.test.client.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -39,10 +42,7 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.junit.Test;
 import org.mortbay.io.WriterOutputStream;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
-public class MultipartRelatedRequestEntityTest extends Assert {
+public class MultipartRelatedRequestEntityTest {
 
 	@Test
 	public void testMultipartFormat() throws IOException {

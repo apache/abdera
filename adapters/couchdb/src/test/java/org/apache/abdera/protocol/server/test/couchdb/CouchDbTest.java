@@ -17,17 +17,18 @@
 */
 package org.apache.abdera.protocol.server.test.couchdb;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Date;
-
-import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Document;
-import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Service;
@@ -52,7 +53,7 @@ import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 
 @Ignore
-public class CouchDbTest extends Assert {
+public class CouchDbTest {
 
   private static Server server;
   private static Abdera abdera = Abdera.getInstance();

@@ -20,22 +20,23 @@ package org.apache.abdera.protocol.server.test.route;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.Assert;
-
 import org.apache.abdera.i18n.templates.HashMapContext;
 import org.apache.abdera.i18n.templates.Route;
 import org.apache.abdera.protocol.server.RequestContext;
-import org.apache.abdera.protocol.server.Target;
 import org.apache.abdera.protocol.server.TargetType;
 import org.apache.abdera.protocol.server.impl.RouteManager;
 import org.apache.abdera.protocol.server.impl.RouteManager.RouteTarget;
 import org.junit.Test;
 
-public class RouteTest extends Assert {
+public class RouteTest {
   @Test
   public void testSimpleRoute() throws Exception {
     Route route = new Route("feed", "/:collection");

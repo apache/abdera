@@ -17,6 +17,11 @@
 */
 package org.apache.abdera.test.client.app;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -59,7 +64,7 @@ import org.junit.Test;
  * Test to make sure that we can operate as a simple APP client
  */
 @SuppressWarnings("serial")
-public class AppTest extends Assert {
+public class AppTest {
   
   protected static void getServletHandler(String... servletMappings) {
     for (int n = 0; n < servletMappings.length; n = n + 2) {

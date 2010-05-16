@@ -308,7 +308,7 @@ public class CacheTest {
     ClientResponse response = abderaClient.get(CHECK_MUST_REVALIDATE, options);
   
     String resp1 = getResponse(response);
-    assertEquals(resp1, "1");
+    assertEquals("1", resp1);
     
     // Should be revalidated and use the cache
     options.setHeader("x-reqnum", "2");
@@ -316,12 +316,12 @@ public class CacheTest {
     assertTrue(response instanceof CachedResponse);
     
     String resp2 = getResponse(response);
-    assertEquals(resp2, "1");
+    assertEquals("1", resp2);
     
     // Should be revalidated and return a 404
     options.setHeader("x-reqnum", "3");
     response = abderaClient.get(CHECK_MUST_REVALIDATE, options);  
-    assertEquals(response.getStatus(), 404);
+    assertEquals(404, response.getStatus());
     response.release();
 
   }
@@ -343,7 +343,7 @@ public class CacheTest {
     String resp1 = getResponse(response);
     
     response.release();
-    assertEquals(resp1, "1");
+    assertEquals("1", resp1);
     
     // calling a method that could change state on the server should invalidate the cache
     options = getRequestOptions(abderaClient,2);
@@ -373,7 +373,7 @@ public class CacheTest {
   
     resp1 = getResponse(response);
     response.release();
-    assertEquals(resp1, "3");
+    assertEquals("3", resp1);
   }
   
   private void _requestCacheInvalidation(int type) throws Exception {
@@ -382,7 +382,7 @@ public class CacheTest {
     RequestOptions options = getRequestOptions(abderaClient,1);
     ClientResponse response = abderaClient.get(CHECK_CACHE_INVALIDATE, options);  
     String resp1 = getResponse(response);
-    assertEquals(resp1, "1");
+    assertEquals("1", resp1);
     
     // Should not use the cache
     options = getRequestOptions(abderaClient,2);
@@ -394,7 +394,7 @@ public class CacheTest {
     response = abderaClient.get(CHECK_CACHE_INVALIDATE, options);
   
     String resp2 = getResponse(response);
-    assertEquals(resp2, "2");
+    assertEquals("2", resp2);
     
     // Should use the cache
     options =getRequestOptions(abderaClient,3);
@@ -406,7 +406,7 @@ public class CacheTest {
     response = abderaClient.get(CHECK_CACHE_INVALIDATE, options);
   
     String resp3 = getResponse(response);
-    assertEquals(resp3, "2");
+    assertEquals("2", resp3);
   }
   
   private void _responseNoCache(int type) throws Exception {
@@ -417,7 +417,7 @@ public class CacheTest {
     ClientResponse response = abderaClient.get(CHECK_NO_CACHE, options);
   
     String resp1 = getResponse(response);
-    assertEquals(resp1, "1");
+    assertEquals("1", resp1);
     
     // Should not use the cache
     
@@ -426,7 +426,7 @@ public class CacheTest {
     response = abderaClient.get(CHECK_NO_CACHE, options);
   
     String resp2 = getResponse(response);
-    assertEquals(resp2, "2");
+    assertEquals("2", resp2);
     
     // Should use the cache
     options = getRequestOptions(abderaClient,3);
@@ -434,7 +434,7 @@ public class CacheTest {
     response = abderaClient.get(CHECK_NO_CACHE, options);
   
     String resp3 = getResponse(response);
-    assertEquals(resp3, "3");
+    assertEquals("3", resp3);
   }
   
   private static String getResponse(ClientResponse response) throws IOException {

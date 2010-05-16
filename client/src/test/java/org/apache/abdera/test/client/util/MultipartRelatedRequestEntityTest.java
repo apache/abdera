@@ -30,8 +30,6 @@ import java.io.StringWriter;
 
 import javax.activation.MimeType;
 
-import junit.framework.Assert;
-
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.parser.stax.FOMEntry;

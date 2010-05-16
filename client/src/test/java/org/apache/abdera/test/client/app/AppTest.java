@@ -18,9 +18,9 @@
 package org.apache.abdera.test.client.app;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,8 +35,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
@@ -387,31 +385,31 @@ public class AppTest {
     assertTrue(options.is5xxRequestException());
     
     options.setAccept("text/plain");
-    assertEquals(options.getAccept(),"text/plain");
+    assertEquals("text/plain", options.getAccept());
     
     options.setAcceptCharset("UTF-8");
-    assertEquals(options.getAcceptCharset(), "UTF-8");
+    assertEquals("UTF-8", options.getAcceptCharset());
     
     options.setAcceptEncoding("gzip");
-    assertEquals(options.getAcceptEncoding(), "gzip");
+    assertEquals("gzip", options.getAcceptEncoding());
     
     options.setAcceptLanguage("en-US");
-    assertEquals(options.getAcceptLanguage(), "en-US");
+    assertEquals("en-US", options.getAcceptLanguage());
     
     options.setAuthorization("auth");
-    assertEquals(options.getAuthorization(), "auth");
+    assertEquals("auth", options.getAuthorization());
     
     options.setCacheControl("no-cache");
-    assertEquals(options.getCacheControl(), "no-cache");
+    assertEquals("no-cache", options.getCacheControl());
     
     options.setContentType("text/plain");
     assertTrue(MimeTypeHelper.isMatch(options.getContentType(), new MimeType("text/plain")));
     
     options.setEncodedHeader("foo", "UTF-8", "bar");
-    assertEquals(options.getDecodedHeader("foo"),"bar");
+    assertEquals("bar", options.getDecodedHeader("foo"));
     
     options.setHeader("foo", "bar");
-    assertEquals(options.getHeader("foo"),"bar");
+    assertEquals("bar", options.getHeader("foo"));
     
     options.setIfMatch("testing");
     assertTrue(EntityTag.matchesAny(new EntityTag("testing"), options.getIfMatch()));
@@ -420,7 +418,7 @@ public class AppTest {
     assertTrue(EntityTag.matchesAny(new EntityTag("testing"), options.getIfNoneMatch()));
     
     options.setSlug("This is the slug");
-    assertEquals(options.getSlug(),"This is the slug");
+    assertEquals("This is the slug", options.getSlug());
     
     options.setUsePostOverride(true);
     assertTrue(options.isUsePostOverride());
@@ -695,18 +693,18 @@ public class AppTest {
     assertTrue(tag2.isWeak());
     assertFalse(EntityTag.matches(tag1, tag2));
     assertFalse(EntityTag.matchesAny(tag1, new EntityTag[] {tag2}));
-    assertEquals(tag1.toString(), "\"tag\"");
-    assertEquals(tag2.toString(), "W/\"tag\"");
+    assertEquals("\"tag\"", tag1.toString());
+    assertEquals("W/\"tag\"", tag2.toString());
     tag1 = EntityTag.parse("\"tag\"");
     assertFalse(tag1.isWeak());
-    assertEquals(tag1.getTag(), "tag");
+    assertEquals("tag", tag1.getTag());
     tag2 = EntityTag.parse("W/\"tag\"");
     assertTrue(tag2.isWeak());
-    assertEquals(tag2.getTag(), "tag");    
+    assertEquals("tag", tag2.getTag());    
     EntityTag[] tags = EntityTag.parseTags("\"tag1\", W/\"tag2\"");
     assertFalse(tags[0].isWeak());
-    assertEquals(tags[0].getTag(), "tag1");
+    assertEquals("tag1", tags[0].getTag());
     assertTrue(tags[1].isWeak());
-    assertEquals(tags[1].getTag(), "tag2");
+    assertEquals("tag2", tags[1].getTag());
   }
 }

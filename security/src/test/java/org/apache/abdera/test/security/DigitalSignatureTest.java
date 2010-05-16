@@ -99,8 +99,8 @@ public class DigitalSignatureTest {
       
     X509Certificate[] certs = sig.getValidSignatureCertificates(entry, options);
     assertNotNull(certs);
-    assertEquals(certs.length, 1);
-    assertEquals(certs[0].getSubjectDN().getName(), "CN=James M Snell, OU=WebAhead, O=IBM, L=Hanford, ST=California, C=US");
+    assertEquals(1, certs.length);
+    assertEquals("CN=James M Snell, OU=WebAhead, O=IBM, L=Hanford, ST=California, C=US", certs[0].getSubjectDN().getName());
     
     // Check the round trip
     ByteArrayOutputStream out = new ByteArrayOutputStream();

@@ -85,20 +85,16 @@ public class EncryptionTest {
     // Encrypt the document using the generated key
     Document enc_doc = enc.encrypt(entry.getDocument(), options);
     
-    assertEquals(
-      enc_doc.getRoot().getQName(), 
-      new QName(
-        "http://www.w3.org/2001/04/xmlenc#", 
-        "EncryptedData"));
+    assertEquals(new QName("http://www.w3.org/2001/04/xmlenc#", 
+        "EncryptedData"),  enc_doc.getRoot().getQName());
     
     // Decrypt the document using the generated key
     Document<Entry> entry_doc = enc.decrypt(enc_doc, options);
 
     assertTrue(entry_doc.getRoot() instanceof Entry);
     
-    assertEquals(
-      entry_doc.getRoot().getId().toString(), 
-      "http://example.org/foo/entry");
+    assertEquals("http://example.org/foo/entry",
+      entry_doc.getRoot().getId().toString());
     
   }
   

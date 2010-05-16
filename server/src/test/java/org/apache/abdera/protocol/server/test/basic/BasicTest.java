@@ -47,8 +47,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import junit.framework.Assert;
-
 public class BasicTest {
 
   private static JettyServer server;
@@ -79,31 +77,31 @@ public class BasicTest {
   public void testGetService() {
     ClientResponse resp = client.get("http://localhost:9002/");
     assertNotNull(resp);
-    assertEquals(resp.getType(), ResponseType.SUCCESS);
+    assertEquals( ResponseType.SUCCESS, resp.getType());
     assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.APP_MEDIA_TYPE));
     Document<Service> doc = resp.getDocument();
     Service service = doc.getRoot();
-    assertEquals(service.getWorkspaces().size(), 1);
+    assertEquals( 1, service.getWorkspaces().size());
     Workspace workspace = service.getWorkspace("Abdera");
-    assertEquals(workspace.getCollections().size(), 1);
+    assertEquals( 1, workspace.getCollections().size());
     Collection collection = workspace.getCollection("title for any sample feed");
     assertNotNull(collection);
     assertTrue(collection.acceptsEntry());
-    assertEquals(collection.getResolvedHref().toString(), "http://localhost:9002/sample");
+    assertEquals( "http://localhost:9002/sample", collection.getResolvedHref().toString());
     resp.release();
   }
   @Test
   public void testGetFeed() {
     ClientResponse resp = client.get("http://localhost:9002/sample");
     assertNotNull(resp);
-    assertEquals(resp.getType(), ResponseType.SUCCESS);
+    assertEquals( ResponseType.SUCCESS, resp.getType());
     assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.FEED_MEDIA_TYPE));    
     Document<Feed> doc = resp.getDocument();    
     Feed feed = doc.getRoot();
-    assertEquals(feed.getId().toString(), "http://localhost:9002/sample");
-    assertEquals(feed.getTitle(), "title for any sample feed");
-    assertEquals(feed.getAuthor().getName(), "rayc");
-    assertEquals(feed.getEntries().size(), 0);
+    assertEquals( "http://localhost:9002/sample", feed.getId().toString());
+    assertEquals( "title for any sample feed", feed.getTitle());
+    assertEquals( "rayc", feed.getAuthor().getName());
+    assertEquals( 0, feed.getEntries().size());
     resp.release();
   }
   @Test
@@ -117,14 +115,14 @@ public class BasicTest {
     entry.addAuthor("James");
     ClientResponse resp = client.post("http://localhost:9002/sample", entry);
     assertNotNull(resp);
-    assertEquals(resp.getType(), ResponseType.SUCCESS);
-    assertEquals(resp.getStatus(), 201);
-    assertEquals(resp.getLocation().toString(), "http://localhost:9002/sample/foo");
+    assertEquals( ResponseType.SUCCESS, resp.getType());
+    assertEquals( 201, resp.getStatus());
+    assertEquals( "http://localhost:9002/sample/foo", resp.getLocation().toString());
     resp.release();
     resp = client.get("http://localhost:9002/sample");
     Document<Feed> feed_doc = resp.getDocument();
     Feed feed = feed_doc.getRoot();
-    assertEquals(feed.getEntries().size(), 1);
+    assertEquals( 1, feed.getEntries().size());
     resp.release();
   }
   @Test
@@ -133,8 +131,8 @@ public class BasicTest {
     RequestOptions options = client.getDefaultRequestOptions();
     options.setContentType("application/octet-stream");
     ClientResponse resp = client.post("http://localhost:9002/sample", in, options);
-    assertEquals(resp.getType(), ResponseType.CLIENT_ERROR);
-    assertEquals(resp.getStatus(), 405);
+    assertEquals( ResponseType.CLIENT_ERROR, resp.getType());
+    assertEquals( 405, resp.getStatus());
     resp.release();
   }
   @Test
@@ -146,30 +144,30 @@ public class BasicTest {
     entry.setTitle("This is the modified title");
     resp.release();
     resp = client.put("http://localhost:9002/sample/foo", entry);
-    assertEquals(resp.getType(), ResponseType.SUCCESS);
-    assertEquals(resp.getStatus(), 200);
+    assertEquals( ResponseType.SUCCESS, resp.getType());
+    assertEquals( 200, resp.getStatus());
     resp.release();
     resp = client.get("http://localhost:9002/sample/foo");
     doc = resp.getDocument();
     entry = doc.getRoot();
-    assertEquals(entry.getTitle(), "This is the modified title");
+    assertEquals( "This is the modified title", entry.getTitle());
     resp.release();
     resp = client.get("http://localhost:9002/sample");
     Document<Feed> feed_doc = resp.getDocument();
     Feed feed = feed_doc.getRoot();
-    assertEquals(feed.getEntries().size(), 1);
+    assertEquals( 1, feed.getEntries().size());
     resp.release();
   }
 
   @Test
   public void testDeleteEntry() {
     ClientResponse resp = client.delete("http://localhost:9002/sample/foo");
-    assertEquals(resp.getType(), ResponseType.SUCCESS);
+    assertEquals( ResponseType.SUCCESS, resp.getType());
     resp.release();
     resp = client.get("http://localhost:9002/sample");
     Document<Feed> feed_doc = resp.getDocument();
     Feed feed = feed_doc.getRoot();
-    assertEquals(feed.getEntries().size(), 0);
+    assertEquals( 0, feed.getEntries().size());
     resp.release();
   }
 }

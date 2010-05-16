@@ -151,7 +151,7 @@ public class TestNameprep extends TestBase {
     for (Test test : Test.values()) {
       try {
         String out = Nameprep.prep(test.in);
-        assertEquals(test.out,out);
+        assertEquals(out, test.out);
       } catch (Exception e) {
         if (test.rc != -1)
           fail("Failure in Test #" + test + " not expected");

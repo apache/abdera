@@ -30,12 +30,12 @@ public class TestNFKC extends TestBase {
     // "\xC2\xB5", "\xCE\xBC"
     String s1 = Normalizer.normalize(string(0xC2,0xB5)).toString();
     String s2 = string(0xCE,0xBC);
-    assertEquals(s1,s2);
+    assertEquals(s2, s1);
     
     // "\xC2\xAA", "\x61"
     s1 = Normalizer.normalize(string(0xC2,0xAA)).toString();
     s2 = string(0x61);
-    assertEquals(s1,s2);
+    assertEquals(s2, s1);
     
   }
   

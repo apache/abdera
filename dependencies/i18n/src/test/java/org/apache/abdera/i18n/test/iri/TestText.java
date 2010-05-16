@@ -34,17 +34,17 @@ public class TestText extends TestBase {
   public void testCodepoints() throws Exception {
     StringBuilder buf = new StringBuilder();
     CharUtils.append(buf, 0x10000);
-    assertEquals(buf.length(),2);
-    assertEquals(buf.charAt(0), CharUtils.getHighSurrogate(0x10000));
-    assertEquals(buf.charAt(1), CharUtils.getLowSurrogate(0x10000));
+    assertEquals(2, buf.length());
+    assertEquals( CharUtils.getHighSurrogate(0x10000), buf.charAt(0));
+    assertEquals( CharUtils.getLowSurrogate(0x10000), buf.charAt(1));
     assertTrue(CharUtils.isSurrogatePair(buf.charAt(0), buf.charAt(1)));
     Codepoint codepoint = CharUtils.codepointAt(buf, 0);
-    assertEquals(codepoint.getValue(),0x10000);
-    assertEquals(codepoint.getCharCount(),2);
+    assertEquals(0x10000, codepoint.getValue());
+    assertEquals(2, codepoint.getCharCount());
     assertTrue(codepoint.isSupplementary());
     CharUtils.insert(buf, 0, codepoint.next());
-    assertEquals(buf.length(),4);
-    assertEquals(codepoint.next(),CharUtils.codepointAt(buf, 0));
+    assertEquals(4, buf.length());
+    assertEquals(CharUtils.codepointAt(buf, 0), codepoint.next());
   }
   
   @Test
@@ -74,36 +74,36 @@ public class TestText extends TestBase {
     String rlo = CharUtils.wrapBidi(s, CharUtils.RLO);
     String rlm = CharUtils.wrapBidi(s, CharUtils.RLM);
     
-    assertEquals(lre.charAt(0),CharUtils.LRE);
-    assertEquals(lre.charAt(lre.length()-1),CharUtils.PDF);
+    assertEquals(CharUtils.LRE, lre.charAt(0));
+    assertEquals(CharUtils.PDF, lre.charAt(lre.length()-1));
     
-    assertEquals(lro.charAt(0),CharUtils.LRO);
-    assertEquals(lro.charAt(lro.length()-1),CharUtils.PDF);
+    assertEquals(CharUtils.LRO, lro.charAt(0));
+    assertEquals(CharUtils.PDF, lro.charAt(lro.length()-1));
     
-    assertEquals(lrm.charAt(0),CharUtils.LRM);
-    assertEquals(lrm.charAt(lrm.length()-1),CharUtils.LRM);
+    assertEquals(CharUtils.LRM, lrm.charAt(0));
+    assertEquals(CharUtils.LRM, lrm.charAt(lrm.length()-1));
 
-    assertEquals(rle.charAt(0),CharUtils.RLE);
-    assertEquals(rle.charAt(rle.length()-1),CharUtils.PDF);
+    assertEquals(CharUtils.RLE, rle.charAt(0));
+    assertEquals(CharUtils.PDF, rle.charAt(rle.length()-1));
     
-    assertEquals(rlo.charAt(0),CharUtils.RLO);
-    assertEquals(rlo.charAt(rlo.length()-1),CharUtils.PDF);
+    assertEquals(CharUtils.RLO, rlo.charAt(0));
+    assertEquals(CharUtils.PDF, rlo.charAt(rlo.length()-1));
     
-    assertEquals(rlm.charAt(0),CharUtils.RLM);
-    assertEquals(rlm.charAt(rlm.length()-1),CharUtils.RLM);
+    assertEquals(CharUtils.RLM, rlm.charAt(0));
+    assertEquals(CharUtils.RLM, rlm.charAt(rlm.length()-1));
     
-    assertEquals(s, CharUtils.stripBidi(lre));
-    assertEquals(s, CharUtils.stripBidi(lro));
-    assertEquals(s, CharUtils.stripBidi(lrm));
-    assertEquals(s, CharUtils.stripBidi(rle));
-    assertEquals(s, CharUtils.stripBidi(rlo));
-    assertEquals(s, CharUtils.stripBidi(rlm));
+    assertEquals( s,  CharUtils.stripBidi(lre));
+    assertEquals( s,  CharUtils.stripBidi(lro));
+    assertEquals( s,  CharUtils.stripBidi(lrm));
+    assertEquals( s,  CharUtils.stripBidi(rle));
+    assertEquals( s,  CharUtils.stripBidi(rlo));
+    assertEquals( s,  CharUtils.stripBidi(rlm));
     
     s = new String(new char[] {'a',CharUtils.LRM,'b',CharUtils.LRM,'c'});
-    assertEquals(s.length(),5);
+    assertEquals(5, s.length());
     s = CharUtils.stripBidiInternal(s);
-    assertEquals(s.length(),3);
-    assertEquals(s,"abc");
+    assertEquals(3, s.length());
+    assertEquals("abc", s);
   }
   
   @Test
@@ -123,9 +123,9 @@ public class TestText extends TestBase {
   public void testSanitizer() throws Exception {
     String s = "\u0074\u0068\u00ed\u0073\u0020\u00ed\u0073\u0020\u00e0\u0020\u0074\u00e9\u0073\u0074";
     String t = Sanitizer.sanitize(s);
-    assertEquals(t,"th%C3%ADs_%C3%ADs_%C3%A0_t%C3%A9st");
+    assertEquals("th%C3%ADs_%C3%ADs_%C3%A0_t%C3%A9st", t);
     t = Sanitizer.sanitize(s, "", true, Normalizer.Form.D);
-    assertEquals(t,"this_is_a_test");
+    assertEquals("this_is_a_test", t);
     
   }
 }

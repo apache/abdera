@@ -209,16 +209,16 @@ public final class TestTemplate
     String t = "http://www.google.com/notebook/feeds/{userID}{-prefix|/notebooks/|notebookID}{-opt|/-/|categories}{-list|/|categories}?{-join|&|updated-min,updated-max,alt,start-index,max-results,entryID,orderby}";
     Template template = new Template(t);
     String[] variables = template.getVariables();
-    assertEquals(variables[0],"userID");
-    assertEquals(variables[1],"notebookID");
-    assertEquals(variables[2],"categories");
-    assertEquals(variables[3],"updated-min");
-    assertEquals(variables[4],"updated-max");
-    assertEquals(variables[5],"alt");
-    assertEquals(variables[6],"start-index");
-    assertEquals(variables[7],"max-results");
-    assertEquals(variables[8],"entryID");
-    assertEquals(variables[9],"orderby");
+    assertEquals("userID", variables[0]);
+    assertEquals("notebookID", variables[1]);
+    assertEquals("categories", variables[2]);
+    assertEquals("updated-min", variables[3]);
+    assertEquals("updated-max", variables[4]);
+    assertEquals("alt", variables[5]);
+    assertEquals("start-index", variables[6]);
+    assertEquals("max-results", variables[7]);
+    assertEquals("entryID", variables[8]);
+    assertEquals("orderby", variables[9]);
   }
 
   @Test
@@ -226,8 +226,8 @@ public final class TestTemplate
     String t = "http://www.google.com/notebook/feeds/{userID}{-prefix|/notebooks/|notebookID}{-opt|/-/|categories}{-list|/|categories}?{-join|&|updated-min,updated-max,alt,start-index,max-results,entryID,orderby}";
     Template template = new Template(t);
     Template t2 = template.clone();
-    assertEquals(template,t2);
-    assertEquals(template.hashCode(),t2.hashCode());
+    assertEquals(t2, template);
+    assertEquals(t2.hashCode(), template.hashCode());
   }
   
   @Test
@@ -269,20 +269,20 @@ public final class TestTemplate
     tests.put("{ints}","1%2C2%2C3");
     
     for (String t : tests.keySet())
-      assertEquals(Template.expand(t,map),tests.get(t));
+      assertEquals(tests.get(t), Template.expand(t,map));
   }
   
   @Test
   public void test21() throws Exception {
     String t = "http://example.org/{foo}/{bar}{-opt|/|categories}{-list|/|categories}?{-join|&|baz,tag}";
     String e = "http://example.org/abc/xyz/a/b?baz=true&tag=x&tag=y&tag=z";
-    assertEquals(Template.expand(t,new MyObject()),e);
+    assertEquals(e, Template.expand(t,new MyObject()));
   }
 
   @Test
   public void test22() throws Exception {
     String e = "http://example.org/abc/xyz/a/b?baz=true&tag=x&tag=y&tag=z";
-    assertEquals(Template.expandAnnotated(new MyObject()),e);
+    assertEquals(e, Template.expandAnnotated(new MyObject()));
   }
   
   @Test
@@ -337,7 +337,7 @@ public final class TestTemplate
     };
     
     for (int n = 0; n < templates.length; n = n + 2) {
-      assertEquals(Template.expand(templates[n], map), templates[n+1]);
+      assertEquals( templates[n+1], Template.expand(templates[n], map));
     }
   }
   
@@ -355,7 +355,7 @@ public final class TestTemplate
     };
       
       for (int n = 0; n < templates.length; n = n + 2) {
-        assertEquals(Template.expand(templates[n], map), templates[n+1]);
+        assertEquals( templates[n+1], Template.expand(templates[n], map));
       }
   }
     
@@ -373,7 +373,7 @@ public final class TestTemplate
     };
       
       for (int n = 0; n < templates.length; n = n + 2) {
-        assertEquals(Template.expand(templates[n], map), templates[n+1]);
+        assertEquals( templates[n+1], Template.expand(templates[n], map));
       }
   }
   
@@ -395,7 +395,7 @@ public final class TestTemplate
   }
   
   private static void eval(String t, String e, HashMapContext c) {
-    assertEquals(Template.expand(t,c), e);
+    assertEquals( e, Template.expand(t,c));
   }
 }
 

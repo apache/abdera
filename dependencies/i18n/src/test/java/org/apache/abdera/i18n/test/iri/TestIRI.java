@@ -32,33 +32,33 @@ public class TestIRI extends TestBase {
   @Test
   public void testSimple() throws Exception {
     IRI iri = new IRI("http://validator.w3.org/check?uri=http%3A%2F%2Fr\u00E9sum\u00E9.example.org");
-    assertEquals(iri.toString(),"http://validator.w3.org/check?uri=http%3A%2F%2Fr\u00E9sum\u00E9.example.org");
-    assertEquals(iri.toURI().toString(),"http://validator.w3.org/check?uri=http%3A%2F%2Fr%C3%A9sum%C3%A9.example.org");   
+    assertEquals("http://validator.w3.org/check?uri=http%3A%2F%2Fr\u00E9sum\u00E9.example.org", iri.toString());
+    assertEquals("http://validator.w3.org/check?uri=http%3A%2F%2Fr%C3%A9sum%C3%A9.example.org", iri.toURI().toString());   
   }
   
   @Test
   public void testFile() throws Exception {
     IRI iri = new IRI("file:///tmp/test/foo");
-    assertEquals(iri.toURI().toString(),"file:///tmp/test/foo");
+    assertEquals("file:///tmp/test/foo", iri.toURI().toString());
   }
 
   @Test
   public void testSimple2() throws Exception {
     IRI iri = new IRI("http://www.example.org/red%09ros\u00E9#red");
-    assertEquals(iri.toURI().toString(),"http://www.example.org/red%09ros%C3%A9#red");
+    assertEquals("http://www.example.org/red%09ros%C3%A9#red", iri.toURI().toString());
   }
   
   @Test
   public void testNotSoSimple() throws Exception {
     IRI iri = new IRI("http://example.com/\uD800\uDF00\uD800\uDF01\uD800\uDF02");
-    assertEquals(iri.toURI().toString(),"http://example.com/%F0%90%8C%80%F0%90%8C%81%F0%90%8C%82");
+    assertEquals("http://example.com/%F0%90%8C%80%F0%90%8C%81%F0%90%8C%82", iri.toURI().toString());
   }
     
   @Test
   public void testIRItoURI() throws Exception {
     IRI iri = new IRI("http://\u7D0D\u8C46.example.org/%E2%80%AE");
     URI uri = iri.toURI();
-    assertEquals(uri.toString(),"http://xn--99zt52a.example.org/%E2%80%AE");
+    assertEquals("http://xn--99zt52a.example.org/%E2%80%AE", uri.toString());
   }
   
   @Test
@@ -88,7 +88,7 @@ public class TestIRI extends TestBase {
   public void testUCN() throws Exception {
     IRI iri1 = new IRI("http://www.example.org/r\u00E9sum\u00E9.html");
     IRI iri2 = new IRI("http://www.example.org/re\u0301sume\u0301.html", Normalizer.Form.C);
-    assertEquals(iri1,iri2);
+    assertEquals(iri2, iri1);
   }
   
   @Test
@@ -101,22 +101,22 @@ public class TestIRI extends TestBase {
   @Test
   public void testIDN() throws Exception {
     IRI iri1 = new IRI("http://r\u00E9sum\u00E9.example.org");
-    assertEquals(iri1.getASCIIHost(),"xn--rsum-bpad.example.org");
+    assertEquals("xn--rsum-bpad.example.org", iri1.getASCIIHost());
   }
   
   @Test
   public void testRelative() throws Exception{
     IRI base = new IRI("http://example.org/foo/");
     
-    assertEquals(base.resolve("/").toString(),"http://example.org/");
-    assertEquals(base.resolve("/test").toString(),"http://example.org/test");
-    assertEquals(base.resolve("test").toString(),"http://example.org/foo/test");
-    assertEquals(base.resolve("../test").toString(),"http://example.org/test");
-    assertEquals(base.resolve("./test").toString(),"http://example.org/foo/test");
-    assertEquals(base.resolve("test/test/../../").toString(),"http://example.org/foo/");
-    assertEquals(base.resolve("?test").toString(),"http://example.org/foo/?test");
-    assertEquals(base.resolve("#test").toString(),"http://example.org/foo/#test");
-    assertEquals(base.resolve(".").toString(),"http://example.org/foo/");
+    assertEquals("http://example.org/", base.resolve("/").toString());
+    assertEquals("http://example.org/test", base.resolve("/test").toString());
+    assertEquals("http://example.org/foo/test", base.resolve("test").toString());
+    assertEquals("http://example.org/test", base.resolve("../test").toString());
+    assertEquals("http://example.org/foo/test", base.resolve("./test").toString());
+    assertEquals("http://example.org/foo/", base.resolve("test/test/../../").toString());
+    assertEquals("http://example.org/foo/?test", base.resolve("?test").toString());
+    assertEquals("http://example.org/foo/#test", base.resolve("#test").toString());
+    assertEquals("http://example.org/foo/", base.resolve(".").toString());
   }
 
   /**
@@ -127,67 +127,67 @@ public class TestIRI extends TestBase {
   public void testSchemes() throws Exception {
     
     IRI iri = new IRI("http://a:b@c.org:80/d/e?f#g");
-    assertEquals(iri.getScheme(), "http");
-    assertEquals(iri.getUserInfo(), "a:b");
-    assertEquals(iri.getHost(),"c.org");
-    assertEquals(iri.getPort(),80);
-    assertEquals(iri.getPath(),"/d/e");
-    assertEquals(iri.getQuery(), "f");
-    assertEquals(iri.getFragment(),"g");
+    assertEquals( "http", iri.getScheme());
+    assertEquals( "a:b", iri.getUserInfo());
+    assertEquals("c.org", iri.getHost());
+    assertEquals(80, iri.getPort());
+    assertEquals("/d/e", iri.getPath());
+    assertEquals( "f", iri.getQuery());
+    assertEquals("g", iri.getFragment());
     
     iri = new IRI("https://a:b@c.org:80/d/e?f#g");
-    assertEquals(iri.getScheme(), "https");
-    assertEquals(iri.getUserInfo(), "a:b");
-    assertEquals(iri.getHost(),"c.org");
-    assertEquals(iri.getPort(),80);
-    assertEquals(iri.getPath(),"/d/e");
-    assertEquals(iri.getQuery(), "f");
-    assertEquals(iri.getFragment(),"g");
+    assertEquals( "https", iri.getScheme());
+    assertEquals( "a:b", iri.getUserInfo());
+    assertEquals("c.org", iri.getHost());
+    assertEquals(80, iri.getPort());
+    assertEquals("/d/e", iri.getPath());
+    assertEquals( "f", iri.getQuery());
+    assertEquals("g", iri.getFragment());
     
     iri = new IRI("ftp://a:b@c.org:80/d/e?f#g");
-    assertEquals(iri.getScheme(), "ftp");
-    assertEquals(iri.getUserInfo(), "a:b");
-    assertEquals(iri.getHost(),"c.org");
-    assertEquals(iri.getPort(),80);
-    assertEquals(iri.getPath(),"/d/e");
-    assertEquals(iri.getQuery(), "f");
-    assertEquals(iri.getFragment(),"g");
+    assertEquals( "ftp", iri.getScheme());
+    assertEquals( "a:b", iri.getUserInfo());
+    assertEquals("c.org", iri.getHost());
+    assertEquals(80, iri.getPort());
+    assertEquals("/d/e", iri.getPath());
+    assertEquals( "f", iri.getQuery());
+    assertEquals("g", iri.getFragment());
     
     iri = new IRI("mailto:joe@example.org?subject=foo");
-    assertEquals(iri.getScheme(), "mailto");
-    assertEquals(iri.getUserInfo(), null);
-    assertEquals(iri.getHost(),null);
-    assertEquals(iri.getPort(),-1);
-    assertEquals(iri.getPath(),"joe@example.org");
-    assertEquals(iri.getQuery(), "subject=foo");
-    assertEquals(iri.getFragment(),null);
+    assertEquals( "mailto", iri.getScheme());
+    assertEquals( null, iri.getUserInfo());
+    assertEquals(null, iri.getHost());
+    assertEquals(-1, iri.getPort());
+    assertEquals("joe@example.org", iri.getPath());
+    assertEquals( "subject=foo", iri.getQuery());
+    assertEquals(null, iri.getFragment());
     
     iri = new IRI("tag:example.org,2006:foo");
-    assertEquals(iri.getScheme(), "tag");
-    assertEquals(iri.getUserInfo(), null);
-    assertEquals(iri.getHost(),null);
-    assertEquals(iri.getPort(),-1);
-    assertEquals(iri.getPath(),"example.org,2006:foo");
-    assertEquals(iri.getQuery(), null);
-    assertEquals(iri.getFragment(),null);
+    assertEquals( "tag", iri.getScheme());
+    assertEquals( null, iri.getUserInfo());
+    assertEquals(null, iri.getHost());
+    assertEquals(-1, iri.getPort());
+    assertEquals("example.org,2006:foo", iri.getPath());
+    assertEquals( null, iri.getQuery());
+    assertEquals(null, iri.getFragment());
     
     iri = new IRI("urn:lsid:ibm.com:example:82437234964354895798234d");
-    assertEquals(iri.getScheme(), "urn");
-    assertEquals(iri.getUserInfo(), null);
-    assertEquals(iri.getHost(),null);
-    assertEquals(iri.getPort(),-1);
-    assertEquals(iri.getPath(),"lsid:ibm.com:example:82437234964354895798234d");
-    assertEquals(iri.getQuery(), null);
-    assertEquals(iri.getFragment(),null);
+    assertEquals( "urn", iri.getScheme());
+    assertEquals( null, iri.getUserInfo());
+    assertEquals(null, iri.getHost());
+    assertEquals(-1, iri.getPort());
+    assertEquals("lsid:ibm.com:example:82437234964354895798234d", iri.getPath());
+    assertEquals( null, iri.getQuery());
+    assertEquals(null, iri.getFragment());
     
     iri = new IRI("data:image/gif;base64,R0lGODdhMAAwAPAAAAAAAP");
-    assertEquals(iri.getScheme(), "data");
-    assertEquals(iri.getUserInfo(), null);
-    assertEquals(iri.getHost(),null);
-    assertEquals(iri.getPort(),-1);
-    assertEquals(iri.getPath(),"image/gif;base64,R0lGODdhMAAwAPAAAAAAAP");
-    assertEquals(iri.getQuery(), null);
-    assertEquals(iri.getFragment(),null);
+    assertEquals( "data", iri.getScheme());
+    assertEquals( null, iri.getUserInfo());
+    assertEquals(null, iri.getHost());
+    assertEquals(-1, iri.getPort());
+    assertEquals("image/gif;base64,R0lGODdhMAAwAPAAAAAAAP", iri.getPath());
+    assertEquals( null, iri.getQuery());
+    assertEquals(null, iri.getFragment());
     
   }
 }

@@ -53,48 +53,48 @@ public class TestIO extends TestBase {
     
     ByteArrayInputStream in = new ByteArrayInputStream(utf32be);
     CharsetSniffingInputStream csis = new CharsetSniffingInputStream(in);
-    assertEquals(csis.getEncoding(),"UTF-32");
+    assertEquals("UTF-32", csis.getEncoding());
     assertTrue(csis.isBomSet());
     
     in = new ByteArrayInputStream(utf32le);
     csis = new CharsetSniffingInputStream(in);
-    assertEquals(csis.getEncoding(),"UTF-32");
+    assertEquals("UTF-32", csis.getEncoding());
     assertTrue(csis.isBomSet());
 
     in = new ByteArrayInputStream(utf16be);
     csis = new CharsetSniffingInputStream(in);
-    assertEquals(csis.getEncoding(),"UTF-16");
+    assertEquals("UTF-16", csis.getEncoding());
     assertTrue(csis.isBomSet());
     
     in = new ByteArrayInputStream(utf16le);
     csis = new CharsetSniffingInputStream(in);
-    assertEquals(csis.getEncoding(),"UTF-16");
+    assertEquals("UTF-16", csis.getEncoding());
     assertTrue(csis.isBomSet());
     
     in = new ByteArrayInputStream(utf8);
     csis = new CharsetSniffingInputStream(in);
-    assertEquals(csis.getEncoding(),"UTF-8");
+    assertEquals("UTF-8", csis.getEncoding());
     assertTrue(csis.isBomSet());
     
 
     in = new ByteArrayInputStream(nobom_utf32be);
     csis = new CharsetSniffingInputStream(in);
-    assertEquals(csis.getEncoding(),"UTF-32be");
+    assertEquals("UTF-32be", csis.getEncoding());
     assertFalse(csis.isBomSet());
     
     in = new ByteArrayInputStream(nobom_utf32le);
     csis = new CharsetSniffingInputStream(in);
-    assertEquals(csis.getEncoding(),"UTF-32le");
+    assertEquals("UTF-32le", csis.getEncoding());
     assertFalse(csis.isBomSet());
 
     in = new ByteArrayInputStream(nobom_utf16be);
     csis = new CharsetSniffingInputStream(in);
-    assertEquals(csis.getEncoding(),"UTF-16be");
+    assertEquals("UTF-16be", csis.getEncoding());
     assertFalse(csis.isBomSet());
     
     in = new ByteArrayInputStream(nobom_utf16le);
     csis = new CharsetSniffingInputStream(in);
-    assertEquals(csis.getEncoding(),"UTF-16le");
+    assertEquals("UTF-16le", csis.getEncoding());
     assertFalse(csis.isBomSet());
   }
   
@@ -126,8 +126,8 @@ public class TestIO extends TestBase {
           }});
     char[] buf = new char[7];
     int r = fcr.read(buf);
-    assertEquals(r,4);
-    assertEquals(new String(buf,0,r),"abfg");
+    assertEquals(4, r);
+    assertEquals("abfg", new String(buf,0,r));
   }
   
   @Test
@@ -138,8 +138,8 @@ public class TestIO extends TestBase {
     byte[] read = new byte[2];
     pais.peek(peek);
     pais.read(read);
-    assertEquals(peek[0],read[0]);
-    assertEquals(peek[1],read[1]);
+    assertEquals(read[0], peek[0]);
+    assertEquals(read[1], peek[1]);
     byte[] newread = new byte[2];
     assertFalse(read[0] == newread[0]);
     assertFalse(read[1] == newread[1]);    
@@ -155,7 +155,7 @@ public class TestIO extends TestBase {
     ris.rewind();
     ris.read(buf2);
     for (int n = 0; n < 4; n++)
-      assertEquals(buf1[n],buf2[n]);
+      assertEquals(buf2[n], buf1[n]);
   }
   
   @Test
@@ -174,10 +174,10 @@ public class TestIO extends TestBase {
     InputStream in = pc.getInputStream();
     byte[] buf = new byte[4];
     in.read(buf);
-    assertEquals(buf[0],0x1);
-    assertEquals(buf[1],0x2);
-    assertEquals(buf[2],0x3);
-    assertEquals(buf[3],0x4);
+    assertEquals(0x1, buf[0]);
+    assertEquals(0x2, buf[1]);
+    assertEquals(0x3, buf[2]);
+    assertEquals(0x4, buf[3]);
     in.close();
     assertTrue(pc.isWritable());
     assertFalse(pc.isReadable());

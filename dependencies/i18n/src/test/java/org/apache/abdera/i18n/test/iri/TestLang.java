@@ -39,9 +39,9 @@ public class TestLang extends TestBase {
       new org.apache.abdera.i18n.lang.Lang("en-US-ca");
     Locale testLocale = new Locale("en", "US", "ca");
         
-    assertEquals(lang.getPrimary(),"en");
-    assertEquals(lang.getSubtag(0),"US");
-    assertEquals(lang.getSubtag(1),"ca");
+    assertEquals("en", lang.getPrimary());
+    assertEquals("US", lang.getSubtag(0));
+    assertEquals("ca", lang.getSubtag(1));
     
     assertEquals( testLocale, lang.getLocale() );
     assertEquals(testLocale.toString(), lang.getLocale().toString());
@@ -70,18 +70,18 @@ public class TestLang extends TestBase {
   @Test
   public void test4646Lang() throws Exception {
     Lang lang = new Lang("en-Latn-US-valencia");
-    assertEquals(lang.getLanguage().toString(),"en");
-    assertEquals(lang.getRegion().toString(), "US");
-    assertEquals(lang.getScript().toString(), "Latn");
-    assertEquals(lang.getVariant().toString(), "valencia");
+    assertEquals("en", lang.getLanguage().toString());
+    assertEquals( "US", lang.getRegion().toString());
+    assertEquals( "Latn", lang.getScript().toString());
+    assertEquals( "valencia", lang.getVariant().toString());
     assertNull(lang.getExtLang());
     assertNull(lang.getExtension());
     assertNull(lang.getPrivateUse());
     assertTrue(lang.isValid());
     Locale locale = lang.getLocale();
-    assertEquals(locale.getCountry(),"US");
-    assertEquals(locale.getLanguage(),"en");
-    assertEquals(locale.getVariant(),"valencia");
+    assertEquals("US", locale.getCountry());
+    assertEquals("en", locale.getLanguage());
+    assertEquals("valencia", locale.getVariant());
   }
   
   @Test

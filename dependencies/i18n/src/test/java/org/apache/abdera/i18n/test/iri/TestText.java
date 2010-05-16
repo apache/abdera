@@ -17,6 +17,10 @@
 */
 package org.apache.abdera.i18n.test.iri;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.abdera.i18n.text.CharUtils;
 import org.apache.abdera.i18n.text.Codepoint;
 import org.apache.abdera.i18n.text.CodepointIterator;

@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.i18n.test.iri;
 
+import static org.junit.Assert.fail;
+
 import org.apache.abdera.i18n.text.Punycode;
 
 public class TestPunycode extends TestBase {

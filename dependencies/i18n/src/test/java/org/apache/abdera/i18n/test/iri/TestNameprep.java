@@ -17,6 +17,9 @@
 */
 package org.apache.abdera.i18n.test.iri;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import org.apache.abdera.i18n.text.CharUtils;
 import org.apache.abdera.i18n.text.Nameprep;
 

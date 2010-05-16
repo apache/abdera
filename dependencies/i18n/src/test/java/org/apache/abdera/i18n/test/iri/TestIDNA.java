@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.i18n.test.iri;
 
+import static org.junit.Assert.assertTrue;
+
 import org.apache.abdera.i18n.iri.IDNA;
 import org.junit.Test;
 

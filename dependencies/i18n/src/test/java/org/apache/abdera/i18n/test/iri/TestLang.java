@@ -17,6 +17,12 @@
 */
 package org.apache.abdera.i18n.test.iri;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Locale;
 
 import org.apache.abdera.i18n.rfc4646.Lang;

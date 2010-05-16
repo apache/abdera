@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.i18n.test.iri;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.HashMap;

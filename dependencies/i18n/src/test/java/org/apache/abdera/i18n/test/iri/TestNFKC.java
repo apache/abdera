@@ -17,6 +17,8 @@
 */
 package org.apache.abdera.i18n.test.iri;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.abdera.i18n.text.Normalizer;
 import org.junit.Test;
 

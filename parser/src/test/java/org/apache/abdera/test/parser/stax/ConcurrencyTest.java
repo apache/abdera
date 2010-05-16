@@ -17,9 +17,9 @@
  */
 package org.apache.abdera.test.parser.stax;
 
-import java.io.InputStream;
+import static org.junit.Assert.fail;
 
-import junit.framework.Assert;
+import java.io.InputStream;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Content;
@@ -34,7 +34,7 @@ import org.junit.Test;
  * 
  * @version $Id$
  */
-public class ConcurrencyTest extends Assert {
+public class ConcurrencyTest {
 
   private static final int N_THREADS = 100;
 

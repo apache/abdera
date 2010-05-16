@@ -17,13 +17,14 @@
 */
 package org.apache.abdera.test.parser;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.Date;
-
-import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.text.io.CompressionUtil;
@@ -37,7 +38,7 @@ import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.writer.WriterOptions;
 import org.junit.Test;
 
-public class EncodingTest extends Assert {
+public class EncodingTest {
     
   @Test
     public void testContentEncoding() throws Exception {

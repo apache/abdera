@@ -17,11 +17,12 @@
 */
 package org.apache.abdera.test.parser.stax;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-
-import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
@@ -31,7 +32,7 @@ import org.apache.abdera.model.Service;
 import org.apache.abdera.parser.Parser;
 import org.junit.Test;
 
-public class ParserTest extends Assert {
+public class ParserTest {
 
   private static Abdera abdera = new Abdera();
   

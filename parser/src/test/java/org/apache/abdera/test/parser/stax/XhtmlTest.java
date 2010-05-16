@@ -17,7 +17,9 @@
 */
 package org.apache.abdera.test.parser.stax;
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Content;
@@ -26,7 +28,7 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Entry;
 import org.junit.Test;
 
-public class XhtmlTest extends Assert {
+public class XhtmlTest {
  
   @Test
   public void testXhtml() throws Exception {

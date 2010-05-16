@@ -17,9 +17,8 @@
 */
 package org.apache.abdera.i18n.test.iri;
 
-import junit.framework.Assert;
 
-public abstract class TestBase extends Assert {
+public abstract class TestBase {
 
   protected static String string(int... chars) {
     try {

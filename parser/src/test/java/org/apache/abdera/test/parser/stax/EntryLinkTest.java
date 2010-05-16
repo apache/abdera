@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.test.parser.stax;
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertNotNull;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
@@ -30,7 +30,7 @@ import org.junit.Test;
 
 
 
-public class EntryLinkTest extends Assert {
+public class EntryLinkTest {
 
     /**
      * Link in entry disappears after adding entry to a feed.

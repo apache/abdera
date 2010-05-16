@@ -17,9 +17,9 @@
 */
 package org.apache.abdera.test.parser;
 
-import java.io.StringWriter;
+import static org.junit.Assert.assertTrue;
 
-import junit.framework.Assert;
+import java.io.StringWriter;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
@@ -31,7 +31,7 @@ import org.junit.Test;
 
 
 
-public class ServiceDocumentTest extends Assert {
+public class ServiceDocumentTest {
 
     /**
      * Test whether the Service Document includes <accept> for collections.

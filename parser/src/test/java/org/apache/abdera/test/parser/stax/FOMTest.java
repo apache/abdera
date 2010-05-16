@@ -17,6 +17,11 @@
 */
 package org.apache.abdera.test.parser.stax;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -32,8 +37,6 @@ import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
-
-import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
@@ -73,7 +76,7 @@ import org.apache.abdera.xpath.XPath;
 import org.apache.axiom.attachments.ByteArrayDataSource;
 import org.junit.Test;
 
-public class FOMTest extends Assert   {
+public class FOMTest {
 
   private static Abdera abdera = new Abdera();
   

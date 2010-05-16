@@ -17,6 +17,12 @@
 */
 package org.apache.abdera.test.parser.stax;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -46,7 +52,6 @@ import org.apache.abdera.model.Text;
 import org.apache.abdera.util.MimeTypeParseException;
 import org.apache.axiom.om.OMException;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 //@Ignore("ABDERA-256")

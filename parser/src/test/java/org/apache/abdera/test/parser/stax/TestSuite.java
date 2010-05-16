@@ -19,7 +19,7 @@ package org.apache.abdera.test.parser.stax;
 
 import org.apache.abdera.test.parser.EncodingTest;
 import org.apache.abdera.test.parser.ServiceDocumentTest;
-import org.junit.internal.runners.TextListener;
+import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
 
 public class TestSuite {

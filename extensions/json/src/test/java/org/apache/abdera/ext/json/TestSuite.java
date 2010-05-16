@@ -17,7 +17,8 @@
 */
 package org.apache.abdera.ext.json;
 
-import org.junit.internal.runners.TextListener;
+
+import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
 
 public class TestSuite  {

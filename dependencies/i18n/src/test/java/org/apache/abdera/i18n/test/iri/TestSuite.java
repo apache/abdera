@@ -17,7 +17,7 @@
 */
 package org.apache.abdera.i18n.test.iri;
 
-import org.junit.internal.runners.TextListener;
+import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
 
 

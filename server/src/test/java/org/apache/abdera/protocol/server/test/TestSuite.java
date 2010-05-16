@@ -22,7 +22,7 @@ import org.apache.abdera.protocol.server.test.custom.CustomProviderTest;
 import org.apache.abdera.protocol.server.test.customer.CustomerAdapterTest;
 import org.apache.abdera.protocol.server.test.multipart.MultipartRelatedTest;
 import org.apache.abdera.protocol.server.test.route.RouteTest;
-import org.junit.internal.runners.TextListener;
+import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
 
 public class TestSuite {

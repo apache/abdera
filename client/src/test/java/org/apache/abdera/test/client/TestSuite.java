@@ -20,7 +20,7 @@ package org.apache.abdera.test.client;
 import org.apache.abdera.test.client.app.AppTest;
 import org.apache.abdera.test.client.cache.CacheTest;
 import org.apache.abdera.test.client.util.MultipartRelatedRequestEntityTest;
-import org.junit.internal.runners.TextListener;
+import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
 
 public class TestSuite {

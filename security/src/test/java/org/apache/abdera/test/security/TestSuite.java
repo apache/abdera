@@ -21,7 +21,7 @@ import java.security.Provider;
 import java.security.Security;
 
 import org.apache.abdera.test.security.filter.SecurityFilterTest;
-import org.junit.internal.runners.TextListener;
+import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
 
 public class TestSuite {

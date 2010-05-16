@@ -21,7 +21,7 @@ import org.apache.abdera.test.ext.bidi.BidiTest;
 import org.apache.abdera.test.ext.history.FeedPagingTest;
 import org.apache.abdera.test.ext.license.LicenseTest;
 import org.apache.abdera.test.ext.thread.ThreadTest;
-import org.junit.internal.runners.TextListener;
+import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
 
 public class TestSuite {

@@ -17,7 +17,8 @@
 */
 package org.apache.abdera.protocol.server.test.filesystem;
 
-import org.junit.internal.runners.TextListener;
+
+import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
 
 public class TestSuite {

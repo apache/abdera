@@ -72,18 +72,18 @@ public class MediaTest {
     group = entry.getExtension(GROUP);
     List<MediaContent> list = entry.getExtensions(CONTENT);
     for (MediaContent item : list) {
-      assertEquals(item.getUrl().toString(), "http://example.org");
-      assertEquals(item.getBitrate(), 123);
-      assertEquals(item.getChannels(), 2);
-      assertEquals(item.getDuration(), 123);
-      assertEquals(item.getExpression(), Expression.SAMPLE);
-      assertEquals(item.getFilesize(), 12345);
-      assertEquals(item.getFramerate(), 123);
-      assertEquals(item.getLang(), "en");
+      assertEquals("http://example.org", item.getUrl().toString());
+      assertEquals(123, item.getBitrate());
+      assertEquals(2, item.getChannels());
+      assertEquals(123, item.getDuration());
+      assertEquals(Expression.SAMPLE, item.getExpression());
+      assertEquals(12345, item.getFilesize());
+      assertEquals(123, item.getFramerate());
+      assertEquals("en", item.getLang());
       title = item.getExtension(TITLE);
       assertNotNull(title);
-      assertEquals(title.getType(), Type.PLAIN);
-      assertEquals(title.getText(), "This is a sample");
+      assertEquals(Type.PLAIN, title.getType());
+      assertEquals("This is a sample", title.getText());
     }
   }
   

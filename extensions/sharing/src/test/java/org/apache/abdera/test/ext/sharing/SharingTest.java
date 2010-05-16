@@ -110,45 +110,45 @@ public class SharingTest {
     Date since = AtomDate.parse("2005-02-13T18:30:02Z");
     Date until = AtomDate.parse("2005-05-23T18:30:02Z");
     
-    assertEquals(sharing.getSince(),since);
-    assertEquals(sharing.getUntil(),until);
+    assertEquals(since, sharing.getSince());
+    assertEquals(until, sharing.getUntil());
     
-    assertEquals(sharing.getRelated().size(),2);
+    assertEquals(2, sharing.getRelated().size());
     
     Related rel = sharing.getRelated().get(0);
-    assertEquals(rel.getLink().toString(),"http://example.com/all.xml");
-    assertEquals(rel.getType(),Related.Type.COMPLETE);
+    assertEquals("http://example.com/all.xml", rel.getLink().toString());
+    assertEquals(Related.Type.COMPLETE, rel.getType());
     
     rel = sharing.getRelated().get(1);
-    assertEquals(rel.getLink().toString(),"http://example.com/B.xml");
-    assertEquals(rel.getType(),Related.Type.AGGREGATED);
+    assertEquals("http://example.com/B.xml", rel.getLink().toString());
+    assertEquals(Related.Type.AGGREGATED, rel.getType());
     
     Entry entry = feed.getEntries().get(0);
     Sync sync = SharingHelper.getSync(entry, false);
     assertNotNull(sync);
-    assertEquals(sync.getId(),"item 1_myapp_2005-05-21T11:43:33Z");
-    assertEquals(sync.getUpdates(),3);
+    assertEquals("item 1_myapp_2005-05-21T11:43:33Z", sync.getId());
+    assertEquals(3, sync.getUpdates());
     
-    assertEquals(sync.getHistory().size(),3);
+    assertEquals(3, sync.getHistory().size());
     
     Date d1 = AtomDate.parse("2005-05-21T11:43:33Z");
     Date d2 = AtomDate.parse("2005-05-21T10:43:33Z");
     Date d3 = AtomDate.parse("2005-05-21T09:43:33Z");
     
     History history = sync.getHistory().get(0);
-    assertEquals(history.getSequence(),3);
-    assertEquals(history.getWhen(),d1);
-    assertEquals(history.getBy(),"JEO2000");
+    assertEquals(3, history.getSequence());
+    assertEquals(d1, history.getWhen());
+    assertEquals("JEO2000", history.getBy());
     
     history = sync.getHistory().get(1);
-    assertEquals(history.getSequence(),2);
-    assertEquals(history.getWhen(),d2);
-    assertEquals(history.getBy(),"REO1750");
+    assertEquals(2, history.getSequence());
+    assertEquals(d2, history.getWhen());
+    assertEquals("REO1750", history.getBy());
     
     history = sync.getHistory().get(2);
-    assertEquals(history.getSequence(),1);
-    assertEquals(history.getWhen(),d3);
-    assertEquals(history.getBy(),"REO1750");
+    assertEquals(1, history.getSequence());
+    assertEquals(d3, history.getWhen());
+    assertEquals("REO1750", history.getBy());
   }
   
   @Test
@@ -158,11 +158,11 @@ public class SharingTest {
     Sync sync = SharingHelper.getSync(entry, false);
     assertNotNull(sync);
     assertNotNull(sync.getId());
-    assertEquals(sync.getUpdates(),1);
-    assertEquals(sync.getHistory().size(),1);
+    assertEquals(1, sync.getUpdates());
+    assertEquals(1, sync.getHistory().size());
     History history = sync.getTopmostHistory();
-    assertEquals(history.getSequence(),1);
-    assertEquals(history.getBy(),"jms");
+    assertEquals(1, history.getSequence());
+    assertEquals("jms", history.getBy());
   }
   
   @Test
@@ -173,11 +173,11 @@ public class SharingTest {
     Sync sync = SharingHelper.getSync(entry, false);
     assertNotNull(sync);
     assertNotNull(sync.getId());
-    assertEquals(sync.getUpdates(),2);
-    assertEquals(sync.getHistory().size(),2);
+    assertEquals(2, sync.getUpdates());
+    assertEquals(2, sync.getHistory().size());
     History history = sync.getTopmostHistory();
-    assertEquals(history.getSequence(),2);
-    assertEquals(history.getBy(),"jms");
+    assertEquals(2, history.getSequence());
+    assertEquals("jms", history.getBy());
   }
   
   @Test
@@ -192,11 +192,11 @@ public class SharingTest {
     assertNotNull(sync);
     assertTrue(sync.isDeleted());
     assertNotNull(sync.getId());
-    assertEquals(sync.getUpdates(),2);
-    assertEquals(sync.getHistory().size(),2);
+    assertEquals(2, sync.getUpdates());
+    assertEquals(2, sync.getHistory().size());
     History history = sync.getTopmostHistory();
-    assertEquals(history.getSequence(),2);
-    assertEquals(history.getBy(),"jms");
+    assertEquals(2, history.getSequence());
+    assertEquals("jms", history.getBy());
   }
   
   @Test
@@ -215,12 +215,12 @@ public class SharingTest {
     
     SharingHelper.mergeFeeds(f1, f2);
     
-    assertEquals(f2.getEntries().size(),1);
+    assertEquals(1, f2.getEntries().size());
     Entry entry = f2.getEntries().get(0);
     Sync sync = SharingHelper.getSync(entry);
     Conflicts conflicts = sync.getConflicts();
     assertNotNull(conflicts);
-    assertEquals(conflicts.getEntries().size(),1);
+    assertEquals(1, conflicts.getEntries().size());
     Entry conflict = conflicts.getEntries().get(0);
     assertNotNull(conflict);
     
@@ -237,7 +237,7 @@ public class SharingTest {
     sync = SharingHelper.getSync(entry);
     conflicts = sync.getConflicts();
     assertNull(conflicts);
-    assertEquals(sync.getHistory().size(),4);
+    assertEquals(4, sync.getHistory().size());
     
   }
   
@@ -247,14 +247,14 @@ public class SharingTest {
     Abdera abdera = new Abdera();
     Feed feed = abdera.newFeed();
     Entry entry = feed.addEntry();
-    assertEquals(feed.getEntries().size(),1);
+    assertEquals(1, feed.getEntries().size());
     entry = SharingHelper.unpublish(entry);
-    assertEquals(feed.getEntries().size(),0);
+    assertEquals(0, feed.getEntries().size());
     Unpublished unpub = SharingHelper.getUnpublished(feed);
-    assertEquals(unpub.getEntries().size(),1);
+    assertEquals(1, unpub.getEntries().size());
     SharingHelper.republish(entry);
     unpub = SharingHelper.getUnpublished(feed);
-    assertEquals(unpub.getEntries().size(),0);
-    assertEquals(feed.getEntries().size(),1);
+    assertEquals(0, unpub.getEntries().size());
+    assertEquals(1, feed.getEntries().size());
   }
 }

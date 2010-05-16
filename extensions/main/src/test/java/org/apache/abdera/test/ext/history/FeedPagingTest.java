@@ -17,16 +17,18 @@
 */
 package org.apache.abdera.test.ext.history;
 
-import javax.xml.namespace.QName;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import junit.framework.Assert;
+import javax.xml.namespace.QName;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.history.FeedPagingHelper;
 import org.apache.abdera.model.Feed;
 import org.junit.Test;
 
-public class FeedPagingTest extends Assert {
+public class FeedPagingTest {
 
   @Test
   public void testHistory() throws Exception {

@@ -17,6 +17,9 @@
 */
 package org.apache.abdera.test.ext.rss;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.InputStream;
 import java.util.List;
 
@@ -25,10 +28,9 @@ import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.model.Person;
-import org.junit.Assert;
 import org.junit.Test;
 
-public class RssTest extends Assert {
+public class RssTest {
 
   @Test
   public void testRSS1() {

@@ -17,11 +17,15 @@
 */
 package org.apache.abdera.test.ext.sharing;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.StringReader;
 import java.util.Date;
 import java.util.List;
-
-import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.sharing.Conflicts;
@@ -39,8 +43,7 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.junit.Test;
 
-public class SharingTest
-    extends Assert {
+public class SharingTest {
   
   @Test
   public void testSharingFactory() throws Exception {

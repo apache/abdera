@@ -20,12 +20,12 @@ package org.apache.abdera.test.ext.media;
 import static org.apache.abdera.ext.media.MediaConstants.CONTENT;
 import static org.apache.abdera.ext.media.MediaConstants.GROUP;
 import static org.apache.abdera.ext.media.MediaConstants.TITLE;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
-
-import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.media.MediaContent;
@@ -39,7 +39,7 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.parser.Parser;
 import org.junit.Test;
 
-public class MediaTest extends Assert {
+public class MediaTest {
 
   @Test
   public void testMedia() throws Exception {

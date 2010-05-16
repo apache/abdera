@@ -17,7 +17,9 @@
 */
 package org.apache.abdera.test.ext.features;
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.features.AcceptSelector;
@@ -34,7 +36,7 @@ import org.apache.abdera.model.Service;
 import org.apache.abdera.model.Workspace;
 import org.junit.Test;
 
-public class FeatureTest extends Assert {
+public class FeatureTest {
 
   @Test
   public void testFeaturesDocument() throws Exception {

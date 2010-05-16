@@ -17,12 +17,12 @@
 */
 package org.apache.abdera.test.ext.serializer;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 import java.util.Date;
-
-import junit.framework.Assert;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.serializer.ConventionSerializationContext;
@@ -39,7 +39,7 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.writer.StreamWriter;
 import org.junit.Test;
 
-public class SerializerTest extends Assert {
+public class SerializerTest {
 
   static Date date_now = new Date();
   static Calendar cal_now = Calendar.getInstance();

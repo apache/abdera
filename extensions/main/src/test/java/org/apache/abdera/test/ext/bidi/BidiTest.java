@@ -17,7 +17,8 @@
 */
 package org.apache.abdera.test.ext.bidi;
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.bidi.BidiHelper;
@@ -26,7 +27,7 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.junit.Test;
 
-public class BidiTest extends Assert {
+public class BidiTest {
 
   @Test
   public void testBidi() throws Exception {

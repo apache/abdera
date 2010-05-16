@@ -17,7 +17,9 @@
 */
 package org.apache.abdera.test.ext.license;
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.license.LicenseHelper;
@@ -25,7 +27,7 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.junit.Test;
 
-public class LicenseTest extends Assert {
+public class LicenseTest {
 
   @Test
   public void testLicense() throws Exception {

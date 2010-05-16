@@ -17,7 +17,8 @@
 */
 package org.apache.abdera.test.ext.thread;
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.thread.InReplyTo;
@@ -27,7 +28,7 @@ import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
 import org.junit.Test;
 
-public class ThreadTest extends Assert {
+public class ThreadTest {
 
   @Test
   public void testThread() throws Exception {

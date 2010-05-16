@@ -87,33 +87,35 @@ public class CouchDbTest {
   public void testGetService() throws Exception {
     ClientResponse resp = client.get("http://localhost:9002/");
     assertNotNull(resp);
-    assertEquals(resp.getType(), ResponseType.SUCCESS);
+    assertEquals(ResponseType.SUCCESS, resp.getType());
     assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.APP_MEDIA_TYPE));
     Document<Service> doc = resp.getDocument();
     Service service = doc.getRoot();
-    assertEquals(service.getWorkspaces().size(), 1);
+    assertEquals(1, service.getWorkspaces().size());
     Workspace workspace = service.getWorkspace("Abdera");
-    assertEquals(workspace.getCollections().size(), 2);
+    assertEquals(2, workspace.getCollections().size());
     Collection collection = workspace.getCollection("CouchDB Feed");
     assertNotNull(collection);
     assertTrue(collection.acceptsEntry());
-    assertEquals(collection.getResolvedHref().toString(), "http://localhost:9002/couchdb");
+    assertEquals("http://localhost:9002/couchdb", collection.getResolvedHref().toString());
     resp.release();
   }
+  
   @Test
   public void testGetFeed() {
     ClientResponse resp = client.get("http://localhost:9002/couchdb");
     assertNotNull(resp);
-    assertEquals(resp.getType(), ResponseType.SUCCESS);
+    assertEquals(ResponseType.SUCCESS, resp.getType());
     assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.ATOM_MEDIA_TYPE));
     Document<Feed> doc = resp.getDocument();
     Feed feed = doc.getRoot();
-    assertEquals(feed.getId().toString(), "http://localhost:9002/couchdb");
-    assertEquals(feed.getTitle(), "CouchDB Feed");
-    assertEquals(feed.getAuthor().getName(), "james");
-    assertEquals(feed.getEntries().size(), 0);
+    assertEquals("http://localhost:9002/couchdb", feed.getId().toString());
+    assertEquals("CouchDB Feed", feed.getTitle());
+    assertEquals("james", feed.getAuthor().getName());
+    assertEquals(0, feed.getEntries().size());
     resp.release();
   }
+  
   @Test
   public void testPostEntry() {
     Entry entry = abdera.newEntry();
@@ -125,25 +127,27 @@ public class CouchDbTest {
     entry.addAuthor("James");
     ClientResponse resp = client.post("http://localhost:9002/couchdb", entry);
     assertNotNull(resp);
-    assertEquals(resp.getType(), ResponseType.SUCCESS);
-    assertEquals(resp.getStatus(), 201);
-    assertEquals(resp.getLocation().toString(), "http://localhost:9002/couchdb/test_entry");
+    assertEquals(ResponseType.SUCCESS, resp.getType());
+    assertEquals(201, resp.getStatus());
+    assertEquals("http://localhost:9002/couchdb/test_entry", resp.getLocation().toString());
     resp = client.get("http://localhost:9002/couchdb");
     Document<Feed> feed_doc = resp.getDocument();
     Feed feed = feed_doc.getRoot();
-    assertEquals(feed.getEntries().size(), 1);
+    assertEquals(1, feed.getEntries().size());
     resp.release();
   }
+  
   @Test
   public void testPostMedia() {
     ByteArrayInputStream in = new ByteArrayInputStream(new byte[] {0x01, 0x02, 0x03, 0x04});
     RequestOptions options = client.getDefaultRequestOptions();
     options.setContentType("application/octet-stream");
     ClientResponse resp = client.post("http://localhost:9002/couchdb", in, options);
-    assertEquals(resp.getType(), ResponseType.CLIENT_ERROR);
-    assertEquals(resp.getStatus(), 415);
+    assertEquals(ResponseType.CLIENT_ERROR, resp.getType());
+    assertEquals(415, resp.getStatus());
     resp.release();
   }
+  
   @Test
   public void testPutEntry() {
     ClientResponse resp = client.get("http://localhost:9002/couchdb/test_entry");
@@ -152,30 +156,30 @@ public class CouchDbTest {
     entry.setTitle("This is the modified title");
     resp.release();
     resp = client.put("http://localhost:9002/couchdb/test_entry", entry);
-    assertEquals(resp.getType(), ResponseType.SUCCESS);
-    assertEquals(resp.getStatus(), 200);
+    assertEquals(ResponseType.SUCCESS, resp.getType());
+    assertEquals(200, resp.getStatus());
     resp.release();
     resp = client.get("http://localhost:9002/couchdb/test_entry");
     doc = resp.getDocument();
     entry = doc.getRoot();
-    assertEquals(entry.getTitle(), "This is the modified title");
+    assertEquals("This is the modified title", entry.getTitle());
     resp.release();
     resp = client.get("http://localhost:9002/couchdb");
     Document<Feed> feed_doc = resp.getDocument();
     Feed feed = feed_doc.getRoot();
-    assertEquals(feed.getEntries().size(), 1);
+    assertEquals(1, feed.getEntries().size());
     resp.release();
   }
 
   @Test
   public void testDeleteEntry() {
     ClientResponse resp = client.delete("http://localhost:9002/couchdb/test_entry");
-    assertEquals(resp.getType(), ResponseType.SUCCESS);
+    assertEquals(ResponseType.SUCCESS, resp.getType());
     resp.release();
     resp = client.get("http://localhost:9002/couchdb");
     Document<Feed> feed_doc = resp.getDocument();
     Feed feed = feed_doc.getRoot();
-    assertEquals(feed.getEntries().size(), 0);
+    assertEquals(0, feed.getEntries().size());
     resp.release();
   }
 }

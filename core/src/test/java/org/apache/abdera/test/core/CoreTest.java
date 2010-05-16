@@ -31,29 +31,17 @@ import org.junit.Test;
 
 public class CoreTest {
   
-  @Test
-  public void testUriNormalization() {
-    try {
-      assertEquals("http://www.example.org/Bar/%3F/foo/",
-        IRI.normalizeString(
-          "HTTP://www.EXAMPLE.org:80/foo/../Bar/%3f/./foo/.") 
-        );
-      assertEquals("https://www.example.org/Bar/%3F/foo/",
-          IRI.normalizeString(
-          "HTTPs://www.EXAMPLE.org:443/foo/../Bar/%3f/./foo/.") 
-        );
-      assertEquals("http://www.example.org:81/Bar/%3F/foo/",
-        IRI.normalizeString(
-          "HTTP://www.EXAMPLE.org:81/foo/../Bar/%3f/./foo/.")
-        );
-      assertEquals("https://www.example.org:444/Bar/%3F/foo/",
-        IRI.normalizeString(
-          "HTTPs://www.EXAMPLE.org:444/foo/../Bar/%3f/./foo/.") 
-        );
-    } catch (Exception e) {
-      e.printStackTrace();
+    @Test
+    public void testUriNormalization() {
+        assertEquals("http://www.example.org/Bar/%3F/foo/",
+                     IRI.normalizeString("HTTP://www.EXAMPLE.org:80/foo/../Bar/%3f/./foo/."));
+        assertEquals("https://www.example.org/Bar/%3F/foo/",
+                     IRI.normalizeString("HTTPs://www.EXAMPLE.org:443/foo/../Bar/%3f/./foo/."));
+        assertEquals("http://www.example.org:81/Bar/%3F/foo/",
+                     IRI.normalizeString("HTTP://www.EXAMPLE.org:81/foo/../Bar/%3f/./foo/."));
+        assertEquals("https://www.example.org:444/Bar/%3F/foo/",
+                     IRI.normalizeString("HTTPs://www.EXAMPLE.org:444/foo/../Bar/%3f/./foo/."));
     }
-  }
   
   
   @Test

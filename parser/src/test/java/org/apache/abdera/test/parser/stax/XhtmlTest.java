@@ -49,4 +49,17 @@ public class XhtmlTest {
     
   }
   
+  @Test
+  public void testSpecialCharacters (){
+      Abdera abdera = new Abdera();
+      Entry entry = abdera.newEntry();
+      entry.setContentAsXhtml("<p>&Auml;sthetik</p>");
+      assertNotNull(entry.getContent());
+      assertEquals( Content.Type.XHTML, entry.getContentType());
+      Element el = entry.getContentElement().getValueElement();
+      char umlaut = el.getFirstChild().getText().charAt(0);
+      //hexadecimal value of &Auml; is U+00C4
+      assertEquals("c4", Integer.toHexString(umlaut));
+  }
+  
 }

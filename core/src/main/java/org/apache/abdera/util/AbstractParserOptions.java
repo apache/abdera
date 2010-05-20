@@ -246,7 +246,7 @@ public abstract class AbstractParserOptions
     registerEntity("yacute","\u00FD");
     registerEntity("thorn","\u00FE");
     registerEntity("yuml","\u00FF");
-    registerEntity("Oelig","\u0152");
+    registerEntity("OElig","\u0152");
     registerEntity("oelig","\u0153");
     registerEntity("Scaron","\u0160");
     registerEntity("scaron","\u0161");

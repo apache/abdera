@@ -1,32 +1,44 @@
 /*
-* Licensed to the Apache Software Foundation (ASF) under one or more
-* contributor license agreements.  The ASF licenses this file to You
-* under the Apache License, Version 2.0 (the "License"); you may not
-* use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.  For additional information regarding
-* copyright in this work, please see the NOTICE file in the top level
-* directory of this distribution.
-*/
-package org.apache.abdera.test.parser.stax;
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  The ASF licenses this file to You
+ * under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.  For additional information regarding
+ * copyright in this work, please see the NOTICE file in the top level
+ * directory of this distribution.
+ */
+package org.apache.abdera.util;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.abdera.parser.stax.FOMParserOptions;
+import org.apache.abdera.factory.Factory;
 import org.junit.Test;
 
-public class FOMParserOptionsTest {
+public class AbstractParserOptionsTest {
+    
+    private static final class TestParserOptions extends AbstractParserOptions {
 
+        @Override
+        protected void checkFactory(Factory factory) { 
+        }
+
+        @Override
+        protected void initFactory() {
+        }   
+    }
+
+    
     @Test
     public void checkAllEntities() throws Exception {
-        FOMParserOptions fomParserOptions = new FOMParserOptions(null);
+        TestParserOptions fomParserOptions = new TestParserOptions();
 
         assertEquals("00A1", getHexValue("iexcl", fomParserOptions));
         assertEquals("00A2", getHexValue("cent", fomParserOptions));
@@ -279,7 +291,7 @@ public class FOMParserOptionsTest {
         assertEquals("20AC", getHexValue("euro", fomParserOptions));
     }
 
-    private String getHexValue(String entity, FOMParserOptions fomParserOptions) {
+    private String getHexValue(String entity, AbstractParserOptions fomParserOptions) {
         String hexValue = fomParserOptions.resolveEntity(entity);
         char hexChar = hexValue.charAt(0);
         StringBuilder result = new StringBuilder(Integer.toHexString(hexChar));
@@ -290,4 +302,6 @@ public class FOMParserOptionsTest {
         }
         return result.toString().toUpperCase();
     }
+    
+    
 }

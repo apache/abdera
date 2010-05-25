@@ -252,7 +252,7 @@ public final class Discover {
         this.args = args;
         this.classesonly = classesonly;
         try {
-          InputStreamReader reader = new InputStreamReader(in);
+          InputStreamReader reader = new InputStreamReader(in, "UTF-8");
           buf = new BufferedReader(reader);
           line = readNext();
         } catch (Throwable t) {

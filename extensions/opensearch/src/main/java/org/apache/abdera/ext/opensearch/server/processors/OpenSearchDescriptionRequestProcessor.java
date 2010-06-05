@@ -28,8 +28,8 @@ import org.apache.abdera.protocol.server.WorkspaceManager;
 import org.apache.abdera.protocol.server.context.BaseResponseContext;
 
 /**
- * {@link org.apache.abdera.protocol.server.RequestProcessor} implementation for processing Open Search Description document
- * GET requests.<br>
+ * {@link org.apache.abdera.protocol.server.RequestProcessor} implementation for processing Open Search Description
+ * document GET requests.<br>
  * This request processor needs an {@link org.apache.abdera.ext.opensearch.server.OpenSearchInfo} in order to provide
  * information about the Open Search service.
  * 
@@ -39,7 +39,9 @@ public class OpenSearchDescriptionRequestProcessor implements RequestProcessor {
 
     private OpenSearchInfo openSearchInfo;
 
-    public ResponseContext process(RequestContext requestContext, WorkspaceManager workspaceManager, CollectionAdapter collectionAdapter) {
+    public ResponseContext process(RequestContext requestContext,
+                                   WorkspaceManager workspaceManager,
+                                   CollectionAdapter collectionAdapter) {
         String method = requestContext.getMethod();
         if (method.equalsIgnoreCase("GET")) {
             OpenSearchDescription description = this.openSearchInfo.asOpenSearchDescriptionElement(requestContext);

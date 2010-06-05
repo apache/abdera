@@ -33,105 +33,108 @@ import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
 import org.apache.abdera.xpath.XPath;
 
-public interface Configuration 
-  extends Cloneable, Serializable {
-  
-  /**
-   * Retrieve the value of the specified configuration option
-   * @return The configuration option value or null
-   */
-  public abstract String getConfigurationOption(String id);
-  
-  /**
-   * Retrieve the value of the specified configuration option or _default
-   * if the value is null
-   * @return The configuration option value of _default
-   */
-  public abstract String getConfigurationOption(String id, String _default);
-    
-  /**
-   * Get a new instance of the default Factory impl
-   */
-  public Factory newFactoryInstance(Abdera abdera);
-  
-  /**
-   * Get a new instance of the default Parser impl
-   */
-  public Parser newParserInstance(Abdera abdera);
-  
-  /**
-   * Get a new instance of the default XPath impl
-   */
-  public XPath newXPathInstance(Abdera abdera);
-  
-  /**
-   * Get a new instance of the default ParserFactory impl
-   */
-  public ParserFactory newParserFactoryInstance(Abdera abdera);
-  
-  /**
-   * Get a new instance of the default WriterFactory impl
-   */
-  public WriterFactory newWriterFactoryInstance(Abdera abdera);
-  
-  /**
-   * Get a new instance of the default Writer impl
-   */
-  public Writer newWriterInstance(Abdera abdera);
-  
-  /**
-   * Get a new instance of the default StreamWriter impl
-   */
-  public StreamWriter newStreamWriterInstance(Abdera abdera);
-  
-  /**
-   * Get the collection of NamedParsers;
-   */
-  public Map<String,NamedParser> getNamedParsers();
-  
-  /**
-   * Get the collection of NamedWriters
-   */
-  public Map<String,NamedWriter> getNamedWriters();
-  
-  /**
-   * Get the collection of Named StreamWriters
-   */
-  public Map<String,Class<? extends StreamWriter>> getStreamWriters();
-  
-  /**
-   * Get the collection of ExtensionFactory impls
-   */
-  public List<ExtensionFactory> getExtensionFactories();
-  
-  
-  public abstract Object clone();
-  
-  /**
-   * Registers a new NamedParser, this method doesn't override a parser if already exists.
-   * @param parser is the new NamedParser to add
-   * @return the instance of the configuration class
-   */
-  public Configuration addNamedParser(NamedParser parser);
-  
-  /**
-   * Registers a new NamedWriter, this method doesn't override a writer if already exists.
-   * @param writer is the new NamedWriter to add
-   * @return the instance of the configuration class
-   */
-  public Configuration addNamedWriter(NamedWriter writer);
-  
-  /**
-   * Registers a new ExtensionFactory, this method doesn't override an extensionFactory if already exists.
-   * @param factory is the new ExtensionFactory to add
-   * @return the instance of the configuration class
-   */
-  public Configuration addExtensionFactory(ExtensionFactory factory);
-  
-  /**
-   * Registers a new StreamWriter, this method doesn't override a streamWriter if already exists.
-   * @param sw is the new StreamWriter to add
-   * @return the instance of the configuration class
-   */
-  public Configuration addStreamWriter(Class<? extends StreamWriter> sw);
+public interface Configuration extends Cloneable, Serializable {
+
+    /**
+     * Retrieve the value of the specified configuration option
+     * 
+     * @return The configuration option value or null
+     */
+    public abstract String getConfigurationOption(String id);
+
+    /**
+     * Retrieve the value of the specified configuration option or _default if the value is null
+     * 
+     * @return The configuration option value of _default
+     */
+    public abstract String getConfigurationOption(String id, String _default);
+
+    /**
+     * Get a new instance of the default Factory impl
+     */
+    public Factory newFactoryInstance(Abdera abdera);
+
+    /**
+     * Get a new instance of the default Parser impl
+     */
+    public Parser newParserInstance(Abdera abdera);
+
+    /**
+     * Get a new instance of the default XPath impl
+     */
+    public XPath newXPathInstance(Abdera abdera);
+
+    /**
+     * Get a new instance of the default ParserFactory impl
+     */
+    public ParserFactory newParserFactoryInstance(Abdera abdera);
+
+    /**
+     * Get a new instance of the default WriterFactory impl
+     */
+    public WriterFactory newWriterFactoryInstance(Abdera abdera);
+
+    /**
+     * Get a new instance of the default Writer impl
+     */
+    public Writer newWriterInstance(Abdera abdera);
+
+    /**
+     * Get a new instance of the default StreamWriter impl
+     */
+    public StreamWriter newStreamWriterInstance(Abdera abdera);
+
+    /**
+     * Get the collection of NamedParsers;
+     */
+    public Map<String, NamedParser> getNamedParsers();
+
+    /**
+     * Get the collection of NamedWriters
+     */
+    public Map<String, NamedWriter> getNamedWriters();
+
+    /**
+     * Get the collection of Named StreamWriters
+     */
+    public Map<String, Class<? extends StreamWriter>> getStreamWriters();
+
+    /**
+     * Get the collection of ExtensionFactory impls
+     */
+    public List<ExtensionFactory> getExtensionFactories();
+
+    public abstract Object clone();
+
+    /**
+     * Registers a new NamedParser, this method doesn't override a parser if already exists.
+     * 
+     * @param parser is the new NamedParser to add
+     * @return the instance of the configuration class
+     */
+    public Configuration addNamedParser(NamedParser parser);
+
+    /**
+     * Registers a new NamedWriter, this method doesn't override a writer if already exists.
+     * 
+     * @param writer is the new NamedWriter to add
+     * @return the instance of the configuration class
+     */
+    public Configuration addNamedWriter(NamedWriter writer);
+
+    /**
+     * Registers a new ExtensionFactory, this method doesn't override an extensionFactory if already exists.
+     * 
+     * @param factory is the new ExtensionFactory to add
+     * @return the instance of the configuration class
+     */
+    public Configuration addExtensionFactory(ExtensionFactory factory);
+
+    /**
+     * Registers a new StreamWriter, this method doesn't override a streamWriter if already exists.
+     * 
+     * @param sw is the new StreamWriter to add
+     * @return the instance of the configuration class
+     */
+    public Configuration addStreamWriter(Class<? extends StreamWriter> sw);
 }

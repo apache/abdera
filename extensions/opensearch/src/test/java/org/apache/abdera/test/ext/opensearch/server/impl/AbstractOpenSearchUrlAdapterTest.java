@@ -49,16 +49,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class AbstractOpenSearchUrlAdapterTest extends AbstractOpenSearchServerTest {
-    
+
     private JettyServer server = new JettyServer();
     private OpenSearchInfo osInfo;
     private OpenSearchUrlRequestProcessor osUrlProcessor;
-    
+
     @Before
     public void setUp() throws Exception {
         this.osInfo = this.createOpenSearchInfo();
-        ((SimpleOpenSearchUrlInfo) osInfo.getUrls()[0]).setOpenSearchUrlAdapter(new TestingOpenSearchUrlAdapter());
-        
+        ((SimpleOpenSearchUrlInfo)osInfo.getUrls()[0]).setOpenSearchUrlAdapter(new TestingOpenSearchUrlAdapter());
+
         this.osUrlProcessor = new OpenSearchUrlRequestProcessor();
         this.osUrlProcessor.setOpenSearchInfo(this.osInfo);
 
@@ -69,11 +69,12 @@ public class AbstractOpenSearchUrlAdapterTest extends AbstractOpenSearchServerTe
         wsManager.setWorkspaces(new LinkedList<WorkspaceInfo>());
 
         RouteManager routeManager = new RouteManager();
-        routeManager.addRoute("service", "/", TargetType.TYPE_SERVICE)
-                .addRoute("feed", "/atom/:collection", TargetType.TYPE_COLLECTION)
-                .addRoute("entry", "/atom/:collection/:entry", TargetType.TYPE_ENTRY)
-                .addRoute("categories", "/atom/:collection/:entry;categories", TargetType.TYPE_CATEGORIES)
-                .addRoute("osSearch1", "/search1", OpenSearchTargetTypes.OPENSEARCH_URL);
+        routeManager.addRoute("service", "/", TargetType.TYPE_SERVICE).addRoute("feed",
+                                                                                "/atom/:collection",
+                                                                                TargetType.TYPE_COLLECTION)
+            .addRoute("entry", "/atom/:collection/:entry", TargetType.TYPE_ENTRY)
+            .addRoute("categories", "/atom/:collection/:entry;categories", TargetType.TYPE_CATEGORIES)
+            .addRoute("osSearch1", "/search1", OpenSearchTargetTypes.OPENSEARCH_URL);
 
         DefaultProvider provider = new DefaultProvider("/");
         provider.setWorkspaceManager(wsManager);
@@ -88,30 +89,34 @@ public class AbstractOpenSearchUrlAdapterTest extends AbstractOpenSearchServerTe
     public void tearDown() throws Exception {
         this.server.stop();
     }
-    
+
     @Test
     public void testOpenSearchFeedResponse() throws Exception {
         AbderaClient client = new AbderaClient();
         ClientResponse response = client.get("http://localhost:9002/search1?q=test1&c=1");
         assertEquals(200, response.getStatus());
-        
+
         Document<Feed> feedDoc = response.getDocument();
         Feed feed = feedDoc.getRoot();
         assertEquals(TestingOpenSearchUrlAdapter.OS_FEED_ID, feed.getId().toString());
         assertEquals(TestingOpenSearchUrlAdapter.OS_FEED_TITLE, feed.getTitle());
         assertEquals(TestingOpenSearchUrlAdapter.OS_FEED_AUTHOR, feed.getAuthor().getName());
-        assertEquals(2, ((IntegerElement) feed.getExtension(OpenSearchConstants.TOTAL_RESULTS)).getValue());
+        assertEquals(2, ((IntegerElement)feed.getExtension(OpenSearchConstants.TOTAL_RESULTS)).getValue());
         assertEquals(2, feed.getEntries().size());
         assertNotNull(feed.getEntry(TestingOpenSearchUrlAdapter.SEARCH_RESULT_1_ID));
         assertNotNull(feed.getEntry(TestingOpenSearchUrlAdapter.SEARCH_RESULT_2_ID));
-        assertEquals(TestingOpenSearchUrlAdapter.SEARCH_RESULT_1_TITLE, feed.getEntry(TestingOpenSearchUrlAdapter.SEARCH_RESULT_1_ID).getTitle());
-        assertEquals(TestingOpenSearchUrlAdapter.SEARCH_RESULT_1_DESC, feed.getEntry(TestingOpenSearchUrlAdapter.SEARCH_RESULT_1_ID).getContent());
-        assertEquals(TestingOpenSearchUrlAdapter.SEARCH_RESULT_2_TITLE, feed.getEntry(TestingOpenSearchUrlAdapter.SEARCH_RESULT_2_ID).getTitle());
-        assertEquals(TestingOpenSearchUrlAdapter.SEARCH_RESULT_2_DESC, feed.getEntry(TestingOpenSearchUrlAdapter.SEARCH_RESULT_2_ID).getContent());
+        assertEquals(TestingOpenSearchUrlAdapter.SEARCH_RESULT_1_TITLE, feed
+            .getEntry(TestingOpenSearchUrlAdapter.SEARCH_RESULT_1_ID).getTitle());
+        assertEquals(TestingOpenSearchUrlAdapter.SEARCH_RESULT_1_DESC, feed
+            .getEntry(TestingOpenSearchUrlAdapter.SEARCH_RESULT_1_ID).getContent());
+        assertEquals(TestingOpenSearchUrlAdapter.SEARCH_RESULT_2_TITLE, feed
+            .getEntry(TestingOpenSearchUrlAdapter.SEARCH_RESULT_2_ID).getTitle());
+        assertEquals(TestingOpenSearchUrlAdapter.SEARCH_RESULT_2_DESC, feed
+            .getEntry(TestingOpenSearchUrlAdapter.SEARCH_RESULT_2_ID).getContent());
     }
-    
+
     private class TestingOpenSearchUrlAdapter extends AbstractOpenSearchUrlAdapter<SearchResult> {
-        
+
         public static final String OS_FEED_AUTHOR = "Sergio Bossa";
         public static final String OS_FEED_ID = "http://www.acme.org/feed/id";
         public static final String OS_FEED_TITLE = "Feed Title";
@@ -155,9 +160,9 @@ public class AbstractOpenSearchUrlAdapterTest extends AbstractOpenSearchServerTe
             entry.setContent(entity.getDescription());
         }
     }
-    
+
     private class SearchResult {
-        
+
         private String id;
         private String title;
         private String description;
@@ -167,7 +172,7 @@ public class AbstractOpenSearchUrlAdapterTest extends AbstractOpenSearchServerTe
             this.title = title;
             this.description = description;
         }
-        
+
         public String getTitle() {
             return this.title;
         }

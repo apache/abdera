@@ -27,81 +27,86 @@ import org.apache.abdera.protocol.server.CollectionInfo;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.WorkspaceInfo;
 
-public class SimpleWorkspaceInfo 
-  implements WorkspaceInfo,
-             Serializable {
+public class SimpleWorkspaceInfo implements WorkspaceInfo, Serializable {
 
-  private static final long serialVersionUID = -8459688584319762878L;
-  
-  protected String title;
-  protected Set<CollectionInfo> collections;
+    private static final long serialVersionUID = -8459688584319762878L;
 
-  public SimpleWorkspaceInfo() {}
-  
-  public SimpleWorkspaceInfo(String title) {
-    this.title = title;
-  }
-  
-  public String getTitle() {
-    return title;
-  }
+    protected String title;
+    protected Set<CollectionInfo> collections;
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public String getTitle(RequestContext request) {
-    return title;
-  }
-
-  public void addCollection(CollectionInfo ci) {
-    getCollections().add(ci);
-  }
-
-  public Collection<CollectionInfo> getCollections(RequestContext request) {
-    return collections;
-  }
-
-  public Set<CollectionInfo> getCollections() {
-    if (collections == null) {
-      collections = new HashSet<CollectionInfo>();
+    public SimpleWorkspaceInfo() {
     }
 
-    return collections;
-  }
+    public SimpleWorkspaceInfo(String title) {
+        this.title = title;
+    }
 
-  public void setCollections(Set<CollectionInfo> collections) {
-    this.collections = collections;
-  }
+    public String getTitle() {
+        return title;
+    }
 
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result
-        + ((collections == null) ? 0 : collections.hashCode());
-    result = prime * result + ((title == null) ? 0 : title.hashCode());
-    return result;
-  }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-  public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
-    final SimpleWorkspaceInfo other = (SimpleWorkspaceInfo) obj;
-    if (collections == null) {
-      if (other.collections != null) return false;
-    } else if (!collections.equals(other.collections)) return false;
-    if (title == null) {
-      if (other.title != null) return false;
-    } else if (!title.equals(other.title)) return false;
-    return true;
-  }
-  
-  public Workspace asWorkspaceElement(RequestContext request) {
-    Workspace workspace = request.getAbdera().getFactory().newWorkspace();
-    workspace.setTitle(title);
-    for (CollectionInfo collection : this.collections)
-      workspace.addCollection(collection.asCollectionElement(request));
-    return workspace;
-  }
+    public String getTitle(RequestContext request) {
+        return title;
+    }
+
+    public void addCollection(CollectionInfo ci) {
+        getCollections().add(ci);
+    }
+
+    public Collection<CollectionInfo> getCollections(RequestContext request) {
+        return collections;
+    }
+
+    public Set<CollectionInfo> getCollections() {
+        if (collections == null) {
+            collections = new HashSet<CollectionInfo>();
+        }
+
+        return collections;
+    }
+
+    public void setCollections(Set<CollectionInfo> collections) {
+        this.collections = collections;
+    }
+
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((collections == null) ? 0 : collections.hashCode());
+        result = prime * result + ((title == null) ? 0 : title.hashCode());
+        return result;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final SimpleWorkspaceInfo other = (SimpleWorkspaceInfo)obj;
+        if (collections == null) {
+            if (other.collections != null)
+                return false;
+        } else if (!collections.equals(other.collections))
+            return false;
+        if (title == null) {
+            if (other.title != null)
+                return false;
+        } else if (!title.equals(other.title))
+            return false;
+        return true;
+    }
+
+    public Workspace asWorkspaceElement(RequestContext request) {
+        Workspace workspace = request.getAbdera().getFactory().newWorkspace();
+        workspace.setTitle(title);
+        for (CollectionInfo collection : this.collections)
+            workspace.addCollection(collection.asCollectionElement(request));
+        return workspace;
+    }
 }

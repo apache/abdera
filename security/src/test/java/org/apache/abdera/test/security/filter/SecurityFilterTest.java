@@ -44,86 +44,80 @@ import org.junit.Test;
 
 public class SecurityFilterTest {
 
-  private static JettyServer server;
-  private static Abdera abdera = Abdera.getInstance();
-  private static AbderaClient client = new AbderaClient();
-  
-  @BeforeClass
-  public static void setUp() throws Exception {
-    try {
-      server = new JettyServer();
-      server.start(CustomProvider.class);
-    } catch (Exception e) {
-      e.printStackTrace();
+    private static JettyServer server;
+    private static Abdera abdera = Abdera.getInstance();
+    private static AbderaClient client = new AbderaClient();
+
+    @BeforeClass
+    public static void setUp() throws Exception {
+        try {
+            server = new JettyServer();
+            server.start(CustomProvider.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-  }
 
-  @AfterClass
-  public static void tearDown() throws Exception {
-    server.stop();
-  }
+    @AfterClass
+    public static void tearDown() throws Exception {
+        server.stop();
+    }
 
-  @Test
-  public void testSignedResponseFilter() throws Exception {
-    ClientResponse resp = client.get("http://localhost:9002/");
-    Document<Element> doc = resp.getDocument();
-    Element root = doc.getRoot();
-    AbderaSecurity security = new AbderaSecurity(abdera);
-    Signature sig = security.getSignature();
-    assertTrue(sig.isSigned(root));
-    assertTrue(sig.verify(root, sig.getDefaultSignatureOptions()));
-  }
-  
-  private static final String keystoreFile = "/key.jks";
-  private static final String keystoreType = "JKS";
-  private static final String keystorePass = "testing";
-  private static final String privateKeyAlias = "James";
-  private static final String privateKeyPass = "testing";
-  private static final String certificateAlias = "James";
-  
- 
-  @Test
-  public void testSignedRequestFilter() throws Exception {
-    Entry entry = abdera.newEntry();
-    entry.setId("http://localhost:9002/feed/entries/1");
-    entry.setTitle("test entry");
-    entry.setContent("Test Content");
-    entry.addLink("http://example.org");
-    entry.setUpdated(new Date());
-    entry.addAuthor("James");
-    ClientResponse resp = client.post("http://localhost:9002/feed", entry);
-    assertNotNull(resp);
-    assertEquals(ResponseType.CLIENT_ERROR, resp.getType());
+    @Test
+    public void testSignedResponseFilter() throws Exception {
+        ClientResponse resp = client.get("http://localhost:9002/");
+        Document<Element> doc = resp.getDocument();
+        Element root = doc.getRoot();
+        AbderaSecurity security = new AbderaSecurity(abdera);
+        Signature sig = security.getSignature();
+        assertTrue(sig.isSigned(root));
+        assertTrue(sig.verify(root, sig.getDefaultSignatureOptions()));
+    }
 
-    // Initialize the keystore
-    AbderaSecurity security = new AbderaSecurity(abdera);
-    KeyStore ks = KeyStore.getInstance(keystoreType);
-    assertNotNull(ks);
-    
-    InputStream in = DigitalSignatureTest.class.getResourceAsStream(keystoreFile);
-    assertNotNull(in);
-    
-    ks.load(in, keystorePass.toCharArray());
-    PrivateKey signingKey = 
-      (PrivateKey) ks.getKey(
-        privateKeyAlias,
-        privateKeyPass.toCharArray());
-    X509Certificate cert = 
-      (X509Certificate) ks.getCertificate(
-        certificateAlias);
-    assertNotNull(signingKey);
-    assertNotNull(cert);
+    private static final String keystoreFile = "/key.jks";
+    private static final String keystoreType = "JKS";
+    private static final String keystorePass = "testing";
+    private static final String privateKeyAlias = "James";
+    private static final String privateKeyPass = "testing";
+    private static final String certificateAlias = "James";
 
-    Signature sig = security.getSignature();
-    SignatureOptions options = sig.getDefaultSignatureOptions();    
-    options.setCertificate(cert);
-    options.setSigningKey(signingKey);  
+    @Test
+    public void testSignedRequestFilter() throws Exception {
+        Entry entry = abdera.newEntry();
+        entry.setId("http://localhost:9002/feed/entries/1");
+        entry.setTitle("test entry");
+        entry.setContent("Test Content");
+        entry.addLink("http://example.org");
+        entry.setUpdated(new Date());
+        entry.addAuthor("James");
+        ClientResponse resp = client.post("http://localhost:9002/feed", entry);
+        assertNotNull(resp);
+        assertEquals(ResponseType.CLIENT_ERROR, resp.getType());
 
-    // Sign the entry
-    entry = sig.sign(entry, options);
-    
-    resp = client.post("http://localhost:9002/feed", entry);
-    assertNotNull(resp);
-    assertEquals(ResponseType.SUCCESS, resp.getType());
-  }
+        // Initialize the keystore
+        AbderaSecurity security = new AbderaSecurity(abdera);
+        KeyStore ks = KeyStore.getInstance(keystoreType);
+        assertNotNull(ks);
+
+        InputStream in = DigitalSignatureTest.class.getResourceAsStream(keystoreFile);
+        assertNotNull(in);
+
+        ks.load(in, keystorePass.toCharArray());
+        PrivateKey signingKey = (PrivateKey)ks.getKey(privateKeyAlias, privateKeyPass.toCharArray());
+        X509Certificate cert = (X509Certificate)ks.getCertificate(certificateAlias);
+        assertNotNull(signingKey);
+        assertNotNull(cert);
+
+        Signature sig = security.getSignature();
+        SignatureOptions options = sig.getDefaultSignatureOptions();
+        options.setCertificate(cert);
+        options.setSigningKey(signingKey);
+
+        // Sign the entry
+        entry = sig.sign(entry, options);
+
+        resp = client.post("http://localhost:9002/feed", entry);
+        assertNotNull(resp);
+        assertEquals(ResponseType.SUCCESS, resp.getType());
+    }
 }

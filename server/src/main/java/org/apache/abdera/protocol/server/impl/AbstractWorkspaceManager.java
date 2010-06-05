@@ -27,23 +27,22 @@ import org.apache.abdera.protocol.server.WorkspaceManager;
 /**
  * Base implementation for WorkspaceManager implementations
  */
-public abstract class AbstractWorkspaceManager 
-  implements WorkspaceManager {
-  
-  protected Collection<WorkspaceInfo> workspaces;
+public abstract class AbstractWorkspaceManager implements WorkspaceManager {
 
-  public Collection<WorkspaceInfo> getWorkspaces(RequestContext request) {
-    return workspaces;
-  }
+    protected Collection<WorkspaceInfo> workspaces;
 
-  public void setWorkspaces(Collection<WorkspaceInfo> workspaces) {
-    this.workspaces = workspaces;
-  }
-
-  public void addWorkspace(WorkspaceInfo workspace) {
-    if (workspaces == null) {
-      workspaces = new HashSet<WorkspaceInfo>();
+    public Collection<WorkspaceInfo> getWorkspaces(RequestContext request) {
+        return workspaces;
     }
-    workspaces.add(workspace);
-  }
+
+    public void setWorkspaces(Collection<WorkspaceInfo> workspaces) {
+        this.workspaces = workspaces;
+    }
+
+    public void addWorkspace(WorkspaceInfo workspace) {
+        if (workspaces == null) {
+            workspaces = new HashSet<WorkspaceInfo>();
+        }
+        workspaces.add(workspace);
+    }
 }

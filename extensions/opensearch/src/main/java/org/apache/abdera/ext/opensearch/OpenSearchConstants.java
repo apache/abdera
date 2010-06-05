@@ -20,7 +20,7 @@ package org.apache.abdera.ext.opensearch;
 import javax.xml.namespace.QName;
 
 /**
- * Simple container of Open Search XML model constants. 
+ * Simple container of Open Search XML model constants.
  */
 public interface OpenSearchConstants {
 

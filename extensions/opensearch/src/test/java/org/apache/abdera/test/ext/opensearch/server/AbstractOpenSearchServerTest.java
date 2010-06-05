@@ -58,31 +58,31 @@ public abstract class AbstractOpenSearchServerTest extends XMLAssert {
         SimpleOpenSearchUrlInfo osUrlInfo2 = new SimpleOpenSearchUrlInfo();
         SimpleOpenSearchUrlParameterInfo osParamInfo1 = new SimpleOpenSearchUrlParameterInfo();
         SimpleOpenSearchUrlParameterInfo osParamInfo2 = new SimpleOpenSearchUrlParameterInfo();
-        
+
         osInfo.setShortName(SHORT_NAME);
         osInfo.setDescription(DESCRIPTION);
         osInfo.setTags(TAG1, TAG2);
-        
+
         osQueryInfo.setRole(Query.Role.EXAMPLE);
         osQueryInfo.setSearchTerms(QUERY_TERMS);
-        
+
         osInfo.setQueries(osQueryInfo);
-        
+
         osUrlInfo1.setSearchPath(SEARCH_PATH_1);
         osUrlInfo2.setSearchPath(SEARCH_PATH_2);
-        
+
         osParamInfo1.setName(TEMPLATE_PARAM_1_NAME);
         osParamInfo1.setValue(TEMPLATE_PARAM_1_VALUE);
-        
+
         osParamInfo2.setName(TEMPLATE_PARAM_2_NAME);
         osParamInfo2.setValue(TEMPLATE_PARAM_2_VALUE);
         osParamInfo2.setOptional(true);
-        
+
         osUrlInfo1.setSearchParameters(osParamInfo1, osParamInfo2);
         osUrlInfo2.setSearchParameters(osParamInfo1, osParamInfo2);
-        
+
         osInfo.setUrls(osUrlInfo1, osUrlInfo2);
-        
+
         return osInfo;
     }
 }

@@ -26,50 +26,40 @@ import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.security.util.filters.SignedRequestFilter;
 import org.apache.abdera.security.util.filters.SignedResponseFilter;
 
-public class CustomProvider 
-  extends AbstractWorkspaceProvider {
+public class CustomProvider extends AbstractWorkspaceProvider {
 
-  private final SimpleAdapter adapter;
-  
-  private static final String keystoreFile = "/key.jks";
-  private static final String keystorePass = "testing";
-  private static final String privateKeyAlias = "James";
-  private static final String privateKeyPass = "testing";
-  private static final String certificateAlias = "James";
-  
-  public CustomProvider() {
-    
-    this.adapter = new SimpleAdapter();
-    
-    RouteManager rm = 
-      new RouteManager()
-        .addRoute("service", "/", TargetType.TYPE_SERVICE)
-        .addRoute("collection", "/:collection", TargetType.TYPE_COLLECTION)
-        .addRoute("entry","/:collection/:entry", TargetType.TYPE_ENTRY);
-    
-    setTargetBuilder(rm);
-    setTargetResolver(rm);
-    
-    SimpleWorkspaceInfo workspace = new SimpleWorkspaceInfo();
-    workspace.setTitle("A Simple Workspace");
-    workspace.addCollection(adapter);
-    addWorkspace(workspace);
-    
-    addFilter(
-      new SignedRequestFilter(),
-      new SignedResponseFilter(
-        keystoreFile,
-        keystorePass,
-        privateKeyAlias,
-        privateKeyPass,
-        certificateAlias, null
-      )
-    );
-  }
+    private final SimpleAdapter adapter;
 
-  public CollectionAdapter getCollectionAdapter(
-    RequestContext request) {
-      return adapter;
-  }
+    private static final String keystoreFile = "/key.jks";
+    private static final String keystorePass = "testing";
+    private static final String privateKeyAlias = "James";
+    private static final String privateKeyPass = "testing";
+    private static final String certificateAlias = "James";
+
+    public CustomProvider() {
+
+        this.adapter = new SimpleAdapter();
+
+        RouteManager rm =
+            new RouteManager().addRoute("service", "/", TargetType.TYPE_SERVICE).addRoute("collection",
+                                                                                          "/:collection",
+                                                                                          TargetType.TYPE_COLLECTION)
+                .addRoute("entry", "/:collection/:entry", TargetType.TYPE_ENTRY);
+
+        setTargetBuilder(rm);
+        setTargetResolver(rm);
+
+        SimpleWorkspaceInfo workspace = new SimpleWorkspaceInfo();
+        workspace.setTitle("A Simple Workspace");
+        workspace.addCollection(adapter);
+        addWorkspace(workspace);
+
+        addFilter(new SignedRequestFilter(), new SignedResponseFilter(keystoreFile, keystorePass, privateKeyAlias,
+                                                                      privateKeyPass, certificateAlias, null));
+    }
+
+    public CollectionAdapter getCollectionAdapter(RequestContext request) {
+        return adapter;
+    }
 
 }

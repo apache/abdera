@@ -1,20 +1,20 @@
 /*
-* Licensed to the Apache Software Foundation (ASF) under one or more
-* contributor license agreements.  The ASF licenses this file to You
-* under the Apache License, Version 2.0 (the "License"); you may not
-* use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.  For additional information regarding
-* copyright in this work, please see the NOTICE file in the top level
-* directory of this distribution.
-*/
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  The ASF licenses this file to You
+ * under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.  For additional information regarding
+ * copyright in this work, please see the NOTICE file in the top level
+ * directory of this distribution.
+ */
 package org.apache.abdera.security.util;
 
 import org.apache.abdera.Abdera;
@@ -23,24 +23,21 @@ import org.apache.abdera.model.ExtensibleElement;
 import org.apache.abdera.security.SecurityException;
 import org.apache.abdera.security.Signature;
 
+public abstract class SignatureBase extends SecurityBase implements Signature {
 
-public abstract class SignatureBase 
-  extends SecurityBase
-  implements Signature {
+    protected SignatureBase(Abdera abdera) {
+        super(abdera);
+    }
 
-  protected SignatureBase(Abdera abdera) {
-    super(abdera);
-  }
+    public <T extends Element> boolean isSigned(T entry) throws SecurityException {
+        return _isSigned(entry);
+    }
 
-  public <T extends Element>boolean isSigned(
-    T entry)  throws SecurityException {
-      return _isSigned(entry);
-  }
-
-  private <T extends Element>boolean _isSigned(T element) {
-    if (element instanceof ExtensibleElement)
-      return ((ExtensibleElement)element).getExtension(Constants.SIGNATURE) != null;
-    else return false;
-  }
+    private <T extends Element> boolean _isSigned(T element) {
+        if (element instanceof ExtensibleElement)
+            return ((ExtensibleElement)element).getExtension(Constants.SIGNATURE) != null;
+        else
+            return false;
+    }
 
 }

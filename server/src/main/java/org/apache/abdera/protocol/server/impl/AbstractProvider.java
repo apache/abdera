@@ -51,8 +51,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Base Provider implementation that provides the core implementation details 
- * for all Providers. This class provides the basic request routing logic.
+ * Base Provider implementation that provides the core implementation details for all Providers. This class provides the
+ * basic request routing logic.
  */
 public abstract class AbstractProvider implements Provider {
 
@@ -63,12 +63,12 @@ public abstract class AbstractProvider implements Provider {
     protected Map<TargetType, RequestProcessor> requestProcessors = new HashMap<TargetType, RequestProcessor>();
 
     protected AbstractProvider() {
-      // Setting default request processors:
-      this.requestProcessors.put(TargetType.TYPE_SERVICE, new ServiceRequestProcessor());
-      this.requestProcessors.put(TargetType.TYPE_CATEGORIES, new CategoriesRequestProcessor());
-      this.requestProcessors.put(TargetType.TYPE_COLLECTION, new CollectionRequestProcessor());
-      this.requestProcessors.put(TargetType.TYPE_ENTRY, new EntryRequestProcessor());
-      this.requestProcessors.put(TargetType.TYPE_MEDIA, new MediaRequestProcessor());
+        // Setting default request processors:
+        this.requestProcessors.put(TargetType.TYPE_SERVICE, new ServiceRequestProcessor());
+        this.requestProcessors.put(TargetType.TYPE_CATEGORIES, new CategoriesRequestProcessor());
+        this.requestProcessors.put(TargetType.TYPE_COLLECTION, new CollectionRequestProcessor());
+        this.requestProcessors.put(TargetType.TYPE_ENTRY, new EntryRequestProcessor());
+        this.requestProcessors.put(TargetType.TYPE_MEDIA, new MediaRequestProcessor());
     }
 
     public void init(Abdera abdera, Map<String, String> properties) {
@@ -94,15 +94,11 @@ public abstract class AbstractProvider implements Provider {
     }
 
     public Target resolveTarget(RequestContext request) {
-        Resolver<Target> targetResolver =
-                getTargetResolver(request);
+        Resolver<Target> targetResolver = getTargetResolver(request);
         return targetResolver != null ? targetResolver.resolve(request) : null;
     }
 
-    public String urlFor(
-            RequestContext request,
-            Object key,
-            Object param) {
+    public String urlFor(RequestContext request, Object key, Object param) {
         TargetBuilder tm = getTargetBuilder(request);
         return tm != null ? tm.urlFor(request, key, param) : null;
     }
@@ -129,15 +125,15 @@ public abstract class AbstractProvider implements Provider {
 
         WorkspaceManager wm = getWorkspaceManager(request);
         CollectionAdapter adapter = wm.getCollectionAdapter(request);
-        Transactional transaction = adapter instanceof Transactional ? (Transactional) adapter : null;
+        Transactional transaction = adapter instanceof Transactional ? (Transactional)adapter : null;
         ResponseContext response = null;
         try {
             transactionStart(transaction, request);
             response = processor.process(request, wm, adapter);
-            response = response != null ? response : processExtensionRequest(request, adapter);            
+            response = response != null ? response : processExtensionRequest(request, adapter);
         } catch (Throwable e) {
             if (e instanceof ResponseContextException) {
-                ResponseContextException rce = (ResponseContextException) e;
+                ResponseContextException rce = (ResponseContextException)e;
                 if (rce.getStatusCode() >= 400 && rce.getStatusCode() < 500) {
                     // don't report routine 4xx HTTP errors
                     log.info(e);
@@ -163,41 +159,30 @@ public abstract class AbstractProvider implements Provider {
         return ProviderHelper.servererror(request, e);
     }
 
-    protected void transactionCompensate(
-            Transactional transactional,
-            RequestContext request,
-            Throwable e) {
+    protected void transactionCompensate(Transactional transactional, RequestContext request, Throwable e) {
         if (transactional != null) {
-          transactional.compensate(request, e);
+            transactional.compensate(request, e);
         }
     }
 
-    protected void transactionEnd(
-            Transactional transactional,
-            RequestContext request,
-            ResponseContext response) {
+    protected void transactionEnd(Transactional transactional, RequestContext request, ResponseContext response) {
         if (transactional != null) {
-          transactional.end(request, response);
+            transactional.end(request, response);
         }
     }
 
-    protected void transactionStart(
-            Transactional transactional,
-            RequestContext request)
-            throws ResponseContextException {
+    protected void transactionStart(Transactional transactional, RequestContext request)
+        throws ResponseContextException {
         if (transactional != null) {
-          transactional.start(request);
+            transactional.start(request);
         }
     }
 
-    protected ResponseContext processExtensionRequest(
-            RequestContext context,
-            CollectionAdapter adapter) {
+    protected ResponseContext processExtensionRequest(RequestContext context, CollectionAdapter adapter) {
         return adapter.extensionRequest(context);
     }
 
-    protected abstract WorkspaceManager getWorkspaceManager(
-            RequestContext request);
+    protected abstract WorkspaceManager getWorkspaceManager(RequestContext request);
 
     protected Service getServiceElement(RequestContext request) {
         Service service = abdera.newService();

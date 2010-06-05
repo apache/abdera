@@ -62,11 +62,12 @@ public class OpenSearchDescriptionRequestProcessorTest extends AbstractOpenSearc
         wsManager.setWorkspaces(new LinkedList<WorkspaceInfo>());
 
         RouteManager routeManager = new RouteManager();
-        routeManager.addRoute("service", "/", TargetType.TYPE_SERVICE)
-                .addRoute("feed", "/atom/:collection", TargetType.TYPE_COLLECTION)
-                .addRoute("entry", "/atom/:collection/:entry", TargetType.TYPE_ENTRY)
-                .addRoute("categories", "/atom/:collection/:entry;categories", TargetType.TYPE_CATEGORIES)
-                .addRoute("osDescription", "/search", OpenSearchTargetTypes.OPENSEARCH_DESCRIPTION);
+        routeManager.addRoute("service", "/", TargetType.TYPE_SERVICE).addRoute("feed",
+                                                                                "/atom/:collection",
+                                                                                TargetType.TYPE_COLLECTION)
+            .addRoute("entry", "/atom/:collection/:entry", TargetType.TYPE_ENTRY)
+            .addRoute("categories", "/atom/:collection/:entry;categories", TargetType.TYPE_CATEGORIES)
+            .addRoute("osDescription", "/search", OpenSearchTargetTypes.OPENSEARCH_DESCRIPTION);
 
         DefaultProvider provider = new DefaultProvider("/");
         provider.setWorkspaceManager(wsManager);
@@ -89,7 +90,8 @@ public class OpenSearchDescriptionRequestProcessorTest extends AbstractOpenSearc
 
         assertNotNull(resp);
         assertEquals(ResponseType.SUCCESS, resp.getType());
-        assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), OpenSearchConstants.OPENSEARCH_DESCRIPTION_CONTENT_TYPE));
+        assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(),
+                                          OpenSearchConstants.OPENSEARCH_DESCRIPTION_CONTENT_TYPE));
 
         Document doc = resp.getDocument();
         StringWriter writer = new StringWriter();
@@ -101,11 +103,17 @@ public class OpenSearchDescriptionRequestProcessorTest extends AbstractOpenSearc
         assertXpathEvaluatesTo(SHORT_NAME, "/os:OpenSearchDescription/os:ShortName", result);
         assertXpathEvaluatesTo(DESCRIPTION, "/os:OpenSearchDescription/os:Description", result);
         assertXpathEvaluatesTo(TAGS, "/os:OpenSearchDescription/os:Tags", result);
-        assertXpathEvaluatesTo(Query.Role.EXAMPLE.toString().toLowerCase(), "/os:OpenSearchDescription/os:Query/@role", result);
+        assertXpathEvaluatesTo(Query.Role.EXAMPLE.toString().toLowerCase(),
+                               "/os:OpenSearchDescription/os:Query/@role",
+                               result);
         assertXpathEvaluatesTo(QUERY_TERMS, "/os:OpenSearchDescription/os:Query/@searchTerms", result);
         assertXpathEvaluatesTo("application/atom+xml", "/os:OpenSearchDescription/os:Url[1]/@type", result);
-        assertXpathEvaluatesTo("http://localhost:9002/search1?q={searchTerms}&c={count?}", "/os:OpenSearchDescription/os:Url[1]/@template", result);
+        assertXpathEvaluatesTo("http://localhost:9002/search1?q={searchTerms}&c={count?}",
+                               "/os:OpenSearchDescription/os:Url[1]/@template",
+                               result);
         assertXpathEvaluatesTo("application/atom+xml", "/os:OpenSearchDescription/os:Url[2]/@type", result);
-        assertXpathEvaluatesTo("http://localhost:9002/search2?q={searchTerms}&c={count?}", "/os:OpenSearchDescription/os:Url[2]/@template", result);
+        assertXpathEvaluatesTo("http://localhost:9002/search2?q={searchTerms}&c={count?}",
+                               "/os:OpenSearchDescription/os:Url[2]/@template",
+                               result);
     }
 }

@@ -28,7 +28,6 @@ import org.apache.abdera.model.Entry;
 import org.apache.abdera.parser.Parser;
 import org.junit.Test;
 
-
 /**
  * Test possible concurrency issues.
  * 
@@ -36,52 +35,51 @@ import org.junit.Test;
  */
 public class ConcurrencyTest {
 
-  private static final int N_THREADS = 100;
+    private static final int N_THREADS = 100;
 
-  /**
-   * Test for a concurrency issue that caused a ConcurrentModificationException
-   * in Abdera 0.1.0 but seems to be fixed in 0.2. We leave the test here to
-   * prevent possible regressions.
-   */
-  @Test 
-  public void testSetContentMT() throws Exception {
-    Thread t[] = new Thread[N_THREADS];
-    final boolean failed[] = new boolean[t.length];
-    for (int i = 0 ; i < t.length ; ++i) {
-      final int j = i;
-      failed[i] = false;
-      Runnable r = new Runnable() {
-        public void run() {
-          try {
-            setContent();
-          } catch (Exception e) {
-            e.printStackTrace();
-            failed[j] = true;
-            fail(e.toString());
-          }
+    /**
+     * Test for a concurrency issue that caused a ConcurrentModificationException in Abdera 0.1.0 but seems to be fixed
+     * in 0.2. We leave the test here to prevent possible regressions.
+     */
+    @Test
+    public void testSetContentMT() throws Exception {
+        Thread t[] = new Thread[N_THREADS];
+        final boolean failed[] = new boolean[t.length];
+        for (int i = 0; i < t.length; ++i) {
+            final int j = i;
+            failed[i] = false;
+            Runnable r = new Runnable() {
+                public void run() {
+                    try {
+                        setContent();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        failed[j] = true;
+                        fail(e.toString());
+                    }
+                }
+            };
+            t[i] = new Thread(r);
+            t[i].start();
         }
-      };
-      t[i] = new Thread(r);
-      t[i].start();
+        for (int i = 0; i < t.length; ++i) {
+            t[i].join();
+            if (failed[i]) {
+                fail("Thread " + t[i] + " failed.");
+            }
+        }
     }
-    for (int i = 0 ; i < t.length ; ++i) {
-      t[i].join();
-      if (failed[i]) {
-        fail("Thread " + t[i] + " failed.");
-      }
-    }
-  }
 
-  private void setContent() throws Exception {
-    // For Abdera 0.1.0 this would be:
-    // Parser parser = Factory.INSTANCE.newParser();
-    Parser parser = Abdera.getNewParser();
-    InputStream is = ParserTest.class.getResourceAsStream("/entry.xml");
-    Document<Entry> doc = parser.parse(is);
-    Entry entry = doc.getRoot();
-    Content content = entry.getFactory().newContent(Content.Type.XML);
-    content.setValue("<some><xml>document</xml></some>");
-    content.setMimeType("application/xml");
-    entry.setContentElement(content);
-  }
+    private void setContent() throws Exception {
+        // For Abdera 0.1.0 this would be:
+        // Parser parser = Factory.INSTANCE.newParser();
+        Parser parser = Abdera.getNewParser();
+        InputStream is = ParserTest.class.getResourceAsStream("/entry.xml");
+        Document<Entry> doc = parser.parse(is);
+        Entry entry = doc.getRoot();
+        Content content = entry.getFactory().newContent(Content.Type.XML);
+        content.setValue("<some><xml>document</xml></some>");
+        content.setMimeType("application/xml");
+        entry.setContentElement(content);
+    }
 }

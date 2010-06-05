@@ -56,163 +56,163 @@ import org.mortbay.jetty.servlet.ServletHolder;
 
 public class CustomerAdapterTest {
 
-  private Server server;
-  private DefaultProvider customerProvider;
+    private Server server;
+    private DefaultProvider customerProvider;
 
-  private void setupAbdera(String base) throws Exception {
-    customerProvider = new DefaultProvider(base);
+    private void setupAbdera(String base) throws Exception {
+        customerProvider = new DefaultProvider(base);
 
-    CustomerAdapter ca = new CustomerAdapter();
-    ca.setHref("customers");
+        CustomerAdapter ca = new CustomerAdapter();
+        ca.setHref("customers");
 
-    SimpleWorkspaceInfo wi = new SimpleWorkspaceInfo();
-    wi.setTitle("Customer Workspace");
-    wi.addCollection(ca);
+        SimpleWorkspaceInfo wi = new SimpleWorkspaceInfo();
+        wi.setTitle("Customer Workspace");
+        wi.addCollection(ca);
 
-    customerProvider.addWorkspace(wi);
-  }
-
-  @Test
-  public void testCustomerProvider() throws Exception {
-    setupAbdera("/");
-    initializeJetty("/");
-
-    runTests("/");
-  }
-
-  @Test
-  public void testCustomerProviderWithNonRootContextPath() throws Exception {
-    setupAbdera("/");
-    initializeJetty("/foo");
-
-    runTests("/foo/");
-  }
-
-  private void runTests(String base) throws IOException {
-    Abdera abdera = new Abdera();
-    Factory factory = abdera.getFactory();
-
-    AbderaClient client = new AbderaClient(abdera);
-
-    String uri = "http://localhost:9002" + base;
-
-    // Service document test.
-
-    ClientResponse res = client.get(uri);
-    assertNotNull(res);
-    try {
-      assertEquals(200, res.getStatus());
-      assertEquals(ResponseType.SUCCESS, res.getType());
-      assertTrue(MimeTypeHelper.isMatch(res.getContentType().toString(), Constants.APP_MEDIA_TYPE));
-
-      Document<Service> doc = res.getDocument();
-      Service service = doc.getRoot();
-      assertEquals(1, service.getWorkspaces().size());
-
-      Workspace workspace = service.getWorkspaces().get(0);
-      assertEquals(1, workspace.getCollections().size());
-
-      // Keep the loop in case we add other collections to the test.
-
-      for (Collection collection : workspace.getCollections()) {
-        if (collection.getTitle().equals("Acme Customer Database")) {
-          String expected = uri + "customers";
-          String actual = collection.getResolvedHref().toString();
-          assertEquals(expected, actual);
-        }
-      }
-    } finally {
-      res.release();
+        customerProvider.addWorkspace(wi);
     }
 
-    // Testing of entry creation
-    IRI colUri = new IRI(uri).resolve("customers");
+    @Test
+    public void testCustomerProvider() throws Exception {
+        setupAbdera("/");
+        initializeJetty("/");
 
-    Entry entry = factory.newEntry();
-    entry.setTitle("This is ignored right now");
-    entry.setUpdated(new Date());
-    entry.addAuthor("Acme Industries");
-    entry.setId(factory.newUuidUri());
-    entry.setSummary("Customer document");
+        runTests("/");
+    }
 
-    Element customerEl = factory.newElement(new QName("customer"));
-    customerEl.setAttributeValue(new QName("name"), "Dan Diephouse");
-    entry.setContent(customerEl);
+    @Test
+    public void testCustomerProviderWithNonRootContextPath() throws Exception {
+        setupAbdera("/");
+        initializeJetty("/foo");
 
-    RequestOptions opts = new RequestOptions();
-    opts.setContentType("application/atom+xml;type=entry");
-    res = client.post(colUri.toString() + "?test=foo", entry, opts);
-    assertEquals(201, res.getStatus());
+        runTests("/foo/");
+    }
 
-    //prettyPrint(abdera, res.getDocument());
+    private void runTests(String base) throws IOException {
+        Abdera abdera = new Abdera();
+        Factory factory = abdera.getFactory();
 
-    IRI location = res.getLocation();
-    assertEquals(uri + "customers/1001-Dan_Diephouse", location.toString());
+        AbderaClient client = new AbderaClient(abdera);
 
-    // GET the entry
-    res = client.get(location.toString());
-    assertEquals(200, res.getStatus());
-    res.release();
+        String uri = "http://localhost:9002" + base;
 
-    // prettyPrint(abdera, res.getDocument());
-    org.apache.abdera.model.Document<Entry> entry_doc = res.getDocument();
-    //prettyPrint(abdera, entry_doc);
-    entry = entry_doc.getRoot();
-    assertEquals(uri + "customers/1001-Dan_Diephouse", entry_doc.getRoot().getEditLinkResolvedHref().toString());
+        // Service document test.
 
-    // HEAD
-    res = client.head(location.toString());
-    assertEquals(200, res.getStatus());
-    assertEquals(0, res.getContentLength());
-    res.release();
+        ClientResponse res = client.get(uri);
+        assertNotNull(res);
+        try {
+            assertEquals(200, res.getStatus());
+            assertEquals(ResponseType.SUCCESS, res.getType());
+            assertTrue(MimeTypeHelper.isMatch(res.getContentType().toString(), Constants.APP_MEDIA_TYPE));
 
-    // Try invalid resources
-    res = client.get(colUri + "/foobar");
-    assertEquals(404, res.getStatus());
-    res.release();
+            Document<Service> doc = res.getDocument();
+            Service service = doc.getRoot();
+            assertEquals(1, service.getWorkspaces().size());
 
-    res = client.head(colUri + "/foobar");
-    assertEquals(404, res.getStatus());
-    assertEquals(0, res.getContentLength());
-    res.release();
-    
-    IRI badColUri = new IRI(uri).resolve("customersbad"); 
-    // GET the service doc
-    res = client.get(colUri.toString());
-    assertEquals(200, res.getStatus());
-    res.release();
-    res = client.get(badColUri.toString());
-    assertEquals(404, res.getStatus());
-    res.release();
-  }
+            Workspace workspace = service.getWorkspaces().get(0);
+            assertEquals(1, workspace.getCollections().size());
 
-  protected void prettyPrint(Abdera abdera, Base doc) throws IOException {
-     WriterFactory factory = abdera.getWriterFactory();
-     Writer writer = factory.getWriter("prettyxml");
-     writer.writeTo(doc, System.out);
-     System.out.println();
-  }
+            // Keep the loop in case we add other collections to the test.
 
-  @SuppressWarnings("serial")
-  private void initializeJetty(String contextPath) throws Exception {
+            for (Collection collection : workspace.getCollections()) {
+                if (collection.getTitle().equals("Acme Customer Database")) {
+                    String expected = uri + "customers";
+                    String actual = collection.getResolvedHref().toString();
+                    assertEquals(expected, actual);
+                }
+            }
+        } finally {
+            res.release();
+        }
 
-    server = new Server(9002);
-    Context root = new Context(server, contextPath, Context.NO_SESSIONS);
-    root.addServlet(new ServletHolder(new AbderaServlet() {
+        // Testing of entry creation
+        IRI colUri = new IRI(uri).resolve("customers");
 
-      @Override
-      protected Provider createProvider() {
-        customerProvider.init(getAbdera(), null);
-        return customerProvider;
-      }
-    }), "/*");
-    server.start();
-  }
+        Entry entry = factory.newEntry();
+        entry.setTitle("This is ignored right now");
+        entry.setUpdated(new Date());
+        entry.addAuthor("Acme Industries");
+        entry.setId(factory.newUuidUri());
+        entry.setSummary("Customer document");
 
-  @After
-  public void tearDown() throws Exception {
-    if (server != null)
-      server.stop();
-  }
+        Element customerEl = factory.newElement(new QName("customer"));
+        customerEl.setAttributeValue(new QName("name"), "Dan Diephouse");
+        entry.setContent(customerEl);
+
+        RequestOptions opts = new RequestOptions();
+        opts.setContentType("application/atom+xml;type=entry");
+        res = client.post(colUri.toString() + "?test=foo", entry, opts);
+        assertEquals(201, res.getStatus());
+
+        // prettyPrint(abdera, res.getDocument());
+
+        IRI location = res.getLocation();
+        assertEquals(uri + "customers/1001-Dan_Diephouse", location.toString());
+
+        // GET the entry
+        res = client.get(location.toString());
+        assertEquals(200, res.getStatus());
+        res.release();
+
+        // prettyPrint(abdera, res.getDocument());
+        org.apache.abdera.model.Document<Entry> entry_doc = res.getDocument();
+        // prettyPrint(abdera, entry_doc);
+        entry = entry_doc.getRoot();
+        assertEquals(uri + "customers/1001-Dan_Diephouse", entry_doc.getRoot().getEditLinkResolvedHref().toString());
+
+        // HEAD
+        res = client.head(location.toString());
+        assertEquals(200, res.getStatus());
+        assertEquals(0, res.getContentLength());
+        res.release();
+
+        // Try invalid resources
+        res = client.get(colUri + "/foobar");
+        assertEquals(404, res.getStatus());
+        res.release();
+
+        res = client.head(colUri + "/foobar");
+        assertEquals(404, res.getStatus());
+        assertEquals(0, res.getContentLength());
+        res.release();
+
+        IRI badColUri = new IRI(uri).resolve("customersbad");
+        // GET the service doc
+        res = client.get(colUri.toString());
+        assertEquals(200, res.getStatus());
+        res.release();
+        res = client.get(badColUri.toString());
+        assertEquals(404, res.getStatus());
+        res.release();
+    }
+
+    protected void prettyPrint(Abdera abdera, Base doc) throws IOException {
+        WriterFactory factory = abdera.getWriterFactory();
+        Writer writer = factory.getWriter("prettyxml");
+        writer.writeTo(doc, System.out);
+        System.out.println();
+    }
+
+    @SuppressWarnings("serial")
+    private void initializeJetty(String contextPath) throws Exception {
+
+        server = new Server(9002);
+        Context root = new Context(server, contextPath, Context.NO_SESSIONS);
+        root.addServlet(new ServletHolder(new AbderaServlet() {
+
+            @Override
+            protected Provider createProvider() {
+                customerProvider.init(getAbdera(), null);
+                return customerProvider;
+            }
+        }), "/*");
+        server.start();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        if (server != null)
+            server.stop();
+    }
 
 }

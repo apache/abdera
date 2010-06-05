@@ -31,7 +31,7 @@ public class StringElement extends ElementWrapper {
     public StringElement(Factory factory, QName qname) {
         super(factory, qname);
     }
-    
+
     public StringElement(Element internal) {
         super(internal);
     }

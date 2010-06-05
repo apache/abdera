@@ -22,8 +22,7 @@ import org.apache.abdera.protocol.server.FilterChain;
 import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 
-public class DummyFilter
-    implements Filter {
+public class DummyFilter implements Filter {
 
     public ResponseContext filter(RequestContext request, FilterChain chain) {
         return chain.next(request);

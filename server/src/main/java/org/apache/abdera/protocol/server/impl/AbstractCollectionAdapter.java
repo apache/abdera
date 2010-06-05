@@ -51,239 +51,231 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Base CollectionAdapter implementation that provides a number of helper 
- * utility methods for adapter implementations.
+ * Base CollectionAdapter implementation that provides a number of helper utility methods for adapter implementations.
  */
-public abstract class AbstractCollectionAdapter 
-  implements CollectionAdapter, 
-             MediaCollectionAdapter,
-             Transactional, 
-             CollectionInfo {
+public abstract class AbstractCollectionAdapter implements CollectionAdapter, MediaCollectionAdapter, Transactional,
+    CollectionInfo {
 
-  private final static Log log = LogFactory.getLog(AbstractEntityCollectionAdapter.class);
-  
-  private String href;
-  private Map<String,Object> hrefParams = new HashMap<String,Object>();
- 
-  public AbstractCollectionAdapter() {
-    super();
-  }
+    private final static Log log = LogFactory.getLog(AbstractEntityCollectionAdapter.class);
 
-  public String getHref() {
-    return href;
-  }
+    private String href;
+    private Map<String, Object> hrefParams = new HashMap<String, Object>();
 
-  public void setHref(String href) {
-    this.href = href;
-    hrefParams.put("collection", href);
-  }
-  
-  public String getHref(RequestContext request) {
-    return request.urlFor("feed", hrefParams);
-  }
-  
-  public void compensate(RequestContext request, Throwable t) {
-  }
-
-  public void end(RequestContext request, ResponseContext response) {
-  }
-
-  public void start(RequestContext request) throws ResponseContextException {
-  }
-
-  public String[] getAccepts(RequestContext request) {
-    return new String[] { "application/atom+xml;type=entry" };
-  }
-
-  public CategoriesInfo[] getCategoriesInfo(RequestContext request) {
-    return null;
-  }
-
-  public ResponseContext getCategories(RequestContext request) {
-      return null;
-  }
-
-  public ResponseContext deleteMedia(RequestContext request) {
-    return ProviderHelper.notallowed(request);
-  }
-
-  public ResponseContext getMedia(RequestContext request) {
-    return ProviderHelper.notallowed(request);
-  }
-
-  public ResponseContext headMedia(RequestContext request) {
-    return ProviderHelper.notallowed(request);
-  }
-
-  public ResponseContext optionsMedia(RequestContext request) {
-    return ProviderHelper.notallowed(request);
-  }
-
-  public ResponseContext putMedia(RequestContext request) {
-    return ProviderHelper.notallowed(request);
-  }
-
-  public ResponseContext postMedia(RequestContext request) {
-    return ProviderHelper.notallowed(request);
-  }
-
-  public ResponseContext headEntry(RequestContext request) {
-    return ProviderHelper.notallowed(request);
-  }
-
-  public ResponseContext optionsEntry(RequestContext request) {
-    return ProviderHelper.notallowed(request);
-  }
-
-  public abstract String getAuthor(RequestContext request) throws ResponseContextException;
-
-  public abstract String getId(RequestContext request);
-  
-  /**
-   * Creates the ResponseContext for a newly created entry.  By default, a
-   * BaseResponseContext is returned.  The Location, Content-Location, Etag and
-   * status are set appropriately.
-   */
-  protected ResponseContext buildCreateEntryResponse(String link, Entry entry) {
-    BaseResponseContext<Entry> rc = new BaseResponseContext<Entry>(entry);
-    rc.setLocation(link);
-    rc.setContentLocation(rc.getLocation().toString());
-    rc.setEntityTag(calculateEntityTag(entry));
-    rc.setStatus(201);
-    return rc;
-  }
-
-  /**
-   * Creates the ResponseContext for a newly created entry.  By default, a
-   * BaseResponseContext is returned.  The Location, Content-Location, Etag and
-   * status are set appropriately.
-   */
-  protected ResponseContext buildPostMediaEntryResponse(String link, Entry entry) {
-    return buildCreateEntryResponse(link, entry);
-  }
-
-  /**
-   * Creates the ResponseContext for a GET entry request.  By default, a BaseResponseContext
-   * is returned.  The Entry will contain an appropriate atom:source element
-   * and the Etag header will be set.
-   */
-  protected ResponseContext buildGetEntryResponse(RequestContext request, Entry entry) throws ResponseContextException {
-    Feed feed = createFeedBase(request);
-    entry.setSource(feed.getAsSource());
-    Document<Entry> entry_doc = entry.getDocument();
-    AbstractResponseContext rc = new BaseResponseContext<Document<Entry>>(entry_doc);
-    rc.setEntityTag(calculateEntityTag(entry));
-    return rc;
-  }
-  
-  /**
-   * Creates the ResponseContext for a HEAD entry request.  By default, an EmptyResponseContext
-   * is returned.  The Etag header will be set.
-   */  
-  protected ResponseContext buildHeadEntryResponse(RequestContext request, 
-                                                   String id,
-                                                   Date updated) throws ResponseContextException {
-    EmptyResponseContext rc = new EmptyResponseContext(200);
-    rc.setEntityTag(EntityTag.generate(id, AtomDate.format(updated)));
-    return rc;
-  }
-
-  /**
-   * Creates the ResponseContext for a GET feed request.  By default, a BaseResponseContext
-   * is returned.  The Etag header will be set.
-   */
-  protected ResponseContext buildGetFeedResponse(Feed feed) {
-    Document<Feed> document = feed.getDocument();
-    AbstractResponseContext rc = new BaseResponseContext<Document<Feed>>(document);
-    rc.setEntityTag(calculateEntityTag(document.getRoot()));
-    return rc;
-  }
-
-  /**
-   * Create a ResponseContext (or take it from the Exception) for an exception
-   * that occurred in the application.
-   * 
-   * @param e
-   * @return
-   */
-  protected ResponseContext createErrorResponse(ResponseContextException e) {
-    if (log.isDebugEnabled()) {
-      log.debug("A ResponseException was thrown.", e);
-    } else if (e.getResponseContext() instanceof EmptyResponseContext
-               && ((EmptyResponseContext)e.getResponseContext()).getStatus() >= 500) {
-      log.warn("A ResponseException was thrown.", e);
+    public AbstractCollectionAdapter() {
+        super();
     }
 
-    return e.getResponseContext();
-  }
-
-  /**
-   * Create the base feed for the requested collection.
-   */
-  protected Feed createFeedBase(RequestContext request) throws ResponseContextException {
-    Factory factory = request.getAbdera().getFactory();
-    Feed feed = factory.newFeed();
-    feed.setId(getId(request));
-    feed.setTitle(getTitle(request));
-    feed.addLink("");
-    feed.addLink("", "self");
-    feed.addAuthor(getAuthor(request));
-    feed.setUpdated(new Date());
-    return feed;
-  }
-  
-  /**
-   * Retrieves the FOM Entry object from the request payload. 
-   */
-  @SuppressWarnings("unchecked")
-  protected Entry getEntryFromRequest(RequestContext request) throws ResponseContextException {
-    Abdera abdera = request.getAbdera();
-    Parser parser = abdera.getParser();
-
-    Document<Entry> entry_doc;
-    try {
-      entry_doc = (Document<Entry>)request.getDocument(parser).clone();
-    } catch (ParseException e) {
-      throw new ResponseContextException(400, e);
-    } catch (IOException e) {
-      throw new ResponseContextException(500, e);
+    public String getHref() {
+        return href;
     }
-    if (entry_doc == null) {
-      return null;
+
+    public void setHref(String href) {
+        this.href = href;
+        hrefParams.put("collection", href);
     }
-    return entry_doc.getRoot();
-  }
 
-  /**
-   * Get's the name of the specific resource requested
-   */
-  protected String getResourceName(RequestContext request) {
-    String path = request.getTargetPath();
-    int q = path.indexOf("?");
-    if (q != -1) {
-      path = path.substring(0, q);
+    public String getHref(RequestContext request) {
+        return request.urlFor("feed", hrefParams);
     }
-    String[] segments = path.split("/");
-    String id = segments[segments.length - 1];
-    return UrlEncoding.decode(id);
-  }
 
-  public ResponseContext extensionRequest(RequestContext request) {
-    return ProviderHelper.notallowed(request, getMethods(request));
-  }
-
-  private String[] getMethods(RequestContext request) {
-    return ProviderHelper.getDefaultMethods(request);
-  }
-
-  public Collection asCollectionElement(RequestContext request) {
-    Collection collection = request.getAbdera().getFactory().newCollection();
-    collection.setHref(getHref(request));
-    collection.setTitle(getTitle(request));
-    collection.setAccept(getAccepts(request));
-    for (CategoriesInfo catsinfo : getCategoriesInfo(request)) {
-      collection.addCategories(catsinfo.asCategoriesElement(request));
+    public void compensate(RequestContext request, Throwable t) {
     }
-    return collection;
-  }
+
+    public void end(RequestContext request, ResponseContext response) {
+    }
+
+    public void start(RequestContext request) throws ResponseContextException {
+    }
+
+    public String[] getAccepts(RequestContext request) {
+        return new String[] {"application/atom+xml;type=entry"};
+    }
+
+    public CategoriesInfo[] getCategoriesInfo(RequestContext request) {
+        return null;
+    }
+
+    public ResponseContext getCategories(RequestContext request) {
+        return null;
+    }
+
+    public ResponseContext deleteMedia(RequestContext request) {
+        return ProviderHelper.notallowed(request);
+    }
+
+    public ResponseContext getMedia(RequestContext request) {
+        return ProviderHelper.notallowed(request);
+    }
+
+    public ResponseContext headMedia(RequestContext request) {
+        return ProviderHelper.notallowed(request);
+    }
+
+    public ResponseContext optionsMedia(RequestContext request) {
+        return ProviderHelper.notallowed(request);
+    }
+
+    public ResponseContext putMedia(RequestContext request) {
+        return ProviderHelper.notallowed(request);
+    }
+
+    public ResponseContext postMedia(RequestContext request) {
+        return ProviderHelper.notallowed(request);
+    }
+
+    public ResponseContext headEntry(RequestContext request) {
+        return ProviderHelper.notallowed(request);
+    }
+
+    public ResponseContext optionsEntry(RequestContext request) {
+        return ProviderHelper.notallowed(request);
+    }
+
+    public abstract String getAuthor(RequestContext request) throws ResponseContextException;
+
+    public abstract String getId(RequestContext request);
+
+    /**
+     * Creates the ResponseContext for a newly created entry. By default, a BaseResponseContext is returned. The
+     * Location, Content-Location, Etag and status are set appropriately.
+     */
+    protected ResponseContext buildCreateEntryResponse(String link, Entry entry) {
+        BaseResponseContext<Entry> rc = new BaseResponseContext<Entry>(entry);
+        rc.setLocation(link);
+        rc.setContentLocation(rc.getLocation().toString());
+        rc.setEntityTag(calculateEntityTag(entry));
+        rc.setStatus(201);
+        return rc;
+    }
+
+    /**
+     * Creates the ResponseContext for a newly created entry. By default, a BaseResponseContext is returned. The
+     * Location, Content-Location, Etag and status are set appropriately.
+     */
+    protected ResponseContext buildPostMediaEntryResponse(String link, Entry entry) {
+        return buildCreateEntryResponse(link, entry);
+    }
+
+    /**
+     * Creates the ResponseContext for a GET entry request. By default, a BaseResponseContext is returned. The Entry
+     * will contain an appropriate atom:source element and the Etag header will be set.
+     */
+    protected ResponseContext buildGetEntryResponse(RequestContext request, Entry entry)
+        throws ResponseContextException {
+        Feed feed = createFeedBase(request);
+        entry.setSource(feed.getAsSource());
+        Document<Entry> entry_doc = entry.getDocument();
+        AbstractResponseContext rc = new BaseResponseContext<Document<Entry>>(entry_doc);
+        rc.setEntityTag(calculateEntityTag(entry));
+        return rc;
+    }
+
+    /**
+     * Creates the ResponseContext for a HEAD entry request. By default, an EmptyResponseContext is returned. The Etag
+     * header will be set.
+     */
+    protected ResponseContext buildHeadEntryResponse(RequestContext request, String id, Date updated)
+        throws ResponseContextException {
+        EmptyResponseContext rc = new EmptyResponseContext(200);
+        rc.setEntityTag(EntityTag.generate(id, AtomDate.format(updated)));
+        return rc;
+    }
+
+    /**
+     * Creates the ResponseContext for a GET feed request. By default, a BaseResponseContext is returned. The Etag
+     * header will be set.
+     */
+    protected ResponseContext buildGetFeedResponse(Feed feed) {
+        Document<Feed> document = feed.getDocument();
+        AbstractResponseContext rc = new BaseResponseContext<Document<Feed>>(document);
+        rc.setEntityTag(calculateEntityTag(document.getRoot()));
+        return rc;
+    }
+
+    /**
+     * Create a ResponseContext (or take it from the Exception) for an exception that occurred in the application.
+     * 
+     * @param e
+     * @return
+     */
+    protected ResponseContext createErrorResponse(ResponseContextException e) {
+        if (log.isDebugEnabled()) {
+            log.debug("A ResponseException was thrown.", e);
+        } else if (e.getResponseContext() instanceof EmptyResponseContext && ((EmptyResponseContext)e
+            .getResponseContext()).getStatus() >= 500) {
+            log.warn("A ResponseException was thrown.", e);
+        }
+
+        return e.getResponseContext();
+    }
+
+    /**
+     * Create the base feed for the requested collection.
+     */
+    protected Feed createFeedBase(RequestContext request) throws ResponseContextException {
+        Factory factory = request.getAbdera().getFactory();
+        Feed feed = factory.newFeed();
+        feed.setId(getId(request));
+        feed.setTitle(getTitle(request));
+        feed.addLink("");
+        feed.addLink("", "self");
+        feed.addAuthor(getAuthor(request));
+        feed.setUpdated(new Date());
+        return feed;
+    }
+
+    /**
+     * Retrieves the FOM Entry object from the request payload.
+     */
+    @SuppressWarnings("unchecked")
+    protected Entry getEntryFromRequest(RequestContext request) throws ResponseContextException {
+        Abdera abdera = request.getAbdera();
+        Parser parser = abdera.getParser();
+
+        Document<Entry> entry_doc;
+        try {
+            entry_doc = (Document<Entry>)request.getDocument(parser).clone();
+        } catch (ParseException e) {
+            throw new ResponseContextException(400, e);
+        } catch (IOException e) {
+            throw new ResponseContextException(500, e);
+        }
+        if (entry_doc == null) {
+            return null;
+        }
+        return entry_doc.getRoot();
+    }
+
+    /**
+     * Get's the name of the specific resource requested
+     */
+    protected String getResourceName(RequestContext request) {
+        String path = request.getTargetPath();
+        int q = path.indexOf("?");
+        if (q != -1) {
+            path = path.substring(0, q);
+        }
+        String[] segments = path.split("/");
+        String id = segments[segments.length - 1];
+        return UrlEncoding.decode(id);
+    }
+
+    public ResponseContext extensionRequest(RequestContext request) {
+        return ProviderHelper.notallowed(request, getMethods(request));
+    }
+
+    private String[] getMethods(RequestContext request) {
+        return ProviderHelper.getDefaultMethods(request);
+    }
+
+    public Collection asCollectionElement(RequestContext request) {
+        Collection collection = request.getAbdera().getFactory().newCollection();
+        collection.setHref(getHref(request));
+        collection.setTitle(getTitle(request));
+        collection.setAccept(getAccepts(request));
+        for (CategoriesInfo catsinfo : getCategoriesInfo(request)) {
+            collection.addCategories(catsinfo.asCategoriesElement(request));
+        }
+        return collection;
+    }
 }

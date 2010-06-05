@@ -26,21 +26,21 @@ public class ConfigurationTest {
     @Test
     public void testDefaultConfigurationProperties() {
         Configuration config1 = new AbderaConfiguration();
-        assertEquals("org.apache.abdera.parser.stax.FOMFactory",
-                     config1.getConfigurationOption(Constants.CONFIG_FACTORY, Constants.DEFAULT_FACTORY));
-        assertEquals("org.apache.abdera.parser.stax.FOMParser",
-                     config1.getConfigurationOption(Constants.CONFIG_PARSER, Constants.DEFAULT_PARSER));
-        assertEquals("org.apache.abdera.parser.stax.FOMXPath",
-                     config1.getConfigurationOption(Constants.CONFIG_XPATH, Constants.DEFAULT_XPATH));
-        
+        assertEquals("org.apache.abdera.parser.stax.FOMFactory", config1
+            .getConfigurationOption(Constants.CONFIG_FACTORY, Constants.DEFAULT_FACTORY));
+        assertEquals("org.apache.abdera.parser.stax.FOMParser", config1
+            .getConfigurationOption(Constants.CONFIG_PARSER, Constants.DEFAULT_PARSER));
+        assertEquals("org.apache.abdera.parser.stax.FOMXPath", config1.getConfigurationOption(Constants.CONFIG_XPATH,
+                                                                                              Constants.DEFAULT_XPATH));
+
         Configuration config2 = AbderaConfiguration.getDefault();
-        assertEquals("org.apache.abdera.parser.stax.FOMFactory",
-                     config2.getConfigurationOption(Constants.CONFIG_FACTORY, Constants.DEFAULT_FACTORY));
-        assertEquals("org.apache.abdera.parser.stax.FOMParser",
-                     config2.getConfigurationOption(Constants.CONFIG_PARSER, Constants.DEFAULT_PARSER));
-        assertEquals("org.apache.abdera.parser.stax.FOMXPath",
-                     config2.getConfigurationOption(Constants.CONFIG_XPATH, Constants.DEFAULT_XPATH));
-        
+        assertEquals("org.apache.abdera.parser.stax.FOMFactory", config2
+            .getConfigurationOption(Constants.CONFIG_FACTORY, Constants.DEFAULT_FACTORY));
+        assertEquals("org.apache.abdera.parser.stax.FOMParser", config2
+            .getConfigurationOption(Constants.CONFIG_PARSER, Constants.DEFAULT_PARSER));
+        assertEquals("org.apache.abdera.parser.stax.FOMXPath", config2.getConfigurationOption(Constants.CONFIG_XPATH,
+                                                                                              Constants.DEFAULT_XPATH));
+
     }
 
 }

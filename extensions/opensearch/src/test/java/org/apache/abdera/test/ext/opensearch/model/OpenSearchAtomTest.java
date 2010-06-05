@@ -43,46 +43,46 @@ public class OpenSearchAtomTest extends XMLAssert {
     private static final int START_INDEX = 1;
     private static final int ITEMS_PER_PAGE = 1;
     private static final String QUERY_TERMS = "some content";
-    
+
     static {
         Map<String, String> nsContext = new HashMap<String, String>();
         nsContext.put(OpenSearchConstants.OS_PREFIX, OpenSearchConstants.OPENSEARCH_NS);
         XMLUnit.setXpathNamespaceContext(new SimpleNamespaceContext(nsContext));
     }
-    
+
     @Test
     public void testAtomResponseCreation() throws Exception {
         Feed feed = Abdera.getInstance().getFactory().newFeed();
-        
+
         feed.setId("http://example.com/opensearch+example");
         feed.setTitle("An OpenSearch Example");
         feed.setUpdated(new Date());
-        
+
         Query query = feed.addExtension(OpenSearchConstants.QUERY);
         query.setRole(Query.Role.REQUEST);
         query.setSearchTerms(QUERY_TERMS);
-        
+
         IntegerElement totalResults = feed.addExtension(OpenSearchConstants.TOTAL_RESULTS);
         totalResults.setValue(TOTAL_RESULTS);
         IntegerElement itemsPerPage = feed.addExtension(OpenSearchConstants.ITEMS_PER_PAGE);
         itemsPerPage.setValue(ITEMS_PER_PAGE);
         IntegerElement startIndex = feed.addExtension(OpenSearchConstants.START_INDEX);
         startIndex.setValue(START_INDEX);
-        
+
         StringWriter writer = new StringWriter();
         feed.writeTo(writer);
-        
+
         String result = writer.toString();
-        
+
         System.out.print(result);
-        
+
         assertXpathEvaluatesTo(String.valueOf(TOTAL_RESULTS), "//os:totalResults", result);
         assertXpathEvaluatesTo(String.valueOf(ITEMS_PER_PAGE), "//os:itemsPerPage", result);
         assertXpathEvaluatesTo(String.valueOf(START_INDEX), "//os:startIndex", result);
         assertXpathEvaluatesTo(Query.Role.REQUEST.toString().toLowerCase(), "//os:Query/@role", result);
         assertXpathEvaluatesTo(QUERY_TERMS, "//os:Query/@searchTerms", result);
     }
-    
+
     @Test
     public void testAtomResponseParsing() throws Exception {
         Parser parser = Abdera.getNewParser();
@@ -101,30 +101,30 @@ public class OpenSearchAtomTest extends XMLAssert {
         IntegerElement si = doc.getRoot().getFirstChild(OpenSearchConstants.START_INDEX);
         assertNotNull(si);
         assertEquals(1, si.getValue());
-        
+
         Query q = doc.getRoot().getFirstChild(OpenSearchConstants.QUERY);
         assertNotNull(q);
         assertEquals(Query.Role.REQUEST, q.getRole());
         assertEquals(QUERY_TERMS, q.getSearchTerms());
     }
-    
+
     @Test
-    public void testFeedSimpleExtension() throws Exception {    	
-    	Feed feed = Abdera.getInstance().getFactory().newFeed();
-        
+    public void testFeedSimpleExtension() throws Exception {
+        Feed feed = Abdera.getInstance().getFactory().newFeed();
+
         feed.setId("http://example.com/opensearch+example");
         feed.setTitle("An OpenSearch Example");
         feed.setUpdated(new Date());
-        
-        feed.addSimpleExtension(OpenSearchConstants.TOTAL_RESULTS, String.valueOf(TOTAL_RESULTS));        
+
+        feed.addSimpleExtension(OpenSearchConstants.TOTAL_RESULTS, String.valueOf(TOTAL_RESULTS));
         feed.addSimpleExtension(OpenSearchConstants.ITEMS_PER_PAGE, String.valueOf(ITEMS_PER_PAGE));
-        
+
         StringWriter writer = new StringWriter();
-        feed.writeTo(writer);        
-        String result = writer.toString();        
-        
+        feed.writeTo(writer);
+        String result = writer.toString();
+
         assertXpathEvaluatesTo(String.valueOf(TOTAL_RESULTS), "//os:totalResults", result);
-        assertXpathEvaluatesTo(String.valueOf(ITEMS_PER_PAGE), "//os:itemsPerPage", result);        
-        
+        assertXpathEvaluatesTo(String.valueOf(ITEMS_PER_PAGE), "//os:itemsPerPage", result);
+
     }
 }

@@ -48,165 +48,165 @@ import org.junit.Test;
 
 public class CustomProviderTest {
 
-  private static JettyServer server;
-  private static Abdera abdera = Abdera.getInstance();
-  private static AbderaClient client = new AbderaClient();
-  
-  private static String BASE = "http://localhost:9002/atom";
-  
-  @BeforeClass
-  public static void setUp() throws Exception {
-    try {
-      server = new JettyServer();
-      server.start(CustomProvider.class);
-    } catch (Exception e) {
-      e.printStackTrace();
+    private static JettyServer server;
+    private static Abdera abdera = Abdera.getInstance();
+    private static AbderaClient client = new AbderaClient();
+
+    private static String BASE = "http://localhost:9002/atom";
+
+    @BeforeClass
+    public static void setUp() throws Exception {
+        try {
+            server = new JettyServer();
+            server.start(CustomProvider.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-  }
 
-  @AfterClass
-  public static void tearDown() throws Exception {
-    server.stop();
-  }
+    @AfterClass
+    public static void tearDown() throws Exception {
+        server.stop();
+    }
 
-  @Test
-  public void testGetService() throws IOException {
-    ClientResponse resp = client.get(BASE);
-    assertNotNull(resp);
-    assertEquals(ResponseType.SUCCESS, resp.getType());
-    assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.APP_MEDIA_TYPE));
-    Document<Service> doc = resp.getDocument();
-try {
-prettyPrint(doc);
-} catch (Exception e) {}
-    Service service = doc.getRoot();
-    prettyPrint(service);
-    assertEquals( 1, service.getWorkspaces().size());
-    Workspace workspace = service.getWorkspaces().get(0);
-    assertEquals( 1, workspace.getCollections().size());
-    Collection collection = workspace.getCollections().get(0);
-    assertEquals( BASE + "/feed", collection.getResolvedHref().toString());
-    assertEquals( "A simple feed", collection.getTitle().toString());
-    resp.release();
-  }
+    @Test
+    public void testGetService() throws IOException {
+        ClientResponse resp = client.get(BASE);
+        assertNotNull(resp);
+        assertEquals(ResponseType.SUCCESS, resp.getType());
+        assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.APP_MEDIA_TYPE));
+        Document<Service> doc = resp.getDocument();
+        try {
+            prettyPrint(doc);
+        } catch (Exception e) {
+        }
+        Service service = doc.getRoot();
+        prettyPrint(service);
+        assertEquals(1, service.getWorkspaces().size());
+        Workspace workspace = service.getWorkspaces().get(0);
+        assertEquals(1, workspace.getCollections().size());
+        Collection collection = workspace.getCollections().get(0);
+        assertEquals(BASE + "/feed", collection.getResolvedHref().toString());
+        assertEquals("A simple feed", collection.getTitle().toString());
+        resp.release();
+    }
 
-  @Test
-  public void testGetCategories() {
-    ClientResponse resp = client.get(BASE + "/feed;categories");
-    assertNotNull(resp);
-    assertEquals(ResponseType.SUCCESS, resp.getType());
-    assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.CAT_MEDIA_TYPE));
-    Document<Categories> doc = resp.getDocument();
-    Categories cats = doc.getRoot();
-    assertEquals( 3, cats.getCategories().size());
-    assertEquals( "foo", cats.getCategories().get(0).getTerm());
-    assertEquals( "bar", cats.getCategories().get(1).getTerm());
-    assertEquals( "baz", cats.getCategories().get(2).getTerm());
-    assertFalse(cats.isFixed());
-  }
+    @Test
+    public void testGetCategories() {
+        ClientResponse resp = client.get(BASE + "/feed;categories");
+        assertNotNull(resp);
+        assertEquals(ResponseType.SUCCESS, resp.getType());
+        assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.CAT_MEDIA_TYPE));
+        Document<Categories> doc = resp.getDocument();
+        Categories cats = doc.getRoot();
+        assertEquals(3, cats.getCategories().size());
+        assertEquals("foo", cats.getCategories().get(0).getTerm());
+        assertEquals("bar", cats.getCategories().get(1).getTerm());
+        assertEquals("baz", cats.getCategories().get(2).getTerm());
+        assertFalse(cats.isFixed());
+    }
 
-  @Test
-  public void testGetFeed() throws Exception {
-    ClientResponse resp = client.get(BASE + "/feed");
-    assertNotNull(resp);
-    assertEquals(ResponseType.SUCCESS, resp.getType());
-    assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.ATOM_MEDIA_TYPE));
-    Document<Feed> doc = resp.getDocument();
-    Feed feed = doc.getRoot();
-    assertEquals("tag:example.org,2008:feed", feed.getId().toString());
-    assertEquals( "A simple feed", feed.getTitle());
-    assertEquals( "Simple McGee", feed.getAuthor().getName());
-    assertEquals( 0, feed.getEntries().size());
-    resp.release();
-  }
+    @Test
+    public void testGetFeed() throws Exception {
+        ClientResponse resp = client.get(BASE + "/feed");
+        assertNotNull(resp);
+        assertEquals(ResponseType.SUCCESS, resp.getType());
+        assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.ATOM_MEDIA_TYPE));
+        Document<Feed> doc = resp.getDocument();
+        Feed feed = doc.getRoot();
+        assertEquals("tag:example.org,2008:feed", feed.getId().toString());
+        assertEquals("A simple feed", feed.getTitle());
+        assertEquals("Simple McGee", feed.getAuthor().getName());
+        assertEquals(0, feed.getEntries().size());
+        resp.release();
+    }
 
-  protected void prettyPrint(Base doc) throws IOException {
-//      WriterFactory writerFactory = abdera.getWriterFactory();
-//      Writer writer = writerFactory.getWriter("prettyxml");
-//      writer.writeTo(doc, System.out);
-//      System.out.println();
-  }
+    protected void prettyPrint(Base doc) throws IOException {
+        // WriterFactory writerFactory = abdera.getWriterFactory();
+        // Writer writer = writerFactory.getWriter("prettyxml");
+        // writer.writeTo(doc, System.out);
+        // System.out.println();
+    }
 
+    @Test
+    public void testPostEntry() {
+        Entry entry = abdera.newEntry();
+        entry.setId(BASE + "/feed/entries/1");
+        entry.setTitle("test entry");
+        entry.setContent("Test Content");
+        entry.addLink("http://example.org");
+        entry.setUpdated(new Date());
+        entry.addAuthor("James");
+        ClientResponse resp = client.post(BASE + "/feed", entry);
+        assertNotNull(resp);
+        assertEquals(ResponseType.SUCCESS, resp.getType());
+        assertEquals(201, resp.getStatus());
+        assertNotNull(resp.getLocation());
+        resp.release();
+        resp = client.get(BASE + "/feed");
+        Document<Feed> feed_doc = resp.getDocument();
+        Feed feed = feed_doc.getRoot();
+        assertEquals(1, feed.getEntries().size());
+    }
 
-  @Test
-  public void testPostEntry() {
-    Entry entry = abdera.newEntry();
-    entry.setId(BASE + "/feed/entries/1");
-    entry.setTitle("test entry");
-    entry.setContent("Test Content");
-    entry.addLink("http://example.org");
-    entry.setUpdated(new Date());
-    entry.addAuthor("James");
-    ClientResponse resp = client.post(BASE + "/feed", entry);
-    assertNotNull(resp);
-    assertEquals(ResponseType.SUCCESS, resp.getType());
-    assertEquals( 201, resp.getStatus());
-    assertNotNull(resp.getLocation());
-    resp.release();
-    resp = client.get(BASE + "/feed");
-    Document<Feed> feed_doc = resp.getDocument();
-    Feed feed = feed_doc.getRoot();
-    assertEquals( 1, feed.getEntries().size());
-  }
+    @Test
+    public void testPostMedia() {
+        ByteArrayInputStream in = new ByteArrayInputStream(new byte[] {0x01, 0x02, 0x03, 0x04});
+        RequestOptions options = client.getDefaultRequestOptions();
+        options.setContentType("application/octet-stream");
+        ClientResponse resp = client.post(BASE + "/feed", in, options);
+        assertEquals(ResponseType.CLIENT_ERROR, resp.getType());
+        assertEquals(405, resp.getStatus());
+        resp.release();
+    }
 
-  @Test
-  public void testPostMedia() {
-    ByteArrayInputStream in = new ByteArrayInputStream(new byte[] {0x01, 0x02, 0x03, 0x04});
-    RequestOptions options = client.getDefaultRequestOptions();
-    options.setContentType("application/octet-stream");
-    ClientResponse resp = client.post(BASE + "/feed", in, options);
-    assertEquals( ResponseType.CLIENT_ERROR, resp.getType());
-    assertEquals( 405, resp.getStatus());
-    resp.release();
-  }
+    @Test
+    public void testPutEntry() throws IOException {
+        ClientResponse resp = client.get(BASE + "/feed");
+        Document<Feed> feed_doc = resp.getDocument();
+        Feed feed = feed_doc.getRoot();
+        prettyPrint(feed);
+        Entry entry = feed.getEntries().get(0);
+        String edit = entry.getEditLinkResolvedHref().toString();
+        resp.release();
+        resp = client.get(edit);
+        Document<Entry> doc = resp.getDocument();
+        doc.writeTo(System.out);
+        prettyPrint(doc.getRoot());
+        entry = doc.getRoot();
+        entry.setTitle("This is the modified title");
+        resp.release();
+        resp = client.put(edit, entry);
+        assertEquals(ResponseType.SUCCESS, resp.getType());
+        assertEquals(204, resp.getStatus());
+        resp.release();
+        resp = client.get(edit);
+        doc = resp.getDocument();
+        entry = doc.getRoot();
+        assertEquals("This is the modified title", entry.getTitle());
+        resp.release();
+        resp = client.get(BASE + "/feed");
+        feed_doc = resp.getDocument();
+        feed = feed_doc.getRoot();
+        assertEquals(1, feed.getEntries().size());
+        resp.release();
+    }
 
-  @Test
-  public void testPutEntry() throws IOException {
-    ClientResponse resp = client.get(BASE + "/feed");
-    Document<Feed> feed_doc = resp.getDocument();
-    Feed feed = feed_doc.getRoot();
-    prettyPrint(feed);
-    Entry entry = feed.getEntries().get(0);
-    String edit = entry.getEditLinkResolvedHref().toString();
-    resp.release();
-    resp = client.get(edit);
-    Document<Entry> doc = resp.getDocument();
-    doc.writeTo(System.out);
-    prettyPrint(doc.getRoot());
-    entry = doc.getRoot();
-    entry.setTitle("This is the modified title");
-    resp.release();
-    resp = client.put(edit, entry);
-    assertEquals(ResponseType.SUCCESS, resp.getType());
-    assertEquals( 204, resp.getStatus());
-    resp.release();
-    resp = client.get(edit);
-    doc = resp.getDocument();
-    entry = doc.getRoot();
-    assertEquals( "This is the modified title", entry.getTitle());
-    resp.release();
-    resp = client.get(BASE + "/feed");
-    feed_doc = resp.getDocument();
-    feed = feed_doc.getRoot();
-    assertEquals( 1, feed.getEntries().size());
-    resp.release();
-  }
-
-  @Test
-  public void testDeleteEntry() {
-    ClientResponse resp = client.get(BASE + "/feed");
-    Document<Feed> feed_doc = resp.getDocument();
-    Feed feed = feed_doc.getRoot();
-    Entry entry = feed.getEntries().get(0);
-    String edit = entry.getEditLinkResolvedHref().toString();
-    resp.release();
-    resp = client.delete(edit);
-    assertEquals(ResponseType.SUCCESS, resp.getType());
-    resp.release();
-    resp = client.get(BASE + "/feed");
-    feed_doc = resp.getDocument();
-    feed = feed_doc.getRoot();
-    assertEquals( 0, feed.getEntries().size());
-    resp.release();
-  }
+    @Test
+    public void testDeleteEntry() {
+        ClientResponse resp = client.get(BASE + "/feed");
+        Document<Feed> feed_doc = resp.getDocument();
+        Feed feed = feed_doc.getRoot();
+        Entry entry = feed.getEntries().get(0);
+        String edit = entry.getEditLinkResolvedHref().toString();
+        resp.release();
+        resp = client.delete(edit);
+        assertEquals(ResponseType.SUCCESS, resp.getType());
+        resp.release();
+        resp = client.get(BASE + "/feed");
+        feed_doc = resp.getDocument();
+        feed = feed_doc.getRoot();
+        assertEquals(0, feed.getEntries().size());
+        resp.release();
+    }
 }

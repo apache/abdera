@@ -1,20 +1,20 @@
 /*
-* Licensed to the Apache Software Foundation (ASF) under one or more
-* contributor license agreements.  The ASF licenses this file to You
-* under the Apache License, Version 2.0 (the "License"); you may not
-* use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.  For additional information regarding
-* copyright in this work, please see the NOTICE file in the top level
-* directory of this distribution.
-*/
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  The ASF licenses this file to You
+ * under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.  For additional information regarding
+ * copyright in this work, please see the NOTICE file in the top level
+ * directory of this distribution.
+ */
 package org.apache.abdera.ext.json;
 
 import java.io.ByteArrayInputStream;
@@ -34,88 +34,70 @@ import org.apache.abdera.protocol.server.context.ResponseContextWrapper;
 import org.apache.abdera.writer.Writer;
 
 /**
- * Filter implementation that will convert an Atom document returned by
- * the server into a JSON document if the request specifies a higher
- * preference value for JSON or explicitly requests JSON by including
- * a format=json querystring parameter
+ * Filter implementation that will convert an Atom document returned by the server into a JSON document if the request
+ * specifies a higher preference value for JSON or explicitly requests JSON by including a format=json querystring
+ * parameter
  */
-public class JSONFilter 
-  implements Filter {
-  
-  public ResponseContext filter(
-    RequestContext request, 
-    FilterChain chain) {
-      ResponseContext resp = chain.next(request);
-      String format = request.getParameter("format");
-      return (resp.getContentType() != null &&
-        jsonPreferred(request,resp.getContentType().toString())) ||
-        (format != null && format.equalsIgnoreCase("json")) ?
-        new JsonResponseContext(resp,request.getAbdera()) :
-        resp;
-  }
-  
-  private boolean jsonPreferred(RequestContext request, String type) {
-    return ProviderHelper.isPreferred(
-      request,
-      "application/json",
-      type);
-  }
-  
-  private class JsonResponseContext 
-    extends ResponseContextWrapper {
+public class JSONFilter implements Filter {
 
-    private final Abdera abdera;
-    
-    public JsonResponseContext(
-      ResponseContext response,
-      Abdera abdera) {
-        super(response);
-        setContentType("application/json");
-        this.abdera = abdera;
+    public ResponseContext filter(RequestContext request, FilterChain chain) {
+        ResponseContext resp = chain.next(request);
+        String format = request.getParameter("format");
+        return (resp.getContentType() != null && jsonPreferred(request, resp.getContentType().toString())) || (format != null && format
+            .equalsIgnoreCase("json")) ? new JsonResponseContext(resp, request.getAbdera()) : resp;
     }
-    
-    public void writeTo(
-      OutputStream out, 
-      Writer writer)
-        throws IOException {
-      try {
-        toJson(out,writer);
-      } catch (Exception se) {
-        if (se instanceof RuntimeException)
-          throw (RuntimeException)se;
-        throw new RuntimeException(se);
-      }
+
+    private boolean jsonPreferred(RequestContext request, String type) {
+        return ProviderHelper.isPreferred(request, "application/json", type);
     }
-    
-    public void writeTo(
-      OutputStream out) 
-        throws IOException {
-      try {
-        toJson(out,null);
-      } catch (Exception se) {
-        if (se instanceof RuntimeException)
-          throw (RuntimeException)se;
-        throw new RuntimeException(se);
-      }
+
+    private class JsonResponseContext extends ResponseContextWrapper {
+
+        private final Abdera abdera;
+
+        public JsonResponseContext(ResponseContext response, Abdera abdera) {
+            super(response);
+            setContentType("application/json");
+            this.abdera = abdera;
+        }
+
+        public void writeTo(OutputStream out, Writer writer) throws IOException {
+            try {
+                toJson(out, writer);
+            } catch (Exception se) {
+                if (se instanceof RuntimeException)
+                    throw (RuntimeException)se;
+                throw new RuntimeException(se);
+            }
+        }
+
+        public void writeTo(OutputStream out) throws IOException {
+            try {
+                toJson(out, null);
+            } catch (Exception se) {
+                if (se instanceof RuntimeException)
+                    throw (RuntimeException)se;
+                throw new RuntimeException(se);
+            }
+        }
+
+        private void toJson(OutputStream aout, Writer writer) throws Exception {
+            Document<Element> doc = null;
+            try {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                if (writer == null)
+                    super.writeTo(out);
+                else
+                    super.writeTo(out, writer);
+                ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+                doc = abdera.getParser().parse(in);
+            } catch (Exception e) {
+            }
+            if (doc != null) {
+                doc.writeTo("json", aout);
+            } else {
+                throw new RuntimeException("There was an error serializing the entry to JSON");
+            }
+        }
     }
-    
-    private void toJson(OutputStream aout,Writer writer) throws Exception {
-      Document<Element> doc = null;
-      try {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        if (writer == null)
-          super.writeTo(out);
-        else 
-          super.writeTo(out,writer);
-        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
-        doc = abdera.getParser().parse(in);
-      } catch (Exception e) {}
-      if (doc != null) {
-        doc.writeTo("json",aout);
-      } else {
-        throw new RuntimeException(
-          "There was an error serializing the entry to JSON");
-      }
-    }
-  }
 }

@@ -29,57 +29,52 @@ import org.apache.abdera.util.AbstractWriterOptions;
 import org.apache.abdera.writer.NamedWriter;
 import org.apache.abdera.writer.WriterOptions;
 
-public class JSONWriter
-  extends AbstractNamedWriter
-  implements NamedWriter {
+public class JSONWriter extends AbstractNamedWriter implements NamedWriter {
 
-  public static final String NAME = "json";
+    public static final String NAME = "json";
 
-  public static final String[] FORMATS = {
-    "application/json",
-    "application/javascript",
-    "application/ecmascript",
-    "text/javascript",
-    "text/ecmascript"
-  };
-  
-  public JSONWriter() {
-    super(NAME,FORMATS);
-  }
+    public static final String[] FORMATS =
+        {"application/json", "application/javascript", "application/ecmascript", "text/javascript", "text/ecmascript"};
 
-  @Override 
-  protected WriterOptions initDefaultWriterOptions() {
-    return new AbstractWriterOptions() {};
-  }
-  
-  public String getName() {
-    return NAME;
-  }
-
-  public Object write(Base base, WriterOptions options) throws IOException {
-    try {
-      ByteArrayOutputStream out = new ByteArrayOutputStream();
-      writeTo(base,out,options);
-      return new String(out.toByteArray(),options.getCharset());
-    } catch (IOException i) {
-      throw i;
-    } catch (Exception e) { 
-      throw new IOException(e.getMessage());
+    public JSONWriter() {
+        super(NAME, FORMATS);
     }
-  }
 
-  public void writeTo(Base base, OutputStream out, WriterOptions options) throws IOException {
-    writeTo(base,new OutputStreamWriter(out,options.getCharset()),options);
-  }
-
-  public void writeTo(Base base, java.io.Writer out, WriterOptions options) throws IOException {
-    try {
-      JSONUtil.toJson(base, out);
-      if (options.getAutoClose()) out.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw new IOException(e.getMessage());
+    @Override
+    protected WriterOptions initDefaultWriterOptions() {
+        return new AbstractWriterOptions() {
+        };
     }
-  }
+
+    public String getName() {
+        return NAME;
+    }
+
+    public Object write(Base base, WriterOptions options) throws IOException {
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            writeTo(base, out, options);
+            return new String(out.toByteArray(), options.getCharset());
+        } catch (IOException i) {
+            throw i;
+        } catch (Exception e) {
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    public void writeTo(Base base, OutputStream out, WriterOptions options) throws IOException {
+        writeTo(base, new OutputStreamWriter(out, options.getCharset()), options);
+    }
+
+    public void writeTo(Base base, java.io.Writer out, WriterOptions options) throws IOException {
+        try {
+            JSONUtil.toJson(base, out);
+            if (options.getAutoClose())
+                out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IOException(e.getMessage());
+        }
+    }
 
 }

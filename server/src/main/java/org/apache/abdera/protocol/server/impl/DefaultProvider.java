@@ -30,96 +30,96 @@ import org.apache.abdera.protocol.server.WorkspaceInfo;
 import org.apache.abdera.protocol.server.WorkspaceManager;
 
 /**
- * The DefaultProvider is the default Provider implementation for Abdera.  It
- * supports multiple collections and assumes a simple http://.../{collection}/{entry}
- * URL structure.  Media-link entries are not supported.
+ * The DefaultProvider is the default Provider implementation for Abdera. It supports multiple collections and assumes a
+ * simple http://.../{collection}/{entry} URL structure. Media-link entries are not supported.
  */
 public class DefaultProvider extends AbstractProvider {
 
-  protected WorkspaceManager workspaceManager;
-  protected Resolver<Target> targetResolver;
-  protected Resolver<Subject> subjectResolver;
-  protected TargetBuilder targetBuilder;
-  protected RouteManager routeManager;
-  
-  public DefaultProvider() {
-    this("/");
-  }
+    protected WorkspaceManager workspaceManager;
+    protected Resolver<Target> targetResolver;
+    protected Resolver<Subject> subjectResolver;
+    protected TargetBuilder targetBuilder;
+    protected RouteManager routeManager;
 
-  public DefaultProvider(String base) {
-    if (base == null) {
-      base = "/";
+    public DefaultProvider() {
+        this("/");
     }
-    workspaceManager = new DefaultWorkspaceManager();
-    routeManager = new RouteManager()
-      .addRoute("service", base, TargetType.TYPE_SERVICE)
-      .addRoute("feed", base + ":collection", TargetType.TYPE_COLLECTION)
-      .addRoute("entry", base + ":collection/:entry", TargetType.TYPE_ENTRY)
-      .addRoute("categories", base + ":collection/:entry;categories", TargetType.TYPE_CATEGORIES);
-    
-    targetBuilder = routeManager;
-    targetResolver = routeManager;
-  }
 
-  public RouteManager getRouteManager() {
-    return routeManager;
-  }
+    public DefaultProvider(String base) {
+        if (base == null) {
+            base = "/";
+        }
+        workspaceManager = new DefaultWorkspaceManager();
+        routeManager =
+            new RouteManager().addRoute("service", base, TargetType.TYPE_SERVICE).addRoute("feed",
+                                                                                           base + ":collection",
+                                                                                           TargetType.TYPE_COLLECTION)
+                .addRoute("entry", base + ":collection/:entry", TargetType.TYPE_ENTRY)
+                .addRoute("categories", base + ":collection/:entry;categories", TargetType.TYPE_CATEGORIES);
 
-  protected Resolver<Target> getTargetResolver(RequestContext request) {
-    return targetResolver;
-  }
-
-  public void setTargetResolver(Resolver<Target> targetResolver) {
-    this.targetResolver = targetResolver;
-  }
-
-  protected Resolver<Subject> getSubjectResolver(RequestContext request) {
-    return subjectResolver;
-  }
-
-  public void setSubjectResolver(Resolver<Subject> subjectResolver) {
-    this.subjectResolver = subjectResolver;
-  }
-
-  public Resolver<Target> getTargetResolver() {
-    return targetResolver;
-  }
-
-  public Resolver<Subject> getSubjectResolver() {
-    return subjectResolver;
-  }
-
-  protected WorkspaceManager getWorkspaceManager(RequestContext request) {
-    return getWorkspaceManager();
-  }
-
-  public WorkspaceManager getWorkspaceManager() {
-    return workspaceManager;
-  }
-
-  public void setWorkspaceManager(WorkspaceManager workspaceManager) {
-    this.workspaceManager = workspaceManager;
-  }
-
-  public TargetBuilder getTargetBuilder() {
-    return targetBuilder;
-  }
-
-  public void setTargetBuilder(TargetBuilder targetBuilder) {
-    this.targetBuilder = targetBuilder;
-  }
-
-  public void addWorkspace(WorkspaceInfo workspace) {
-    ((DefaultWorkspaceManager)getWorkspaceManager()).addWorkspace(workspace);
-  }
-
-  public void addWorkspaces(Collection<WorkspaceInfo> workspaces) {
-    for (WorkspaceInfo w : workspaces) {
-      ((DefaultWorkspaceManager)getWorkspaceManager()).addWorkspace(w);
+        targetBuilder = routeManager;
+        targetResolver = routeManager;
     }
-  }
 
-  protected TargetBuilder getTargetBuilder(RequestContext request) {
-    return (TargetBuilder)targetBuilder;
-  }
+    public RouteManager getRouteManager() {
+        return routeManager;
+    }
+
+    protected Resolver<Target> getTargetResolver(RequestContext request) {
+        return targetResolver;
+    }
+
+    public void setTargetResolver(Resolver<Target> targetResolver) {
+        this.targetResolver = targetResolver;
+    }
+
+    protected Resolver<Subject> getSubjectResolver(RequestContext request) {
+        return subjectResolver;
+    }
+
+    public void setSubjectResolver(Resolver<Subject> subjectResolver) {
+        this.subjectResolver = subjectResolver;
+    }
+
+    public Resolver<Target> getTargetResolver() {
+        return targetResolver;
+    }
+
+    public Resolver<Subject> getSubjectResolver() {
+        return subjectResolver;
+    }
+
+    protected WorkspaceManager getWorkspaceManager(RequestContext request) {
+        return getWorkspaceManager();
+    }
+
+    public WorkspaceManager getWorkspaceManager() {
+        return workspaceManager;
+    }
+
+    public void setWorkspaceManager(WorkspaceManager workspaceManager) {
+        this.workspaceManager = workspaceManager;
+    }
+
+    public TargetBuilder getTargetBuilder() {
+        return targetBuilder;
+    }
+
+    public void setTargetBuilder(TargetBuilder targetBuilder) {
+        this.targetBuilder = targetBuilder;
+    }
+
+    public void addWorkspace(WorkspaceInfo workspace) {
+        ((DefaultWorkspaceManager)getWorkspaceManager()).addWorkspace(workspace);
+    }
+
+    public void addWorkspaces(Collection<WorkspaceInfo> workspaces) {
+        for (WorkspaceInfo w : workspaces) {
+            ((DefaultWorkspaceManager)getWorkspaceManager()).addWorkspace(w);
+        }
+    }
+
+    protected TargetBuilder getTargetBuilder(RequestContext request) {
+        return (TargetBuilder)targetBuilder;
+    }
 }

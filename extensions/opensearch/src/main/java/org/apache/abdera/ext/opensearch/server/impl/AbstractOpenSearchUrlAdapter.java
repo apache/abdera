@@ -33,9 +33,8 @@ import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.context.BaseResponseContext;
 
 /**
- * Abstract {@link org.apache.abdera.ext.opensearch.server.OpenSearchUrlAdapter}
- * providing explicit methods to implement and/or override for executing the actual search and
- * creating the Atom feed containing search results.
+ * Abstract {@link org.apache.abdera.ext.opensearch.server.OpenSearchUrlAdapter} providing explicit methods to implement
+ * and/or override for executing the actual search and creating the Atom feed containing search results.
  * 
  * @param <T> The generic object type representing a search result.
  */
@@ -68,33 +67,38 @@ public abstract class AbstractOpenSearchUrlAdapter<T> implements OpenSearchUrlAd
      * Get the update date of the feed containing this search results.
      */
     protected abstract Date getOpenSearchFeedUpdatedDate(RequestContext request);
-    
+
     /**
      * Do the actual search, returning a list of search results as generic objects.
      */
     protected abstract List<T> doSearch(RequestContext request, Map<String, String> parameters);
-    
+
     /**
      * Fill the given empty Atom entry from the given search result object.<br>
-     * This method is called once for every search result returned by the {#doSearch(RequestContext, Map<String, String>)} method.
+     * This method is called once for every search result returned by the {#doSearch(RequestContext, Map<String,
+     * String>)} method.
      */
     protected abstract void fillEntry(Entry entry, T entity);
-    
+
     /**
      * Get the total number of results of this search.<br>
      * By default, it's equal to the number of search results: override to provide a different behavior.<br>
      * This element can be explicitly omitted from the feed by returning a negative value.
      */
-    protected int getOpenSearchFeedTotalResults(RequestContext request, Map<String, String> parameters, List<T> searchResults) {
+    protected int getOpenSearchFeedTotalResults(RequestContext request,
+                                                Map<String, String> parameters,
+                                                List<T> searchResults) {
         return searchResults.size();
     }
-    
+
     /**
      * Get the number of items (entries) contained into this page (feed).<br>
      * By default, it's equal to the number of search results: override to provide a different behavior.<br>
      * This element can be explicitly omitted from the feed by returning a negative value.
      */
-    protected int getOpenSearchFeedItemsPerPage(RequestContext request, Map<String, String> parameters, List<T> searchResults) {
+    protected int getOpenSearchFeedItemsPerPage(RequestContext request,
+                                                Map<String, String> parameters,
+                                                List<T> searchResults) {
         return searchResults.size();
     }
 
@@ -103,10 +107,12 @@ public abstract class AbstractOpenSearchUrlAdapter<T> implements OpenSearchUrlAd
      * By default, this element is omitted: override to provide a different behavior.<br>
      * This element can be explicitly omitted from the feed by returning a negative value.
      */
-    protected int getOpenSearchFeedStartIndex(RequestContext request, Map<String, String> parameters, List<T> searchResults) {
+    protected int getOpenSearchFeedStartIndex(RequestContext request,
+                                              Map<String, String> parameters,
+                                              List<T> searchResults) {
         return -1;
     }
-    
+
     /**
      * Post process this feed in order to make custom modifications.<br>
      * By default, this method does nothing: override to provide a different behavior.
@@ -124,18 +130,15 @@ public abstract class AbstractOpenSearchUrlAdapter<T> implements OpenSearchUrlAd
         feed.addLink(searchRequest.getUri().toString(), "self");
         int totalResults = this.getOpenSearchFeedTotalResults(searchRequest, parameters, searchResults);
         if (totalResults > -1) {
-        ((IntegerElement) feed.addExtension(OpenSearchConstants.TOTAL_RESULTS))
-                .setValue(totalResults);
+            ((IntegerElement)feed.addExtension(OpenSearchConstants.TOTAL_RESULTS)).setValue(totalResults);
         }
         int itemsPerPage = this.getOpenSearchFeedItemsPerPage(searchRequest, parameters, searchResults);
         if (itemsPerPage > -1) {
-        ((IntegerElement) feed.addExtension(OpenSearchConstants.ITEMS_PER_PAGE))
-                .setValue(itemsPerPage);
+            ((IntegerElement)feed.addExtension(OpenSearchConstants.ITEMS_PER_PAGE)).setValue(itemsPerPage);
         }
         int startIndex = this.getOpenSearchFeedStartIndex(searchRequest, parameters, searchResults);
         if (startIndex > -1) {
-        ((IntegerElement) feed.addExtension(OpenSearchConstants.START_INDEX))
-                .setValue(startIndex);
+            ((IntegerElement)feed.addExtension(OpenSearchConstants.START_INDEX)).setValue(startIndex);
         }
         for (T entity : searchResults) {
             Entry entry = factory.newEntry();

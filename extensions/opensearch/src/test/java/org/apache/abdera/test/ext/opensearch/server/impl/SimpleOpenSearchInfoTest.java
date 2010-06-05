@@ -33,35 +33,41 @@ import static org.easymock.EasyMock.*;
 public class SimpleOpenSearchInfoTest extends AbstractOpenSearchServerTest {
 
     private OpenSearchInfo osInfo;
-    
+
     @Before
     public void setUp() throws Exception {
         this.osInfo = this.createOpenSearchInfo();
     }
-    
+
     @Test
     public void testOpenSearchDescriptionCreationFromOpenSearchInfo() throws Exception {
         RequestContext requestMock = createMock(RequestContext.class);
         expect(requestMock.getAbdera()).andReturn(Abdera.getInstance()).anyTimes();
         expect(requestMock.getBaseUri()).andReturn(new IRI("http://www.acme.org/")).anyTimes();
-        
+
         replay(requestMock);
-        
+
         OpenSearchDescription description = this.osInfo.asOpenSearchDescriptionElement(requestMock);
         StringWriter writer = new StringWriter();
         description.writeTo(writer);
-        
+
         String result = writer.toString();
         System.out.print(result);
-        
+
         assertXpathEvaluatesTo(SHORT_NAME, "/os:OpenSearchDescription/os:ShortName", result);
         assertXpathEvaluatesTo(DESCRIPTION, "/os:OpenSearchDescription/os:Description", result);
         assertXpathEvaluatesTo(TAGS, "/os:OpenSearchDescription/os:Tags", result);
-        assertXpathEvaluatesTo(Query.Role.EXAMPLE.toString().toLowerCase(), "/os:OpenSearchDescription/os:Query/@role", result);
+        assertXpathEvaluatesTo(Query.Role.EXAMPLE.toString().toLowerCase(),
+                               "/os:OpenSearchDescription/os:Query/@role",
+                               result);
         assertXpathEvaluatesTo(QUERY_TERMS, "/os:OpenSearchDescription/os:Query/@searchTerms", result);
         assertXpathEvaluatesTo("application/atom+xml", "/os:OpenSearchDescription/os:Url[1]/@type", result);
-        assertXpathEvaluatesTo("http://www.acme.org/search1?q={searchTerms}&c={count?}", "/os:OpenSearchDescription/os:Url[1]/@template", result);
+        assertXpathEvaluatesTo("http://www.acme.org/search1?q={searchTerms}&c={count?}",
+                               "/os:OpenSearchDescription/os:Url[1]/@template",
+                               result);
         assertXpathEvaluatesTo("application/atom+xml", "/os:OpenSearchDescription/os:Url[2]/@type", result);
-        assertXpathEvaluatesTo("http://www.acme.org/search2?q={searchTerms}&c={count?}", "/os:OpenSearchDescription/os:Url[2]/@template", result);
+        assertXpathEvaluatesTo("http://www.acme.org/search2?q={searchTerms}&c={count?}",
+                               "/os:OpenSearchDescription/os:Url[2]/@template",
+                               result);
     }
 }

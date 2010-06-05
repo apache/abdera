@@ -26,12 +26,14 @@ import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.WorkspaceManager;
 
 /**
- * {@link org.apache.abdera.protocol.server.RequestProcessor} implementation which
- * processes requests for media documents.
+ * {@link org.apache.abdera.protocol.server.RequestProcessor} implementation which processes requests for media
+ * documents.
  */
 public class MediaRequestProcessor implements RequestProcessor {
 
-    public ResponseContext process(RequestContext context, WorkspaceManager workspaceManager, CollectionAdapter collectionAdapter) {
+    public ResponseContext process(RequestContext context,
+                                   WorkspaceManager workspaceManager,
+                                   CollectionAdapter collectionAdapter) {
         if (collectionAdapter == null) {
             return ProviderHelper.notfound(context);
         } else {
@@ -42,7 +44,7 @@ public class MediaRequestProcessor implements RequestProcessor {
     protected ResponseContext processMedia(RequestContext context, CollectionAdapter adapter) {
         String method = context.getMethod();
         if (adapter instanceof MediaCollectionAdapter) {
-            MediaCollectionAdapter mcadapter = (MediaCollectionAdapter) adapter;
+            MediaCollectionAdapter mcadapter = (MediaCollectionAdapter)adapter;
             if (method.equalsIgnoreCase("GET")) {
                 return mcadapter.getMedia(context);
             } else if (method.equalsIgnoreCase("PUT")) {

@@ -17,7 +17,6 @@
  */
 package org.apache.abdera.ext.opensearch.model;
 
-
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.opensearch.OpenSearchConstants;
 import org.apache.abdera.factory.Factory;
@@ -29,15 +28,15 @@ import org.apache.abdera.model.ExtensibleElementWrapper;
  * This supports all parts of the Open Search 1.1 Url specification.
  */
 public class Query extends ExtensibleElementWrapper {
-    
+
     public Query(Factory factory) {
         super(factory, OpenSearchConstants.QUERY);
     }
-    
+
     public Query(Abdera abdera) {
         this(abdera.getFactory());
     }
-    
+
     public Query(Element internal) {
         super(internal);
     }
@@ -176,14 +175,9 @@ public class Query extends ExtensibleElementWrapper {
             this.removeAttribute(OpenSearchConstants.QUERY_OUTPUTENCODING_LN);
         }
     }
-    
+
     public enum Role {
 
-        CORRECTION,
-        EXAMPLE,
-        RELATED,
-        REQUEST,
-        SUBSET,
-        SUPERSET;
+        CORRECTION, EXAMPLE, RELATED, REQUEST, SUBSET, SUPERSET;
     }
 }

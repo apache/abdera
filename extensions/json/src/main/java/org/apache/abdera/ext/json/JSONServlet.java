@@ -34,83 +34,76 @@ import org.apache.abdera.protocol.client.ClientResponse;
 import org.apache.abdera.protocol.client.RequestOptions;
 
 /**
- * Servlet that will do an HTTP GET to retrieve an Atom document then
- * convert that into a JSON doc.  The URL pattern is simple:
- * 
- * http://.../servlet/path/{url}
+ * Servlet that will do an HTTP GET to retrieve an Atom document then convert that into a JSON doc. The URL pattern is
+ * simple: http://.../servlet/path/{url}
  */
-@SuppressWarnings("unchecked") 
-public class JSONServlet 
-  extends HttpServlet {
+@SuppressWarnings("unchecked")
+public class JSONServlet extends HttpServlet {
 
-  private static final long serialVersionUID = 1414392196430276024L;
+    private static final long serialVersionUID = 1414392196430276024L;
 
-  private Abdera getAbdera() {
-    ServletContext sc = getServletContext();
-    Abdera abdera = null;
-    synchronized(sc) {
-      abdera = (Abdera)sc.getAttribute(Abdera.class.getName());
-      if (abdera == null) {
-        abdera = new Abdera();
-        sc.setAttribute(Abdera.class.getName(), abdera);
-      }      
-    }
-    return abdera;
-  }
-  
-  @Override 
-  protected void doGet(
-    HttpServletRequest request,
-    HttpServletResponse response) 
-      throws ServletException, IOException {
-    
-    String url = request.getPathInfo();
-    if (url != null && url.length() > 1) url = URLDecoder.decode(url, "UTF-8");
-    else {
-      response.sendError(400); 
-      return;
-    }
-    url = url.substring(1);
-
-    Abdera abdera = getAbdera();
-    AbderaClient client = new AbderaClient(abdera);
-    
-    RequestOptions options = client.getDefaultRequestOptions();
-    if (request.getHeader("If-Match") != null)
-      options.setIfMatch(request.getHeader("If-Match"));
-    if (request.getHeader("If-None-Match") != null)
-      options.setIfNoneMatch(request.getHeader("If-None-Match"));
-    if (request.getHeader("If-Modified-Since") != null)
-      options.setIfNoneMatch(request.getHeader("If-Modified-Since"));
-    if (request.getHeader("If-Unmodified-Since") != null)
-      options.setIfNoneMatch(request.getHeader("If-Unmodified-Since"));
-    
-    ClientResponse resp = client.get(url);
-    switch(resp.getType()) {
-      case SUCCESS:
-        try {
-          Document doc = resp.getDocument();
-          response.setContentType("application/json");
-          response.setCharacterEncoding("UTF-8");
-          if (doc.getEntityTag() != null) 
-            response.setHeader("ETag", doc.getEntityTag().toString());
-          if (doc.getLanguage() != null)
-            response.setHeader("Content-Language", doc.getLanguage());
-          if (doc.getLastModified() != null)
-            response.setDateHeader("Last-Modified", doc.getLastModified().getTime());
-          OutputStream out = response.getOutputStream();
-          doc.writeTo("json",out);
-        } catch (Exception e) {
-          response.sendError(500);
-          return;
+    private Abdera getAbdera() {
+        ServletContext sc = getServletContext();
+        Abdera abdera = null;
+        synchronized (sc) {
+            abdera = (Abdera)sc.getAttribute(Abdera.class.getName());
+            if (abdera == null) {
+                abdera = new Abdera();
+                sc.setAttribute(Abdera.class.getName(), abdera);
+            }
         }
-      case CLIENT_ERROR:
-      case SERVER_ERROR:
-        response.sendError(resp.getStatus(), resp.getStatusText());
-        return;
+        return abdera;
     }
-  }
 
-  
-  
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String url = request.getPathInfo();
+        if (url != null && url.length() > 1)
+            url = URLDecoder.decode(url, "UTF-8");
+        else {
+            response.sendError(400);
+            return;
+        }
+        url = url.substring(1);
+
+        Abdera abdera = getAbdera();
+        AbderaClient client = new AbderaClient(abdera);
+
+        RequestOptions options = client.getDefaultRequestOptions();
+        if (request.getHeader("If-Match") != null)
+            options.setIfMatch(request.getHeader("If-Match"));
+        if (request.getHeader("If-None-Match") != null)
+            options.setIfNoneMatch(request.getHeader("If-None-Match"));
+        if (request.getHeader("If-Modified-Since") != null)
+            options.setIfNoneMatch(request.getHeader("If-Modified-Since"));
+        if (request.getHeader("If-Unmodified-Since") != null)
+            options.setIfNoneMatch(request.getHeader("If-Unmodified-Since"));
+
+        ClientResponse resp = client.get(url);
+        switch (resp.getType()) {
+            case SUCCESS:
+                try {
+                    Document doc = resp.getDocument();
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    if (doc.getEntityTag() != null)
+                        response.setHeader("ETag", doc.getEntityTag().toString());
+                    if (doc.getLanguage() != null)
+                        response.setHeader("Content-Language", doc.getLanguage());
+                    if (doc.getLastModified() != null)
+                        response.setDateHeader("Last-Modified", doc.getLastModified().getTime());
+                    OutputStream out = response.getOutputStream();
+                    doc.writeTo("json", out);
+                } catch (Exception e) {
+                    response.sendError(500);
+                    return;
+                }
+            case CLIENT_ERROR:
+            case SERVER_ERROR:
+                response.sendError(resp.getStatus(), resp.getStatusText());
+                return;
+        }
+    }
+
 }

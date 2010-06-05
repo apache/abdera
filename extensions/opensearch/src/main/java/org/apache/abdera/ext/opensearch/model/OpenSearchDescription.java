@@ -26,7 +26,8 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ExtensibleElementWrapper;
 
 /**
- * Open Search 1.1 Description Document element: used to describe the web interface of an Open Search based search engine.<br>
+ * Open Search 1.1 Description Document element: used to describe the web interface of an Open Search based search
+ * engine.<br>
  * Currently, this supports only a subset of the Open Search 1.1 Description Document element specification.
  */
 public class OpenSearchDescription extends ExtensibleElementWrapper {
@@ -38,7 +39,7 @@ public class OpenSearchDescription extends ExtensibleElementWrapper {
     public OpenSearchDescription(Abdera abdera) {
         this(abdera.getFactory());
     }
-    
+
     public OpenSearchDescription(Element internal) {
         super(internal);
     }
@@ -49,19 +50,19 @@ public class OpenSearchDescription extends ExtensibleElementWrapper {
         }
         this.setExtensionStringValue(OpenSearchConstants.SHORT_NAME, shortName);
     }
-    
+
     public String getShortName() {
         StringElement element = this.getExtension(OpenSearchConstants.SHORT_NAME);
         return element.getValue();
     }
-    
+
     public void setDescription(String description) {
         if (description == null) {
             description = "";
         }
         this.setExtensionStringValue(OpenSearchConstants.DESCRIPTION, description);
     }
-    
+
     public String getDescription() {
         StringElement element = this.getExtension(OpenSearchConstants.DESCRIPTION);
         return element.getValue();
@@ -79,12 +80,12 @@ public class OpenSearchDescription extends ExtensibleElementWrapper {
             this.setExtensionStringValue(OpenSearchConstants.TAGS, "");
         }
     }
-    
+
     public String getTags() {
         StringElement element = this.getExtension(OpenSearchConstants.TAGS);
         return element.getValue();
     }
-    
+
     public void addUrls(Url... urls) {
         if (urls != null && urls.length > 0) {
             for (Url url : urls) {
@@ -96,7 +97,7 @@ public class OpenSearchDescription extends ExtensibleElementWrapper {
     public List<Url> getUrls() {
         return this.getExtensions(OpenSearchConstants.URL);
     }
-    
+
     public void addQueries(Query... queries) {
         if (queries != null && queries.length > 0) {
             for (Query query : queries) {
@@ -104,7 +105,7 @@ public class OpenSearchDescription extends ExtensibleElementWrapper {
             }
         }
     }
-    
+
     public List<Query> getQueries() {
         return this.getExtensions(OpenSearchConstants.QUERY);
     }

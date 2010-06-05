@@ -53,9 +53,9 @@ public class OpenSearchUrlRequestProcessorTest extends AbstractOpenSearchServerT
     @Before
     public void setUp() throws Exception {
         this.osInfo = this.createOpenSearchInfo();
-        ((SimpleOpenSearchUrlInfo) osInfo.getUrls()[0]).setOpenSearchUrlAdapter(new TestingOpenSearchUrlAdapter1());
-        ((SimpleOpenSearchUrlInfo) osInfo.getUrls()[1]).setOpenSearchUrlAdapter(new TestingOpenSearchUrlAdapter2());
-        
+        ((SimpleOpenSearchUrlInfo)osInfo.getUrls()[0]).setOpenSearchUrlAdapter(new TestingOpenSearchUrlAdapter1());
+        ((SimpleOpenSearchUrlInfo)osInfo.getUrls()[1]).setOpenSearchUrlAdapter(new TestingOpenSearchUrlAdapter2());
+
         this.osUrlProcessor = new OpenSearchUrlRequestProcessor();
         this.osUrlProcessor.setOpenSearchInfo(this.osInfo);
 
@@ -66,13 +66,14 @@ public class OpenSearchUrlRequestProcessorTest extends AbstractOpenSearchServerT
         wsManager.setWorkspaces(new LinkedList<WorkspaceInfo>());
 
         RouteManager routeManager = new RouteManager();
-        routeManager.addRoute("service", "/", TargetType.TYPE_SERVICE)
-                .addRoute("feed", "/atom/:collection", TargetType.TYPE_COLLECTION)
-                .addRoute("entry", "/atom/:collection/:entry", TargetType.TYPE_ENTRY)
-                .addRoute("categories", "/atom/:collection/:entry;categories", TargetType.TYPE_CATEGORIES)
-                .addRoute("osSearch1", "/search1", OpenSearchTargetTypes.OPENSEARCH_URL)
-                .addRoute("osSearch2", "/search2", OpenSearchTargetTypes.OPENSEARCH_URL)
-                .addRoute("osSearch3", "/search3", OpenSearchTargetTypes.OPENSEARCH_URL);
+        routeManager.addRoute("service", "/", TargetType.TYPE_SERVICE).addRoute("feed",
+                                                                                "/atom/:collection",
+                                                                                TargetType.TYPE_COLLECTION)
+            .addRoute("entry", "/atom/:collection/:entry", TargetType.TYPE_ENTRY)
+            .addRoute("categories", "/atom/:collection/:entry;categories", TargetType.TYPE_CATEGORIES)
+            .addRoute("osSearch1", "/search1", OpenSearchTargetTypes.OPENSEARCH_URL)
+            .addRoute("osSearch2", "/search2", OpenSearchTargetTypes.OPENSEARCH_URL)
+            .addRoute("osSearch3", "/search3", OpenSearchTargetTypes.OPENSEARCH_URL);
 
         DefaultProvider provider = new DefaultProvider("/");
         provider.setWorkspaceManager(wsManager);
@@ -99,7 +100,7 @@ public class OpenSearchUrlRequestProcessorTest extends AbstractOpenSearchServerT
         client.get("http://localhost:9002/search2?q=test2&c=1");
         assertEquals(200, response.getStatus());
     }
-    
+
     @Test
     public void testProcessFailsBecauseOfNoAdapterFound() throws Exception {
         AbderaClient client = new AbderaClient();

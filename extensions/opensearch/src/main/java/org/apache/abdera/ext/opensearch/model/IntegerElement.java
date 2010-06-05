@@ -31,7 +31,7 @@ public class IntegerElement extends ElementWrapper {
     public IntegerElement(Factory factory, QName qname) {
         super(factory, qname);
     }
-    
+
     public IntegerElement(Element internal) {
         super(internal);
     }

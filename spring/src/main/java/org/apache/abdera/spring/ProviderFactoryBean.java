@@ -39,20 +39,19 @@ public class ProviderFactoryBean implements FactoryBean {
     private Resolver<Target> targetResolver;
     private Resolver<Subject> subjectResolver;
     private Filter[] filters;
-    
+
     public Object getObject() throws Exception {
         DefaultProvider p = null;
-        
+
         if (base != null) {
-            Constructor<? extends DefaultProvider> constructor = 
-              providerClass.getConstructor(String.class);
+            Constructor<? extends DefaultProvider> constructor = providerClass.getConstructor(String.class);
             p = constructor.newInstance(base);
         } else {
             p = providerClass.newInstance();
         }
-        
-        if( workspaceManager != null ) {
-            p.setWorkspaceManager( workspaceManager );
+
+        if (workspaceManager != null) {
+            p.setWorkspaceManager(workspaceManager);
         }
 
         if (workspaces != null && workspaces.size() > 0) {
@@ -61,14 +60,14 @@ public class ProviderFactoryBean implements FactoryBean {
         if (targetResolver != null) {
             p.setTargetResolver(targetResolver);
         }
-        
+
         if (subjectResolver != null) {
             p.setSubjectResolver(subjectResolver);
         }
         if (filters != null && filters.length > 0) {
             p.addFilter(filters);
         }
-        
+
         return p;
     }
 
@@ -100,8 +99,8 @@ public class ProviderFactoryBean implements FactoryBean {
         return workspaceManager;
     }
 
-    public void setWorkspaceManager( WorkspaceManager workspaceManager ) {
-      this.workspaceManager = workspaceManager;
+    public void setWorkspaceManager(WorkspaceManager workspaceManager) {
+        this.workspaceManager = workspaceManager;
     }
 
     public Collection<WorkspaceInfo> getWorkspaces() {

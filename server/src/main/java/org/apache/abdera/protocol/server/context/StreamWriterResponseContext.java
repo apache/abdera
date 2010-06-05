@@ -24,102 +24,88 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.writer.StreamWriter;
 
 /**
- * Abstract base class for creating ResponseContext implementations that use
- * the StreamWriter interface.  Using the StreamWriter to write out documents
- * is significantly faster than using the object model but requires developers
- * to know more about proper Atom syntax.
+ * Abstract base class for creating ResponseContext implementations that use the StreamWriter interface. Using the
+ * StreamWriter to write out documents is significantly faster than using the object model but requires developers to
+ * know more about proper Atom syntax.
  */
-public abstract class StreamWriterResponseContext 
-  extends SimpleResponseContext {
-  
-  private final Abdera abdera;
-  private final String sw;
-  private boolean autoindent;
-  
-  /**
-   * Create a new StreamWriterResponseContext
-   * @param abdera The Abdera instance
-   */
-  protected StreamWriterResponseContext(
-    Abdera abdera) {
-      this(abdera,null,null);
-  }
+public abstract class StreamWriterResponseContext extends SimpleResponseContext {
 
-  /**
-   * Create a new StreamWriterResponseContext
-   * @param abdera The Abdera instance
-   * @param encoding The charset encoding
-   */
-  protected StreamWriterResponseContext(
-      Abdera abdera,
-      String encoding) {
-        this(abdera,encoding,null);
-  }
-  
-  /**
-   * Create a new StreamWriterResponseContext
-   * @param abdera The Abdera instance
-   * @param encoding The charset encoding
-   * @param sw The name of the Named StreamWriter to use
-   */
-  protected StreamWriterResponseContext(
-    Abdera abdera,
-    String encoding,
-    String sw) {
-      super(encoding);
-      this.abdera = abdera;
-      this.sw = sw;
-  }
-  
-  /**
-   * Get the Abdera instance
-   */
-  protected final Abdera getAbdera() {
-    return abdera;
-  }
-  
-  /**
-   * Create a new StreamWriter instance.  If the sw property was set,
-   * the specified Named StreamWriter will be returned
-   */
-  protected StreamWriter newStreamWriter() {
-    return sw == null ? 
-      abdera.newStreamWriter() : 
-      abdera.getWriterFactory().newStreamWriter(sw);
-  }
-  
-  protected void writeEntity(
-    Writer writer) 
-      throws IOException {
-    writeTo(
-      newStreamWriter()
-        .setWriter(writer)
-        .setAutoIndent(autoindent));
-  }
-  
-  /**
-   * Write to the specified StreamWriter.  Subclasses of this class must
-   * implement this method.
-   */
-  protected abstract void writeTo(StreamWriter sw) throws IOException;
-  
-  /**
-   * True to enable automatic indenting on the StreamWriter
-   */
-  public StreamWriterResponseContext setAutoIndent(boolean autoindent) {
-    this.autoindent = autoindent;
-    return this;
-  }
-  
-  /**
-   * True if automatic indenting is enabled on the StreamWriter
-   */
-  public boolean getAutoIndent() {
-    return this.autoindent;
-  }
+    private final Abdera abdera;
+    private final String sw;
+    private boolean autoindent;
 
-  public boolean hasEntity() {
-    return true;
-  }
+    /**
+     * Create a new StreamWriterResponseContext
+     * 
+     * @param abdera The Abdera instance
+     */
+    protected StreamWriterResponseContext(Abdera abdera) {
+        this(abdera, null, null);
+    }
+
+    /**
+     * Create a new StreamWriterResponseContext
+     * 
+     * @param abdera The Abdera instance
+     * @param encoding The charset encoding
+     */
+    protected StreamWriterResponseContext(Abdera abdera, String encoding) {
+        this(abdera, encoding, null);
+    }
+
+    /**
+     * Create a new StreamWriterResponseContext
+     * 
+     * @param abdera The Abdera instance
+     * @param encoding The charset encoding
+     * @param sw The name of the Named StreamWriter to use
+     */
+    protected StreamWriterResponseContext(Abdera abdera, String encoding, String sw) {
+        super(encoding);
+        this.abdera = abdera;
+        this.sw = sw;
+    }
+
+    /**
+     * Get the Abdera instance
+     */
+    protected final Abdera getAbdera() {
+        return abdera;
+    }
+
+    /**
+     * Create a new StreamWriter instance. If the sw property was set, the specified Named StreamWriter will be returned
+     */
+    protected StreamWriter newStreamWriter() {
+        return sw == null ? abdera.newStreamWriter() : abdera.getWriterFactory().newStreamWriter(sw);
+    }
+
+    protected void writeEntity(Writer writer) throws IOException {
+        writeTo(newStreamWriter().setWriter(writer).setAutoIndent(autoindent));
+    }
+
+    /**
+     * Write to the specified StreamWriter. Subclasses of this class must implement this method.
+     */
+    protected abstract void writeTo(StreamWriter sw) throws IOException;
+
+    /**
+     * True to enable automatic indenting on the StreamWriter
+     */
+    public StreamWriterResponseContext setAutoIndent(boolean autoindent) {
+        this.autoindent = autoindent;
+        return this;
+    }
+
+    /**
+     * True if automatic indenting is enabled on the StreamWriter
+     */
+    public boolean getAutoIndent() {
+        return this.autoindent;
+    }
+
+    public boolean hasEntity() {
+        return true;
+    }
 
 }

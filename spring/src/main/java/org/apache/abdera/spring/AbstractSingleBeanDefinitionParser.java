@@ -30,8 +30,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public abstract class AbstractSingleBeanDefinitionParser 
-    extends org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser {
+public abstract class AbstractSingleBeanDefinitionParser extends
+    org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser {
 
     public AbstractSingleBeanDefinitionParser() {
         super();
@@ -41,55 +41,59 @@ public abstract class AbstractSingleBeanDefinitionParser
     protected void doParse(Element element, ParserContext ctx, BeanDefinitionBuilder bean) {
         NamedNodeMap atts = element.getAttributes();
         for (int i = 0; i < atts.getLength(); i++) {
-            Attr node = (Attr) atts.item(i);
+            Attr node = (Attr)atts.item(i);
             String val = node.getValue();
             String name = node.getLocalName();
-            
+
             if ("abstract".equals(name)) {
                 bean.setAbstract(true);
             } else if (!"id".equals(name) && !"name".equals(name)) {
                 mapAttribute(bean, element, name, val);
             }
         }
-        
+
         NodeList children = element.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             Node n = children.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
                 String name = n.getLocalName();
-                
-                mapElement(ctx, bean, (Element) n, name);
+
+                mapElement(ctx, bean, (Element)n, name);
             }
         }
     }
 
     protected void mapElement(ParserContext ctx, BeanDefinitionBuilder bean, Element element, String name) {
-        
+
     }
 
     protected void mapAttribute(BeanDefinitionBuilder bean, Element element, String name, String val) {
 
     }
-    
-    protected void setFirstChildAsProperty(Element element, ParserContext ctx, BeanDefinitionBuilder bean, String propertyName) {
+
+    protected void setFirstChildAsProperty(Element element,
+                                           ParserContext ctx,
+                                           BeanDefinitionBuilder bean,
+                                           String propertyName) {
         String id = getAndRegisterFirstChild(element, ctx, bean, propertyName);
         bean.addPropertyReference(propertyName, id);
-        
+
     }
 
-    protected String getAndRegisterFirstChild(Element element, ParserContext ctx, BeanDefinitionBuilder bean, String propertyName) {
+    protected String getAndRegisterFirstChild(Element element,
+                                              ParserContext ctx,
+                                              BeanDefinitionBuilder bean,
+                                              String propertyName) {
         Element first = getFirstChild(element);
-        
+
         if (first == null) {
             throw new IllegalStateException(propertyName + " property must have child elements!");
         }
-        
+
         return getAndRegister(ctx, bean, first);
     }
 
-    protected String getAndRegister(ParserContext ctx, 
-                                    BeanDefinitionBuilder bean,
-                                    Element el) {
+    protected String getAndRegister(ParserContext ctx, BeanDefinitionBuilder bean, Element el) {
         // Seems odd that we have to do the registration, I wonder if there is a better way
         String id;
         BeanDefinition child;
@@ -106,17 +110,17 @@ public abstract class AbstractSingleBeanDefinitionParser
                 child = bdh.getBeanDefinition();
                 id = bdh.getBeanName();
             } else {
-                throw new UnsupportedOperationException("Elements with the name " + name  
-                                                        + " are not currently "
-                                                        + "supported as sub elements of " 
-                                                        + el.getParentNode().getLocalName());
+                throw new UnsupportedOperationException("Elements with the name " + name
+                    + " are not currently "
+                    + "supported as sub elements of "
+                    + el.getParentNode().getLocalName());
             }
-            
+
         } else {
             child = ctx.getDelegate().parseCustomElement(el, bean.getBeanDefinition());
             id = child.toString();
         }
-    
+
         ctx.getRegistry().registerBeanDefinition(id, child);
         return id;
     }
@@ -127,7 +131,7 @@ public abstract class AbstractSingleBeanDefinitionParser
         for (int i = 0; i < children.getLength(); i++) {
             Node n = children.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
-                first = (Element) n;
+                first = (Element)n;
             }
         }
         return first;

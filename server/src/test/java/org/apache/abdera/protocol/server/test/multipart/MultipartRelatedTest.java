@@ -28,84 +28,87 @@ import org.mortbay.jetty.servlet.ServletHolder;
 @SuppressWarnings("serial")
 public class MultipartRelatedTest {
 
-	private Server server;
+    private Server server;
 
-	private void initializeJetty(String contextPath) throws Exception {
-		server = new Server(9002);
-		Context root = new Context(server, contextPath, Context.NO_SESSIONS);
-		root.addServlet(new ServletHolder(new AbderaServlet() {
-			@Override
-			protected Provider createProvider() {
-				DefaultProvider provider = new DefaultProvider("/");
-				provider.addRequestProcessors(new HashMap<TargetType, RequestProcessor>() {
-					{put(TargetType.TYPE_SERVICE,new MultipartRelatedServiceRequestProcessor());}
-				});
+    private void initializeJetty(String contextPath) throws Exception {
+        server = new Server(9002);
+        Context root = new Context(server, contextPath, Context.NO_SESSIONS);
+        root.addServlet(new ServletHolder(new AbderaServlet() {
+            @Override
+            protected Provider createProvider() {
+                DefaultProvider provider = new DefaultProvider("/");
+                provider.addRequestProcessors(new HashMap<TargetType, RequestProcessor>() {
+                    {
+                        put(TargetType.TYPE_SERVICE, new MultipartRelatedServiceRequestProcessor());
+                    }
+                });
 
-				MultipartRelatedAdapter ca = new MultipartRelatedAdapter();
-				ca.setHref("media");
+                MultipartRelatedAdapter ca = new MultipartRelatedAdapter();
+                ca.setHref("media");
 
-				SimpleWorkspaceInfo wi = new SimpleWorkspaceInfo();
-				wi.setTitle("multimedia/related Workspace");
-				wi.addCollection(ca);
+                SimpleWorkspaceInfo wi = new SimpleWorkspaceInfo();
+                wi.setTitle("multimedia/related Workspace");
+                wi.addCollection(ca);
 
-				provider.addWorkspace(wi);
+                provider.addWorkspace(wi);
 
-				provider.init(getAbdera(), null);
-				return provider;
-			}
-		}), "/*");
-		server.start();
-	}
+                provider.init(getAbdera(), null);
+                return provider;
+            }
+        }), "/*");
+        server.start();
+    }
 
-	@After
-	public void tearDown() throws Exception {
-		if (server != null) server.stop();
-	}
-	
-	@Test
-	public void testServiceDocument() throws Exception {
-		initializeJetty("/");		
-		AbderaClient client = new AbderaClient(new Abdera());
-		
-		ClientResponse res = client.get("http://localhost:9002/");
-		assertEquals(200, res.getStatus());
-		StringWriter sw = new StringWriter();
-		res.getDocument().writeTo(sw);	
-				
-		assertTrue(sw.toString().contains("accept alternate=\"multipart-related\">image/png"));
-		assertTrue(sw.toString().contains("accept>video/*"));
-		assertTrue(sw.toString().contains("accept>image/jpg"));
-	}
+    @After
+    public void tearDown() throws Exception {
+        if (server != null)
+            server.stop();
+    }
 
-	@Test
-	public void testPostMedia() throws Exception {
-		execTest(201, "image/png");
-	}
-	
-	@Test
-	public void testPostMediaInvalidContentType() throws Exception {
-		//collection doesn't accept multipart files with this content type
-		execTest(415, "image/jpg");
-	}
-	
-	private void execTest(int status, String contentType) throws Exception {
-		initializeJetty("/");
+    @Test
+    public void testServiceDocument() throws Exception {
+        initializeJetty("/");
+        AbderaClient client = new AbderaClient(new Abdera());
 
-		Abdera abdera = new Abdera();
-		Factory factory = abdera.getFactory();
+        ClientResponse res = client.get("http://localhost:9002/");
+        assertEquals(200, res.getStatus());
+        StringWriter sw = new StringWriter();
+        res.getDocument().writeTo(sw);
 
-		AbderaClient client = new AbderaClient(abdera);
+        assertTrue(sw.toString().contains("accept alternate=\"multipart-related\">image/png"));
+        assertTrue(sw.toString().contains("accept>video/*"));
+        assertTrue(sw.toString().contains("accept>image/jpg"));
+    }
 
-		Entry entry = factory.newEntry();
+    @Test
+    public void testPostMedia() throws Exception {
+        execTest(201, "image/png");
+    }
 
-		entry.setTitle("my image");
-		entry.addAuthor("david");
-		entry.setId("tag:apache.org,2008:234534344");
-		entry.setSummary("multipart test");		
-		entry.setContent(new IRI("cid:234234@example.com"), contentType);
+    @Test
+    public void testPostMediaInvalidContentType() throws Exception {
+        // collection doesn't accept multipart files with this content type
+        execTest(415, "image/jpg");
+    }
 
-		ClientResponse res = client.post("http://localhost:9002/media", entry,
-				this.getClass().getResourceAsStream("info.png"));
-		assertEquals(status, res.getStatus());
-	}
+    private void execTest(int status, String contentType) throws Exception {
+        initializeJetty("/");
+
+        Abdera abdera = new Abdera();
+        Factory factory = abdera.getFactory();
+
+        AbderaClient client = new AbderaClient(abdera);
+
+        Entry entry = factory.newEntry();
+
+        entry.setTitle("my image");
+        entry.addAuthor("david");
+        entry.setId("tag:apache.org,2008:234534344");
+        entry.setSummary("multipart test");
+        entry.setContent(new IRI("cid:234234@example.com"), contentType);
+
+        ClientResponse res =
+            client.post("http://localhost:9002/media", entry, this.getClass().getResourceAsStream("info.png"));
+        assertEquals(status, res.getStatus());
+    }
 }

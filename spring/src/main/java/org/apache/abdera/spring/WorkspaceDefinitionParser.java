@@ -29,8 +29,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 @SuppressWarnings("unchecked")
-public class WorkspaceDefinitionParser 
-    extends org.apache.abdera.spring.AbstractSingleBeanDefinitionParser {
+public class WorkspaceDefinitionParser extends org.apache.abdera.spring.AbstractSingleBeanDefinitionParser {
 
     @Override
     protected void doParse(Element element, ParserContext ctx, BeanDefinitionBuilder bean) {
@@ -39,14 +38,14 @@ public class WorkspaceDefinitionParser
         for (int i = 0; i < nodes.getLength(); i++) {
             Node n = nodes.item(i);
             if (n.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE
-//                &&
-//                n.getNodeName().equals("bean")) {
-//                Element childElement = (Element)n;
-//                BeanDefinitionHolder child = ctx.getDelegate().parseBeanDefinitionElement(childElement);
-//                collections.add(child);
-//            } else if (n.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE &&
-//                n.getNodeName().equals("ref")
-                ) {
+            // &&
+            // n.getNodeName().equals("bean")) {
+            // Element childElement = (Element)n;
+            // BeanDefinitionHolder child = ctx.getDelegate().parseBeanDefinitionElement(childElement);
+            // collections.add(child);
+            // } else if (n.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE &&
+            // n.getNodeName().equals("ref")
+            ) {
                 Element childElement = (Element)n;
                 Object child = ctx.getDelegate().parsePropertySubElement(childElement, bean.getRawBeanDefinition());
                 collections.add(child);
@@ -65,11 +64,11 @@ public class WorkspaceDefinitionParser
     @Override
     protected String getBeanClassName(Element arg0) {
         String cls = super.getBeanClassName(arg0);
-        
+
         if (cls == null) {
             cls = SimpleWorkspaceInfo.class.getName();
         }
-        
+
         return cls;
     }
 
@@ -78,6 +77,4 @@ public class WorkspaceDefinitionParser
         return true;
     }
 
-    
 }
- 

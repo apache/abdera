@@ -32,35 +32,33 @@ import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
 import org.junit.Test;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
-public class ProviderDefinitionParserTest 
-    extends AbstractDependencyInjectionSpringContextTests {
+public class ProviderDefinitionParserTest extends AbstractDependencyInjectionSpringContextTests {
 
-  @Test
+    @Test
     public void testParser() throws Exception {
-        DefaultProvider p = (DefaultProvider) applicationContext.getBean(Provider.class.getName());
-        
+        DefaultProvider p = (DefaultProvider)applicationContext.getBean(Provider.class.getName());
+
         Resolver<Target> tresolver = p.getTargetResolver();
         assertTrue(tresolver instanceof RegexTargetResolver);
-        
+
         WorkspaceManager wm = p.getWorkspaceManager();
-        
+
         Collection<WorkspaceInfo> workspaces = wm.getWorkspaces(null);
         assertEquals(1, workspaces.size());
-        
+
         WorkspaceInfo w = workspaces.iterator().next();
         assertNotNull(w);
         assertEquals("Foo Workspace", w.getTitle(null));
-        
+
         Collection<CollectionInfo> collections = w.getCollections(null);
         assertEquals(2, collections.size());
-        
-        assertEquals(2, p.getFilters(null).length); //Parameter isn't used
+
+        assertEquals(2, p.getFilters(null).length); // Parameter isn't used
     }
-    
+
     @Override
     protected String getConfigPath() {
         return "/org/apache/abdera/spring/beans.xml";
     }
-    
+
 }
- 

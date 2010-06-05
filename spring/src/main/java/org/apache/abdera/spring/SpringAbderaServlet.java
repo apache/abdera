@@ -23,14 +23,12 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
- * Loads a Spring ServiceContext from a Spring WebApplicationContext.
- * By default it looks for a bean with the name "org.apache.abdera.protocol.server.ServiceContext". 
- * This can be overridden by supplying the "serviceContextBeanName" initialization
- * parameter.
+ * Loads a Spring ServiceContext from a Spring WebApplicationContext. By default it looks for a bean with the name
+ * "org.apache.abdera.protocol.server.ServiceContext". This can be overridden by supplying the "serviceContextBeanName"
+ * initialization parameter.
  */
-public class SpringAbderaServlet 
-  extends AbderaServlet {
-    
+public class SpringAbderaServlet extends AbderaServlet {
+
     private static final long serialVersionUID = -7579564455804753809L;
 
     protected Provider createProvider() {
@@ -38,12 +36,11 @@ public class SpringAbderaServlet
         if (providerName == null) {
             providerName = Provider.class.getName();
         }
-        
+
         WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-        
-        Provider p = (Provider) ctx.getBean(providerName);
+
+        Provider p = (Provider)ctx.getBean(providerName);
         p.init(getAbdera(), getProperties(getServletConfig()));
         return p;
     }
 }
- 

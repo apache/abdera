@@ -31,11 +31,12 @@ import org.apache.abdera.protocol.server.ResponseContext;
 import org.apache.abdera.protocol.server.WorkspaceManager;
 
 /**
- * {@link org.apache.abdera.protocol.server.RequestProcessor} implementation for processing GET requests to Open Search urls
- * and then delegating the actual search to the proper {@link org.apache.abdera.ext.opensearch.server.OpenSearchUrlAdapter}.<br>
- * The proper {@link org.apache.abdera.ext.opensearch.server.OpenSearchUrlAdapter} is selected by searching the configured
- * {@link org.apache.abdera.ext.opensearch.server.OpenSearchInfo} for an {@link org.apache.abdera.ext.opensearch.server.OpenSearchUrlInfo}
- * with a matching search path.
+ * {@link org.apache.abdera.protocol.server.RequestProcessor} implementation for processing GET requests to Open Search
+ * urls and then delegating the actual search to the proper
+ * {@link org.apache.abdera.ext.opensearch.server.OpenSearchUrlAdapter}.<br>
+ * The proper {@link org.apache.abdera.ext.opensearch.server.OpenSearchUrlAdapter} is selected by searching the
+ * configured {@link org.apache.abdera.ext.opensearch.server.OpenSearchInfo} for an
+ * {@link org.apache.abdera.ext.opensearch.server.OpenSearchUrlInfo} with a matching search path.
  * 
  * @see {@link #setOpenSearchInfo(OpenSearchInfo)}
  */
@@ -43,7 +44,9 @@ public class OpenSearchUrlRequestProcessor implements RequestProcessor {
 
     private OpenSearchInfo openSearchInfo;
 
-    public ResponseContext process(final RequestContext requestContext, final WorkspaceManager workspaceManager, final CollectionAdapter collectionAdapter) {
+    public ResponseContext process(final RequestContext requestContext,
+                                   final WorkspaceManager workspaceManager,
+                                   final CollectionAdapter collectionAdapter) {
         String method = requestContext.getMethod();
         if (method.equalsIgnoreCase("GET")) {
             OpenSearchUrlInfo urlInfo = this.getMatchingUrlInfo(requestContext);
@@ -68,7 +71,8 @@ public class OpenSearchUrlRequestProcessor implements RequestProcessor {
     }
 
     private OpenSearchUrlInfo getMatchingUrlInfo(RequestContext request) {
-        String targetSearchPath = this.stripSlashes(request.getTargetPath().substring(0, request.getTargetPath().indexOf("?")));
+        String targetSearchPath =
+            this.stripSlashes(request.getTargetPath().substring(0, request.getTargetPath().indexOf("?")));
         OpenSearchUrlInfo result = null;
         for (OpenSearchUrlInfo urlInfo : this.openSearchInfo.getUrls()) {
             String searchPath = this.stripSlashes(urlInfo.getSearchPath());

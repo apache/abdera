@@ -1,20 +1,20 @@
 /*
-* Licensed to the Apache Software Foundation (ASF) under one or more
-* contributor license agreements.  The ASF licenses this file to You
-* under the Apache License, Version 2.0 (the "License"); you may not
-* use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.  For additional information regarding
-* copyright in this work, please see the NOTICE file in the top level
-* directory of this distribution.
-*/
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  The ASF licenses this file to You
+ * under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.  For additional information regarding
+ * copyright in this work, please see the NOTICE file in the top level
+ * directory of this distribution.
+ */
 package org.apache.abdera.model;
 
 import java.io.IOException;
@@ -36,271 +36,268 @@ import org.apache.abdera.writer.WriterOptions;
 /**
  * Base implementation used for static extensions.
  */
-@SuppressWarnings("unchecked") 
-public abstract class ElementWrapper 
-  implements Element {
+@SuppressWarnings("unchecked")
+public abstract class ElementWrapper implements Element {
 
-  private Element internal;
-  
-  protected ElementWrapper(
-    Element internal) {
-      this.internal = internal;
-  }
-  
-  protected ElementWrapper(Factory factory, QName qname) {
-    Element el = factory.newElement(qname);
-    internal = (el instanceof ElementWrapper) ?
-      ((ElementWrapper)el).getInternal() : el;
-  }
+    private Element internal;
 
-  public <T extends Base>T addComment(
-    String value) {
-      internal.addComment(value);
-      return (T)this;
-  }
-
-  public Object clone() {
-    try {
-      ElementWrapper wrapper = (ElementWrapper) super.clone();
-      wrapper.internal = (Element) internal.clone();
-      return wrapper;
-    } catch (CloneNotSupportedException e) {
-      // won't happen
-      return null;
+    protected ElementWrapper(Element internal) {
+        this.internal = internal;
     }
-  }
 
-  public <T extends Element>T declareNS(String uri, String prefix) {
-    internal.declareNS(uri, prefix);
-    return (T)this;
-  }
+    protected ElementWrapper(Factory factory, QName qname) {
+        Element el = factory.newElement(qname);
+        internal = (el instanceof ElementWrapper) ? ((ElementWrapper)el).getInternal() : el;
+    }
 
-  public void discard() {
-    internal.discard();
-  }
+    public <T extends Base> T addComment(String value) {
+        internal.addComment(value);
+        return (T)this;
+    }
 
-  public List<QName> getAttributes() {
-    return internal.getAttributes();
-  }
+    public Object clone() {
+        try {
+            ElementWrapper wrapper = (ElementWrapper)super.clone();
+            wrapper.internal = (Element)internal.clone();
+            return wrapper;
+        } catch (CloneNotSupportedException e) {
+            // won't happen
+            return null;
+        }
+    }
 
-  public String getAttributeValue(QName qname) {
-    return internal.getAttributeValue(qname);
-  }
+    public <T extends Element> T declareNS(String uri, String prefix) {
+        internal.declareNS(uri, prefix);
+        return (T)this;
+    }
 
-  public String getAttributeValue(String name) {
-    return internal.getAttributeValue(name);
-  }
+    public void discard() {
+        internal.discard();
+    }
 
-  public IRI getBaseUri() {
-    return internal.getBaseUri();
-  }
+    public List<QName> getAttributes() {
+        return internal.getAttributes();
+    }
 
-  public <T extends Element> Document<T> getDocument() {
-    return internal.getDocument();
-  }
+    public String getAttributeValue(QName qname) {
+        return internal.getAttributeValue(qname);
+    }
 
-  public List<QName> getExtensionAttributes() {
-    return internal.getExtensionAttributes();
-  }
+    public String getAttributeValue(String name) {
+        return internal.getAttributeValue(name);
+    }
 
-  public Factory getFactory() {
-    return internal.getFactory();
-  }
+    public IRI getBaseUri() {
+        return internal.getBaseUri();
+    }
 
-  public <T extends Element> T getFirstChild() {
-    return (T) internal.getFirstChild();
-  }
+    public <T extends Element> Document<T> getDocument() {
+        return internal.getDocument();
+    }
 
-  public <T extends Element> T getFirstChild(QName qname) {
-    return (T) internal.getFirstChild(qname);
-  }
+    public List<QName> getExtensionAttributes() {
+        return internal.getExtensionAttributes();
+    }
 
-  public String getLanguage() {
-    return internal.getLanguage();
-  }
-  
-  public Lang getLanguageTag() {
-    return internal.getLanguageTag();
-  }
+    public Factory getFactory() {
+        return internal.getFactory();
+    }
 
-  public Locale getLocale() {
-    return internal.getLocale();
-  }
+    public <T extends Element> T getFirstChild() {
+        return (T)internal.getFirstChild();
+    }
 
-  public <T extends Element> T getNextSibling() {
-    return (T) internal.getNextSibling();
-  }
+    public <T extends Element> T getFirstChild(QName qname) {
+        return (T)internal.getFirstChild(qname);
+    }
 
-  public <T extends Element> T getNextSibling(QName qname) {
-    return (T) internal.getNextSibling(qname);
-  }
+    public String getLanguage() {
+        return internal.getLanguage();
+    }
 
-  public <T extends Base> T getParentElement() {
-    return (T) internal.getParentElement();
-  }
+    public Lang getLanguageTag() {
+        return internal.getLanguageTag();
+    }
 
-  public <T extends Element> T getPreviousSibling() {
-    return (T) internal.getPreviousSibling();
-  }
+    public Locale getLocale() {
+        return internal.getLocale();
+    }
 
-  public <T extends Element> T getPreviousSibling(QName qname) {
-    return (T) internal.getPreviousSibling(qname);
-  }
+    public <T extends Element> T getNextSibling() {
+        return (T)internal.getNextSibling();
+    }
 
-  public QName getQName() {
-    return internal.getQName();
-  }
+    public <T extends Element> T getNextSibling(QName qname) {
+        return (T)internal.getNextSibling(qname);
+    }
 
-  public IRI getResolvedBaseUri() {
-    return internal.getResolvedBaseUri();
-  }
+    public <T extends Base> T getParentElement() {
+        return (T)internal.getParentElement();
+    }
 
-  public String getText() {
-    return internal.getText();
-  }
+    public <T extends Element> T getPreviousSibling() {
+        return (T)internal.getPreviousSibling();
+    }
 
-  public <T extends Element>T removeAttribute(QName qname) {
-    internal.removeAttribute(qname);
-    return (T)this;
-  }
+    public <T extends Element> T getPreviousSibling(QName qname) {
+        return (T)internal.getPreviousSibling(qname);
+    }
 
-  public <T extends Element>T removeAttribute(String name) {
-    internal.removeAttribute(name);
-    return (T)this;
-  }
-  
-  public <T extends Element>T setAttributeValue(QName qname, String value) {
-    internal.setAttributeValue(qname, value);
-    return (T)this;
-  }
+    public QName getQName() {
+        return internal.getQName();
+    }
 
-  public <T extends Element>T setAttributeValue(String name, String value) {
-    internal.setAttributeValue(name, value);
-    return (T)this;
-  }
+    public IRI getResolvedBaseUri() {
+        return internal.getResolvedBaseUri();
+    }
 
-  public <T extends Element>T setBaseUri(IRI base) {
-    internal.setBaseUri(base);
-    return (T)this;
-  }
+    public String getText() {
+        return internal.getText();
+    }
 
-  public <T extends Element>T setBaseUri(String base) {
-    internal.setBaseUri(base);
-    return (T)this;
-  }
+    public <T extends Element> T removeAttribute(QName qname) {
+        internal.removeAttribute(qname);
+        return (T)this;
+    }
 
-  public <T extends Element>T setLanguage(String language) {
-    internal.setLanguage(language);
-    return (T)this;
-  }
+    public <T extends Element> T removeAttribute(String name) {
+        internal.removeAttribute(name);
+        return (T)this;
+    }
 
-  public <T extends Element>T setParentElement(Element parent) {
-    internal.setParentElement(parent);
-    return (T)this;
-  }
+    public <T extends Element> T setAttributeValue(QName qname, String value) {
+        internal.setAttributeValue(qname, value);
+        return (T)this;
+    }
 
-  public void setText(String text) {
-    internal.setText(text);
-  }
+    public <T extends Element> T setAttributeValue(String name, String value) {
+        internal.setAttributeValue(name, value);
+        return (T)this;
+    }
 
-  public <T extends Element>T setText(DataHandler handler) {
-    internal.setText(handler);
-    return (T)this;
-  }
-  
-  public void writeTo(OutputStream out) throws IOException {
-    internal.writeTo(out);
-  }
+    public <T extends Element> T setBaseUri(IRI base) {
+        internal.setBaseUri(base);
+        return (T)this;
+    }
 
-  public void writeTo(Writer writer) throws IOException {
-    internal.writeTo(writer);
-  }
-  
-  public boolean equals(Object other) {
-    if (other instanceof ElementWrapper)
-      other = ((ElementWrapper)other).getInternal();
-    return internal.equals(other);
-  }
-  
-  public String toString() {
-    return internal.toString();
-  }
-  
-  public int hashCode() {
-    return internal.hashCode();
-  }
+    public <T extends Element> T setBaseUri(String base) {
+        internal.setBaseUri(base);
+        return (T)this;
+    }
 
-  public Element getInternal() {
-    return internal;
-  }
+    public <T extends Element> T setLanguage(String language) {
+        internal.setLanguage(language);
+        return (T)this;
+    }
 
-  public <T extends Element> List<T> getElements() {
-    return internal.getElements();
-  }
+    public <T extends Element> T setParentElement(Element parent) {
+        internal.setParentElement(parent);
+        return (T)this;
+    }
 
-  public Map<String, String> getNamespaces() {
-    return internal.getNamespaces();
-  }
+    public void setText(String text) {
+        internal.setText(text);
+    }
 
-  public boolean getMustPreserveWhitespace() {
-    return internal.getMustPreserveWhitespace();
-  }
+    public <T extends Element> T setText(DataHandler handler) {
+        internal.setText(handler);
+        return (T)this;
+    }
 
-  public <T extends Element>T setMustPreserveWhitespace(boolean preserve) {
-    internal.setMustPreserveWhitespace(preserve);
-    return (T)this;
-  }
+    public void writeTo(OutputStream out) throws IOException {
+        internal.writeTo(out);
+    }
 
-  public void writeTo(OutputStream out, WriterOptions options) throws IOException {
-    internal.writeTo(out,options);
-  }
+    public void writeTo(Writer writer) throws IOException {
+        internal.writeTo(writer);
+    }
 
-  public void writeTo(org.apache.abdera.writer.Writer writer, OutputStream out, WriterOptions options) throws IOException {
-    internal.writeTo(writer,out,options);
-  }
+    public boolean equals(Object other) {
+        if (other instanceof ElementWrapper)
+            other = ((ElementWrapper)other).getInternal();
+        return internal.equals(other);
+    }
 
-  public void writeTo(org.apache.abdera.writer.Writer writer, OutputStream out) throws IOException {
-    internal.writeTo(writer,out);
-  }
+    public String toString() {
+        return internal.toString();
+    }
 
-  public void writeTo(org.apache.abdera.writer.Writer writer, Writer out, WriterOptions options) throws IOException {
-    internal.writeTo(writer,out,options);
-  }
+    public int hashCode() {
+        return internal.hashCode();
+    }
 
-  public void writeTo(org.apache.abdera.writer.Writer writer, Writer out) throws IOException {
-    internal.writeTo(writer,out);
-  }
+    public Element getInternal() {
+        return internal;
+    }
 
-  public void writeTo(String writer, OutputStream out, WriterOptions options) throws IOException {
-    internal.writeTo(writer,out,options);
-  }
+    public <T extends Element> List<T> getElements() {
+        return internal.getElements();
+    }
 
-  public void writeTo(String writer, OutputStream out) throws IOException {
-    internal.writeTo(writer,out);
-  }
+    public Map<String, String> getNamespaces() {
+        return internal.getNamespaces();
+    }
 
-  public void writeTo(String writer, Writer out, WriterOptions options) throws IOException {
-    internal.writeTo(writer,out,options);
-  }
+    public boolean getMustPreserveWhitespace() {
+        return internal.getMustPreserveWhitespace();
+    }
 
-  public void writeTo(String writer, Writer out) throws IOException {
-    internal.writeTo(writer,out);
-  }
-  
-  public void writeTo(Writer out, WriterOptions options) throws IOException {
-    internal.writeTo(out,options);
-  }
+    public <T extends Element> T setMustPreserveWhitespace(boolean preserve) {
+        internal.setMustPreserveWhitespace(preserve);
+        return (T)this;
+    }
 
-  public WriterOptions getDefaultWriterOptions() {
-    return internal.getDefaultWriterOptions();
-  }
-  
-  public <T extends Base>T complete() {
-    internal.complete();
-    return (T)this;
-  }
-  
-  public Iterator<Element> iterator() {
-    return internal.iterator();
-  }
+    public void writeTo(OutputStream out, WriterOptions options) throws IOException {
+        internal.writeTo(out, options);
+    }
+
+    public void writeTo(org.apache.abdera.writer.Writer writer, OutputStream out, WriterOptions options)
+        throws IOException {
+        internal.writeTo(writer, out, options);
+    }
+
+    public void writeTo(org.apache.abdera.writer.Writer writer, OutputStream out) throws IOException {
+        internal.writeTo(writer, out);
+    }
+
+    public void writeTo(org.apache.abdera.writer.Writer writer, Writer out, WriterOptions options) throws IOException {
+        internal.writeTo(writer, out, options);
+    }
+
+    public void writeTo(org.apache.abdera.writer.Writer writer, Writer out) throws IOException {
+        internal.writeTo(writer, out);
+    }
+
+    public void writeTo(String writer, OutputStream out, WriterOptions options) throws IOException {
+        internal.writeTo(writer, out, options);
+    }
+
+    public void writeTo(String writer, OutputStream out) throws IOException {
+        internal.writeTo(writer, out);
+    }
+
+    public void writeTo(String writer, Writer out, WriterOptions options) throws IOException {
+        internal.writeTo(writer, out, options);
+    }
+
+    public void writeTo(String writer, Writer out) throws IOException {
+        internal.writeTo(writer, out);
+    }
+
+    public void writeTo(Writer out, WriterOptions options) throws IOException {
+        internal.writeTo(out, options);
+    }
+
+    public WriterOptions getDefaultWriterOptions() {
+        return internal.getDefaultWriterOptions();
+    }
+
+    public <T extends Base> T complete() {
+        internal.complete();
+        return (T)this;
+    }
+
+    public Iterator<Element> iterator() {
+        return internal.iterator();
+    }
 }

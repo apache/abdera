@@ -22,16 +22,17 @@ import org.apache.abdera.protocol.server.RequestContext;
 import org.apache.abdera.protocol.server.ResponseContext;
 
 /**
- * The OpenSearchUrlAdapter interface provides the business logic for executing search operations
- * and getting back Atom-based responses augmented with Open Search metadata.
+ * The OpenSearchUrlAdapter interface provides the business logic for executing search operations and getting back
+ * Atom-based responses augmented with Open Search metadata.
  */
 public interface OpenSearchUrlAdapter {
 
     /**
      * Make the actual search operation based on passed parameters.
+     * 
      * @param request The {@link org.apache.abdera.protocol.server.RequestContext} object.
-     * @param parameters Search parameters extracted from the request: 
-     * they are the same parameters reported into the Open Search URL template.
+     * @param parameters Search parameters extracted from the request: they are the same parameters reported into the
+     *            Open Search URL template.
      */
     ResponseContext search(RequestContext request, Map<String, String> parameters);
 }

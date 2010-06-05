@@ -34,8 +34,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class DefaultProviderDefinitionParser 
-    extends org.apache.abdera.spring.AbstractSingleBeanDefinitionParser {
+public class DefaultProviderDefinitionParser extends org.apache.abdera.spring.AbstractSingleBeanDefinitionParser {
 
     @Override
     protected void mapAttribute(BeanDefinitionBuilder bean, Element element, String name, String val) {
@@ -48,69 +47,67 @@ public class DefaultProviderDefinitionParser
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void mapElement(ParserContext ctx, BeanDefinitionBuilder bean, Element element, String name) {    	
-    	if (name.equals("workspaceManager")) {
+    protected void mapElement(ParserContext ctx, BeanDefinitionBuilder bean, Element element, String name) {
+        if (name.equals("workspaceManager")) {
             setFirstChildAsProperty(element, ctx, bean, "workspaceManager");
         } else if (name.equals("targetResolver")) {
             setFirstChildAsProperty(element, ctx, bean, "targetResolver");
         } else if (name.equals("subjectResolver")) {
             setFirstChildAsProperty(element, ctx, bean, name);
-        } else if (name.equals("filter")) {        	
-        	MutablePropertyValues values = bean.getBeanDefinition().getPropertyValues();
-        	PropertyValue pv = values.getPropertyValue("filters");
-        	List filters = pv != null?(List) pv.getValue():new ManagedList();        	
+        } else if (name.equals("filter")) {
+            MutablePropertyValues values = bean.getBeanDefinition().getPropertyValues();
+            PropertyValue pv = values.getPropertyValue("filters");
+            List filters = pv != null ? (List)pv.getValue() : new ManagedList();
             NodeList nodes = element.getChildNodes();
             Object child = null;
             if (element.hasAttribute("ref")) {
-            	if (!StringUtils.hasText(element.getAttribute("ref"))) {
-            		ctx.getReaderContext().error(name + " contains empty 'ref' attribute", element);            		
-            	}
-            	child = new RuntimeBeanReference(element.getAttribute("ref"));
-        		((RuntimeBeanReference)child).setSource(ctx.extractSource(element));
-            } else if (nodes != null) {            	
-	            for (int i = 0; i < nodes.getLength(); i++) {
-	                Node n = nodes.item(i);	                
-	                if (n.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
-	                    Element childElement = (Element)n;
-	                    child = ctx.getDelegate().parsePropertySubElement(childElement, bean.getRawBeanDefinition());	                    
-	                }
-	            }	            
+                if (!StringUtils.hasText(element.getAttribute("ref"))) {
+                    ctx.getReaderContext().error(name + " contains empty 'ref' attribute", element);
+                }
+                child = new RuntimeBeanReference(element.getAttribute("ref"));
+                ((RuntimeBeanReference)child).setSource(ctx.extractSource(element));
+            } else if (nodes != null) {
+                for (int i = 0; i < nodes.getLength(); i++) {
+                    Node n = nodes.item(i);
+                    if (n.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
+                        Element childElement = (Element)n;
+                        child = ctx.getDelegate().parsePropertySubElement(childElement, bean.getRawBeanDefinition());
+                    }
+                }
             }
             if (child != null) {
-            	filters.add(child);
+                filters.add(child);
             }
             bean.addPropertyValue("filters", filters);
         } else if (name.equals("workspace")) {
-            String id = getAndRegister(ctx, bean, element);            
+            String id = getAndRegister(ctx, bean, element);
             bean.addPropertyReference("workspaces", id);
         } else if (name.equals("property")) {
-        	ctx.getDelegate().parsePropertyElement(element, bean.getRawBeanDefinition());
+            ctx.getDelegate().parsePropertyElement(element, bean.getRawBeanDefinition());
         }
     }
 
     @Override
     protected String getBeanClassName(Element arg0) {
         String cls = super.getBeanClassName(arg0);
-        
+
         if (cls == null) {
             cls = ProviderFactoryBean.class.getName();
         }
-        
+
         return cls;
     }
 
     @Override
-    protected String resolveId(Element element, AbstractBeanDefinition arg1, ParserContext arg2) throws BeanDefinitionStoreException {
+    protected String resolveId(Element element, AbstractBeanDefinition arg1, ParserContext arg2)
+        throws BeanDefinitionStoreException {
         String id = element.getAttribute("id");
-        
+
         if (id == null || "".equals(id)) {
             id = Provider.class.getName();
         }
-        
-        
+
         return id;
     }
-    
-    
+
 }
- 

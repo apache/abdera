@@ -23,19 +23,18 @@ import org.apache.abdera.factory.Factory;
 import org.junit.Test;
 
 public class AbstractParserOptionsTest {
-    
+
     private static final class TestParserOptions extends AbstractParserOptions {
 
         @Override
-        protected void checkFactory(Factory factory) { 
+        protected void checkFactory(Factory factory) {
         }
 
         @Override
         protected void initFactory() {
-        }   
+        }
     }
 
-    
     @Test
     public void checkAllEntities() throws Exception {
         TestParserOptions fomParserOptions = new TestParserOptions();
@@ -296,12 +295,11 @@ public class AbstractParserOptionsTest {
         char hexChar = hexValue.charAt(0);
         StringBuilder result = new StringBuilder(Integer.toHexString(hexChar));
         if (result.length() == 2) {
-            result.insert(0,"00");
+            result.insert(0, "00");
         } else if (result.length() == 3) {
-            result.insert(0,"0");
+            result.insert(0, "0");
         }
         return result.toString().toUpperCase();
     }
-    
-    
+
 }

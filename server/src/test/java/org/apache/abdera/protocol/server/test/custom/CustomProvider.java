@@ -30,71 +30,56 @@ import org.apache.abdera.protocol.server.impl.RegexTargetResolver;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.protocol.server.impl.TemplateTargetBuilder;
 
-public class CustomProvider 
-  extends AbstractWorkspaceProvider {
+public class CustomProvider extends AbstractWorkspaceProvider {
 
-  private final SimpleAdapter adapter;
-  
-  public CustomProvider() {
-    
-    this.adapter = new SimpleAdapter();
-    
-    setTargetResolver(      
-      new RegexTargetResolver()
-        .setPattern("/atom(\\?[^#]*)?", TargetType.TYPE_SERVICE)
-        .setPattern("/atom/([^/#?]+);categories", TargetType.TYPE_CATEGORIES, "collection")
-        .setPattern("/atom/([^/#?;]+)(\\?[^#]*)?", TargetType.TYPE_COLLECTION, "collection")
-        .setPattern("/atom/([^/#?]+)/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY, "collection","entry")
-        .setPattern("/search", OpenSearchFilter.TYPE_OPENSEARCH_DESCRIPTION)
-    );
-    
-    setTargetBuilder(
-      new TemplateTargetBuilder()
-        .setTemplate(TargetType.TYPE_SERVICE, "{target_base}/atom")
-        .setTemplate(TargetType.TYPE_COLLECTION, "{target_base}/atom/{collection}{-opt|?|q,c,s,p,l,i,o}{-join|&|q,c,s,p,l,i,o}")
-        .setTemplate(TargetType.TYPE_CATEGORIES, "{target_base}/atom/{collection};categories")
-        .setTemplate(TargetType.TYPE_ENTRY, "{target_base}/atom/{collection}/{entry}")
-        .setTemplate(OpenSearchFilter.TYPE_OPENSEARCH_DESCRIPTION, "{target_base}/search")
-    );
-    
-    SimpleWorkspaceInfo workspace = new SimpleWorkspaceInfo();
-    workspace.setTitle("A Simple Workspace");
-    workspace.addCollection(adapter);
-    addWorkspace(workspace);
-    
-    addFilter(new SimpleFilter());
-    addFilter(
-      new OpenSearchFilter()
-        .setShortName("My OpenSearch")
-        .setDescription("My Description")
-        .setTags("test","example","opensearch")
-        .setContact("john.doe@example.org")
-        .setTemplate("http://localhost:8080/atom/feed?q={searchTerms}&c={count?}&s={startIndex?}&p={startPage?}&l={language?}&i={indexEncoding?}&o={outputEncoding?}")
-        .mapTargetParameter("q", "searchTerms")
-        .mapTargetParameter("c", "count")
-        .mapTargetParameter("s", "startIndex")
-        .mapTargetParameter("p", "startPage")
-        .mapTargetParameter("l", "language")
-        .mapTargetParameter("i", "inputEncoding")
-        .mapTargetParameter("o", "outputEncoding")
-      );
-  }
+    private final SimpleAdapter adapter;
 
-  public CollectionAdapter getCollectionAdapter(
-    RequestContext request) {
-      return adapter;
-  }
+    public CustomProvider() {
 
-  public class SimpleFilter 
-    implements Filter {
-      public ResponseContext filter(
-        RequestContext request, 
-        FilterChain chain) {
-          RequestContextWrapper rcw = new RequestContextWrapper(request);
-          rcw.setAttribute("offset", 10);
-          rcw.setAttribute("count", 10);
-          return chain.next(rcw);
-      }    
-  }
+        this.adapter = new SimpleAdapter();
+
+        setTargetResolver(new RegexTargetResolver().setPattern("/atom(\\?[^#]*)?", TargetType.TYPE_SERVICE)
+            .setPattern("/atom/([^/#?]+);categories", TargetType.TYPE_CATEGORIES, "collection")
+            .setPattern("/atom/([^/#?;]+)(\\?[^#]*)?", TargetType.TYPE_COLLECTION, "collection")
+            .setPattern("/atom/([^/#?]+)/([^/#?]+)(\\?[^#]*)?", TargetType.TYPE_ENTRY, "collection", "entry")
+            .setPattern("/search", OpenSearchFilter.TYPE_OPENSEARCH_DESCRIPTION));
+
+        setTargetBuilder(new TemplateTargetBuilder().setTemplate(TargetType.TYPE_SERVICE, "{target_base}/atom")
+            .setTemplate(TargetType.TYPE_COLLECTION,
+                         "{target_base}/atom/{collection}{-opt|?|q,c,s,p,l,i,o}{-join|&|q,c,s,p,l,i,o}")
+            .setTemplate(TargetType.TYPE_CATEGORIES, "{target_base}/atom/{collection};categories")
+            .setTemplate(TargetType.TYPE_ENTRY, "{target_base}/atom/{collection}/{entry}")
+            .setTemplate(OpenSearchFilter.TYPE_OPENSEARCH_DESCRIPTION, "{target_base}/search"));
+
+        SimpleWorkspaceInfo workspace = new SimpleWorkspaceInfo();
+        workspace.setTitle("A Simple Workspace");
+        workspace.addCollection(adapter);
+        addWorkspace(workspace);
+
+        addFilter(new SimpleFilter());
+        addFilter(new OpenSearchFilter()
+            .setShortName("My OpenSearch")
+            .setDescription("My Description")
+            .setTags("test", "example", "opensearch")
+            .setContact("john.doe@example.org")
+            .setTemplate("http://localhost:8080/atom/feed?q={searchTerms}&c={count?}&s={startIndex?}&p={startPage?}&l={language?}&i={indexEncoding?}&o={outputEncoding?}")
+            .mapTargetParameter("q", "searchTerms").mapTargetParameter("c", "count").mapTargetParameter("s",
+                                                                                                        "startIndex")
+            .mapTargetParameter("p", "startPage").mapTargetParameter("l", "language")
+            .mapTargetParameter("i", "inputEncoding").mapTargetParameter("o", "outputEncoding"));
+    }
+
+    public CollectionAdapter getCollectionAdapter(RequestContext request) {
+        return adapter;
+    }
+
+    public class SimpleFilter implements Filter {
+        public ResponseContext filter(RequestContext request, FilterChain chain) {
+            RequestContextWrapper rcw = new RequestContextWrapper(request);
+            rcw.setAttribute("offset", 10);
+            rcw.setAttribute("count", 10);
+            return chain.next(rcw);
+        }
+    }
 
 }

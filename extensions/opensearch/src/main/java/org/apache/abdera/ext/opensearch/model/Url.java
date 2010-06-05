@@ -17,7 +17,6 @@
  */
 package org.apache.abdera.ext.opensearch.model;
 
-
 import org.apache.abdera.ext.opensearch.OpenSearchConstants;
 import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
@@ -39,7 +38,7 @@ public class Url extends ElementWrapper {
     public Url(Abdera abdera) {
         this(abdera.getFactory());
     }
-    
+
     public Url(Element internal) {
         super(internal);
     }
@@ -55,7 +54,7 @@ public class Url extends ElementWrapper {
     public String getType() {
         return this.getAttributeValue(OpenSearchConstants.URL_TYPE_LN);
     }
-    
+
     public void setTemplate(String template) {
         if (template != null) {
             this.setAttributeValue(OpenSearchConstants.URL_TEMPLATE_LN, template);
@@ -63,11 +62,11 @@ public class Url extends ElementWrapper {
             this.removeAttribute(OpenSearchConstants.URL_TEMPLATE_LN);
         }
     }
-    
+
     public String getTemplate() {
         return this.getAttributeValue(OpenSearchConstants.URL_TEMPLATE_LN);
     }
-    
+
     public void setIndexOffset(int offset) {
         if (offset > -1) {
             this.setAttributeValue(OpenSearchConstants.URL_INDEXOFFSET_LN, String.valueOf(offset));
@@ -75,12 +74,12 @@ public class Url extends ElementWrapper {
             this.removeAttribute(OpenSearchConstants.URL_INDEXOFFSET_LN);
         }
     }
-    
+
     public int getIndexOffset() {
         String val = this.getAttributeValue(OpenSearchConstants.URL_INDEXOFFSET_LN);
         return (val != null) ? Integer.parseInt(val) : -1;
     }
-    
+
     public void setPageOffset(int offset) {
         if (offset > -1) {
             this.setAttributeValue(OpenSearchConstants.URL_PAGEOFFSET_LN, String.valueOf(offset));
@@ -88,7 +87,7 @@ public class Url extends ElementWrapper {
             this.removeAttribute(OpenSearchConstants.URL_PAGEOFFSET_LN);
         }
     }
-    
+
     public int getPageOffset() {
         String val = this.getAttributeValue(OpenSearchConstants.URL_PAGEOFFSET_LN);
         return (val != null) ? Integer.parseInt(val) : -1;

@@ -32,6 +32,7 @@
             <directory>../</directory>
             <outputDirectory>apache-abdera-${version}/</outputDirectory>
             <includes>
+                <include>CHANGES</include>
                 <include>README</include>
             </includes>
         </fileSet>

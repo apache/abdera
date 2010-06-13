@@ -4,13 +4,13 @@
   <artifactId>abdera-i18n</artifactId>
   <packaging>bundle</packaging>
   <name>I18N Libraries</name>
-  <version>1.1-SNAPSHOT</version>  
+  <version>1.1</version>  
   <description>RFC 3987 (Internationlaized Resource Identifier) libraries.</description>
   <url>http://abdera.apache.org</url>
   <parent>
     <groupId>org.apache.abdera</groupId>
     <artifactId>abdera</artifactId>
-    <version>1.1-SNAPSHOT</version>  
+    <version>1.1</version>  
   </parent>
   <build>
     <plugins>

@@ -1,6 +1,25 @@
 Apache Abdera: Changes in XXX Release
 ---------------------------------------
 
+r941259: Add a changes file listing the changes since 1.0
+r944143: Remove old KEYS files, the actual one thats used is at: http://www.apache.org/dist/abdera/KEYS
+r944731: minor refactoring of unit tests; adopt test structure to src structure
+r944740: removing all occurences of 'extend Testcase'
+r944745 and others: replaced all occurences of 'extends Assert' with static imports
+r944780: update to junit 4.8.1
+r944792: easymock version update
+r944803: fix for ABDERA-102 - Unit tests equality assertions, params in wrong order
+r944810: removed unnecessary try/catch from Unit Test
+r944813 and others: fix for ABDERA-102
+r944883: updated jetty version
+r945376: fix for ABDERA-242 - Failing to convert some big capital letters from HTML escape characters to UTF-8
+r946755: added FOMParserOptionsTest; fixed OElig
+r946759: added license header
+r946769: added Testcase for HTML special characters
+r947102: minor version updates
+r947450: extended and refactored unit tests in core
+r948204: patch for ABDERA-250 (the original patch couldn't be applied as there was a refactoring in the meantime)
+r951666: Reformat codebase using the template at https://svn.apache.org/repos/asf/abdera/etc/
 r940380: ABDERA-102: Apply patch from Christine Koppelt for Unit tests equality assertions, params in wrong order
 r940218: Fix GeoRSS extension from Nathan Reese on ML - http://www.mail-archive.com/dev@abdera.apache.org/msg00259.html
 r940215: ABDERA-233: initBaseUri() in the class ServletRequestContext will append the port 443 to https requests, fixed as suggested in JIRA by J G
@@ -11,7 +30,7 @@ r936027: fixing a bug initializing providers
 r916287: fixes redundant assignation of mimeType. Thanks to Pascal Christoph
 r914998: fixing providers discovering errors. Now we just need to fix the failing tests
 r782732: Don't use the discovery mechanism for cache impls. for now, this means the AbderaClient is hard coded to use the LRUCache in-memory cache implementation. The original design meant for the cache implementation to be pluggable. Ideally, however, the HttpClient would incorporate some kind of cache so we wouldn't have to do this at all. I'm wondering if there's some way we could separate all the http client related stuff out to a distinct subproject?
-r782570: Applied patch from ABDERA-236
+r782570: Applied patch from ABDERA-236 - Create OSGi Bundles for Abdera using the Maven Felix plugin
 r780662: LRUCacheFactory needs a constructor that takes an Abdera parameter
 r780661: Added dependency on commons-codec for i18n build
 r774027: avoid potential NPE

@@ -1,6 +1,7 @@
 Apache Abdera: Changes in 1.1 Release
 -------------------------------------
 
+r955502: Fix negative behaviour on uri templates
 r941259: Add a changes file listing the changes since 1.0
 r944143: Remove old KEYS files, the actual one thats used is at: http://www.apache.org/dist/abdera/KEYS
 r944731: minor refactoring of unit tests; adopt test structure to src structure

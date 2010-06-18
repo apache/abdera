@@ -74,4 +74,25 @@ Without Maven:
     XML Security jars.  To build and use that module, you'll need to
     download the Apache XML Security and the Bouncy Castle Crypto
     implementation.
+
+
+Releasing the Abdera artifacts
+------------------------------
+
+The release consists of the binary and source distributions along with the Maven artifacts. Those get deployed to a staging area so they can be voted on before going live.
+
+Deploy the jars to a Maven staging repository:
+
+mvn -DaltDeploymentRepository=apache.rsync::default::scp://people.apache.org/home/antelder/public_html/abdera/1.1-RC1/maven clean install gpg:sign deploy
+
+Deploy the binary and source distribution archives:
+
+cd distribution
+mvn -DaltDeploymentRepository=apache.rsync::default::scp://people.apache.org/home/antelder/public_html/abdera/1.1-RC1 clean install gpg:sign deploy
+
+(then copy the distribution archives and signatures from 1.1-RC1/org/apache/abdera/distribution to 1.1-RC1 and delete the org/ folder)
+
+
+
+
  

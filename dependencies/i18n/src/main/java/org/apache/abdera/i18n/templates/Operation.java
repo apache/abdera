@@ -543,10 +543,10 @@ public abstract class Operation implements Serializable {
         public String evaluate(String var, String arg, Context context) {
             String[] vardefs = var.split("\\s*,\\s*");
             for (String v : vardefs) {
-                if (!isdefined(v, context))
-                    return arg;
+                if (isdefined(v, context))
+                    return null;
             }
-            return null;
+            return arg;
         }
 
         public void explain(String var, String arg, Appendable buf) throws IOException {

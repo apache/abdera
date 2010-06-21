@@ -57,7 +57,7 @@ public class XhtmlTest {
         assertNotNull(entry.getContent());
         assertEquals(Content.Type.XHTML, entry.getContentType());
         Element el = entry.getContentElement().getValueElement();
-        char umlaut = el.getFirstChild().getText().charAt(0);
+        char umlaut = ((Element)el.getFirstChild()).getText().charAt(0);
         // hexadecimal value of &Auml; is U+00C4
         assertEquals("c4", Integer.toHexString(umlaut));
     }

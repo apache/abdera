@@ -72,7 +72,7 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
     private final Abdera abdera;
 
     public static void registerAsDefault() {
-        System.setProperty(OMAbstractFactory.OM_FACTORY_NAME_PROPERTY, FOMFactory.class.getName());
+        System.setProperty(OMAbstractFactory.META_FACTORY_NAME_PROPERTY, FOMFactory.class.getName());
     }
 
     public FOMFactory() {

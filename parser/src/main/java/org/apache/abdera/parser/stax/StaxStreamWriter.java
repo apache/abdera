@@ -36,8 +36,22 @@ import org.apache.abdera.util.AbstractStreamWriter;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.writer.StreamWriter;
 import org.apache.axiom.om.util.StAXUtils;
+import org.apache.axiom.om.util.StAXWriterConfiguration;
+import org.apache.axiom.util.stax.dialect.StAXDialect;
 
 public class StaxStreamWriter extends AbstractStreamWriter {
+    private static final StAXWriterConfiguration ABDERA_WRITER_CONFIGURATION = new StAXWriterConfiguration() {
+        public XMLOutputFactory configure(XMLOutputFactory factory, StAXDialect dialect) {
+            factory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, true);
+            return factory;
+        }
+        
+        // This is used in log statements inside Axiom
+        @Override
+        public String toString() {
+            return "ABDERA";
+        }
+    }; 
 
     private static final String NAME = "default";
 
@@ -74,16 +88,9 @@ public class StaxStreamWriter extends AbstractStreamWriter {
     }
 
     private static XMLStreamWriter createXMLStreamWriter(Writer out) throws XMLStreamException {
-        XMLOutputFactory outputFactory = StAXUtils.getXMLOutputFactory();
-        Object curval = outputFactory.getProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES);
-        try {
-            outputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, true);
-            XMLStreamWriter writer = outputFactory.createXMLStreamWriter(out);
-            return writer;
-        } finally {
-            outputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, curval);
-            StAXUtils.releaseXMLOutputFactory(outputFactory);
-        }
+        XMLOutputFactory outputFactory = StAXUtils.getXMLOutputFactory(ABDERA_WRITER_CONFIGURATION);
+        XMLStreamWriter writer = outputFactory.createXMLStreamWriter(out);
+        return writer;
     }
 
     public StreamWriter setOutputStream(java.io.OutputStream out) {
@@ -96,16 +103,9 @@ public class StaxStreamWriter extends AbstractStreamWriter {
     }
 
     private static XMLStreamWriter createXMLStreamWriter(OutputStream out, String encoding) throws XMLStreamException {
-        XMLOutputFactory outputFactory = StAXUtils.getXMLOutputFactory();
-        Object curval = outputFactory.getProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES);
-        try {
-            outputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, true);
-            XMLStreamWriter writer = outputFactory.createXMLStreamWriter(out, encoding);
-            return writer;
-        } finally {
-            outputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, curval);
-            StAXUtils.releaseXMLOutputFactory(outputFactory);
-        }
+        XMLOutputFactory outputFactory = StAXUtils.getXMLOutputFactory(ABDERA_WRITER_CONFIGURATION);
+        XMLStreamWriter writer = outputFactory.createXMLStreamWriter(out, encoding);
+        return writer;
     }
 
     public StreamWriter setOutputStream(java.io.OutputStream out, String charset) {

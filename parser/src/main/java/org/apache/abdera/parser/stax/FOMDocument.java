@@ -67,7 +67,7 @@ public class FOMDocument<T extends Element> extends OMDocumentImpl implements Do
     protected boolean preserve = true;
 
     public FOMDocument() {
-        super();
+        super(new FOMFactory());
     }
 
     protected FOMDocument(OMElement documentElement, OMXMLParserWrapper parserWrapper, OMFactory factory) {
@@ -75,7 +75,7 @@ public class FOMDocument<T extends Element> extends OMDocumentImpl implements Do
     }
 
     protected FOMDocument(OMElement documentElement, OMXMLParserWrapper parserWrapper) {
-        super(documentElement, parserWrapper);
+        super(documentElement, parserWrapper, new FOMFactory());
     }
 
     protected FOMDocument(OMFactory factory) {
@@ -87,7 +87,7 @@ public class FOMDocument<T extends Element> extends OMDocumentImpl implements Do
     }
 
     protected FOMDocument(OMXMLParserWrapper parserWrapper) {
-        super(parserWrapper);
+        super(parserWrapper, new FOMFactory());
     }
 
     public T getRoot() {

@@ -38,9 +38,23 @@ import org.apache.abdera.parser.stax.util.FOMSniffingInputStream;
 import org.apache.abdera.parser.stax.util.FOMXmlRestrictedCharReader;
 import org.apache.abdera.util.AbstractParser;
 import org.apache.axiom.om.OMDocument;
+import org.apache.axiom.om.util.StAXParserConfiguration;
 import org.apache.axiom.om.util.StAXUtils;
+import org.apache.axiom.util.stax.dialect.StAXDialect;
 
 public class FOMParser extends AbstractParser implements Parser {
+    private static final StAXParserConfiguration ABDERA_PARSER_CONFIGURATION = new StAXParserConfiguration() {
+        public XMLInputFactory configure(XMLInputFactory factory, StAXDialect dialect) {
+            factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, Boolean.FALSE);
+            return factory;
+        }
+        
+        // This is used in log statements inside Axiom
+        @Override
+        public String toString() {
+            return "ABDERA";
+        }
+    };
 
     public FOMParser() {
         super();
@@ -135,9 +149,7 @@ public class FOMParser extends AbstractParser implements Parser {
     }
 
     private static XMLInputFactory getXMLInputFactory() {
-        XMLInputFactory inputFactory = StAXUtils.getXMLInputFactory();
-        inputFactory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, Boolean.FALSE);
-        return inputFactory;
+        return StAXUtils.getXMLInputFactory(ABDERA_PARSER_CONFIGURATION);
     }
 
     private static void releaseXMLInputFactory(XMLInputFactory inputFactory) {

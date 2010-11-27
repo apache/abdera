@@ -29,24 +29,10 @@
 
   <properties>
     <topDir>${basedir}/..</topDir>
+    <abdera.osgi.default.exports>
+		org.apache.abdera.protocol.server.*
+	</abdera.osgi.default.exports>
   </properties>
-  
-  <build>
-    <plugins>
-      <plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Export-Package>
-              org.apache.abdera.protocol.server.*;version=${pom.version}
-            </Export-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
   
   <dependencies>
     <dependency>

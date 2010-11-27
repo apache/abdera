@@ -12,6 +12,9 @@
     
   <properties>
     <topDir>${basedir}/../..</topDir>
+    <abdera.osgi.default.exports>
+      org.apache.abdera.protocol.server.adapters.ibatis.*
+    </abdera.osgi.default.exports>
   </properties>
   
   <dependencies>
@@ -23,14 +26,4 @@
     </dependency>
     
   </dependencies>
-  
-  <build>
-    <plugins>
-      <plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-        </plugin>
-    </plugins>
-  </build>
 </project>

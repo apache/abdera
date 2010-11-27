@@ -6,13 +6,16 @@
   </parent>  
   <modelVersion>4.0.0</modelVersion>
   <artifactId>abdera-extensions-json</artifactId>
-  <packaging>jar</packaging>
+  <packaging>bundle</packaging>
   <name>Abdera Extensions - JSON</name>
   <version>1.1-SNAPSHOT</version>  
   <description>Atom Specification Extensions - JSON</description>
   
   <properties>
     <topDir>${basedir}/../../</topDir>
+    <abdera.osgi.default.exports>
+      org.apache.abdera.ext.json.*
+    </abdera.osgi.default.exports>
   </properties>
   
   <dependencies>

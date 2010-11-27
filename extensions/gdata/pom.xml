@@ -24,13 +24,4 @@
       <artifactId>junit</artifactId>
     </dependency>
   </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-        </plugin>
-    </plugins>
-  </build>
 </project>

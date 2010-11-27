@@ -28,6 +28,9 @@
     <description>Abdera Specification Extensions - RSS</description>
     <properties>
         <topDir>${basedir}/../..</topDir>
+        <abdera.osgi.default.exports>
+          org.apache.abdera.ext.rss.*
+        </abdera.osgi.default.exports>
     </properties>
     <dependencies>
         <dependency>
@@ -45,13 +48,4 @@
             <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
-    <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
-        </plugin>
-    </plugins>
-  </build>
 </project>

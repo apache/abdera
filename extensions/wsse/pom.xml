@@ -13,6 +13,9 @@
   
   <properties>
     <topDir>${basedir}/../..</topDir>
+    <abdera.osgi.default.exports>
+      org.apache.abdera.ext.wsse.*
+    </abdera.osgi.default.exports>
   </properties>
   
   <dependencies> 
@@ -23,13 +26,4 @@
       <scope>compile</scope>
     </dependency>
   </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-        </plugin>
-    </plugins>
-  </build>
 </project>

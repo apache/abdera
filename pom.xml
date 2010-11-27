@@ -181,6 +181,32 @@
           </execution>
         </executions>
       </plugin>
+	<plugin>
+		<groupId>org.apache.felix</groupId>
+		<artifactId>maven-bundle-plugin</artifactId>
+		<version>2.1.0</version>
+		<extensions>true</extensions>
+		<inherited>true</inherited>
+		<configuration>
+			<instructions>
+				<Export-Package>${abdera.osgi.exports}</Export-Package>
+				<Import-Package>${abdera.osgi.imports}</Import-Package>
+				<Embed-Dependency>${abdera.osgi.embed.dependencies}</Embed-Dependency>
+	            <_versionpolicy>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy>
+			</instructions>
+	        <versions>
+	            <abdera.osgi.version.clean>${project.version}</abdera.osgi.version.clean>
+	        </versions>
+		</configuration>
+	    <executions>
+	        <execution>
+	            <phase>generate-sources</phase>
+	            <goals>
+	                <goal>cleanVersions</goal>
+	            </goals>
+	        </execution>
+		</executions>
+	</plugin>
     </plugins>
     <pluginManagement>
       <plugins>
@@ -226,6 +252,8 @@
             <failIfMissing>true</failIfMissing>
           </configuration>
         </plugin>
+
+
       </plugins>
     </pluginManagement>
   </build>
@@ -335,6 +363,12 @@
       
       <dependency>
         <groupId>org.apache.ws.commons.axiom</groupId>
+        <artifactId>axiom-api</artifactId>
+        <version>1.2.10</version>  
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.ws.commons.axiom</groupId>
         <artifactId>axiom-impl</artifactId>
         <version>1.2.10</version>  
 
@@ -442,6 +476,12 @@
     <jetty.version>6.1.24</jetty.version>
     <easymock.version>3.0</easymock.version>
     <topDir>${basedir}</topDir>
+    <abdera.osgi.imports>${abdera.osgi.abdera.imports},${abdera.osgi.default.imports}</abdera.osgi.imports>
+	<abdera.osgi.exports>${abdera.osgi.default.exports};version=${project.version};-noimport:=true</abdera.osgi.exports>
+    <abdera.osgi.abdera.imports>org.apache.abdera.*;version="[$(version;===;${abdera.osgi.version.clean}),$(version;==+;${abdera.osgi.version.clean}))"</abdera.osgi.abdera.imports>
+    <abdera.osgi.default.imports>*</abdera.osgi.default.imports>
+	<abdera.osgi.default.exports>org.apache.abdera.*</abdera.osgi.default.exports>
+	<abdera.osgi.embed.dependencies></abdera.osgi.embed.dependencies>
   </properties>
   
 </project>

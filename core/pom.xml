@@ -28,30 +28,18 @@
   <description>Atom Specification Implementation Core</description>
   <properties>
     <topDir>${basedir}/..</topDir>
+    <abdera.osgi.default.exports>
+		org.apache.abdera;
+		org.apache.abdera.factory.*;
+		org.apache.abdera.filter.*;
+		org.apache.abdera.model.*;
+		org.apache.abdera.parser.*;
+		org.apache.abdera.protocol.*;
+		org.apache.abdera.util.*;
+		org.apache.abdera.writer.*;
+		org.apache.abdera.xpath.*
+	</abdera.osgi.default.exports>
   </properties>
-    <build>
-    <plugins>
-      <plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Export-Package>
-              org.apache.abdera.factory.*;version=${pom.version},
-              org.apache.abdera.model.*;version=${pom.version},
-              org.apache.abdera.writer.*;version=${pom.version},
-              org.apache.abdera.xpath.*;version=${pom.version},
-              org.apache.abdera.filter.*;version=${pom.version},
-              org.apache.abdera.protocol.*;version=${pom.version},
-              org.apache.abdera.util.*;version=${pom.version},
-              org.apache.abdera;version=${pom.version}
-            </Export-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-     </plugins>
-   </build>
   <dependencies>
   	<dependency>
   		<groupId>junit</groupId>

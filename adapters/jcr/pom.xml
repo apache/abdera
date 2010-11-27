@@ -29,17 +29,10 @@
     
   <properties>
     <topDir>${basedir}/../..</topDir>
+    <abdera.osgi.default.exports>
+      org.apache.abdera.protocol.server.adapters.jcr.*
+    </abdera.osgi.default.exports>
   </properties>
-  
-  <build>
-    <plugins>
-      <plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-        </plugin>
-    </plugins>
-  </build>
   
   <dependencies>
     <dependency>

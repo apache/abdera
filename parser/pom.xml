@@ -13,43 +13,27 @@
 
   <properties>
     <topDir>${basedir}/..</topDir>
+    <abdera.osgi.default.exports>
+		org.apache.abdera.parser.stax.*
+	</abdera.osgi.default.exports>
+    <abdera.osgi.default.imports>
+		!org.dom4j.*,
+		!org.jdom.*,
+		!nu.xom.*,
+		!junit.framework.*,
+		!com.sun.msv.*,
+		!org.relaxng.datatype.*,
+		!org.apache.axiom*,
+		*
+	</abdera.osgi.default.imports>
+	<abdera.osgi.embed.dependencies>
+        axiom-api,
+		axiom-impl,
+		geronimo-stax-api_1.0_spec,
+		jaxen,
+		wstx-asl
+	</abdera.osgi.embed.dependencies>
   </properties>
-  <build>
-    <plugins>
-      <plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Export-Package>
-              org.apache.abdera.parser.*;version=${pom.version}
-            </Export-Package>
-            <Embed-Dependency>
-              axiom-api,
-							axiom-impl,
-							geronimo-stax-api_1.0_spec,
-							jaxen,
-							wstx-asl
-            </Embed-Dependency>
-            <Private-Package>
-              org.apache.axiom.*,
-            </Private-Package>
-            <Import-Package>
-							!org.dom4j.*;resolution:=optional,
-							!org.jdom.*;resolution:=optional,
-              !nu.xom.*;resolution:=optional,
-              !junit.framework.*;resolution:=optional,
-              !com.sun.msv.*;resolution:=optional,
-              !org.relaxng.datatype.*;resolution:=optional,
-							*
-            </Import-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-  
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

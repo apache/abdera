@@ -22,13 +22,15 @@ import java.io.ByteArrayOutputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.security.SecurityOptions;
-import org.apache.xml.serialize.Serializer;
-import org.apache.xml.serialize.XMLSerializer;
 
 @SuppressWarnings("unchecked")
 public abstract class SecurityBase {
@@ -65,10 +67,10 @@ public abstract class SecurityBase {
         Document doc = null;
         if (dom != null) {
             try {
-                Serializer ser = new XMLSerializer();
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
-                ser.setOutputByteStream(out);
-                ser.asDOMSerializer().serialize(dom);
+                TransformerFactory tf = TransformerFactory.newInstance();
+                Transformer t = tf.newTransformer();
+                t.transform(new DOMSource(dom), new StreamResult(out));
                 ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
                 doc = options.getParser().parse(in);
             } catch (Exception e) {
@@ -97,10 +99,10 @@ public abstract class SecurityBase {
         Element el = null;
         if (element != null) {
             try {
-                Serializer ser = new XMLSerializer();
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
-                ser.setOutputByteStream(out);
-                ser.asDOMSerializer().serialize(element);
+                TransformerFactory tf = TransformerFactory.newInstance();
+                Transformer t = tf.newTransformer();
+                t.transform(new DOMSource(element), new StreamResult(out));
                 ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
                 el = options.getParser().parse(in).getRoot();
             } catch (Exception e) {

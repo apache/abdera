@@ -7,7 +7,6 @@ r1006114: ABDERA-267: Apply patch from Andreas Veithen to use latest axiom to ge
 r956475: Add an explicit cast to fix a compile error when building with JDK 1.5
 r955891: Add some notes on releasing the artifacts
 r955868: Update changes file with latest fix from Josh Gordineer for URI templates
-r955502: fixes negative behaviour on uri templates
 
 Apache Abdera: Changes in 1.1 Release
 -------------------------------------

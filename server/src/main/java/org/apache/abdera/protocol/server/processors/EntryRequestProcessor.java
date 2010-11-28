@@ -44,6 +44,8 @@ public class EntryRequestProcessor implements RequestProcessor {
         String method = context.getMethod();
         if (method.equalsIgnoreCase("GET")) {
             return adapter.getEntry(context);
+        } else if (method.equalsIgnoreCase("POST")) {
+            return adapter.postEntry(context);
         } else if (method.equalsIgnoreCase("PUT")) {
             return adapter.putEntry(context);
         } else if (method.equalsIgnoreCase("DELETE")) {

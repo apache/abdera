@@ -47,6 +47,8 @@ public class MediaRequestProcessor implements RequestProcessor {
             MediaCollectionAdapter mcadapter = (MediaCollectionAdapter)adapter;
             if (method.equalsIgnoreCase("GET")) {
                 return mcadapter.getMedia(context);
+            } else if (method.equalsIgnoreCase("POST")) {
+                return mcadapter.postMedia(context);
             } else if (method.equalsIgnoreCase("PUT")) {
                 return mcadapter.putMedia(context);
             } else if (method.equalsIgnoreCase("DELETE")) {

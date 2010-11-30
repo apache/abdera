@@ -1,8 +1,9 @@
 Apache Abdera: Changes in 1.1.1 Release
 ---------------------------------------
 
+r1039944: ABDERA-262: patch from Nathan Reese to fix EntryRequestProcessor and MediaRequestProcessor do not support POST"
 r1039664: ABDERA-270: Apply patch from Guillaume Nodet for OSGi meta-data is broken
-r1039210: Update to use the mpw released 1.2.10 version of axiom instead of the snapshot
+r1039210: Update to use the mow released 1.2.10 version of Axiom instead of the snapshot
 r1006114: ABDERA-267: Apply patch from Andreas Veithen to use latest axiom to get fix for performance issue
 r956475: Add an explicit cast to fix a compile error when building with JDK 1.5
 r955891: Add some notes on releasing the artifacts

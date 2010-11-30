@@ -18,13 +18,13 @@
   <parent>
     <groupId>org.apache.abdera</groupId>
     <artifactId>abdera</artifactId>
-    <version>1.1-SNAPSHOT</version>  
+    <version>1.1.1</version>  
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>abdera-core</artifactId>
   <packaging>bundle</packaging>
   <name>Abdera Core</name>
-  <version>1.1-SNAPSHOT</version>  
+  <version>1.1.1</version>  
   <description>Atom Specification Implementation Core</description>
   <properties>
     <topDir>${basedir}/..</topDir>
@@ -48,7 +48,7 @@
   	<dependency>
   		<groupId>org.apache.abdera</groupId>
   		<artifactId>abdera-i18n</artifactId>
-  		<version>1.1-SNAPSHOT</version>  
+  		<version>1.1.1</version>  
   	</dependency>
   	<dependency>
   		<groupId>org.apache.geronimo.specs</groupId>

@@ -413,6 +413,10 @@ public final class CharUtils {
     public static boolean isAlphaDigit(int codepoint) {
         return isDigit(codepoint) || isAlpha(codepoint);
     }
+    
+    public static boolean isHex (int codepoint){
+        return isDigit(codepoint) || CharUtils.inRange(codepoint, 'a', 'f') || CharUtils.inRange(codepoint, 'A', 'F');
+    }
 
     /**
      * True if the codepoint is a bidi control character
@@ -537,6 +541,10 @@ public final class CharUtils {
         }), IREGNAME(new Filter() {
             public boolean accept(int codepoint) {
                 return !is_iregname(codepoint);
+            }
+        }), IHOST (new Filter(){
+            public boolean accept(int codepoint){
+                return !is_ihost(codepoint);
             }
         }), IPRIVATE(new Filter() {
             public boolean accept(int codepoint) {
@@ -763,6 +771,16 @@ public final class CharUtils {
             || codepoint == ';'
             || codepoint == '='
             || codepoint == '"';
+    }
+    
+    public static boolean is_ipliteral (int codepoint){
+        return isHex(codepoint) || codepoint==':' 
+            || codepoint =='[' 
+            || codepoint==']';
+    }
+    
+    public static boolean is_ihost (int codepoint){
+        return is_iregname(codepoint) || is_ipliteral(codepoint);
     }
 
     public static boolean is_regname(int codepoint) {

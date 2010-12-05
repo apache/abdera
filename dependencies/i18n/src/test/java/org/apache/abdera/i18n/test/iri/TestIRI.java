@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.i18n.text.Normalizer;
@@ -35,6 +36,24 @@ public class TestIRI extends TestBase {
         assertEquals("http://validator.w3.org/check?uri=http%3A%2F%2Fr\u00E9sum\u00E9.example.org", iri.toString());
         assertEquals("http://validator.w3.org/check?uri=http%3A%2F%2Fr%C3%A9sum%C3%A9.example.org", iri.toURI()
             .toString());
+    }
+    
+    @Test
+    public void testIpv4() throws URISyntaxException{
+        IRI iri = new IRI("http://127.0.0.1");
+        assertEquals("http://127.0.0.1", iri.toURI().toString());
+    }
+    
+    @Test
+    public void testIpv6() throws URISyntaxException{
+        IRI iri = new IRI("http://[2001:0db8:85a3:08d3:1319:8a2e:0370:7344]");
+        assertEquals("http://[2001:0db8:85a3:08d3:1319:8a2e:0370:7344]", iri.toURI().toString());
+    }
+    
+    @Test(expected=URISyntaxException.class)
+    public void testIpv6Invalid() throws URISyntaxException{
+        IRI iri = new IRI("http://[2001:0db8:85a3:08d3:1319:8a2e:0370:734o]");
+        iri.toURI().toString();
     }
 
     @Test

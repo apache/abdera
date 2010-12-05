@@ -22,9 +22,9 @@ import java.io.Serializable;
 import java.net.UnknownHostException;
 
 import org.apache.abdera.i18n.text.CharUtils;
+import org.apache.abdera.i18n.text.CharUtils.Profile;
 import org.apache.abdera.i18n.text.Nameprep;
 import org.apache.abdera.i18n.text.Punycode;
-import org.apache.abdera.i18n.text.CharUtils.Profile;
 
 /**
  * Provides an Internationized Domain Name implementation
@@ -94,10 +94,12 @@ public final class IDNA implements Serializable, Cloneable {
 
     public static String toASCII(String regname) {
         try {
-            if (regname == null)
+            if (regname == null){
                 return null;
-            if (regname.length() == 0)
+            }
+            if (regname.length() == 0){
                 return regname;
+            }
             String[] labels = regname.split("\\\u002E");
             StringBuilder buf = new StringBuilder();
             for (String label : labels) {

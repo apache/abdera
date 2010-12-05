@@ -25,11 +25,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.abdera.i18n.text.CharUtils;
+import org.apache.abdera.i18n.text.CharUtils.Profile;
 import org.apache.abdera.i18n.text.InvalidCharacterException;
 import org.apache.abdera.i18n.text.Nameprep;
 import org.apache.abdera.i18n.text.Normalizer;
 import org.apache.abdera.i18n.text.UrlEncoding;
-import org.apache.abdera.i18n.text.CharUtils.Profile;
 import org.apache.abdera.i18n.text.data.UnicodeCharacterDatabase;
 
 public final class IRI implements Serializable, Cloneable {
@@ -121,7 +121,11 @@ public final class IRI implements Serializable, Cloneable {
     }
 
     private void init() {
-        a_host = IDNA.toASCII(host);
+        if (host != null && host.startsWith("[")) {
+            a_host = host;
+        } else {
+            a_host = IDNA.toASCII(host);
+        }
         a_fragment = UrlEncoding.encode(fragment, Profile.FRAGMENT.filter());
         a_path = UrlEncoding.encode(path, Profile.PATH.filter());
         a_query = UrlEncoding.encode(query, Profile.QUERY.filter(), Profile.PATH.filter());
@@ -312,7 +316,8 @@ public final class IRI implements Serializable, Cloneable {
         try {
             return super.clone();
         } catch (CloneNotSupportedException e) {
-            return new IRI(toString()); // not going to happen, but we have to catch it
+            return new IRI(toString()); // not going to happen, but we have to
+                                        // catch it
         }
     }
 
@@ -544,7 +549,7 @@ public final class IRI implements Serializable, Cloneable {
             }
             try {
                 CharUtils.verify(userinfo, Profile.IUSERINFO);
-                CharUtils.verify(host, Profile.IREGNAME);
+                CharUtils.verify(host, Profile.IHOST);
             } catch (InvalidCharacterException e) {
                 throw new IRISyntaxException(e);
             }

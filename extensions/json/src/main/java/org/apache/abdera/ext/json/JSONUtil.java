@@ -58,10 +58,11 @@ public class JSONUtil {
 
     public static void toJson(Base base, Writer writer) throws IOException {
         JSONStream jstream = new JSONStream(writer);
-        if (base instanceof Document)
+        if (base instanceof Document) {
             toJson((Document)base, jstream);
-        else if (base instanceof Element)
+        } else if (base instanceof Element) {
             toJson((Element)base, jstream);
+        }
         writer.flush();
     }
 
@@ -74,10 +75,12 @@ public class JSONUtil {
         }
         IRI base = element.getResolvedBaseUri();
 
-        if (parentbase == null && base != null)
+        if (parentbase == null && base != null) {
             return false;
-        if (parentbase == null && base == null)
+        }
+        if (parentbase == null && base == null) {
             return true;
+        }
         return parentbase.equals(element.getResolvedBaseUri());
     }
 
@@ -94,8 +97,9 @@ public class JSONUtil {
                 jstream.startObject();
                 jstream.writeField("type", texttype.name().toLowerCase());
                 writeLanguageFields(element, jstream);
-                if (!isSameAsParentBase(element))
+                if (!isSameAsParentBase(element)) {
                     jstream.writeField("xml:base", element.getResolvedBaseUri());
+                }
                 jstream.endObject();
                 jstream.writeField("children");
                 switch (text.getTextType()) {
@@ -105,11 +109,19 @@ public class JSONUtil {
                         jstream.endArray();
                         break;
                     case HTML:
-                        Div div = HtmlHelper.parse(text.getValue());
-                        writeElementValue(div, jstream);
+                        if (text.getValue() != null) {
+                            Div div = HtmlHelper.parse(text.getValue());
+                            writeElementValue(div, jstream);
+                        } else {
+                            jstream.writeQuoted("");
+                        }
                         break;
                     case XHTML:
-                        writeElementValue(text.getValueElement(), jstream);
+                        if (text.getValueElement() != null) {
+                            writeElementValue(text.getValueElement(), jstream);
+                        } else {
+                            jstream.writeQuoted("");
+                        }
                         break;
                 }
                 jstream.endObject();
@@ -193,7 +205,7 @@ public class JSONUtil {
                 jstream.writeField("href", collection.getResolvedHref());
                 writeElement("title", collection.getTitleElement(), jstream);
                 String[] accepts = collection.getAccept();
-                if (accepts != null || accepts.length > 0) {
+                if (accepts != null && accepts.length > 0) {
                     jstream.writeField("accept");
                     jstream.startArray();
                     for (int n = 0; n < accepts.length; n++) {
@@ -211,8 +223,9 @@ public class JSONUtil {
             } else if (element instanceof Control) {
                 jstream.startObject();
                 writeLanguageFields(element, jstream);
-                if (!isSameAsParentBase(element))
+                if (!isSameAsParentBase(element)) {
                     jstream.writeField("xml:base", element.getResolvedBaseUri());
+                }
                 Control control = (Control)element;
                 jstream.writeField("draft", control.isDraft() ? "true" : "false");
                 writeExtensions((ExtensibleElement)element, jstream);
@@ -220,8 +233,9 @@ public class JSONUtil {
             } else if (element instanceof Entry) {
                 jstream.startObject();
                 writeLanguageFields(element, jstream);
-                if (!isSameAsParentBase(element))
+                if (!isSameAsParentBase(element)){
                     jstream.writeField("xml:base", element.getResolvedBaseUri());
+                }
                 Entry entry = (Entry)element;
                 jstream.writeField("id", entry.getId());
                 writeElement("title", entry.getTitleElement(), jstream);
@@ -243,8 +257,9 @@ public class JSONUtil {
             } else if (element instanceof Generator) {
                 jstream.startObject();
                 writeLanguageFields(element, jstream);
-                if (!isSameAsParentBase(element))
+                if (!isSameAsParentBase(element)) {
                     jstream.writeField("xml:base", element.getResolvedBaseUri());
+                }
                 Generator generator = (Generator)element;
                 jstream.writeField("version", generator.getVersion());
                 jstream.writeField("uri", generator.getResolvedUri());
@@ -253,16 +268,18 @@ public class JSONUtil {
             } else if (element instanceof Link) {
                 jstream.startObject();
                 writeLanguageFields(element, jstream);
-                if (!isSameAsParentBase(element))
+                if (!isSameAsParentBase(element)) {
                     jstream.writeField("xml:base", element.getResolvedBaseUri());
+                }
                 Link link = (Link)element;
                 jstream.writeField("href", link.getResolvedHref());
                 jstream.writeField("rel", link.getRel());
                 jstream.writeField("title", link.getTitle());
                 jstream.writeField("type", link.getMimeType());
                 jstream.writeField("hreflang", link.getHrefLang());
-                if (link.getLength() > -1)
+                if (link.getLength() > -1) {
                     jstream.writeField("length", link.getLength());
+                }
                 writeExtensions((ExtensibleElement)element, jstream);
                 jstream.endObject();
             } else if (element instanceof Person) {

@@ -40,8 +40,9 @@ public class JSONStream {
 
     private boolean isStart() {
         boolean b = sepstack.peek();
-        if (b)
+        if (b) {
             sepstack.set(sepstack.size() - 1, false);
+        }
         return b;
     }
 
@@ -62,8 +63,9 @@ public class JSONStream {
     }
 
     private void writeIndent() throws IOException {
-        for (int n = 0; n < depth; n++)
+        for (int n = 0; n < depth; n++) {
             writer.write(' ');
+        }
         writer.flush();
     }
 
@@ -122,8 +124,9 @@ public class JSONStream {
     }
 
     public void writeField(String name) throws IOException {
-        if (!isStart())
+        if (!isStart()) {
             writeSeparator();
+        }
         writeNewLine();
         writeIndent();
         writeQuoted(name);
@@ -131,23 +134,27 @@ public class JSONStream {
     }
 
     public void writeField(String name, Date value) throws IOException {
-        if (value != null)
+        if (value != null) {
             writeField(name, AtomDate.format(value));
+        }
     }
 
     public void writeField(String name, IRI value) throws IOException {
-        if (value != null)
+        if (value != null) {
             writeField(name, value.toASCIIString());
+        }
     }
 
     public void writeField(String name, MimeType value) throws IOException {
-        if (value != null)
+        if (value != null) {
             writeField(name, value.toString());
+        }
     }
 
     public void writeField(String name, EntityTag value) throws IOException {
-        if (value != null)
+        if (value != null) {
             writeField(name, value.toString());
+        }
     }
 
     public void writeField(String name, String value) throws IOException {

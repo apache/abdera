@@ -17,18 +17,15 @@
  */
 package org.apache.abdera.ext.json;
 
+import static org.junit.Assert.assertTrue;
+import java.io.ByteArrayOutputStream;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.writer.Writer;
 import org.junit.Test;
 
-/**
- * JSONStreamTest
- * 
- * @author David Calavera
- * @since 11/01/08
- */
 public class JSONStreamTest {
 
     @Test
@@ -39,6 +36,11 @@ public class JSONStreamTest {
         entry.setContent(new IRI("http://example.org/xml"), "text/xml");
 
         Writer json = abdera.getWriterFactory().getWriter("json");
-        entry.writeTo(json, System.out);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        entry.writeTo(json, outputStream);
+        String output = outputStream.toString();
+        assertTrue(output.contains("\"type\":\"text/xml\""));
+        assertTrue(output.contains("\"src\":\"http://example.org/xml\""));
+        assertTrue(output.contains("\"content\":"));
     }
 }

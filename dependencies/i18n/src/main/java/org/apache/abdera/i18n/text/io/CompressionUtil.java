@@ -20,6 +20,7 @@ package org.apache.abdera.i18n.text.io;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Locale;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -33,7 +34,7 @@ public class CompressionUtil {
         public static CompressionCodec value(String encoding) {
             if (encoding == null)
                 throw new IllegalArgumentException();
-            return valueOf(encoding.toUpperCase().replaceAll("-", ""));
+            return valueOf(encoding.toUpperCase(Locale.ENGLISH).replaceAll("-", ""));
         }
 
     }
@@ -43,7 +44,7 @@ public class CompressionUtil {
         if (name == null)
             return null;
         try {
-            codec = CompressionCodec.valueOf(name.toUpperCase().trim());
+            codec = CompressionCodec.valueOf(name.toUpperCase(Locale.ENGLISH).trim());
         } catch (Exception e) {
         }
         return codec;

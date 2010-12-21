@@ -32,7 +32,6 @@
   </properties>
   
   <modules>
-    <module>couchdb</module>
     <module>filesystem</module>
     <module>jcr</module>
     <module>jdbc</module>

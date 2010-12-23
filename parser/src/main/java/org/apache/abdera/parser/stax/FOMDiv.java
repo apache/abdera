@@ -17,7 +17,7 @@
  */
 package org.apache.abdera.parser.stax;
 
-import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -129,15 +129,15 @@ public class FOMDiv extends FOMExtensibleElement implements Div {
 
     protected String getInternalValue() {
         try {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            StringWriter out = new StringWriter();
             XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(out);
-            writer.writeStartElement("");
+            writer.writeStartElement(""); 
             for (Iterator<?> nodes = this.getChildren(); nodes.hasNext();) {
                 OMNode node = (OMNode)nodes.next();
                 node.serialize(writer);
             }
-            writer.writeEndElement();
-            return out.toString().substring(2);
+            writer.writeEndElement(); 
+            return out.getBuffer().toString().substring(2);
         } catch (Exception e) {
         }
         return "";

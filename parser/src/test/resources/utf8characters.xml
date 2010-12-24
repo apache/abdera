@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<entry xmlns="http://www.w3.org/2005/Atom"> 
+   <title>Item</title>
+   <content type="xhtml" xmlns:xhtml = "http://www.w3.org/1999/xhtml" >
+		<xhtml:div>
+			<p>This is simple XHTML &#x200;&#x201; contained within a xhtml:div tag.</p>
+		</xhtml:div>
+	</content>
+</entry>

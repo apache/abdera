@@ -63,7 +63,6 @@ public class JSONUtil {
         } else if (base instanceof Element) {
             toJson((Element)base, jstream);
         }
-        writer.flush();
     }
 
     private static boolean isSameAsParentBase(Element element) {

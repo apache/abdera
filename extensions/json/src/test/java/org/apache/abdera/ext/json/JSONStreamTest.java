@@ -18,14 +18,12 @@
 package org.apache.abdera.ext.json;
 
 import static org.junit.Assert.assertTrue;
-
 import java.io.ByteArrayOutputStream;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.writer.Writer;
-import org.apache.abdera.writer.WriterOptions;
 import org.junit.Test;
 
 public class JSONStreamTest {
@@ -39,9 +37,7 @@ public class JSONStreamTest {
 
         Writer json = abdera.getWriterFactory().getWriter("json");
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        WriterOptions opts = entry.getDefaultWriterOptions();
-        opts.setAutoClose(true);
-        entry.writeTo(json, outputStream, opts);
+        entry.writeTo(json, outputStream);
         String output = outputStream.toString();
         assertTrue(output.contains("\"type\":\"text/xml\""));
         assertTrue(output.contains("\"src\":\"http://example.org/xml\""));

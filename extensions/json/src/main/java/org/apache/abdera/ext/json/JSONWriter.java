@@ -69,6 +69,7 @@ public class JSONWriter extends AbstractNamedWriter implements NamedWriter {
     public void writeTo(Base base, java.io.Writer out, WriterOptions options) throws IOException {
         try {
             JSONUtil.toJson(base, out);
+            out.flush();
             if (options.getAutoClose())
                 out.close();
         } catch (Exception e) {

@@ -1,3 +1,14 @@
+Apache Abdera: Changes in 1.1.2 Release
+---------------------------------------
+
+ABDERA-277: Apply patch from Olve Sæther Hansen to fix Excessive calls to flush() on the Writer responsible for writing JSONStream data.
+added unit test for ABDERA-251 and and ABDERA-243
+applied patch for ABDERA-251 Charset issue in FOMDiv.getInternalValue() leads to corrupt return value on non-ASCII platforms
+removed couchdb adapter from build files to get rid of the additional maven repo; updated some dependencies
+fix for ABDERA-275 Error in Turkish Locale when using GZIP compression
+fix for ABDERA-258 Abdera needs to support IPv6
+fixed null pointers; added unit tests - preparing a refactoring
+
 Apache Abdera: Changes in 1.1.1 Release
 ---------------------------------------
 

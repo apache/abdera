@@ -39,6 +39,10 @@
 		org.apache.abdera.writer.*;
 		org.apache.abdera.xpath.*
 	</abdera.osgi.default.exports>
+    <abdera.osgi.default.imports>
+      org.apache.commons.codec*;version="[1.3,2)",
+      *
+    </abdera.osgi.default.imports>
   </properties>
   <dependencies>
   	<dependency>

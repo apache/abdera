@@ -1,6 +1,7 @@
 Apache Abdera: Changes in 1.1.2 Release
 ---------------------------------------
 
+ABDERA-278: Fix to relax the version requirement for commons-codec in OSGi manifests
 ABDERA-277: Apply patch from Olve Sæther Hansen to fix Excessive calls to flush() on the Writer responsible for writing JSONStream data.
 added unit test for ABDERA-251 and and ABDERA-243
 applied patch for ABDERA-251 Charset issue in FOMDiv.getInternalValue() leads to corrupt return value on non-ASCII platforms

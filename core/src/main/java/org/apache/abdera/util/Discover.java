@@ -157,9 +157,15 @@ public final class Discover {
         Class<T> c = null;
         try {
             c = (Class<T>)loader.loadClass(spec);
-            c = (Class<T>)(c != null ? c : getClass(Discover.class.getClassLoader(), spec));
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            try {
+                // try loading the class from the Discover class loader
+                // if the loader failed.
+                c = (Class<T>)Discover.class.getClassLoader().loadClass(spec);
+            } catch (ClassNotFoundException e1) {
+                // throw the original exception
+                throw new RuntimeException(e);
+            }
         }
         return c;
     }

@@ -143,11 +143,10 @@ public class CommonsResponse extends AbstractClientResponse implements ClientRes
      * decode Content-Encodings and will automatically release the response when the stream has been read fully.
      */
     public InputStream getInputStream() throws IOException {
-        String methodName = method.getName();
         if (in == null ) {
             String ce = getHeader("Content-Encoding");
             in = method.getResponseBodyAsStream();
-            if (ce != null && !methodName.equalsIgnoreCase("HEAD")) {
+            if (ce != null && in != null) {
                 in = CompressionUtil.getDecodingInputStream(in, ce);
             }
             in = new AutoReleasingInputStream(method, in);

@@ -202,9 +202,9 @@ public class MethodHelper {
                           "application/atom+xml",
                           "application/atomsvc+xml",
                           "application/atomcat+xml",
-                          "application/xml",
-                          "text/xml",
-                          "*/*");
+                          "application/xml;q=0.5",
+                          "text/xml;q=0.5",
+                          "*/*;q=0.01");
         options.setAcceptCharset("utf-8", "*;q=0.5");
         return options;
     }

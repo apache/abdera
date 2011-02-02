@@ -11,6 +11,7 @@
     <groupId>org.apache.abdera</groupId>
     <artifactId>abdera</artifactId>
     <version>1.2-SNAPSHOT</version>  
+    <relativePath>../..</relativePath>
   </parent>
    <properties>
      <topDir>${basedir}/../..</topDir>

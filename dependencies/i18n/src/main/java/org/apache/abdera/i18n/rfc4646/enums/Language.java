@@ -120,35 +120,43 @@ public enum Language {
         null, "Welsh"), CZE(null, null, "Czech"),
     // D
     DAK(null, null, "Dakota"), DAN(null, null, "Danish"), DAR(null, null, "Dargwa"), DAY(null, null,
-        "Land Dayak languages"), DEL(null, null, "Delaware"), DEN(null, null, "Slave (Athapascan)"), DGR(null, null,
-        "Dogrib"), DIN(null, null, "Dinka"), DIV(null, null, "Divehi", "Dhivehi", "Maldivian"), DOI(null, null, "Dogri"), DRA(
-        null, null, "Dravidian (Other)"), DSB(null, null, "Lower Sorbian"), DUA(null, null, "Duala"), DUM(null, null,
-        "Dutch, Middle (ca. 1050-1350)"), DUT(null, null, "Dutch", "Flemish"), DYU(null, null, "Dyula"), DZO(null,
-        null, "Dzongkha"),
+        "Land Dayak languages"), DEL(null, null, "Delaware"), DEN(null, null, "Slave (Athapascan)"), DEU(null, null,
+        "German"), DGR(null, null, "Dogrib"), DIN(null, null, "Dinka"), DIV(null, null, "Divehi", "Dhivehi",
+        "Maldivian"), DOI(null, null, "Dogri"), DRA(null, null, "Dravidian (Other)"), DSB(null, null, "Lower Sorbian"), DUA(
+        null, null, "Duala"), DUM(null, null, "Dutch, Middle (ca. 1050-1350)"), DUT(null, null, "Dutch", "Flemish"), DYU(
+        null, null, "Dyula"), DZO(null, null, "Dzongkha"),
     // E
     EFI(null, null, "Efik"), EGY(null, null, "Egyptian (Ancient)"), EKA(null, null, "Ekajuk"), ELL(null, null,
         "Greek, Modern (1453-)"), ELX(null, null, "Elamite"), ENG(null, null, "English"), ENM(null, null,
         "English, Middle (1100-1500)"), EPO(null, null, "Esperanto"), EST(null, null, "Estonian"), EUS(null, null,
         "Basque"), EWE(null, null, "Ewe"), EWO(null, null, "Ewondo"),
     // F
-    FAN(null, null, "Fang"), FAT(null, null, "Fanti"), FIL(null, null, "Filipino", "Pilipino"), FIU(null, null,
-        "Finno-Ugrian (Other)"), FON(null, null, "Fon"), FRM(null, null, "French, Middle (ca. 1400-1600)"), FRO(null,
-        null, "French, Old (842-ca. 1400)"), FRR(null, null, "Northern Frisian"), FRS(null, null, "Eastern Frisian"), FUR(
-        null, null, "Friulian"),
+    FAN(null, null, "Fang"), FAO(null, null, "Faroese"), FAS(null, null, "Persian"), FAT(null, null, "Fanti"), FIJ(
+        null, null, "Fijian"), FIL(null, null, "Filipino", "Pilipino"), FIN(null, null, "Finnish"), FIU(null, null,
+        "Finno-Ugrian (Other)"), FON(null, null, "Fon"), FRA(null, null, "French"), FRE(null, null, "French"), FRM(
+        null, null, "French, Middle (ca. 1400-1600)"), FRO(null, null, "French, Old (842-ca. 1400)"), FRR(null, null,
+        "Northern Frisian"), FRS(null, null, "Eastern Frisian"), FRY(null, null, "Western Frisian"), FUL(null, null,
+        "Fulah"), FUR(null, null, "Friulian"),
     // G
-    GAA(null, null, "Ga"), GAY(null, null, "Gayo"), GBA(null, null, "Gbaya"), GEM(null, null, "Germanic (Other)"), GEZ(
-        null, null, "Geez"), GIL(null, null, "Gilbertese"), GMH(null, null, "German, Middle High (ca. 1050-1500)"), GOH(
-        null, null, "German, Old High (ca. 750-1050)"), GON(null, null, "Gondi"), GOR(null, null, "Gorontalo"), GOT(
-        null, null, "Gothic"), GRB(null, null, "Grebo"), GRC(null, null, "Greek, Ancient (to 1453)"), GSW(null, null,
-        "Swiss German", "Alemannic"), GWI(null, null, "Gwich&#xB4;in"),
+    GAA(null, null, "Ga"), GAY(null, null, "Gayo"), GBA(null, null, "Gbaya"), GEM(null, null, "Germanic (Other)"), GEO(
+        null, null, "Georgian"), GER(null, null, "German"), GEZ(null, null, "Geez"), GIL(null, null, "Gilbertese"), GLA(
+        null, null, "Gaelic", "Scottish Gaelic"), GLE(null, null, "Irish"), GLG(null, null, "Galician"), GLV(null,
+        null, "Manx"), GMH(null, null, "German, Middle High (ca. 1050-1500)"), GOH(null, null,
+        "German, Old High (ca. 750-1050)"), GON(null, null, "Gondi"), GOR(null, null, "Gorontalo"), GOT(null, null,
+        "Gothic"), GRB(null, null, "Grebo"), GRC(null, null, "Greek, Ancient (to 1453)"), GRE(null, null,
+        "Greek, Modern (1453-)"), GRN(null, null, "Guarani"), GSW(null, null, "Swiss German", "Alemannic"), GUJ(null,
+        null, "Gujarati"), GWI(null, null, "Gwich&#xB4;in"),
     // H
-    HAI(null, null, "Haida"), HAW(null, null, "Hawaiian"), HAT(null, null, "Haitian", "Haitian Creole"), HIL(null,
-        null, "Hiligaynon"), HIM(null, null, "Himachali"), HIT(null, null, "Hittite"), HMN(null, null, "Hmong"), HSB(
-        null, null, "Upper Sorbian"), HUP(null, null, "Hupa"),
+    HAI(null, null, "Haida"), HAU(null, null, "Hausa"), HAW(null, null, "Hawaiian"), HAT(null, null, "Haitian",
+        "Haitian Creole"), HEB(null, null, "Hebrew"), HER(null, null, "Herero"), HIL(null, null, "Hiligaynon"), HIM(
+        null, null, "Himachali"), HIN(null, null, "Hindi"), HIT(null, null, "Hittite"), HMN(null, null, "Hmong"), HMO(
+        null, null, "Hiri Motu"), HRV(null, null, "Croatian"), HSB(null, null, "Upper Sorbian"), HUN(null, null,
+        "Hungarian"), HUP(null, null, "Hupa"), HYE(null, null, "Armenian"),
     // I
-    IBA(null, null, "Iban"), III(null, null, "Sichuan Yi", "Nuosu"), IJO(null, null, "Ijo languages"), ILO(null, null,
-        "Iloko"), INC(null, null, "Indic (Other)"), INE(null, null, "Indo-European (Other)"), INH(null, null, "Ingush"), IRA(
-        null, null, "Iranian (Other)"), IRO(null, null, "Iroquoian languages"), ITA(null, null, "Italian"),
+    IBA(null, null, "Iban"), IBO(null, null, "Igbo"), III(null, null, "Sichuan Yi", "Nuosu"), IJO(null, null,
+        "Ijo languages"), ILE(null, null, "Interlingue", "Occidental"), ILO(null, null, "Iloko"), INC(null, null,
+        "Indic (Other)"), INE(null, null, "Indo-European (Other)"), INH(null, null, "Ingush"), IRA(null, null,
+        "Iranian (Other)"), IRO(null, null, "Iroquoian languages"), ITA(null, null, "Italian"),
     // J
     JAV(null, null, "Javanese"), JBO(null, null, "Lojban"), JPN(null, null, "Japanese"), JPR(null, null,
         "Judeo-Persian"), JRB(null, null, "Judeo-Arabic"),
@@ -156,9 +164,10 @@ public enum Language {
     KAA(null, null, "Kara-Kalpak"), KAB(null, null, "Kabyle"), KAC(null, null, "Kachin", "Jingpho"), KAL(null, null,
         "Kalaallisut", "Greenlandic"), KAM(null, null, "Kamba"), KAR(null, null, "Karen languages"), KAW(null, null,
         "Kawi"), KBD(null, null, "Kabardian"), KHA(null, null, "Khasi"), KHI(null, null, "Khoisan (Other)"), KHO(null,
-        null, "Khotanese"), KMB(null, null, "Kimbundu"), KOK(null, null, "Konkani"), KOS(null, null, "Kosraean"), KPE(
-        null, null, "Kpelle"), KRC(null, null, "Karachay-Balkar"), KRL(null, null, "Karelian"), KRO(null, null,
-        "Kru languages"), KRU(null, null, "Kurukh"), KUM(null, null, "Kumyk"), KUT(null, null, "Kutenai"),
+        null, "Khotanese"), KIK(null, null, "Kikuyu", "Gikuyu"), KIR(null, null, "Kirghiz", "Kyrgyz"), KMB(null, null,
+        "Kimbundu"), KOK(null, null, "Konkani"), KOS(null, null, "Kosraean"), KPE(null, null, "Kpelle"), KRC(null,
+        null, "Karachay-Balkar"), KRL(null, null, "Karelian"), KRO(null, null, "Kru languages"), KRU(null, null,
+        "Kurukh"), KUA(null, null, "Kuanyama", "Kwanyama"), KUM(null, null, "Kumyk"), KUT(null, null, "Kutenai"),
     // L
     LAD(null, null, "Ladino"), LAH(null, null, "Lahnda"), LAM(null, null, "Lamba"), LEZ(null, null, "Lezghian"), LIM(
         null, null, "Limburgan", "Limburger", "Limburgish"), LOL(null, null, "Mongo"), LOZ(null, null, "Lozi"), LUA(
@@ -174,13 +183,15 @@ public enum Language {
         null, null, "Munda languages"), MUS(null, null, "Creek"), MWL(null, null, "Mirandese"), MWR(null, null,
         "Marwari"), MYN(null, null, "Mayan languages"), MYV(null, null, "Erzya"),
     // N
-    NAH(null, null, "Nahuatl languages"), NAI(null, null, "North American Indian"), NAP(null, null, "Neapolitan"), NBL(
-        null, null, "Ndebele, South", "South Ndebele"), NDS(null, null, "Low German", "Low Saxon", "German, Low",
+    NAH(null, null, "Nahuatl languages"), NAI(null, null, "North American Indian"), NAP(null, null, "Neapolitan"), NAU(
+        null, null, "Nauru"), NAV(null, null, "Navajo", "Navaho"), NBL(null, null, "Ndebele, South", "South Ndebele"), NDE(
+        null, null, "Ndebele, North", "North Ndebele"), NDS(null, null, "Low German", "Low Saxon", "German, Low",
         "Saxon, Low"), NEW(null, null, "Nepal Bhasa", "Newari"), NIA(null, null, "Nias"), NIC(null, null,
-        "Niger-Kordofanian (Other)"), NIU(null, null, "Niuean"), NOG(null, null, "Nogai"), NON(null, null, "Norse, Old"), NQO(
-        null, null, "N&#x2019;Ko"), NSO(null, null, "Northern Sotho", "Pedi", "Sepedi"), NUB(null, null,
-        "Nubian languages"), NWC(null, null, "Classical Newari", "Old Newari", "Classical Nepal Bhasa"), NYM(null,
-        null, "Nyamwezi"), NYN(null, null, "Nyankole"), NYO(null, null, "Nyoro"), NZI(null, null, "Nzima"),
+        "Niger-Kordofanian (Other)"), NIU(null, null, "Niuean"), NNO(null, null, "Norwegian Nynorsk",
+        "Nynorsk, Norwegian"), NOG(null, null, "Nogai"), NON(null, null, "Norse, Old"), NQO(null, null, "N&#x2019;Ko"), NSO(
+        null, null, "Northern Sotho", "Pedi", "Sepedi"), NUB(null, null, "Nubian languages"), NWC(null, null,
+        "Classical Newari", "Old Newari", "Classical Nepal Bhasa"), NYA(null, null, "Chichewa", "Chewa", "Nyanja"), NYM(
+        null, null, "Nyamwezi"), NYN(null, null, "Nyankole"), NYO(null, null, "Nyoro"), NZI(null, null, "Nzima"),
     // O
     OCI(null, null, "Occitan"), OJI(null, null, "Ojibwa"), ORI(null, null, "Oriya"), ORM(null, null, "Oromo"), OSA(
         null, null, "Osage"), OSS(null, null, "Ossetian", "Ossetic"), OTA(null, null, "Turkish, Ottoman (1500-1928)"), OTO(
@@ -351,20 +362,21 @@ public enum Language {
         null, "Salishan languages"), SAM(null, null, "Samaritan Aramaic"), SAS(null, null, "Sasak"), SAT(null, null,
         "Santali"), SCN(null, null, "Sicilian"), SCO(null, null, "Scots"), SEL(null, null, "Selkup"), SEM(null, null,
         "Semitic (Other)"), SGA(null, null, "Irish, Old (to 900)"), SGN(null, null, "Sign Languages"), SHN(null, null,
-        "Shan"), SID(null, null, "Sidamo"), SIO(null, null, "Siouan languages"), SIT(null, null, "Sino-Tibetan (Other)"), SLA(
-        null, null, "Slavic (Other)"), SMA(null, null, "Southern Sami"), SMI(null, null, "Sami languages (Other)"), SMJ(
-        null, null, "Lule Sami"), SMN(null, null, "Inari Sami"), SMS(null, null, "Skolt Sami"), SNK(null, null,
-        "Soninke"), SOG(null, null, "Sogdian"), SON(null, null, "Songhai languages"), SPA(null, null, "Spanish",
-        "Castilian"), SRN(null, null, "Sranan Tongo"), SRR(null, null, "Serer"), SSA(null, null, "Nilo-Saharan (Other)"), SUK(
-        null, null, "Sukuma"), SUS(null, null, "Susu"), SUX(null, null, "Sumerian"), SYC(null, null, "Classical Syriac"), SYR(
-        null, null, "Syriac"),
+        "Shan"), SID(null, null, "Sidamo"), SIN(null, null, "Sinhala", "Sinhalese"), SIO(null, null, "Siouan languages"), SIT(
+        null, null, "Sino-Tibetan (Other)"), SLA(null, null, "Slavic (Other)"), SMA(null, null, "Southern Sami"), SMI(
+        null, null, "Sami languages (Other)"), SMJ(null, null, "Lule Sami"), SMN(null, null, "Inari Sami"), SMS(null,
+        null, "Skolt Sami"), SNK(null, null, "Soninke"), SOG(null, null, "Sogdian"), SON(null, null,
+        "Songhai languages"), SPA(null, null, "Spanish", "Castilian"), SRN(null, null, "Sranan Tongo"), SRR(null, null,
+        "Serer"), SSA(null, null, "Nilo-Saharan (Other)"), SUK(null, null, "Sukuma"), SUS(null, null, "Susu"), SUX(
+        null, null, "Sumerian"), SYC(null, null, "Classical Syriac"), SYR(null, null, "Syriac"),
     // T
-    TAI(null, null, "Tai (Other)"), TEM(null, null, "Timne"), TER(null, null, "Tereno"), TET(null, null, "Tetum"), TIG(
-        null, null, "Tigre"), TIV(null, null, "Tiv"), TKL(null, null, "Tokelau"), TLH(null, null, "Klingon",
-        "tlhIngan-Hol"), TLI(null, null, "Tlingit"), TMH(null, null, "Tamashek"), TOG(null, null, "Tonga (Nyasa)"), TPI(
-        null, null, "Tok Pisin"), TSI(null, null, "Tsimshian"), TUM(null, null, "Tumbuka"), TUP(null, null,
-        "Tupi languages"), TUR(null, null, "Turkish"), TUT(null, null, "Altaic (Other)"), TVL(null, null, "Tuvalu"), TYV(
-        null, null, "Tuvinian"),
+    TAH(null, null, "Tahitian"), TAI(null, null, "Tai (Other)"), TAM(null, null, "Tamil"), TAT(null, null, "Tatar"), TEM(
+        null, null, "Timne"), TER(null, null, "Tereno"), TET(null, null, "Tetum"), TIG(null, null, "Tigre"), TIV(null,
+        null, "Tiv"), TKL(null, null, "Tokelau"), TLH(null, null, "Klingon", "tlhIngan-Hol"), TLI(null, null, "Tlingit"), TMH(
+        null, null, "Tamashek"), TOG(null, null, "Tonga (Nyasa)"), TPI(null, null, "Tok Pisin"), TSI(null, null,
+        "Tsimshian"), TUK(null, null, "Turkmen"), TUM(null, null, "Tumbuka"), TUP(null, null, "Tupi languages"), TUR(
+        null, null, "Turkish"), TSO(null, null, "Tsonga"), TUT(null, null, "Altaic (Other)"), TVL(null, null, "Tuvalu"), TWI(
+        null, null, "Twi"), TYV(null, null, "Tuvinian"),
     // U
     UDM(null, null, "Udmurt"), UGA(null, null, "Ugaritic"), UIG(null, null, "Uighur", "Uyghur"), UKR(null, null,
         "Ukrainian"), UMB(null, null, "Umbundu"), UND(null, null, "Undetermined"), URD(null, null, "Urdu"), UZB(null,

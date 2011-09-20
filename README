@@ -1,0 +1,3 @@
+This is an as-yet incomplete update for Abdera. All of the base dependencies
+have been updated and a broad range of significant changes have been made to
+the overall code structure, many of the apis and implementation detail. 

@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Implementation-Title: Abdera2 Activities
+Implementation-Version: 2.0-SNAPSHOT
+Built-By: james
+Specification-Vendor: The Apache Software Foundation
+Tool: Bnd-0.0.357
+Bundle-Name: Abdera2 Activities
+Created-By: Apache Maven Bundle Plugin
+Implementation-Vendor: The Apache Software Foundation
+Bundle-Vendor: Apache Software Foundation
+Implementation-Vendor-Id: org.apache
+Build-Jdk: 1.6.0_26
+Bundle-Version: 2.0.0.SNAPSHOT
+Bnd-LastModified: 1316064257787
+Specification-Title: Abdera2 Activities
+Bundle-ManifestVersion: 2
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-Description: JSON Activity Streams Implementation
+Specification-Version: 2.0-SNAPSHOT
+Import-Package: com.google.gson;version="[1.7,2)",javax.activation;ver
+ sion="[1.1,2)",javax.security.auth,org.apache.abdera2.common,org.apac
+ he.abdera2.common.anno,org.apache.abdera2.common.date,org.apache.abde
+ ra2.common.geo,org.apache.abdera2.common.http,org.apache.abdera2.comm
+ on.iri,org.apache.abdera2.common.lang,org.apache.abdera2.common.media
+ type,org.apache.abdera2.common.misc,org.apache.abdera2.common.protoco
+ l,org.apache.abdera2.common.pusher,org.apache.abdera2.common.template
+ s,org.apache.commons.logging
+Bundle-SymbolicName: org.apache.abdera2.activities
+Bundle-DocURL: http://www.apache.org/
+

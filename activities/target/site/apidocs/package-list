@@ -1,0 +1,6 @@
+org.apache.abdera2.activities.io.gson
+org.apache.abdera2.activities.model
+org.apache.abdera2.activities.model.objects
+org.apache.abdera2.activities.protocol
+org.apache.abdera2.activities.protocol.basic
+org.apache.abdera2.activities.protocol.managed

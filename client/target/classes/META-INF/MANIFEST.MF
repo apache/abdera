@@ -1,0 +1,39 @@
+Manifest-Version: 1.0
+Implementation-Title: Abdera2 Client
+Implementation-Version: 2.0-SNAPSHOT
+Built-By: james
+Specification-Vendor: The Apache Software Foundation
+Tool: Bnd-0.0.357
+Bundle-Name: Abdera2 Client
+Created-By: Apache Maven Bundle Plugin
+Implementation-Vendor: The Apache Software Foundation
+Bundle-Vendor: Apache Software Foundation
+Implementation-Vendor-Id: org.apache
+Build-Jdk: 1.6.0_26
+Bundle-Version: 2.0.0.SNAPSHOT
+Bnd-LastModified: 1316064259673
+Specification-Title: Abdera2 Client
+Bundle-ManifestVersion: 2
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-Description: Atom Publishing Protocol Client Implementation
+Specification-Version: 2.0-SNAPSHOT
+Import-Package: javax.activation;version="[1.1,2)",javax.net.ssl,org.a
+ pache.abdera2,org.apache.abdera2.activities.model,org.apache.abdera2.
+ common,org.apache.abdera2.common.anno,org.apache.abdera2.common.http,
+ org.apache.abdera2.common.io,org.apache.abdera2.common.iri,org.apache
+ .abdera2.common.lang,org.apache.abdera2.common.protocol,org.apache.ab
+ dera2.common.text,org.apache.abdera2.model,org.apache.abdera2.parser,
+ org.apache.abdera2.protocol,org.apache.abdera2.protocol.error,org.apa
+ che.abdera2.writer,org.apache.http,org.apache.http.auth,org.apache.ht
+ tp.client,org.apache.http.client.cache,org.apache.http.client.entity,
+ org.apache.http.client.methods,org.apache.http.conn,org.apache.http.c
+ onn.routing,org.apache.http.conn.scheme,org.apache.http.conn.ssl,org.
+ apache.http.cookie,org.apache.http.entity,org.apache.http.entity.mime
+ ,org.apache.http.entity.mime.content,org.apache.http.impl.auth,org.ap
+ ache.http.impl.client,org.apache.http.impl.client.cache,org.apache.ht
+ tp.impl.conn,org.apache.http.impl.conn.tsccm,org.apache.http.impl.coo
+ kie,org.apache.http.message,org.apache.http.params,org.apache.http.pr
+ otocol,org.apache.http.util
+Bundle-SymbolicName: org.apache.abdera2.client
+Bundle-DocURL: http://www.apache.org/
+

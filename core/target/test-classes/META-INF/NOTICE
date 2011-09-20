@@ -1,0 +1,34 @@
+// ------------------------------------------------------------------
+// NOTICE file corresponding to the section 4d of The Apache License,
+// Version 2.0, in this case for Apache Abdera2
+// ------------------------------------------------------------------
+
+Apache Abdera2
+Copyright 2006-2011 Apache Software Foundation
+
+This product includes/uses software(s) developed by 'an unknown organization'
+  - ICU4J (http://icu-project.org/)
+
+This product includes/uses software(s) developed by 'Apache Software Foundation' (http://www.apache.org)
+  - Streaming API for XML (STAX API 1.0) (http://geronimo.apache.org/specs/geronimo-stax-api_1.0_spec)
+
+This product includes/uses software(s) developed by 'Apache Software Foundation' (http://www.apache.org/)
+  - Abdera2 Common Library (http://abdera.apache.org)
+
+This product includes/uses software(s) developed by 'Codehaus' (http://www.codehaus.org/)
+  - Woodstox (http://woodstox.codehaus.org)
+
+This product includes/uses software(s) developed by 'The Apache Software Foundation' (http://www.apache.org)
+  - Activation 1.1 (http://geronimo.apache.org/maven/specs/geronimo-activation_1.1_spec/1.1)
+  - JavaMail 1.4 (http://geronimo.apache.org/maven/specs/geronimo-javamail_1.4_spec/1.6)
+
+This product includes/uses software(s) developed by 'The Apache Software Foundation' (http://www.apache.org/)
+  - Commons Codec (http://commons.apache.org/codec/)
+  - Commons Logging (http://commons.apache.org/logging)
+  - Axiom API (http://ws.apache.org/axiom/)
+  - Axiom Impl (http://ws.apache.org/axiom/axiom-impl)
+
+This product includes/uses software(s) developed by 'The Werken Company' (http://jaxen.codehaus.org)
+  - Jaxen (http://jaxen.codehaus.org/jaxen)
+
+

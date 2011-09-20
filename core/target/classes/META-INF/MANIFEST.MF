@@ -1,0 +1,36 @@
+Manifest-Version: 1.0
+Implementation-Title: Abdera2 Core
+Implementation-Version: 2.0-SNAPSHOT
+Built-By: james
+Specification-Vendor: The Apache Software Foundation
+Class-Path: 
+Tool: Bnd-0.0.357
+Bundle-Name: Abdera2 Core
+Created-By: Apache Maven Bundle Plugin
+Implementation-Vendor: The Apache Software Foundation
+Bundle-Vendor: Apache Software Foundation
+Implementation-Vendor-Id: org.apache
+Build-Jdk: 1.6.0_26
+Bundle-Version: 2.0.0.SNAPSHOT
+Bnd-LastModified: 1316064253486
+Specification-Title: Abdera2 Core
+Bundle-ManifestVersion: 2
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-Description: Atom Specification Implementation Core
+Specification-Version: 2.0-SNAPSHOT
+Import-Package: javax.activation;version="[1.1,2)",javax.xml.namespace
+ ,javax.xml.stream;version="[1.0,2)",javax.xml.transform,javax.xml.tra
+ nsform.stream,org.apache.abdera2.common,org.apache.abdera2.common.ann
+ o,org.apache.abdera2.common.date,org.apache.abdera2.common.http,org.a
+ pache.abdera2.common.io,org.apache.abdera2.common.iri,org.apache.abde
+ ra2.common.lang,org.apache.abdera2.common.mediatype,org.apache.abdera
+ 2.common.selector,org.apache.abdera2.common.xml,org.apache.axiom.atta
+ chments.utils,org.apache.axiom.om,org.apache.axiom.om.impl,org.apache
+ .axiom.om.impl.builder,org.apache.axiom.om.impl.llom,org.apache.axiom
+ .om.impl.llom.factory,org.apache.axiom.om.impl.util,org.apache.axiom.
+ om.util,org.apache.axiom.om.xpath,org.apache.axiom.util.stax.dialect,
+ org.apache.commons.codec.binary;version="[1.5,2)",org.apache.commons.
+ logging,org.jaxen,org.jaxen.function
+Bundle-SymbolicName: org.apache.abdera2.core
+Bundle-DocURL: http://www.apache.org/
+

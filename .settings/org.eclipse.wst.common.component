@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="abdera2">
+        <wb-resource deploy-path="/" source-path="/activities/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/activities/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/client/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/client/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/common/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/common/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/core/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/core/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/ext/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/ext/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/security/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/security/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/server/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/test/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/test/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/server/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/test/src/java"/>
+        <wb-resource deploy-path="/" source-path="/test/src/test/java"/>
+        <wb-resource deploy-path="/" source-path="/examples/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/examples/src/main/java"/>
+    </wb-module>
+</project-modules>

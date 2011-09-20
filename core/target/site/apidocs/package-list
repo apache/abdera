@@ -1,0 +1,13 @@
+org.apache.abdera2
+org.apache.abdera2.extra
+org.apache.abdera2.factory
+org.apache.abdera2.model
+org.apache.abdera2.model.selector
+org.apache.abdera2.parser
+org.apache.abdera2.parser.axiom
+org.apache.abdera2.parser.filter
+org.apache.abdera2.protocol
+org.apache.abdera2.protocol.error
+org.apache.abdera2.util
+org.apache.abdera2.writer
+org.apache.abdera2.xpath

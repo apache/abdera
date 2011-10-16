@@ -1,3 +1,22 @@
+Apache Abdera: Changes in 1.1.3 Release
+---------------------------------------
+
+ABDERA-290: Apply patch from Andreas Veithen and Olve Sæther Hansen to fix using Axiom 1.2.12 breaks Abdera-parser - compile-errors
+r1137038: further ISO 639-2 language codes added
+r1136911: refactoring;added some new ISO 639-2 language codes
+r1136868: added some new ISO 639-2 language codes
+ABDERA-285: deps.properties javamail.dir is not valid, updated directory in description
+r1136817: harmonized geronimo-activation version
+r1132940: removed broken test
+ABDERA-281: Add axiom-api dependency to parser
+ABDERA-282: Maven build problem
+r1065346: added quaility factors to request accept header
+ABDERA-259: NullPointerException happens when trying to decode HEAD response
+r1060056: finally removed outdated couchdb adapter
+ABDERA-279: patch from Antoine Toulme to fix Faulty classloading - unreachable code
+r1058008: updated readme and build script 
+r1057926: moved doco to wiki
+
 Apache Abdera: Changes in 1.1.2 Release
 ---------------------------------------
 

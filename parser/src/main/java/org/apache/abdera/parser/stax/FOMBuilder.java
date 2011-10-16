@@ -96,7 +96,7 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
         } else {
             OMElement e = (OMElement)lastNode;
             node = constructNode((OMElement)lastNode, elementName);
-            e.setFirstChild(node);
+            ((OMContainerEx)e).setFirstChild(node);
         }
         return node;
     }

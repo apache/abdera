@@ -20,14 +20,12 @@ package org.apache.abdera.parser.stax.util;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.parser.stax.FOMFactory;
 import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.impl.traverse.OMChildrenIterator;
+import org.apache.axiom.om.OMNode;
+import org.apache.axiom.om.impl.traverse.OMFilterIterator;
 
 import javax.xml.namespace.QName;
 
-/**
- * Most of the original code for this class came from the OMChildrenQNameIterator from Axiom
- */
-public class FOMExtensionIterator extends OMChildrenIterator {
+public class FOMExtensionIterator extends OMFilterIterator {
 
     /**
      * Field givenQName
@@ -37,23 +35,13 @@ public class FOMExtensionIterator extends OMChildrenIterator {
     private FOMFactory factory = null;
 
     /**
-     * Field needToMoveForward
-     */
-    private boolean needToMoveForward = true;
-
-    /**
-     * Field isMatchingNodeFound
-     */
-    private boolean isMatchingNodeFound = false;
-
-    /**
      * Constructor OMChildrenQNameIterator.
      * 
-     * @param currentChild
+     * @param parent
      * @param givenQName
      */
     public FOMExtensionIterator(OMElement parent) {
-        super(parent.getFirstOMChild());
+        super(parent.getChildren());
         this.namespace = parent.getQName().getNamespaceURI();
         this.factory = (FOMFactory)parent.getOMFactory();
     }
@@ -63,44 +51,15 @@ public class FOMExtensionIterator extends OMChildrenIterator {
         this.extns = extns;
     }
 
-    /**
-     * Returns <tt>true</tt> if the iteration has more elements. (In other words, returns <tt>true</tt> if <tt>next</tt>
-     * would return an element rather than throwing an exception.)
-     * 
-     * @return Returns <tt>true</tt> if the iterator has more elements.
-     */
-    public boolean hasNext() {
-        while (needToMoveForward) {
-            if (currentChild != null) {
-
-                // check the current node for the criteria
-                if ((currentChild instanceof OMElement) && (isQNamesMatch(((OMElement)currentChild).getQName(),
-                                                                          this.namespace))) {
-                    isMatchingNodeFound = true;
-                    needToMoveForward = false;
-                } else {
-
-                    // get the next named node
-                    currentChild = currentChild.getNextOMSibling();
-                    isMatchingNodeFound = needToMoveForward = !(currentChild == null);
-                }
-            } else {
-                needToMoveForward = false;
-            }
-        }
-        return isMatchingNodeFound;
+    @Override
+    public Object next() {
+        return factory.getElementWrapper((Element)super.next());
     }
 
-    public Object next() {
-
-        // reset the flags
-        needToMoveForward = true;
-        isMatchingNodeFound = false;
-        nextCalled = true;
-        removeCalled = false;
-        lastChild = currentChild;
-        currentChild = currentChild.getNextOMSibling();
-        return factory.getElementWrapper((Element)lastChild);
+    @Override
+    protected boolean matches(OMNode node) {
+        return (node instanceof OMElement) && (isQNamesMatch(((OMElement)node).getQName(),
+                this.namespace));
     }
 
     private boolean isQNamesMatch(QName elementQName, String namespace) {

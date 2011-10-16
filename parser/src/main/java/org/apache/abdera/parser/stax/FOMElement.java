@@ -17,11 +17,11 @@
  */
 package org.apache.abdera.parser.stax;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -525,12 +525,9 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
             return null;
         FOMFactory fomfactory = (FOMFactory)factory;
         Parser parser = fomfactory.newParser();
-        ByteArrayInputStream bais =
-            new ByteArrayInputStream(value.getBytes(getXMLStreamReader().getCharacterEncodingScheme()));
         ParserOptions options = parser.getDefaultParserOptions();
-        options.setCharset(getXMLStreamReader().getCharacterEncodingScheme());
         options.setFactory(fomfactory);
-        Document doc = parser.parse(bais, (baseUri != null) ? baseUri.toString() : null, options);
+        Document doc = parser.parse(new StringReader(value), (baseUri != null) ? baseUri.toString() : null, options);
         return doc.getRoot();
     }
 

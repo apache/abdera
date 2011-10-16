@@ -18,25 +18,12 @@
 package org.apache.abdera.parser.stax;
 
 import org.apache.axiom.om.OMFactory;
-import org.apache.axiom.om.OMMetaFactory;
-import org.apache.axiom.soap.SOAPFactory;
-import org.apache.axiom.soap.impl.llom.soap11.SOAP11Factory;
-import org.apache.axiom.soap.impl.llom.soap12.SOAP12Factory;
+import org.apache.axiom.om.impl.llom.factory.OMLinkedListMetaFactory;
 
-public class FOMMetaFactory implements OMMetaFactory {
+public class FOMMetaFactory extends OMLinkedListMetaFactory {
     private final OMFactory omFactory = new FOMFactory();
-    private final SOAPFactory soap11Factory = new SOAP11Factory();
-    private final SOAPFactory soap12Factory = new SOAP12Factory();
     
     public OMFactory getOMFactory() {
         return omFactory;
-    }
-    
-    public SOAPFactory getSOAP11Factory() {
-        return soap11Factory;
-    }
-    
-    public SOAPFactory getSOAP12Factory() {
-        return soap12Factory;
     }
 }

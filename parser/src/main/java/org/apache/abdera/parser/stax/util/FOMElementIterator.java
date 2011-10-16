@@ -21,10 +21,11 @@ import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Element;
 import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.impl.traverse.OMChildrenIterator;
+import org.apache.axiom.om.OMNode;
+import org.apache.axiom.om.impl.traverse.OMFilterIterator;
 
 @SuppressWarnings("unchecked")
-public class FOMElementIterator extends OMChildrenIterator {
+public class FOMElementIterator extends OMFilterIterator {
 
     /**
      * Field givenQName
@@ -35,23 +36,13 @@ public class FOMElementIterator extends OMChildrenIterator {
     protected Class _class = null;
 
     /**
-     * Field needToMoveForward
-     */
-    private boolean needToMoveForward = true;
-
-    /**
-     * Field isMatchingNodeFound
-     */
-    private boolean isMatchingNodeFound = false;
-
-    /**
      * Constructor OMChildrenQNameIterator.
      * 
-     * @param currentChild
+     * @param parent
      * @param givenQName
      */
     public FOMElementIterator(Element parent, Class _class) {
-        super(((OMElement)parent).getFirstOMChild());
+        super(((OMElement)parent).getChildren());
         this._class = _class;
     }
 
@@ -62,45 +53,9 @@ public class FOMElementIterator extends OMChildrenIterator {
         this.defaultValue = defaultValue;
     }
 
-    /**
-     * Returns <tt>true</tt> if the iteration has more elements. (In other words, returns <tt>true</tt> if <tt>next</tt>
-     * would return an element rather than throwing an exception.)
-     * 
-     * @return Returns <tt>true</tt> if the iterator has more elements.
-     */
-    public boolean hasNext() {
-        while (needToMoveForward) {
-            if (currentChild != null) {
-                // check the current node for the criteria
-                if (currentChild instanceof Element) {
-                    if (((_class != null && _class.isAssignableFrom(currentChild.getClass())) || _class == null) && isMatch((Element)currentChild)) {
-                        isMatchingNodeFound = true;
-                        needToMoveForward = false;
-                    } else {
-                        isMatchingNodeFound = false;
-                        currentChild = currentChild.getNextOMSibling();
-                    }
-                } else {
-                    isMatchingNodeFound = false;
-                    currentChild = currentChild.getNextOMSibling();
-                }
-            } else {
-                needToMoveForward = false;
-            }
-        }
-        return isMatchingNodeFound;
-    }
-
-    public Object next() {
-
-        // reset the flags
-        needToMoveForward = true;
-        isMatchingNodeFound = false;
-        nextCalled = true;
-        removeCalled = false;
-        lastChild = currentChild;
-        currentChild = currentChild.getNextOMSibling();
-        return lastChild;
+    @Override
+    protected boolean matches(OMNode node) {
+        return ((_class != null && _class.isAssignableFrom(node.getClass())) || _class == null) && isMatch((Element)node);
     }
 
     protected boolean isMatch(Element el) {

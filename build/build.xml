@@ -585,8 +585,8 @@ Working directory: ${work}
     <parallel>
       <get src="${geronimo.activation.dir}/${geronimo.activation.jar}" dest="${dependencies}/${geronimo.activation.jar}" usetimestamp="true" />
       <get src="${geronimo.servlet.dir}/${geronimo.servlet.jar}" dest="${dependencies}/${geronimo.servlet.jar}" usetimestamp="true" />
-      <get src="${axiom.dir}/${axiom.api.jar}" dest="${dependencies}/${axiom.api.jar}" usetimestamp="true" />
-      <get src="${axiom.dir}/${axiom.impl.jar}" dest="${dependencies}/${axiom.impl.jar}" usetimestamp="true" />
+      <get src="${axiom.api.dir}/${axiom.api.jar}" dest="${dependencies}/${axiom.api.jar}" usetimestamp="true" />
+      <get src="${axiom.impl.dir}/${axiom.impl.jar}" dest="${dependencies}/${axiom.impl.jar}" usetimestamp="true" />
       <get src="${jaxen.dir}/${jaxen.jar}" dest="${dependencies}/${jaxen.jar}" usetimestamp="true" />
       <get src="${log4j.dir}/${log4j.jar}" dest="${dependencies}/${log4j.jar}" usetimestamp="true" />
       <get src="${stax.dir}/${stax.api.jar}" dest="${dependencies}/${stax.api.jar}" usetimestamp="true" />

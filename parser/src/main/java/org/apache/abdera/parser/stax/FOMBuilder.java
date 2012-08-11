@@ -52,7 +52,6 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
     private final FOMFactory fomfactory;
     private final ParserOptions parserOptions;
     private boolean indoc = false;
-    private int depth = 0;
     private int depthInSkipElement = 0;
     private boolean ignoreWhitespace = false;
     private boolean ignoreComments = false;
@@ -82,22 +81,21 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
 
     @Override
     protected OMNode createOMElement() throws OMException {
-        depth++;
         OMElement node;
         String elementName = parser.getLocalName();
         if (lastNode == null) {
             node = constructNode(null, elementName);
         } else if (lastNode.isComplete()) {
             node = constructNode((OMContainer)lastNode.getParent(), elementName);
-            if (node != null) {
-                ((OMNodeEx)lastNode).setNextOMSibling(node);
-                ((OMNodeEx)node).setPreviousOMSibling(lastNode);
-            }
+            ((OMNodeEx)lastNode).setNextOMSibling(node);
+            ((OMNodeEx)node).setPreviousOMSibling(lastNode);
         } else {
             OMElement e = (OMElement)lastNode;
             node = constructNode((OMElement)lastNode, elementName);
             ((OMContainerEx)e).setFirstChild(node);
         }
+        this.processNamespaceData(node);
+        processAttributes(node);
         return node;
     }
 
@@ -267,10 +265,6 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
         if (element == null) {
             element = new FOMElement(qname, parent, fomfactory, this);
         }
-        if (element != null) {
-            this.processNamespaceData(element);
-            processAttributes(element);
-        }
         return element;
     }
 
@@ -296,20 +290,6 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
                 node.addAttribute(parser.getAttributeLocalName(i), value, namespace);
             }
         }
-    }
-
-    @Override
-    protected void endElement() {
-        if (lastNode != null && lastNode.isComplete()) {
-            OMElement parent = (OMElement)lastNode.getParent();
-            ((OMNodeEx)parent).setComplete(true);
-            lastNode = parent;
-        } else {
-            OMNode e = lastNode;
-            if (e != null)
-                ((OMNodeEx)e).setComplete(true);
-        }
-        depth--;
     }
 
     public <T extends Element> Document<T> getFomDocument() {

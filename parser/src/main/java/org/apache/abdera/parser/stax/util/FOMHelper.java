@@ -25,7 +25,7 @@ import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Link;
 import org.apache.abdera.util.Constants;
-import org.apache.axiom.om.util.UUIDGenerator;
+import org.apache.axiom.util.UIDGenerator;
 
 @SuppressWarnings("unchecked")
 public class FOMHelper implements Constants {
@@ -50,6 +50,6 @@ public class FOMHelper implements Constants {
     }
 
     public static String generateUuid() {
-        return UUIDGenerator.getUUID();
+        return UIDGenerator.generateURNString();
     }
 }

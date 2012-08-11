@@ -292,19 +292,6 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
         }
     }
 
-    @Override
-    protected void endElement() {
-        if (lastNode != null && lastNode.isComplete()) {
-            OMElement parent = (OMElement)lastNode.getParent();
-            ((OMNodeEx)parent).setComplete(true);
-            lastNode = parent;
-        } else {
-            OMNode e = lastNode;
-            if (e != null)
-                ((OMNodeEx)e).setComplete(true);
-        }
-    }
-
     public <T extends Element> Document<T> getFomDocument() {
         while (!indoc && !done) {
             next();

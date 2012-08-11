@@ -87,10 +87,8 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
             node = constructNode(null, elementName);
         } else if (lastNode.isComplete()) {
             node = constructNode((OMContainer)lastNode.getParent(), elementName);
-            if (node != null) {
-                ((OMNodeEx)lastNode).setNextOMSibling(node);
-                ((OMNodeEx)node).setPreviousOMSibling(lastNode);
-            }
+            ((OMNodeEx)lastNode).setNextOMSibling(node);
+            ((OMNodeEx)node).setPreviousOMSibling(lastNode);
         } else {
             OMElement e = (OMElement)lastNode;
             node = constructNode((OMElement)lastNode, elementName);
@@ -265,10 +263,8 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
         if (element == null) {
             element = new FOMElement(qname, parent, fomfactory, this);
         }
-        if (element != null) {
-            this.processNamespaceData(element);
-            processAttributes(element);
-        }
+        this.processNamespaceData(element);
+        processAttributes(element);
         return element;
     }
 

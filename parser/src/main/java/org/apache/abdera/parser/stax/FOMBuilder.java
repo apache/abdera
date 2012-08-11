@@ -94,6 +94,8 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
             node = constructNode((OMElement)lastNode, elementName);
             ((OMContainerEx)e).setFirstChild(node);
         }
+        this.processNamespaceData(node);
+        processAttributes(node);
         return node;
     }
 
@@ -263,8 +265,6 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
         if (element == null) {
             element = new FOMElement(qname, parent, fomfactory, this);
         }
-        this.processNamespaceData(element);
-        processAttributes(element);
         return element;
     }
 

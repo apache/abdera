@@ -79,26 +79,6 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
         return parserOptions;
     }
 
-    @Override
-    protected OMNode createOMElement() throws OMException {
-        OMElement node;
-        String elementName = parser.getLocalName();
-        if (lastNode == null) {
-            node = constructNode(null, elementName);
-        } else if (lastNode.isComplete()) {
-            node = constructNode((OMContainer)lastNode.getParent(), elementName);
-            ((OMNodeEx)lastNode).setNextOMSibling(node);
-            ((OMNodeEx)node).setPreviousOMSibling(lastNode);
-        } else {
-            OMElement e = (OMElement)lastNode;
-            node = constructNode((OMElement)lastNode, elementName);
-            ((OMContainerEx)e).setFirstChild(node);
-        }
-        this.processNamespaceData(node);
-        processAttributes(node);
-        return node;
-    }
-
     protected Text.Type getTextType() {
         Text.Type ttype = Text.Type.TEXT;
         String type = parser.getAttributeValue(null, LN_TYPE);
@@ -251,6 +231,7 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
         return alias != null ? alias : qname;
     }
 
+    @Override
     protected OMElement constructNode(OMContainer parent, String name) {
         OMElement element = null;
         if (!indoc) {

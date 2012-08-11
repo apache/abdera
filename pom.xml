@@ -340,9 +340,7 @@
   							<exclude>**/*TestSuite*</exclude>
   							<exclude>**/*$*</exclude>
   							<exclude>**/*TestAdapter*</exclude>
-  							<exclude>**/FeedValidatorTest.java</exclude>
   							<exclude>**/DSigThirdPartyVerifyTest.java</exclude>
-  							<exclude>**/AtomConformanceTest.java</exclude>
   						</excludes>
   					</configuration>
   				</plugin>

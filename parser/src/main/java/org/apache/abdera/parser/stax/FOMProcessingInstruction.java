@@ -28,12 +28,9 @@ import org.apache.axiom.om.impl.llom.OMProcessingInstructionImpl;
 @SuppressWarnings("unchecked")
 public class FOMProcessingInstruction extends OMProcessingInstructionImpl implements ProcessingInstruction {
 
-    public FOMProcessingInstruction(OMContainer arg0, OMFactory arg1) {
-        super(arg0, arg1);
-    }
-
-    public FOMProcessingInstruction(OMContainer arg0, String arg1, String arg2, OMFactory arg3) {
-        super(arg0, arg1, arg2, arg3);
+    public FOMProcessingInstruction(OMContainer parentNode, String target, String value,
+            OMFactory factory, boolean fromBuilder) {
+        super(parentNode, target, value, factory, fromBuilder);
     }
 
     public <T extends Base> T getParentElement() {

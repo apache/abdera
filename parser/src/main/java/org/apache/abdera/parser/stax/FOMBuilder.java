@@ -52,7 +52,6 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
     private final FOMFactory fomfactory;
     private final ParserOptions parserOptions;
     private boolean indoc = false;
-    private int depth = 0;
     private int depthInSkipElement = 0;
     private boolean ignoreWhitespace = false;
     private boolean ignoreComments = false;
@@ -82,7 +81,6 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
 
     @Override
     protected OMNode createOMElement() throws OMException {
-        depth++;
         OMElement node;
         String elementName = parser.getLocalName();
         if (lastNode == null) {
@@ -309,7 +307,6 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
             if (e != null)
                 ((OMNodeEx)e).setComplete(true);
         }
-        depth--;
     }
 
     public <T extends Element> Document<T> getFomDocument() {

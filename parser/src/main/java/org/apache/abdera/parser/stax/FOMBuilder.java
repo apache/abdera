@@ -20,7 +20,6 @@ package org.apache.abdera.parser.stax;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.abdera.filter.ParseFilter;
@@ -124,53 +123,9 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
      */
     public int next() throws OMException {
         try {
-            if (done) {
-                throw new OMException();
-            }
-            int token = parser.next();
-            if (!cache) {
-                return token;
-            }
-            switch (token) {
-                case XMLStreamConstants.START_ELEMENT:
-                    lastNode = createOMElement();
-                    break;
-                case XMLStreamConstants.START_DOCUMENT:
-                    document.setXMLVersion(parser.getVersion() != null ? parser.getVersion() : "1.0");
-                    document.setCharsetEncoding(parser.getEncoding() != null ? parser.getEncoding() : "utf-8");
-                    document.setStandalone(parser.isStandalone() ? YES : NO);
-                    break;
-                case XMLStreamConstants.CHARACTERS:
-                    lastNode = createOMText(XMLStreamConstants.CHARACTERS);
-                    break;
-                case XMLStreamConstants.CDATA:
-                    lastNode = createOMText(XMLStreamConstants.CDATA);
-                    break;
-                case XMLStreamConstants.END_ELEMENT:
-                    endElement();
-                    break;
-                case XMLStreamConstants.END_DOCUMENT:
-                    done = true;
-                    ((OMContainerEx)this.document).setComplete(true);
-                    break;
-                case XMLStreamConstants.SPACE:
-                    lastNode = createOMText(XMLStreamConstants.SPACE);
-                    break;
-                case XMLStreamConstants.COMMENT:
-                    createComment();
-                    break;
-                case XMLStreamConstants.PROCESSING_INSTRUCTION:
-                    createPI();
-                    break;
-                default:
-                    throw new ParseException();
-            }
-            return token;
-        } catch (ParseException e) {
-            throw e;
+            return super.next();
         } catch (OMException e) {
-            throw new ParseException(e);
-        } catch (Exception e) {
+            // TODO: transforming the OMException here is not ideal!
             throw new ParseException(e);
         }
     }

@@ -57,8 +57,6 @@ public class FOMProcessingInstruction extends OMProcessingInstructionImpl implem
     }
 
     public <T extends ProcessingInstruction> T setText(String text) {
-        if (!isComplete() && builder != null)
-            build();
         setValue(text);
         return (T)this;
     }

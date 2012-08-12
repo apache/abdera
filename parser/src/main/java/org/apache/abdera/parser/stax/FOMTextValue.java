@@ -32,52 +32,52 @@ import org.apache.axiom.om.impl.llom.OMTextImpl;
 @SuppressWarnings("unchecked")
 public class FOMTextValue extends OMTextImpl implements TextValue {
 
-    public FOMTextValue(Object arg0, boolean arg1, OMFactory arg2) {
-        super(arg0, arg1, arg2);
+    public FOMTextValue(Object dataHandler, boolean optimize, OMFactory factory) {
+        super(dataHandler, optimize, factory);
     }
 
-    public FOMTextValue(Object arg0, OMFactory arg1) {
-        super(arg0, arg1);
+    public FOMTextValue(Object dataHandler, OMFactory factory) {
+        super(dataHandler, factory);
     }
 
-    public FOMTextValue(OMContainer arg0, char[] arg1, int arg2, OMFactory arg3) {
-        super(arg0, arg1, arg2, arg3);
+    public FOMTextValue(OMContainer parent, char[] charArray, int nodeType, OMFactory factory) {
+        super(parent, charArray, nodeType, factory);
     }
 
-    public FOMTextValue(OMContainer arg0, QName arg1, int arg2, OMFactory arg3) {
-        super(arg0, arg1, arg2, arg3);
+    public FOMTextValue(OMContainer parent, QName text, int nodeType, OMFactory factory) {
+        super(parent, text, nodeType, factory);
     }
 
-    public FOMTextValue(OMContainer arg0, QName arg1, OMFactory arg2) {
-        super(arg0, arg1, arg2);
+    public FOMTextValue(OMContainer parent, QName text, OMFactory factory) {
+        super(parent, text, factory);
     }
 
-    public FOMTextValue(OMContainer arg0, String arg1, int arg2, OMFactory arg3) {
-        super(arg0, arg1, arg2, arg3);
+    public FOMTextValue(OMContainer parent, String text, int nodeType, OMFactory factory) {
+        super(parent, text, nodeType, factory);
     }
 
-    public FOMTextValue(OMContainer arg0, String arg1, OMFactory arg2) {
-        super(arg0, arg1, arg2);
+    public FOMTextValue(OMContainer parent, String text, OMFactory factory) {
+        super(parent, text, factory);
     }
 
-    public FOMTextValue(OMContainer arg0, String arg1, String arg2, boolean arg3, OMFactory arg4) {
-        super(arg0, arg1, arg2, arg3, arg4);
+    public FOMTextValue(OMContainer parent, String s, String mimeType, boolean optimize, OMFactory factory) {
+        super(parent, s, mimeType, optimize, factory);
     }
 
-    public FOMTextValue(String arg0, int arg1, OMFactory arg2) {
-        super(arg0, arg1, arg2);
+    public FOMTextValue(String text, int nodeType, OMFactory factory) {
+        super(text, nodeType, factory);
     }
 
-    public FOMTextValue(String arg0, OMContainer arg1, OMXMLParserWrapper arg2, OMFactory arg3) {
-        super(arg0, arg1, arg2, arg3);
+    public FOMTextValue(String contentID, OMContainer parent, OMXMLParserWrapper builder, OMFactory factory) {
+        super(contentID, parent, builder, factory);
     }
 
-    public FOMTextValue(String arg0, OMFactory arg1) {
-        super(arg0, arg1);
+    public FOMTextValue(String text, OMFactory factory) {
+        super(text, factory);
     }
 
-    public FOMTextValue(String arg0, String arg1, boolean arg2, OMFactory arg3) {
-        super(arg0, arg1, arg2, arg3);
+    public FOMTextValue(String s, String mimeType, boolean optimize, OMFactory factory) {
+        super(s, mimeType, optimize, factory);
     }
 
     public DataHandler getDataHandler() {

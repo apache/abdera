@@ -21,7 +21,6 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamConstants;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.abdera.filter.ParseFilter;
@@ -32,15 +31,12 @@ import org.apache.abdera.model.Text;
 import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.util.Constants;
-import org.apache.axiom.om.OMConstants;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
-import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
-import org.apache.axiom.om.OMText;
 import org.apache.axiom.om.impl.OMContainerEx;
 import org.apache.axiom.om.impl.OMNodeEx;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
@@ -52,27 +48,15 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
     private final FOMFactory fomfactory;
     private final ParserOptions parserOptions;
     private boolean indoc = false;
-    private int depthInSkipElement = 0;
-    private boolean ignoreWhitespace = false;
-    private boolean ignoreComments = false;
-    private boolean ignorePI = false;
 
     public FOMBuilder(FOMFactory factory, XMLStreamReader parser, ParserOptions parserOptions) {
-        super(factory, parser);
+        super(factory, new FOMStAXFilter(parser, parserOptions));
         this.document = (OMDocument)factory.newDocument();
         this.parserOptions = parserOptions;
         this.fomfactory = factory;
         String enc = parser.getCharacterEncodingScheme();
         document.setCharsetEncoding(enc != null ? enc : "utf-8");
         document.setXMLVersion(parser.getVersion() != null ? parser.getVersion() : "1.0");
-        if (parserOptions != null) {
-            ParseFilter parseFilter = parserOptions.getParseFilter();
-            if (parseFilter != null) {
-                ignoreWhitespace = parseFilter.getIgnoreWhitespace();
-                ignoreComments = parseFilter.getIgnoreComments();
-                ignorePI = parseFilter.getIgnoreProcessingInstructions();
-            }
-        }
     }
 
     public ParserOptions getParserOptions() {
@@ -132,32 +116,6 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
             : true;
     }
 
-    private OMNode applyTextFilter(int type) {
-        if (parserOptions != null) {
-            ParseFilter parseFilter = parserOptions.getParseFilter();
-            if (parseFilter != null) {
-                if (parser.isWhiteSpace() && parseFilter.getIgnoreWhitespace())
-                    return createOMText("", type);
-            }
-        }
-        return createOMText(type);
-    }
-
-    private int getNextElementToParse() throws XMLStreamException {
-        int token = parser.next();
-        if (depthInSkipElement == 0 && token != XMLStreamConstants.START_ELEMENT) {
-            return token;
-        } else if (token == XMLStreamConstants.START_ELEMENT && isAcceptableToParse(parser.getName(), false)
-            && depthInSkipElement == 0) {
-            return token;
-        } else if (token == XMLStreamConstants.START_ELEMENT) {
-            depthInSkipElement++;
-        } else if (token == XMLStreamConstants.END_ELEMENT) { // otherwise skip like crazy
-            depthInSkipElement--;
-        }
-        return getNextElementToParse();
-    }
-
     /**
      * Method next.
      * 
@@ -169,7 +127,7 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
             if (done) {
                 throw new OMException();
             }
-            int token = getNextElementToParse();
+            int token = parser.next();
             if (!cache) {
                 return token;
             }
@@ -183,10 +141,10 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
                     document.setStandalone(parser.isStandalone() ? YES : NO);
                     break;
                 case XMLStreamConstants.CHARACTERS:
-                    lastNode = applyTextFilter(XMLStreamConstants.CHARACTERS);
+                    lastNode = createOMText(XMLStreamConstants.CHARACTERS);
                     break;
                 case XMLStreamConstants.CDATA:
-                    lastNode = applyTextFilter(XMLStreamConstants.CDATA);
+                    lastNode = createOMText(XMLStreamConstants.CDATA);
                     break;
                 case XMLStreamConstants.END_ELEMENT:
                     endElement();
@@ -196,39 +154,13 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
                     ((OMContainerEx)this.document).setComplete(true);
                     break;
                 case XMLStreamConstants.SPACE:
-                    if (!ignoreWhitespace)
-                        lastNode = createOMText(XMLStreamConstants.SPACE);
+                    lastNode = createOMText(XMLStreamConstants.SPACE);
                     break;
                 case XMLStreamConstants.COMMENT:
-                    if (!ignoreComments)
-                        createComment();
-                    break;
-                case XMLStreamConstants.DTD:
-                    // Current StAX cursor model implementations inconsistently handle DTDs.
-                    // Woodstox, for instance, does not provide a means of getting to the complete
-                    // doctype declaration (which is actually valid according to the spec, which
-                    // is broken). The StAX reference impl returns the complete doctype declaration
-                    // despite the fact that doing so is apparently against the spec. We can get
-                    // to the complete declaration in Woodstox if we want to use their proprietary
-                    // extension APIs. It's unclear how other Stax impls handle this. So.. for now,
-                    // we're just going to ignore the DTD. The DTD will still be processed as far
-                    // as entities are concerned, but we will not be able to reserialize the parsed
-                    // document with the DTD. Since very few folks actually use DTD's in feeds
-                    // right now (and we should likely be encouraging folks not to do so), this
-                    // shouldn't be that big of a problem
-                    // if (!parserOptions.getIgnoreDoctype())
-                    // createDTD();
+                    createComment();
                     break;
                 case XMLStreamConstants.PROCESSING_INSTRUCTION:
-                    if (!ignorePI)
-                        createPI();
-                    break;
-                case XMLStreamConstants.ENTITY_REFERENCE:
-                    String val = parserOptions.resolveEntity(super.getName());
-                    if (val == null)
-                        throw new ParseException("Unresolved undeclared entity: " + super.getName());
-                    else
-                        lastNode = createOMText(val, XMLStreamConstants.CHARACTERS);
+                    createPI();
                     break;
                 default:
                     throw new ParseException();
@@ -305,51 +237,5 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
 
     public FOMFactory getFactory() {
         return fomfactory;
-    }
-
-    /**
-     * Method createOMText.
-     * 
-     * @return Returns OMNode.
-     * @throws OMException
-     */
-    protected OMNode createOMText(String value, int textType) throws OMException {
-        OMNode node = null;
-        if (lastNode == null) {
-            return null;
-        } else if (!lastNode.isComplete()) {
-            node = createOMText(value, (OMElement)lastNode, textType);
-        } else {
-            OMContainer parent = lastNode.getParent();
-            if (!(parent instanceof OMDocument)) {
-                node = createOMText(value, (OMElement)parent, textType);
-            }
-        }
-        return node;
-    }
-
-    /**
-     * This method will check whether the text can be optimizable using IS_BINARY flag. If that is set then we try to
-     * get the data handler.
-     * 
-     * @param omElement
-     * @param textType
-     * @return omNode
-     */
-    private OMNode createOMText(String value, OMElement omElement, int textType) {
-        try {
-            // TODO:Check on this. I'm not sure it's actually used
-            // if (isDataHandlerAware && Boolean.TRUE == parser.getProperty(OMConstants.IS_BINARY)) {
-            if (Boolean.TRUE == parser.getProperty(OMConstants.IS_BINARY)) {
-                Object dataHandler = parser.getProperty(OMConstants.DATA_HANDLER);
-                OMText text = new FOMTextValue(dataHandler, true, (OMFactory)this);
-                omElement.addChild(text);
-                return text;
-            } else {
-                return new FOMTextValue(omElement, value, textType, (OMFactory)this.fomfactory);
-            }
-        } catch (IllegalArgumentException e) {
-            return new FOMTextValue(omElement, value, textType, (OMFactory)this.fomfactory);
-        }
     }
 }

@@ -33,20 +33,11 @@ public abstract class BaseParserTestCase {
         return abdera.getParser();
     }
 
-    protected static <T extends Element> Document<T> parse(IRI uri) {
-        try {
-            String uriStr = uri.toString();
-            String path = uriStr.substring(uriStr.indexOf("//") + 1);
-            InputStream stream = BaseParserTestCase.class.getResourceAsStream(path);
-            return getParser().parse(stream, uri.toString());
-        } catch (Exception e) {
-            // when getting it local fails, fall back to getting it from the server
-            try {
-                return getParser().parse(uri.toURL().openStream(), uri.toString());
-            } catch (Exception ex) {
-            }
-        }
-        return null;
+    protected static <T extends Element> Document<T> parse(IRI uri) throws Exception {
+        String uriStr = uri.toString();
+        String path = uriStr.substring(uriStr.indexOf("//") + 1);
+        InputStream stream = BaseParserTestCase.class.getResourceAsStream(path);
+        return getParser().parse(stream, uri.toString());
     }
 
 }

@@ -26,14 +26,14 @@ import org.apache.abdera.model.Element;
 import org.apache.abdera.model.TextValue;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMFactory;
-import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.llom.OMTextImpl;
 
 @SuppressWarnings("unchecked")
 public class FOMTextValue extends OMTextImpl implements TextValue {
 
-    public FOMTextValue(Object dataHandler, boolean optimize, OMFactory factory) {
-        super(dataHandler, optimize, factory);
+    public FOMTextValue(OMContainer parent, Object dataHandler,
+            boolean optimize, OMFactory factory, boolean fromBuilder) {
+        super(parent, dataHandler, optimize, factory, fromBuilder);
     }
 
     public FOMTextValue(Object dataHandler, OMFactory factory) {
@@ -52,8 +52,9 @@ public class FOMTextValue extends OMTextImpl implements TextValue {
         super(parent, text, factory);
     }
 
-    public FOMTextValue(OMContainer parent, String text, int nodeType, OMFactory factory) {
-        super(parent, text, nodeType, factory);
+    public FOMTextValue(OMContainer parent, String text, int nodeType,
+            OMFactory factory, boolean fromBuilder) {
+        super(parent, text, nodeType, factory, fromBuilder);
     }
 
     public FOMTextValue(OMContainer parent, String text, OMFactory factory) {
@@ -66,10 +67,6 @@ public class FOMTextValue extends OMTextImpl implements TextValue {
 
     public FOMTextValue(String text, int nodeType, OMFactory factory) {
         super(text, nodeType, factory);
-    }
-
-    public FOMTextValue(String contentID, OMContainer parent, OMXMLParserWrapper builder, OMFactory factory) {
-        super(contentID, parent, builder, factory);
     }
 
     public FOMTextValue(String text, OMFactory factory) {

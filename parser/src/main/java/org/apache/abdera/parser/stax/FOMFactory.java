@@ -726,7 +726,7 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
 
     @Override
     public OMText createOMText(Object arg0, boolean arg1) {
-        return new FOMTextValue(arg0, arg1, this);
+        return new FOMTextValue(null, arg0, arg1, this, false);
     }
 
     @Override
@@ -746,7 +746,7 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
 
     @Override
     public OMText createOMText(OMContainer arg0, String arg1, int arg2) {
-        return new FOMTextValue(arg0, arg1, arg2, this);
+        return new FOMTextValue(arg0, arg1, arg2, this, false);
     }
 
     @Override
@@ -765,11 +765,6 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
     }
 
     @Override
-    public OMText createOMText(String arg0, OMContainer arg1, OMXMLParserWrapper arg2) {
-        return new FOMTextValue(arg0, arg1, arg2, this);
-    }
-
-    @Override
     public OMText createOMText(String arg0, String arg1, boolean arg2) {
         return new FOMTextValue(arg0, arg1, arg2, this);
     }
@@ -781,12 +776,12 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
 
     @Override
     public OMComment createOMComment(OMContainer arg0, String arg1) {
-        return new FOMComment(arg0, arg1, this);
+        return new FOMComment(arg0, arg1, this, false);
     }
 
     @Override
     public OMProcessingInstruction createOMProcessingInstruction(OMContainer arg0, String arg1, String arg2) {
-        return new FOMProcessingInstruction(arg0, arg1, arg2, this);
+        return new FOMProcessingInstruction(arg0, arg1, arg2, this, false);
     }
 
 }

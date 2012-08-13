@@ -70,14 +70,6 @@ public class FOMDocument<T extends Element> extends OMDocumentImpl implements Do
         super(new FOMFactory());
     }
 
-    protected FOMDocument(OMElement documentElement, OMXMLParserWrapper parserWrapper, OMFactory factory) {
-        super(documentElement, parserWrapper, factory);
-    }
-
-    protected FOMDocument(OMElement documentElement, OMXMLParserWrapper parserWrapper) {
-        super(documentElement, parserWrapper, new FOMFactory());
-    }
-
     protected FOMDocument(OMFactory factory) {
         super(factory);
     }

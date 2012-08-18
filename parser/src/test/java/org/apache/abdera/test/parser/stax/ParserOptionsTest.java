@@ -18,7 +18,13 @@
 package org.apache.abdera.test.parser.stax;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.filter.ParseFilter;
@@ -65,5 +71,18 @@ public class ParserOptionsTest {
         Document<Feed> doc = parser.parse(ParserOptionsTest.class.getResourceAsStream(
                 "/parseroptionstest.xml"), options);
         assertEquals("", doc.getRoot().getEntries().get(0).getSummary());
+    }
+    
+    @Test
+    public void test() {
+        Parser parser = abdera.getParser();
+        ParserOptions options = parser.getDefaultParserOptions();
+        Map<QName,QName> qnameAliases = new HashMap<QName,QName>();
+        qnameAliases.put(new QName("urn:test", "mylink"), new QName("http://www.w3.org/2005/Atom", "link"));
+        options.setQNameAliasMap(qnameAliases);
+        options.setQNameAliasMappingEnabled(true);
+        Document<Feed> doc = parser.parse(ParserOptionsTest.class.getResourceAsStream(
+                "/parseroptionstest.xml"), options);
+        assertFalse(doc.getRoot().getEntries().get(0).getLinks().isEmpty());
     }
 }

@@ -17,6 +17,8 @@
  */
 package org.apache.abdera.parser.stax;
 
+import java.util.Map;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -47,6 +49,7 @@ class FOMStAXFilter extends XMLStreamReaderWrapper {
     private boolean ignorePI = false;
     private int depthInSkipElement;
     private int altEventType;
+    private QName altQName;
     private String altText;
     
     FOMStAXFilter(XMLStreamReader parent, ParserOptions parserOptions) {
@@ -65,6 +68,7 @@ class FOMStAXFilter extends XMLStreamReaderWrapper {
 
     private void resetEvent() {
         altEventType = -1;
+        altQName = null;
         altText = null;
     }
     
@@ -76,6 +80,15 @@ class FOMStAXFilter extends XMLStreamReaderWrapper {
             : true;
     }
 
+    private void translateQName() {
+        if (parserOptions.isQNameAliasMappingEnabled()) {
+            Map<QName,QName> map = parserOptions.getQNameAliasMap();
+            if (map != null) {
+                altQName = map.get(super.getName());
+            }
+        }
+    }
+    
     @Override
     public int next() throws XMLStreamException {
         resetEvent();
@@ -111,6 +124,10 @@ class FOMStAXFilter extends XMLStreamReaderWrapper {
                             depthInSkipElement = 1;
                             continue;
                         }
+                        translateQName();
+                        break;
+                    case END_ELEMENT:
+                        translateQName();
                         break;
                     case SPACE:
                         if (ignoreWhitespace) {
@@ -156,5 +173,20 @@ class FOMStAXFilter extends XMLStreamReaderWrapper {
     @Override
     public String getText() {
         return altText != null ? altText : super.getText();
+    }
+
+    @Override
+    public String getNamespaceURI() {
+        return altQName != null ? altQName.getNamespaceURI() : super.getNamespaceURI();
+    }
+
+    @Override
+    public String getLocalName() {
+        return altQName != null ? altQName.getLocalPart() : super.getLocalName();
+    }
+
+    @Override
+    public QName getName() {
+        return altQName != null ? altQName : super.getName();
     }
 }

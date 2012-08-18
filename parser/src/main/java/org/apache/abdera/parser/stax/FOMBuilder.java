@@ -17,8 +17,6 @@
  */
 package org.apache.abdera.parser.stax;
 
-import java.util.Map;
-
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamReader;
 
@@ -130,14 +128,6 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
         }
     }
 
-    private QName getAlias(QName qname) {
-        Map<QName, QName> map = parserOptions.getQNameAliasMap();
-        if (map == null)
-            return qname;
-        QName alias = map.get(qname);
-        return alias != null ? alias : qname;
-    }
-
     protected OMElement constructNode(OMContainer parent, String name) {
         OMElement element = null;
         if (!indoc) {
@@ -145,9 +135,6 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
             indoc = true;
         }
         QName qname = parser.getName();
-        if (parserOptions.isQNameAliasMappingEnabled()) {
-            qname = getAlias(qname);
-        }
         element = fomfactory.createElement(qname, parent, this);
         if (element == null) {
             element = new FOMElement(qname, parent, fomfactory, this);

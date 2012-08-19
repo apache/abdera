@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <!-- comment -->
     <?pi processing instruction?>
-    <entry>
+    <entry x:attr="value" xmlns:x="urn:test">
         <title>Atom-Powered Robots Run Amok</title>
         <ns:mylink href="http://example.org/2003/12/13/atom03" xmlns:ns="urn:test"/>
         <id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</id>

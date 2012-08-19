@@ -26,7 +26,6 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Link;
-import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -36,21 +35,6 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 public class FOMLink extends FOMExtensibleElement implements Link {
 
     private static final long serialVersionUID = 2239772197929910635L;
-
-    public FOMLink() {
-        super(Constants.LINK);
-    }
-
-    public FOMLink(String href) {
-        this();
-        setHref(href);
-    }
-
-    public FOMLink(String href, String rel) {
-        this();
-        setHref(href);
-        setRel(rel);
-    }
 
     protected FOMLink(String name, OMNamespace namespace, OMContainer parent, OMFactory factory) throws OMException {
         super(name, namespace, parent, factory);

@@ -26,7 +26,6 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.model.Workspace;
-import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -38,15 +37,6 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 public class FOMWorkspace extends FOMExtensibleElement implements Workspace {
 
     private static final long serialVersionUID = -421749865550509424L;
-
-    public FOMWorkspace() {
-        super(Constants.WORKSPACE);
-    }
-
-    public FOMWorkspace(String title) {
-        this();
-        setTitle(title);
-    }
 
     protected FOMWorkspace(String name, OMNamespace namespace, OMContainer parent, OMFactory factory)
         throws OMException {

@@ -34,22 +34,6 @@ public class FOMPerson extends FOMExtensibleElement implements Person {
 
     private static final long serialVersionUID = 2147684807662492625L;
 
-    public FOMPerson(QName qname) {
-        super(qname);
-    }
-
-    public FOMPerson(QName qname, String name) {
-        this(qname);
-        setName(name);
-    }
-
-    public FOMPerson(QName qname, String name, String email, String uri) {
-        this(qname);
-        setName(name);
-        setEmail(email);
-        setUri(uri);
-    }
-
     protected FOMPerson(String name, OMNamespace namespace, OMContainer parent, OMFactory factory) throws OMException {
         super(name, namespace, parent, factory);
     }

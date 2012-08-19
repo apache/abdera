@@ -36,35 +36,6 @@ public class FOMDateTime extends FOMElement implements DateTime {
     private static final long serialVersionUID = -6611503566172011733L;
     private AtomDate value;
 
-    public FOMDateTime(QName qname) {
-        super(qname);
-    }
-
-    public FOMDateTime(QName qname, Date date) {
-        this(qname);
-        setDate(date);
-    }
-
-    public FOMDateTime(QName qname, Calendar calendar) {
-        this(qname);
-        setCalendar(calendar);
-    }
-
-    public FOMDateTime(QName qname, String value) {
-        this(qname);
-        setString(value);
-    }
-
-    public FOMDateTime(QName qname, long time) {
-        this(qname);
-        setTime(time);
-    }
-
-    public FOMDateTime(QName qname, AtomDate atomDate) {
-        this(qname);
-        setValue(atomDate);
-    }
-
     protected FOMDateTime(String name, OMNamespace namespace, OMContainer parent, OMFactory factory) throws OMException {
         super(name, namespace, parent, factory);
     }

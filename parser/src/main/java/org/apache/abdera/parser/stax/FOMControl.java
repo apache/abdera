@@ -20,7 +20,6 @@ package org.apache.abdera.parser.stax;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.model.Control;
-import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -31,10 +30,6 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 public class FOMControl extends FOMExtensibleElement implements Control {
 
     private static final long serialVersionUID = -3816493378953555206L;
-
-    public FOMControl() {
-        super(Constants.CONTROL);
-    }
 
     protected FOMControl(String name, OMNamespace namespace, OMContainer parent, OMFactory factory) throws OMException {
         super(name, namespace, parent, factory);

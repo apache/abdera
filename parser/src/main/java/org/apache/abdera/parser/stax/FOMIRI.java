@@ -32,15 +32,6 @@ public class FOMIRI extends FOMElement implements IRIElement {
 
     private static final long serialVersionUID = -8434722753544181200L;
 
-    public FOMIRI(QName qname) {
-        super(qname);
-    }
-
-    public FOMIRI(QName qname, String value) {
-        this(qname);
-        setValue(value);
-    }
-
     protected FOMIRI(String name, OMNamespace namespace, OMContainer parent, OMFactory factory) throws OMException {
         super(name, namespace, parent, factory);
     }

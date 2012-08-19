@@ -26,7 +26,6 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Div;
-import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -38,10 +37,6 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 public class FOMDiv extends FOMExtensibleElement implements Div {
 
     private static final long serialVersionUID = -2319449893405850433L;
-
-    public FOMDiv() {
-        super(Constants.DIV);
-    }
 
     protected FOMDiv(String name, OMNamespace namespace, OMContainer parent, OMFactory factory) throws OMException {
         super(name, namespace, parent, factory);

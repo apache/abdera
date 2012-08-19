@@ -33,22 +33,6 @@ public class FOMCategory extends FOMExtensibleElement implements Category {
 
     private static final long serialVersionUID = -4313042828936786803L;
 
-    public FOMCategory() {
-        super(Constants.CATEGORY);
-    }
-
-    public FOMCategory(String term) {
-        this();
-        setTerm(term);
-    }
-
-    public FOMCategory(String term, String scheme, String label) {
-        this();
-        setTerm(term);
-        setScheme(scheme);
-        setLabel(label);
-    }
-
     protected FOMCategory(String name, OMNamespace namespace, OMContainer parent, OMFactory factory) throws OMException {
         super(name, namespace, parent, factory);
     }

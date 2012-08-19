@@ -33,17 +33,6 @@ public class FOMGenerator extends FOMElement implements Generator {
 
     private static final long serialVersionUID = -8441971633807437976L;
 
-    public FOMGenerator() {
-        super(Constants.GENERATOR);
-    }
-
-    public FOMGenerator(String value, String version, String uri) {
-        this();
-        ((Element)this).setText(value);
-        setVersion(version);
-        setUri(uri);
-    }
-
     protected FOMGenerator(String name, OMNamespace namespace, OMContainer parent, OMFactory factory)
         throws OMException {
         super(name, namespace, parent, factory);

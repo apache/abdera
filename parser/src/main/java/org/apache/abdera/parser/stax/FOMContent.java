@@ -44,11 +44,6 @@ public class FOMContent extends FOMExtensibleElement implements Content {
     private static final long serialVersionUID = -5499917654824498563L;
     protected Type type = Type.TEXT;
 
-    public FOMContent(Content.Type type) {
-        super(Constants.CONTENT);
-        init(type);
-    }
-
     protected FOMContent(String name, OMNamespace namespace, Type type, OMContainer parent, OMFactory factory)
         throws OMException {
         super(name, namespace, parent, factory);

@@ -39,10 +39,6 @@ public class FOMExtensibleElement extends FOMElement implements ExtensibleElemen
 
     private static final long serialVersionUID = -1652430686161947531L;
 
-    public FOMExtensibleElement(QName qname) {
-        super(qname);
-    }
-
     protected FOMExtensibleElement(String name, OMNamespace namespace, OMContainer parent, OMFactory factory)
         throws OMException {
         super(name, namespace, parent, factory);

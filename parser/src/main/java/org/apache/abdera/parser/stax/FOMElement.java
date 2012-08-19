@@ -76,10 +76,6 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
 
     private static final long serialVersionUID = 8024257594220911953L;
 
-    public FOMElement(QName qname) {
-        super(qname, null, null);
-    }
-
     protected FOMElement(String name, OMNamespace namespace, OMContainer parent, OMFactory factory) throws OMException {
         super(name, namespace, parent, factory);
     }

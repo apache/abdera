@@ -180,7 +180,6 @@ public class FOMExtensibleElement extends FOMElement implements ExtensibleElemen
         if (el == null) {
             addExtension(element);
         } else {
-            element.setParentElement(this);
             el.insertSiblingBefore((OMElement)getInternal(element));
         }
         return (T)element;

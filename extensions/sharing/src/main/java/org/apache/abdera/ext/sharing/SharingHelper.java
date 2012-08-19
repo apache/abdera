@@ -335,8 +335,8 @@ public class SharingHelper {
         Feed feed = (Feed)base;
         Unpublished unpub = getUnpublished(feed, true);
         Entry newentry = (Entry)entry.clone();
-        newentry.setParentElement(unpub);
-        unpub.addEntry(newentry);
+        // Use addExtension instead of addEntry because addEntry clones the node
+        unpub.addExtension(newentry);
         entry.discard();
         return newentry;
     }
@@ -350,7 +350,6 @@ public class SharingHelper {
         Unpublished unpub = (Unpublished)base;
         Feed feed = unpub.getParentElement();
         Entry newentry = (Entry)entry.clone();
-        newentry.setParentElement(feed);
         feed.addEntry(newentry);
         entry.discard();
         return newentry;

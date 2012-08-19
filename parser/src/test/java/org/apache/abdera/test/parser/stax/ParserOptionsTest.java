@@ -74,7 +74,7 @@ public class ParserOptionsTest {
     }
     
     @Test
-    public void test() {
+    public void testQNameAliasMapping() {
         Parser parser = abdera.getParser();
         ParserOptions options = parser.getDefaultParserOptions();
         Map<QName,QName> qnameAliases = new HashMap<QName,QName>();

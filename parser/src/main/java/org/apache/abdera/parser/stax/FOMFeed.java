@@ -54,16 +54,12 @@ public class FOMFeed extends FOMSource implements Feed {
         super(qname, parent, factory);
     }
 
-    protected FOMFeed(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
-        super(qname, parent, factory, builder);
+    protected FOMFeed(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
+        super(localName, parent, factory, builder);
     }
 
     protected FOMFeed(OMContainer parent, OMFactory factory) throws OMException {
         super(FEED, parent, factory);
-    }
-
-    protected FOMFeed(OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) throws OMException {
-        super(FEED, parent, factory, builder);
     }
 
     public List<Entry> getEntries() {

@@ -47,17 +47,13 @@ public class FOMWorkspace extends FOMExtensibleElement implements Workspace {
         super(qname, parent, factory);
     }
 
-    protected FOMWorkspace(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder)
+    protected FOMWorkspace(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder)
         throws OMException {
-        super(qname, parent, factory, builder);
+        super(localName, parent, factory, builder);
     }
 
     protected FOMWorkspace(OMContainer parent, OMFactory factory) throws OMException {
         super(WORKSPACE, parent, factory);
-    }
-
-    protected FOMWorkspace(OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) throws OMException {
-        super(WORKSPACE, parent, factory, builder);
     }
 
     public String getTitle() {

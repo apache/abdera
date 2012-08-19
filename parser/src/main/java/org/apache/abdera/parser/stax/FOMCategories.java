@@ -53,17 +53,13 @@ public class FOMCategories extends FOMExtensibleElement implements Categories {
         init();
     }
 
-    protected FOMCategories(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
-        super(qname, parent, factory, builder);
+    protected FOMCategories(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
+        super(localName, parent, factory, builder);
     }
 
     protected FOMCategories(OMContainer parent, OMFactory factory) throws OMException {
         super(CATEGORIES, parent, factory);
         init();
-    }
-
-    protected FOMCategories(OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) throws OMException {
-        super(CATEGORIES, parent, factory, builder);
     }
 
     private void init() {

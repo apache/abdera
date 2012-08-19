@@ -44,9 +44,9 @@ public class FOMDateTime extends FOMElement implements DateTime {
         super(qname, parent, factory);
     }
 
-    protected FOMDateTime(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder)
+    protected FOMDateTime(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder)
         throws OMException {
-        super(qname, parent, factory, builder);
+        super(localName, parent, factory, builder);
     }
 
     public AtomDate getValue() {

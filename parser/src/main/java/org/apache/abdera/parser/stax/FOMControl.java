@@ -39,12 +39,8 @@ public class FOMControl extends FOMExtensibleElement implements Control {
         super(qname, parent, factory);
     }
 
-    protected FOMControl(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
-        super(qname, parent, factory, builder);
-    }
-
-    protected FOMControl(OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) throws OMException {
-        super(CONTROL, parent, factory, builder);
+    protected FOMControl(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
+        super(localName, parent, factory, builder);
     }
 
     protected FOMControl(OMContainer parent, OMFactory factory) throws OMException {

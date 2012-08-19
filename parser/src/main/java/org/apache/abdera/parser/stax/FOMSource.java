@@ -61,17 +61,13 @@ public class FOMSource extends FOMExtensibleElement implements Source {
         super(SOURCE, parent, factory);
     }
 
-    protected FOMSource(OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) throws OMException {
-        super(SOURCE, parent, factory, builder);
-    }
-
     protected FOMSource(QName qname, OMContainer parent, OMFactory factory) throws OMException {
         super(qname, parent, factory);
     }
 
-    protected FOMSource(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder)
+    protected FOMSource(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder)
         throws OMException {
-        super(qname, parent, factory, builder);
+        super(localName, parent, factory, builder);
     }
 
     public Person getAuthor() {

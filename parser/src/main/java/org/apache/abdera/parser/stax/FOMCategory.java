@@ -22,7 +22,6 @@ import javax.xml.namespace.QName;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Element;
-import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -41,16 +40,12 @@ public class FOMCategory extends FOMExtensibleElement implements Category {
         super(qname, parent, factory);
     }
 
-    protected FOMCategory(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
-        super(qname, parent, factory, builder);
+    protected FOMCategory(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
+        super(localName, parent, factory, builder);
     }
 
     protected FOMCategory(OMContainer parent, OMFactory factory) {
         super(CATEGORY, parent, factory);
-    }
-
-    protected FOMCategory(OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
-        super(CATEGORY, parent, factory, builder);
     }
 
     public String getTerm() {

@@ -73,16 +73,12 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
         super(qname, parent, factory);
     }
 
-    protected FOMEntry(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
-        super(qname, parent, factory, builder);
+    protected FOMEntry(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
+        super(localName, parent, factory, builder);
     }
 
     protected FOMEntry(OMContainer parent, OMFactory factory) throws OMException {
         super(ENTRY, parent, factory);
-    }
-
-    protected FOMEntry(OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) throws OMException {
-        super(ENTRY, parent, factory, builder);
     }
 
     public Person getAuthor() {

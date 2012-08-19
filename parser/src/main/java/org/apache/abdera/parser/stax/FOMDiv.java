@@ -46,8 +46,8 @@ public class FOMDiv extends FOMExtensibleElement implements Div {
         super(qname, parent, factory);
     }
 
-    protected FOMDiv(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) throws OMException {
-        super(qname, parent, factory, builder);
+    protected FOMDiv(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) throws OMException {
+        super(localName, parent, factory, builder);
     }
 
     public String[] getXhtmlClass() {

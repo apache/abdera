@@ -84,9 +84,8 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
         super(qname.getLocalPart(), getOrCreateNamespace(qname, parent, factory), parent, factory);
     }
 
-    protected FOMElement(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
-        super(qname.getLocalPart(), factory.createOMNamespace(qname.getNamespaceURI(), qname.getPrefix()), parent,
-              builder, factory);
+    protected FOMElement(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
+        super(localName, null, parent, builder, factory);
     }
 
     private static OMNamespace getOrCreateNamespace(QName qname, OMContainer parent, OMFactory factory) {

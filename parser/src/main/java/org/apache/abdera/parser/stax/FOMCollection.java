@@ -47,17 +47,6 @@ public class FOMCollection extends FOMExtensibleElement implements Collection {
 
     private static final long serialVersionUID = -5291734055253987136L;
 
-    public FOMCollection() {
-        super(Constants.COLLECTION);
-    }
-
-    public FOMCollection(String title, String href, String[] accepts) {
-        this();
-        setTitle(title);
-        setHref(href);
-        setAccept(accepts);
-    }
-
     protected FOMCollection(String name, OMNamespace namespace, OMContainer parent, OMFactory factory)
         throws OMException {
         super(name, namespace, parent, factory);

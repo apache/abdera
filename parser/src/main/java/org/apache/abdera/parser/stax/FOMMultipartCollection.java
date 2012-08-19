@@ -17,17 +17,6 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 
 public class FOMMultipartCollection extends FOMCollection {
 
-    public FOMMultipartCollection() {
-        super();
-    }
-
-    public FOMMultipartCollection(String title, String href, Map<String, String> accepts) {
-        this();
-        setTitle(title);
-        setHref(href);
-        setAccept(accepts);
-    }
-
     protected FOMMultipartCollection(QName qname, OMContainer parent, OMFactory factory) {
         super(qname, parent, factory);
     }

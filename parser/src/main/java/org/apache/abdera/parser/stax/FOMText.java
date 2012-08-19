@@ -38,11 +38,6 @@ public class FOMText extends FOMElement implements Text {
     private static final long serialVersionUID = 5177795905116574120L;
     protected Type type = Type.TEXT;
 
-    public FOMText(QName qname, Text.Type type) {
-        super(qname);
-        init(type);
-    }
-
     protected FOMText(Type type, String name, OMNamespace namespace, OMContainer parent, OMFactory factory)
         throws OMException {
         super(name, namespace, parent, factory);

@@ -40,7 +40,6 @@ import org.apache.abdera.model.Person;
 import org.apache.abdera.model.Source;
 import org.apache.abdera.model.Text;
 import org.apache.abdera.parser.stax.util.FOMHelper;
-import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -53,10 +52,6 @@ import org.apache.axiom.om.OMXMLParserWrapper;
 public class FOMSource extends FOMExtensibleElement implements Source {
 
     private static final long serialVersionUID = 9153127297531238021L;
-
-    public FOMSource() {
-        super(Constants.SOURCE);
-    }
 
     protected FOMSource(String name, OMNamespace namespace, OMContainer parent, OMFactory factory) throws OMException {
         super(name, namespace, parent, factory);

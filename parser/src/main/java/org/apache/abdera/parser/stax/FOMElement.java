@@ -77,15 +77,15 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
     private static final long serialVersionUID = 8024257594220911953L;
 
     protected FOMElement(String name, OMNamespace namespace, OMContainer parent, OMFactory factory) throws OMException {
-        super(name, namespace, parent, factory);
+        super(parent, name, namespace, null, factory, true);
     }
 
     protected FOMElement(QName qname, OMContainer parent, OMFactory factory) throws OMException {
-        super(qname.getLocalPart(), getOrCreateNamespace(qname, parent, factory), parent, factory);
+        super(parent, qname.getLocalPart(), getOrCreateNamespace(qname, parent, factory), null, factory, true);
     }
 
     protected FOMElement(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
-        super(localName, null, parent, builder, factory);
+        super(parent, localName, null, builder, factory, false);
     }
 
     private static OMNamespace getOrCreateNamespace(QName qname, OMContainer parent, OMFactory factory) {

@@ -28,12 +28,9 @@ import org.apache.axiom.om.impl.llom.OMCommentImpl;
 @SuppressWarnings("unchecked")
 public class FOMComment extends OMCommentImpl implements Comment {
 
-    public FOMComment(OMContainer parent, OMFactory factory) {
-        super(parent, factory);
-    }
-
-    public FOMComment(OMContainer parent, String value, OMFactory factory) {
-        super(parent, value, factory);
+    public FOMComment(OMContainer parent, String contentText,
+            OMFactory factory, boolean fromBuilder) {
+        super(parent, contentText, factory, fromBuilder);
     }
 
     public String getText() {

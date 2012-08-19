@@ -192,10 +192,12 @@ public class FOMDocument<T extends Element> extends OMDocumentImpl implements Do
                     OMComment comment = (OMComment)node;
                     factory.createOMComment(omdoc, comment.getValue());
                     break;
-                case OMNode.DTD_NODE:
-                    OMDocType doctype = (OMDocType)node;
-                    factory.createOMDocType(omdoc, doctype.getValue());
-                    break;
+                // TODO: Decide what to do with this code; it will no longer work in Axiom 1.2.14 (because of AXIOM-437).
+                //       On the other hand, since we filter out DTDs, this code is never triggered.
+//                case OMNode.DTD_NODE:
+//                    OMDocType doctype = (OMDocType)node;
+//                    factory.createOMDocType(omdoc, doctype.getValue());
+//                    break;
                 case OMNode.ELEMENT_NODE:
                     Element el = (Element)node;
                     omdoc.addChild((OMNode)el.clone());

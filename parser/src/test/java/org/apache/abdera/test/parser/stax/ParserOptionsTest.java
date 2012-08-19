@@ -18,14 +18,23 @@
 package org.apache.abdera.test.parser.stax;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
 
 import org.apache.abdera.Abdera;
 import org.apache.abdera.filter.ParseFilter;
 import org.apache.abdera.model.Document;
+import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
 import org.apache.abdera.parser.Parser;
 import org.apache.abdera.parser.ParserOptions;
+import org.apache.abdera.util.filter.AbstractParseFilter;
 import org.junit.Test;
 
 public class ParserOptionsTest {
@@ -65,5 +74,38 @@ public class ParserOptionsTest {
         Document<Feed> doc = parser.parse(ParserOptionsTest.class.getResourceAsStream(
                 "/parseroptionstest.xml"), options);
         assertEquals("", doc.getRoot().getEntries().get(0).getSummary());
+    }
+    
+    @Test
+    public void testAttributeFiltering() {
+        final QName filteredAttribute = new QName("urn:test", "attr");
+        Parser parser = abdera.getParser();
+        ParserOptions options = parser.getDefaultParserOptions();
+        options.setParseFilter(new AbstractParseFilter() {
+            public boolean acceptable(QName qname) {
+                return true;
+            }
+
+            public boolean acceptable(QName qname, QName attribute) {
+                return !filteredAttribute.equals(attribute);
+            }
+        });
+        Document<Feed> doc = parser.parse(ParserOptionsTest.class.getResourceAsStream(
+                "/parseroptionstest.xml"), options);
+        Entry entry = doc.getRoot().getEntries().get(0);
+        assertNull(entry.getAttributeValue(filteredAttribute));
+    }
+    
+    @Test
+    public void testQNameAliasMapping() {
+        Parser parser = abdera.getParser();
+        ParserOptions options = parser.getDefaultParserOptions();
+        Map<QName,QName> qnameAliases = new HashMap<QName,QName>();
+        qnameAliases.put(new QName("urn:test", "mylink"), new QName("http://www.w3.org/2005/Atom", "link"));
+        options.setQNameAliasMap(qnameAliases);
+        options.setQNameAliasMappingEnabled(true);
+        Document<Feed> doc = parser.parse(ParserOptionsTest.class.getResourceAsStream(
+                "/parseroptionstest.xml"), options);
+        assertFalse(doc.getRoot().getEntries().get(0).getLinks().isEmpty());
     }
 }

@@ -17,12 +17,9 @@
  */
 package org.apache.abdera.parser.stax;
 
-import java.util.Map;
-
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.abdera.filter.ParseFilter;
 import org.apache.abdera.model.Content;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Element;
@@ -34,12 +31,10 @@ import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
-import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.impl.OMContainerEx;
 import org.apache.axiom.om.impl.OMNodeEx;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
-import org.apache.axiom.om.impl.util.OMSerializerUtil;
 
 @SuppressWarnings( {"unchecked", "deprecation"})
 public class FOMBuilder extends StAXOMBuilder implements Constants {
@@ -87,14 +82,6 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
         return ctype;
     }
 
-    private boolean isAcceptableToParse(QName qname, boolean attribute) {
-        if (parserOptions == null)
-            return true;
-        ParseFilter filter = parserOptions.getParseFilter();
-        return (filter != null) ? (!attribute) ? filter.acceptable(qname) : filter.acceptable(parser.getName(), qname)
-            : true;
-    }
-
     /**
      * Method next.
      * 
@@ -110,14 +97,6 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
         }
     }
 
-    private QName getAlias(QName qname) {
-        Map<QName, QName> map = parserOptions.getQNameAliasMap();
-        if (map == null)
-            return qname;
-        QName alias = map.get(qname);
-        return alias != null ? alias : qname;
-    }
-
     @Override
     protected OMElement constructNode(OMContainer parent, String name) {
         OMElement element = null;
@@ -126,38 +105,11 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
             indoc = true;
         }
         QName qname = parser.getName();
-        if (parserOptions.isQNameAliasMappingEnabled()) {
-            qname = getAlias(qname);
-        }
         element = fomfactory.createElement(qname, parent, this);
         if (element == null) {
             element = new FOMElement(qname, parent, fomfactory, this);
         }
         return element;
-    }
-
-    @Override
-    protected void processAttributes(OMElement node) {
-        int attribCount = parser.getAttributeCount();
-        for (int i = 0; i < attribCount; i++) {
-            QName attr = parser.getAttributeName(i);
-            if (isAcceptableToParse(attr, true)) {
-                String uri = parser.getAttributeNamespace(i);
-                String prefix = parser.getAttributePrefix(i);
-                OMNamespace namespace = null;
-                if (uri != null && uri.length() > 0) {
-                    namespace = node.findNamespace(uri, prefix);
-                    if (namespace == null) {
-                        if (prefix == null || "".equals(prefix)) {
-                            prefix = OMSerializerUtil.getNextNSPrefix();
-                        }
-                        namespace = node.declareNamespace(uri, prefix);
-                    }
-                }
-                String value = parser.getAttributeValue(i);
-                node.addAttribute(parser.getAttributeLocalName(i), value, namespace);
-            }
-        }
     }
 
     public <T extends Element> Document<T> getFomDocument() {

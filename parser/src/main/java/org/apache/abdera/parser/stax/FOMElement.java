@@ -260,7 +260,7 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
                 }
                 if (attr != null)
                     addAttribute(attr);
-            } else {
+            } else if (attr != null) {
                 removeAttribute(attr);
             }
         }

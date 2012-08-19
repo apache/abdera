@@ -105,16 +105,8 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
         return doc;
     }
 
-    public Service newService(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMService(qname, parent, this, parserWrapper);
-    }
-
     public Service newService(Base parent) {
         return new FOMService((OMContainer)parent, this);
-    }
-
-    public Workspace newWorkspace(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMWorkspace(qname, parent, this, parserWrapper);
     }
 
     public Workspace newWorkspace() {
@@ -123,10 +115,6 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
 
     public Workspace newWorkspace(Element parent) {
         return new FOMWorkspace((OMContainer)parent, this);
-    }
-
-    public Collection newCollection(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMCollection(qname, parent, this, parserWrapper);
     }
 
     public Collection newCollection() {
@@ -156,24 +144,12 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
         return newService(doc);
     }
 
-    public Feed newFeed(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMFeed(qname, parent, this, parserWrapper);
-    }
-
     public Feed newFeed(Base parent) {
         return new FOMFeed((OMContainer)parent, this);
     }
 
-    public Entry newEntry(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMEntry(qname, parent, this, parserWrapper);
-    }
-
     public Entry newEntry(Base parent) {
         return new FOMEntry((OMContainer)parent, this);
-    }
-
-    public Category newCategory(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMCategory(qname, parent, this, parserWrapper);
     }
 
     public Category newCategory() {
@@ -182,12 +158,6 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
 
     public Category newCategory(Element parent) {
         return new FOMCategory((OMContainer)parent, this);
-    }
-
-    public Content newContent(QName qname, Type type, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        if (type == null)
-            type = Content.Type.TEXT;
-        return new FOMContent(qname, type, parent, this, parserWrapper);
     }
 
     public Content newContent() {
@@ -220,16 +190,8 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
         return content;
     }
 
-    public DateTime newDateTimeElement(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMDateTime(qname, parent, this, parserWrapper);
-    }
-
     public DateTime newDateTime(QName qname, Element parent) {
         return new FOMDateTime(qname, (OMContainer)parent, this);
-    }
-
-    public Generator newGenerator(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMGenerator(qname, parent, this, parserWrapper);
     }
 
     public Generator newDefaultGenerator() {
@@ -252,10 +214,6 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
         return new FOMGenerator((OMContainer)parent, this);
     }
 
-    public IRIElement newID(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMIRI(qname, parent, this, parserWrapper);
-    }
-
     public IRIElement newID() {
         return newID(null);
     }
@@ -264,16 +222,8 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
         return new FOMIRI(Constants.ID, (OMContainer)parent, this);
     }
 
-    public IRIElement newURIElement(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMIRI(qname, parent, this, parserWrapper);
-    }
-
     public IRIElement newIRIElement(QName qname, Element parent) {
         return new FOMIRI(qname, (OMContainer)parent, this);
-    }
-
-    public Link newLink(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMLink(qname, parent, this, parserWrapper);
     }
 
     public Link newLink() {
@@ -284,16 +234,8 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
         return new FOMLink((OMContainer)parent, this);
     }
 
-    public Person newPerson(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMPerson(qname, parent, this, parserWrapper);
-    }
-
     public Person newPerson(QName qname, Element parent) {
         return new FOMPerson(qname, (OMContainer)parent, this);
-    }
-
-    public Source newSource(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMSource(qname, parent, this, parserWrapper);
     }
 
     public Source newSource() {
@@ -302,12 +244,6 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
 
     public Source newSource(Element parent) {
         return new FOMSource((OMContainer)parent, this);
-    }
-
-    public Text newText(QName qname, Text.Type type, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        if (type == null)
-            type = Text.Type.TEXT;
-        return new FOMText(type, qname, parent, this, parserWrapper);
     }
 
     public Text newText(QName qname, Text.Type type) {
@@ -329,30 +265,13 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
     }
 
     public <T extends Element> T newExtensionElement(QName qname) {
-        return (T)newExtensionElement(qname, (OMContainer)null);
+        return (T)newExtensionElement(qname, null);
     }
 
     public <T extends Element> T newExtensionElement(QName qname, Base parent) {
-        return (T)newExtensionElement(qname, (OMContainer)parent);
-    }
-
-    private <T extends Element> T newExtensionElement(QName qname, OMContainer parent) {
         String ns = qname.getNamespaceURI();
-        Element el = newExtensionElement(qname, parent, null);
+        Element el = (Element)createElement(qname, (OMContainer)parent, this, null);
         return (T)((ATOM_NS.equals(ns) || APP_NS.equals(ns)) ? el : factoriesMap.getElementWrapper(el));
-    }
-
-    private <T extends Element> T newExtensionElement(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-
-        // Element element = (parserWrapper == null) ?
-        // new FOMExtensibleElement(qname, parent, this) :
-        // new FOMExtensibleElement(qname, parent, this, parserWrapper);
-
-        Element element =
-            (parserWrapper == null) ? (Element)createElement(qname, parent, this, null)
-                : (Element)createElement(qname, parent, (FOMBuilder)parserWrapper);
-
-        return (T)element;
     }
 
     public Control newControl() {
@@ -361,10 +280,6 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
 
     public Control newControl(Element parent) {
         return new FOMControl((OMContainer)parent, this);
-    }
-
-    public Control newControl(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMControl(qname, parent, this, parserWrapper);
     }
 
     public DateTime newPublished() {
@@ -519,14 +434,6 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
         return new FOMDiv(DIV, (OMContainer)parent, this);
     }
 
-    public Div newDiv(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMDiv(qname, parent, this, parserWrapper);
-    }
-
-    public Element newElement(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMExtensibleElement(qname, parent, this, parserWrapper);
-    }
-
     protected OMElement createElement(QName qname, OMContainer parent, OMFactory factory, Object objecttype) {
         OMElement element = null;
         OMNamespace namespace = this.createOMNamespace(qname.getNamespaceURI(), qname.getPrefix());
@@ -602,68 +509,78 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
     protected OMElement createElement(QName qname, OMContainer parent, FOMBuilder builder) {
         OMElement element = null;
         if (FEED.equals(qname)) {
-            element = (OMElement)newFeed(qname, parent, builder);
+            element = new FOMFeed(qname.getLocalPart(), parent, this, builder);
         } else if (SERVICE.equals(qname) || PRE_RFC_SERVICE.equals(qname)) {
-            element = (OMElement)newService(qname, parent, builder);
+            element = new FOMService(qname.getLocalPart(), parent, this, builder);
         } else if (ENTRY.equals(qname)) {
-            element = (OMElement)newEntry(qname, parent, builder);
+            element = new FOMEntry(qname.getLocalPart(), parent, this, builder);
         } else if (AUTHOR.equals(qname)) {
-            element = (OMElement)newPerson(qname, parent, builder);
+            element = new FOMPerson(qname.getLocalPart(), parent, this, builder);
         } else if (CATEGORY.equals(qname)) {
-            element = (OMElement)newCategory(qname, parent, builder);
+            element = new FOMCategory(qname.getLocalPart(), parent, this, builder);
         } else if (CONTENT.equals(qname)) {
             Content.Type type = builder.getContentType();
-            element = (OMElement)newContent(qname, type, parent, builder);
+            if (type == null)
+                type = Content.Type.TEXT;
+            element = new FOMContent(qname.getLocalPart(), type, parent, this, builder);
         } else if (CONTRIBUTOR.equals(qname)) {
-            element = (OMElement)newPerson(qname, parent, builder);
+            element = new FOMPerson(qname.getLocalPart(), parent, this, builder);
         } else if (GENERATOR.equals(qname)) {
-            element = (OMElement)newGenerator(qname, parent, builder);
+            element = new FOMGenerator(qname.getLocalPart(), parent, this, builder);
         } else if (ICON.equals(qname)) {
-            element = (OMElement)newURIElement(qname, parent, builder);
+            element = new FOMIRI(qname.getLocalPart(), parent, this, builder);
         } else if (ID.equals(qname)) {
-            element = (OMElement)newID(qname, parent, builder);
+            element = new FOMIRI(qname.getLocalPart(), parent, this, builder);
         } else if (LOGO.equals(qname)) {
-            element = (OMElement)newURIElement(qname, parent, builder);
+            element = new FOMIRI(qname.getLocalPart(), parent, this, builder);
         } else if (LINK.equals(qname)) {
-            element = (OMElement)newLink(qname, parent, builder);
+            element = new FOMLink(qname.getLocalPart(), parent, this, builder);
         } else if (PUBLISHED.equals(qname)) {
-            element = (OMElement)newDateTimeElement(qname, parent, builder);
+            element = new FOMDateTime(qname.getLocalPart(), parent, this, builder);
         } else if (RIGHTS.equals(qname)) {
             Text.Type type = builder.getTextType();
-            element = (OMElement)newText(qname, type, parent, builder);
+            if (type == null)
+                type = Text.Type.TEXT;
+            element = new FOMText(type, qname.getLocalPart(), parent, this, builder);
         } else if (SOURCE.equals(qname)) {
-            element = (OMElement)newSource(qname, parent, builder);
+            element = new FOMSource(qname.getLocalPart(), parent, this, builder);
         } else if (SUBTITLE.equals(qname)) {
             Text.Type type = builder.getTextType();
-            element = (OMElement)newText(qname, type, parent, builder);
+            if (type == null)
+                type = Text.Type.TEXT;
+            element = new FOMText(type, qname.getLocalPart(), parent, this, builder);
         } else if (SUMMARY.equals(qname)) {
             Text.Type type = builder.getTextType();
-            element = (OMElement)newText(qname, type, parent, builder);
+            if (type == null)
+                type = Text.Type.TEXT;
+            element = new FOMText(type, qname.getLocalPart(), parent, this, builder);
         } else if (TITLE.equals(qname)) {
             Text.Type type = builder.getTextType();
-            element = (OMElement)newText(qname, type, parent, builder);
+            if (type == null)
+                type = Text.Type.TEXT;
+            element = new FOMText(type, qname.getLocalPart(), parent, this, builder);
         } else if (UPDATED.equals(qname)) {
-            element = (OMElement)newDateTimeElement(qname, parent, builder);
+            element = new FOMDateTime(qname.getLocalPart(), parent, this, builder);
         } else if (WORKSPACE.equals(qname) || PRE_RFC_WORKSPACE.equals(qname)) {
-            element = (OMElement)newWorkspace(qname, parent, builder);
+            element = new FOMWorkspace(qname.getLocalPart(), parent, this, builder);
         } else if (COLLECTION.equals(qname) || PRE_RFC_COLLECTION.equals(qname)) {
-            element = (OMElement)newCollection(qname, parent, builder);
+            element = new FOMCollection(qname.getLocalPart(), parent, this, builder);
         } else if (NAME.equals(qname)) {
-            element = (OMElement)new FOMElement(qname, parent, this, builder);
+            element = new FOMElement(qname.getLocalPart(), parent, this, builder);
         } else if (EMAIL.equals(qname)) {
-            element = (OMElement)new FOMElement(qname, parent, this, builder);
+            element = new FOMElement(qname.getLocalPart(), parent, this, builder);
         } else if (URI.equals(qname)) {
-            element = (OMElement)newURIElement(qname, parent, builder);
+            element = new FOMIRI(qname.getLocalPart(), parent, this, builder);
         } else if (CONTROL.equals(qname) || PRE_RFC_CONTROL.equals(qname)) {
-            element = (OMElement)newControl(qname, parent, builder);
+            element = new FOMControl(qname.getLocalPart(), parent, this, builder);
         } else if (DIV.equals(qname)) {
-            element = (OMElement)newDiv(qname, parent, builder);
+            element = new FOMDiv(qname.getLocalPart(), parent, this, builder);
         } else if (CATEGORIES.equals(qname) || PRE_RFC_CATEGORIES.equals(qname)) {
-            element = (OMElement)newCategories(qname, parent, builder);
+            element = new FOMCategories(qname.getLocalPart(), parent, this, builder);
         } else if (EDITED.equals(qname) || PRE_RFC_EDITED.equals(qname)) {
-            element = (OMElement)newDateTimeElement(qname, parent, builder);
+            element = new FOMDateTime(qname.getLocalPart(), parent, this, builder);
         } else if (parent instanceof ExtensibleElement || parent instanceof Document) {
-            element = (OMElement)new FOMExtensibleElement(qname, parent, this, builder);
+            element = new FOMExtensibleElement(qname.getLocalPart(), parent, this, builder);
         }
         return element;
     }
@@ -680,10 +597,6 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
 
     public Categories newCategories(Base parent) {
         return new FOMCategories((OMContainer)parent, this);
-    }
-
-    public Categories newCategories(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-        return new FOMCategories(qname, parent, this, parserWrapper);
     }
 
     public String newUuidUri() {

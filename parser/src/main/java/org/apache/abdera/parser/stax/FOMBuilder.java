@@ -107,7 +107,7 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
         QName qname = parser.getName();
         element = fomfactory.createElement(qname, parent, this);
         if (element == null) {
-            element = new FOMElement(qname, parent, fomfactory, this);
+            element = new FOMElement(qname.getLocalPart(), parent, fomfactory, this);
         }
         return element;
     }

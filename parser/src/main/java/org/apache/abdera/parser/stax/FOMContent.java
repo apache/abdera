@@ -55,18 +55,13 @@ public class FOMContent extends FOMExtensibleElement implements Content {
         init(type);
     }
 
-    protected FOMContent(QName qname, Type type, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
-        super(qname, parent, factory, builder);
+    protected FOMContent(String localName, Type type, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
+        super(localName, parent, factory, builder);
         init(type);
     }
 
     protected FOMContent(Type type, OMContainer parent, OMFactory factory) throws OMException {
         super(CONTENT, parent, factory);
-        init(type);
-    }
-
-    protected FOMContent(Type type, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
-        super(CONTENT, parent, factory, builder);
         init(type);
     }
 

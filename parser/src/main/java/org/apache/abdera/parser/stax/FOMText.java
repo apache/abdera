@@ -49,9 +49,9 @@ public class FOMText extends FOMElement implements Text {
         init(type);
     }
 
-    protected FOMText(Type type, QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder)
+    protected FOMText(Type type, String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder)
         throws OMException {
-        super(qname, parent, factory, builder);
+        super(localName, parent, factory, builder);
         init(type);
     }
 

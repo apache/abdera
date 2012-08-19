@@ -40,8 +40,8 @@ public class FOMIRI extends FOMElement implements IRIElement {
         super(qname, parent, factory);
     }
 
-    protected FOMIRI(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) throws OMException {
-        super(qname, parent, factory, builder);
+    protected FOMIRI(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) throws OMException {
+        super(localName, parent, factory, builder);
     }
 
     public IRI getValue() {

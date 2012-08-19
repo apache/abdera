@@ -48,9 +48,9 @@ public class FOMExtensibleElement extends FOMElement implements ExtensibleElemen
         super(qname, parent, factory);
     }
 
-    protected FOMExtensibleElement(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder)
+    protected FOMExtensibleElement(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder)
         throws OMException {
-        super(qname, parent, factory, builder);
+        super(localName, parent, factory, builder);
     }
 
     public List<Element> getExtensions() {

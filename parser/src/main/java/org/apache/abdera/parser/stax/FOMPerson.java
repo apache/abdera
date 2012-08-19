@@ -42,11 +42,9 @@ public class FOMPerson extends FOMExtensibleElement implements Person {
         super(qname, parent, factory);
     }
 
-    protected FOMPerson(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder)
+    protected FOMPerson(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder)
         throws OMException {
-        super(qname, parent, factory, builder);
-        setBuilder(builder);
-        done = false;
+        super(localName, parent, factory, builder);
     }
 
     public Element getNameElement() {

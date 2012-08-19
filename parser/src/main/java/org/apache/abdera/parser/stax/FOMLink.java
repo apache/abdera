@@ -48,13 +48,9 @@ public class FOMLink extends FOMExtensibleElement implements Link {
         super(qname, parent, factory);
     }
 
-    protected FOMLink(OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) throws OMException {
-        super(LINK, parent, factory, builder);
-    }
-
-    protected FOMLink(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder)
+    protected FOMLink(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder)
         throws OMException {
-        super(qname, parent, factory, builder);
+        super(localName, parent, factory, builder);
     }
 
     public IRI getHref() {

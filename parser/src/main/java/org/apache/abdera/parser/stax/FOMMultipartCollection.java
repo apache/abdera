@@ -21,16 +21,12 @@ public class FOMMultipartCollection extends FOMCollection {
         super(qname, parent, factory);
     }
 
-    protected FOMMultipartCollection(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
-        super(qname, parent, factory, builder);
+    protected FOMMultipartCollection(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
+        super(localName, parent, factory, builder);
     }
 
     protected FOMMultipartCollection(OMContainer parent, OMFactory factory) {
         super(COLLECTION, parent, factory);
-    }
-
-    protected FOMMultipartCollection(OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
-        super(COLLECTION, parent, factory, builder);
     }
 
     public boolean acceptsMultipart(String mediaType) {

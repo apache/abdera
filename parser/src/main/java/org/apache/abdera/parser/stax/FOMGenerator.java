@@ -20,9 +20,7 @@ package org.apache.abdera.parser.stax;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.i18n.iri.IRI;
-import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Generator;
-import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
@@ -42,16 +40,12 @@ public class FOMGenerator extends FOMElement implements Generator {
         super(qname, parent, factory);
     }
 
-    protected FOMGenerator(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
-        super(qname, parent, factory, builder);
+    protected FOMGenerator(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
+        super(localName, parent, factory, builder);
     }
 
     protected FOMGenerator(OMContainer parent, OMFactory factory) throws OMException {
         super(GENERATOR, parent, factory);
-    }
-
-    protected FOMGenerator(OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) throws OMException {
-        super(GENERATOR, parent, factory, builder);
     }
 
     public IRI getUri() {

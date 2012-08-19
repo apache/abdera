@@ -30,7 +30,6 @@ import org.apache.abdera.model.Category;
 import org.apache.abdera.model.Collection;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.Text;
-import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
@@ -56,16 +55,12 @@ public class FOMCollection extends FOMExtensibleElement implements Collection {
         super(qname, parent, factory);
     }
 
-    protected FOMCollection(QName qname, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
-        super(qname, parent, factory, builder);
+    protected FOMCollection(String localName, OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
+        super(localName, parent, factory, builder);
     }
 
     protected FOMCollection(OMContainer parent, OMFactory factory) {
         super(COLLECTION, parent, factory);
-    }
-
-    protected FOMCollection(OMContainer parent, OMFactory factory, OMXMLParserWrapper builder) {
-        super(COLLECTION, parent, factory, builder);
     }
 
     public String getTitle() {

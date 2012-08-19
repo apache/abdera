@@ -51,6 +51,8 @@ class FOMStAXFilter extends XMLStreamReaderWrapper {
     private int altEventType;
     private QName altQName;
     private String altText;
+    private int[] attributeMap;
+    private int attributeCount;
     
     FOMStAXFilter(XMLStreamReader parent, ParserOptions parserOptions) {
         super(parent);
@@ -61,6 +63,7 @@ class FOMStAXFilter extends XMLStreamReaderWrapper {
                 ignoreWhitespace = parseFilter.getIgnoreWhitespace();
                 ignoreComments = parseFilter.getIgnoreComments();
                 ignorePI = parseFilter.getIgnoreProcessingInstructions();
+                attributeMap = new int[8];
             }
         }
         resetEvent();
@@ -70,21 +73,33 @@ class FOMStAXFilter extends XMLStreamReaderWrapper {
         altEventType = -1;
         altQName = null;
         altText = null;
+        attributeCount = -1;
     }
     
-    private boolean isAcceptableToParse(QName qname, boolean attribute) {
-        if (parserOptions == null)
-            return true;
-        ParseFilter filter = parserOptions.getParseFilter();
-        return (filter != null) ? (!attribute) ? filter.acceptable(qname) : filter.acceptable(getName(), qname)
-            : true;
-    }
-
     private void translateQName() {
         if (parserOptions.isQNameAliasMappingEnabled()) {
             Map<QName,QName> map = parserOptions.getQNameAliasMap();
             if (map != null) {
                 altQName = map.get(super.getName());
+            }
+        }
+    }
+    
+    private void mapAttributes() {
+        attributeCount = 0;
+        int orgAttCount = super.getAttributeCount();
+        if (orgAttCount > 0) {
+            QName elementQName = super.getName();
+            ParseFilter filter = parserOptions.getParseFilter();
+            for (int i=0; i<orgAttCount; i++) {
+                if (filter.acceptable(elementQName, super.getAttributeName(i))) {
+                    if (attributeCount == attributeMap.length) {
+                        int[] newAttributeMap = new int[attributeMap.length*2];
+                        System.arraycopy(attributeMap, 0, newAttributeMap, 0, attributeMap.length);
+                        attributeMap = newAttributeMap;
+                    }
+                    attributeMap[attributeCount++] = i;
+                }
             }
         }
     }
@@ -120,11 +135,15 @@ class FOMStAXFilter extends XMLStreamReaderWrapper {
                         // shouldn't be that big of a problem
                         continue;
                     case START_ELEMENT:
-                        if (!isAcceptableToParse(getName(), false)) {
+                        ParseFilter filter = parserOptions.getParseFilter();
+                        if (filter != null && !filter.acceptable(super.getName())) {
                             depthInSkipElement = 1;
                             continue;
                         }
                         translateQName();
+                        if (attributeMap != null) {
+                            mapAttributes();
+                        }
                         break;
                     case END_ELEMENT:
                         translateQName();
@@ -188,5 +207,40 @@ class FOMStAXFilter extends XMLStreamReaderWrapper {
     @Override
     public QName getName() {
         return altQName != null ? altQName : super.getName();
+    }
+
+    @Override
+    public int getAttributeCount() {
+        return attributeCount != -1 ? attributeCount : super.getAttributeCount();
+    }
+
+    @Override
+    public String getAttributeNamespace(int index) {
+        return attributeCount != -1 ? super.getAttributeNamespace(attributeMap[index]) : super.getAttributeNamespace(index);
+    }
+
+    @Override
+    public String getAttributeLocalName(int index) {
+        return attributeCount != -1 ? super.getAttributeLocalName(attributeMap[index]) : super.getAttributeLocalName(index);
+    }
+
+    @Override
+    public String getAttributePrefix(int index) {
+        return attributeCount != -1 ? super.getAttributePrefix(attributeMap[index]) : super.getAttributePrefix(index);
+    }
+
+    @Override
+    public QName getAttributeName(int index) {
+        return attributeCount != -1 ? super.getAttributeName(attributeMap[index]) : super.getAttributeName(index);
+    }
+
+    @Override
+    public String getAttributeType(int index) {
+        return attributeCount != -1 ? super.getAttributeType(attributeMap[index]) : super.getAttributeType(index);
+    }
+
+    @Override
+    public String getAttributeValue(int index) {
+        return attributeCount != -1 ? super.getAttributeValue(attributeMap[index]) : super.getAttributeValue(index);
     }
 }

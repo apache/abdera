@@ -329,30 +329,13 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
     }
 
     public <T extends Element> T newExtensionElement(QName qname) {
-        return (T)newExtensionElement(qname, (OMContainer)null);
+        return (T)newExtensionElement(qname, null);
     }
 
     public <T extends Element> T newExtensionElement(QName qname, Base parent) {
-        return (T)newExtensionElement(qname, (OMContainer)parent);
-    }
-
-    private <T extends Element> T newExtensionElement(QName qname, OMContainer parent) {
         String ns = qname.getNamespaceURI();
-        Element el = newExtensionElement(qname, parent, null);
+        Element el = (Element)createElement(qname, (OMContainer)parent, this, null);
         return (T)((ATOM_NS.equals(ns) || APP_NS.equals(ns)) ? el : factoriesMap.getElementWrapper(el));
-    }
-
-    private <T extends Element> T newExtensionElement(QName qname, OMContainer parent, OMXMLParserWrapper parserWrapper) {
-
-        // Element element = (parserWrapper == null) ?
-        // new FOMExtensibleElement(qname, parent, this) :
-        // new FOMExtensibleElement(qname, parent, this, parserWrapper);
-
-        Element element =
-            (parserWrapper == null) ? (Element)createElement(qname, parent, this, null)
-                : (Element)createElement(qname, parent, (FOMBuilder)parserWrapper);
-
-        return (T)element;
     }
 
     public Control newControl() {

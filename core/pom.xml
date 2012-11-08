@@ -40,6 +40,8 @@
 		org.apache.abdera.xpath.*
 	</abdera.osgi.default.exports>
     <abdera.osgi.default.imports>
+      javax.activation*;version="[0,2)",
+      javax.xml.stream*;version="[0,2)",
       org.apache.commons.codec*;version="[1.3,2)",
       *
     </abdera.osgi.default.imports>

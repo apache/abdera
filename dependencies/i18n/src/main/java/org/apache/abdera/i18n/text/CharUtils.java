@@ -583,9 +583,11 @@ public final class CharUtils {
             }
         }), STD3ASCIIRULES(new Filter() {
             public boolean accept(int codepoint) {
-                return !CharUtils.inRange(codepoint, 0x0000, 0x002C) && !CharUtils.inRange(codepoint, 0x002E, 0x002F)
+                return !CharUtils.inRange(codepoint, 0x0000, 0x002C) 
+                	&& !CharUtils.inRange(codepoint, 0x002E, 0x002F)
                     && !CharUtils.inRange(codepoint, 0x003A, 0x0040)
-                    && !CharUtils.inRange(codepoint, 0x005B, 0x0060)
+                    && !CharUtils.inRange(codepoint, 0x005B, 0x005E)
+                    && !CharUtils.inRange(codepoint, 0x0060, 0x0060)
                     && !CharUtils.inRange(codepoint, 0x007B, 0x007F);
             }
         });

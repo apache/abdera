@@ -50,6 +50,12 @@ public class TestIRI extends TestBase {
         assertEquals("http://[2001:0db8:85a3:08d3:1319:8a2e:0370:7344]", iri.toURI().toString());
     }
     
+    @Test
+    public void testUnderscore() throws URISyntaxException{
+    	IRI iri = new IRI("http://its_gbsc.cn.ibm.com/");
+    	assertEquals("http://its_gbsc.cn.ibm.com/", iri.toURI().toString());
+    }
+    
     @Test(expected=URISyntaxException.class)
     public void testIpv6Invalid() throws URISyntaxException{
         IRI iri = new IRI("http://[2001:0db8:85a3:08d3:1319:8a2e:0370:734o]");

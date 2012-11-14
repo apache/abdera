@@ -17,6 +17,9 @@
  */
 package org.apache.abdera.parser.stax;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.activation.DataHandler;
 import javax.xml.namespace.QName;
 
@@ -79,6 +82,14 @@ public class FOMTextValue extends OMTextImpl implements TextValue {
 
     public DataHandler getDataHandler() {
         return (DataHandler)super.getDataHandler();
+    }
+
+    public InputStream getInputStream() {
+        try {
+            return getDataHandler().getInputStream();
+        } catch (IOException ex) {
+            throw new FOMException(ex);
+        }
     }
 
     public <T extends Base> T getParentElement() {

@@ -37,7 +37,7 @@ import javax.crypto.spec.DHParameterSpec;
 
 import org.apache.abdera.security.Encryption;
 import org.apache.abdera.security.EncryptionOptions;
-import org.apache.axiom.om.util.Base64;
+import org.apache.axiom.util.base64.Base64Utils;
 import org.apache.xml.security.encryption.XMLCipher;
 
 /**
@@ -85,7 +85,7 @@ public class DHContext implements Cloneable, Serializable {
         buf.append(g.toString());
         buf.append(", ");
         buf.append("k=");
-        buf.append(Base64.encode(keyPair.getPublic().getEncoded()));
+        buf.append(Base64Utils.encode(keyPair.getPublic().getEncoded()));
         return buf.toString();
     }
 
@@ -93,7 +93,7 @@ public class DHContext implements Cloneable, Serializable {
         StringBuilder buf = new StringBuilder();
         buf.append("DH ");
         buf.append("k=");
-        buf.append(Base64.encode(keyPair.getPublic().getEncoded()));
+        buf.append(Base64Utils.encode(keyPair.getPublic().getEncoded()));
         return buf.toString();
     }
 
@@ -126,7 +126,7 @@ public class DHContext implements Cloneable, Serializable {
             else if (name.equalsIgnoreCase("g"))
                 g = new BigInteger(value);
             else if (name.equalsIgnoreCase("k"))
-                key = Base64.decode(value);
+                key = Base64Utils.decode(value);
         }
         init(p, g, l, key);
     }
@@ -164,7 +164,7 @@ public class DHContext implements Cloneable, Serializable {
             String name = token.substring(0, token.indexOf("="));
             String value = token.substring(token.indexOf("=") + 1);
             if (name.equalsIgnoreCase("k"))
-                key = Base64.decode(value);
+                key = Base64Utils.decode(value);
         }
         publicKey = decode(key);
         return this;

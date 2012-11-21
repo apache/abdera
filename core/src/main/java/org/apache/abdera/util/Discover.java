@@ -47,13 +47,17 @@ public final class Discover {
     }
 
     public static <T> Iterable<T> locate(String id, boolean classesonly, ClassLoader cl, Object... args) {
-        return locate(id, classesonly, new DefaultLoader<T>(id, classesonly, args, cl));
+        return locate(id, new DefaultLoader<T>(id, classesonly, args, cl));
     }
 
     public static <T> Iterable<T> locate(String id, Object... args) {
         return locate(id, false, args);
     }
 
+    public static <T> Iterable<T> locate(String id, boolean classesonly) {
+        return locate(id, new DefaultLoader<T>(id, classesonly, null));
+    }
+    
     public static <T> Iterable<T> locate(String id, boolean classesonly, Object... args) {
         return locate(id, new DefaultLoader<T>(id, classesonly, args));
     }

@@ -503,7 +503,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jetty.version>6.1.24</jetty.version>
+    <jetty.version>6.1.26</jetty.version>
     <easymock.version>3.0</easymock.version>
     <topDir>${basedir}</topDir>
     <abdera.osgi.imports>${abdera.osgi.abdera.imports},${abdera.osgi.default.imports}</abdera.osgi.imports>

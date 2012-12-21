@@ -16,6 +16,41 @@ r1060056: finally removed outdated couchdb adapter
 ABDERA-279: patch from Antoine Toulme to fix Faulty classloading - unreachable code
 r1058008: updated readme and build script 
 r1057926: moved doco to wiki
+r1210094 ABDERA-284: Updated the Axiom version in the ant build (to match the one used in the Maven build).
+r1210126 Only add default namespace declarations on "service" elements that are created programmatically, but not on elments that are created by the parser. Otherwise this may result in inconsistent namespaces. This change also makes Abdera 1.x compatible with Axiom 1.2.13 (which detects this situation and triggers an exception).
+r1371874 Let the root POM inherit from the Apache super-POM.
+r1371875 Prevent the build from creating a derby.log file in the source tree (instead, create it in the target directory).
+r1371876 Fixed svn:ignore.
+r1371882 Avoid usage of deprecated UUIDGenerator.
+r1371885 Removed unused attribute.
+r1371887 Removed unnecessary null checks.
+r1371956 Removed method that duplicates code from the base class.
+r1371962 Realigned the control flow in FOMBuilder with the control flow in the standard Axiom builders.
+r1371984 Removed unnecessary repository declaration. The Apache snapshot repository is configured in the Apache super-POM.
+r1372029 Don't let the build depend on external resources (other than artifacts from Maven repositories). Added the test cases from feedvalidator.org to the sources. They are MIT licensed, which is compatible with the Apache license.
+r1372057 Added a unit test to test various parser options for which there was no test coverage yet.
+r1372155 Started to decouple Abdera from the internals of the Axiom builder by moving the filtering logic (for whitespace, comments, etc.) out of FOMBuilder into an XMLStreamReader wrapper.
+r1372161 No need to replace the entire StAXOMBuilder#next() method. At this point we only need to override the method to transform exceptions.
+r1372165 A processing instruction is always complete.
+r1372174 Use meaningful parameter names.
+r1372497 Since we filter out DTDs, we don't need to handle them in FOMDocument#clone().
+r1374550 Fixed the qnameAliasMap stuff. It was not exactly working as expected because Axiom resets the namespace information after an element has been created. Moved the logic to FOMStAXFilter so that QName aliasing is entirely transparent to Axiom. Also added a test case.
+r1374699 Forgot to give the unit test a meaningful name.
+r1374700 Added a unit test for attribute filtering.
+r1374702 Also move attribute filtering to FOMStAXFilter, so that FOMBuilder no longer needs to override StAXOMBuilder#processAttributes. Now, all filtering and transformation is done in FOMStAXFilter.
+r1374707 Removed constructors that would allow to create OMElement instances that are not linked to an OMFactory.
+r1374724 Some code simplifications.
+r1374732 When creating an element from the builder, only initialize the local name. The namespace will be set by StAXOMBuilder#processNamespaceData. This should avoid unnecessary creation of OMNamespace objects.
+r1374760 Avoid calling OMElement#removeAttribute(OMAttribute) with a null value.
+r1374766 Eliminated a couple of unnecessary/incorrect calls to setParentElement.
+r1374815 Upgraded Axiom to 1.2.14-SNAPSHOT.
+r1374816 Removed empty svn:mergeinfo properties.
+r1407291 added patch from Willem Jiang for ABDERA-293
+r1407379 fix for ABDERA-309
+r1409289 Set svn:ignore.
+r1409331 Adapt to latest changes in Axiom.
+r1412329 fix for the Java7 build problems from ABDERA-311
+r1422616 Switched to Axiom release version.
 
 Apache Abdera: Changes in 1.1.2 Release
 ---------------------------------------

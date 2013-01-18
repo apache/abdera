@@ -31,12 +31,9 @@ import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
-import org.apache.axiom.om.OMNode;
-import org.apache.axiom.om.impl.OMContainerEx;
-import org.apache.axiom.om.impl.OMNodeEx;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 
-@SuppressWarnings( {"unchecked", "deprecation"})
+@SuppressWarnings("unchecked")
 public class FOMBuilder extends StAXOMBuilder implements Constants {
 
     private final FOMFactory fomfactory;

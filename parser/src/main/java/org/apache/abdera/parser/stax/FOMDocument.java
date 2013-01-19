@@ -212,10 +212,12 @@ public class FOMDocument<T extends Element> extends OMDocumentImpl implements Do
     }
 
     public String getCharset() {
-        return this.getCharsetEncoding();
+        String enc = this.getXMLEncoding();
+        return enc == null ? "utf-8" : enc;
     }
 
     public Document<T> setCharset(String charset) {
+        this.setXMLEncoding(charset);
         this.setCharsetEncoding(charset);
         return this;
     }

@@ -28,7 +28,6 @@ import org.apache.abdera.parser.ParseException;
 import org.apache.abdera.parser.ParserOptions;
 import org.apache.abdera.util.Constants;
 import org.apache.axiom.om.OMContainer;
-import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
@@ -38,16 +37,11 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
 
     private final FOMFactory fomfactory;
     private final ParserOptions parserOptions;
-    private boolean indoc = false;
 
     public FOMBuilder(FOMFactory factory, XMLStreamReader parser, ParserOptions parserOptions) {
         super(factory, new FOMStAXFilter(parser, parserOptions));
-        this.document = (OMDocument)factory.newDocument();
         this.parserOptions = parserOptions;
         this.fomfactory = factory;
-        String enc = parser.getCharacterEncodingScheme();
-        document.setCharsetEncoding(enc != null ? enc : "utf-8");
-        document.setXMLVersion(parser.getVersion() != null ? parser.getVersion() : "1.0");
     }
 
     public ParserOptions getParserOptions() {
@@ -96,13 +90,8 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
 
     @Override
     protected OMElement constructNode(OMContainer parent, String name) {
-        OMElement element = null;
-        if (!indoc) {
-            parent = document;
-            indoc = true;
-        }
         QName qname = parser.getName();
-        element = fomfactory.createElement(qname, parent, this);
+        OMElement element = fomfactory.createElement(qname, parent, this);
         if (element == null) {
             element = new FOMElement(qname.getLocalPart(), parent, fomfactory, this);
         }
@@ -110,14 +99,11 @@ public class FOMBuilder extends StAXOMBuilder implements Constants {
     }
 
     public <T extends Element> Document<T> getFomDocument() {
-        while (!indoc && !done) {
-            next();
-        }
-        return (Document<T>)document;
-    }
-
-    public OMDocument getDocument() {
-        return (OMDocument)getFomDocument();
+        // For compatibility with earlier Abdera versions, force creation of the document element.
+        // Note that the only known case where this has a visible effect is when the document is
+        // not well formed. At least one unit test depends on this behavior.
+        getDocumentElement();
+        return (Document<T>)getDocument();
     }
 
     public FOMFactory getFactory() {

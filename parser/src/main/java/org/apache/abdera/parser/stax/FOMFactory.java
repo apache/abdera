@@ -57,6 +57,7 @@ import org.apache.abdera.util.Version;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMComment;
 import org.apache.axiom.om.OMContainer;
+import org.apache.axiom.om.OMDocument;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
@@ -95,14 +96,9 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
         return new FOMDocument(this);
     }
 
-    public <T extends Element> Document<T> newDocument(OMXMLParserWrapper parserWrapper) {
+    @Override
+    public OMDocument createOMDocument(OMXMLParserWrapper parserWrapper) {
         return new FOMDocument(parserWrapper, this);
-    }
-
-    public <T extends Element> Document<T> newDocument(T root, OMXMLParserWrapper parserWrapper) {
-        FOMDocument<T> doc = (FOMDocument<T>)newDocument(parserWrapper);
-        doc.setRoot(root);
-        return doc;
     }
 
     public Service newService(Base parent) {

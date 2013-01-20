@@ -148,40 +148,16 @@ public class FOMParser extends AbstractParser implements Parser {
         }
     }
 
-    private static XMLInputFactory getXMLInputFactory() {
-        return StAXUtils.getXMLInputFactory(ABDERA_PARSER_CONFIGURATION);
-    }
-
-    private static void releaseXMLInputFactory(XMLInputFactory inputFactory) {
-        StAXUtils.releaseXMLInputFactory(inputFactory);
-    }
-
     public static XMLStreamReader createXMLStreamReader(InputStream in, String encoding) throws XMLStreamException {
-        XMLInputFactory inputFactory = getXMLInputFactory();
-        try {
-            return inputFactory.createXMLStreamReader(in, encoding);
-        } finally {
-            releaseXMLInputFactory(inputFactory);
-        }
+        return StAXUtils.createXMLStreamReader(ABDERA_PARSER_CONFIGURATION, in, encoding);
     }
 
     public static XMLStreamReader createXMLStreamReader(InputStream in) throws XMLStreamException {
-        XMLInputFactory inputFactory = getXMLInputFactory();
-        try {
-            return inputFactory.createXMLStreamReader(in);
-        } finally {
-            releaseXMLInputFactory(inputFactory);
-        }
+        return StAXUtils.createXMLStreamReader(ABDERA_PARSER_CONFIGURATION, in);
     }
 
     private XMLStreamReader createXMLStreamReader(Reader in) throws XMLStreamException {
-        XMLInputFactory inputFactory = getXMLInputFactory();
-        try {
-            XMLStreamReader reader = inputFactory.createXMLStreamReader(in);
-            return reader;
-        } finally {
-            releaseXMLInputFactory(inputFactory);
-        }
+        return StAXUtils.createXMLStreamReader(ABDERA_PARSER_CONFIGURATION, in);
     }
 
     public <T extends Element> Document<T> parse(XMLStreamReader reader, String base, ParserOptions options)

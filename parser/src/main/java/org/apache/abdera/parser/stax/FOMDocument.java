@@ -50,9 +50,7 @@ import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMOutputFormat;
 import org.apache.axiom.om.OMProcessingInstruction;
 import org.apache.axiom.om.OMXMLParserWrapper;
-import org.apache.axiom.om.impl.MTOMXMLStreamWriter;
 import org.apache.axiom.om.impl.llom.OMDocumentImpl;
-import org.apache.axiom.om.util.StAXUtils;
 
 @SuppressWarnings("unchecked")
 public class FOMDocument<T extends Element> extends OMDocumentImpl implements Document<T> {
@@ -148,10 +146,7 @@ public class FOMDocument<T extends Element> extends OMDocumentImpl implements Do
                 OMOutputFormat outputFormat = new OMOutputFormat();
                 if (this.getCharsetEncoding() != null)
                     outputFormat.setCharSetEncoding(this.getCharsetEncoding());
-                MTOMXMLStreamWriter omwriter = new MTOMXMLStreamWriter(StAXUtils.createXMLStreamWriter(writer));
-                omwriter.setOutputFormat(outputFormat);
-                this.internalSerialize(omwriter);
-                omwriter.flush();
+                this.serialize(writer, outputFormat);
             } catch (XMLStreamException e) {
                 throw new FOMException(e);
             }

@@ -84,7 +84,6 @@ public class FOMFeed extends FOMSource implements Feed {
         if (el == null) {
             addEntry(entry);
         } else {
-            entry.setParentElement(this);
             el.insertSiblingBefore((OMElement)entry);
         }
         return this;

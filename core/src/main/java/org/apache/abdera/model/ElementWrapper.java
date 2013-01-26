@@ -190,6 +190,7 @@ public abstract class ElementWrapper implements Element {
         return (T)this;
     }
 
+    @SuppressWarnings("deprecation")
     public <T extends Element> T setParentElement(Element parent) {
         internal.setParentElement(parent);
         return (T)this;

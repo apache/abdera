@@ -167,7 +167,6 @@ public class FOMExtensibleElement extends FOMElement implements ExtensibleElemen
         if (before == null) {
             addExtension(extension);
         } else {
-            extension.setParentElement(this);
             ((OMElement)before).insertSiblingBefore((OMElement)extension);
         }
         return (T)this;

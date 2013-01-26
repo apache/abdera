@@ -41,9 +41,8 @@ public interface Element extends Base, Iterable<Element> {
     <T extends Base> T getParentElement();
 
     /**
-     * Set this Element's parent element
-     * 
-     * @param parent The parent element
+     * @deprecated This method will cause corruption of the object model because the parent of an
+     *             element cannot be set without adding that element as a child.
      */
     <T extends Element> T setParentElement(Element parent);
 

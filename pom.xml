@@ -401,6 +401,12 @@
       </dependency>
       
       <dependency>
+        <groupId>org.apache.ws.commons.axiom</groupId>
+        <artifactId>axiom-testutils</artifactId>
+        <version>1.2.15-SNAPSHOT</version>
+      </dependency>
+      
+      <dependency>
         <groupId>org.codehaus.woodstox</groupId>
         <artifactId>wstx-asl</artifactId>
         <version>3.2.6</version>  

@@ -40,18 +40,23 @@ import org.apache.abdera.protocol.server.impl.DefaultWorkspaceManager;
 import org.apache.abdera.protocol.server.impl.RouteManager;
 import org.apache.abdera.test.ext.opensearch.server.AbstractOpenSearchServerTest;
 import org.apache.abdera.test.ext.opensearch.server.JettyServer;
+import org.apache.axiom.testutils.PortAllocator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class OpenSearchUrlRequestProcessorTest extends AbstractOpenSearchServerTest {
 
-    private JettyServer server = new JettyServer();
+    private int port;
+    private JettyServer server;
     private OpenSearchInfo osInfo;
     private OpenSearchUrlRequestProcessor osUrlProcessor;
 
     @Before
     public void setUp() throws Exception {
+        port = PortAllocator.allocatePort();
+        server = new JettyServer(port);
+        
         this.osInfo = this.createOpenSearchInfo();
         ((SimpleOpenSearchUrlInfo)osInfo.getUrls()[0]).setOpenSearchUrlAdapter(new TestingOpenSearchUrlAdapter1());
         ((SimpleOpenSearchUrlInfo)osInfo.getUrls()[1]).setOpenSearchUrlAdapter(new TestingOpenSearchUrlAdapter2());
@@ -94,10 +99,10 @@ public class OpenSearchUrlRequestProcessorTest extends AbstractOpenSearchServerT
         AbderaClient client = new AbderaClient();
         ClientResponse response = null;
         // Test with first adapter:
-        response = client.get("http://localhost:9002/search1?q=test1&c=1");
+        response = client.get("http://localhost:" + port + "/search1?q=test1&c=1");
         assertEquals(200, response.getStatus());
         // Test with second adapter:
-        client.get("http://localhost:9002/search2?q=test2&c=1");
+        client.get("http://localhost:" + port + "/search2?q=test2&c=1");
         assertEquals(200, response.getStatus());
     }
 
@@ -106,7 +111,7 @@ public class OpenSearchUrlRequestProcessorTest extends AbstractOpenSearchServerT
         AbderaClient client = new AbderaClient();
         ClientResponse response = null;
         // No adapter found for this Open Search url:
-        response = client.get("http://localhost:9002/search3?q=test1&c=1");
+        response = client.get("http://localhost:" + port + "/search3?q=test1&c=1");
         assertEquals(404, response.getStatus());
     }
 

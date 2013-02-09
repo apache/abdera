@@ -73,6 +73,11 @@
             <artifactId>abdera-extensions-json</artifactId>
             <version>1.2-SNAPSHOT</version>  
             <scope>test</scope>
-        </dependency> 
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-testutils</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

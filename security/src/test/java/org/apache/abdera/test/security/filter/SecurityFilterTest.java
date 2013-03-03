@@ -38,19 +38,22 @@ import org.apache.abdera.security.AbderaSecurity;
 import org.apache.abdera.security.Signature;
 import org.apache.abdera.security.SignatureOptions;
 import org.apache.abdera.test.security.DigitalSignatureTest;
+import org.apache.axiom.testutils.PortAllocator;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class SecurityFilterTest {
 
+    private static int port;
     private static JettyServer server;
     private static Abdera abdera = Abdera.getInstance();
     private static AbderaClient client = new AbderaClient();
 
     @BeforeClass
     public static void setUp() throws Exception {
-        server = new JettyServer();
+        port = PortAllocator.allocatePort();
+        server = new JettyServer(port);
         server.start(CustomProvider.class);
     }
 
@@ -61,7 +64,7 @@ public class SecurityFilterTest {
 
     @Test
     public void testSignedResponseFilter() throws Exception {
-        ClientResponse resp = client.get("http://localhost:9002/");
+        ClientResponse resp = client.get("http://localhost:" + port + "/");
         Document<Element> doc = resp.getDocument();
         Element root = doc.getRoot();
         AbderaSecurity security = new AbderaSecurity(abdera);
@@ -80,13 +83,13 @@ public class SecurityFilterTest {
     @Test
     public void testSignedRequestFilter() throws Exception {
         Entry entry = abdera.newEntry();
-        entry.setId("http://localhost:9002/feed/entries/1");
+        entry.setId("http://localhost:" + port + "/feed/entries/1");
         entry.setTitle("test entry");
         entry.setContent("Test Content");
         entry.addLink("http://example.org");
         entry.setUpdated(new Date());
         entry.addAuthor("James");
-        ClientResponse resp = client.post("http://localhost:9002/feed", entry);
+        ClientResponse resp = client.post("http://localhost:" + port + "/feed", entry);
         assertNotNull(resp);
         assertEquals(ResponseType.CLIENT_ERROR, resp.getType());
 
@@ -112,7 +115,7 @@ public class SecurityFilterTest {
         // Sign the entry
         entry = sig.sign(entry, options);
 
-        resp = client.post("http://localhost:9002/feed", entry);
+        resp = client.post("http://localhost:" + port + "/feed", entry);
         assertNotNull(resp);
         assertEquals(ResponseType.SUCCESS, resp.getType());
     }

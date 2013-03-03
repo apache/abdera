@@ -74,5 +74,10 @@
       <artifactId>axiom-api</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.ws.commons.axiom</groupId>
+      <artifactId>axiom-testutils</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>

@@ -130,7 +130,7 @@ public class SimpleAdapter extends AbstractCollectionAdapter {
                 feed.insertEntry(entry);
                 feed.setUpdated(new Date());
                 BaseResponseContext rc =
-                    (BaseResponseContext)ProviderHelper.returnBase(entry_doc, 201, entry.getEdited());
+                    (BaseResponseContext)ProviderHelper.returnBase(entry, 201, entry.getEdited());
                 return rc.setLocation(ProviderHelper.resolveBase(request).resolve(entry.getEditLinkResolvedHref())
                     .toString()).setContentLocation(rc.getLocation().toString()).setEntityTag(ProviderHelper
                     .calculateEntityTag(entry));

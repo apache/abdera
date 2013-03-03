@@ -50,12 +50,8 @@ public class SecurityFilterTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        try {
-            server = new JettyServer();
-            server.start(CustomProvider.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        server = new JettyServer();
+        server.start(CustomProvider.class);
     }
 
     @AfterClass

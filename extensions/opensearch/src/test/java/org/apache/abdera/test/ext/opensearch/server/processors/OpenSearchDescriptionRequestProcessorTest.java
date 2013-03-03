@@ -39,18 +39,23 @@ import org.apache.abdera.protocol.server.impl.RouteManager;
 import org.apache.abdera.test.ext.opensearch.server.AbstractOpenSearchServerTest;
 import org.apache.abdera.test.ext.opensearch.server.JettyServer;
 import org.apache.abdera.util.MimeTypeHelper;
+import org.apache.axiom.testutils.PortAllocator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class OpenSearchDescriptionRequestProcessorTest extends AbstractOpenSearchServerTest {
 
-    private JettyServer server = new JettyServer();
+    private int port;
+    private JettyServer server;
     private OpenSearchInfo osInfo;
     private OpenSearchDescriptionRequestProcessor osRequestProcessor;
 
     @Before
     public void setUp() throws Exception {
+        port = PortAllocator.allocatePort();
+        server = new JettyServer(port);
+        
         this.osInfo = this.createOpenSearchInfo();
         this.osRequestProcessor = new OpenSearchDescriptionRequestProcessor();
         this.osRequestProcessor.setOpenSearchInfo(osInfo);
@@ -86,7 +91,7 @@ public class OpenSearchDescriptionRequestProcessorTest extends AbstractOpenSearc
     @Test
     public void testOpenSearchDescriptionRequestProcessorOutput() throws Exception {
         AbderaClient client = new AbderaClient();
-        ClientResponse resp = client.get("http://localhost:9002/search");
+        ClientResponse resp = client.get("http://localhost:" + port + "/search");
 
         assertNotNull(resp);
         assertEquals(ResponseType.SUCCESS, resp.getType());
@@ -108,11 +113,11 @@ public class OpenSearchDescriptionRequestProcessorTest extends AbstractOpenSearc
                                result);
         assertXpathEvaluatesTo(QUERY_TERMS, "/os:OpenSearchDescription/os:Query/@searchTerms", result);
         assertXpathEvaluatesTo("application/atom+xml", "/os:OpenSearchDescription/os:Url[1]/@type", result);
-        assertXpathEvaluatesTo("http://localhost:9002/search1?q={searchTerms}&c={count?}",
+        assertXpathEvaluatesTo("http://localhost:" + port + "/search1?q={searchTerms}&c={count?}",
                                "/os:OpenSearchDescription/os:Url[1]/@template",
                                result);
         assertXpathEvaluatesTo("application/atom+xml", "/os:OpenSearchDescription/os:Url[2]/@type", result);
-        assertXpathEvaluatesTo("http://localhost:9002/search2?q={searchTerms}&c={count?}",
+        assertXpathEvaluatesTo("http://localhost:" + port + "/search2?q={searchTerms}&c={count?}",
                                "/os:OpenSearchDescription/os:Url[2]/@template",
                                result);
     }

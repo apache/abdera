@@ -17,6 +17,7 @@
  */
 package org.apache.abdera.test.client;
 
+import org.apache.axiom.testutils.PortAllocator;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
@@ -26,7 +27,7 @@ public class JettyUtil {
 
     private static final String PORT_PROP = "abdera.test.client.port";
 
-    private static int PORT = 9002;
+    private static int PORT = PortAllocator.allocatePort();
     private static Server server = null;
     private static ServletHandler handler = null;
 

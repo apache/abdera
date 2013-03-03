@@ -43,12 +43,14 @@ import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
+import org.apache.axiom.testutils.PortAllocator;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class BasicTest {
 
+    private static int port;
     private static JettyServer server;
     private static Abdera abdera = Abdera.getInstance();
     private static AbderaClient client = new AbderaClient();
@@ -56,7 +58,8 @@ public class BasicTest {
     @BeforeClass
     public static void setUp() throws Exception {
         if (server == null) {
-            server = new JettyServer();
+            port = PortAllocator.allocatePort();
+            server = new JettyServer(port);
             server.start(BasicProvider.class);
         }
     }
@@ -75,7 +78,7 @@ public class BasicTest {
 
     @Test
     public void testGetService() {
-        ClientResponse resp = client.get("http://localhost:9002/");
+        ClientResponse resp = client.get("http://localhost:" + port + "/");
         assertNotNull(resp);
         assertEquals(ResponseType.SUCCESS, resp.getType());
         assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.APP_MEDIA_TYPE));
@@ -87,19 +90,19 @@ public class BasicTest {
         Collection collection = workspace.getCollection("title for any sample feed");
         assertNotNull(collection);
         assertTrue(collection.acceptsEntry());
-        assertEquals("http://localhost:9002/sample", collection.getResolvedHref().toString());
+        assertEquals("http://localhost:" + port + "/sample", collection.getResolvedHref().toString());
         resp.release();
     }
 
     @Test
     public void testGetFeed() {
-        ClientResponse resp = client.get("http://localhost:9002/sample");
+        ClientResponse resp = client.get("http://localhost:" + port + "/sample");
         assertNotNull(resp);
         assertEquals(ResponseType.SUCCESS, resp.getType());
         assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.FEED_MEDIA_TYPE));
         Document<Feed> doc = resp.getDocument();
         Feed feed = doc.getRoot();
-        assertEquals("http://localhost:9002/sample", feed.getId().toString());
+        assertEquals("http://localhost:" + port + "/sample", feed.getId().toString());
         assertEquals("title for any sample feed", feed.getTitle());
         assertEquals("rayc", feed.getAuthor().getName());
         assertEquals(0, feed.getEntries().size());
@@ -109,19 +112,19 @@ public class BasicTest {
     @Test
     public void testPostEntry() {
         Entry entry = abdera.newEntry();
-        entry.setId("http://localhost:9002/sample/foo");
+        entry.setId("http://localhost:" + port + "/sample/foo");
         entry.setTitle("test entry");
         entry.setContent("Test Content");
         entry.addLink("http://example.org");
         entry.setUpdated(new Date());
         entry.addAuthor("James");
-        ClientResponse resp = client.post("http://localhost:9002/sample", entry);
+        ClientResponse resp = client.post("http://localhost:" + port + "/sample", entry);
         assertNotNull(resp);
         assertEquals(ResponseType.SUCCESS, resp.getType());
         assertEquals(201, resp.getStatus());
-        assertEquals("http://localhost:9002/sample/foo", resp.getLocation().toString());
+        assertEquals("http://localhost:" + port + "/sample/foo", resp.getLocation().toString());
         resp.release();
-        resp = client.get("http://localhost:9002/sample");
+        resp = client.get("http://localhost:" + port + "/sample");
         Document<Feed> feed_doc = resp.getDocument();
         Feed feed = feed_doc.getRoot();
         assertEquals(1, feed.getEntries().size());
@@ -133,7 +136,7 @@ public class BasicTest {
         ByteArrayInputStream in = new ByteArrayInputStream(new byte[] {0x01, 0x02, 0x03, 0x04});
         RequestOptions options = client.getDefaultRequestOptions();
         options.setContentType("application/octet-stream");
-        ClientResponse resp = client.post("http://localhost:9002/sample", in, options);
+        ClientResponse resp = client.post("http://localhost:" + port + "/sample", in, options);
         assertEquals(ResponseType.CLIENT_ERROR, resp.getType());
         assertEquals(405, resp.getStatus());
         resp.release();
@@ -141,22 +144,22 @@ public class BasicTest {
 
     @Test
     public void testPutEntry() {
-        ClientResponse resp = client.get("http://localhost:9002/sample/foo");
+        ClientResponse resp = client.get("http://localhost:" + port + "/sample/foo");
         assertTrue(MimeTypeHelper.isMatch(resp.getContentType().toString(), Constants.ENTRY_MEDIA_TYPE));
         Document<Entry> doc = resp.getDocument();
         Entry entry = doc.getRoot();
         entry.setTitle("This is the modified title");
         resp.release();
-        resp = client.put("http://localhost:9002/sample/foo", entry);
+        resp = client.put("http://localhost:" + port + "/sample/foo", entry);
         assertEquals(ResponseType.SUCCESS, resp.getType());
         assertEquals(200, resp.getStatus());
         resp.release();
-        resp = client.get("http://localhost:9002/sample/foo");
+        resp = client.get("http://localhost:" + port + "/sample/foo");
         doc = resp.getDocument();
         entry = doc.getRoot();
         assertEquals("This is the modified title", entry.getTitle());
         resp.release();
-        resp = client.get("http://localhost:9002/sample");
+        resp = client.get("http://localhost:" + port + "/sample");
         Document<Feed> feed_doc = resp.getDocument();
         Feed feed = feed_doc.getRoot();
         assertEquals(1, feed.getEntries().size());
@@ -165,10 +168,10 @@ public class BasicTest {
 
     @Test
     public void testDeleteEntry() {
-        ClientResponse resp = client.delete("http://localhost:9002/sample/foo");
+        ClientResponse resp = client.delete("http://localhost:" + port + "/sample/foo");
         assertEquals(ResponseType.SUCCESS, resp.getType());
         resp.release();
-        resp = client.get("http://localhost:9002/sample");
+        resp = client.get("http://localhost:" + port + "/sample");
         Document<Feed> feed_doc = resp.getDocument();
         Feed feed = feed_doc.getRoot();
         assertEquals(0, feed.getEntries().size());

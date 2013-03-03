@@ -46,6 +46,7 @@ import org.apache.abdera.protocol.server.impl.DefaultProvider;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.protocol.server.servlet.AbderaServlet;
 import org.apache.abdera.writer.Writer;
+import org.apache.axiom.testutils.PortAllocator;
 import org.apache.jackrabbit.core.TransientRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -56,6 +57,7 @@ import org.mortbay.jetty.servlet.ServletHolder;
 
 public class JcrCollectionAdapterTest {
 
+    private int port;
     private Server server;
     private DefaultProvider jcrProvider;
     private Repository repository;
@@ -91,7 +93,7 @@ public class JcrCollectionAdapterTest {
 
         AbderaClient client = new AbderaClient(abdera);
 
-        String base = "http://localhost:9002/";
+        String base = "http://localhost:" + port + "/";
 
         // Testing of entry creation
         IRI colUri = new IRI(base).resolve("feed");
@@ -174,8 +176,8 @@ public class JcrCollectionAdapterTest {
     }
 
     private void initializeJetty() throws Exception {
-
-        server = new Server(9002);
+        port = PortAllocator.allocatePort();
+        server = new Server(port);
         Context root = new Context(server, "/", Context.NO_SESSIONS);
         root.addServlet(new ServletHolder(new AbderaServlet() {
 

@@ -44,18 +44,23 @@ import org.apache.abdera.protocol.server.impl.DefaultWorkspaceManager;
 import org.apache.abdera.protocol.server.impl.RouteManager;
 import org.apache.abdera.test.ext.opensearch.server.AbstractOpenSearchServerTest;
 import org.apache.abdera.test.ext.opensearch.server.JettyServer;
+import org.apache.axiom.testutils.PortAllocator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class AbstractOpenSearchUrlAdapterTest extends AbstractOpenSearchServerTest {
 
-    private JettyServer server = new JettyServer();
+    private int port;
+    private JettyServer server;
     private OpenSearchInfo osInfo;
     private OpenSearchUrlRequestProcessor osUrlProcessor;
 
     @Before
     public void setUp() throws Exception {
+        port = PortAllocator.allocatePort();
+        server = new JettyServer(port);
+        
         this.osInfo = this.createOpenSearchInfo();
         ((SimpleOpenSearchUrlInfo)osInfo.getUrls()[0]).setOpenSearchUrlAdapter(new TestingOpenSearchUrlAdapter());
 
@@ -93,7 +98,7 @@ public class AbstractOpenSearchUrlAdapterTest extends AbstractOpenSearchServerTe
     @Test
     public void testOpenSearchFeedResponse() throws Exception {
         AbderaClient client = new AbderaClient();
-        ClientResponse response = client.get("http://localhost:9002/search1?q=test1&c=1");
+        ClientResponse response = client.get("http://localhost:" + port + "/search1?q=test1&c=1");
         assertEquals(200, response.getStatus());
 
         Document<Feed> feedDoc = response.getDocument();

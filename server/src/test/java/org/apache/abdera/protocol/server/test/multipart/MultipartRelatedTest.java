@@ -19,6 +19,7 @@ import org.apache.abdera.protocol.server.impl.DefaultProvider;
 import org.apache.abdera.protocol.server.impl.SimpleWorkspaceInfo;
 import org.apache.abdera.protocol.server.processors.MultipartRelatedServiceRequestProcessor;
 import org.apache.abdera.protocol.server.servlet.AbderaServlet;
+import org.apache.axiom.testutils.PortAllocator;
 import org.junit.After;
 import org.junit.Test;
 import org.mortbay.jetty.Server;
@@ -28,10 +29,12 @@ import org.mortbay.jetty.servlet.ServletHolder;
 @SuppressWarnings("serial")
 public class MultipartRelatedTest {
 
+    private int port;
     private Server server;
 
     private void initializeJetty(String contextPath) throws Exception {
-        server = new Server(9002);
+        port = PortAllocator.allocatePort();
+        server = new Server(port);
         Context root = new Context(server, contextPath, Context.NO_SESSIONS);
         root.addServlet(new ServletHolder(new AbderaServlet() {
             @Override
@@ -70,7 +73,7 @@ public class MultipartRelatedTest {
         initializeJetty("/");
         AbderaClient client = new AbderaClient(new Abdera());
 
-        ClientResponse res = client.get("http://localhost:9002/");
+        ClientResponse res = client.get("http://localhost:" + port + "/");
         assertEquals(200, res.getStatus());
         StringWriter sw = new StringWriter();
         res.getDocument().writeTo(sw);
@@ -108,7 +111,7 @@ public class MultipartRelatedTest {
         entry.setContent(new IRI("cid:234234@example.com"), contentType);
 
         ClientResponse res =
-            client.post("http://localhost:9002/media", entry, this.getClass().getResourceAsStream("info.png"));
+            client.post("http://localhost:" + port + "/media", entry, this.getClass().getResourceAsStream("info.png"));
         assertEquals(status, res.getStatus());
     }
 }

@@ -48,6 +48,7 @@ import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.writer.Writer;
 import org.apache.abdera.writer.WriterFactory;
+import org.apache.axiom.testutils.PortAllocator;
 import org.junit.After;
 import org.junit.Test;
 import org.mortbay.jetty.Server;
@@ -56,6 +57,7 @@ import org.mortbay.jetty.servlet.ServletHolder;
 
 public class CustomerAdapterTest {
 
+    private int port;
     private Server server;
     private DefaultProvider customerProvider;
 
@@ -94,7 +96,7 @@ public class CustomerAdapterTest {
 
         AbderaClient client = new AbderaClient(abdera);
 
-        String uri = "http://localhost:9002" + base;
+        String uri = "http://localhost:" + port + base;
 
         // Service document test.
 
@@ -195,8 +197,8 @@ public class CustomerAdapterTest {
 
     @SuppressWarnings("serial")
     private void initializeJetty(String contextPath) throws Exception {
-
-        server = new Server(9002);
+        port = PortAllocator.allocatePort();
+        server = new Server(port);
         Context root = new Context(server, contextPath, Context.NO_SESSIONS);
         root.addServlet(new ServletHolder(new AbderaServlet() {
 

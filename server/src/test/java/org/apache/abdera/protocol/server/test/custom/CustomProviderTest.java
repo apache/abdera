@@ -141,7 +141,10 @@ public class CustomProviderTest {
         assertEquals(ResponseType.SUCCESS, resp.getType());
         assertEquals(201, resp.getStatus());
         assertNotNull(resp.getLocation());
-        resp.release();
+        Document<Entry> resp_doc = resp.getDocument();
+        // Check that the response contains the enriched entry, not the original entry
+        assertTrue(resp_doc.getRoot().getLinks("edit").iterator().hasNext());
+        
         resp = client.get(base + "/feed");
         Document<Feed> feed_doc = resp.getDocument();
         Feed feed = feed_doc.getRoot();

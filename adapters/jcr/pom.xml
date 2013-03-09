@@ -93,6 +93,8 @@
         <configuration>
           <systemPropertyVariables>
             <derby.stream.error.file>${project.build.directory}/derby.log</derby.stream.error.file>
+            <org.apache.jackrabbit.repository.conf>${project.build.directory}/repository.xml</org.apache.jackrabbit.repository.conf>
+            <org.apache.jackrabbit.repository.home>${project.build.directory}/repository</org.apache.jackrabbit.repository.home>
           </systemPropertyVariables>
         </configuration>
       </plugin>

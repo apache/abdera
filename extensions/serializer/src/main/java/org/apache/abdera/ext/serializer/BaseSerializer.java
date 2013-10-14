@@ -93,16 +93,14 @@ public abstract class BaseSerializer extends Serializer {
             Extension extension = valueContext.getAnnotation(Extension.class);
             boolean simple = extension != null ? extension.simple() : false;
             Serializer ser = context.getSerializer(valueContext);
-            if (ser == null) {
-                if (simple) {
+            if (simple || ser == null) {
+                QName qname = getQName(accessor);
+                ser = new SimpleElementSerializer(qname);
+            } else {
+                ser = context.getSerializer(valueContext);
+                if (ser == null) {
                     QName qname = getQName(accessor);
-                    ser = new SimpleElementSerializer(qname);
-                } else {
-                    ser = context.getSerializer(valueContext);
-                    if (ser == null) {
-                        QName qname = getQName(accessor);
-                        ser = new ExtensionSerializer(qname);
-                    }
+                    ser = new ExtensionSerializer(qname);
                 }
             }
             ser.serialize(value, valueContext, context);
@@ -249,7 +247,7 @@ public abstract class BaseSerializer extends Serializer {
     protected static QName getQName(Extension extension) {
         QName qname = null;
         if (extension != null) {
-            if (isUndefined(extension.prefix()) && isUndefined(extension.ns()) && isUndefined(extension.name())) {
+            if (!isUndefined(extension.prefix()) && !isUndefined(extension.ns()) && !isUndefined(extension.name())) {
                 qname = new QName(extension.ns(), extension.name(), extension.prefix());
             } else if (isUndefined(extension.prefix()) && !isUndefined(extension.ns())
                 && !isUndefined(extension.name())) {

@@ -18,15 +18,19 @@
 package org.apache.abdera.test.ext.serializer;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.xml.namespace.QName;
+
 import org.apache.abdera.Abdera;
 import org.apache.abdera.ext.serializer.ConventionSerializationContext;
 import org.apache.abdera.ext.serializer.annotation.Author;
+import org.apache.abdera.ext.serializer.annotation.Extension;
 import org.apache.abdera.ext.serializer.annotation.ID;
 import org.apache.abdera.ext.serializer.annotation.Link;
 import org.apache.abdera.ext.serializer.annotation.Published;
@@ -36,6 +40,7 @@ import org.apache.abdera.ext.serializer.annotation.Updated;
 import org.apache.abdera.ext.serializer.impl.EntrySerializer;
 import org.apache.abdera.model.Document;
 import org.apache.abdera.model.Entry;
+import org.apache.abdera.model.ExtensibleElement;
 import org.apache.abdera.writer.StreamWriter;
 import org.junit.Test;
 
@@ -119,6 +124,69 @@ public class SerializerTest {
         assertEquals("James", entry.getAuthor().getName());
         assertEquals("this is the summary", entry.getSummary());
         assertEquals("http://example.org/foo", entry.getAlternateLink().getResolvedHref().toString());
+
+        final ExtensibleElement simpleExtension = entry.getExtension(SimpleExtensionQName.INSTANCE);
+        assertNotNull(simpleExtension);
+        assertEquals("baz", simpleExtension.getText());
+
+        final ExtensibleElement complexExtension = entry.getExtension(ComplexExtensionQName.INSTANCE);
+        assertNotNull(complexExtension);
+        final ExtensibleElement nestedSimpleExtension = complexExtension.getExtension(SimpleExtensionQName.INSTANCE);
+        assertNotNull(nestedSimpleExtension);
+        assertEquals("baz", nestedSimpleExtension.getText());
+
+        final ExtensibleElement moreComplexExtension = entry.getExtension(MoreComplexExtensionQName.INSTANCE);
+        assertNotNull(moreComplexExtension);
+        final ExtensibleElement nestedComplexExtension = moreComplexExtension.getExtension(ComplexExtensionQName.INSTANCE);
+        assertNotNull(nestedComplexExtension);
+        final ExtensibleElement deepNestedSimpleExtension = nestedComplexExtension.getExtension(SimpleExtensionQName.INSTANCE);
+        assertNotNull(deepNestedSimpleExtension);
+        assertEquals("baz", deepNestedSimpleExtension.getText());
+    }
+
+    private static final class SimpleExtensionQName extends QName {
+
+        public static final String NS = "http://example.org/simple";
+
+        public static final String NAME = "foo";
+
+        public static final String PREFIX = "simple";
+
+        public static final QName INSTANCE = new SimpleExtensionQName();
+
+        private SimpleExtensionQName() {
+            super(NS, NAME, PREFIX);
+        }
+    }
+
+    private static final class ComplexExtensionQName extends QName {
+
+        public static final String NS = "http://example.org/complex";
+
+        public static final String NAME = "foo";
+
+        public static final String PREFIX = "complex";
+
+        public static final QName INSTANCE = new ComplexExtensionQName();
+
+        private ComplexExtensionQName() {
+            super(NS, NAME, PREFIX);
+        }
+    }
+
+    private static final class MoreComplexExtensionQName extends QName {
+
+        public static final String NS = "http://example.org/morecomplex";
+
+        public static final String NAME = "foo";
+
+        public static final String PREFIX = "morecomplex";
+
+        public static final QName INSTANCE = new MoreComplexExtensionQName();
+
+        private MoreComplexExtensionQName() {
+            super(NS, NAME, PREFIX);
+        }
     }
 
     @org.apache.abdera.ext.serializer.annotation.Entry
@@ -153,5 +221,40 @@ public class SerializerTest {
         public String getUri() {
             return "http://example.org/foo";
         }
+
+        @Extension(ns = SimpleExtensionQName.NS, name = SimpleExtensionQName.NAME, prefix = SimpleExtensionQName.PREFIX, simple = true)
+        public String getSimpleExtension() {
+            return "baz";
+        }
+
+        @Extension(ns = ComplexExtensionQName.NS, name = ComplexExtensionQName.NAME, prefix = ComplexExtensionQName.PREFIX)
+        public ComplexExtension getComplexExtension() {
+            return new ComplexExtension();
+        }
+
+        @Extension(ns = MoreComplexExtensionQName.NS, name = MoreComplexExtensionQName.NAME, prefix = MoreComplexExtensionQName.PREFIX)
+        public MoreComplexExtension getMoreComplexExtension() {
+            return new MoreComplexExtension();
+        }
+
     }
+
+    public static class ComplexExtension {
+
+        @Extension(ns = SimpleExtensionQName.NS, name = SimpleExtensionQName.NAME, prefix = SimpleExtensionQName.PREFIX, simple = true)
+        public String getSimpleExtension() {
+            return "baz";
+        }
+
+    }
+
+    public static class MoreComplexExtension {
+
+        @Extension(ns = ComplexExtensionQName.NS, name = ComplexExtensionQName.NAME, prefix = ComplexExtensionQName.PREFIX)
+        public ComplexExtension getComplexExtension() {
+            return new ComplexExtension();
+        }
+
+    }
+
 }

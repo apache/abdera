@@ -1,6 +1,8 @@
 package org.apache.abdera.test.ext.serializer;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
+import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.abdera.Abdera;
@@ -124,6 +126,64 @@ public final class ExtensionAnnotationTest {
 
     }
 
+    /**
+     * Expected serialized result:
+     * <?xml version='1.0'?>
+     * <entry xmlns="http://www.w3.org/2005/Atom">
+     *   <foo:ext xmlns:s="http://example.org/foo">
+     *     foo
+     *   </foo:ext>
+     *   <foo:ext xmlns:s="http://example.org/foo">
+     *     bar
+     *   </foo:ext>
+     *   <foo:ext xmlns:s="http://example.org/foo">
+     *     baz
+     *   </foo:ext>
+     * </entry>
+     */
+    @Entry
+    public static final class EntryWithListOfSimpleExtensions {
+
+        @Extension(prefix = PREFIX, ns = NS, name = EXT_NAME, simple = true)
+        public List<String> getSimpleExtensions() {
+            return Arrays.asList("foo", "bar", "baz");
+        }
+
+    }
+
+    /**
+     * Expected serialized result:
+     * <?xml version='1.0'?>
+     * <entry xmlns="http://www.w3.org/2005/Atom">
+     *   <foo:ext xmlns:s="http://example.org/foo">
+     *     <foo:ext xmlns:s="http://example.org/foo">
+     *       foo
+     *     </foo:ext>
+     *   </foo:ext>
+     *   <foo:ext xmlns:s="http://example.org/foo">
+     *     <foo:ext xmlns:s="http://example.org/foo">
+     *       bar
+     *     </foo:ext>
+     *   </foo:ext>
+     *   <foo:ext xmlns:s="http://example.org/foo">
+     *     <foo:ext xmlns:s="http://example.org/foo">
+     *       baz
+     *     </foo:ext>
+     *   </foo:ext>
+     * </entry>
+     */
+    @Entry
+    public static final class EntryWithListOfExtensionsNestingSimpleExtension {
+
+        @Extension(prefix = PREFIX, ns = NS, name = EXT_NAME)
+        public List<ExtensionNestingSimpleExtension> getComplexExtensionExtensions() {
+            return Arrays.asList(new ExtensionNestingSimpleExtension("foo"),
+                    new ExtensionNestingSimpleExtension("bar"),
+                    new ExtensionNestingSimpleExtension("baz"));
+        }
+
+    }
+
     private final Abdera abdera = Abdera.getInstance();
 
     @Test
@@ -194,5 +254,59 @@ public final class ExtensionAnnotationTest {
         final Element simple = nested.getExtension(EXT_QNAME);
         assertNotNull(simple);
         assertEquals("foo", simple.getText().trim());
+    }
+
+    @Test
+    public void shouldGenerateSeveralSimpleExtensions() {
+        // given
+        final EntryWithListOfSimpleExtensions source = new EntryWithListOfSimpleExtensions();
+
+        // when
+        final StreamWriter streamWriter = abdera.newStreamWriter();
+        final ByteArrayOutputStream serialized = new ByteArrayOutputStream();
+        streamWriter.setOutputStream(serialized).setAutoIndent(true);
+        final ConventionSerializationContext context = new ConventionSerializationContext(streamWriter);
+        streamWriter.startDocument();
+        context.serialize(source);
+        streamWriter.endDocument();
+
+        // then
+        final org.apache.abdera.model.Entry entry = AbderaTestHelper.deserialize(serialized);
+        final List<Element> extensions = entry.getExtensions(EXT_QNAME);
+        assertNotNull(extensions);
+        assertEquals(3, extensions.size());
+        assertEquals("foo", extensions.get(0).getText().trim());
+        assertEquals("bar", extensions.get(1).getText().trim());
+        assertEquals("baz", extensions.get(2).getText().trim());
+    }
+
+    @Test
+    public void shouldGenerateSeveralExtensionsNestingSimpleExtension() {
+        // given
+        final EntryWithListOfExtensionsNestingSimpleExtension source = new EntryWithListOfExtensionsNestingSimpleExtension();
+
+        // when
+        final StreamWriter streamWriter = abdera.newStreamWriter();
+        final ByteArrayOutputStream serialized = new ByteArrayOutputStream();
+        streamWriter.setOutputStream(serialized).setAutoIndent(true);
+        final ConventionSerializationContext context = new ConventionSerializationContext(streamWriter);
+        streamWriter.startDocument();
+        context.serialize(source);
+        streamWriter.endDocument();
+
+        // then
+        final org.apache.abdera.model.Entry entry = AbderaTestHelper.deserialize(serialized);
+        final List<ExtensibleElement> extensions = entry.getExtensions(EXT_QNAME);
+        assertNotNull(extensions);
+        assertEquals(3, extensions.size());
+        final Element first = extensions.get(0).getExtension(EXT_QNAME);
+        assertNotNull(first);
+        assertEquals("foo", first.getText().trim());
+        final Element second = extensions.get(1).getExtension(EXT_QNAME);
+        assertNotNull(second);
+        assertEquals("bar", second.getText().trim());
+        final Element third = extensions.get(2).getExtension(EXT_QNAME);
+        assertNotNull(third);
+        assertEquals("baz", third.getText().trim());
     }
 }

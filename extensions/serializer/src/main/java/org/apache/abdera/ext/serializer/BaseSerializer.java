@@ -86,24 +86,27 @@ public abstract class BaseSerializer extends Serializer {
                                    ObjectContext objectContext,
                                    SerializationContext context,
                                    Conventions conventions) {
-        AccessibleObject[] accessors = objectContext.getAccessors(Extension.class, conventions);
+        final AccessibleObject[] accessors = objectContext.getAccessors(Extension.class, conventions);
         for (AccessibleObject accessor : accessors) {
-            Object value = eval(accessor, source);
-            ObjectContext valueContext = new ObjectContext(value, source, accessor);
-            Extension extension = valueContext.getAnnotation(Extension.class);
-            boolean simple = extension != null ? extension.simple() : false;
-            Serializer ser;
-            if (simple) {
-                final QName qname = getQName(accessor);
-                ser = new SimpleElementSerializer(qname);
-            } else {
-                ser = context.getSerializer(valueContext);
+            final Object value = eval(accessor, source);
+            final Object[] values = toArray(value);
+            for (Object val : values) {
+                final ObjectContext valueContext = new ObjectContext(val, source, accessor);
+                final Extension extension = valueContext.getAnnotation(Extension.class);
+                final boolean simple = extension != null ? extension.simple() : false;
+                Serializer ser;
+                if (simple) {
+                    final QName qname = getQName(accessor);
+                    ser = new SimpleElementSerializer(qname);
+                } else {
+                    ser = context.getSerializer(valueContext);
+                }
+                if (ser == null) {
+                    final QName qname = getQName(accessor);
+                    ser = new ExtensionSerializer(qname);
+                }
+                ser.serialize(val, valueContext, context);
             }
-            if (ser == null) {
-                final QName qname = getQName(accessor);
-                ser = new ExtensionSerializer(qname);
-            }
-            ser.serialize(value, valueContext, context);
         }
     }
 

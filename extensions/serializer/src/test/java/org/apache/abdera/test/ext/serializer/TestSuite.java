@@ -25,5 +25,6 @@ public class TestSuite {
         JUnitCore runner = new JUnitCore();
         runner.addListener(new TextListener(System.out));
         runner.run(SerializerTest.class);
+        runner.run(ExtensionAnnotationTest.class);
     }
 }

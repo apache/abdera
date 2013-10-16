@@ -92,16 +92,16 @@ public abstract class BaseSerializer extends Serializer {
             ObjectContext valueContext = new ObjectContext(value, source, accessor);
             Extension extension = valueContext.getAnnotation(Extension.class);
             boolean simple = extension != null ? extension.simple() : false;
-            Serializer ser = context.getSerializer(valueContext);
-            if (simple || ser == null) {
-                QName qname = getQName(accessor);
+            Serializer ser;
+            if (simple) {
+                final QName qname = getQName(accessor);
                 ser = new SimpleElementSerializer(qname);
             } else {
                 ser = context.getSerializer(valueContext);
-                if (ser == null) {
-                    QName qname = getQName(accessor);
-                    ser = new ExtensionSerializer(qname);
-                }
+            }
+            if (ser == null) {
+                final QName qname = getQName(accessor);
+                ser = new ExtensionSerializer(qname);
             }
             ser.serialize(value, valueContext, context);
         }

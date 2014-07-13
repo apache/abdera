@@ -97,7 +97,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
 
     public Person addAuthor(String name) {
         complete();
-        FOMFactory fomfactory = (FOMFactory)this.factory;
+        FOMFactory fomfactory = (FOMFactory)this.getOMFactory();
         Person person = fomfactory.newAuthor(this);
         person.setName(name);
         return person;
@@ -105,7 +105,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
 
     public Person addAuthor(String name, String email, String uri) {
         complete();
-        FOMFactory fomfactory = (FOMFactory)this.factory;
+        FOMFactory fomfactory = (FOMFactory)this.getOMFactory();
         Person person = fomfactory.newAuthor(this);
         person.setName(name);
         person.setEmail(email);
@@ -140,7 +140,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
 
     public Category addCategory(String term) {
         complete();
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Category category = factory.newCategory(this);
         category.setTerm(term);
         return category;
@@ -148,7 +148,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
 
     public Category addCategory(String scheme, String term, String label) {
         complete();
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Category category = factory.newCategory(this);
         category.setTerm(term);
         category.setScheme(scheme);
@@ -175,7 +175,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
      */
     public Content setContent(String value) {
         complete();
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Content content = factory.newContent();
         content.setValue(value);
         setContentElement(content);
@@ -194,7 +194,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
      * Sets the content for this entry
      */
     public Content setContent(String value, Content.Type type) {
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Content content = factory.newContent(type);
         content.setValue(value);
         setContentElement(content);
@@ -205,7 +205,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
      * Sets the content for this entry
      */
     public Content setContent(Element value) {
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Content content = factory.newContent();
         content.setValueElement(value);
         setContentElement(content);
@@ -221,7 +221,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
         try {
             if (MimeTypeHelper.isText(mediaType))
                 throw new IllegalArgumentException();
-            FOMFactory factory = (FOMFactory)this.factory;
+            FOMFactory factory = (FOMFactory)this.getOMFactory();
             Content content = factory.newContent(new MimeType(mediaType));
             content.setValueElement(element);
             setContentElement(content);
@@ -253,7 +253,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
                 throw new RuntimeException(e);
             }
         } else {
-            FOMFactory factory = (FOMFactory)this.factory;
+            FOMFactory factory = (FOMFactory)this.getOMFactory();
             Content content = factory.newContent(Content.Type.MEDIA);
             content.setDataHandler(dataHandler);
             if (mediatype != null)
@@ -308,7 +308,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
      */
     public Content setContent(String value, String mediatype) {
         try {
-            FOMFactory factory = (FOMFactory)this.factory;
+            FOMFactory factory = (FOMFactory)this.getOMFactory();
             Content content = factory.newContent(new MimeType(mediatype));
             content.setValue(value);
             content.setMimeType(mediatype);
@@ -327,7 +327,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
      */
     public Content setContent(IRI uri, String mediatype) {
         try {
-            FOMFactory factory = (FOMFactory)this.factory;
+            FOMFactory factory = (FOMFactory)this.getOMFactory();
             Content content = factory.newContent(new MimeType(mediatype));
             content.setSrc(uri.toString());
             setContentElement(content);
@@ -349,7 +349,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
 
     public Person addContributor(String name) {
         complete();
-        FOMFactory fomfactory = (FOMFactory)this.factory;
+        FOMFactory fomfactory = (FOMFactory)this.getOMFactory();
         Person person = fomfactory.newContributor(this);
         person.setName(name);
         return person;
@@ -357,7 +357,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
 
     public Person addContributor(String name, String email, String uri) {
         complete();
-        FOMFactory fomfactory = (FOMFactory)this.factory;
+        FOMFactory fomfactory = (FOMFactory)this.getOMFactory();
         Person person = fomfactory.newContributor(this);
         person.setName(name);
         person.setEmail(email);
@@ -405,7 +405,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
                 id.setValue(value);
             return id;
         } else {
-            FOMFactory fomfactory = (FOMFactory)factory;
+            FOMFactory fomfactory = (FOMFactory)getOMFactory();
             IRIElement iri = fomfactory.newID(this);
             iri.setValue((normalize) ? IRI.normalizeString(value) : value);
             return iri;
@@ -437,7 +437,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
 
     public Link addLink(String href, String rel) {
         complete();
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         Link link = fomfactory.newLink(this);
         link.setHref(href);
         if (rel != null)
@@ -447,7 +447,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
 
     public Link addLink(String href, String rel, String type, String title, String hreflang, long length) {
         complete();
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         Link link = fomfactory.newLink(this);
         link.setHref(href);
         link.setRel(rel);
@@ -487,7 +487,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
             dte.setValue(value);
             return dte;
         } else {
-            FOMFactory fomfactory = (FOMFactory)factory;
+            FOMFactory fomfactory = (FOMFactory)getOMFactory();
             DateTime dt = fomfactory.newPublished(this);
             dt.setValue(value);
             return dt;
@@ -514,7 +514,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
 
     public Text setRights(String value) {
         complete();
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Text text = factory.newRights();
         text.setValue(value);
         setRightsElement(text);
@@ -530,7 +530,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
     }
 
     public Text setRights(String value, Text.Type type) {
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Text text = factory.newRights(type);
         text.setValue(value);
         setRightsElement(text);
@@ -538,7 +538,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
     }
 
     public Text setRights(Div value) {
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Text text = factory.newRights(Text.Type.XHTML);
         text.setValueElement(value);
         setRightsElement(text);
@@ -577,7 +577,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
 
     public Text setSummary(String value) {
         complete();
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Text text = factory.newSummary();
         text.setValue(value);
         setSummaryElement(text);
@@ -593,7 +593,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
     }
 
     public Text setSummary(String value, Text.Type type) {
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Text text = factory.newSummary(type);
         text.setValue(value);
         setSummaryElement(text);
@@ -601,7 +601,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
     }
 
     public Text setSummary(Div value) {
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Text text = factory.newSummary(Text.Type.XHTML);
         text.setValueElement(value);
         setSummaryElement(text);
@@ -624,7 +624,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
 
     public Text setTitle(String value) {
         complete();
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Text text = factory.newTitle();
         text.setValue(value);
         setTitleElement(text);
@@ -640,7 +640,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
     }
 
     public Text setTitle(String value, Text.Type type) {
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Text text = factory.newTitle(type);
         text.setValue(value);
         setTitleElement(text);
@@ -648,7 +648,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
     }
 
     public Text setTitle(Div value) {
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Text text = factory.newTitle(Text.Type.XHTML);
         text.setValueElement(value);
         setTitleElement(text);
@@ -688,7 +688,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
             dte.setValue(value);
             return dte;
         } else {
-            FOMFactory fomfactory = (FOMFactory)factory;
+            FOMFactory fomfactory = (FOMFactory)getOMFactory();
             DateTime dt = fomfactory.newUpdated(this);
             dt.setValue(value);
             return dt;
@@ -738,7 +738,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
             dte.setValue(value);
             return dte;
         } else {
-            FOMFactory fomfactory = (FOMFactory)factory;
+            FOMFactory fomfactory = (FOMFactory)getOMFactory();
             DateTime dt = fomfactory.newEdited(this);
             dt.setValue(value);
             return dt;
@@ -900,7 +900,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
         complete();
         Control control = getControl();
         if (control == null && draft) {
-            control = ((FOMFactory)factory).newControl(this);
+            control = ((FOMFactory)getOMFactory()).newControl(this);
         }
         if (control != null)
             control.setDraft(draft);
@@ -919,7 +919,7 @@ public class FOMEntry extends FOMExtensibleElement implements Entry {
         complete();
         Control control = getControl();
         if (control == null) {
-            control = ((FOMFactory)factory).newControl(this);
+            control = ((FOMFactory)getOMFactory()).newControl(this);
         }
         return control;
     }

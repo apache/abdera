@@ -74,7 +74,7 @@ public class FOMFeed extends FOMSource implements Feed {
 
     public Entry addEntry() {
         complete();
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         return fomfactory.newEntry(this);
     }
 
@@ -91,14 +91,14 @@ public class FOMFeed extends FOMSource implements Feed {
 
     public Entry insertEntry() {
         complete();
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         Entry entry = fomfactory.newEntry((Feed)null);
         insertEntry(entry);
         return entry;
     }
 
     public Source getAsSource() {
-        FOMSource source = (FOMSource)((FOMFactory)factory).newSource(null);
+        FOMSource source = (FOMSource)((FOMFactory)getOMFactory()).newSource(null);
         for (Iterator<?> i = this.getChildElements(); i.hasNext();) {
             FOMElement child = (FOMElement)i.next();
             if (!child.getQName().equals(ENTRY)) {

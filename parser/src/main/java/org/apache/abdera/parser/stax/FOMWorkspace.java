@@ -63,7 +63,7 @@ public class FOMWorkspace extends FOMExtensibleElement implements Workspace {
 
     private Text setTitle(String title, Text.Type type) {
         complete();
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         Text text = fomfactory.newText(PREFIXED_TITLE, type);
         text.setValue(title);
         this._setChild(PREFIXED_TITLE, (OMElement)text);
@@ -113,7 +113,7 @@ public class FOMWorkspace extends FOMExtensibleElement implements Workspace {
 
     public Collection addCollection(String title, String href) {
         complete();
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         Collection collection = fomfactory.newCollection(this);
         collection.setTitle(title);
         collection.setHref(href);
@@ -122,7 +122,7 @@ public class FOMWorkspace extends FOMExtensibleElement implements Workspace {
 
     public Collection addMultipartCollection(String title, String href) {
         complete();
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         Collection collection = fomfactory.newMultipartCollection(this);
         collection.setTitle(title);
         collection.setHref(href);

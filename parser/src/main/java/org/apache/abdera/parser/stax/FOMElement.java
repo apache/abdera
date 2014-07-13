@@ -112,14 +112,14 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
     }
 
     protected void setParentDocument(Document parent) {
-        super.setParent((OMContainer)parent);
+        ((OMContainer)parent).addChild(this);
     }
 
     public <T extends Element> T setParentElement(Element parent) {
         if (parent instanceof ElementWrapper) {
             parent = ((ElementWrapper)parent).getInternal();
         }
-        super.setParent((FOMElement)parent);
+        ((FOMElement)parent).addChild(this);
         return (T)this;
     }
 
@@ -250,6 +250,7 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
             if (value != null) {
                 String uri = qname.getNamespaceURI();
                 String prefix = qname.getPrefix();
+                OMFactory factory = getOMFactory();
                 if (uri != null) {
                     OMNamespace ns = findNamespace(uri, prefix);
                     if (ns == null)
@@ -377,7 +378,7 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
                 node.discard();
             }
         } else if (element == null && value != null) {
-            element = factory.createOMElement(qname, this);
+            element = getOMFactory().createOMElement(qname, this);
             element.setText(value);
             this.addChild(element);
         }
@@ -408,7 +409,7 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
             setTextElement(qname, null, false);
             return null;
         }
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         Text text = fomfactory.newText(qname, Text.Type.TEXT);
         text.setValue(value);
         setTextElement(qname, text, false);
@@ -420,7 +421,7 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
             setTextElement(qname, null, false);
             return null;
         }
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         Text text = fomfactory.newText(qname, Text.Type.HTML);
         if (baseUri != null)
             text.setBaseUri(baseUri);
@@ -434,7 +435,7 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
             setTextElement(qname, null, false);
             return null;
         }
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         Text text = fomfactory.newText(qname, Text.Type.XHTML);
         if (baseUri != null)
             text.setBaseUri(baseUri);
@@ -448,7 +449,7 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
             setTextElement(qname, null, false);
             return null;
         }
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         Text text = fomfactory.newText(qname, Text.Type.XHTML);
         if (baseUri != null)
             text.setBaseUri(baseUri);
@@ -518,7 +519,7 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
     protected Element _parse(String value, IRI baseUri) throws ParseException, UnsupportedEncodingException {
         if (value == null)
             return null;
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         Parser parser = fomfactory.newParser();
         ParserOptions options = parser.getDefaultParserOptions();
         options.setFactory(fomfactory);
@@ -570,6 +571,7 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
     }
 
     protected OMElement _copyElement(OMElement src, OMElement dest) {
+        OMFactory factory = getOMFactory();
         for (Iterator i = src.getAllAttributes(); i.hasNext();) {
             OMAttribute attr = (OMAttribute)i.next();
             dest.addAttribute(attr);
@@ -611,19 +613,19 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
     protected OMElement _create(OMElement src) {
         OMElement el = null;
 
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         Object obj = null;
         if (src instanceof Content)
             obj = ((Content)src).getContentType();
         if (src instanceof Text)
             obj = ((Text)src).getTextType();
-        el = fomfactory.createElement(src.getQName(), (OMContainer)fomfactory.newDocument(), factory, obj);
+        el = fomfactory.createElement(src.getQName(), (OMContainer)fomfactory.newDocument(), fomfactory, obj);
 
         return el;
     }
 
     public Factory getFactory() {
-        return (Factory)this.factory;
+        return (Factory)this.getOMFactory();
     }
 
     // This appears to no longer be necessary with Axiom 1.2
@@ -645,7 +647,7 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
     // }
 
     public <T extends Base> T addComment(String value) {
-        factory.createOMComment(this, value);
+        getOMFactory().createOMComment(this, value);
         return (T)this;
     }
 
@@ -729,7 +731,7 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
     }
 
     public <T extends Element> List<T> getElements() {
-        return new FOMList<T>(new FOMElementIteratorWrapper((FOMFactory)factory, getChildElements()));
+        return new FOMList<T>(new FOMElementIteratorWrapper((FOMFactory)getOMFactory(), getChildElements()));
     }
 
     public boolean getMustPreserveWhitespace() {
@@ -754,7 +756,7 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
 
     public <T extends Element> T setText(DataHandler handler) {
         _removeAllChildren();
-        addChild(factory.createOMText(handler, true));
+        addChild(getOMFactory().createOMText(handler, true));
         return (T)this;
     }
 

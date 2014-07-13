@@ -105,7 +105,7 @@ public class FOMTextValue extends OMTextImpl implements TextValue {
     }
 
     public Factory getFactory() {
-        return (Factory)this.factory;
+        return (Factory)this.getOMFactory();
     }
 
     @Override

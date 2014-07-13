@@ -55,7 +55,7 @@ public class FOMComment extends OMCommentImpl implements Comment {
     }
 
     public Factory getFactory() {
-        return (Factory)this.factory;
+        return (Factory)this.getOMFactory();
     }
 
     public String toString() {

@@ -87,7 +87,8 @@ public class FOMText extends FOMElement implements Text {
             if (this.getFirstChildWithName(Constants.DIV) != null)
                 this.getFirstChildWithName(Constants.DIV).discard();
             init(Text.Type.XHTML);
-            this.setFirstChild((OMElement)value);
+            removeChildren();
+            addChild((OMElement)value);
         } else
             _removeAllChildren();
         return this;

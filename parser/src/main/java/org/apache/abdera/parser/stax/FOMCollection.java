@@ -70,7 +70,7 @@ public class FOMCollection extends FOMExtensibleElement implements Collection {
 
     private Text setTitle(String title, Text.Type type) {
         complete();
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         Text text = fomfactory.newText(PREFIXED_TITLE, type);
         text.setValue(title);
         this._setChild(PREFIXED_TITLE, (OMElement)text);
@@ -218,7 +218,7 @@ public class FOMCollection extends FOMExtensibleElement implements Collection {
 
     public Categories addCategories() {
         complete();
-        return ((FOMFactory)factory).newCategories(this);
+        return ((FOMFactory)getOMFactory()).newCategories(this);
     }
 
     public Collection addCategories(Categories categories) {
@@ -229,7 +229,7 @@ public class FOMCollection extends FOMExtensibleElement implements Collection {
 
     public Categories addCategories(String href) {
         complete();
-        Categories cats = ((FOMFactory)factory).newCategories();
+        Categories cats = ((FOMFactory)getOMFactory()).newCategories();
         cats.setHref(href);
         addCategories(cats);
         return cats;
@@ -237,7 +237,7 @@ public class FOMCollection extends FOMExtensibleElement implements Collection {
 
     public Categories addCategories(List<Category> categories, boolean fixed, String scheme) {
         complete();
-        Categories cats = ((FOMFactory)factory).newCategories();
+        Categories cats = ((FOMFactory)getOMFactory()).newCategories();
         cats.setFixed(fixed);
         if (scheme != null)
             cats.setScheme(scheme);

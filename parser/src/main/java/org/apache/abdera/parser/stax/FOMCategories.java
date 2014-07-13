@@ -74,7 +74,7 @@ public class FOMCategories extends FOMExtensibleElement implements Categories {
 
     public Category addCategory(String term) {
         complete();
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Category category = factory.newCategory(this);
         category.setTerm(term);
         return category;
@@ -82,7 +82,7 @@ public class FOMCategories extends FOMExtensibleElement implements Categories {
 
     public Category addCategory(String scheme, String term, String label) {
         complete();
-        FOMFactory factory = (FOMFactory)this.factory;
+        FOMFactory factory = (FOMFactory)this.getOMFactory();
         Category category = factory.newCategory(this);
         category.setTerm(term);
         category.setScheme(scheme);

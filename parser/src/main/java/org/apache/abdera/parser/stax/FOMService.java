@@ -95,7 +95,7 @@ public class FOMService extends FOMExtensibleElement implements Service {
 
     public Workspace addWorkspace(String title) {
         complete();
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         Workspace workspace = fomfactory.newWorkspace(this);
         workspace.setTitle(title);
         return workspace;

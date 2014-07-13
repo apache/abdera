@@ -63,7 +63,7 @@ public class FOMPerson extends FOMExtensibleElement implements Person {
     public Element setName(String name) {
         complete();
         if (name != null) {
-            FOMFactory fomfactory = (FOMFactory)factory;
+            FOMFactory fomfactory = (FOMFactory)getOMFactory();
             Element el = fomfactory.newName(null);
             el.setText(name);
             _setChild(NAME, (OMElement)el);
@@ -95,7 +95,7 @@ public class FOMPerson extends FOMExtensibleElement implements Person {
     public Element setEmail(String email) {
         complete();
         if (email != null) {
-            FOMFactory fomfactory = (FOMFactory)factory;
+            FOMFactory fomfactory = (FOMFactory)getOMFactory();
             Element el = fomfactory.newEmail(null);
             el.setText(email);
             _setChild(EMAIL, (OMElement)el);
@@ -127,7 +127,7 @@ public class FOMPerson extends FOMExtensibleElement implements Person {
     public IRIElement setUri(String uri) {
         complete();
         if (uri != null) {
-            FOMFactory fomfactory = (FOMFactory)factory;
+            FOMFactory fomfactory = (FOMFactory)getOMFactory();
             IRIElement el = fomfactory.newUri(null);
             el.setValue(uri);
             _setChild(URI, (OMElement)el);

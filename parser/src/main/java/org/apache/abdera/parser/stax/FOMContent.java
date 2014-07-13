@@ -118,7 +118,8 @@ public class FOMContent extends FOMExtensibleElement implements Content {
                 }
             }
             OMElement el = (OMElement)(value instanceof ElementWrapper ? ((ElementWrapper)value).getInternal() : value);
-            this.setFirstChild(el);
+            removeChildren();
+            addChild(el);
         } else {
             _removeAllChildren();
         }
@@ -198,7 +199,7 @@ public class FOMContent extends FOMExtensibleElement implements Content {
             }
         }
         _removeAllChildren();
-        addChild(factory.createOMText(dataHandler, true));
+        addChild(getOMFactory().createOMText(dataHandler, true));
         return this;
     }
 

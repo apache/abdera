@@ -87,7 +87,7 @@ public class FOMExtensibleElement extends FOMElement implements ExtensibleElemen
 
     public <T extends Element> T addExtension(QName qname) {
         complete();
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         String prefix = qname.getPrefix();
         declareIfNecessary(qname.getNamespaceURI(), prefix);
         return (T)fomfactory.newExtensionElement(qname, this);
@@ -102,7 +102,7 @@ public class FOMExtensibleElement extends FOMElement implements ExtensibleElemen
 
     public Element addSimpleExtension(QName qname, String value) {
         complete();
-        FOMFactory fomfactory = (FOMFactory)factory;
+        FOMFactory fomfactory = (FOMFactory)getOMFactory();
         Element el = fomfactory.newElement(qname, this);
         el.setText(value);
         String prefix = qname.getPrefix();

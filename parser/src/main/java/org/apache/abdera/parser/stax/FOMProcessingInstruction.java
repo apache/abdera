@@ -46,7 +46,7 @@ public class FOMProcessingInstruction extends OMProcessingInstructionImpl implem
     }
 
     public Factory getFactory() {
-        return (Factory)this.factory;
+        return (Factory)this.getOMFactory();
     }
 
     public String getText() {

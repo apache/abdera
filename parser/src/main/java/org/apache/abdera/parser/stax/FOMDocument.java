@@ -178,14 +178,14 @@ public class FOMDocument<T extends Element> extends OMDocumentImpl implements Do
     }
 
     public Object clone() {
-        Document<T> doc = ((FOMFactory)factory).newDocument();
+        Document<T> doc = ((FOMFactory)getOMFactory()).newDocument();
         OMDocument omdoc = (OMDocument)doc;
         for (Iterator i = getChildren(); i.hasNext();) {
             OMNode node = (OMNode)i.next();
             switch (node.getType()) {
                 case OMNode.COMMENT_NODE:
                     OMComment comment = (OMComment)node;
-                    factory.createOMComment(omdoc, comment.getValue());
+                    getOMFactory().createOMComment(omdoc, comment.getValue());
                     break;
                 // TODO: Decide what to do with this code; it will no longer work in Axiom 1.2.14 (because of AXIOM-437).
                 //       On the other hand, since we filter out DTDs, this code is never triggered.
@@ -199,7 +199,7 @@ public class FOMDocument<T extends Element> extends OMDocumentImpl implements Do
                     break;
                 case OMNode.PI_NODE:
                     OMProcessingInstruction pi = (OMProcessingInstruction)node;
-                    factory.createOMProcessingInstruction(omdoc, pi.getTarget(), pi.getValue());
+                    getOMFactory().createOMProcessingInstruction(omdoc, pi.getTarget(), pi.getValue());
                     break;
             }
         }
@@ -218,7 +218,7 @@ public class FOMDocument<T extends Element> extends OMDocumentImpl implements Do
     }
 
     public Factory getFactory() {
-        return (Factory)this.factory;
+        return (Factory)this.getOMFactory();
     }
 
     public String[] getProcessingInstruction(String target) {
@@ -235,7 +235,7 @@ public class FOMDocument<T extends Element> extends OMDocumentImpl implements Do
     }
 
     public Document<T> addProcessingInstruction(String target, String value) {
-        OMProcessingInstruction pi = this.factory.createOMProcessingInstruction(null, target, value);
+        OMProcessingInstruction pi = this.getOMFactory().createOMProcessingInstruction(null, target, value);
         if (this.getOMDocumentElement() != null) {
             this.getOMDocumentElement().insertSiblingBefore(pi);
         } else {
@@ -254,7 +254,7 @@ public class FOMDocument<T extends Element> extends OMDocumentImpl implements Do
     }
 
     public <X extends Base> X addComment(String value) {
-        OMComment comment = this.factory.createOMComment(null, value);
+        OMComment comment = this.getOMFactory().createOMComment(null, value);
         if (this.getOMDocumentElement() != null) {
             this.getOMDocumentElement().insertSiblingBefore(comment);
         } else {

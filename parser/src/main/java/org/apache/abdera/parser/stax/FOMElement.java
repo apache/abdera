@@ -198,6 +198,7 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
             uri = null;
         }
         if (uri == null) {
+            OMContainer parent = getParent();
             if (parent instanceof Element) {
                 uri = ((Element)parent).getBaseUri();
             } else if (parent instanceof Document) {
@@ -213,6 +214,7 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
         if (IRIHelper.isJavascriptUri(uri) || IRIHelper.isMailtoUri(uri)) {
             uri = null;
         }
+        OMContainer parent = getParent();
         if (parent instanceof Element)
             baseUri = ((Element)parent).getResolvedBaseUri();
         else if (parent instanceof Document)
@@ -348,6 +350,7 @@ public class FOMElement extends OMElementImpl implements Element, OMElement, Con
 
     public <T extends Element> Document<T> getDocument() {
         Document<T> document = null;
+        OMContainer parent = getParent();
         if (parent != null) {
             if (parent instanceof Element) {
                 document = ((Element)parent).getDocument();

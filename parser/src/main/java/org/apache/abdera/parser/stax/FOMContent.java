@@ -29,7 +29,7 @@ import org.apache.abdera.model.Div;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.ElementWrapper;
 import org.apache.abdera.util.Constants;
-import org.apache.axiom.attachments.utils.DataHandlerUtils;
+import org.apache.axiom.attachments.ByteArrayDataSource;
 import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMException;
@@ -37,6 +37,7 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.OMXMLParserWrapper;
+import org.apache.axiom.util.base64.Base64Utils;
 
 @SuppressWarnings("unchecked")
 public class FOMContent extends FOMExtensibleElement implements Content {
@@ -179,9 +180,9 @@ public class FOMContent extends FOMExtensibleElement implements Content {
         }
         DataHandler dh = null;
         if (src == null) {
-            dh =
-                (DataHandler)DataHandlerUtils
-                    .getDataHandlerFromText(getText(), (type != null) ? type.toString() : null);
+            dh = new DataHandler(new ByteArrayDataSource(
+                    Base64Utils.decode(getText()),
+                    (type != null) ? type.toString() : null));
         } else {
             dh = new DataHandler(new URLDataSource(src));
         }

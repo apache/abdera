@@ -21,63 +21,19 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.activation.DataHandler;
-import javax.xml.namespace.QName;
 
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Base;
 import org.apache.abdera.model.Element;
 import org.apache.abdera.model.TextValue;
-import org.apache.axiom.om.OMContainer;
 import org.apache.axiom.om.OMFactory;
-import org.apache.axiom.om.impl.llom.OMTextImpl;
+import org.apache.axiom.om.impl.llom.CDATASectionImpl;
 
 @SuppressWarnings("unchecked")
-public class FOMTextValue extends OMTextImpl implements TextValue {
+public class FOMCDATASection extends CDATASectionImpl implements TextValue {
 
-    public FOMTextValue(OMContainer parent, Object dataHandler,
-            boolean optimize, OMFactory factory, boolean fromBuilder) {
-        super(parent, dataHandler, optimize, factory, fromBuilder);
-    }
-
-    public FOMTextValue(Object dataHandler, OMFactory factory) {
-        super(dataHandler, factory);
-    }
-
-    public FOMTextValue(OMContainer parent, char[] charArray, int nodeType, OMFactory factory) {
-        super(parent, charArray, nodeType, factory);
-    }
-
-    public FOMTextValue(OMContainer parent, QName text, int nodeType, OMFactory factory) {
-        super(parent, text, nodeType, factory);
-    }
-
-    public FOMTextValue(OMContainer parent, QName text, OMFactory factory) {
-        super(parent, text, factory);
-    }
-
-    public FOMTextValue(OMContainer parent, String text, int nodeType,
-            OMFactory factory, boolean fromBuilder) {
-        super(parent, text, nodeType, factory, fromBuilder);
-    }
-
-    public FOMTextValue(OMContainer parent, String text, OMFactory factory) {
-        super(parent, text, factory);
-    }
-
-    public FOMTextValue(OMContainer parent, String s, String mimeType, boolean optimize, OMFactory factory) {
-        super(parent, s, mimeType, optimize, factory);
-    }
-
-    public FOMTextValue(String text, int nodeType, OMFactory factory) {
-        super(text, nodeType, factory);
-    }
-
-    public FOMTextValue(String text, OMFactory factory) {
-        super(text, factory);
-    }
-
-    public FOMTextValue(String s, String mimeType, boolean optimize, OMFactory factory) {
-        super(s, mimeType, optimize, factory);
+    public FOMCDATASection(OMFactory factory) {
+        super(factory);
     }
 
     public DataHandler getDataHandler() {

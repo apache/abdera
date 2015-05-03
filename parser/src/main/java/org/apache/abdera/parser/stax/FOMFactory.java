@@ -54,6 +54,8 @@ import org.apache.abdera.parser.stax.util.FOMHelper;
 import org.apache.abdera.util.Constants;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.abdera.util.Version;
+import org.apache.axiom.core.CoreCDATASection;
+import org.apache.axiom.core.CoreCharacterData;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMComment;
 import org.apache.axiom.om.OMContainer;
@@ -62,7 +64,6 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMProcessingInstruction;
-import org.apache.axiom.om.OMText;
 import org.apache.axiom.om.OMXMLParserWrapper;
 import org.apache.axiom.om.impl.llom.factory.OMLinkedListImplFactory;
 
@@ -634,56 +635,6 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
     }
 
     @Override
-    public OMText createOMText(Object arg0, boolean arg1) {
-        return new FOMTextValue(null, arg0, arg1, this, false);
-    }
-
-    @Override
-    public OMText createOMText(OMContainer arg0, char[] arg1, int arg2) {
-        return new FOMTextValue(arg0, arg1, arg2, this);
-    }
-
-    @Override
-    public OMText createOMText(OMContainer arg0, QName arg1, int arg2) {
-        return new FOMTextValue(arg0, arg1, arg2, this);
-    }
-
-    @Override
-    public OMText createOMText(OMContainer arg0, QName arg1) {
-        return new FOMTextValue(arg0, arg1, this);
-    }
-
-    @Override
-    public OMText createOMText(OMContainer arg0, String arg1, int arg2) {
-        return new FOMTextValue(arg0, arg1, arg2, this, false);
-    }
-
-    @Override
-    public OMText createOMText(OMContainer arg0, String arg1, String arg2, boolean arg3) {
-        return new FOMTextValue(arg0, arg1, arg2, arg3, this);
-    }
-
-    @Override
-    public OMText createOMText(OMContainer arg0, String arg1) {
-        return new FOMTextValue(arg0, arg1, this);
-    }
-
-    @Override
-    public OMText createOMText(String arg0, int arg1) {
-        return new FOMTextValue(arg0, arg1, this);
-    }
-
-    @Override
-    public OMText createOMText(String arg0, String arg1, boolean arg2) {
-        return new FOMTextValue(arg0, arg1, arg2, this);
-    }
-
-    @Override
-    public OMText createOMText(String arg0) {
-        return new FOMTextValue(arg0, this);
-    }
-
-    @Override
     public OMComment createOMComment(OMContainer arg0, String arg1) {
         return new FOMComment(arg0, arg1, this, false);
     }
@@ -693,4 +644,13 @@ public class FOMFactory extends OMLinkedListImplFactory implements Factory, Cons
         return new FOMProcessingInstruction(arg0, arg1, arg2, this, false);
     }
 
+    @Override
+    public CoreCharacterData createCharacterData() {
+        return new FOMCharacterData(this);
+    }
+
+    @Override
+    public CoreCDATASection createCDATASection() {
+        return new FOMCDATASection(this);
+    }
 }

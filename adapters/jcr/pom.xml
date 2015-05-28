@@ -81,7 +81,7 @@
 
     <dependency>
       <groupId>org.apache.ws.commons.axiom</groupId>
-      <artifactId>axiom-testutils</artifactId>
+      <artifactId>testutils</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

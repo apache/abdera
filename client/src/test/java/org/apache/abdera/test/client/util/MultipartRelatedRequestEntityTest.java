@@ -30,9 +30,9 @@ import java.io.StringWriter;
 
 import javax.activation.MimeType;
 
+import org.apache.abdera.Abdera;
 import org.apache.abdera.i18n.iri.IRI;
 import org.apache.abdera.model.Entry;
-import org.apache.abdera.parser.stax.FOMEntry;
 import org.apache.abdera.protocol.client.util.MultipartRelatedRequestEntity;
 import org.apache.abdera.util.MimeTypeHelper;
 import org.apache.commons.codec.binary.Base64;
@@ -44,7 +44,7 @@ public class MultipartRelatedRequestEntityTest {
 
     @Test
     public void testMultipartFormat() throws IOException {
-        Entry entry = new FOMEntry();
+        Entry entry = Abdera.getInstance().newEntry();
         entry.setTitle("my image");
         entry.addAuthor("david");
         entry.setId("tag:apache.org,2008:234534344");

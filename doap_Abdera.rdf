@@ -25,7 +25,7 @@
     <license rdf:resource="http://usefulinc.com/doap/licenses/asl20" />
     <name>Apache Abdera</name>
     <homepage rdf:resource="http://abdera.apache.org" />
-    <asfext:pmc rdf:resource="http://http://attic.apache.org" />
+    <asfext:pmc rdf:resource="http://attic.apache.org" />
     <shortdesc>An open source Atom implementation</shortdesc>
     <description>The goal of the Apache Abdera project is to build a functionally-complete, high-performance implementation of the IETF Atom Syndication Format (RFC 4287) and Atom Publishing Protocol (RFC 5023) specifications.</description>
     <bug-database rdf:resource="https://issues.apache.org/jira/browse/ABDERA" />

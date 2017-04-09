@@ -86,26 +86,27 @@ public abstract class BaseSerializer extends Serializer {
                                    ObjectContext objectContext,
                                    SerializationContext context,
                                    Conventions conventions) {
-        AccessibleObject[] accessors = objectContext.getAccessors(Extension.class, conventions);
+        final AccessibleObject[] accessors = objectContext.getAccessors(Extension.class, conventions);
         for (AccessibleObject accessor : accessors) {
-            Object value = eval(accessor, source);
-            ObjectContext valueContext = new ObjectContext(value, source, accessor);
-            Extension extension = valueContext.getAnnotation(Extension.class);
-            boolean simple = extension != null ? extension.simple() : false;
-            Serializer ser = context.getSerializer(valueContext);
-            if (ser == null) {
+            final Object value = eval(accessor, source);
+            final Object[] values = toArray(value);
+            for (Object val : values) {
+                final ObjectContext valueContext = new ObjectContext(val, source, accessor);
+                final Extension extension = valueContext.getAnnotation(Extension.class);
+                final boolean simple = extension != null ? extension.simple() : false;
+                Serializer ser;
                 if (simple) {
-                    QName qname = getQName(accessor);
+                    final QName qname = getQName(accessor);
                     ser = new SimpleElementSerializer(qname);
                 } else {
                     ser = context.getSerializer(valueContext);
-                    if (ser == null) {
-                        QName qname = getQName(accessor);
-                        ser = new ExtensionSerializer(qname);
-                    }
                 }
+                if (ser == null) {
+                    final QName qname = getQName(accessor);
+                    ser = new ExtensionSerializer(qname);
+                }
+                ser.serialize(val, valueContext, context);
             }
-            ser.serialize(value, valueContext, context);
         }
     }
 
@@ -249,7 +250,7 @@ public abstract class BaseSerializer extends Serializer {
     protected static QName getQName(Extension extension) {
         QName qname = null;
         if (extension != null) {
-            if (isUndefined(extension.prefix()) && isUndefined(extension.ns()) && isUndefined(extension.name())) {
+            if (!isUndefined(extension.prefix()) && !isUndefined(extension.ns()) && !isUndefined(extension.name())) {
                 qname = new QName(extension.ns(), extension.name(), extension.prefix());
             } else if (isUndefined(extension.prefix()) && !isUndefined(extension.ns())
                 && !isUndefined(extension.name())) {

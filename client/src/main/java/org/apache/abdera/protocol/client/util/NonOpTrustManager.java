@@ -22,6 +22,7 @@ import java.security.cert.X509Certificate;
 
 import javax.net.ssl.X509TrustManager;
 
+// this is not secure!
 public class NonOpTrustManager implements X509TrustManager {
 
     public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {

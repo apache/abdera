@@ -315,10 +315,10 @@ public class Range extends SubtagSet {
     private static final String privateuse = "[xX](?:[-_][a-zA-Z0-9]{2,8})+";
     private static final String _privateuse = "((?:[-_](?:" + privateuse + ")+|\\*)?)";
     private static final String langtag = "^" + language + script + region + variant + extension + _privateuse + "$";
-    private static final String grandfathered =
+    private static final String legacyStatus =
         "^(?:art[-_]lojban|cel[-_]gaulish|en[-_]GB[-_]oed|i[-_]ami|i[-_]bnn|i[-_]default|i[-_]enochian|i[-_]hak|i[-_]klingon|i[-_]lux|i[-_]mingo|i[-_]navajo|i[-_]pwn|i[-_]tao||i[-_]tay|i[-_]tsu|no[-_]bok|no[-_]nyn|sgn[-_]BE[-_]fr|sgn[-_]BE[-_]nl|sgn[-_]CH[-_]de|zh[-_]cmn|zh[-_]cmn[-_]Hans|zh[-_]cmn[-_]Hant|zh[-_]gan|zh[-_]guoyu|zh[-_]hakka|zh[-_]min|zh[-_]min[-_]nan|zh[-_]wuu|zh[-_]xiang|zh[-_]yue)$";
     private static final Pattern p_privateuse = Pattern.compile("^" + privateuse + "$");
-    private static final Pattern p_grandfathered = Pattern.compile(grandfathered);
+    private static final Pattern p_legacyStatus = Pattern.compile(legacyStatus);
     private static final Pattern p_extended_range = Pattern.compile(langtag);
 
     /**
@@ -355,7 +355,7 @@ public class Range extends SubtagSet {
         } else {
 
             Subtag primary = null;
-            Matcher m = p_grandfathered.matcher(range);
+            Matcher m = p_legacyStatus.matcher(range);
             if (m.find()) {
                 String[] tags = range.split("[-_]");
                 Subtag current = null;

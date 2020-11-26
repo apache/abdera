@@ -51,8 +51,8 @@ public final class Subtag implements Serializable, Cloneable, Comparable<Subtag>
         EXTENSION,
         /** Primary-use subtag **/
         PRIVATEUSE,
-        /** Grandfathered subtag **/
-        GRANDFATHERED,
+        /** Legacy-status subtag **/
+        LEGACYSTATUS,
         /** Wildcard subtag ("*") **/
         WILDCARD,
         /** Simple subtag (ranges) **/
@@ -326,7 +326,7 @@ public final class Subtag implements Serializable, Cloneable, Comparable<Subtag>
                 }
             case EXTENSION:
                 return name.matches("[A-Za-z0-9]{2,8}");
-            case GRANDFATHERED:
+            case LEGACYSTATUS:
                 return name.matches("[A-Za-z]{1,3}(?:-[A-Za-z0-9]{2,8}){1,2}");
             case PRIVATEUSE:
                 return name.matches("[A-Za-z0-9]{1,8}");
@@ -362,7 +362,7 @@ public final class Subtag implements Serializable, Cloneable, Comparable<Subtag>
                 Extlang extlang = getEnum();
                 return extlang.getPreferred().newSubtag();
             case EXTENSION:
-            case GRANDFATHERED:
+            case LEGACYSTATUS:
             case PRIVATEUSE:
             case SINGLETON:
             default:

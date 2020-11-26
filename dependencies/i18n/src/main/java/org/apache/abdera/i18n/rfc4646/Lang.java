@@ -358,10 +358,10 @@ public final class Lang extends SubtagSet {
             Subtag current = null;
             for (String tag : tags) {
                 if (current == null) {
-                    primary = new Subtag(Type.GRANDFATHERED, tag, null);
+                    primary = new Subtag(Type.LEGACYSTATUS, tag, null);
                     current = primary;
                 } else {
-                    current = new Subtag(Type.GRANDFATHERED, tag, current);
+                    current = new Subtag(Type.LEGACYSTATUS, tag, current);
                 }
             }
             return new Lang(primary);
